@@ -1,13 +1,12 @@
 {
   "name": "wTesting",
-  "version": "0.1.4",
-  
+  "version": "0.1.5",
   "description": "Tool for unit testing in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "license": "MIT",
-  "main": "staging/aTesting.s",
+  "main": "taging/object/zTesting.debug.s",
   "files": [
-    "staging/wTools.s",
+    "staging/object/zTesting.debug.s",
     "production"
   ],
   "scripts": {

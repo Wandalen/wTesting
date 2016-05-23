@@ -89,7 +89,7 @@ var identical = function( got,expected )
   _.assert( arguments.length === 2 );
 
   var outcome = _.entityIdentical( got,expected,options );
-  test.reportOutcome( outcome,got,expected,options.lastPath );
+  test.reportOutcome( outcome,got,expected,options.lastPath,4 );
 
   return outcome;
 }

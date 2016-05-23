@@ -1,4 +1,4 @@
-( function( ) {
+( function simple1_js( ) {
 
 'use strict';
 

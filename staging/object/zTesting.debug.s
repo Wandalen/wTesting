@@ -144,7 +144,7 @@ var shouldThrowError = function( routine )
   {
     routine.call( this );
   }
-  catch()
+  catch( err )
   {
     thrown = 1;
     outcome = test.reportOutcome( 1,true,true );

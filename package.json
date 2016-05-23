@@ -6,7 +6,9 @@
   "license": "MIT",
   "main": "staging/object/zTesting.debug.s",
   "files": [
-    "staging/object/zTesting.debug.s",
+    "staging/component",
+    "staging/mixin",
+    "staging/object",
     "production"
   ],
   "scripts": {

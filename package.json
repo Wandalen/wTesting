@@ -9,6 +9,7 @@
     "staging/component",
     "staging/mixin",
     "staging/object",
+    "staging/syn",
     "production"
   ],
   "scripts": {

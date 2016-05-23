@@ -89,7 +89,7 @@ var identical = function( got,expected )
   _.assert( arguments.length === 2 );
 
   var outcome = _.entityIdentical( got,expected,options );
-  test.reportOutcome( outcome,got,expected,options.lastPath,4 );
+  test.reportOutcome( outcome,got,expected,options.lastPath );
 
   return outcome;
 }
@@ -147,11 +147,11 @@ var shouldThrowError = function( routine )
   catch( err )
   {
     thrown = 1;
-    outcome = test.reportOutcome( 1,true,true );
+    outcome = test.reportOutcome( 1,true,true,'' );
   }
 
   if( !thrown )
-  outcome = test.reportOutcome( 0,false,true );
+  outcome = test.reportOutcome( 0,false,true,'' );
 
   return outcome;
 }

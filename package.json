@@ -1,0 +1,39 @@
+{
+
+  "name" : "wTesting",
+  "version" : "0.1.0",
+  "description" : "Tool for unit testing in Java Script.",
+  "author" : "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "license" : "MIT",
+  "main" : "staging/aTesting.s",
+  "files" :
+  [
+    "staging/wTools.s",
+    "production"
+  ],
+  "scripts" :
+  {
+    "test" : "node ./staging/z.tests/All.s"
+  },
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/Wandalen/wTesting.git"
+  },
+  "bugs" :
+  {
+    "url" : "https://github.com/Wandalen/wTesting/issues"
+  },
+  "dependencies" :
+  {
+    "wTools" : ""
+  },
+  "keywords" :
+  [
+    "testing",
+    "unit test",
+    "functional test",
+    "wTools"
+  ]
+
+}

@@ -2,17 +2,26 @@
 
 'use strict';
 
+if( typeof module !== 'undefined' )
+{
+
+  try
+  {
+    require( 'wTools' );
+  }
+  catch( err )
+  {
+    require( '../wTools.s' );
+  }
+
+}
+
 var Self = wTools;
 var _ = wTools;
 
-var _ArraySlice = Array.prototype.slice;
-var _FunctionBind = Function.prototype.bind;
-var _ObjectToString = Object.prototype.toString;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
-
 var _assert = _.assert;
-var _arraySlice = _.arraySlice;
-var nameFielded = _.nameFielded;
+var _nameFielded = _.nameFielded;
 
 // --
 // property
@@ -35,11 +44,11 @@ var _accessorOptions = function( object,names )
   if( !options.methods )
   options.methods = object;
 
-  var names = options.names = nameFielded( names );
+  var names = options.names = _nameFielded( names );
 
   if( arguments.length > 2 )
   {
-    options.args = _.arraySlice( arguments,2 );
+    options.message = _.arraySlice( arguments,2 );
   }
 
   return options;
@@ -47,24 +56,22 @@ var _accessorOptions = function( object,names )
 
 //
 
-var _accessor = function( options )
+var _accessor = function( o )
 {
-  var object = options.object;
-  var names = options.names;
-  var methods = options.methods;
-
-  _assert( !_.atomicIs( object ) );
-  _assert( !_.atomicIs( methods ) );
-
-  if( options.strict === undefined )
-  options.strict = true;
-
-  if( options.enumerable === undefined )
-  options.enumerable = true;
+  var object = o.object;
+  var names = o.names;
+  var methods = o.methods;
+  var message = o.message;
 
   // verification
 
-  if( options.strict && !options.noField /*&& !object[ '_SelfGet' ]*/ )
+  _assert( !_.atomicIs( object ) );
+  _assert( !_.atomicIs( methods ) );
+  _assert( !o.message || _.arrayIs( o.message ) );
+  _.assertMapOnly( o,_accessor.defaults );
+  _.mapComplement( o,_accessor.defaults );
+
+  if( o.strict /*&& o.preserveValues*/ )
   {
 
     var has =
@@ -79,7 +86,6 @@ var _accessor = function( options )
     }
 
     _.assertMapOwnAll( object,has );
-    /*_.assertMapOwnNone( object,hasNot );*/
     _.accessorForbidOnce( object,hasNot );
 
   }
@@ -93,7 +99,7 @@ var _accessor = function( options )
   for( var n in _name )
   {
 
-    (function _accessor()
+    (function _accessorField()
     {
 
       var encodedName = n;
@@ -107,23 +113,16 @@ var _accessor = function( options )
       var setter = methods[ '_' + rawName + 'Set' ] ? methods[ '_' + rawName + 'Set' ] : methods[ rawName + 'Set' ];
       var getter = methods[ '_' + rawName + 'Get' ] ? methods[ '_' + rawName + 'Get' ] : methods[ rawName + 'Get' ];
 
-/*
-      if( rawName === 'Parent' )
-      console.log( 'rawName:',rawName );
-*/
-
       var fieldName = '_' + rawName;
       var fieldSymbol = Symbol.for( rawName );
-      var needPrivateField = !_ObjectHasOwnProperty.call( object,fieldName );
-      var message = options.args;
 
-      if( !options.noField )
+      if( o.preserveValues )
       if( _ObjectHasOwnProperty.call( object,encodedName ) )
       object[ fieldSymbol ] = object[ encodedName ];
 
       // setter
 
-      if( !setter && !options.readOnly )
+      if( !setter && !o.readOnly )
       if( message )
       setter = function setter( src )
       {
@@ -136,7 +135,7 @@ var _accessor = function( options )
         this[ fieldSymbol ] = src;
       }
 
-      _assert( !setter || !options.readOnly,'accessor:','readOnly but setter found in',object );
+      _assert( !setter || !o.readOnly,'accessor:','readOnly but setter found in',object );
 
       // getter
 
@@ -159,13 +158,13 @@ var _accessor = function( options )
       {
         set : setter,
         get : getter,
-        enumerable : options.enumerable,
+        enumerable : o.enumerable,
         configurable : false,
       });
 
       // define private field
 
-      if( !options.noField && !redefinition )
+      if( o.strict && !redefinition )
       {
         var m =
         [ 'use Symbol.for( \'' + rawName + '\' ) ',
@@ -181,20 +180,20 @@ var _accessor = function( options )
 
   }
 
-  //goog.exportProperty( object,names );
-  //goog.exportProperty( object,names + 'Set',object[ names + 'Set' ] );
-  //goog.exportProperty( object,names + 'Get',object[ names + 'Get' ] );
+}
 
-  //goog.exportSymbol( names );
-  //goog.exportSymbol( names + 'Set',object[ names + 'Set' ] );
-  //goog.exportSymbol( names + 'Get',object[ names + 'Get' ] );
+_accessor.defaults =
+{
 
-  //ex. goog.exportSymbol('public.path.Foo.prototype.myMethod',
-  //                      Foo.prototype.myMethod);
-  //    new public.path.Foo().myMethod();
+  object : null,
+  names : null,
+  methods : null,
+  message : null,
 
-  // * ex. goog.exportSymbol('public.path.Foo.staticFunction', Foo.staticFunction);
-  // *     public.path.Foo.staticFunction();
+  strict : 1,
+  enumerable : 1,
+  preserveValues : 1,
+  readOnly : 0,
 
 }
 
@@ -210,17 +209,17 @@ var accessor = function accessor( object,names )
 
 var accessorForbid = function accessorForbid( object,names )
 {
-  var options = _accessorOptions.apply( this,arguments );
-  var object = options.object;
-  var names = options.names;
+  var o = _accessorOptions.apply( this,arguments );
+  var object = o.object;
+  var names = o.names;
 
-  if( options.override === undefined )
-  options.override = false;
 
   // verification
 
   _assert( _.objectLike( object ),'_.accessor:','expects object as argument but got', object );
   _assert( _.objectIs( names ),'_.accessor:','expects object names as argument but got', names );
+  _.assertMapOnly( o,accessorForbid.defaults );
+  _.mapComplement( o,accessorForbid.defaults );
 
 
   // message
@@ -228,8 +227,8 @@ var accessorForbid = function accessorForbid( object,names )
   _assert( object.constructor === null || object.constructor.name || object.constructor._name,'accessorForbid:','object should have name' );
   var protoName = ( object.constructor ? ( object.constructor.name || object.constructor._name || '' ) : '' ) + '.';
   var message = 'is deprecated';
-  if( options.args )
-  message = options.args.join( ' : ' );
+  if( o.message )
+  message = o.message.join( ' : ' );
 
 
   // property
@@ -248,63 +247,69 @@ var accessorForbid = function accessorForbid( object,names )
     (function _accessorForbid()
     {
 
-      var messageLine = protoName + rawName + ': ' + message;
+      var messageLine = protoName + rawName + ' : ' + message;
       var handler = function forbidden()
       {
-        /*console.log( 'stack :\n' + stack );*/
-        /*_.errLog( messageLine );*/
+        debugger;
         throw _.err( messageLine );
       }
 
       handler.forbid = true;
 
-/*
-      Object.defineProperty( object, setterName,
-      {
-        value : handler,
-        enumerable : false,
-        writable : false,
-      });
-
-      Object.defineProperty( object, getterName,
-      {
-        value : handler,
-        enumerable : false,
-        writable : false,
-      });
-*/
-
       methods[ setterName ] = handler;
       methods[ getterName ] = handler;
 
-      if( !options.override )
+      if( !o.override || o.allowMultiple )
       if( _ObjectHasOwnProperty.call( object,encodedName ) )
       {
         var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-        if( _.routineIs( descriptor.get ) && descriptor.get.name === _.nameUnfielded({ forbidden : 'forbidden' }).coded )
-        delete names[ n ];
-        else
+        if( _.routineIs( descriptor.get ) && descriptor.get.forbid && o.allowMultiple )
+        {
+          delete names[ n ];
+          return;
+        }
+        else if( !o.override )
         handler();
+      }
+
+      if( !Object.isExtensible( object ) )
+      {
+        delete names[ n ];
       }
 
     })();
 
   }
 
-  options.noField = true;
-  options.enumerable = false;
-  options.names = names;
-  options.object = object;
-  options.methods = methods;
+  o.preserveValues = 0;
+  o.strict = 0;
+  o.enumerable = false;
+  o.names = names;
+  o.object = object;
+  o.methods = methods;
 
-  return _accessor( options );
+  return _accessor( _.mapScreen( _accessor.defaults,o ) );
 }
+
+accessorForbid.defaults =
+{
+  override : 0,
+  allowMultiple : 1,
+}
+
+accessorForbid.defaults.__proto__ = _accessor.defaults;
 
 //
 
 var accessorForbidOnce = function( object,names )
 {
-  var options = _accessorOptions.apply( this,arguments );
+  var o = _accessorOptions.apply( this,arguments );
+
+  o.allowMultiple = 1;
+
+  return accessorForbid( o );
+
+/*
   var object = options.object;
   var names = options.names;
 
@@ -332,6 +337,7 @@ var accessorForbidOnce = function( object,names )
   //
 
   return accessorForbid( options );
+*/
 }
 
 //
@@ -614,7 +620,7 @@ var protoHas = function( srcProto,insProto )
 
 var protoOwning = function( srcObject,names )
 {
-  var names = _.nameFielded( names );
+  var names = _nameFielded( names );
   _assert( _.objectIs( srcObject ) );
 
   do
@@ -684,8 +690,6 @@ _.protoMake
   extend : Proto,
   supplement : Original.prototype,
   usingAtomicExtension : true,
-  usingGlobalName : true,
-  wname : { Bitmask : 'Bitmask' },
 });
 */
 
@@ -744,54 +748,10 @@ var protoMake = function( options )
     constructor : options.constructor,
     extend : options.extend,
     supplement : options.supplement,
+    static : options.static,
     usingAtomicExtension : options.usingAtomicExtension,
     overrideOriginal : options.overrideOriginal,
   });
-
-  // extend fields and methods
-/*
-  if( options.extend )
-  {
-    var extend = _.mapBut( options.extend,ClassFacility );
-    _.mapExtend( prototype,extend );
-  }
-
-  if( options.supplement )
-  _.mapSupplement( prototype,options.supplement );
-
-  // extend relationships
-
-  var ParentPrototype = prototype.__proto__;
-  if( options.overrideOriginal )
-  {
-
-    for( var f in ClassFacility )
-    if( options.extend[ f ] )
-    _propertyAddOwnDefaults( f,prototype,options.extend[ f ],{ override : true } );
-
-  }
-  else
-  {
-
-    for( var f in ClassFacility )
-    if( prototype.hasOwnProperty( f ) && ParentPrototype[ f ] )
-    {
-      _assert( prototype[ f ].constructor === ParentPrototype[ f ].constructor || prototype[ f ] === Object );
-      prototype[ f ].__proto__ = ParentPrototype[ f ];
-    }
-
-  }
-
-  // atomic extension
-
-  if( options.usingAtomicExtension )
-  {
-    if( _.mapOwn( prototype,{ Composes : 'Composes' } ) )
-    _.mapExtendFiltering( _.filter.atomicOwn(),prototype,prototype.Composes );
-    if( _.mapOwn( prototype,{ Aggregates : 'Aggregates' } ) )
-    _.mapExtendFiltering( _.filter.atomicOwn(),prototype,prototype.Aggregates );
-  }
-*/
 
   // name
 
@@ -812,6 +772,7 @@ protoMake.defaults =
   parent : null,
   extend : null,
   supplement : null,
+  static : null,
   wname : null,
   usingGlobalName : false,
   usingAtomicExtension : false,
@@ -835,22 +796,11 @@ protoMake.defaults =
 var protoExtend = function( options )
 {
 
-/*
-  var hasNot =
-  {
-    Parent : 'Parent',
-    Self : 'Self',
-    Type : 'Type',
-    type : 'type',
-  }
-*/
-
   _assert( arguments.length === 1 );
   _assert( _.objectIs( options ) );
 
   _assert( _.routineIs( options.constructor ) );
-  _assert( options.constructor.name );
-  /*_.assertMapOwnNone( options.constructor.prototype,hasNot );*/
+  _assert( options.constructor.name,'class constructor should have name' );
 
   _assert( _.routineIs( options.parent ) || options.parent === undefined || options.parent === null );
   _assert( _.objectIs( options.extend ) || options.extend === undefined || options.extend === null );
@@ -881,6 +831,12 @@ var protoExtend = function( options )
 
   if( options.supplement )
   _.mapSupplement( prototype,options.supplement );
+
+  if( options.static )
+  {
+    _.mapSupplement( prototype,options.static );
+    _.mapSupplement( options.constructor,options.static );
+  }
 
   // extend relationships
 
@@ -931,6 +887,7 @@ protoExtend.defaults =
   constructor : null,
   extend : null,
   supplement : null,
+  static : null,
   usingAtomicExtension : false,
   overrideOriginal : false,
 }

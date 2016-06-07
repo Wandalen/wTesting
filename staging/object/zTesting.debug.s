@@ -4,10 +4,12 @@
 
 if( typeof module !== 'undefined' )
 {
-  if( require( 'fs' ).existsSync( '../wTools.s' ) )
+
+  if( require( 'fs' ).existsSync( __dirname + '/../wTools.s' ) )
   require( '../wTools.s' );
   else
   require( 'wTools' );
+
   require( '../syn/Consequence.s' );
   require( '../object/printer/Logger.s' );
   require( '../component/StringFormat.s' );
@@ -378,6 +380,6 @@ if( typeof module !== 'undefined' && module !== null )
   module[ 'exports' ] = Self;
 }
 
-//_.timeOut( 5000, _.routineBind( Self.test,Self ) );
+//_.timeOut( 5000, _.routineJoin( self,Self.test ) );
 
 })();

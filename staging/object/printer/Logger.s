@@ -329,7 +329,7 @@ var _hookConsoleToServerSend = function( options, data )
     method: 'post',
     /*dataType: 'json',*/
     data: JSON.stringify( data ),
-    error: _.routineBind( self.unhookConsole,self,[ false ] ),
+    error: _.routineJoin_( self,self.unhookConsole,[ false ] ),
   });
 
 }

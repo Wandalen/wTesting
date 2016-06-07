@@ -38,7 +38,7 @@ var mixin = function( dst )
     object : dst.constructor,
     methods : { '_firstInstanceGet' : _firstInstanceGet },
     names : { firstInstance : 'firstInstance' },
-    noField : true,
+    preserveValues : 0,
   });
 
   _.accessorForbid( dst.constructor,

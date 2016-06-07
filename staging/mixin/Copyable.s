@@ -4,6 +4,18 @@
 
 var _ = wTools;
 
+if( typeof module !== 'undefined' )
+{
+  try
+  {
+    require( 'wProto' );
+  }
+  catch( err )
+  {
+    require( '../component/Proto.s' );
+  }
+}
+
 //
 
 /**
@@ -70,14 +82,14 @@ var mixin = function( dst )
   ({
     object : dst,
     names : accessor,
-    noField : true,
+    preserveValues : 0,
   });
 
   _.accessorForbid
   ({
     object : dst,
     names : forbid,
-    noField : true,
+    preserveValues : 0,
   });
 
   if( dst.finit.name === 'finitEventHandler' )
@@ -743,11 +755,11 @@ var _classNameGet = function _classNameGet()
 
 /**
  * Is this class prototype or instance.
- * @method _classIs
+ * @method _classIsGet
  * @memberof wCopyable#
  */
 
-var _classIs = function _classIs()
+var _classIsGet = function _classIsGet()
 {
   throw _.err( 'Not tested' );
   return this.hasOwnProperty( 'constructor' );
@@ -796,7 +808,7 @@ var Proto =
   '_SelfGet': _SelfGet,
   '_ParentGet': _ParentGet,
   '_classNameGet': _classNameGet,
-  '_classIs': _classIs,
+  '_classIsGet': _classIsGet,
   '_nickNameGet': _nickNameGet,
 
   Composes: Composes,

@@ -650,6 +650,15 @@ var toStrForCall = function( nameOfRoutine,args,ret,options )
 
 //
 
+var strCapitalize = function( src )
+{
+  _.assert( _.strIs( src ) );
+  _.assert( arguments.length === 1 );
+  return src[ 0 ].toUpperCase() + src.substring( 1 );
+}
+
+//
+
 var strTimes = function( s,times )
 {
   var result = '';
@@ -808,7 +817,53 @@ strSplitChunks.defaults =
   investigate : 1,
   prefix : '//>-' + '->//',
   postfix : '//<-' + '-<//',
-};
+}
+
+//
+
+var strInhalf = function( o )
+{
+  var result = [];
+
+  if( _.strIs( o ) )
+  o = { src : o };
+
+  //logger.log( 'strInhalf.src :',o.src );
+
+  _.mapSupplement( o,strInhalf.defaults );
+  _.assertMapOnly( o,strInhalf.defaults );
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( o.src ) );
+  _.assert( _.strIs( o.splitter ) || _.arrayIs( o.splitter ) );
+
+  o.splitter = _.arrayAs( o.splitter );
+
+  if( !o.splitter.length )
+  return [ o.src,'' ];
+
+  var splitter = _.entityMin( o.splitter,function( a )
+  {
+
+    var index = o.src.indexOf( a );
+    if( index === -1 )
+    return o.src.length;
+
+    return index;
+  });
+
+  result[ 0 ] = o.src.substring( 0,splitter.value );
+  result[ 1 ] = o.src.substring( splitter.value + o.splitter[ splitter.index ].length );
+
+  //logger.log( 'strInhalf.result :',result );
+
+  return result;
+}
+
+strInhalf.defaults =
+{
+  src : null,
+  splitter : ' ',
+}
 
 //
 
@@ -816,9 +871,7 @@ var strSplit = function( o )
 {
 
   if( _.strIs( o ) )
-  {
-    o = { src : o };
-  }
+  o = { src : o };
 
   _.mapSupplement( o,strSplit.defaults );
   _.assertMapOnly( o,strSplit.defaults );
@@ -854,7 +907,7 @@ var strSplit = function( o )
   {
 
     if( o.strip )
-    result[ r ] = _.strStrip( result[ r ] );
+    result[ r ] = strStrip( result[ r ] );
     if( !result[ r ] )
     result.splice( r,1 );
 
@@ -872,18 +925,79 @@ strSplit.defaults =
 
 //
 
-var strStrip = function( src,sub )
+var strStrip = function( o )
 {
-  if( sub === undefined ) sub = '';
-  return src.replace( /^\s+|\s+$/g,sub );
+
+  if( _.strIs( o ) )
+  o = { src : o };
+
+  _.mapSupplement( o,strStrip.defaults );
+  _.assertMapOnly( o,strStrip.defaults );
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( o.src ),'expects string or array o.src, got',_.strTypeOf( o.src ) );
+  _.assert( _.strIs( o.stripper ) || _.arrayIs( o.stripper ),'expects string or array o.stripper' );
+
+  //logger.log( 'strStrip.src :',o.src ); debugger;
+
+  if( o.stripper === ' ' )
+  {
+    return o.src.replace( /^\s+|\s+$/g,'' );
+  }
+  else
+  {
+
+    o.stripper = _.arrayAs( o.stripper );
+
+    for( var b = 0 ; b < o.src.length ; b++ )
+    if( o.stripper.indexOf( o.src[ b ] ) === -1 )
+    break;
+
+    for( var e = o.src.length-1 ; e >= 0 ; e-- )
+    if( o.stripper.indexOf( o.src[ e ] ) === -1 )
+    break;
+
+    //logger.log( 'strStrip.result :',o.src.substring( b,e+1 ) );
+
+    return o.src.substring( b,e+1 );
+  }
+
+}
+
+strStrip.defaults =
+{
+  src : null,
+  stripper : ' ',
 }
 
 //
 
-var strStripAllSpaces = function( src,sub )
+var strRemoveAllSpaces = function( src,sub )
 {
   if( sub === undefined ) sub = '';
   return src.replace( /\s/g,sub );
+}
+
+//
+
+var strStripEmptyLines = function( srcStr )
+{
+  var result = '';
+  var lines = srcStr.split( '\n' );
+
+  _.assert( _.strIs( srcStr ) );
+  _.assert( arguments.length === 1 );
+
+  for( var l = 0; l < lines.length; l += 1 )
+  {
+    var line = lines[ l ];
+
+    if( !_.strStrip( line ) )
+    continue;
+
+    result += line + '\n';
+  }
+
+  return result;
 }
 
 //
@@ -913,55 +1027,6 @@ t
 
   }
 
-  return result;
-};
-
-//
-
-var _strParts = function( src,delimeter ){
-
-  var result = [];
-
-  var index = src.indexOf( delimeter );
-  if( index === -1 )
-  {
-    result[ 0 ] = src;
-    return result;
-  }
-
-  result[ 0 ] = src.substr( 0,index );
-  result[ 1 ] = src.substr( index+delimeter.length );
-
-  return result;
-}
-
-//
-
-var strParts = function( src,delimeter ){
-
-  var result = [];
-
-  _.assert( _.strIs( src ) )
-  _.assert( _.strIs( delimeter ) || _.arrayIs( delimeter ) )
-
-/*
-  if( _.strIs( delimeter ) )
-  {
-*/
-    result = _strParts( src,delimeter );
-/*
-  }
-  else
-  {
-    _.until( src,function( e,k,i )
-    {
-
-      result = _strParts( src,e );
-      return result.length;
-
-    });
-  }
-*/
   return result;
 }
 
@@ -1293,26 +1358,6 @@ var strNumberLines = function( srcStr )
 
 //
 
-var strStripEmptyLines = function( srcStr )
-{
-  var result = '';
-  var lines = srcStr.split( '\n' );
-
-  for( var l = 0; l < lines.length; l += 1 )
-  {
-    var line = lines[ l ];
-
-    if( !_.strStrip( line ) )
-    continue;
-
-    result += line + '\n';
-  }
-
-  return result;
-}
-
-//
-
 var strCount = function( src,ins )
 {
   var result = -1;
@@ -1584,19 +1629,19 @@ var Proto =
   toStrForRange: toStrForRange,
   toStrForCall: toStrForCall,
 
+  strCapitalize: strCapitalize,
   strTimes: strTimes,
   strLineCount: strLineCount,
   strSplitStrNumber: strSplitStrNumber,
   strSplitChunks: strSplitChunks,
 
+  strInhalf: strInhalf,
   strSplit: strSplit,
   strStrip: strStrip,
-  strStripAllSpaces: strStripAllSpaces,
+  strRemoveAllSpaces: strRemoveAllSpaces,
+  strStripEmptyLines: strStripEmptyLines,
 
   strIron: strIron,
-
-  _strParts: _strParts,
-  strParts: strParts,
 
   strReplaceAll: strReplaceAll,
   strReplaceNames: strReplaceNames,
@@ -1619,7 +1664,6 @@ var Proto =
 
   strIndentation: strIndentation,
   strNumberLines: strNumberLines,
-  strStripEmptyLines: strStripEmptyLines,
 
   strCount: strCount,
 
@@ -1642,7 +1686,7 @@ _.mapExtend( Self, Proto );
 //
 
 var toStrFine = Self.toStrFine = Self.toStrFine_gen();
-var toStr = Self.toStr = toStrFine;
+var toStr = Self.toStr = Self.strFrom = toStrFine;
 
 //
 

@@ -1,13 +1,30 @@
-( function(){
+( function _Consequence_s_(){
 
 'use strict';
 
-if( typeof wCopyable === 'undefined' && typeof module !== 'undefined' )
+if( typeof module !== 'undefined' )
 {
-  require( '../component/Proto.s' );
-  require( '../component/Exec.s' );
-  require( '../object/printer/aPrinter.s' );
-  require( '../mixin/Copyable.s' );
+
+  try
+  {
+    require( 'wTools' );
+  }
+  catch( err )
+  {
+    require( '../wTools.s' );
+  }
+
+  try
+  {
+    require( 'wProto' );
+    require( 'wCopyable' );
+  }
+  catch( err )
+  {
+    require( '../component/Proto.s' );
+    require( '../mixin/Copyable.s' );
+  }
+
 }
 
 var _ = wTools;
@@ -18,6 +35,21 @@ var Self = function wConsequence( options )
   return new( _.routineJoin( Self, Self, arguments ) );
   return Self.prototype.init.apply( this,arguments );
 }
+
+/*
+
+ !!! move promise / event property from object to taker
+
+ !!! test difference :
+
+    if( errs.length )
+    return new wConsequence().error( errs[ 0 ] );
+
+    if( errs.length )
+    throw _.err( errs[ 0 ] );
+
+
+*/
 
 //
 
@@ -75,30 +107,30 @@ var _modeSet = function _modeSet( value )
 // mechanics
 // --
 
-var _gotterAppend = function( options )
+var _gotterAppend = function( o )
 {
   var self = this;
-  var taker = options.taker;
-  var name = options.name || taker ? taker.name : null || null;
+  var taker = o.taker;
+  var name = o.name || taker ? taker.name : null || null;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.boolIs( options.thenning ) );
+  _.assert( _.boolIs( o.thenning ) );
   _.assert( _.routineIs( taker ) || taker instanceof Self );
 
   if( _.routineIs( taker ) )
   {
-    if( options.context !== undefined || options.argument !== undefined )
-    taker = _.routineBind( taker,options.context,options.argument );
+    if( o.context !== undefined || o.argument !== undefined )
+    taker = _.routineJoin( o.context,taker,o.argument );
   }
   else
   {
-    _.assert( options.context === undefined && options.argument === undefined );
+    _.assert( o.context === undefined && o.argument === undefined );
   }
 
   self._taker.push
   ({
     onGot : taker,
-    thenning : options.thenning,
+    thenning : o.thenning,
     name : name,
   });
 
@@ -187,57 +219,53 @@ var ifNoErrorThen = function()
 {
 
   _.assert( arguments.length === 1 );
+  _.assert( this instanceof Self )
+  _.assert( arguments.length <= 3 );
 
-  if( this === Self )
-  {
-
-    var onEnd = arguments[ 0 ];
-    _.assert( arguments.length === 1 );
-    _.assert( _.routineIs( onEnd ) );
-
-    return function ifNoErrorThen( err,data )
-    {
-
-      _.assert( arguments.length === 2 );
-
-      if( !err )
-      {
-        return onEnd();
-      }
-      else
-      {
-        debugger;
-/*
-        if( Config.debug )
-        _.errLog( err );
-*/
-        return wConsequence().error( err );
-      }
-
-    }
-
-  }
-  else if( this instanceof Self )
-  {
-
-    _.assert( arguments.length <= 3 );
-
-    return this._gotterAppend
-    ({
-      taker : Self.ifNoErrorThen( arguments[ 0 ] ),
-      context : arguments[ 1 ],
-      argument : arguments[ 2 ],
-      thenning : true,
-    });
-
-  }
-  else throw _.err( 'unexpected' );
+  return this._gotterAppend
+  ({
+    taker : Self.ifNoErrorThen( arguments[ 0 ] ),
+    context : arguments[ 1 ],
+    argument : arguments[ 2 ],
+    thenning : true,
+  });
 
 }
 
 //
 
-var thenDebug = function thenDebug( taker )
+var ifNoErrorThenClass = function()
+{
+
+  _.assert( arguments.length === 1 );
+  _.assert( this === Self );
+
+  var onEnd = arguments[ 0 ];
+  _.assert( arguments.length === 1 );
+  _.assert( _.routineIs( onEnd ) );
+
+  return function ifNoErrorThen( err,data )
+  {
+
+    _.assert( arguments.length === 2 );
+
+    if( !err )
+    {
+      return onEnd( err,data );
+    }
+    else
+    {
+      debugger;
+      return wConsequence().error( _.err( err ) );
+    }
+
+  }
+
+}
+
+//
+
+var thenDebug = function thenDebug()
 {
   var self = this;
 
@@ -347,62 +375,76 @@ var _handleGot = function()
 
   _.assert( self._given.length );
 
-  var mark = self.mark;
-  self.mark = null;
   var _given = self._given[ 0 ];
   self._given.splice( 0,1 );
 
   //
 
-  var giveTo = function( _taker )
+  var _giveToConsequence = function( _taker )
+  {
+
+    result = _taker.onGot.giveWithError.call( _taker.onGot,_given.error,_given.argument );
+    if( self.mode === 'promise' && _taker.thenning )
+    {
+      self.giveWithError( _given.error,_given.argument );
+    }
+
+  }
+
+  //
+
+  var _giveToRoutine = function( _taker )
+  {
+
+    try
+    {
+      result = _taker.onGot.call( self,_given.error,_given.argument );
+    }
+    catch( err )
+    {
+      debugger;
+      var err = _.err( err );
+      err.respected = 1;
+      result = new wConsequence().error( err );
+      if( Config.debug )
+      console.error( 'Consequence caught error' );
+      if( Config.debug )
+      {
+        _.timeOut( 1, function()
+        {
+          if( err.respected )
+          {
+            console.error( 'Uncaught error caught by Consequence:' );
+            _.errLog( err );
+          }
+        });
+      }
+    }
+    if( self.mode === 'promise' && _taker.thenning )
+    {
+      if( result instanceof Self )
+      result.got( self );
+      else
+      self.give( result );
+    }
+
+  }
+
+  //
+
+  var _giveTo = function( _taker )
   {
 
     if( _taker.onGot === _onDebug )
     debugger;
 
-    if( mark )
-    debugger;
-
     if( _taker.onGot instanceof Self )
     {
-      result = _taker.onGot.giveWithError.call( _taker.onGot,_given.error,_given.argument );
-      if( self.mode === 'promise' && _taker.thenning )
-      {
-        self.giveWithError( _given.error,_given.argument );
-      }
+      _giveToConsequence( _taker );
     }
     else
     {
-      try
-      {
-        result = _taker.onGot.call( self,_given.error,_given.argument );
-      }
-      catch( err )
-      {
-        debugger;
-        /*if( Config.debug )*/
-        /*_.errLog( err );*/
-        var err = _.err( err );
-        result = new wConsequence().error( err );
-        if( Config.debug )
-        if( !self._taker.length )
-        {
-          self.mark = self.mark || [];
-          self.mark.push( err );
-          _.timeOut( 1, function()
-          {
-            if( self.mark && self.mark.indexOf( err ) !== -1 )
-            _.errLog( err );
-          });
-        }
-      }
-      if( self.mode === 'promise' && _taker.thenning )
-      {
-        if( result instanceof Self )
-        result.got( self );
-        else
-        self.give( result );
-      }
+      _giveToRoutine( _taker );
     }
 
   }
@@ -414,14 +456,14 @@ var _handleGot = function()
 
     var _taker = self._taker[ 0 ];
     self._taker.splice( 0,1 );
-    giveTo( _taker );
+    _giveTo( _taker );
 
   }
   else if( self.mode === 'event' )
   {
 
     for( var i = 0 ; i < self._taker.length ; i++ )
-    giveTo( self._taker[ i ] );
+    _giveTo( self._taker[ i ] );
 
   }
   else throw _.err( 'unexepected' );
@@ -433,53 +475,86 @@ var _handleGot = function()
   return result;
 }
 
-// --
-// class
-// --
+//
 
-var _giveTo = function _giveTo( options )
+var _giveClass = function _giveClass( o )
 {
-  var give, context;
-  var args = options.args;
+  var context;
+
+  if( !( _.arrayIs( o.args ) && o.args.length <= 1 ) )
+  debugger;
 
   _.assert( arguments.length );
-  _.assert( _.objectIs( options ) );
-
-  if( options.error === undefined )
-  options.error = undefined;
-
-  if( options.context === undefined )
-  options.context = undefined;
+  _.assert( _.objectIs( o ) );
+  _.assert( _.arrayIs( o.args ) && o.args.length <= 1, 'not tested' );
 
   //
 
-  if( options.consequence instanceof Self )
+  if( o.consequence instanceof Self )
   {
-    if( options.error === undefined )
-    give = options.consequence.give;
+/*
+    if( o.error === undefined )
+    give = o.consequence.give;
     else
-    give = options.consequence.giveWithError;
-    context = options.consequence;
+    give = o.consequence.giveWithError;
+*/
+    _.assert( _.arrayIs( o.args ) && o.args.length <= 1 );
+
+    context = o.consequence;
+
+    if( o.error !== undefined )
+    {
+      o.consequence.giveWithError( o.error,o.args[ 0 ] );
+    }
+    else
+    {
+      o.consequence.give( o.args[ 0 ] );
+    }
+/*
+    if( o.args )
+    give.apply( context,o.args );
+    else
+    give.call( context,got );
+*/
   }
-  else if( _.routineIs( options.consequence ) )
+  else if( _.routineIs( o.consequence ) )
   {
-    give = options.consequence;
-    context = options.context;
+
+    _.assert( _.arrayIs( o.args ) && o.args.length <= 1 );
+
+/*
+    give = o.consequence;
+    context = o.context;
+
+    if( o.error !== undefined )
+    {
+      o.args = o.args || [];
+      o.args.unshift( o.error );
+    }
+
+    if( o.args )
+    o.consequence.apply( context,o.args );
+    else
+    o.consequence.call( context,got );
+*/
+
+    if( o.error !== undefined )
+    {
+      return o.consequence.call( context,o.error,o.args[ 0 ] );
+    }
+    else
+    {
+      return o.consequence.call( context,null,o.args[ 0 ] );
+    }
+
   }
-  else throw _.err( 'Unknown type of consequence' );
+  else throw _.err( 'Unknown type of consequence : ' + _.strTypeOf( o.consequence ) );
 
-  if( options.error !== undefined )
-  args.unshift( options.error );
-
-  if( options.args )
-  give.apply( context,options.args );
-  else
-  give.call( context,got );
 
 }
 
 //
-
+/*
 var giveWithContextTo = function giveWithContextTo( consequence,context,got )
 {
 
@@ -487,7 +562,7 @@ var giveWithContextTo = function giveWithContextTo( consequence,context,got )
   if( arguments.length > 3 )
   args = _.arraySlice( arguments,2 );
 
-  return _giveTo
+  return _giveClass
   ({
     consequence : consequence,
     context : context,
@@ -496,23 +571,32 @@ var giveWithContextTo = function giveWithContextTo( consequence,context,got )
   });
 
 }
-
+*/
 //
 
-var giveTo = function( consequence,got )
+var giveClass = function( consequence )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2 || arguments.length === 3 );
+
+  var err,got;
+  if( arguments.length === 2 )
+  {
+    got = arguments[ 1 ];
+  }
+  else if( arguments.length === 3 )
+  {
+    err = arguments[ 1 ];
+    got = arguments[ 2 ];
+  }
 
   var args = [ got ];
-  if( arguments.length > 2 )
-  args = _.arraySlice( arguments,1 );
 
-  return _giveTo
+  return _giveClass
   ({
     consequence : consequence,
     context : undefined,
-    error : undefined,
+    error : err,
     args : args,
   });
 
@@ -520,17 +604,17 @@ var giveTo = function( consequence,got )
 
 //
 
-var errorTo = function( consequence,error )
+var errorClass = function( consequence,error )
 {
 
   _.assert( arguments.length === 2 );
 
-  return _giveTo
+  return _giveClass
   ({
     consequence : consequence,
     context : undefined,
     error : error,
-    args : undefined,
+    args : [],
   });
 
 }
@@ -547,32 +631,10 @@ var giveWithContextAndErrorTo = function giveWithContextAndErrorTo( consequence,
   if( arguments.length > 4 )
   args = _.arraySlice( arguments,3 );
 
-  return _giveTo
+  return _giveClass
   ({
     consequence : consequence,
     context : context,
-    error : err,
-    args : args,
-  });
-
-}
-
-//
-
-var giveWithErrorTo = function giveWithErrorTo( consequence,err,got )
-{
-
-  if( err === undefined )
-  err = null;
-
-  var args = [ got ];
-  if( arguments.length > 3 )
-  args = _.arraySlice( arguments,2 );
-
-  return _giveTo
-  ({
-    consequence : consequence,
-    context : undefined,
     error : err,
     args : args,
   });
@@ -595,6 +657,22 @@ var givenGet = function()
 {
   var self = this;
   return self._given;
+}
+
+//
+
+var toStr = function()
+{
+  var self = this;
+  var result = self.nickName;
+
+  var names = _.entitySelect( self.takersGet(),'*.name' );
+
+  result += '\n  given : ' + self.givenGet().length;
+  result += '\n  takers : ' + self.takersGet().length;
+  result += '\n  takers : ' + names.join( ' ' );
+
+  return result;
 }
 
 // --
@@ -672,7 +750,6 @@ var Aggregates =
 
 var Restricts =
 {
-  mark : null,
 }
 
 // --
@@ -700,6 +777,7 @@ var Proto =
   done: got,
   gotOnce: gotOnce,
   then_: then_,
+  ifNoErrorThen: ifNoErrorThen,
   thenDebug: thenDebug,
   timeOut: timeOut,
 
@@ -709,22 +787,23 @@ var Proto =
   ping: ping,
 
   _handleGot: _handleGot,
+  _giveClass: _giveClass,
 
-  _giveTo: _giveTo,
+  //
+/*
 
   giveWithContextTo: giveWithContextTo,
   giveTo: giveTo,
   errorTo: errorTo,
-  ifNoErrorThen: ifNoErrorThen,
-
   giveWithContextAndErrorTo: giveWithContextAndErrorTo,
-  giveWithErrorTo: giveWithErrorTo,
 
+*/
 
   //
 
   takersGet: takersGet,
   givenGet: givenGet,
+  toStr: toStr,
 
 
   //
@@ -751,10 +830,12 @@ var Proto =
 var Static =
 {
 
-  giveWithContextTo: giveWithContextTo,
-  giveTo: giveTo,
-  errorTo: errorTo,
-  ifNoErrorThen: ifNoErrorThen,
+  give: giveClass,
+  error: errorClass,
+
+  giveWithContextAndErrorTo: giveWithContextAndErrorTo,
+
+  ifNoErrorThen: ifNoErrorThenClass,
 
 }
 
@@ -763,18 +844,11 @@ _.protoMake
   constructor : Self,
   parent : Parent,
   extend : Proto,
-  usingGlobalName : true,
-  wname : { Consequence : 'Consequence' },
 });
 
 _.mapExtend( Self,Static );
 
-/*
-_.mapExtend( Self,Proto );
-_.mapExtend( Self.prototype,Proto );
-_global_.wConsequence = wTools.Consequence = Self;
-*/
-
+if( _global_.wCopyable )
 wCopyable.mixin( Self.prototype );
 
 //
@@ -808,6 +882,7 @@ if( typeof module !== 'undefined' )
 
 //
 
+_global_.wConsequence = wTools.Consequence = Self;
 return Self;
 
 })();

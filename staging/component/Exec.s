@@ -38,8 +38,6 @@ var execAsyn = function( routine,onEnd,context )
 var execStages = function( stages,options )
 {
 
-  console.log( 'execStages' );
-
   // options
 
   var options = options || {};
@@ -52,7 +50,7 @@ var execStages = function( stages,options )
   // validation
 
   if( options.onUpdate )
-  throw _.err( '_.execStages:','onUpdate is deprecated, please use onEach' );
+  throw _.err( 'execStages :','onUpdate is deprecated, please use onEach' );
 
   _.assert( _.objectIs( stages ) || _.arrayLike( stages ) )
 
@@ -60,7 +58,7 @@ var execStages = function( stages,options )
   {
 
     if( !stages[ s ] )
-    throw _.err( 'execStages:','#'+s,'stage is not defined' );
+    throw _.err( 'execStages :','#'+s,'stage is not defined' );
 
     var routine = stages[ s ];
 
@@ -68,7 +66,7 @@ var execStages = function( stages,options )
     routine = stages[ s ].syn || stages[ s ].asyn;
 
     if( !_.routineIs( routine ) )
-    throw _.err( 'execStages:','stage','#'+s,'does not have routine to execute' );
+    throw _.err( 'execStages :','stage','#'+s,'does not have routine to execute' );
 
   }
 
@@ -82,7 +80,7 @@ var execStages = function( stages,options )
   // begin
 
   if( options.onBegin )
-  wConsequence.prototype.giveWithContextAndErrorTo( options.onBegin,options.context,null,options );
+  wConsequence.giveWithContextAndErrorTo( options.onBegin,options.context,null,options );
 
   // end
 
@@ -96,7 +94,7 @@ var execStages = function( stages,options )
     }
 
     if( options.onEnd )
-    wConsequence.prototype.giveWithContextAndErrorTo( options.onEnd,options.context,err,options );
+    wConsequence.giveWithContextAndErrorTo( options.onEnd,options.context,err,options );
 
     conEnd.giveWithError( err,null );
 

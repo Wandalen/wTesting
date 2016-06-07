@@ -111,6 +111,17 @@ var finit = function( Prototype )
 // register
 // --
 
+var eventHandlerInit = function()
+{
+  var self = this;
+
+  _.assert( arguments.length === 0 );
+
+  self._eventHandlerDescriptorsByKind( '' );
+}
+
+//
+
 var eventHandlerRegister = function( kind, onHandle )
 {
   var self = this;
@@ -132,6 +143,42 @@ var eventHandlerRegister = function( kind, onHandle )
   }
 
   self._eventHandlerRegister( descriptor );
+
+  return self;
+}
+
+//
+
+var eventForbid = function( kinds )
+{
+  var self = this;
+  var owner;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( kinds ) || _.arrayIs( kinds ) );
+
+  var kinds = _.arrayAs( kinds );
+
+  var onHandle = function()
+  {
+    throw _.err( kinds.join( ' ' ),'event is forbidden in',self.nickName );
+  }
+
+  for( var k = 0 ; k < kinds.length ; k++ )
+  {
+
+    var kind = kinds[ k ];
+
+    var descriptor =
+    {
+      kind : kind,
+      onHandle : onHandle,
+      forbidden : 1,
+    }
+
+    self._eventHandlerRegister( descriptor );
+
+  }
 
   return self;
 }
@@ -177,6 +224,9 @@ var _eventHandlerRegister = function _eventHandlerRegister( descriptor )
   _.assert( _.routineIs( descriptor.onHandle ) );
   _.assertMapOnly( descriptor,_eventHandlerRegister.defaults );
   _.assert( arguments.length === 1 );
+
+  if( descriptor.forbidden )
+  console.warn( 'REMINDER : forbidden event is not implemented!' );
 
   if( self._eventKinds && self._eventKinds.indexOf( kind ) === -1 )
   throw _.err( 'eventHandlerRegister:','Object does not support such kind of events:',kind,self );
@@ -229,6 +279,7 @@ _eventHandlerRegister.defaults =
   owner : null,
   proxy : 0,
   once : 0,
+  forbidden : 0,
 }
 
 // --
@@ -239,8 +290,7 @@ var eventHandlerUnregister = function( kind, onHandle )
 {
   var self = this;
 
-  var handlers = self._eventHandlerDescriptors;
-  if( !handlers )
+  if( !self._eventHandlerDescriptors )
   return self;
 
   if( arguments.length === 0 )
@@ -395,29 +445,6 @@ _eventHandlerUnregister.defaults =
 
 //
 
-/*
-var eventHandlerUnregisterAll = function( kind, handlersToUnregister )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1,'not implemented' );
-
-  var handlers = self._eventHandlerDescriptors;
-  if( !handlers )
-  return self;
-
-  handlers = handlers[ kind ];
-  if( !handlers )
-  return self;
-
-  handlers.splice( 0,handlers.length );
-
-  return self;
-}
-*/
-
-//
-
 var eventHandlerUnregisterByKindAndOwner = function( kind, owner )
 {
   var self = this;
@@ -479,10 +506,30 @@ var eventHandleUntil = function( event,value )
 
 //
 
+var eventHandleSingle = function( event )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  if( _.strIs( event ) )
+  event = { kind : event };
+
+  return self._eventHandle( event,{ single : 1 } );
+}
+
+//
+
 var _eventHandle = function( event,options )
 {
   var self = this;
   var result = options.result = options.result || [];
+  var untilFound = 0;
+
+/*
+  if( event.kind === 'finit' )
+  debugger;
+*/
 
   _.assert( arguments.length === 2 );
 
@@ -491,8 +538,6 @@ var _eventHandle = function( event,options )
 
   if( self.usingEventLogging )
   logger.log( 'fired event', self.nickName + '.' + event.kind );
-
-  var isUntil = options.hasOwnProperty( 'until' );
 
   var handlers = self._eventHandlerDescriptors;
   if( handlers === undefined )
@@ -508,6 +553,9 @@ var _eventHandle = function( event,options )
 
   if( self.usingEventLogging )
   logger.up();
+
+  if( options.single )
+  _.assert( handlerArray.length <= 1,'expects single handler, but has ' + handlerArray.length );
 
   //
 
@@ -526,11 +574,11 @@ var _eventHandle = function( event,options )
     else
     {
       result.push( handler.onHandleEffective.call( self, event ) );
-      if( isUntil )
+      if( options.until )
       {
         if( result[ result.length-1 ] === options.until )
         {
-          isUntil = 'found';
+          untilFound = 1;
           result = options.until;
           break;
         }
@@ -544,8 +592,12 @@ var _eventHandle = function( event,options )
   if( self.usingEventLogging )
   logger.down();
 
-  if( isUntil === true )
+  if( options.single )
+  result = result[ 0 ];
+
+  if( options.until && !untilFound )
   result = undefined;
+
   return result;
 }
 
@@ -661,8 +713,17 @@ var eventProxyTo = function( dst,rename )
   var self = this;
 
   _.assert( arguments.length === 2 );
-  _.assert( _.objectIs( dst ) && _.routineIs( dst.eventHandle ) );
+  _.assert( _.objectIs( dst ) || _.arrayIs( dst ) );
   _.assert( _.mapIs( rename ) || _.strIs( rename ) );
+
+  if( _.arrayIs( dst ) )
+  {
+    for( var d = 0 ; d < dst.length ; d++ )
+    self.eventProxyTo( dst[ d ],rename );
+    return self;
+  }
+
+  _.assert( _.routineIs( dst.eventHandle ) );
 
   if( _.strIs( rename ) )
   {
@@ -693,6 +754,7 @@ var eventProxyTo = function( dst,rename )
 
   })();
 
+  return self;
 }
 
 //
@@ -702,6 +764,13 @@ var eventProxyFrom = function( src,rename )
   var self = this;
 
   _.assert( arguments.length === 2 );
+
+  if( _.arrayIs( src ) )
+  {
+    for( var s = 0 ; s < src.length ; s++ )
+    self.eventProxyFrom( src[ s ],rename );
+    return self;
+  }
 
   return src.eventProxyTo( self,rename );
 }
@@ -742,13 +811,18 @@ var Proto =
 
   // register
 
+  eventHandlerInit : eventHandlerInit,
+
   eventHandlerRegister : eventHandlerRegister,
   addEventListener : eventHandlerRegister,
   on : eventHandlerRegister,
 
+  eventForbid : eventForbid,
+
   eventHandlerRegisterOneTime : eventHandlerRegisterOneTime,
   once : eventHandlerRegisterOneTime,
   _eventHandlerRegister: _eventHandlerRegister,
+
 
   // unregister
 
@@ -765,7 +839,9 @@ var Proto =
   emit : eventHandle,
   eventHandle : eventHandle,
   eventHandleUntil : eventHandleUntil,
+  eventHandleSingle : eventHandleSingle,
   _eventHandle : _eventHandle,
+
 
   // get
 
@@ -774,10 +850,12 @@ var Proto =
   _eventHandlerDescriptorByHandler : _eventHandlerDescriptorByHandler,
   _eventHandlerDescriptorsByKind : _eventHandlerDescriptorsByKind,
 
+
   // proxy
 
   eventProxyTo : eventProxyTo,
   eventProxyFrom : eventProxyFrom,
+
 
   // ident
 

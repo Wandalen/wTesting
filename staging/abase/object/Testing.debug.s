@@ -5,14 +5,28 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( require( 'fs' ).existsSync( __dirname + '/../wTools.s' ) )
-  require( '../wTools.s' );
-  else
-  require( 'wTools' );
+  try
+  {
+    require( '../wTools.ss' );
+  }
+  catch( err )
+  {
+    require( 'wTools' );
+  }
 
-  require( '../syn/Consequence.s' );
+  try
+  {
+    require( '../syn/Consequence.ss' );
+  }
+  catch( err )
+  {
+    require( 'wConsequence' );
+  }
+
   require( '../object/printer/Logger.s' );
   require( '../component/StringFormat.s' );
+  require( '../component/Exec.s' );
+
 }
 
 _global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;

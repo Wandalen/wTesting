@@ -5,8 +5,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( require( 'fs' ).existsSync( __dirname + '/../object/Testing.debug.s' ) )
-  require( '../object/Testing.debug.s' );
+  if( require( 'fs' ).existsSync( __dirname + '/../../amid/diagnostic/Testing.debug.s' ) )
+  require( '../../amid/diagnostic/Testing.debug.s' );
   else
   require( 'wTesting' );
 

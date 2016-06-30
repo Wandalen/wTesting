@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( '../wTools.ss' );
+    require( '../../abase/wTools.s' );
   }
   catch( err )
   {
@@ -16,16 +16,16 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( '../syn/Consequence.ss' );
+    require( '../../abase/syn/Consequence.s' );
   }
   catch( err )
   {
     require( 'wConsequence' );
   }
 
-  require( '../object/printer/Logger.s' );
-  require( '../component/StringFormat.s' );
-  require( '../component/Exec.s' );
+  require( '../../abase/object/printer/Logger.s' );
+  require( '../../abase/component/StringFormat.s' );
+  require( '../../abase/component/Exec.s' );
 
 }
 
@@ -261,6 +261,7 @@ var _testCollection = function( context )
   var onEach = function( options,testRoutine )
   {
     var failed = report.failed;
+    var result = null;
 
     var test = {};
     test.name = options.key;
@@ -277,21 +278,28 @@ var _testCollection = function( context )
     {
       try
       {
-        testRoutine.call( context,test );
+        result = testRoutine.call( context,test );
       }
       catch( err )
       {
         report.failed += 1;
-        logger.error( 'Failed:',test.name, test.description ? test.description : '' ,'\error:\n',err );
+        logger.error( 'Failed :',test.name, test.description ? test.description : '' ,'\error:\n',err );
       }
     }
     else
     {
-      testRoutine.call( context,test );
+      result = testRoutine.call( context,test );
     }
 
-    self._endTest( test,failed === report.failed );
+    if( !( result instanceof wConsequence ) )
+    result = new wConsequence().give( result );
 
+    result.then_( function()
+    {
+      self._endTest( test,failed === report.failed );
+    });
+
+    return result;
   }
 
   var onBegin = function()
@@ -348,7 +356,7 @@ var colorGood = 'background-color: #00aa00; color: #ffffff; font-weight:lighter;
 var colorNeutral = 'background-color: #aaaaaa; color: #ffffff; font-weight:lighter;';
 var EPS = 1e-5;
 var safe = false;
-var verbose = true;
+var verbose = false;
 
 // --
 // prototype

@@ -201,7 +201,7 @@ var _toStrFine = function _toStrFine( src,options )
   {
     if( options.noRoutine )
     return;
-    result += '{ routine ' + ( src.name ) + ' }';
+    result += '{ routine ' + ( src.name || 'noname' ) + ' }';
   }
   else if( _.numberIs( src ) )
   {
@@ -941,7 +941,7 @@ var strStrip = function( o )
 
   if( o.stripper === ' ' )
   {
-    return o.src.replace( /^\s+|\s+$/g,'' );
+    return o.src.replace( /^(\s|\n|\0)+|(\s|\n|\0)+$/gm,'' );
   }
   else
   {

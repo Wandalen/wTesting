@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
   }
   catch( err )
   {
-    require( '../object/Testing.debug.s' );
+    require( '../../amid/diagnostic/Testing.debug.s' );
   }
 }
 

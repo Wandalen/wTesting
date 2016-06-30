@@ -425,7 +425,7 @@ var _testSuiteRun = function( context )
         [
           testCaseText( test ) +
           ' ... failed throwing error\n' +
-          err.toString()
+          _.err( err ).toString()
         ];
 
         logger.error.apply( logger,strColor.apply( 'bad',msg ) );

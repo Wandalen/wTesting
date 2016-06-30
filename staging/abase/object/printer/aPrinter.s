@@ -64,7 +64,7 @@ var bindWriter = function( name,routine,context )
   var writeUp = function()
   {
 
-    console.log( 'up' );
+    //console.log( 'up' );
 
     var result = this[ name ].apply( this,arguments );
     this.up();
@@ -77,7 +77,7 @@ var bindWriter = function( name,routine,context )
   var writeDown = function()
   {
 
-    console.log( 'down' );
+    //console.log( 'down' );
 
     this.down();
     if( arguments.length )

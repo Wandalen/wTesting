@@ -2,6 +2,8 @@
 
 'use strict';
 
+var Chalk = null;
+
 if( typeof module !== 'undefined' )
 {
 
@@ -27,6 +29,8 @@ if( typeof module !== 'undefined' )
   require( '../../abase/component/StringFormat.s' );
   require( '../../abase/component/Exec.s' );
 
+  var Chalk = require( 'chalk' );
+
 }
 
 _global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
@@ -38,64 +42,6 @@ _.toStr = function(){ return String( arguments ) };
 // --
 // equalizer
 // --
-
-var reportOutcome = function( outcome,got,expected,path )
-{
-  var test = this;
-
-  if( !test._sampleIndex )
-  test._sampleIndex = 1;
-  else test._sampleIndex += 1;
-
-  _.assert( arguments.length === 4 );
-
-  if( outcome )
-  {
-    if( test.verbose )
-    {
-      logger.up();
-      logger.log
-      (
-        '\nexpected:\n',_.toStr( expected ),
-        '\ngot:\n',_.toStr( got )
-      );
-      logger.log
-      (
-        '%c' +
-        test.name + ' ' +
-        ( test.description ? test.description : '' ) +
-        '#' + test._sampleIndex +
-        ' ... ok:',colorGood
-      );
-      logger.down();
-    }
-    test.report.passed += 1;
-  }
-  else
-  {
-    logger.up();
-    logger.error
-    (
-      '\n' + test.name + ' ' +
-      ( test.description ? test.description : '' ) +
-      '#' + test._sampleIndex +
-      ' ... failed\n' +
-      '\nexpected :\n' + _.toStr( expected ) +
-      '\ngot :\n' + _.toStr( got ) +
-      '\nat : ' + path +
-      '\nexpected :\n' + _.toStr( _.entitySelect( expected,path ) ) +
-      '\ngot :\n' + _.toStr( _.entitySelect( got,path ) )
-    );
-    if( _.strIs( expected ) && _.strIs( got ) )
-    logger.error( '\ndifference:\n' + _.strDifference( expected,got ) );
-    logger.down();
-    test.report.failed += 1;
-    debugger;
-  }
-
-}
-
-//
 
 var identical = function( got,expected )
 {
@@ -173,6 +119,196 @@ var shouldThrowError = function( routine )
 }
 
 // --
+// output
+// --
+
+var reportOutcome = function( outcome,got,expected,path )
+{
+  var test = this;
+
+  if( !test._sampleIndex )
+  test._sampleIndex = 1;
+  else test._sampleIndex += 1;
+
+  _.assert( arguments.length === 4 );
+
+  /**/
+
+  var msgExpectedGot = function()
+  {
+    return '' +
+    'expected :\n' + _.toStr( expected ) +
+    '\ngot :\n' + _.toStr( got );
+  }
+
+  /**/
+
+  if( outcome )
+  {
+    if( test.verbose )
+    {
+
+      logger.logUp();
+
+      logger.log( msgExpectedGot() );
+
+      var msg =
+      [
+        testCaseText( test ) +
+        ' ... ok'
+      ];
+
+      logger.logDown.apply( logger,strColor.apply( 'good',msg ) );
+
+    }
+    test.report.passed += 1;
+  }
+  else
+  {
+
+    logger.logUp();
+
+    logger.log( msgExpectedGot() );
+
+    if( !_.atomicIs( got ) && !_.atomicIs( expected ) )
+    logger.log
+    (
+      'at : ' + path +
+      '\nexpected :\n' + _.toStr( _.entitySelect( expected,path ) ) +
+      '\ngot :\n' + _.toStr( _.entitySelect( got,path ) )
+    );
+
+    if( _.strIs( expected ) && _.strIs( got ) )
+    logger.error( '\ndifference :\n' + _.strDifference( expected,got ) );
+
+    var msg =
+    [
+      testCaseText( test ) +
+      ' ... failed'
+    ];
+
+    logger.errorDown.apply( logger,strColor.apply( 'bad',msg ) );
+
+    test.report.failed += 1;
+    debugger;
+  }
+
+}
+
+//
+
+var testCaseText = function( test )
+{
+  return '' +
+    'Test routine : ' + test.name + ' : ' +
+    'test case : ' + ( test.description ? test.description : '' ) + '' +
+    ' # ' + test._sampleIndex
+  ;
+}
+
+//
+
+var _strColor = function _strColor( color,result )
+{
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.arrayIs( result ) );
+  _.assert( _.strIs( color ),'expects color as string' );
+
+  var src = result[ 0 ];
+
+  if( Chalk )
+  {
+
+    _.assert( result.length === 1 );
+
+    switch( color )
+    {
+
+      case 'good' :
+        result[ 0 ] = Chalk.green( src ); break;
+
+      case 'bad' :
+        result[ 0 ] = Chalk.red( src ); break;
+
+      case 'neutral' :
+        result[ 0 ] = Chalk.bgWhite( Chalk.black( src ) ); break;
+        return Chalk.bgWhite( Chalk.black( src ) ); break;
+
+      case 'bold' :
+        result[ 0 ] = Chalk.bgWhite( src ); break;
+        return Chalk.bgWhite( src ); break;
+
+      default :
+        throw _.err( 'strColor : unknown color : ' + color );
+
+    }
+
+  }
+  else
+  {
+
+    _.assert( result.length === 2 );
+    _.assert( _.strIs( result[ 1 ] ) );
+
+    var tag = null;
+    switch( color )
+    {
+
+      case 'good' :
+        tag = colorGood; break;
+
+      case 'bad' :
+        tag = colorBad; break;
+
+      case 'neutral' :
+        tag = colorNeutral; break;
+
+      case 'bold' :
+        tag = colorBold; break;
+
+      default :
+        throw _.err( 'strColor : unknown color : ' + color );
+
+    }
+
+    result[ 0 ] = _.strPrependOnce( src,'%c' );
+    result[ 1 ] += ' ; ' + tag;
+
+  }
+
+  return result;
+}
+
+//
+
+var strColor = function strColor()
+{
+
+  var src = _.str.apply( _,arguments );
+  var result = null;
+
+  if( Chalk )
+  result = [ src ];
+  else
+  result = [ src,'' ];
+
+  if( _.arrayIs( this ) )
+  {
+
+    for( var t = 0 ; t < this.length ; t++ )
+    _strColor( this[ t ],result );
+
+  }
+  else
+  {
+    _strColor( this,result );
+  }
+
+  return result;
+}
+
+// --
 // tester
 // --
 
@@ -198,7 +334,7 @@ var test = function( args )
 
   var run = function()
   {
-    self._testCollectionDelayed.apply( self,args );
+    self._testSuiteRunDelayed.apply( self,args );
   }
 
   _.timeOut( 1, function()
@@ -212,7 +348,7 @@ var test = function( args )
 
 //
 
-var _testCollectionDelayed = function( context )
+var _testSuiteRunDelayed = function( context )
 {
   var self = this;
 
@@ -235,7 +371,7 @@ var _testCollectionDelayed = function( context )
   self.queue.got( function()
   {
 
-    var testing = self._testCollection.call( self,context );
+    var testing = self._testSuiteRun.call( self,context );
     testing.done( self.queue );
 
   });
@@ -244,12 +380,11 @@ var _testCollectionDelayed = function( context )
 
 //
 
-var _testCollection = function( context )
+var _testSuiteRun = function( context )
 {
   var self = this;
   var tests = context.tests;
   var con = new wConsequence();
-  /*context.__proto__ = Self;*/
 
   _.accessorForbid( context, { options : 'options' } );
   _.accessorForbid( context, { context : 'context' } );
@@ -283,7 +418,18 @@ var _testCollection = function( context )
       catch( err )
       {
         report.failed += 1;
-        logger.error( 'Failed :',test.name, test.description ? test.description : '' ,'\error:\n',err );
+
+        debugger;
+
+        var msg =
+        [
+          testCaseText( test ) +
+          ' ... failed throwing error\n' +
+          err.toString()
+        ];
+
+        logger.error.apply( logger,strColor.apply( 'bad',msg ) );
+
       }
     }
     else
@@ -302,19 +448,44 @@ var _testCollection = function( context )
     return result;
   }
 
-  var onBegin = function()
+  var handleTestSuiteBegin = function handleTestSuiteBegin()
   {
-    logger.logUp( '%cTesting of ' + context.name + ' starting..', colorNeutral );
+
+    var msg =
+    [
+      'Starting testing of test suite ' + context.name + '..'
+    ];
+    logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
+    logger.log();
+
   }
 
-  var onEnd = function()
+  var handleTestSuiteEnd = function handleTestSuiteEnd()
   {
+
+    var msg =
+    [
+      'Testing of test suite ' + context.name + ' finished ' + ( report.failed === 0 ? 'good' : 'with fails' ) + '.'
+    ];
+    logger.logDown.apply( logger,strColor.apply( [ report.failed === 0 ? 'good' : 'bad','bold' ],msg ) );
+
+    var msg =
+    [
+      _.toStr( report,{ wrap : 0, multiline : 1 } )+'\n\n'
+    ];
+    logger.logDown.apply( logger,strColor.apply( [ report.failed === 0 ? 'good' : 'bad' ],msg ) );
+
+    //logger.log( '' + _.toStr( report,{ wrap : 0, multiline : 1 } )+'\n\n' );
+
+/*
     logger.logDown
     (
       '%cTesting of ' + context.name + ' finished.',
       ( report.failed === 0 ) ? colorGood : colorBad,
       '\n  ' + _.toStr( report,{ wrap : 0, multiline : 1 } )+'\n\n'
     );
+*/
+
     con.give();
   }
 
@@ -323,8 +494,8 @@ var _testCollection = function( context )
     syn : 1,
     manual : 1,
     onEach : onEach,
-    onBegin : onBegin,
-    onEnd : onEnd,
+    onBegin : handleTestSuiteBegin,
+    onEnd : handleTestSuiteEnd,
   });
 
   return con;
@@ -335,7 +506,15 @@ var _testCollection = function( context )
 var _beginTest = function( test )
 {
 
+  var msg =
+  [
+    'Running test routine ' + test.name + '..'
+  ];
+  logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
+
+/*
   logger.logUp( '\n%cRunning test',colorNeutral,test.name+'..' );
+*/
 
 }
 
@@ -345,17 +524,42 @@ var _endTest = function( test,success )
 {
 
   if( success )
-  logger.logDown( '%cPassed test:',colorGood,test.name+'.\n' );
+  {
+
+    var msg =
+    [
+      'Passed test routine : ' + test.name + '.'
+    ];
+    logger.logDown.apply( logger,strColor.apply( [ 'good','bold' ],msg ) );
+
+    //logger.logDown( '%cPassed test :',colorGood,test.name+'.\n' );
+
+  }
+  else
+  {
+
+    var msg =
+    [
+      'Failed test routine : ' + test.name + '.'
+    ];
+    logger.logDown.apply( logger,strColor.apply( [ 'bad','bold' ],msg ) );
+
+  }
+
+  logger.log();
 
 }
 
 //
 
-var colorBad = 'background-color: #aa0000; color: #000000; font-weight:lighter;';
-var colorGood = 'background-color: #00aa00; color: #ffffff; font-weight:lighter;';
-var colorNeutral = 'background-color: #aaaaaa; color: #ffffff; font-weight:lighter;';
+var colorBad = 'color : #ff0000; font-weight :lighter;';
+var colorGood = 'background-color : #00aa00; color : #008800; font-weight :lighter;';
+var colorNeutral = 'background-color : #aaaaaa; color : #ffffff; font-weight :lighter;';
+
+var colorBold = 'background-color : #aaaaaa';
+
 var EPS = 1e-5;
-var safe = false;
+var safe = true;
 var verbose = false;
 
 // --
@@ -367,31 +571,41 @@ var Self =
 
   // equalizer
 
-  reportOutcome: reportOutcome,
-  identical: identical,
-  equivalent: equivalent,
-  contain: contain,
-  shouldThrowError: shouldThrowError,
+  identical : identical,
+  equivalent : equivalent,
+  contain : contain,
+  shouldThrowError : shouldThrowError,
+
+
+  // output
+
+  reportOutcome : reportOutcome,
+  testCaseText : testCaseText,
+
+  _strColor : _strColor,
+  strColor : strColor,
+
+
 
   // tester
 
-  testAll: testAll,
-  test: test,
-  _testCollectionDelayed: _testCollectionDelayed,
-  _testCollection: _testCollection,
+  testAll : testAll,
+  test : test,
+  _testSuiteRunDelayed : _testSuiteRunDelayed,
+  _testSuiteRun : _testSuiteRun,
 
-  _beginTest: _beginTest,
-  _endTest: _endTest,
+  _beginTest : _beginTest,
+  _endTest : _endTest,
 
   // var
 
-  colorBad: colorBad,
-  colorGood: colorGood,
-  colorNeutral: colorNeutral,
-  EPS: EPS,
+  colorBad : colorBad,
+  colorGood : colorGood,
+  colorNeutral : colorNeutral,
+  EPS : EPS,
 
-  safe: safe,
-  verbose: verbose,
+  safe : safe,
+  verbose : verbose,
 
 };
 

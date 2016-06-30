@@ -178,7 +178,6 @@ var execStages = function( stages,options )
       if( options.onEach )
       {
         ret = options.onEach.call( options.context,options,stage );
-        debugger;
       }
 
       if( !( ret instanceof wConsequence ) )

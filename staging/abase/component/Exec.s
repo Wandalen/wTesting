@@ -149,6 +149,9 @@ var execStages = function( stages,options )
     var handleStageEnd = function( err,ret )
     {
 
+      if( err )
+      return handleEnd( _.err( err ) );
+
       var isSyn = stage.syn || ( options.syn && !stage.asyn );
 
       if( !isSyn && !( ret instanceof wConsequence ) )
@@ -158,9 +161,12 @@ var execStages = function( stages,options )
       else if( isSyn && ( ret instanceof wConsequence ) )
       throw _.err( 'Synchronous stage should not return wConsequence' );
 
-      if( !isSyn || ret instanceof wConsequence  )
+      if( !isSyn || ret instanceof wConsequence )
       {
-        ret.got( handleNext );
+        if( ret instanceof wConsequence )
+        ret.then_( handleNext );
+        else
+        handleNext( null );
       }
       else
       {

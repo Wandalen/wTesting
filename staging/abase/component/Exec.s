@@ -13,6 +13,13 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 var _assert = _.assert;
 var _arraySlice = _.arraySlice;
 
+/*
+
+  !!! rewrite or deprecate?
+  !!! introduce paramter to continue on error
+
+*/
+
 // --
 // exec
 // --

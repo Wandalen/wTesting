@@ -414,7 +414,7 @@ var Proto =
 
 };
 
-Self.__proto__ = Proto;
+Object.setPrototypeOf( Self, Proto );
 wTests[ Self.name ] = Self;
 
 if( typeof module !== 'undefined' && !module.parent )

@@ -405,7 +405,7 @@ var _testSuiteRun = function( context )
 
     _.mapSupplement( test,context );
 
-    test.__proto__ = Self;
+    Object.setPrototypeOf( test, Self );
 
     self._beginTest( test );
 

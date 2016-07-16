@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 'use strict';
 
@@ -1073,18 +1073,16 @@ var strJoin = function()
 
   var join = function( s,src )
   {
-    /*
-    if( result[ s ] === undefined )
-    result[ s ] = '';
-    */
     result[ s ] += src;
   }
+
+  /**/
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var src = arguments[ a ];
 
-    _.assert( _.strIs( src ) || _.arrayIs( src ) );
+    _.assert( _.strIs( src ) || _.numberIs( src ) || _.arrayIs( src ) );
 
     if( _.arrayIs( src ) )
     {
@@ -1117,24 +1115,87 @@ var strJoin = function()
 }
 
 //
-/*
-var strStick = function strStick( src, prefix, postfix )
+
+var strUnjoin = function( srcStr,maskArray )
 {
 
-  if( _.arrayIs( src ) )
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( srcStr ) );
+  _.assert( _.arrayIs( maskArray ) );
+
+  var result = [];
+  var index = 0;
+  var rindex = -1;
+
+  /**/
+
+  var checkRoutine = function()
   {
-    for( var s = 0 ; s < src.length ; s++ )
-    src[ s ] = _.strStick( src[ s ],prefix,postfix );
-    return src;
+
+    if( rindex !== -1 )
+    {
+      _.assert( rindex <= index );
+      result.push( srcStr.substring( rindex,index ) );
+      rindex = -1;
+      return true;
+    }
+
+    return false;
   }
 
-  _.assert( _.strIs( src ) );
-  _.assert( _.strIs( prefix ) || prefix === undefined );
-  _.assert( _.strIs( postfix ) || postfix === undefined );
+  /**/
 
-  return ( prefix ? prefix : '' ) + src + ( postfix ? postfix : '' );
+  var checkMask = function( mask )
+  {
+
+    _.assert( _.strIs( mask ) || _.routineIs( mask ) )
+
+    if( _.strIs( mask ) )
+    {
+      index = srcStr.indexOf( mask,index );
+
+      if( index === -1 )
+      return false;
+
+      checkRoutine();
+
+      result.push( mask );
+      index += mask.length;
+
+    }
+    else if( _.routineIs( mask ) )
+    {
+      rindex = index;
+    }
+
+    return true;
+  }
+
+  /**/
+
+  for( var m = 0 ; m < maskArray.length ; m++ )
+  {
+
+    var mask = maskArray[ m ];
+
+    if( !checkMask( mask ) )
+    return;
+
+  }
+
+  if( checkRoutine() )
+  debugger;
+
+  /**/
+
+  return result;
 }
-*/
+
+strUnjoin.any = function( src )
+{
+  return src;
+}
+
 //
 
 var strDropPrefix = function( src,prefix )
@@ -1647,7 +1708,7 @@ var Proto =
   strReplaceNames: strReplaceNames,
 
   strJoin: strJoin,
-  /*strStick: strStick,*/
+  strUnjoin: strUnjoin,
 
   strDropPrefix: strDropPrefix,
   strDropPostfix: strDropPostfix,
@@ -1677,7 +1738,6 @@ var Proto =
 
   strCamelize: strCamelize,
   strFilenameFor: strFilenameFor,
-
 
 }
 

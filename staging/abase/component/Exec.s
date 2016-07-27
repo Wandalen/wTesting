@@ -1,4 +1,4 @@
-(function _Exec_s_(){
+( function _Exec_s_() {
 
 'use strict';
 
@@ -42,21 +42,21 @@ var execAsyn = function( routine,onEnd,context )
 
 //
 
-var execStages = function( stages,options )
+var execStages = function( stages,o )
 {
 
-  // options
+  // o
 
-  var options = options || {};
-  _.assertMapOnly( options,execStages.defaults );
-  _.mapComplement( options,execStages.defaults );
+  var o = o || {};
+  _.assertMapOnly( o,execStages.defaults );
+  _.mapComplement( o,execStages.defaults );
 
-  if( options.context === null )
-  options.context = this;
+  if( o.context === null )
+  o.context = this;
 
   // validation
 
-  if( options.onUpdate )
+  if( o.onUpdate )
   throw _.err( 'execStages :','onUpdate is deprecated, please use onEach' );
 
   _.assert( _.objectIs( stages ) || _.arrayLike( stages ) )
@@ -86,8 +86,8 @@ var execStages = function( stages,options )
 
   // begin
 
-  if( options.onBegin )
-  wConsequence.giveWithContextAndErrorTo( options.onBegin,options.context,null,options );
+  if( o.onBegin )
+  wConsequence.giveWithContextAndErrorTo( o.onBegin,o.context,null,o );
 
   // end
 
@@ -100,10 +100,10 @@ var execStages = function( stages,options )
       _.errLog( err );
     }
 
-    if( options.onEnd )
-    wConsequence.giveWithContextAndErrorTo( options.onEnd,options.context,err,options );
+    if( o.onEnd )
+    wConsequence.giveWithContextAndErrorTo( o.onEnd,o.context,err,o );
 
-    conEnd.giveWithError( err,null );
+    conEnd._giveWithError( err,null );
 
   }
 
@@ -115,7 +115,7 @@ var execStages = function( stages,options )
     if( err )
     return handleEnd( err );
 
-    _.timeOut( options.delay,handleStage );
+    _.timeOut( o.delay,handleStage );
 
     return true;
   }
@@ -126,8 +126,8 @@ var execStages = function( stages,options )
   {
 
     var stage = stages[ keys[ s ] ];
-    options.index = s;
-    options.key = keys[ s ];
+    o.index = s;
+    o.key = keys[ s ];
     s += 1;
 
     if( !stage )
@@ -147,7 +147,7 @@ var execStages = function( stages,options )
     }
 
     if( !args )
-    args = options.args ? _.arraySlice( options.args ) : [];
+    args = o.args ? _.arraySlice( o.args ) : [];
 
     /*args.push( handleNext ); */
 
@@ -159,7 +159,7 @@ var execStages = function( stages,options )
       if( err )
       return handleEnd( _.err( err ) );
 
-      var isSyn = stage.syn || ( options.syn && !stage.asyn );
+      var isSyn = stage.syn || ( o.syn && !stage.asyn );
 
       if( !isSyn && !( ret instanceof wConsequence ) )
       {
@@ -188,19 +188,19 @@ var execStages = function( stages,options )
     {
 
       var ret;
-      if( options.onEach )
+      if( o.onEach )
       {
-        ret = options.onEach.call( options.context,options,stage );
+        ret = o.onEach.call( o.context,o,stage );
       }
 
       if( !( ret instanceof wConsequence ) )
       ret = new wConsequence().give( ret );
 
-      if( !options.manual )
+      if( !o.manual )
       //if( ret instanceof wConsequence )
-      ret.then_( _.routineJoin( options.context,routine,args ) );
+      ret.then_( _.routineJoin( o.context,routine,args ) );
       //else
-      //ret = routine.apply( options.context,args );
+      //ret = routine.apply( o.context,args );
 
       ret.then_( handleStageEnd );
 
@@ -214,7 +214,7 @@ var execStages = function( stages,options )
 
   //
 
-  _.timeOut( options.delay,handleStage );
+  _.timeOut( o.delay,handleStage );
 
   return conEnd;
 }
@@ -235,45 +235,45 @@ execStages.defaults =
 
 //
 /*
-var execForEach = function execForEach( elements,options )
+var execForEach = function execForEach( elements,o )
 {
 
   // validation
 
   if( !elements ) throw _.err( 'execForEach:','require elements' );
-  if( !options ) throw _.err( 'execForEach:','require options' );
-  if( options.onEach === undefined ) throw _.err( 'execForEach:','options require onEach' );
-  if( options.range === undefined ) throw _.err( 'execForEach:','options require range' );
+  if( !o ) throw _.err( 'execForEach:','require o' );
+  if( o.onEach === undefined ) throw _.err( 'execForEach:','o require onEach' );
+  if( o.range === undefined ) throw _.err( 'execForEach:','o require range' );
 
   // correction
 
-  if( options.batch === undefined ) options.batch = 1;
-  if( options.delay === undefined ) options.delay = 0;
-  if( options.batch === 0 ) options.batch = options.range[ 1 ] - options.range[ 0 ];
+  if( o.batch === undefined ) o.batch = 1;
+  if( o.delay === undefined ) o.delay = 0;
+  if( o.batch === 0 ) o.batch = o.range[ 1 ] - o.range[ 0 ];
 
   // begin
 
-  if( options.onBegin ) options.onBegin.call( options.context );
+  if( o.onBegin ) o.onBegin.call( o.context );
 
-  var r = options.range[ 0 ];
+  var r = o.range[ 0 ];
 
-  var range = options.range.slice();
+  var range = o.range.slice();
 
   var exec = function()
   {
 
-    for( var l = Math.min( range[ 1 ],r+options.batch ) ; r < l ; r++ )
+    for( var l = Math.min( range[ 1 ],r+o.batch ) ; r < l ; r++ )
     {
-      options.onEach.call( options.context,r );
+      o.onEach.call( o.context,r );
     }
 
     if( r < range[ 1 ] )
     {
-      _.timeOut( options.delay,exec );
+      _.timeOut( o.delay,exec );
     }
     else
     {
-      if( options.onEnd ) options.onEnd.call( options.context );
+      if( o.onEnd ) o.onEnd.call( o.context );
     }
 
   }
@@ -284,37 +284,37 @@ var execForEach = function execForEach( elements,options )
 */
 //
 
-var execInRange = function execInRange( options )
+var execInRange = function execInRange( o )
 {
 
-  if( !options ) throw _.err( '_.execInRange:','require options' );
-  if( options.onEach === undefined ) throw _.err( '_.execInRange:','options require onEach' );
-  if( options.range === undefined ) throw _.err( '_.execInRange:','options require range' );
+  if( !o ) throw _.err( '_.execInRange:','require o' );
+  if( o.onEach === undefined ) throw _.err( '_.execInRange:','o require onEach' );
+  if( o.range === undefined ) throw _.err( '_.execInRange:','o require range' );
 
-  if( options.batch === undefined ) options.batch = 1;
-  if( options.delay === undefined ) options.delay = 0;
-  if( options.batch === 0 ) options.batch = options.range[ 1 ] - options.range[ 0 ];
-  if( options.onBegin ) options.onBegin.call( options.context );
+  if( o.batch === undefined ) o.batch = 1;
+  if( o.delay === undefined ) o.delay = 0;
+  if( o.batch === 0 ) o.batch = o.range[ 1 ] - o.range[ 0 ];
+  if( o.onBegin ) o.onBegin.call( o.context );
 
-  var r = options.range[ 0 ];
+  var r = o.range[ 0 ];
 
-  var range = options.range.slice();
+  var range = o.range.slice();
 
   var exec = function()
   {
 
-    for( var l = Math.min( range[ 1 ],r+options.batch ) ; r < l ; r++ )
+    for( var l = Math.min( range[ 1 ],r+o.batch ) ; r < l ; r++ )
     {
-      options.onEach.call( options.context,r );
+      o.onEach.call( o.context,r );
     }
 
     if( r < range[ 1 ] )
     {
-      _.timeOut( options.delay,exec );
+      _.timeOut( o.delay,exec );
     }
     else
     {
-      if( options.onEnd ) options.onEnd.call( options.context );
+      if( o.onEnd ) o.onEnd.call( o.context );
     }
 
   }
@@ -325,46 +325,55 @@ var execInRange = function execInRange( options )
 
 //
 
-var execInRanges = function( options )
+var execInRanges = function( o )
 {
 
-  _.assertMapOnly( options,execInRanges.defaults );
-  _assert( _.objectIs( options ) )
-  _assert( _.arrayIs( options.ranges ) || _.objectIs( options.ranges ),'execInRanges:','expects options.ranges as array or object' )
-  _assert( _.routineIs( options.onEach ),'execInRanges:','expects options.onEach as routine' )
-  _assert( !options.delta || options.delta.length === options.ranges.length,'execInRanges:','options.delta must be same length as ranges' );
+  _.assertMapOnly( o,execInRanges.defaults );
+  _assert( _.objectIs( o ) )
+  _assert( _.arrayIs( o.ranges ) || _.objectIs( o.ranges ),'execInRanges:','expects o.ranges as array or object' )
+  _assert( _.routineIs( o.onEach ),'execInRanges:','expects o.onEach as routine' )
+  _assert( !o.delta || o.delta.length === o.ranges.length,'execInRanges:','o.delta must be same length as ranges' );
 
-  var delta = _.objectIs( options.delta ) ? [] : null;
+  /**/
+
+  var iterationNumber = 1;
+  var l = 0;
+  var delta = _.objectIs( o.delta ) ? [] : null;
   var ranges = [];
   var names = null;
-  if( _.objectIs( options.ranges ) )
+  if( _.objectIs( o.ranges ) )
   {
-    _assert( _.objectIs( options.delta ) || !options.delta );
+    _assert( _.objectIs( o.delta ) || !o.delta );
 
     names = [];
     var i = 0;
-    for( var r in options.ranges )
+    for( var r in o.ranges )
     {
       names[ i ] = r;
-      ranges[ i ] = options.ranges[ r ];
+      ranges[ i ] = o.ranges[ r ];
       if( delta )
       {
-        if( !options.delta[ r ] )
+        if( !o.delta[ r ] )
         throw _.err( 'no delta for',r );
-        delta[ i ] = options.delta[ r ];
+        delta[ i ] = o.delta[ r ];
       }
     }
+
+    l = names.length;
 
   }
   else
   {
-    ranges = options.ranges.slice();
-    delta = _.arrayLike( options.delta ) ? options.delta.slice() : null;
+    ranges = o.ranges.slice();
+    delta = _.arrayLike( o.delta ) ? o.delta.slice() : null;
+    l = o.ranges.length;
   }
 
   var last = ranges.length-1;
 
-  for( var r = 0 ; r < ranges.length ; r++ )
+  /* adjust range */
+
+  var adjustRange = function( r )
   {
 
     if( _.numberIs( ranges[ r ] ) )
@@ -377,13 +386,34 @@ var execInRanges = function( options )
     _assert( _.numberIs( ranges[ r ][ 0 ] ) );
     _assert( _.numberIs( ranges[ r ][ 1 ] ) );
 
+    iterationNumber *= ranges[ r ][ 1 ] - ranges[ r ][ 0 ];
+
   }
 
-  //
+  if( _.objectIs( ranges ) )
+  for( var r in ranges )
+  adjustRange( r );
+  else
+  for( var r = 0 ; r < ranges.length ; r++ )
+  adjustRange( r );
 
-  var adjust = function( arg ){ return arg.slice(); };
+  /* estimate */
+
+  if( o.estimate )
+  {
+
+    if( !ranges.length )
+    return 0;
+
+    return { length : iterationNumber };
+
+  }
+
+  /**/
+
+  var adjustIndex = function( arg ){ return arg.slice(); };
   if( names )
-  adjust = function( arg )
+  adjustIndex = function( arg )
   {
     var result = {};
     for( var i = 0 ; i < names.length ; i++ )
@@ -391,19 +421,19 @@ var execInRanges = function( options )
     return result;
   }
 
-  //
+  /**/
 
   var counter = [];
   for( var r = 0 ; r < ranges.length ; r++ )
   counter[ r ] = ranges[ r ][ 0 ];
 
-  //
+  /**/
 
   var i = 0;
   while( counter[ last ] < ranges[ last ][ 1 ] )
   {
 
-    var res = options.onEach.call( options.context,adjust( counter ),i );
+    var res = o.onEach.call( o.context,adjustIndex( counter ),i );
 
     if( res === false )
     break;
@@ -427,6 +457,8 @@ var execInRanges = function( options )
 
   }
 
+  /**/
+
   return i;
 }
 
@@ -435,6 +467,7 @@ execInRanges.defaults =
   ranges : null,
   delta : null,
   onEach : null,
+  estimate : 0,
 }
 
 // --

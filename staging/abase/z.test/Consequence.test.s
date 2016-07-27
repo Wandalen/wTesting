@@ -23,11 +23,10 @@ var Self = {};
 // test
 // --
 
-var promiseMode = function( test )
+var ordinarMessage = function( test )
 {
   var self = this;
 
-  var mode = 'promise';
   var samples =
   [
 
@@ -58,7 +57,7 @@ var promiseMode = function( test )
 
     /**/
 
-    var con = new wConsequence({ mode : mode });
+    var con = new wConsequence();
 
     con.got( function( err,data )
     {
@@ -118,7 +117,7 @@ var promiseMode = function( test )
 
     /**/
 
-    var con = new wConsequence({ mode : mode });
+    var con = new wConsequence();
 
     con[ sample.giveMethod ]( 1 );
     con[ sample.giveMethod ]( 2 );
@@ -182,11 +181,10 @@ var promiseMode = function( test )
 
 //
 
-var eventMode = function( test )
+var persistantMessage = function( test )
 {
   var self = this;
 
-  var mode = 'event';
   var samples =
   [
 
@@ -216,29 +214,32 @@ var eventMode = function( test )
 
     /**/
 
-    var con = new wConsequence({ mode : mode });
+    var con = new wConsequence();
 
-    con.got( ( function(){ var first = 1; return function( err,data )
+    con.persist( ( function(){ var first = 1; return function( err,data )
     {
 
+      debugger;
+      test.description = 'first message got with persist';
       test.identical( arguments[ sample.gotArgument ],first );
       test.identical( arguments[ sample.anotherArgument ],sample.anotherArgumentValue );
-      test.identical( arguments[ sample.gotArgument ] !== 3,true );
+      //test.identical( arguments[ sample.gotArgument ] !== 3,true );
       first += 1;
 
     }}()) );
 
     con[ sample.giveMethod ]( 1 );
     con[ sample.giveMethod ]( 2 );
-    con.clearTakers();
+    con.correspondentsClear();
 
     /**/
 
     var got8 = 0;
 
-    con.got( ( function(){ var first = 3; return function( err,data )
+    con.persist( ( function(){ var first = 3; return function( err,data )
     {
 
+      test.description = 'second message got with persist';
       test.identical( arguments[ sample.gotArgument ],first );
       test.identical( arguments[ sample.anotherArgument ],sample.anotherArgumentValue );
       first += 1;
@@ -248,9 +249,10 @@ var eventMode = function( test )
 
     }}()) );
 
-    con.got( ( function(){ var first = 3; return function( err,data )
+    con.persist( ( function(){ var first = 3; return function( err,data )
     {
 
+      test.description = 'third message got with persist';
       test.identical( arguments[ sample.gotArgument ],first );
       test.identical( arguments[ sample.anotherArgument ],sample.anotherArgumentValue );
       first += 1;
@@ -265,9 +267,10 @@ var eventMode = function( test )
     con[ sample.giveMethod ]( 5 );
     con[ sample.giveMethod ]( 6 );
 
-    con.got( ( function(){ var first = 7; return function( err,data )
+    con.persist( ( function(){ var first = 7; return function( err,data )
     {
 
+      test.description = 'got many messages with persist';
       test.identical( arguments[ sample.gotArgument ],first );
       test.identical( arguments[ sample.anotherArgument ],sample.anotherArgumentValue );
       first += 1;
@@ -285,14 +288,15 @@ var eventMode = function( test )
     /**/
 
     var got2 = 0;
-    var con = new wConsequence({ mode : mode });
+    var con = new wConsequence();
 
     con[ sample.giveMethod ]( 1 );
     con[ sample.giveMethod ]( 2 );
 
-    con.got( ( function(){ var first = 1; return function( err,data )
+    con.persist( ( function(){ var first = 1; return function( err,data )
     {
 
+      test.description = 'got two messages with persist';
       test.identical( arguments[ sample.gotArgument ],first );
       test.identical( arguments[ sample.anotherArgument ],sample.anotherArgumentValue );
       first += 1;
@@ -302,14 +306,19 @@ var eventMode = function( test )
 
     }}()) );
 
-    con.got( ( function(){ var first = 7; return function( err,data )
+    con.persist( ( function(){ var first = 7; return function( err,data )
     {
 
+      test.description = 'should never happened';
       test.identical( false,true );
 
     }}()) );
 
-    test.identical( got2,1 );
+    _.timeOut( 25, function()
+    {
+      test.description = 'got one only messages';
+      test.identical( got2,1 );
+    });
 
   }
 
@@ -321,7 +330,6 @@ var then = function( test )
 {
   var self = this;
 
-  var mode = 'event';
   var samples =
   [
 
@@ -400,13 +408,13 @@ var then = function( test )
 var Proto =
 {
 
-  tests:
+  tests :
   {
 
-    promiseMode: promiseMode,
-    eventMode: eventMode,
+    ordinarMessage : ordinarMessage,
+    persistantMessage : persistantMessage,
 
-    then: then,
+    then : then,
 
   },
 

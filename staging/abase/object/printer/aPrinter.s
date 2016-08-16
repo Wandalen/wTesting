@@ -134,6 +134,40 @@ var down = function( delta )
 
 //
 
+var topic = ( function()
+{
+
+  var Chalk;
+
+  return function topic()
+  {
+
+    var s = _.str.apply( _,arguments );
+
+    if( Chalk === undefined && typeof module !== 'undefined' )
+    try
+    {
+      Chalk = require( 'chalk' );
+    }
+    catch( err ) 
+    {
+      Chalk = null;
+    }
+
+    if( Chalk )
+    s = Chalk.bgWhite( Chalk.black( s ) );
+
+    this.log();
+    this.log( s );
+    this.log();
+
+    return s;
+  }
+
+})();
+
+//
+
 var levelGet = function()
 {
   var self = this;
@@ -158,17 +192,17 @@ var levelSet = function( level )
 var format =
 {
   level : 0,
-  prefix:
+  prefix :
   {
-    current: '',
-    up: '  ',
-    down: [2,0]
+    current : '',
+    up : '  ',
+    down : [2,0]
   },
-  postfix:
+  postfix :
   {
-    current: '',
-    up: '',
-    down: ''
+    current : '',
+    up : '',
+    down : ''
   }
 }
 
@@ -181,19 +215,20 @@ var Proto =
 
   // routine
 
-  init: init,
-  bindWriter: bindWriter,
+  init : init,
+  bindWriter : bindWriter,
 
-  up: up,
-  down: down,
+  up : up,
+  down : down,
+  topic : topic,
 
-  levelGet: levelGet,
-  levelSet: levelSet,
+  levelGet : levelGet,
+  levelSet : levelSet,
 
 
   // var
 
-  format: format,
+  format : format,
 
 };
 

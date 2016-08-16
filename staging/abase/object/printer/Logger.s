@@ -69,7 +69,7 @@ var wrapProto = function( proto,options )
 
   proto.constructor.wrappedByLogger = true;
 
-  console.log( 'wrapProto:',proto.constructor.name );
+  console.log( 'wrapProto :',proto.constructor.name );
 
   var methods = options.methods || proto;
   for( var r in methods )
@@ -112,7 +112,7 @@ var unwrapProto = function( proto )
 
   proto.constructor.wrappedByLogger = false;
 
-  console.log( 'unwrapProto:',proto.constructor.name );
+  console.log( 'unwrapProto :',proto.constructor.name );
 
   var methods = options.methods || proto;
   for( var r in methods )
@@ -164,9 +164,9 @@ var _hookConsoleToFileHandler = function( wasMethod, methodName, fileName )
       var strOptions = { levels : 7 };
       _.fileWrite
       ({
-        path: fileName,
-        data: _.toStr( args,strOptions ) + '\n',
-        append: true,
+        path : fileName,
+        data : _.toStr( args,strOptions ) + '\n',
+        append : true,
       });
 
     }
@@ -187,7 +187,7 @@ var hookConsoleToFile = function( fileName )
   fileName = fileName || 'log.txt';
   fileName = _.pathJoin( _.pathMainDir(),fileName );
 
-  console.log( 'hookConsoleToFile:',fileName );
+  console.log( 'hookConsoleToFile :',fileName );
 
   for( var i = 0, l = self._methods.length; i < l; i++ )
   {
@@ -203,7 +203,7 @@ var hookConsoleToFile = function( fileName )
   if( typeof window !== 'undefined' )
   window.onerror = function( msg, url, line )
   {
-    alert( 'Window error: ' + msg + ', ' + url + ', line ' + line );
+    alert( 'Window error : ' + msg + ', ' + url + ', line ' + line );
   };
 */
 
@@ -248,7 +248,7 @@ var hookConsoleToAlert = function()
   if( typeof window !== 'undefined' )
   window.onerror = function( msg, url, line )
   {
-    alert( 'Window error: ' + msg + ', ' + url + ', line ' + line );
+    alert( 'Window error : ' + msg + ', ' + url + ', line ' + line );
   };
 */
 
@@ -324,12 +324,12 @@ var _hookConsoleToServerSend = function( options, data )
 
   var request = $.ajax
   ({
-    url: options.url,
-    crossDomain: true,
-    method: 'post',
-    /*dataType: 'json',*/
-    data: JSON.stringify( data ),
-    error: _.routineJoin_( self,self.unhookConsole,[ false ] ),
+    url : options.url,
+    crossDomain : true,
+    method : 'post',
+    /*dataType : 'json',*/
+    data : JSON.stringify( data ),
+    error : _.routineJoin_( self,self.unhookConsole,[ false ] ),
   });
 
 }
@@ -390,7 +390,7 @@ var hookConsoleToServer = function( options )
   if( !options.id )
   options.id = _.numberRandomInt( 1 << 30 );
 
-  console.log( 'hookConsoleToServer:',options.url );
+  console.log( 'hookConsoleToServer :',options.url );
 
   //
 
@@ -425,7 +425,7 @@ var unhookConsole = function( force )
   return;
 
   console._hook = false;
-  console.log( 'unhookConsole:' );
+  console.log( 'unhookConsole :' );
 
   for( var i = 0, l = self._methods.length; i < l; i++ )
   {
@@ -473,7 +473,7 @@ var Proto =
   _hookConsoleToDomHandler : _hookConsoleToDomHandler,
   hookConsoleToDom : hookConsoleToDom,
 
-  _hookConsoleToServerSend: _hookConsoleToServerSend,
+  _hookConsoleToServerSend : _hookConsoleToServerSend,
   _hookConsoleToServerHandler : _hookConsoleToServerHandler,
   hookConsoleToServer : hookConsoleToServer,
 

@@ -1,4 +1,4 @@
-(function(){
+(function _Testing_debug_s_() {
 
 'use strict';
 
@@ -26,8 +26,8 @@ if( typeof module !== 'undefined' )
   }
 
   require( '../../abase/object/printer/Logger.s' );
-  require( '../../abase/component/StringFormat.s' );
-  require( '../../abase/component/Exec.s' );
+  //require( '../../abase/component/StringFormat.s' );
+  //require( '../../abase/component/Exec.s' );
 
   var Chalk = require( 'chalk' );
 

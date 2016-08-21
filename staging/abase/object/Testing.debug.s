@@ -7,6 +7,7 @@ var Chalk = null;
 if( typeof module !== 'undefined' )
 {
 
+  if( typeof wBase === 'undefined' )
   try
   {
     require( '../../abase/wTools.s' );
@@ -16,6 +17,7 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
+  if( typeof wConsequence === 'undefined' )
   try
   {
     require( '../../abase/syn/Consequence.s' );
@@ -25,9 +27,8 @@ if( typeof module !== 'undefined' )
     require( 'wConsequence' );
   }
 
+  if( typeof logger === 'undefined' )
   require( '../../abase/object/printer/Logger.s' );
-  //require( '../../abase/component/StringFormat.s' );
-  //require( '../../abase/component/Exec.s' );
 
   var Chalk = require( 'chalk' );
 

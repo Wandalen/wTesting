@@ -396,7 +396,7 @@ var _testSuiteRun = function( context )
 
   var onEach = function( o,testRoutine )
   {
-    return _testRoutineRun( o,testRoutine,context,report );
+    return self._testRoutineRun( o,testRoutine,context,report );
   }
 
   var handleTestSuiteBegin = function handleTestSuiteBegin()
@@ -472,7 +472,7 @@ var _testRoutineRun = function( o,testRoutine,context,report )
 
   var result = null;
   var test = {};
-  test.name = options.key;
+  test.name = o.key;
   test.report = report;
   test.description = '';
   test.context = context;

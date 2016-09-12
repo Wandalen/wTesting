@@ -394,59 +394,9 @@ var _testSuiteRun = function( context )
   report.passed = 0;
   report.failed = 0;
 
-  var onEach = function( options,testRoutine )
+  var onEach = function( o,testRoutine )
   {
-    var failed = report.failed;
-    var result = null;
-
-    var test = {};
-    test.name = options.key;
-    test.report = report;
-    test.description = '';
-
-    _.mapSupplement( test,context );
-
-    Object.setPrototypeOf( test, Self );
-
-    self._beginTest( test );
-
-    if( self.safe )
-    {
-      try
-      {
-        result = testRoutine.call( context,test );
-      }
-      catch( err )
-      {
-        report.failed += 1;
-
-        debugger;
-
-        var msg =
-        [
-          testCaseText( test ) +
-          ' ... failed throwing error\n' +
-          _.err( err ).toString()
-        ];
-
-        logger.error.apply( logger,strColor.apply( 'bad',msg ) );
-
-      }
-    }
-    else
-    {
-      result = testRoutine.call( context,test );
-    }
-
-    if( !( result instanceof wConsequence ) )
-    result = new wConsequence().give( result );
-
-    result.then_( function()
-    {
-      self._endTest( test,failed === report.failed );
-    });
-
-    return result;
+    return _testRoutineRun( o,testRoutine,context,report );
   }
 
   var handleTestSuiteBegin = function handleTestSuiteBegin()
@@ -504,7 +454,76 @@ var _testSuiteRun = function( context )
 
 //
 
-var _beginTest = function( test )
+var _testRoutineRun = function( o,testRoutine,context,report )
+{
+  var self = this;
+
+  // var tests = context.tests;
+  // var con = new wConsequence();
+  //
+  // _.accessorForbid( context, { options : 'options' } );
+  // _.accessorForbid( context, { context : 'context' } );
+  //
+  // var report = {};
+  // report.passed = 0;
+  // report.failed = 0;
+
+  //var onEach = function( o,testRoutine )
+
+  var result = null;
+  var test = {};
+  test.name = options.key;
+  test.report = report;
+  test.description = '';
+  test.context = context;
+
+  _.mapSupplement( test,context );
+
+  Object.setPrototypeOf( test, Self );
+
+  self._beganTestRoutine( test );
+
+  if( self.safe )
+  {
+
+    try
+    {
+      result = testRoutine.call( context,test );
+    }
+    catch( err )
+    {
+      report.failed += 1;
+
+      debugger;
+
+      var msg =
+      [
+        testCaseText( test ) +
+        ' ... failed throwing error\n' +
+        _.err( err ).toString()
+      ];
+
+      logger.error.apply( logger,strColor.apply( 'bad',msg ) );
+    }
+  }
+  else
+  {
+    result = testRoutine.call( context,test );
+  }
+
+  result = wConsequence.make( result );
+
+  result.then_( function()
+  {
+    self._endedTestRoutine( test,failed === report.failed );
+  });
+
+  return result;
+}
+
+//
+
+var _beganTestRoutine = function( test )
 {
 
   var msg =
@@ -521,7 +540,7 @@ var _beginTest = function( test )
 
 //
 
-var _endTest = function( test,success )
+var _endedTestRoutine = function( test,success )
 {
 
   if( success )
@@ -587,16 +606,18 @@ var Self =
   strColor : strColor,
 
 
-
   // tester
 
   testAll : testAll,
   test : test,
+
   _testSuiteRunDelayed : _testSuiteRunDelayed,
   _testSuiteRun : _testSuiteRun,
 
-  _beginTest : _beginTest,
-  _endTest : _endTest,
+  _testRoutineRun : _testRoutineRun,
+  _beganTestRoutine : _beganTestRoutine,
+  _endedTestRoutine : _endedTestRoutine,
+
 
   // var
 

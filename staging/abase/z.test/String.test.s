@@ -5,6 +5,9 @@
 if( typeof module !== 'undefined' )
 {
 
+  require( '../wTools.s' );
+  require( '../component/StringTools.s' );
+
   if( require( 'fs' ).existsSync( __dirname + '/../../amid/diagnostic/Testing.debug.s' ) )
   require( '../../amid/diagnostic/Testing.debug.s' );
   else
@@ -29,9 +32,17 @@ var toStr = function( test )
   [
 
     {
-      options : { levels : 2 },
+      options : {},
       in : false,
       out : 'false',
+      description : 'boolean',
+    },
+
+    {
+      options : {},
+      in : 13,
+      out : '13',
+      description : 'number',
     },
 
     {
@@ -300,8 +311,8 @@ var toStr = function( test )
         '[',
         '  "a", ',
         '  [ Array with 3 elements ], ',
-        '  { Object with 2 elements }, ',
-        '  { Object with 2 elements }, ',
+        '  [ Object with 2 elements ], ',
+        '  [ Object with 2 elements ], ',
         '  [ Array with 3 elements ], ',
         '  [ Array with 3 elements ]',
         ']',
@@ -341,16 +352,16 @@ var toStr = function( test )
         '    22 : [ Array with 4 elements ]',
         '  }, ',
         '  {',
-        '    31 : { Object with 2 elements }, ',
-        '    32 : { Object with 3 elements }',
+        '    31 : [ Object with 2 elements ], ',
+        '    32 : [ Object with 3 elements ]',
         '  }, ',
         '  [',
         '    [ Array with 3 elements ], ',
         '    [ Array with 4 elements ]',
         '  ], ',
         '  [',
-        '    { Object with 2 elements }, ',
-        '    { Object with 3 elements }',
+        '    [ Object with 2 elements ], ',
+        '    [ Object with 3 elements ]',
         '  ]',
         ']',
       ].join( '\n' ),
@@ -495,6 +506,7 @@ var toStr = function( test )
     var sample = samples[ s ];
     var got = _.toStr( sample.in,sample.options );
 
+    test.description = sample.description;
     test.identical( got,sample.out );
 
   }

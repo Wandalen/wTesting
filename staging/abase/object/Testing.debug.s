@@ -127,9 +127,9 @@ var reportOutcome = function( outcome,got,expected,path )
 {
   var test = this;
 
-  if( !test._sampleIndex )
-  test._sampleIndex = 1;
-  else test._sampleIndex += 1;
+  if( !test._caseIndex )
+  test._caseIndex = 1;
+  else test._caseIndex += 1;
 
   _.assert( arguments.length === 4 );
 
@@ -201,9 +201,9 @@ var reportOutcome = function( outcome,got,expected,path )
 var testCaseText = function( test )
 {
   return '' +
-    'Test routine : ' + test.name + ' : ' +
-    'test case : ' + ( test.description ? test.description : '' ) + '' +
-    ' # ' + test._sampleIndex
+    'Test routine( ' + test.name + ' ) : ' +
+    'test case' + ( test.description ? ( '( ' + test.description + ' )' ) : '' ) +
+    ' # ' + test._caseIndex
   ;
 }
 
@@ -404,7 +404,7 @@ var _testSuiteRun = function( context )
 
     var msg =
     [
-      'Starting testing of test suite ' + context.name + '..'
+      'Starting testing of test suite ( ' + context.name + ' )..'
     ];
     logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
     logger.log();
@@ -416,7 +416,7 @@ var _testSuiteRun = function( context )
 
     var msg =
     [
-      'Testing of test suite ' + context.name + ' finished ' + ( report.failed === 0 ? 'good' : 'with fails' ) + '.'
+      'Testing of test suite ( ' + context.name + ' ) finished ' + ( report.failed === 0 ? 'good' : 'with fails' ) + '.'
     ];
     logger.logDown.apply( logger,strColor.apply( [ report.failed === 0 ? 'good' : 'bad','bold' ],msg ) );
 
@@ -467,15 +467,16 @@ var _testRoutineRun = function( o,testRoutine,context,report )
   // var report = {};
   // report.passed = 0;
   // report.failed = 0;
-
   //var onEach = function( o,testRoutine )
 
   var result = null;
+  var failed = report.failed;
   var test = {};
   test.name = o.key;
   test.report = report;
   test.description = '';
   test.context = context;
+  test._caseIndex = 0;
 
   _.mapSupplement( test,context );
 
@@ -528,7 +529,7 @@ var _beganTestRoutine = function( test )
 
   var msg =
   [
-    'Running test routine ' + test.name + '..'
+    'Running test routine ( ' + test.name + ' )..'
   ];
   logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
 
@@ -548,7 +549,7 @@ var _endedTestRoutine = function( test,success )
 
     var msg =
     [
-      'Passed test routine : ' + test.name + '.'
+      'Passed test routine ( ' + test.name + ' ).'
     ];
     logger.logDown.apply( logger,strColor.apply( [ 'good','bold' ],msg ) );
 
@@ -560,7 +561,7 @@ var _endedTestRoutine = function( test,success )
 
     var msg =
     [
-      'Failed test routine : ' + test.name + '.'
+      'Failed test routine ( ' + test.name + ' ).'
     ];
     logger.logDown.apply( logger,strColor.apply( [ 'bad','bold' ],msg ) );
 

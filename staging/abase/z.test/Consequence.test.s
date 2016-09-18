@@ -230,7 +230,7 @@ var persistantMessage = function( test )
 
     con[ sample.giveMethod ]( 1 );
     con[ sample.giveMethod ]( 2 );
-    con.correspondentsClear();
+    con.correspondentsCancel();
 
     /**/
 

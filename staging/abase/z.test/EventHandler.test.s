@@ -39,14 +39,14 @@ var basic = function( test )
 
   //
 
-  test.description = 'eventHandlerRegister';
+  test.description = 'eventHandlerAppend';
 
   var onEvent1 = function( e ){ return entity1[ e.kind ] = ( entity1[ e.kind ] || 0 ) + 1; };
   var onEvent2 = function( e ){ return entity1[ e.kind ] = ( entity1[ e.kind ] || 0 ) + 1; };
   var onEvent3 = function( e ){ return entity1[ e.kind ] = ( entity1[ e.kind ] || 0 ) + 1; };
 
   entity1.on( 'event1',onEvent1 );
-  entity1.eventHandlerRegister( 'event2',onEvent2 );
+  entity1.eventHandlerAppend( 'event2',onEvent2 );
   entity1.on( 'event3','owner',onEvent3 );
 
   test.identical( entity1._eventHandlerDescriptorByHandler( onEvent1 ).onHandle,onEvent1 );

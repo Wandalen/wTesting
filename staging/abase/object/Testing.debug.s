@@ -457,18 +457,6 @@ var _testSuiteRun = function( context )
 var _testRoutineRun = function( o,testRoutine,context,report )
 {
   var self = this;
-
-  // var tests = context.tests;
-  // var con = new wConsequence();
-  //
-  // _.accessorForbid( context, { options : 'options' } );
-  // _.accessorForbid( context, { context : 'context' } );
-  //
-  // var report = {};
-  // report.passed = 0;
-  // report.failed = 0;
-  //var onEach = function( o,testRoutine )
-
   var result = null;
   var failed = report.failed;
   var test = {};
@@ -484,6 +472,8 @@ var _testRoutineRun = function( o,testRoutine,context,report )
 
   self._beganTestRoutine( test );
 
+  /* */
+
   if( self.safe )
   {
 
@@ -496,6 +486,9 @@ var _testRoutineRun = function( o,testRoutine,context,report )
       report.failed += 1;
 
       debugger;
+
+      if( test.onError )
+      test.onError.call( context,test );
 
       var msg =
       [
@@ -512,9 +505,11 @@ var _testRoutineRun = function( o,testRoutine,context,report )
     result = testRoutine.call( context,test );
   }
 
-  result = wConsequence.make( result );
+  /* */
 
-  result.then_( function()
+  result = wConsequence.from( result );
+
+  result.thenDo( function()
   {
     self._endedTestRoutine( test,failed === report.failed );
   });

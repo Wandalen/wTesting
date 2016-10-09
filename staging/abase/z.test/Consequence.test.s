@@ -358,7 +358,7 @@ var then = function( test )
     var con = new wConsequence();
     var counter = 0;
 
-    con.then_( function()
+    con.thenDo( function()
     {
 
       test.identical( counter,0 );
@@ -377,7 +377,7 @@ var then = function( test )
 
     });
 
-    con.then_( function()
+    con.thenDo( function()
     {
 
       test.identical( counter,4 );
@@ -385,7 +385,7 @@ var then = function( test )
 
     });
 
-    con.then_( function()
+    con.thenDo( function()
     {
 
       test.identical( counter,6 );

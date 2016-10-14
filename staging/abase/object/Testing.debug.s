@@ -103,20 +103,44 @@ var shouldThrowError = function( routine )
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
 
-  try
+  return test._conSyn.thenDo( function()
   {
-    routine.call( this );
-  }
-  catch( err )
-  {
-    thrown = 1;
-    outcome = test.reportOutcome( 1,true,true,'' );
-  }
 
-  if( !thrown )
-  outcome = test.reportOutcome( 0,false,true,'' );
+    var result;
+    if( routine instanceof wConsequence )
+    {
+      result = routine;
+    }
+    else try
+    {
+      var result = routine.call( this );
+    }
+    catch( err )
+    {
+      thrown = 1;
+      outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
+    }
 
-  return outcome;
+    //console.log( 'result :',result );
+
+    if( result instanceof wConsequence )
+    result.thenDo( function( err )
+    {
+      //console.log( 'err :',err );
+      if( !err )
+      outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
+      else
+      outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
+    });
+    else
+    {
+      if( !thrown )
+      outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
+    }
+
+    return result;
+  });
+
 }
 
 // --
@@ -366,14 +390,11 @@ var _testSuiteRunDelayed = function( context )
   self.queue = new wConsequence().give();
 
   _.assert( arguments.length === 1 );
-  _.assert( _.strIs( context.name ),'testing context should has name' );
-  _.assert( _.objectIs( context.tests ),'testing context should has map with tests' );
 
-  self.queue.got( function()
+  self.queue.thenDo( function()
   {
 
-    var testing = self._testSuiteRun.call( self,context );
-    testing.done( self.queue );
+    return self._testSuiteRun.call( self,context );
 
   });
 
@@ -387,69 +408,80 @@ var _testSuiteRun = function( context )
   var tests = context.tests;
   var con = new wConsequence();
 
+  //console.log( 'Object.getPrototypeOf( context ) :',Object.getPrototypeOf( context ) );
+
+  debugger;
+  _.assert( _.strIs( context.name ),'testing context should has name' );
+  _.assert( _.objectIs( context.tests ),'testing context should has map with test routines' );
+  _.assert( _.mapIs( context ) || Object.getPrototypeOf( context ) === Self );
   _.accessorForbid( context, { options : 'options' } );
   _.accessorForbid( context, { context : 'context' } );
 
-  var report = {};
-  report.passed = 0;
-  report.failed = 0;
+  if( Object.getPrototypeOf( context ) !== Self )
+  Object.setPrototypeOf( context, Self );
 
-  var onEach = function( o,testRoutine )
-  {
-    return self._testRoutineRun( o,testRoutine,context,report );
-  }
-
-  var handleTestSuiteBegin = function handleTestSuiteBegin()
+  var con = context._conSyn.thenClone();
+  con.thenDo( function()
   {
 
-    var msg =
-    [
-      'Starting testing of test suite ( ' + context.name + ' )..'
-    ];
-    logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
-    logger.log();
+    _.assert( !context.report );
+    var report = context.report = {};
+    report.passed = 0;
+    report.failed = 0;
 
-  }
+    var onEach = function( o,testRoutine )
+    {
+      return context._testRoutineRun( o,testRoutine,context,report );
+    }
 
-  var handleTestSuiteEnd = function handleTestSuiteEnd()
-  {
+    return _.execStages( tests,
+    {
+      syn : 1,
+      manual : 1,
+      onEach : onEach,
+      onBegin : _.routineJoin( context,context.testSuiteBegin ),
+      onEnd : _.routineJoin( context,context.testSuiteEnd ),
+    });
 
-    var msg =
-    [
-      'Testing of test suite ( ' + context.name + ' ) finished ' + ( report.failed === 0 ? 'good' : 'with fails' ) + '.'
-    ];
-    logger.logDown.apply( logger,strColor.apply( [ report.failed === 0 ? 'good' : 'bad','bold' ],msg ) );
-
-    var msg =
-    [
-      _.toStr( report,{ wrap : 0, multiline : 1 } )+'\n\n'
-    ];
-    logger.logDown.apply( logger,strColor.apply( [ report.failed === 0 ? 'good' : 'bad' ],msg ) );
-
-    //logger.log( '' + _.toStr( report,{ wrap : 0, multiline : 1 } )+'\n\n' );
-
-/*
-    logger.logDown
-    (
-      '%cTesting of ' + context.name + ' finished.',
-      ( report.failed === 0 ) ? colorGood : colorBad,
-      '\n  ' + _.toStr( report,{ wrap : 0, multiline : 1 } )+'\n\n'
-    );
-*/
-
-    con.give();
-  }
-
-  _.execStages( tests,
-  {
-    syn : 1,
-    manual : 1,
-    onEach : onEach,
-    onBegin : handleTestSuiteBegin,
-    onEnd : handleTestSuiteEnd,
   });
 
   return con;
+}
+
+//
+
+var testSuiteBegin = function testSuiteBegin()
+{
+  var self = this;
+
+  var msg =
+  [
+    'Starting testing of test suite ( ' + self.name + ' )..'
+  ];
+
+  logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
+  logger.log();
+
+}
+
+//
+
+var testSuiteEnd = function testSuiteEnd()
+{
+  var self = this;
+
+  var msg =
+  [
+    'Testing of test suite ( ' + self.name + ' ) finished ' + ( self.report.failed === 0 ? 'good' : 'with fails' ) + '.'
+  ];
+  logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad','bold' ],msg ) );
+
+  var msg =
+  [
+    _.toStr( self.report,{ wrap : 0, multiline : 1 } )+'\n\n'
+  ];
+  logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad' ],msg ) );
+
 }
 
 //
@@ -459,6 +491,7 @@ var _testRoutineRun = function( o,testRoutine,context,report )
   var self = this;
   var result = null;
   var failed = report.failed;
+
   var test = {};
   test.name = o.key;
   test.report = report;
@@ -470,51 +503,58 @@ var _testRoutineRun = function( o,testRoutine,context,report )
 
   Object.setPrototypeOf( test, Self );
 
-  self._beganTestRoutine( test );
-
-  /* */
-
-  if( self.safe )
+  var con = self._conSyn.thenClone();
+  con.thenDo( function()
   {
 
-    try
+    self._beganTestRoutine( test );
+
+    /* */
+
+    if( self.safe )
+    {
+
+      try
+      {
+        result = testRoutine.call( context,test );
+      }
+      catch( err )
+      {
+        report.failed += 1;
+
+        debugger;
+
+        if( test.onError )
+        test.onError.call( context,test );
+
+        var msg =
+        [
+          testCaseText( test ) +
+          ' ... failed throwing error\n' +
+          _.err( err ).toString()
+        ];
+
+        logger.error.apply( logger,strColor.apply( 'bad',msg ) );
+      }
+    }
+    else
     {
       result = testRoutine.call( context,test );
     }
-    catch( err )
+
+    /* */
+
+    result = wConsequence.from( result );
+
+    result.thenDo( function()
     {
-      report.failed += 1;
+      self._endedTestRoutine( test,failed === report.failed );
+    });
 
-      debugger;
-
-      if( test.onError )
-      test.onError.call( context,test );
-
-      var msg =
-      [
-        testCaseText( test ) +
-        ' ... failed throwing error\n' +
-        _.err( err ).toString()
-      ];
-
-      logger.error.apply( logger,strColor.apply( 'bad',msg ) );
-    }
-  }
-  else
-  {
-    result = testRoutine.call( context,test );
-  }
-
-  /* */
-
-  result = wConsequence.from( result );
-
-  result.thenDo( function()
-  {
-    self._endedTestRoutine( test,failed === report.failed );
+    return result;
   });
 
-  return result;
+  return con;
 }
 
 //
@@ -577,6 +617,7 @@ var colorBold = 'background-color : #aaaaaa';
 var EPS = 1e-5;
 var safe = true;
 var verbose = false;
+var _conSyn = new wConsequence().give();
 
 // --
 // prototype
@@ -609,6 +650,8 @@ var Self =
 
   _testSuiteRunDelayed : _testSuiteRunDelayed,
   _testSuiteRun : _testSuiteRun,
+  testSuiteBegin : testSuiteBegin,
+  testSuiteEnd : testSuiteEnd,
 
   _testRoutineRun : _testRoutineRun,
   _beganTestRoutine : _beganTestRoutine,
@@ -621,11 +664,12 @@ var Self =
   colorGood : colorGood,
   colorNeutral : colorNeutral,
   EPS : EPS,
+  _conSyn : _conSyn,
 
   safe : safe,
   verbose : verbose,
 
-};
+}
 
 wTools.testing = Self;
 

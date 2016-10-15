@@ -420,6 +420,9 @@ var _testSuiteRun = function( context )
   if( Object.getPrototypeOf( context ) !== Self )
   Object.setPrototypeOf( context, Self );
 
+  if( !Self._conSyn )
+  Self._conSyn = new wConsequence().give();
+
   var con = context._conSyn.thenClone();
   con.thenDo( function()
   {
@@ -500,8 +503,29 @@ var _testRoutineRun = function( o,testRoutine,context,report )
   test._caseIndex = 0;
 
   _.mapSupplement( test,context );
-
   Object.setPrototypeOf( test, Self );
+
+  /* error */
+
+  var handleError = function( err )
+  {
+
+    report.failed += 1;
+
+    if( test.onError )
+    test.onError.call( context,test );
+
+    var msg =
+    [
+      testCaseText( test ) +
+      ' ... failed throwing error\n' +
+      _.err( err ).toString()
+    ];
+
+    logger.error.apply( logger,strColor.apply( 'bad',msg ) );
+  }
+
+  /* */
 
   var con = self._conSyn.thenClone();
   con.thenDo( function()
@@ -520,21 +544,7 @@ var _testRoutineRun = function( o,testRoutine,context,report )
       }
       catch( err )
       {
-        report.failed += 1;
-
-        debugger;
-
-        if( test.onError )
-        test.onError.call( context,test );
-
-        var msg =
-        [
-          testCaseText( test ) +
-          ' ... failed throwing error\n' +
-          _.err( err ).toString()
-        ];
-
-        logger.error.apply( logger,strColor.apply( 'bad',msg ) );
+        handleError( err );
       }
     }
     else
@@ -546,8 +556,10 @@ var _testRoutineRun = function( o,testRoutine,context,report )
 
     result = wConsequence.from( result );
 
-    result.thenDo( function()
+    result.thenDo( function( err )
     {
+      if( err )
+      handleError( err );
       self._endedTestRoutine( test,failed === report.failed );
     });
 
@@ -617,7 +629,7 @@ var colorBold = 'background-color : #aaaaaa';
 var EPS = 1e-5;
 var safe = true;
 var verbose = false;
-var _conSyn = new wConsequence().give();
+var _conSyn = null
 
 // --
 // prototype

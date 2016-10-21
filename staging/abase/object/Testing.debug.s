@@ -59,20 +59,21 @@ var identical = function( got,expected )
 
 //
 
-var equivalent = function( got,expected,EPS )
+var equivalent = function( got,expected,eps )
 {
   var test = this;
-  var options = {};
+  var optionsForEntity = {};
 
-  if( EPS === undefined )
-  EPS = test.EPS;
-  options.EPS = EPS;
+  if( eps === undefined )
+  eps = test.eps;
+
+  optionsForEntity.eps = eps;
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
 
-  var outcome = _.entityEquivalent( got,expected,options );
+  var outcome = _.entityEquivalent( got,expected,optionsForEntity );
 
-  test.reportOutcome( outcome,got,expected,options.lastPath );
+  test.reportOutcome( outcome,got,expected,optionsForEntity.lastPath );
 
   return outcome;
 }
@@ -357,15 +358,15 @@ var test = function( args )
   var self = this;
   var args = arguments;
 
-  var run = function()
-  {
-    self._testSuiteRunDelayed.apply( self,args );
-  }
+  // var run = function()
+  // {
+  //   self._testSuiteRunDelayed.apply( self,args );
+  // }
 
   _.timeOut( 1, function()
   {
 
-    _.timeReady( run );
+    _.timeReady( _.routineSeal( self,self._testSuiteRunDelayed,args ) );
 
   });
 
@@ -373,7 +374,7 @@ var test = function( args )
 
 //
 
-var _testSuiteRunDelayed = function( context )
+var _testSuiteRunDelayed = function( suit )
 {
   var self = this;
 
@@ -383,9 +384,6 @@ var _testSuiteRunDelayed = function( context )
     return;
   }
 
-  if( _.strIs( context ) )
-  context = wTests[ context ];
-
   if( !self.queue )
   self.queue = new wConsequence().give();
 
@@ -394,7 +392,7 @@ var _testSuiteRunDelayed = function( context )
   self.queue.thenDo( function()
   {
 
-    return self._testSuiteRun.call( self,context );
+    return self._testSuiteRun.call( self,suit );
 
   });
 
@@ -402,39 +400,45 @@ var _testSuiteRunDelayed = function( context )
 
 //
 
-var _testSuiteRun = function( context )
+var _testSuiteRun = function( suit )
 {
   var self = this;
-  var tests = context.tests;
+  var tests = suit.tests;
   var con = new wConsequence();
 
-  //console.log( 'Object.getPrototypeOf( context ) :',Object.getPrototypeOf( context ) );
+  if( _.strIs( suit ) )
+  suit = wTests[ suit ];
 
-  debugger;
-  _.assert( _.strIs( context.name ),'testing context should has name' );
-  _.assert( _.objectIs( context.tests ),'testing context should has map with test routines' );
-  _.assert( _.mapIs( context ) || Object.getPrototypeOf( context ) === Self );
-  _.accessorForbid( context, { options : 'options' } );
-  _.accessorForbid( context, { context : 'context' } );
+  //console.log( 'Object.getPrototypeOf( suit ) :',Object.getPrototypeOf( suit ) );
 
-  if( Object.getPrototypeOf( context ) !== Self )
-  Object.setPrototypeOf( context, Self );
+  _.assert( _.strIs( suit.name ),'testing suit should has name' );
+  _.assert( _.objectIs( suit.tests ),'testing suit should has map with test routines' );
+  //_.assert( _.mapIs( suit ) || Object.getPrototypeOf( suit ) === Self,'expects suit instance of','wTools.Testing' );
+  _.accessorForbid( suit,
+  {
+    options : 'options',
+    suit : 'suit',
+    context : 'context',
+  });
+
+  if( _.mapIs( suit ) )
+  Object.setPrototypeOf( suit, Self );
 
   if( !Self._conSyn )
   Self._conSyn = new wConsequence().give();
 
-  var con = context._conSyn.thenClone();
+  var con = suit._conSyn.thenClone();
   con.thenDo( function()
   {
 
-    _.assert( !context.report );
-    var report = context.report = {};
+    _.assert( !suit.report );
+    var report = suit.report = {};
     report.passed = 0;
     report.failed = 0;
 
-    var onEach = function( o,testRoutine )
+    var onEach = function( e,testRoutine )
     {
-      return context._testRoutineRun( o,testRoutine,context,report );
+      return suit._testRoutineRun( e,testRoutine,suit,report );
     }
 
     return _.execStages( tests,
@@ -442,8 +446,8 @@ var _testSuiteRun = function( context )
       syn : 1,
       manual : 1,
       onEach : onEach,
-      onBegin : _.routineJoin( context,context.testSuiteBegin ),
-      onEnd : _.routineJoin( context,context.testSuiteEnd ),
+      onBegin : _.routineJoin( suit,suit.testSuiteBegin ),
+      onEnd : _.routineJoin( suit,suit.testSuiteEnd ),
     });
 
   });
@@ -465,6 +469,9 @@ var testSuiteBegin = function testSuiteBegin()
   logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
   logger.log();
 
+  if( self.onSuitBegin )
+  self.onSuitBegin();
+
 }
 
 //
@@ -472,6 +479,9 @@ var testSuiteBegin = function testSuiteBegin()
 var testSuiteEnd = function testSuiteEnd()
 {
   var self = this;
+
+  if( self.onSuitBegin )
+  self.onSuitBegin();
 
   var msg =
   [
@@ -483,26 +493,27 @@ var testSuiteEnd = function testSuiteEnd()
   [
     _.toStr( self.report,{ wrap : 0, multiline : 1 } )+'\n\n'
   ];
+
   logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad' ],msg ) );
 
 }
 
 //
 
-var _testRoutineRun = function( o,testRoutine,context,report )
+var _testRoutineRun = function( e,testRoutine,suit,report )
 {
   var self = this;
   var result = null;
   var failed = report.failed;
 
   var test = {};
-  test.name = o.key;
+  test.name = e.key;
   test.report = report;
   test.description = '';
-  test.context = context;
+  test.suit = suit;
   test._caseIndex = 0;
 
-  _.mapSupplement( test,context );
+  _.mapSupplement( test,suit );
   Object.setPrototypeOf( test, Self );
 
   /* error */
@@ -513,7 +524,7 @@ var _testRoutineRun = function( o,testRoutine,context,report )
     report.failed += 1;
 
     if( test.onError )
-    test.onError.call( context,test );
+    test.onError.call( suit,test );
 
     var msg =
     [
@@ -540,7 +551,7 @@ var _testRoutineRun = function( o,testRoutine,context,report )
 
       try
       {
-        result = testRoutine.call( context,test );
+        result = testRoutine.call( suit,test );
       }
       catch( err )
       {
@@ -549,7 +560,7 @@ var _testRoutineRun = function( o,testRoutine,context,report )
     }
     else
     {
-      result = testRoutine.call( context,test );
+      result = testRoutine.call( suit,test );
     }
 
     /* */
@@ -683,7 +694,7 @@ var Self =
 
 }
 
-wTools.testing = Self;
+wTools.Testing = Self;
 
 if( typeof module !== 'undefined' && module !== null )
 {

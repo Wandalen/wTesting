@@ -95,6 +95,6 @@ var Proto =
 _.mapExtend( Self,Proto );
 
 if( typeof module !== 'undefined' && !module.parent )
-_.testing.test( Self );
+_.Testing.test( Self );
 
 } )( );

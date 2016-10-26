@@ -34,8 +34,6 @@ if( typeof module !== 'undefined' )
 
 }
 
-_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
-
 var _ = wTools;
 if( !_.toStr )
 _.toStr = function(){ return String( arguments ) };
@@ -104,9 +102,10 @@ var shouldThrowError = function( routine )
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
 
-  return test._conSyn.thenDo( function()
+  return test._conSyn/*.thenClone()*/.got( function()
   {
 
+    var con = this;
     var result;
     if( routine instanceof wConsequence )
     {
@@ -114,6 +113,7 @@ var shouldThrowError = function( routine )
     }
     else try
     {
+      debugger;
       var result = routine.call( this );
     }
     catch( err )
@@ -122,26 +122,105 @@ var shouldThrowError = function( routine )
       outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
     }
 
-    //console.log( 'result :',result );
+    /* */
 
     if( result instanceof wConsequence )
-    result.thenDo( function( err )
     {
-      //console.log( 'err :',err );
-      if( !err )
-      outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
-      else
-      outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
-    });
+      result
+      .got( function( err )
+      {
+        if( !err )
+        outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
+        else
+        outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
+        con.give();
+      })
+      .thenDo( function( err,data )
+      {
+        test.reportOutcome( 0,'shouldThrowError : should never reach it, several messages for consequence','single message for consequence','' );
+      });
+    }
     else
     {
       if( !thrown )
       outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
+      con.give();
     }
 
-    return result;
+    //return result;
   });
 
+}
+
+//
+
+var shouldMessageOnlyOnce = function( con )
+{
+  var test = this;
+  var result = new wConsequence();
+
+  _.assert( arguments.length === 1 );
+  _.assert( con instanceof wConsequence );
+
+  var state = test.stateStore();
+
+  con
+  .got( function( err,data )
+  {
+    _.timeOut( 10, function()
+    {
+      result.give( err,data );
+    });
+  })
+  .thenDo( function( err,data )
+  {
+    test.stateStore();
+    test.stateRestore( state );
+    test.reportOutcome( 0,'shouldMessageOnlyOnce : should never reach it, several messages for consequence','single message for consequence','' );
+    test.stateRestore();
+  });
+
+  return result;
+}
+
+// --
+// store
+// --
+
+var stateStore = function()
+{
+  var test = this;
+  var result = {};
+
+  _.assert( arguments.length === 0 );
+
+  result.description = test.description;
+  result._caseIndex = test._caseIndex;
+
+  test._storedStates = test._storedStates || [];
+  test._storedStates.push( result );
+
+  return test;
+}
+
+//
+
+var stateRestore = function( state )
+{
+  var test = this;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  if( !state )
+  {
+    _.assert( _.arrayIs( test._storedStates ) && test._storedStates.length, 'stateRestore : no stored state' )
+    state = test._storedStates.pop();
+  }
+
+  test.description = state.description;
+  test._caseIndex = state._caseIndex;
+
+  return test;
 }
 
 // --
@@ -154,7 +233,8 @@ var reportOutcome = function( outcome,got,expected,path )
 
   if( !test._caseIndex )
   test._caseIndex = 1;
-  else test._caseIndex += 1;
+  else
+  test._caseIndex += 1;
 
   _.assert( arguments.length === 4 );
 
@@ -634,7 +714,6 @@ var _endedTestRoutine = function( test,success )
 var colorBad = 'color : #ff0000; font-weight :lighter;';
 var colorGood = 'background-color : #00aa00; color : #008800; font-weight :lighter;';
 var colorNeutral = 'background-color : #aaaaaa; color : #ffffff; font-weight :lighter;';
-
 var colorBold = 'background-color : #aaaaaa';
 
 var EPS = 1e-5;
@@ -655,6 +734,12 @@ var Self =
   equivalent : equivalent,
   contain : contain,
   shouldThrowError : shouldThrowError,
+  shouldMessageOnlyOnce : shouldMessageOnlyOnce,
+
+  //
+
+  stateStore : stateStore,
+  stateRestore : stateRestore,
 
 
   // output
@@ -695,6 +780,8 @@ var Self =
 }
 
 wTools.Testing = Self;
+
+_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
 
 if( typeof module !== 'undefined' && module !== null )
 {

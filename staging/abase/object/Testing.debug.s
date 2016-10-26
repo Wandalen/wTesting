@@ -137,7 +137,7 @@ var shouldThrowError = function( routine )
       })
       .thenDo( function( err,data )
       {
-        test.reportOutcome( 0,'shouldThrowError : should never reach it, several messages for consequence','single message for consequence','' );
+        test.reportOutcome( 0,'shouldThrowError : should never reach it, consequence got redundant messages','single message for consequence','' );
       });
     }
     else
@@ -176,7 +176,7 @@ var shouldMessageOnlyOnce = function( con )
   {
     test.stateStore();
     test.stateRestore( state );
-    test.reportOutcome( 0,'shouldMessageOnlyOnce : should never reach it, several messages for consequence','single message for consequence','' );
+    test.reportOutcome( 0,'shouldMessageOnlyOnce : should never reach it, consequence got redundant messages','single message for consequence','' );
     test.stateRestore();
   });
 

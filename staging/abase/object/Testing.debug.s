@@ -42,6 +42,41 @@ _.toStr = function(){ return String( arguments ) };
 // equalizer
 // --
 
+
+/**
+ * Checks if test passes a specified condition by deep strict comparsing result of code execution( got )
+ * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
+ * If entity( got ) is equal to entity( expected ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - Source entity.
+ * @param {*} expected - Target entity.
+ *
+ * @example
+ * var sometest = function( test )
+ * {
+ *  test.description = 'single zero';
+ *  var got = 0;
+ *  var expected = 0;
+ *  test.identical( got, expected );//returns true
+ * }
+ *
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ * //returns
+ * //Starting testing of test suite ( test )..
+ * //  Running test routine ( sometest )..
+ * //  Passed test routine ( sometest ).
+ * //
+ * //Testing of test suite ( test ) finished good.
+ * //  passed : 1
+ * //  failed : 0
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method identical
+ * @memberof wTools
+ */
+
 var identical = function( got,expected )
 {
   var test = this;
@@ -56,6 +91,44 @@ var identical = function( got,expected )
 }
 
 //
+
+/**
+ * Checks if test passes a specified condition by deep soft comparsing result of code execution( got )
+ * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects. Two entity are equivalent if
+ * difference between their values are less or equal to( eps ). Example: ( got - expected ) <= ( eps ).
+ * If entity( got ) is equivalent to entity( expected ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - Source entity.
+ * @param {*} expected - Target entity.
+ * @param {*} [ eps=1e-5 ] - Maximal distance between two values.
+ *
+ * @example
+ * var sometest = function( test )
+ * {
+ *  test.description = 'single number';
+ *  var got = 0.5;
+ *  var expected = 1;
+ *  var eps = 0.5;
+ *  test.equivalent( got, expected, eps );//returns true
+ * }
+ *
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ * //returns
+ * //Starting testing of test suite ( test )..
+ * //  Running test routine ( sometest )..
+ * //  Passed test routine ( sometest ).
+ * //
+ * //Testing of test suite ( test ) finished good.
+ * //  passed : 1
+ * //  failed : 0
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method equivalent
+ * @memberof wTools
+ */
+
 
 var equivalent = function( got,expected,eps )
 {
@@ -77,6 +150,40 @@ var equivalent = function( got,expected,eps )
 }
 
 //
+
+/**
+ * Checks if test passes a specified condition by deep contain comparsing result of code execution( got )
+ * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
+ * If entity( got ) contains keys/values from entity( expected ) or they are indentical test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - Source entity.
+ * @param {*} expected - Target entity.
+ *
+ * @example
+ * var sometest = function( test )
+ * {
+ *  test.description = 'array';
+ *  var got = [ 0, 1, 2 ]
+ *  var expected = [ 0 ];
+ *  test.contain( got, expected );//returns true
+ * }
+ *
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ * //returns
+ * //Starting testing of test suite ( test )..
+ * //  Running test routine ( sometest )..
+ * //  Passed test routine ( sometest ).
+ * //
+ * //Testing of test suite ( test ) finished good.
+ * //  passed : 1
+ * //  failed : 0
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method contain
+ * @memberof wTools
+ */
 
 var contain = function( got,expected )
 {

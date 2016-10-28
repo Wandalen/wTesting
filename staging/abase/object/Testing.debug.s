@@ -60,17 +60,14 @@ _.toStr = function(){ return String( arguments ) };
  *  var got = 0;
  *  var expected = 0;
  *  test.identical( got, expected );//returns true
+ *
+ *  test.description = 'single number';
+ *  var got = 2;
+ *  var expected = 1;
+ *  test.identical( got, expected );//returns false
  * }
  *
  * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
- * //returns
- * //Starting testing of test suite ( test )..
- * //  Running test routine ( sometest )..
- * //  Passed test routine ( sometest ).
- * //
- * //Testing of test suite ( test ) finished good.
- * //  passed : 1
- * //  failed : 0
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
@@ -94,7 +91,7 @@ var identical = function( got,expected )
 
 /**
  * Checks if test passes a specified condition by deep soft comparsing result of code execution( got )
- * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects. Two entity are equivalent if
+ * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects. Two entities are equivalent if
  * difference between their values are less or equal to( eps ). Example: ( got - expected ) <= ( eps ).
  * If entity( got ) is equivalent to entity( expected ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
@@ -112,17 +109,14 @@ var identical = function( got,expected )
  *  var expected = 1;
  *  var eps = 0.5;
  *  test.equivalent( got, expected, eps );//returns true
- * }
  *
+ *  test.description = 'single number';
+ *  var got = 0.5;
+ *  var expected = 2;
+ *  var eps = 0.5;
+ *  test.equivalent( got, expected, eps );//returns false
+ * }
  * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
- * //returns
- * //Starting testing of test suite ( test )..
- * //  Running test routine ( sometest )..
- * //  Passed test routine ( sometest ).
- * //
- * //Testing of test suite ( test ) finished good.
- * //  passed : 1
- * //  failed : 0
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
@@ -165,20 +159,16 @@ var equivalent = function( got,expected,eps )
  * var sometest = function( test )
  * {
  *  test.description = 'array';
- *  var got = [ 0, 1, 2 ]
+ *  var got = [ 0, 1, 2 ];
  *  var expected = [ 0 ];
  *  test.contain( got, expected );//returns true
- * }
  *
+ *  test.description = 'array';
+ *  var got = [ 0, 1, 2 ];
+ *  var expected = [ 4 ];
+ *  test.contain( got, expected );//returns false
+ * }
  * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
- * //returns
- * //Starting testing of test suite ( test )..
- * //  Running test routine ( sometest )..
- * //  Passed test routine ( sometest ).
- * //
- * //Testing of test suite ( test ) finished good.
- * //  passed : 1
- * //  failed : 0
  *
  * @throws {Exception} If no arguments provided.
  * @method contain
@@ -198,6 +188,56 @@ var contain = function( got,expected )
 }
 
 //
+
+/**
+ * Error throwing test. Expects one argument( routine ) - function to call or wConsequence instance.
+ * If argument is a function runs it and checks if it throws an error. Otherwise if argument is a consequence  checks if it has a error message.
+ * If its not a error or consequence contains more then one message test is failed. After check function reports result of test to the testing system.
+ * If test is failed function also outputs additional information. Returns wConsequence instance to perform next call in chain.
+ *
+ * @param {Function|wConsequence} routine - Funtion to call or wConsequence instance.
+ *
+ * @example
+ * var sometest = function( test )
+ * {
+ *  test.description = 'shouldThrowError';
+ *  test.shouldThrowError( function()
+ *  {
+ *    throw _.err( 'Error' );
+ *  });
+ * }
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @example
+ * var sometest = function( test )
+ * {
+ *  var consequence = new wConsequence().give();
+ *  consequence
+ *  .ifNoErrorThen( function()
+ *  {
+ *    test.description = 'shouldThrowError';
+ *    var con = new wConsequence( )
+ *    .error( _.err() ); //wConsequence instance with error message
+ *    return test.shouldThrowError( con );//test passes
+ *  })
+ *  .ifNoErrorThen( function()
+ *  {
+ *    test.description = 'shouldThrowError2';
+ *    var con = new wConsequence( )
+ *    .error( _.err() )
+ *    .error( _.err() ); //wConsequence instance with two error messages
+ *    return test.shouldThrowError( con ); //test fails
+ *  });
+ *
+ *  return consequence;
+ * }
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @throws {Exception} If passed argument is not a Routine.
+ * @method shouldThrowError
+ * @memberof wTools
+ */
 
 var shouldThrowError = function( routine )
 {

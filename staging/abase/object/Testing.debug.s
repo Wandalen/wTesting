@@ -28,7 +28,7 @@ if( typeof module !== 'undefined' )
   }
 
   if( typeof logger === 'undefined' )
-  require( '../../abase/object/printer/Logger.s' );
+  require( '../../abase/object/printer/printer/Logger.s' );
 
   var Chalk = require( 'chalk' );
 
@@ -503,6 +503,7 @@ var _testSuiteRun = function( suit )
 
   if( _.mapIs( suit ) )
   Object.setPrototypeOf( suit, Self );
+  _.assert( Object.isPrototypeOf.call( Self,suit ) );
 
   if( !Self._conSyn )
   Self._conSyn = new wConsequence().give();
@@ -560,13 +561,14 @@ var testSuiteEnd = function testSuiteEnd()
 {
   var self = this;
 
-  if( self.onSuitBegin )
-  self.onSuitBegin();
+  if( self.onSuitEnd )
+  self.onSuitEnd();
 
   var msg =
   [
     'Testing of test suite ( ' + self.name + ' ) finished ' + ( self.report.failed === 0 ? 'good' : 'with fails' ) + '.'
   ];
+
   logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad','bold' ],msg ) );
 
   var msg =
@@ -574,7 +576,7 @@ var testSuiteEnd = function testSuiteEnd()
     _.toStr( self.report,{ wrap : 0, multiline : 1 } )+'\n\n'
   ];
 
-  logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad' ],msg ) );
+  logger.log.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad' ],msg ) );
 
 }
 
@@ -586,15 +588,17 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
   var result = null;
   var failed = report.failed;
 
-  var test = {};
-  test.name = e.key;
-  test.report = report;
-  test.description = '';
-  test.suit = suit;
-  test._caseIndex = 0;
+  var testRoutine = { routine : testRoutine };
+  testRoutine.name = e.key;
+  testRoutine.report = report;
+  testRoutine.description = '';
+  testRoutine.suit = suit;
+  testRoutine._caseIndex = 0;
 
-  _.mapSupplement( test,suit );
-  Object.setPrototypeOf( test, Self );
+  Object.setPrototypeOf( testRoutine, suit );
+
+  _.assert( Object.isPrototypeOf.call( Self,suit ) );
+  _.assert( Object.isPrototypeOf.call( Self,testRoutine ) );
 
   /* error */
 
@@ -603,12 +607,12 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
 
     report.failed += 1;
 
-    if( test.onError )
-    test.onError.call( suit,test );
+    if( testRoutine.onError )
+    testRoutine.onError.call( suit,testRoutine );
 
     var msg =
     [
-      testCaseText( test ) +
+      testCaseText( testRoutine ) +
       ' ... failed throwing error\n' +
       _.err( err ).toString()
     ];
@@ -622,7 +626,7 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
   con.thenDo( function()
   {
 
-    self._beganTestRoutine( test );
+    self._beganTestRoutine( testRoutine );
 
     /* */
 
@@ -631,7 +635,7 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
 
       try
       {
-        result = testRoutine.call( suit,test );
+        result = testRoutine.routine.call( suit,testRoutine );
       }
       catch( err )
       {
@@ -640,7 +644,7 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
     }
     else
     {
-      result = testRoutine.call( suit,test );
+      result = testRoutine.routine.call( suit,testRoutine );
     }
 
     /* */
@@ -662,12 +666,12 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
 
 //
 
-var _beganTestRoutine = function( test )
+var _beganTestRoutine = function( testRoutine )
 {
 
   var msg =
   [
-    'Running test routine ( ' + test.name + ' )..'
+    'Running test routine ( ' + testRoutine.name + ' )..'
   ];
   logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
 
@@ -679,7 +683,7 @@ var _beganTestRoutine = function( test )
 
 //
 
-var _endedTestRoutine = function( test,success )
+var _endedTestRoutine = function( testRoutine,success )
 {
 
   if( success )
@@ -687,7 +691,7 @@ var _endedTestRoutine = function( test,success )
 
     var msg =
     [
-      'Passed test routine ( ' + test.name + ' ).'
+      'Passed test routine ( ' + testRoutine.name + ' ).'
     ];
     logger.logDown.apply( logger,strColor.apply( [ 'good','bold' ],msg ) );
 
@@ -699,7 +703,7 @@ var _endedTestRoutine = function( test,success )
 
     var msg =
     [
-      'Failed test routine ( ' + test.name + ' ).'
+      'Failed test routine ( ' + testRoutine.name + ' ).'
     ];
     logger.logDown.apply( logger,strColor.apply( [ 'bad','bold' ],msg ) );
 
@@ -711,10 +715,10 @@ var _endedTestRoutine = function( test,success )
 
 //
 
-var colorBad = 'color : #ff0000; font-weight :lighter;';
-var colorGood = 'background-color : #00aa00; color : #008800; font-weight :lighter;';
-var colorNeutral = 'background-color : #aaaaaa; color : #ffffff; font-weight :lighter;';
-var colorBold = 'background-color : #aaaaaa';
+var colorBad = 'color:#ff0000;font-weight:lighter;';
+var colorGood = 'background-color:#00aa00;color:#008800;font-weight:lighter;';
+var colorNeutral = 'background-color:#aaaaaa;color:#ffffff;font-weight:lighter;';
+var colorBold = 'background-color:#aaaaaa';
 
 var EPS = 1e-5;
 var safe = true;

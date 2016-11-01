@@ -394,8 +394,8 @@ var reportOutcome = function( outcome,got,expected,path )
   var msgExpectedGot = function()
   {
     return '' +
-    'expected :\n' + _.toStr( expected,{ wrapString : 0 } ) +
-    '\ngot :\n' + _.toStr( got,{ wrapString : 0 } );
+    'expected :\n' + _.toStr( expected,{ stringWrapper : '' } ) +
+    '\ngot :\n' + _.toStr( got,{ stringWrapper : '' } );
   }
 
   /**/

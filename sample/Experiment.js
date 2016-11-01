@@ -3,7 +3,20 @@
 'use strict';
 
 if( typeof module !== 'undefined' )
-require( 'wTesting' );
+{
+
+  require( '../staging/abase/object/Testing.debug.s' );
+
+  try
+  {
+    require( '../staging/abase/object/Testing.debug.s' );
+  }
+  catch( err )
+  {
+    require( 'wTesting' );
+  }
+
+}
 
 var _ = wTools;
 var Self = {};
@@ -32,20 +45,64 @@ var singleMessage = function( test )
 
 var multipleMessages = function( test )
 {
- var consequence = new wConsequence().give();
- consequence
- .ifNoErrorThen( function()
- {
-   test.description = 'two messages';
-   var con = new wConsequence()
-   .give( null, 'data' )
-   .give( null, 'data' );
-   return test.shouldMessageOnlyOnce( con );
- })
- .ifNoErrorThen( function ( data )
- {
-   test.identical( data, 'data' );
- });
+  var consequence = new wConsequence().give();
+  consequence
+  .ifNoErrorThen( function()
+  {
+    test.identical( 'data', 'data' );
+  })
+  .ifNoErrorThen( function()
+  {
+    test.description = 'two messages';
+    var con = new wConsequence()
+    .give( null, 'data' )
+    .give( null, 'data' );
+    return test.shouldMessageOnlyOnce( con );
+  })
+  .ifNoErrorThen( function( data )
+  {
+    test.identical( 'data', 'data' );
+  })
+  .ifNoErrorThen( function( data )
+  {
+    test.identical( 'data', 'data' );
+  })
+  ;
+
+ return consequence;
+}
+
+//
+
+var multipleMessagesAsync = function( test )
+{
+  var consequence = new wConsequence().give();
+
+  consequence
+  .ifNoErrorThen( function()
+  {
+    test.identical( 'data', 'data' );
+  })
+  .ifNoErrorThen( function()
+  {
+    test.description = 'two messages';
+    var con = new wConsequence();
+    con.give( null, 'data' );
+    _.timeOut( 1000,function()
+    {
+      con.give( null, 'data' );
+    });
+    return test.shouldMessageOnlyOnce( con );
+  })
+  .ifNoErrorThen( function( data )
+  {
+    test.identical( 'data', 'data' );
+  })
+  .ifNoErrorThen( function( data )
+  {
+    test.identical( 'data', 'data' );
+  })
+  ;
 
  return consequence;
 }
@@ -56,14 +113,18 @@ var Proto =
 {
 
   name : 'Experiment',
+  verbose : 1,
 
-  tests:
+  tests :
   {
     singleMessage : singleMessage,
     multipleMessages : multipleMessages,
+    multipleMessagesAsync : multipleMessagesAsync,
   }
 
 }
+
+//
 
 _.mapExtend( Self,Proto );
 

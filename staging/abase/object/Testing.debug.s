@@ -347,7 +347,9 @@ var stateStore = function()
   test._storedStates = test._storedStates || [];
   test._storedStates.push( result );
 
-  return test;
+  // console.log( 'stateStore',result._caseIndex );
+
+  return result;
 }
 
 //
@@ -357,6 +359,8 @@ var stateRestore = function( state )
   var test = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  // console.log( 'stateRestore',state );
 
   if( !state )
   {
@@ -674,8 +678,8 @@ var _testSuiteRun = function( suit )
       syn : 1,
       manual : 1,
       onEach : onEach,
-      onBegin : _.routineJoin( suit,suit.testSuiteBegin ),
-      onEnd : _.routineJoin( suit,suit.testSuiteEnd ),
+      onBegin : _.routineJoin( suit,suit._testSuiteBegin ),
+      onEnd : _.routineJoin( suit,suit._testSuiteEnd ),
     });
 
   });
@@ -685,7 +689,7 @@ var _testSuiteRun = function( suit )
 
 //
 
-var testSuiteBegin = function testSuiteBegin()
+var _testSuiteBegin = function _testSuiteBegin()
 {
   var self = this;
 
@@ -704,7 +708,7 @@ var testSuiteBegin = function testSuiteBegin()
 
 //
 
-var testSuiteEnd = function testSuiteEnd()
+var _testSuiteEnd = function _testSuiteEnd()
 {
   var self = this;
 
@@ -802,7 +806,7 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
     {
       if( err )
       handleError( err );
-      self._endedTestRoutine( test,failed === report.failed );
+      self._endedTestRoutine( testRoutine,failed === report.failed );
     });
 
     return result;
@@ -832,6 +836,8 @@ var _beganTestRoutine = function( testRoutine )
 
 var _endedTestRoutine = function( testRoutine,success )
 {
+
+  _.assert( _.strIsNotEmpty( testRoutine.name ),'test routine should have name' );
 
   if( success )
   {
@@ -887,7 +893,8 @@ var Self =
   shouldThrowError : shouldThrowError,
   shouldMessageOnlyOnce : shouldMessageOnlyOnce,
 
-  //
+
+  // state
 
   stateStore : stateStore,
   stateRestore : stateRestore,
@@ -909,8 +916,8 @@ var Self =
 
   _testSuiteRunDelayed : _testSuiteRunDelayed,
   _testSuiteRun : _testSuiteRun,
-  testSuiteBegin : testSuiteBegin,
-  testSuiteEnd : testSuiteEnd,
+  _testSuiteBegin : _testSuiteBegin,
+  _testSuiteEnd : _testSuiteEnd,
 
   _testRoutineRun : _testRoutineRun,
   _beganTestRoutine : _beganTestRoutine,

@@ -2,7 +2,7 @@
 
 'use strict';
 
-var Chalk = null;
+// var Chalk = null;
 
 if( typeof module !== 'undefined' )
 {
@@ -27,10 +27,17 @@ if( typeof module !== 'undefined' )
     require( 'wConsequence' );
   }
 
-  if( typeof logger === 'undefined' )
-  require( '../../abase/object/printer/printer/Logger.s' );
+  // if( typeof logger === 'undefined' )
+  try
+  {
+    require( '../../../../wLogger/staging/abase/object/printer/printer/Logger.s' );
+  }
+  catch( err )
+  {
+    require( 'wLogger' );
+  }
 
-  var Chalk = require( 'chalk' );
+  // var Chalk = require( 'chalk' );
 
 }
 
@@ -474,65 +481,71 @@ var _strColor = function _strColor( color,result )
 
   var src = result[ 0 ];
 
-  if( Chalk )
-  {
+  // if( Chalk )
+  // {
 
-    _.assert( result.length === 1 );
-
+    // _.assert( result.length === 1 );
     switch( color )
     {
 
       case 'good' :
-        result[ 0 ] = Chalk.green( src ); break;
+        // result[ 0 ] = Chalk.green( src ); break;
+        result[ 0 ] = _.strColor.fg( src, 'green' ); break;
 
       case 'bad' :
-        result[ 0 ] = Chalk.red( src ); break;
+        // result[ 0 ] = Chalk.red( src ); break;
+        result[ 0 ] = _.strColor.fg( src, 'red' ); break;
 
       case 'neutral' :
-        result[ 0 ] = Chalk.bgWhite( Chalk.black( src ) ); break;
-        return Chalk.bgWhite( Chalk.black( src ) ); break;
+        // result[ 0 ] = Chalk.bgWhite( Chalk.black( src ) ); break;
+        // return Chalk.bgWhite( Chalk.black( src ) ); break;
+        result[ 0 ] = _.strColor.bg( _.strColor.fg( src, 'black' ), 'white' ); break;
+        return _.strColor.bg( _.strColor.fg( src, 'black' ), 'white' ); break;
 
       case 'bold' :
-        result[ 0 ] = Chalk.bgWhite( src ); break;
-        return Chalk.bgWhite( src ); break;
+        // result[ 0 ] = Chalk.bgWhite( src ); break;
+        // return Chalk.bgWhite( src ); break;
+        result[ 0 ] = _.strColor.bg( src, 'white' ); break;
+        return _.strColor.bg( src, 'white' ); break;
 
       default :
         throw _.err( 'strColor : unknown color : ' + color );
 
     }
 
-  }
-  else
-  {
-
-    _.assert( result.length === 2 );
-    _.assert( _.strIs( result[ 1 ] ) );
-
-    var tag = null;
-    switch( color )
-    {
-
-      case 'good' :
-        tag = colorGood; break;
-
-      case 'bad' :
-        tag = colorBad; break;
-
-      case 'neutral' :
-        tag = colorNeutral; break;
-
-      case 'bold' :
-        tag = colorBold; break;
-
-      default :
-        throw _.err( 'strColor : unknown color : ' + color );
-
-    }
-
-    result[ 0 ] = _.strPrependOnce( src,'%c' );
-    result[ 1 ] += ' ; ' + tag;
-
-  }
+  // }
+  // else
+  // {
+  //
+  //   _.assert( result.length === 2 );
+  //   _.assert( _.strIs( result[ 1 ] ) );
+  //
+  //   var tag = null;
+  //   switch( color )
+  //   {
+  //
+  //     case 'good' :
+  //       tag = colorGood; break;
+  //
+  //     case 'bad' :
+  //       tag = colorBad; break;
+  //
+  //     case 'neutral' :
+  //       tag = colorNeutral; break;
+  //
+  //     case 'bold' :
+  //       tag = colorBold; break;
+  //
+  //     default :
+  //       throw _.err( 'strColor : unknown color : ' + color );
+  //
+  //   }
+  //
+  //   // result[ 0 ] = _.strPrependOnce( src,'%c' );
+  //   // result[ 1 ] += ' ; ' + tag;
+  //     result[ 0 ] =  tag[ 0 ] + src + tag[ 1 ];
+  //
+  // }
 
   return result;
 }
@@ -545,10 +558,10 @@ var strColor = function strColor()
   var src = _.str.apply( _,arguments );
   var result = null;
 
-  if( Chalk )
+  // if( Chalk )
   result = [ src ];
-  else
-  result = [ src,'' ];
+  // else
+  // result = [ src,'' ];
 
   if( _.arrayIs( this ) )
   {
@@ -868,10 +881,10 @@ var _endedTestRoutine = function( testRoutine,success )
 
 //
 
-var colorBad = 'color:#ff0000;font-weight:lighter;';
-var colorGood = 'background-color:#00aa00;color:#008800;font-weight:lighter;';
-var colorNeutral = 'background-color:#aaaaaa;color:#ffffff;font-weight:lighter;';
-var colorBold = 'background-color:#aaaaaa';
+// var colorBad = 'color:#ff0000;font-weight:lighter;';
+// var colorGood = 'background-color:#00aa00;color:#008800;font-weight:lighter;';
+// var colorNeutral = 'background-color:#aaaaaa;color:#ffffff;font-weight:lighter;';
+// var colorBold = 'background-color:#aaaaaa';
 
 var EPS = 1e-5;
 var safe = true;
@@ -926,9 +939,9 @@ var Self =
 
   // var
 
-  colorBad : colorBad,
-  colorGood : colorGood,
-  colorNeutral : colorNeutral,
+  // colorBad : colorBad,
+  // colorGood : colorGood,
+  // colorNeutral : colorNeutral,
   EPS : EPS,
   _conSyn : _conSyn,
 

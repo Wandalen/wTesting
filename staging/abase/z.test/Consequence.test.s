@@ -1,4 +1,4 @@
-( function( ) {
+( function _Consequence_test_s_( ) {
 
 'use strict';
 
@@ -13,8 +13,6 @@ if( typeof module !== 'undefined' )
     require( '../../amid/diagnostic/Testing.debug.s' );
   }
 }
-
-_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
 
 var _ = wTools;
 var Self = {};
@@ -422,7 +420,9 @@ var Proto =
 
 };
 
-Object.setPrototypeOf( Self, Proto );
+//Object.setPrototypeOf( Self, Proto );
+
+_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
 wTests[ Self.name ] = Self;
 
 if( typeof module !== 'undefined' && !module.parent )

@@ -27,10 +27,11 @@ if( typeof module !== 'undefined' )
     require( 'wConsequence' );
   }
 
-  // if( typeof logger === 'undefined' )
+  if( typeof wLogger === 'undefined' )
   try
   {
-    require( '../../../../wLogger/staging/abase/object/printer/printer/Logger.s' );
+    require( '../../abase/object/printer/printer/Logger.s' );
+    //require( '../../../../wLogger/staging/abase/object/printer/printer/Logger.s' );
   }
   catch( err )
   {

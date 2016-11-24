@@ -583,11 +583,33 @@ var strColor = function strColor()
 // tester
 // --
 
+var register = function( test )
+{
+  var self = this;
+
+  _.assert( arguments.length > 0 );
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+
+    var test = arguments[ a ];
+    _.assert( _.strIsNotEmpty( test.name ),'test suite should have name' );
+    _global_.wTests[ test.name ] = test;
+
+  }
+
+  return self;
+}
+
+//
+
 var testAll = function()
 {
   var self = this;
 
   _.assert( arguments.length === 0 );
+
+  logger.log( 'wTests :',wTests );
 
   for( var t in wTests )
   {
@@ -648,15 +670,20 @@ var _testSuiteRunDelayed = function( suit )
 var _testSuiteRun = function( suit )
 {
   var self = this;
-  var tests = suit.tests;
   var con = new wConsequence();
+
+  // logger.log( '_testSuiteRun',suit );
 
   if( _.strIs( suit ) )
   suit = wTests[ suit ];
+  var tests = suit.tests;
+
+  // logger.log( '_testSuiteRun.suit',suit );
+  // logger.log( '_testSuiteRun.name',suit.name );
 
   //console.log( 'Object.getPrototypeOf( suit ) :',Object.getPrototypeOf( suit ) );
 
-  _.assert( _.strIs( suit.name ),'testing suit should has name' );
+  _.assert( _.strIsNotEmpty( suit.name ),'testing suit should has name' );
   _.assert( _.objectIs( suit.tests ),'testing suit should has map with test routines' );
   //_.assert( _.mapIs( suit ) || Object.getPrototypeOf( suit ) === Self,'expects suit instance of','wTools.Testing' );
   _.accessorForbid( suit,
@@ -707,9 +734,11 @@ var _testSuiteBegin = function _testSuiteBegin()
 {
   var self = this;
 
+  debugger;
+
   var msg =
   [
-    'Starting testing of test suite ( ' + self.name + ' )..'
+    'Starting testing of test suite ( ' + self.name + ' ) ..'
   ];
 
   logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
@@ -834,9 +863,10 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
 var _beganTestRoutine = function( testRoutine )
 {
 
+
   var msg =
   [
-    'Running test routine ( ' + testRoutine.name + ' )..'
+    'Running test routine ( ' + testRoutine.name + ' ) ..'
   ];
   logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
 
@@ -924,6 +954,8 @@ var Self =
 
 
   // tester
+
+  register : register,
 
   testAll : testAll,
   test : test,

@@ -734,8 +734,6 @@ var _testSuiteBegin = function _testSuiteBegin()
 {
   var self = this;
 
-  debugger;
-
   var msg =
   [
     'Starting testing of test suite ( ' + self.name + ' ) ..'

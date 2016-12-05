@@ -90,6 +90,9 @@ var identical = function( got,expected )
   _.assert( arguments.length === 2 );
 
   var outcome = _.entityIdentical( got,expected,options );
+
+  _.assert( options.lastPath !== undefined );
+
   test.reportOutcome( outcome,got,expected,options.lastPath );
 
   return outcome;
@@ -482,71 +485,37 @@ var _strColor = function _strColor( color,result )
 
   var src = result[ 0 ];
 
-  // if( Chalk )
-  // {
+  // _.assert( result.length === 1 );
 
-    // _.assert( result.length === 1 );
-    switch( color )
-    {
+  switch( color )
+  {
 
-      case 'good' :
-        // result[ 0 ] = Chalk.green( src ); break;
-        result[ 0 ] = _.strColor.fg( src, 'green' ); break;
+    case 'good' :
+      // result[ 0 ] = Chalk.green( src ); break;
+      result[ 0 ] = _.strColor.fg( src, 'green' ); break;
 
-      case 'bad' :
-        // result[ 0 ] = Chalk.red( src ); break;
-        result[ 0 ] = _.strColor.fg( src, 'red' ); break;
+    case 'bad' :
+      // result[ 0 ] = Chalk.red( src ); break;
+      result[ 0 ] = _.strColor.fg( src, 'red' ); break;
 
-      case 'neutral' :
-        // result[ 0 ] = Chalk.bgWhite( Chalk.black( src ) ); break;
-        // return Chalk.bgWhite( Chalk.black( src ) ); break;
-        result[ 0 ] = _.strColor.bg( _.strColor.fg( src, 'black' ), 'white' ); break;
-        return _.strColor.bg( _.strColor.fg( src, 'black' ), 'white' ); break;
+    case 'topic' :
+      result[ 0 ] = _.strColor.bg( src, 'dim' ); break;
+      return _.strColor.bg( src, 'dim' ); break;
 
-      case 'bold' :
-        // result[ 0 ] = Chalk.bgWhite( src ); break;
-        // return Chalk.bgWhite( src ); break;
-        result[ 0 ] = _.strColor.bg( src, 'white' ); break;
-        return _.strColor.bg( src, 'white' ); break;
+    case 'neutral' :
+      result[ 0 ] = _.strColor.bg( _.strColor.fg( src, 'white' ), 'dim' ); break;
+      return _.strColor.bg( _.strColor.fg( src, 'white' ), 'dim' ); break;
 
-      default :
-        throw _.err( 'strColor : unknown color : ' + color );
+    // case 'bold' :
+    //   // result[ 0 ] = Chalk.bgWhite( src ); break;
+    //   // return Chalk.bgWhite( src ); break;
+    //   result[ 0 ] = _.strColor.bg( src, 'white' ); break;
+    //   return _.strColor.bg( src, 'white' ); break;
 
-    }
+    default :
+      throw _.err( 'strColor : unknown color : ' + color );
 
-  // }
-  // else
-  // {
-  //
-  //   _.assert( result.length === 2 );
-  //   _.assert( _.strIs( result[ 1 ] ) );
-  //
-  //   var tag = null;
-  //   switch( color )
-  //   {
-  //
-  //     case 'good' :
-  //       tag = colorGood; break;
-  //
-  //     case 'bad' :
-  //       tag = colorBad; break;
-  //
-  //     case 'neutral' :
-  //       tag = colorNeutral; break;
-  //
-  //     case 'bold' :
-  //       tag = colorBold; break;
-  //
-  //     default :
-  //       throw _.err( 'strColor : unknown color : ' + color );
-  //
-  //   }
-  //
-  //   // result[ 0 ] = _.strPrependOnce( src,'%c' );
-  //   // result[ 1 ] += ' ; ' + tag;
-  //     result[ 0 ] =  tag[ 0 ] + src + tag[ 1 ];
-  //
-  // }
+  }
 
   return result;
 }
@@ -559,10 +528,7 @@ var strColor = function strColor()
   var src = _.str.apply( _,arguments );
   var result = null;
 
-  // if( Chalk )
   result = [ src ];
-  // else
-  // result = [ src,'' ];
 
   if( _.arrayIs( this ) )
   {
@@ -739,7 +705,7 @@ var _testSuiteBegin = function _testSuiteBegin()
     'Starting testing of test suite ( ' + self.name + ' ) ..'
   ];
 
-  logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
+  logger.logUp.apply( logger,strColor.apply( [ 'topic','neutral' ], msg ) );
   logger.log();
 
   if( self.onSuitBegin )
@@ -761,7 +727,7 @@ var _testSuiteEnd = function _testSuiteEnd()
     'Testing of test suite ( ' + self.name + ' ) finished ' + ( self.report.failed === 0 ? 'good' : 'with fails' ) + '.'
   ];
 
-  logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad','bold' ],msg ) );
+  logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad','topic' ],msg ) );
 
   var msg =
   [
@@ -861,12 +827,11 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
 var _beganTestRoutine = function( testRoutine )
 {
 
-
   var msg =
   [
     'Running test routine ( ' + testRoutine.name + ' ) ..'
   ];
-  logger.logUp.apply( logger,strColor.apply( 'neutral',msg ) );
+  logger.logUp.apply( logger,strColor.apply( [ 'topic','neutral' ],msg ) );
 
 /*
   logger.logUp( '\n%cRunning test',colorNeutral,test.name+'..' );
@@ -888,7 +853,7 @@ var _endedTestRoutine = function( testRoutine,success )
     [
       'Passed test routine ( ' + testRoutine.name + ' ).'
     ];
-    logger.logDown.apply( logger,strColor.apply( [ 'good','bold' ],msg ) );
+    logger.logDown.apply( logger,strColor.apply( [ 'good','neutral' ],msg ) );
 
     //logger.logDown( '%cPassed test :',colorGood,test.name+'.\n' );
 
@@ -900,7 +865,7 @@ var _endedTestRoutine = function( testRoutine,success )
     [
       'Failed test routine ( ' + testRoutine.name + ' ).'
     ];
-    logger.logDown.apply( logger,strColor.apply( [ 'bad','bold' ],msg ) );
+    logger.logDown.apply( logger,strColor.apply( [ 'bad','neutral' ],msg ) );
 
   }
 

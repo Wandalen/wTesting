@@ -250,7 +250,7 @@ var contain = function( got,expected )
  * @memberof wTools
  */
 
-var shouldThrowError = function( routine )
+var shouldThrowError = function shouldThrowError( routine )
 {
   var test = this;
   var options = {};
@@ -260,7 +260,7 @@ var shouldThrowError = function( routine )
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
 
-  return test._conSyn/*.thenClone()*/.got( function()
+  return test._conSyn.got( function shouldThrowError()
   {
 
     var con = this;
@@ -271,13 +271,12 @@ var shouldThrowError = function( routine )
     }
     else try
     {
-      debugger;
       var result = routine.call( this );
     }
     catch( err )
     {
       thrown = 1;
-      outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
+      outcome = test.reportOutcome( 1,'a error thrown','error thrown','' );
     }
 
     /* */
@@ -288,31 +287,30 @@ var shouldThrowError = function( routine )
       .got( function( err )
       {
         if( !err )
-        outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
+        outcome = test.reportOutcome( 0,'b error not thrown','error thrown','' );
         else
-        outcome = test.reportOutcome( 1,'error thrown','error thrown','' );
+        outcome = test.reportOutcome( 1,'c error thrown','error thrown','' );
         con.give();
       })
       .thenDo( function( err,data )
       {
-        test.reportOutcome( 0,'shouldThrowError : should never reach it, consequence got redundant messages','single message for consequence','' );
+        test.reportOutcome( 0,'d shouldThrowError : should never reach it, consequence got redundant messages','single message for consequence','' );
       });
     }
     else
     {
       if( !thrown )
-      outcome = test.reportOutcome( 0,'error not thrown','error thrown','' );
+      outcome = test.reportOutcome( 0,'e error not thrown','error thrown','' );
       con.give();
     }
 
-    //return result;
   });
 
 }
 
 //
 
-var shouldMessageOnlyOnce = function( con )
+var shouldMessageOnlyOnce = function shouldMessageOnlyOnce( con )
 {
   var test = this;
   var result = new wConsequence();
@@ -325,7 +323,7 @@ var shouldMessageOnlyOnce = function( con )
   con
   .got( function( err,data )
   {
-    _.timeOut( 10, function()
+    _.timeOut( 100, function()
     {
       result.give( err,data );
     });
@@ -345,7 +343,7 @@ var shouldMessageOnlyOnce = function( con )
 // store
 // --
 
-var stateStore = function()
+var stateStore = function stateStore()
 {
   var test = this;
   var result = {};
@@ -405,8 +403,9 @@ var reportOutcome = function( outcome,got,expected,path )
   var msgExpectedGot = function()
   {
     return '' +
+    'got :\n' + _.toStr( got,{ stringWrapper : '' } ) + '\n' +
     'expected :\n' + _.toStr( expected,{ stringWrapper : '' } ) +
-    '\ngot :\n' + _.toStr( got,{ stringWrapper : '' } );
+    '';
   }
 
   /**/
@@ -442,8 +441,9 @@ var reportOutcome = function( outcome,got,expected,path )
     logger.log
     (
       'at : ' + path +
+      '\ngot :\n' + _.toStr( _.entitySelect( got,path ) ) +
       '\nexpected :\n' + _.toStr( _.entitySelect( expected,path ) ) +
-      '\ngot :\n' + _.toStr( _.entitySelect( got,path ) )
+      ''
     );
 
     if( _.strIs( expected ) && _.strIs( got ) )

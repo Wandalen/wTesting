@@ -4,10 +4,16 @@
 
 if( typeof module !== 'undefined' )
 {
-  if( require( 'fs' ).existsSync( __dirname + '/../../amid/diagnostic/Testing.debug.s' ) )
-  require( '../../amid/diagnostic/Testing.debug.s' );
-  else
-  require( 'wTesting' );
+
+  try
+  {
+    require( '../../amid/diagnostic/Testing.debug.s' );
+  }
+  catch( err )
+  {
+    require( 'wTesting' );
+  }
+
 
   require( '../mixin/EventHandler.s' );
 }
@@ -58,15 +64,15 @@ var basic = function( test )
 
   //
 
-  test.identical( entity1.eventHandle( 'event1' ),[ 1 ] );
+  test.identical( entity1.eventGive( 'event1' ),[ 1 ] );
   test.identical( entity1[ 'event1' ], 1 );
 
-  test.identical( entity1.eventHandle( 'event2' ),[ 1 ] );
-  test.identical( entity1.eventHandle( 'event2' ),[ 2 ] );
+  test.identical( entity1.eventGive( 'event2' ),[ 1 ] );
+  test.identical( entity1.eventGive( 'event2' ),[ 2 ] );
   test.identical( entity1[ 'event2' ], 2 );
 
-  test.identical( entity1.eventHandle( 'event3' ),[ 1 ] );
-  test.identical( entity1.eventHandle( 'event3' ),[ 2 ] );
+  test.identical( entity1.eventGive( 'event3' ),[ 1 ] );
+  test.identical( entity1.eventGive( 'event3' ),[ 2 ] );
   test.identical( entity1[ 'event3' ], 2 );
 
   //
@@ -108,14 +114,14 @@ var basic = function( test )
   test.identical( entity1.eventHandleUntil( 'until',1 ),undefined );
   test.identical( entity1[ 'until' ], 11 );
 
-  test.identical( entity1.eventHandle( 'event3' ),[ 3 ] );
+  test.identical( entity1.eventGive( 'event3' ),[ 3 ] );
   test.identical( entity1[ 'event3' ], 3 );
   entity1._eventHandlerUnregister({ owner : 'owner' });
   test.identical( entity1.eventHandleUntil( 'until',1 ),undefined );
-  test.identical( entity1.eventHandle( 'event3' ),[] );
+  test.identical( entity1.eventGive( 'event3' ),[] );
   test.identical( entity1[ 'event3' ], 3 );
 
-  test.identical( entity1.eventHandle( 'event1' ),[ 2 ] );
+  test.identical( entity1.eventGive( 'event1' ),[ 2 ] );
   test.identical( entity1[ 'event1' ], 2 );
 
   //
@@ -144,15 +150,15 @@ var basic = function( test )
     'event3' : 'event33',
   });
 
-  test.identical( entity1.eventHandle( 'event1' ),[ 1,2 ] );
-  test.identical( entity1.eventHandle( 'event2' ),[] );
-  test.identical( entity1.eventHandle( 'event3' ),[] );
-  test.identical( entity1.eventHandle( 'event33' ),[ 1,2 ] );
+  test.identical( entity1.eventGive( 'event1' ),[ 1,2 ] );
+  test.identical( entity1.eventGive( 'event2' ),[] );
+  test.identical( entity1.eventGive( 'event3' ),[] );
+  test.identical( entity1.eventGive( 'event33' ),[ 1,2 ] );
 
-  test.identical( entity2.eventHandle( 'event1' ),[ 3,4 ] );
-  test.identical( entity2.eventHandle( 'event2' ),[] );
-  test.identical( entity2.eventHandle( 'event3' ),[ 3,4 ] );
-  test.identical( entity2.eventHandle( 'event33' ),[] );
+  test.identical( entity2.eventGive( 'event1' ),[ 3,4 ] );
+  test.identical( entity2.eventGive( 'event2' ),[] );
+  test.identical( entity2.eventGive( 'event3' ),[ 3,4 ] );
+  test.identical( entity2.eventGive( 'event33' ),[] );
 
   test.identical( entity1[ 'event1' ], 4 );
   test.identical( entity1[ 'event2' ], undefined );
@@ -163,7 +169,7 @@ var basic = function( test )
 
   test.description = 'eventHandlerUnregisterByKindAndOwner';
 
-  test.identical( entity1.eventHandle( 'event1' ),[ 5,6 ] );
+  test.identical( entity1.eventGive( 'event1' ),[ 5,6 ] );
   test.identical( entity1[ 'event1' ], 6 );
   try
   {
@@ -175,18 +181,18 @@ var basic = function( test )
     test.identical( 1,1 );
   }
 
-  test.identical( entity1.eventHandle( 'event1' ),[ 7,8 ] );
+  test.identical( entity1.eventGive( 'event1' ),[ 7,8 ] );
   test.identical( entity1[ 'event1' ], 8 );
   entity1.eventHandlerUnregisterByKindAndOwner( 'event1','owner' );
-  test.identical( entity1.eventHandle( 'event1' ),[ 9 ] );
+  test.identical( entity1.eventGive( 'event1' ),[ 9 ] );
   test.identical( entity1[ 'event1' ], 9 );
 
-  test.identical( entity1.eventHandle( 'event33' ),[ 5,6 ] );
+  test.identical( entity1.eventGive( 'event33' ),[ 5,6 ] );
   test.identical( entity1[ 'event33' ], 6 );
   entity1.eventHandlerUnregister();
-  test.identical( entity1.eventHandle( 'event33' ),[] );
+  test.identical( entity1.eventGive( 'event33' ),[] );
   test.identical( entity1[ 'event33' ], 6 );
-  test.identical( entity1.eventHandle( 'event1' ),[] );
+  test.identical( entity1.eventGive( 'event1' ),[] );
   test.identical( entity1[ 'event1' ], 9 );
 
   //
@@ -194,15 +200,15 @@ var basic = function( test )
   test.description = 'once';
 
   entity1.once( 'event2',onEvent2 );
-  test.identical( entity1.eventHandle( 'event2' ),[ 1 ] );
-  test.identical( entity1.eventHandle( 'event2' ),[] );
+  test.identical( entity1.eventGive( 'event2' ),[ 1 ] );
+  test.identical( entity1.eventGive( 'event2' ),[] );
   test.identical( entity1[ 'event2' ], 1 );
 
   entity1.once( 'event2',onEvent2 );
   entity1.once( 'event2',onEvent2 );
   entity1.once( 'event2',onEvent3 );
-  test.identical( entity1.eventHandle( 'event2' ),[ 2,3 ] );
-  test.identical( entity1.eventHandle( 'event2' ),[] );
+  test.identical( entity1.eventGive( 'event2' ),[ 2,3 ] );
+  test.identical( entity1.eventGive( 'event2' ),[] );
   test.identical( entity1[ 'event2' ], 3 );
 
 }

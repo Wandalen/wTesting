@@ -1,16 +1,20 @@
-( function( ) {
+( function _ArraySorted_test_s_( ) {
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
-  if( require( 'fs' ).existsSync( __dirname + '/../../amid/diagnostic/Testing.debug.s' ) )
-  require( '../../amid/diagnostic/Testing.debug.s' );
-  else
-  require( 'wTesting' );
-}
 
-_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
+  try
+  {
+    require( '../../amid/diagnostic/Testing.debug.s' );
+  }
+  catch( err )
+  {
+    require( 'wTesting' );
+  }
+
+}
 
 var _ = wTools;
 var Self = {};
@@ -19,7 +23,7 @@ var Self = {};
 // test
 // --
 
-var arraySortedAdd = function( test )
+var arraySortedAdd = function arraySortedAdd( test )
 {
   var self = this;
 
@@ -69,7 +73,7 @@ var arraySortedAdd = function( test )
 
 //
 
-var arraySortedClosest = function( test )
+var arraySortedClosest = function arraySortedClosest( test )
 {
   var self = this;
 
@@ -115,6 +119,70 @@ var arraySortedClosest = function( test )
   test.identical( true,true );
 }
 
+//
+
+var arraySortedLookUpDomain = function arraySortedLookUpDomain( test )
+{
+  var self = this;
+
+  var samples =
+  [
+
+    {
+      arr : [ 1,2,3,4,5,6,7,8,9 ],
+      domain : [ -1,-1 ],
+      exp : [ 0,0 ],
+    },
+
+    {
+      arr : [ 1,2,3,4,5,6,7,8,9 ],
+      domain : [ -1,1 ],
+      exp : [ 0,1 ],
+    },
+
+    {
+      arr : [ 1,2,3,4,5,6,7,8,9 ],
+      domain : [ 1,1 ],
+      exp : [ 0,1 ],
+    },
+
+    {
+      arr : [ 1,2,3,4,5,6,7,8,9 ],
+      domain : [ 2,3 ],
+      exp : [ 1,3 ],
+    },
+
+    {
+      arr : [ 1,2,3,4,5,6,7,8,9 ],
+      domain : [ 2,4 ],
+      exp : [ 1,4 ],
+    },
+
+  ];
+
+  // return;
+  debugger;
+  _.arraySortedLookUpIndex( [ 0 ],1 );
+  _.arraySortedLookUpIndex( [ 0,2 ],1 );
+  _.arraySortedLookUpIndex( [ 0,2,3 ],1 );
+  _.arraySortedLookUpIndex( [ 0,0,1,1,1,3,3,3 ],1 )
+  debugger;
+
+  for( var s = 0 ; s < samples.length ; s++ )
+  {
+    var sample = samples[ s ];
+
+    debugger;
+    var got = _.arraySortedLookUpDomain( sample.arr,sample.domain );
+    debugger;
+    test.identical( got,sample.exp );
+    debugger;
+
+  }
+
+  test.identical( true,true );
+}
+
 // --
 // proto
 // --
@@ -122,21 +190,25 @@ var arraySortedClosest = function( test )
 var Proto =
 {
 
-  tests:
+  tests :
   {
 
-    arraySortedAdd: arraySortedAdd,
-    arraySortedClosest: arraySortedClosest,
+    arraySortedAdd : arraySortedAdd,
+    arraySortedClosest : arraySortedClosest,
+    arraySortedLookUpDomain : arraySortedLookUpDomain,
 
   },
 
-  name : 'SortedArrayTests',
+  name : 'ArraySorted',
 
 };
 
-Object.setPrototypeOf( Self, Proto );
+_.mapExtend( Self, Proto );
+
+_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
 wTests[ Self.name ] = Self;
 
+// debugger;
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self );
 

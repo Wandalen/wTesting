@@ -4,14 +4,16 @@
 
 if( typeof module !== 'undefined' )
 {
+
   try
-  {
-    require( 'wTesting' );
-  }
-  catch( err )
   {
     require( '../../amid/diagnostic/Testing.debug.s' );
   }
+  catch( err )
+  {
+    require( 'wTesting' );
+  }
+
 }
 
 var _ = wTools;

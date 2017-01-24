@@ -523,8 +523,6 @@ var outcomeReportSpecial = function outcomeReportSpecial( outcome,msg )
 {
   var testRoutineDescriptor = this;
 
-  testRoutineDescriptor._outcomeReporting( outcome );
-
   _.assert( arguments.length === 2 );
 
   msg = testRoutineDescriptor._currentTestCaseTextGet( outcome,msg );
@@ -541,8 +539,6 @@ var outcomeReportCompare = function outcomeReportCompare( outcome,got,expected,p
 
   _.assert( testRoutineDescriptor._testRoutineDescriptorIs );
   _.assert( arguments.length === 4 );
-
-  testRoutineDescriptor._outcomeReporting( outcome );
 
   /**/
 

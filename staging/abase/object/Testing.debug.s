@@ -82,9 +82,9 @@ _.toStr = function(){ return String( arguments ) };
  * @memberof wTools
  */
 
-var identical = function( got,expected )
+var identical = function identical( got,expected )
 {
-  var test = this;
+  var testRoutineDescriptor = this;
   var options = {};
 
   _.assert( arguments.length === 2 );
@@ -93,7 +93,7 @@ var identical = function( got,expected )
 
   _.assert( options.lastPath !== undefined );
 
-  test.reportOutcome( outcome,got,expected,options.lastPath );
+  testRoutineDescriptor.outcomeReportCompare( outcome,got,expected,options.lastPath );
 
   return outcome;
 }
@@ -135,13 +135,13 @@ var identical = function( got,expected )
  */
 
 
-var equivalent = function( got,expected,eps )
+var equivalent = function equivalent( got,expected,eps )
 {
-  var test = this;
+  var testRoutineDescriptor = this;
   var optionsForEntity = {};
 
   if( eps === undefined )
-  eps = test.eps;
+  eps = testRoutineDescriptor.eps;
 
   optionsForEntity.eps = eps;
 
@@ -149,7 +149,7 @@ var equivalent = function( got,expected,eps )
 
   var outcome = _.entityEquivalent( got,expected,optionsForEntity );
 
-  test.reportOutcome( outcome,got,expected,optionsForEntity.lastPath );
+  testRoutineDescriptor.outcomeReportCompare( outcome,got,expected,optionsForEntity.lastPath );
 
   return outcome;
 }
@@ -186,14 +186,14 @@ var equivalent = function( got,expected,eps )
  * @memberof wTools
  */
 
-var contain = function( got,expected )
+var contain = function contain( got,expected )
 {
-  var test = this;
+  var testRoutineDescriptor = this;
   var options = {};
 
   var outcome = _.entityContain( got,expected,options );
 
-  test.reportOutcome( outcome,got,expected,options.lastPath );
+  testRoutineDescriptor.outcomeReportCompare( outcome,got,expected,options.lastPath );
 
   return outcome;
 }
@@ -252,15 +252,14 @@ var contain = function( got,expected )
 
 var shouldThrowError = function shouldThrowError( routine )
 {
-  var test = this;
-  var options = {};
+  var suit = this;
   var thrown = 0;
   var outcome;
 
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
 
-  return test._conSyn.got( function shouldThrowError()
+  return suit._conSyn.got( function shouldThrowError()
   {
 
     var con = this;
@@ -276,7 +275,7 @@ var shouldThrowError = function shouldThrowError( routine )
     catch( err )
     {
       thrown = 1;
-      outcome = test.reportOutcome( 1,'a error thrown','error thrown','' );
+      outcome = suit.outcomeReportSpecial( 1,'error thrown by call as expected' );
     }
 
     /* */
@@ -284,23 +283,94 @@ var shouldThrowError = function shouldThrowError( routine )
     if( result instanceof wConsequence )
     {
       result
-      .got( function( err )
+      .got( function( err,data )
       {
         if( !err )
-        outcome = test.reportOutcome( 0,'b error not thrown','error thrown','' );
+        {
+          outcome = suit.outcomeReportSpecial( 0,'error not thrown, but expected' );
+        }
         else
-        outcome = test.reportOutcome( 1,'c error thrown','error thrown','' );
-        con.give();
+        {
+          thrown = 1;
+          if( suit.verbose )
+          _.errLogOnce( err );
+          outcome = suit.outcomeReportSpecial( 1,'error thrown by consequence as expected' );
+        }
+        con.give( data );
       })
       .thenDo( function( err,data )
       {
-        test.reportOutcome( 0,'d shouldThrowError : should never reach it, consequence got redundant messages','single message for consequence','' );
+        suit.outcomeReportSpecial( 0,'error thrown several times, something wrong' );
       });
     }
     else
     {
       if( !thrown )
-      outcome = test.reportOutcome( 0,'e error not thrown','error thrown','' );
+      outcome = suit.outcomeReportSpecial( 0,'error not thrown, but expected' );
+      con.give();
+    }
+
+  });
+
+}
+
+//
+
+var mustNotThrowError = function mustNotThrowError( routine )
+{
+  var suit = this;
+  var thrown = 0;
+  var outcome;
+
+  _.assert( _.routineIs( routine ) )
+  _.assert( arguments.length === 1 );
+
+  return suit._conSyn.got( function shouldThrowError()
+  {
+
+    var con = this;
+    var result;
+    if( routine instanceof wConsequence )
+    {
+      result = routine;
+    }
+    else try
+    {
+      var result = routine.call( this );
+    }
+    catch( err )
+    {
+      thrown = 1;
+      _.errLogOnce( err );
+      outcome = suit.outcomeReportSpecial( 0,'error thrown by call, something wrong' );
+    }
+
+    /* */
+
+    if( result instanceof wConsequence )
+    {
+      result
+      .got( function( err,data )
+      {
+        if( err )
+        {
+          thrown = 1;
+          _.errLogOnce( err );
+          outcome = suit.outcomeReportSpecial( 0,'error thrown by consequence, not expected' );
+        }
+        else
+        {
+          outcome = suit.outcomeReportSpecial( 1,'error not thrown' );
+        }
+        con.give( err,data );
+      })
+      .thenDo( function( err,data )
+      {
+        suit.outcomeReportSpecial( 0,'message sent several times, something wrong' );
+      });
+    }
+    else
+    {
       con.give();
     }
 
@@ -312,28 +382,29 @@ var shouldThrowError = function shouldThrowError( routine )
 
 var shouldMessageOnlyOnce = function shouldMessageOnlyOnce( con )
 {
-  var test = this;
+  var suit = this;
   var result = new wConsequence();
 
   _.assert( arguments.length === 1 );
   _.assert( con instanceof wConsequence );
 
-  var state = test.stateStore();
+  var state = suit.stateStore();
 
   con
   .got( function( err,data )
   {
-    _.timeOut( 100, function()
+    _.timeOut( 1000, function()
     {
+      suit.outcomeReportSpecial( 1,'message thrown at least once' );
       result.give( err,data );
     });
   })
   .thenDo( function( err,data )
   {
-    test.stateStore();
-    test.stateRestore( state );
-    test.reportOutcome( 0,'shouldMessageOnlyOnce : should never reach it, consequence got redundant messages','single message for consequence','' );
-    test.stateRestore();
+    suit.stateStore();
+    suit.stateRestore( state );
+    suit.outcomeReportSpecial( 0,'got several messages, expected only one' );
+    suit.stateRestore();
   });
 
   return result;
@@ -345,16 +416,16 @@ var shouldMessageOnlyOnce = function shouldMessageOnlyOnce( con )
 
 var stateStore = function stateStore()
 {
-  var test = this;
+  var suit = this;
   var result = {};
 
   _.assert( arguments.length === 0 );
 
-  result.description = test.description;
-  result._caseIndex = test._caseIndex;
+  result.description = suit.description;
+  result._caseIndex = suit._caseIndex;
 
-  test._storedStates = test._storedStates || [];
-  test._storedStates.push( result );
+  suit._storedStates = suit._storedStates || [];
+  suit._storedStates.push( result );
 
   // console.log( 'stateStore',result._caseIndex );
 
@@ -365,7 +436,7 @@ var stateStore = function stateStore()
 
 var stateRestore = function( state )
 {
-  var test = this;
+  var suit = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
@@ -373,30 +444,105 @@ var stateRestore = function( state )
 
   if( !state )
   {
-    _.assert( _.arrayIs( test._storedStates ) && test._storedStates.length, 'stateRestore : no stored state' )
-    state = test._storedStates.pop();
+    _.assert( _.arrayIs( suit._storedStates ) && suit._storedStates.length, 'stateRestore : no stored state' )
+    state = suit._storedStates.pop();
   }
 
-  test.description = state.description;
-  test._caseIndex = state._caseIndex;
+  suit.description = state.description;
+  suit._caseIndex = state._caseIndex;
 
-  return test;
+  return suit;
 }
 
 // --
 // output
 // --
 
-var reportOutcome = function( outcome,got,expected,path )
+var _outcomeReporting = function _outcomeReporting( outcome )
 {
-  var test = this;
+  var suit = this;
 
-  if( !test._caseIndex )
-  test._caseIndex = 1;
+  if( !suit._caseIndex )
+  suit._caseIndex = 1;
   else
-  test._caseIndex += 1;
+  suit._caseIndex += 1;
 
+  if( outcome )
+  suit.report.passed += 1;
+  else
+  suit.report.failed += 1;
+
+  _.assert( arguments.length === 1 );
+
+}
+
+//
+
+var _outcomeReport = function _outcomeReport( outcome,msg,details )
+{
+  var testRoutineDescriptor = this;
+
+  testRoutineDescriptor._outcomeReporting( outcome );
+
+  _.assert( arguments.length === 3 );
+
+  if( outcome )
+  {
+
+    if( testRoutineDescriptor.verbose )
+    {
+
+      logger.logUp();
+      if( details )
+      logger.log( details );
+      // msg = testRoutineDescriptor._currentTestCaseTextGet( 1,msg );
+      msg = _.strColor.style( msg,'good' )
+      logger.logDown( msg );
+      logger.log();
+
+    }
+
+  }
+  else
+  {
+
+    logger.logUp();
+    if( details )
+    //msg = testRoutineDescriptor._currentTestCaseTextGet( 0,msg );
+    msg = _.strColor.style( msg,'bad' )
+    logger.errorDown( msg );
+    logger.log();
+
+  }
+
+}
+
+//
+
+var outcomeReportSpecial = function outcomeReportSpecial( outcome,msg )
+{
+  var testRoutineDescriptor = this;
+
+  testRoutineDescriptor._outcomeReporting( outcome );
+
+  _.assert( arguments.length === 2 );
+
+  msg = testRoutineDescriptor._currentTestCaseTextGet( outcome,msg );
+
+  testRoutineDescriptor._outcomeReport( outcome,msg,'' );
+
+}
+
+//
+
+var outcomeReportCompare = function outcomeReportCompare( outcome,got,expected,path )
+{
+  var testRoutineDescriptor = this;
+
+  _.assert( testRoutineDescriptor._testRoutineDescriptorIs );
   _.assert( arguments.length === 4 );
+
+  testRoutineDescriptor._outcomeReporting( outcome );
 
   /**/
 
@@ -410,140 +556,200 @@ var reportOutcome = function( outcome,got,expected,path )
 
   /**/
 
+
   if( outcome )
   {
-    if( test.verbose )
-    {
 
-      logger.logUp();
+    var details = msgExpectedGot();
+    var msg = testRoutineDescriptor._currentTestCaseTextGet( 1 );
+    testRoutineDescriptor._outcomeReport( outcome,msg,details );
 
-      logger.log( msgExpectedGot() );
-
-      var msg =
-      [
-        testCaseText( test ) +
-        ' ... ok'
-      ];
-
-      logger.logDown.apply( logger,strColor.apply( 'good',msg ) );
-
-    }
-    test.report.passed += 1;
   }
   else
   {
 
-    logger.logUp();
-
-    logger.log( msgExpectedGot() );
+    var details = msgExpectedGot();
 
     if( !_.atomicIs( got ) && !_.atomicIs( expected ) )
-    logger.log
+    details +=
     (
-      'at : ' + path +
+      '\nat : ' + path +
       '\ngot :\n' + _.toStr( _.entitySelect( got,path ) ) +
       '\nexpected :\n' + _.toStr( _.entitySelect( expected,path ) ) +
       ''
     );
 
     if( _.strIs( expected ) && _.strIs( got ) )
-    logger.error( '\ndifference :\n' + _.strDifference( expected,got ) );
+    details += '\ndifference :\n' + _.strDifference( expected,got );
 
-    var msg =
-    [
-      testCaseText( test ) +
-      ' ... failed'
-    ];
+    var msg = testRoutineDescriptor._currentTestCaseTextGet( 0 );
 
-    logger.errorDown.apply( logger,strColor.apply( 'bad',msg ) );
+    testRoutineDescriptor._outcomeReport( outcome,msg,details );
 
-    test.report.failed += 1;
     debugger;
   }
 
+  //
+  // if( outcome )
+  // {
+  //
+  //   if( testRoutineDescriptor.verbose )
+  //   {
+  //
+  //     logger.logUp();
+  //     logger.log( msgExpectedGot() );
+  //
+  //     var msg = testRoutineDescriptor._currentTestCaseTextGet( 1 );
+  //
+  //     logger.logDown( _.strColor.style( msg,'good' ) );
+  //
+  //   }
+  //
+  // }
+  // else
+  // {
+  //
+  //   logger.logUp();
+  //   logger.log( msgExpectedGot() );
+  //
+  //   if( !_.atomicIs( got ) && !_.atomicIs( expected ) )
+  //   logger.log
+  //   (
+  //     'at : ' + path +
+  //     '\ngot :\n' + _.toStr( _.entitySelect( got,path ) ) +
+  //     '\nexpected :\n' + _.toStr( _.entitySelect( expected,path ) ) +
+  //     ''
+  //   );
+  //
+  //   if( _.strIs( expected ) && _.strIs( got ) )
+  //   logger.error( '\ndifference :\n' + _.strDifference( expected,got ) );
+  //
+  //   var msg = testRoutineDescriptor._currentTestCaseTextGet( 0 );
+  //
+  //   logger.errorDown( _.strColor.style( msg,'bad' ) );
+  //
+  //   debugger;
+  // }
+
 }
 
 //
 
-var testCaseText = function( test )
+var exceptionReport = function exceptionReport( err,testRoutineDescriptor )
 {
-  return '' +
-    'Test routine( ' + test.name + ' ) : ' +
-    'test case' + ( test.description ? ( '( ' + test.description + ' )' ) : '' ) +
-    ' # ' + test._caseIndex
+  var suit = this;
+
+  console.warn( 'not tested!' );
+  debugger;
+  suit.report.failed += 1;
+
+  if( testRoutineDescriptor.onError )
+  testRoutineDescriptor.onError.call( suit,testRoutineDescriptor );
+
+  var msg =
+  [
+    testRoutineDescriptor._currentTestCaseTextGet() +
+    ' ... failed throwing error\n'
+    //_.err( err ).toString()
+  ];
+
+  var details = _.err( err ).toString();
+
+  testRoutineDescriptor._outcomeReport( 0,msg,details );
+
+  // logger.error( _.strColor.style( msg,'bad' ) );
+
+}
+
+//
+
+var _currentTestCaseTextGet = function _currentTestCaseTextGet( value,hint )
+{
+  var testRoutineDescriptor = this;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 || arguments.length === 2 );
+  _.assert( value === undefined || _.boolLike( value ) );
+  _.assert( hint === undefined || _.strIs( hint ) );
+  _.assert( testRoutineDescriptor._testRoutineDescriptorIs );
+  _.assert( testRoutineDescriptor._caseIndex >= 0 );
+  _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'test routine descriptor should have name' );
+
+  var result = '' +
+    'Test routine( ' + testRoutineDescriptor.name + ' ) : ' +
+    'test case' + ( testRoutineDescriptor.description ? ( '( ' + testRoutineDescriptor.description + ' )' ) : '' ) +
+    ' # ' + testRoutineDescriptor._caseIndex
   ;
-}
 
-//
+  if( hint )
+  result += ' : ' + hint;
 
-var _strColor = function _strColor( color,result )
-{
-
-  _.assert( arguments.length === 2 );
-  _.assert( _.arrayIs( result ) );
-  _.assert( _.strIs( color ),'expects color as string' );
-
-  var src = result[ 0 ];
-
-  // _.assert( result.length === 1 );
-
-  switch( color )
+  if( value !== undefined )
   {
-
-    case 'good' :
-      // result[ 0 ] = Chalk.green( src ); break;
-      result[ 0 ] = _.strColor.fg( src, 'green' ); break;
-
-    case 'bad' :
-      // result[ 0 ] = Chalk.red( src ); break;
-      result[ 0 ] = _.strColor.fg( src, 'red' ); break;
-
-    case 'topic' :
-      result[ 0 ] = _.strColor.bg( src, 'dim' ); break;
-      return _.strColor.bg( src, 'dim' ); break;
-
-    case 'neutral' :
-      result[ 0 ] = _.strColor.bg( _.strColor.fg( src, 'white' ), 'dim' ); break;
-      return _.strColor.bg( _.strColor.fg( src, 'white' ), 'dim' ); break;
-
-    // case 'bold' :
-    //   // result[ 0 ] = Chalk.bgWhite( src ); break;
-    //   // return Chalk.bgWhite( src ); break;
-    //   result[ 0 ] = _.strColor.bg( src, 'white' ); break;
-    //   return _.strColor.bg( src, 'white' ); break;
-
-    default :
-      throw _.err( 'strColor : unknown color : ' + color );
-
+    if( value )
+    result += ' ... ok';
+    else
+    result += ' ... failed';
   }
 
   return result;
 }
-
 //
-
-var strColor = function strColor()
-{
-
-  var src = _.str.apply( _,arguments );
-  var result = null;
-
-  result = [ src ];
-
-  if( _.arrayIs( this ) )
-  {
-
-    for( var t = 0 ; t < this.length ; t++ )
-    _strColor( this[ t ],result );
-
-  }
-  else
-  {
-    _strColor( this,result );
-  }
-
-  return result;
-}
+// //
+//
+// var _strColor = function _strColor( color,src )
+// {
+//   var result;
+//
+//   _.assert( arguments.length === 2 );
+//   _.assert( _.strIs( src ),'expects string got',_.strTypeOf( src ) );
+//   _.assert( _.strIs( color ),'expects color as string' );
+//
+//   switch( color )
+//   {
+//
+//     case 'good' :
+//       result = _.strColor.fg( src, 'green' ); break;
+//
+//     case 'bad' :
+//       result = _.strColor.fg( src, 'red' ); break;
+//
+//     case 'topic' :
+//       result = _.strColor.bg( src, 'dim' ); break;
+//
+//     case 'neutral' :
+//       result = _.strColor.bg( _.strColor.fg( src, 'white' ), 'dim' ); break;
+//
+//     default :
+//       throw _.err( 'strColor : unknown color : ' + color );
+//
+//   }
+//
+//   return result;
+// }
+//
+// //
+//
+// var strColor = function strColor( colors,src )
+// {
+//   var result = src;
+//
+//   if( _.arrayIs( result ) )
+//   result = _.strConcat.apply( _,result );
+//
+//   _.assert( _.strIs( result ) );
+//
+//   if( _.arrayIs( colors ) )
+//   {
+//     for( var t = 0 ; t < colors.length ; t++ )
+//     result = _strColor( colors[ t ],result );
+//   }
+//   else
+//   {
+//     result = _strColor( colors,result );
+//   }
+//
+//   return result;
+// }
 
 // --
 // tester
@@ -586,7 +792,7 @@ var testAll = function()
 
 //
 
-var test = function( args )
+var test = function test( args )
 {
   var self = this;
   var args = arguments;
@@ -638,26 +844,22 @@ var _testSuiteRun = function( suit )
   var self = this;
   var con = new wConsequence();
 
-  // logger.log( '_testSuiteRun',suit );
-
   if( _.strIs( suit ) )
   suit = wTests[ suit ];
   var tests = suit.tests;
 
-  // logger.log( '_testSuiteRun.suit',suit );
-  // logger.log( '_testSuiteRun.name',suit.name );
-
-  //console.log( 'Object.getPrototypeOf( suit ) :',Object.getPrototypeOf( suit ) );
+  /* */
 
   _.assert( _.strIsNotEmpty( suit.name ),'testing suit should has name' );
   _.assert( _.objectIs( suit.tests ),'testing suit should has map with test routines' );
-  //_.assert( _.mapIs( suit ) || Object.getPrototypeOf( suit ) === Self,'expects suit instance of','wTools.Testing' );
   _.accessorForbid( suit,
   {
     options : 'options',
     suit : 'suit',
     context : 'context',
   });
+
+  /* */
 
   if( _.mapIs( suit ) )
   Object.setPrototypeOf( suit, Self );
@@ -675,16 +877,16 @@ var _testSuiteRun = function( suit )
     report.passed = 0;
     report.failed = 0;
 
-    var onEach = function( e,testRoutine )
+    var onEachStage = function onEachStage( stage,testRoutine )
     {
-      return suit._testRoutineRun( e,testRoutine,suit,report );
+      return suit._testRoutineRun( stage.key,testRoutine );
     }
 
     return _.execStages( tests,
     {
       syn : 1,
       manual : 1,
-      onEach : onEach,
+      onEach : onEachStage,
       onBegin : _.routineJoin( suit,suit._testSuiteBegin ),
       onEnd : _.routineJoin( suit,suit._testSuiteEnd ),
     });
@@ -698,18 +900,18 @@ var _testSuiteRun = function( suit )
 
 var _testSuiteBegin = function _testSuiteBegin()
 {
-  var self = this;
+  var suit = this;
 
   var msg =
   [
-    'Starting testing of test suite ( ' + self.name + ' ) ..'
+    'Starting testing of test suite ( ' + suit.name + ' ) ..'
   ];
 
-  logger.logUp.apply( logger,strColor.apply( [ 'topic','neutral' ], msg ) );
+  logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
   logger.log();
 
-  if( self.onSuitBegin )
-  self.onSuitBegin();
+  if( suit.onSuitBegin )
+  suit.onSuitBegin();
 
 }
 
@@ -717,92 +919,80 @@ var _testSuiteBegin = function _testSuiteBegin()
 
 var _testSuiteEnd = function _testSuiteEnd()
 {
-  var self = this;
+  var suit = this;
 
-  if( self.onSuitEnd )
-  self.onSuitEnd();
-
-  var msg =
-  [
-    'Testing of test suite ( ' + self.name + ' ) finished ' + ( self.report.failed === 0 ? 'good' : 'with fails' ) + '.'
-  ];
-
-  logger.logDown.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad','topic' ],msg ) );
+  if( suit.onSuitEnd )
+  suit.onSuitEnd();
 
   var msg =
   [
-    _.toStr( self.report,{ wrap : 0, multiline : 1 } )+'\n\n'
+    'Testing of test suite ( ' + suit.name + ' ) finished ' + ( suit.report.failed === 0 ? 'good' : 'with fails' ) + '.'
   ];
 
-  logger.log.apply( logger,strColor.apply( [ self.report.failed === 0 ? 'good' : 'bad' ],msg ) );
+  logger.logDown( _.strColor.style( msg,[ suit.report.failed === 0 ? 'good' : 'bad','topic' ] ) );
+
+  var msg =
+  [
+    _.toStr( suit.report,{ wrap : 0, multiline : 1 } )+'\n\n'
+  ];
+
+  logger.log( _.strColor.style( msg,[ suit.report.failed === 0 ? 'good' : 'bad' ] ) );
 
 }
 
 //
 
-var _testRoutineRun = function( e,testRoutine,suit,report )
+var _testRoutineRun = function _testRoutineRun( name,testRoutine )
 {
-  var self = this;
+  var suit = this;
   var result = null;
+  var report = suit.report;
   var failed = report.failed;
 
-  var testRoutine = { routine : testRoutine };
-  testRoutine.name = e.key;
-  testRoutine.report = report;
-  testRoutine.description = '';
-  testRoutine.suit = suit;
-  testRoutine._caseIndex = 0;
+  var testRoutineDescriptor = { routine : testRoutine };
+  testRoutineDescriptor.name = name;
+  // testRoutineDescriptor.report = report;
+  testRoutineDescriptor.description = '';
+  testRoutineDescriptor.suit = suit;
+  testRoutineDescriptor._caseIndex = 0;
+  testRoutineDescriptor._testRoutineDescriptorIs = 1;
+  testRoutineDescriptor._storedStates = null;
 
-  Object.setPrototypeOf( testRoutine, suit );
+  Object.setPrototypeOf( testRoutineDescriptor, suit );
+  Object.preventExtensions( testRoutineDescriptor );
 
+  _.assert( _.routineIs( testRoutine ) );
+  _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'test routine descriptor should have name' );
   _.assert( Object.isPrototypeOf.call( Self,suit ) );
-  _.assert( Object.isPrototypeOf.call( Self,testRoutine ) );
-
-  /* error */
-
-  var handleError = function( err )
-  {
-
-    report.failed += 1;
-
-    if( testRoutine.onError )
-    testRoutine.onError.call( suit,testRoutine );
-
-    var msg =
-    [
-      testCaseText( testRoutine ) +
-      ' ... failed throwing error\n' +
-      _.err( err ).toString()
-    ];
-
-    logger.error.apply( logger,strColor.apply( 'bad',msg ) );
-  }
+  _.assert( Object.isPrototypeOf.call( Self,testRoutineDescriptor ) );
+  _.assert( arguments.length === 2 );
 
   /* */
 
-  var con = self._conSyn.thenClone();
+  var con = suit._conSyn.thenClone();
   con.thenDo( function()
   {
 
-    self._beganTestRoutine( testRoutine );
+    suit._beganTestRoutine( testRoutineDescriptor );
 
     /* */
 
-    if( self.safe )
+    if( suit.safe )
     {
 
       try
       {
-        result = testRoutine.routine.call( suit,testRoutine );
+        result = testRoutineDescriptor.routine.call( suit,testRoutineDescriptor );
       }
       catch( err )
       {
-        handleError( err );
+        suit.exceptionReport( err,testRoutineDescriptor );
       }
+
     }
     else
     {
-      result = testRoutine.routine.call( suit,testRoutine );
+      result = testRoutineDescriptor.routine.call( suit,testRoutineDescriptor );
     }
 
     /* */
@@ -812,8 +1002,8 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
     result.thenDo( function( err )
     {
       if( err )
-      handleError( err );
-      self._endedTestRoutine( testRoutine,failed === report.failed );
+      suit.exceptionReport( err,testRoutineDescriptor );
+      suit._endedTestRoutine( testRoutineDescriptor,failed === report.failed );
     });
 
     return result;
@@ -824,14 +1014,16 @@ var _testRoutineRun = function( e,testRoutine,suit,report )
 
 //
 
-var _beganTestRoutine = function( testRoutine )
+var _beganTestRoutine = function _beganTestRoutine( testRoutineDescriptor )
 {
+  var suit = this;
 
   var msg =
   [
-    'Running test routine ( ' + testRoutine.name + ' ) ..'
+    'Running test routine ( ' + testRoutineDescriptor.name + ' ) ..'
   ];
-  logger.logUp.apply( logger,strColor.apply( [ 'topic','neutral' ],msg ) );
+
+  logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
 
 /*
   logger.logUp( '\n%cRunning test',colorNeutral,test.name+'..' );
@@ -841,19 +1033,20 @@ var _beganTestRoutine = function( testRoutine )
 
 //
 
-var _endedTestRoutine = function( testRoutine,success )
+var _endedTestRoutine = function _endedTestRoutine( testRoutineDescriptor,success )
 {
+  var suit = this;
 
-  _.assert( _.strIsNotEmpty( testRoutine.name ),'test routine should have name' );
+  _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'test routine should have name' );
 
   if( success )
   {
 
     var msg =
     [
-      'Passed test routine ( ' + testRoutine.name + ' ).'
+      'Passed test routine ( ' + testRoutineDescriptor.name + ' ).'
     ];
-    logger.logDown.apply( logger,strColor.apply( [ 'good','neutral' ],msg ) );
+    logger.logDown( _.strColor.style( msg,[ 'good','neutral' ] ) );
 
     //logger.logDown( '%cPassed test :',colorGood,test.name+'.\n' );
 
@@ -863,9 +1056,9 @@ var _endedTestRoutine = function( testRoutine,success )
 
     var msg =
     [
-      'Failed test routine ( ' + testRoutine.name + ' ).'
+      'Failed test routine ( ' + testRoutineDescriptor.name + ' ).'
     ];
-    logger.logDown.apply( logger,strColor.apply( [ 'bad','neutral' ],msg ) );
+    logger.logDown( _.strColor.style( msg,[ 'bad','neutral' ] ) );
 
   }
 
@@ -873,17 +1066,17 @@ var _endedTestRoutine = function( testRoutine,success )
 
 }
 
+// --
 //
+// --
 
-// var colorBad = 'color:#ff0000;font-weight:lighter;';
-// var colorGood = 'background-color:#00aa00;color:#008800;font-weight:lighter;';
-// var colorNeutral = 'background-color:#aaaaaa;color:#ffffff;font-weight:lighter;';
-// var colorBold = 'background-color:#aaaaaa';
-
-var EPS = 1e-5;
-var safe = true;
-var verbose = false;
-var _conSyn = null
+var Statics =
+{
+  EPS : 1e-5,
+  safe : true,
+  verbose : false,
+  _conSyn : null,
+}
 
 // --
 // prototype
@@ -897,7 +1090,9 @@ var Self =
   identical : identical,
   equivalent : equivalent,
   contain : contain,
+
   shouldThrowError : shouldThrowError,
+  mustNotThrowError : mustNotThrowError,
   shouldMessageOnlyOnce : shouldMessageOnlyOnce,
 
 
@@ -909,11 +1104,15 @@ var Self =
 
   // output
 
-  reportOutcome : reportOutcome,
-  testCaseText : testCaseText,
+  _outcomeReporting : _outcomeReporting,
+  _outcomeReport : _outcomeReport,
 
-  _strColor : _strColor,
-  strColor : strColor,
+  outcomeReportSpecial : outcomeReportSpecial,
+  outcomeReportCompare : outcomeReportCompare,
+
+  exceptionReport : exceptionReport,
+
+  _currentTestCaseTextGet : _currentTestCaseTextGet,
 
 
   // tester
@@ -932,19 +1131,9 @@ var Self =
   _beganTestRoutine : _beganTestRoutine,
   _endedTestRoutine : _endedTestRoutine,
 
-
-  // var
-
-  // colorBad : colorBad,
-  // colorGood : colorGood,
-  // colorNeutral : colorNeutral,
-  EPS : EPS,
-  _conSyn : _conSyn,
-
-  safe : safe,
-  verbose : verbose,
-
 }
+
+_.mapExtend( Self,Statics );
 
 wTools.Testing = Self;
 

@@ -50,6 +50,22 @@ _.toStr = function(){ return String( arguments ) };
 // equalizer
 // --
 
+var shouldBe = function shouldBe( outcome )
+{
+  var testRoutineDescriptor = this;
+
+  _.assert( _.boolLike( outcome ),'shouldBe expects single bool argument' )
+  _.assert( arguments.length === 1,'shouldBe expects single bool argument' );
+
+  if( !outcome )
+  debugger;
+
+  testRoutineDescriptor.outcomeReportSpecial( outcome,'expected true' )
+
+  return outcome;
+}
+
+//
 
 /**
  * Checks if test passes a specified condition by deep strict comparsing result of code execution( got )
@@ -508,6 +524,7 @@ var _outcomeReport = function _outcomeReport( outcome,msg,details )
 
     logger.logUp();
     if( details )
+    logger.error( details );
     //msg = testRoutineDescriptor._currentTestCaseTextGet( 0,msg );
     msg = _.strColor.style( msg,'bad' )
     logger.errorDown( msg );
@@ -635,8 +652,8 @@ var exceptionReport = function exceptionReport( err,testRoutineDescriptor )
 {
   var suit = this;
 
-  console.warn( 'not tested!' );
-  debugger;
+  // console.warn( 'not tested!' );
+  // debugger;
   suit.report.failed += 1;
 
   if( testRoutineDescriptor.onError )
@@ -650,6 +667,8 @@ var exceptionReport = function exceptionReport( err,testRoutineDescriptor )
   ];
 
   var details = _.err( err ).toString();
+
+  debugger;
 
   testRoutineDescriptor._outcomeReport( 0,msg,details );
 
@@ -771,13 +790,13 @@ var register = function( test )
 
 //
 
-var testAll = function()
+var testAll = function testAll()
 {
   var self = this;
 
   _.assert( arguments.length === 0 );
 
-  logger.log( 'wTests :',wTests );
+  logger.log( 'Launching all test suites' );
 
   for( var t in wTests )
   {
@@ -788,56 +807,53 @@ var testAll = function()
 
 //
 
-var test = function test( args )
+var test = function test()
 {
-  var self = this;
+  var proto = this;
   var args = arguments;
 
-  // var run = function()
-  // {
-  //   self._testSuiteRunDelayed.apply( self,args );
-  // }
+  _.assert( this === Self );
 
-  _.timeOut( 1, function()
+  return _.timeOut( 1, function()
   {
-
-    _.timeReady( _.routineSeal( self,self._testSuiteRunDelayed,args ) );
-
+    return _.timeReady( _.routineSeal( Self,Self._testSuiteRunDelayed,args ) );
   });
 
 }
 
 //
 
-var _testSuiteRunDelayed = function( suit )
+var _testSuiteRunDelayed = function _testSuiteRunDelayed( suit )
 {
-  var self = this;
+
+  _.assert( this === Self );
 
   if( arguments.length === 0 )
   {
-    self.testAll();
+    Self.testAll();
     return;
   }
 
-  if( !self.queue )
-  self.queue = new wConsequence().give();
+  if( !Self.queue )
+  Self.queue = new wConsequence().give();
 
   _.assert( arguments.length === 1 );
 
-  self.queue.thenDo( function()
+  Self.queue.thenDo( function()
   {
 
-    return self._testSuiteRun.call( self,suit );
+    return Self._testSuiteRun.call( Self,suit );
 
   });
 
+  return Self.queue;
 }
 
 //
 
-var _testSuiteRun = function( suit )
+var _testSuiteRun = function _testSuiteRun( suit )
 {
-  var self = this;
+  var proto = this;
   var con = new wConsequence();
 
   if( _.strIs( suit ) )
@@ -873,16 +889,16 @@ var _testSuiteRun = function( suit )
     report.passed = 0;
     report.failed = 0;
 
-    var onEachStage = function onEachStage( stage,testRoutine )
+    var onEachStage = function onEachStage( testRoutine,iteration,iterator )
     {
-      return suit._testRoutineRun( stage.key,testRoutine );
+      return suit._testRoutineRun( iteration.key,testRoutine );
     }
 
     return _.execStages( tests,
     {
-      syn : 1,
+      // syn : 1,
       manual : 1,
-      onEach : onEachStage,
+      onEachRoutine : onEachStage,
       onBegin : _.routineJoin( suit,suit._testSuiteBegin ),
       onEnd : _.routineJoin( suit,suit._testSuiteEnd ),
     });
@@ -917,6 +933,9 @@ var _testSuiteEnd = function _testSuiteEnd()
 {
   var suit = this;
 
+  // debugger;
+  // console.log( '_testSuiteEnd',arguments.length );
+
   if( suit.onSuitEnd )
   suit.onSuitEnd();
 
@@ -934,6 +953,7 @@ var _testSuiteEnd = function _testSuiteEnd()
 
   logger.log( _.strColor.style( msg,[ suit.report.failed === 0 ? 'good' : 'bad' ] ) );
 
+  return suit;
 }
 
 //
@@ -1083,6 +1103,7 @@ var Self =
 
   // equalizer
 
+  shouldBe : shouldBe,
   identical : identical,
   equivalent : equivalent,
   contain : contain,

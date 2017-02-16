@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( '../../amid/diagnostic/Testing.debug.s' );
+    require( '../../abase/xTesting/Testing.debug.s' );
   }
   catch( err )
   {
@@ -148,7 +148,7 @@ var changesArray =
 // test
 // --
 
-var changesExtend = function( test )
+function changesExtend( test )
 {
   var self = this;
 
@@ -388,7 +388,7 @@ var changesExtend = function( test )
 
 //
 
-var changesSelect = function( test )
+function changesSelect( test )
 {
   var self = this;
 
@@ -461,7 +461,7 @@ var changesSelect = function( test )
 
 //
 
-var changesApply = function( test )
+function changesApply( test )
 {
   var self = this;
 

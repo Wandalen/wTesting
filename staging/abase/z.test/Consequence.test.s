@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( '../../amid/diagnostic/Testing.debug.s' );
+    require( '../../abase/xTesting/Testing.debug.s' );
   }
   catch( err )
   {
@@ -23,7 +23,7 @@ var Self = {};
 // test
 // --
 
-var ordinarMessage = function( test )
+function ordinarMessage( test )
 {
   var self = this;
 
@@ -181,7 +181,7 @@ var ordinarMessage = function( test )
 
 //
 
-var persistantMessage = function( test )
+function persistantMessage( test )
 {
   var self = this;
 
@@ -326,7 +326,7 @@ var persistantMessage = function( test )
 
 //
 
-var then = function( test )
+function then( test )
 {
   var self = this;
 

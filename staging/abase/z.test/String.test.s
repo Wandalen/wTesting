@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( '../../amid/diagnostic/Testing.debug.s' );
+    require( '../../abase/xTesting/Testing.debug.s' );
   }
   catch( err )
   {
@@ -28,7 +28,7 @@ var Self = {};
 // test
 // --
 
-var toStr = function( test )
+function toStr( test )
 {
   var self = this;
 

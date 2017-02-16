@@ -1,19 +1,16 @@
 {
   "name": "wTesting",
   "version": "0.1.54",
-  "description": "Tool for unit testing in Java Script.",
+  "description": "Tool for convenient unit testing in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "license": "MIT",
-  "main": "staging/abase/object/Testing.debug.s",
+  "main": "staging/abase/object/zTesting/Testing.debug.s",
   "files": [
-    "staging/abase/component",
-    "staging/abase/mixin",
-    "staging/abase/object",
-    "staging/abase/syn",
+    "staging/abase",
     "production"
   ],
   "scripts": {
-    "test": "node ./staging/abase/z.test/Consequence.test.s"
+    "test": "node ./staging/abase/x"
   },
   "repository": {
     "type": "git",

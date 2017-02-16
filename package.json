@@ -3,10 +3,20 @@
   "version": "0.1.55",
   "description": "Tool for convenient unit testing in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wtory.net@domainsbyproxy.com>"
+    },
+    {
+      "name": "Volodymyr M.",
+      "email": "volodymyr.migdal@gmail.com"
+    }
+  ],
   "license": "MIT",
-  "main": "staging/abase/object/zTesting/Testing.debug.s",
+  "main": "staging/abase/object/xTesting/Testing.debug.s",
   "files": [
-    "staging/abase",
+    "staging/abase/xTesting",
     "production"
   ],
   "scripts": {

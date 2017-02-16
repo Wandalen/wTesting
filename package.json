@@ -14,7 +14,7 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/abase/object/xTesting/Testing.debug.s",
+  "main": "staging/abase/xTesting/Testing.debug.s",
   "files": [
     "staging/abase/xTesting",
     "production"

@@ -20,6 +20,7 @@ if( typeof module !== 'undefined' )
   var _ = wTools;
 
   _.include( 'wConsequence' );
+  _.include( 'wFiles' );
   _.include( 'wLogger' );
 
 }
@@ -509,11 +510,17 @@ function _outcomeReport( outcome,msg,details )
   {
 
     var code;
-    if( testRoutineDescriptor.usingCode )
+    if( testRoutineDescriptor.usingSourceCode )
     {
-      code = _.diagnosticLocation({ level : 3 }).full;
-      if( code )
-      code += '\n' + _.diagnosticCode({ level : 3 });
+      debugger;
+      var _location = _.diagnosticLocation({ level : 3 }).full;
+      var _code = _.diagnosticCode({ level : 3 });
+
+      if( _code )
+      code = '\n' + _location + '\n' + _code;
+      else
+      code = '\n' + _location;
+
     }
 
     testRoutineDescriptor.logger.logUp();
@@ -976,7 +983,7 @@ var Statics =
   EPS : 1e-5,
 
   safe : 1,
-  usingCode : 1,
+  usingSourceCode : 1,
   verbose : 0,
 
   _conSyn : null,

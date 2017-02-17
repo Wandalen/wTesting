@@ -50,14 +50,54 @@ function init( o )
 {
   var suite = this;
 
-  _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
-
   _.instanceInit( suite );
 
   Object.preventExtensions( suite );
 
   if( o )
   suite.copy( o );
+
+  _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
+
+  if( !( o instanceof Self ) )
+  _.assert( _.strIsNotEmpty( suite.name ),'Test suite expects name, but got',suite.name );
+
+  return suite;
+}
+
+//
+
+function copy( o )
+{
+  var suite = this;
+
+  if( !( o instanceof Self ) )
+  suite.name = o.name;
+
+  return wCopyable.copy.call( suite,o );
+}
+
+//
+
+function extendBy()
+{
+  var suite = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var src = arguments[ 0 ];
+
+    _.assert( _.mapIs( src ) );
+
+    if( src.tests )
+    _.mapSupplement( src.tests,suite.tests );
+
+    if( src.special )
+    _.mapSupplement( src.special,suite.special );
+
+    _.mapExtend( suite,src );
+
+  }
 
   return suite;
 }
@@ -66,32 +106,32 @@ function init( o )
 // etc
 // --
 
-function _register()
-{
-  var suite = this;
-
-  _.assert( arguments.length > 0 );
-
-  for( var a = 0 ; a < arguments.length ; a++ )
-  {
-
-    var testSuite = arguments[ a ];
-
-    _.assert( _.strIsNotEmpty( testSuite.name ),'Test suite should have name' );
-    _.assert( !_global_.wTests[ testSuite.name ],'Test suite with name',testSuite.name,'already registered!' );
-
-    _global_.wTests[ testSuite.name ] = wTestSuite( testSuite );
-
-    debugger;
-
-    _.assert( _global_.wTests[ testSuite.name ] instanceof Self );
-
-    // console.log( 'Test suite ',testSuite.name,_global_.wTests[ testSuite.name ].logger );
-
-  }
-
-  return suite;
-}
+// function _register()
+// {
+//   var suite = this;
+//
+//   _.assert( arguments.length > 0 );
+//
+//   for( var a = 0 ; a < arguments.length ; a++ )
+//   {
+//
+//     var testSuite = arguments[ a ];
+//
+//     _.assert( _.strIsNotEmpty( testSuite.name ),'Test suite should have name' );
+//     _.assert( !_global_.wTests[ testSuite.name ],'Test suite with name',testSuite.name,'already registered!' );
+//
+//     _global_.wTests[ testSuite.name ] = wTestSuite( testSuite );
+//
+//     debugger;
+//
+//     _.assert( _global_.wTests[ testSuite.name ] instanceof Self );
+//
+//     // console.log( 'Test suite ',testSuite.name,_global_.wTests[ testSuite.name ].logger );
+//
+//   }
+//
+//   return suite;
+// }
 
 //
 
@@ -131,38 +171,30 @@ function reportNew()
 // test suite run
 // --
 
-function _testSuiteRunDelayed()
+function _testSuiteRunLater()
 {
   var suite = this;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
-  return _.timeReady( function()
+  return wTestSuite._suiteCon
+  .thenDo( _.routineSeal( _,_.timeReady,[] ) )
+  // .thenDo( _.routineSeal( _,_.timeOut,[ 10000 ] ) )
+  .thenDo( function()
   {
 
-    // if( _suite === undefined )
-    // {
-    //   Self.testAll();
-    //   return;
-    // }
+    return suite._testSuiteRunAct();
 
-    return wTestSuite._conSyn.thenSplit( function()
-    {
-
-      return suite._testSuiteRun();
-
-    });
-  });
-
+  })
+  .thenSplit();
 }
 
 //
 
-function _testSuiteRun()
+function _testSuiteRunNow()
 {
   var suite = this;
-  var con = new wConsequence();
   var tests = suite.tests;
 
   _.assert( suite instanceof Self );
@@ -170,24 +202,45 @@ function _testSuiteRun()
 
   /* */
 
-  return wTestSuite._conSyn.thenSplit( function()
+  return wTestSuite._suiteCon
+  .thenDo( function()
   {
 
-    suite.reportNew();
+    return suite._testSuiteRunAct();
 
-    var onEachStage = function onEachStage( testRoutine,iteration,iterator )
-    {
-      return suite._testRoutineRun( iteration.key,testRoutine );
-    }
+  })
+  .thenSplit();
+}
 
-    return _.execStages( tests,
-    {
-      manual : 1,
-      onEachRoutine : onEachStage,
-      onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
-      onEnd : _.routineJoin( suite,suite._testSuiteEnd ),
-    });
+//
 
+function _testSuiteRunAct()
+{
+  var suite = this;
+  var tests = suite.tests;
+
+  _.assert( suite instanceof Self );
+  _.assert( arguments.length === 0 );
+
+  if( _.Testing.verbosity !== null )
+  suite.verbosity = _.Testing.verbosity;
+
+  if( _.Testing.logger !== null )
+  suite.logger = _.Testing.logger;
+
+  suite.reportNew();
+
+  var onEachStage = function onEachStage( testRoutine,iteration,iterator )
+  {
+    return suite._testRoutineRun( iteration.key,testRoutine );
+  }
+
+  return _.execStages( tests,
+  {
+    manual : 1,
+    onEachRoutine : onEachStage,
+    onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
+    onEnd : _.routineJoin( suite,suite._testSuiteEnd ),
   });
 
 }
@@ -197,7 +250,7 @@ function _testSuiteRun()
 function _testSuiteBegin()
 {
   var suite = this;
-  debugger;
+  // debugger;
 
   var msg =
   [
@@ -206,6 +259,9 @@ function _testSuiteBegin()
 
   suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
   suite.logger.log();
+
+  _.assert( !_.Testing.currentSuite );
+  _.Testing.currentSuite = suite;
 
   if( suite.onSuitBegin )
   suite.onSuitBegin();
@@ -218,8 +274,8 @@ function _testSuiteEnd()
 {
   var suite = this;
 
-  // debugger;
-  // console.log( '_testSuiteEnd',arguments.length );
+  _.assert( _.Testing.currentSuite === suite );
+  _.Testing.currentSuite = null;
 
   if( suite.onSuitEnd )
   suite.onSuitEnd();
@@ -238,7 +294,7 @@ function _testSuiteEnd()
 
   suite.logger.log( _.strColor.style( msg,[ suite.report.failed === 0 ? 'good' : 'bad' ] ) );
 
-  debugger;
+  // debugger;
   return suite;
 }
 
@@ -255,25 +311,25 @@ function _testRoutineRun( name,testRoutine )
 
   var testRoutineDescriptor = Object.create( suite );
   testRoutineDescriptor.routine = testRoutine;
-  testRoutineDescriptor.name = name;
+  // testRoutineDescriptor.name = name;
   testRoutineDescriptor.description = '';
   testRoutineDescriptor.suite = suite;
   testRoutineDescriptor._caseIndex = 0;
   testRoutineDescriptor._testRoutineDescriptorIs = 1;
   testRoutineDescriptor._storedStates = null;
-
   Object.preventExtensions( testRoutineDescriptor );
 
   _.assert( _.routineIs( testRoutine ) );
   _.assert( _.strIsNotEmpty( testRoutine.name ),'Test routine should have name, few test routine of test suite',suite.name,'does not' );
-  _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'Test routine descriptor should have name' );
+  _.assert( testRoutine.name === name );
+  // _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'Test routine descriptor should have name' );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,suite ) );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,testRoutineDescriptor ) );
   _.assert( arguments.length === 2 );
 
   /* */
 
-  wTestSuite._conSyn.thenSplit( function()
+  wTestSuite._routineCon.thenDo( function()
   {
 
     suite._testRoutineBegin( testRoutineDescriptor );
@@ -327,6 +383,9 @@ function _testRoutineBegin( testRoutineDescriptor )
 
   suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
 
+  _.assert( !suite.currentRoutine );
+  suite.currentRoutine = testRoutineDescriptor;
+
 }
 
 //
@@ -336,6 +395,8 @@ function _testRoutineEnd( testRoutineDescriptor,success )
   var suite = this;
 
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'test routine should have name' );
+  _.assert( suite.currentRoutine === testRoutineDescriptor );
+  suite.currentRoutine = null;
 
   if( success )
   {
@@ -1001,9 +1062,10 @@ function _currentTestCaseTextGet( value,hint )
 var Composes =
 {
 
-  name : null,
   tests : null,
+
   verbosity : 0,
+  abstract : 0,
 
   usingSourceCode : 1,
 
@@ -1021,16 +1083,20 @@ var Aggregates =
 var Associates =
 {
   logger : logger,
-  vars : null,
+  special : null,
 }
 
 var Restricts =
 {
+  name : null,
+  currentRoutine : null,
 }
 
 var Statics =
 {
   usingUniqueNames : 1,
+  _suiteCon : new wConsequence().give(),
+  _routineCon : new wConsequence().give(),
   _conSyn : new wConsequence().give(),
 }
 
@@ -1044,20 +1110,21 @@ var Proto =
   // inter
 
   init : init,
+  copy : copy,
+  extendBy : extendBy,
 
 
   // etc
 
-  _register : _register,
   _registerSuites : _registerSuites,
-
   reportNew : reportNew,
 
 
   // test suite run
 
-  _testSuiteRunDelayed : _testSuiteRunDelayed,
-  _testSuiteRun : _testSuiteRun,
+  _testSuiteRunLater : _testSuiteRunLater,
+  _testSuiteRunNow : _testSuiteRunNow,
+  _testSuiteRunAct : _testSuiteRunAct,
   _testSuiteBegin : _testSuiteBegin,
   _testSuiteEnd : _testSuiteEnd,
 

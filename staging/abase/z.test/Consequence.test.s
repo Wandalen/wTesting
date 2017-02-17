@@ -17,7 +17,6 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = wTools;
-var Self = {};
 
 // --
 // test
@@ -219,7 +218,6 @@ function persistantMessage( test )
     con.persist( ( function(){ var first = 1; return function( err,data )
     {
 
-      debugger;
       test.description = 'first message got with persist';
       test.identical( arguments[ sample.gotArgument ],first );
       test.identical( arguments[ sample.anotherArgument ],sample.anotherArgumentValue );
@@ -405,8 +403,10 @@ function then( test )
 // proto
 // --
 
-var Proto =
+var Self =
 {
+
+  name : 'Consequence',
 
   tests :
   {
@@ -418,13 +418,8 @@ var Proto =
 
   },
 
-  name : 'Consequence',
-
 };
 
-//Object.setPrototypeOf( Self, Proto );
-
-_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
 Self = wTestSuite( Self );
 
 if( typeof module !== 'undefined' && !module.parent )

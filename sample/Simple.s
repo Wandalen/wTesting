@@ -1,4 +1,4 @@
-( function simple1_js( ) {
+( function _Simple_s( ) {
 
 'use strict';
 
@@ -6,11 +6,10 @@ if( typeof module !== 'undefined' )
 require( 'wTesting' );
 
 var _ = wTools;
-var Self = {};
 
 //
 
-var arrayRange = function( test )
+function arrayRange( test )
 {
 
   test.description = 'single zero';
@@ -78,12 +77,12 @@ var arrayRange = function( test )
 
 //
 
-var Proto =
+var Self =
 {
 
   name : 'simple1',
 
-  tests:
+  tests :
   {
 
     arrayRange : arrayRange,
@@ -92,8 +91,7 @@ var Proto =
 
 }
 
-_.mapExtend( Self,Proto );
-
+Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self );
 

@@ -231,9 +231,9 @@ var Proto =
 };
 
 Object.setPrototypeOf( Self, Proto );
-wTests[ Self.name ] = Self;
+Self = wTestSuite( Self );
 
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );

@@ -581,17 +581,17 @@ var Proto =
   },
 
   name : 'ArraySorted',
-  verbose : 0,
+  verbosity : 0,
 
 };
 
 _.mapExtend( Self, Proto );
 
 _global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
-wTests[ Self.name ] = Self;
+Self = wTestSuite( Self );
 
 // debugger;
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );

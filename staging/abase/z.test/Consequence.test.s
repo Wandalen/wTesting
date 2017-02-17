@@ -425,9 +425,9 @@ var Proto =
 //Object.setPrototypeOf( Self, Proto );
 
 _global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
-wTests[ Self.name ] = Self;
+Self = wTestSuite( Self );
 
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );

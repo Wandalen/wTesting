@@ -233,7 +233,7 @@ function _testSuiteRunAct()
   suite.logger = _.Testing.logger;
 
   suite.report = null;
-  suite.reportNew();
+  suite.reportNew(); 
 
   var onEachStage = function onEachStage( testRoutine,iteration,iterator )
   {

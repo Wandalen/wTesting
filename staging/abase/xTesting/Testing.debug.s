@@ -31,92 +31,66 @@ var _ = wTools;
 // if( !_.toStr )
 // _.toStr = function(){ return String( arguments ) };
 
-_.assert( _.toStr );
+_.assert( _.toStr,'wTesting needs wTools/staging/abase/component/StringTools.s' );
+_.assert( _.execStages,'wTesting needs wTools/staging/abase/component/ExecTools.s' );
+_.assert( _.Consequence,'wTesting needs wConsequence/staging/abase/syn/Consequence.s' );
 
 // --
 // tester
 // --
 
-// function register( testSuite )
-// {
-//   var self = this;
-//
-//   _.assert( arguments.length > 0 );
-//
-//   for( var a = 0 ; a < arguments.length ; a++ )
-//   {
-//
-//     var testSuite = arguments[ a ];
-//
-//     _.assert( _.strIsNotEmpty( testSuite.name ),'Test suite should have name' );
-//     _.assert( !_global_.wTests[ testSuite.name ],'Test suite with name',testSuite.name,'already registered!' );
-//
-//     _global_.wTests[ testSuite.name ] = wTestSuite( testSuite );
-//
-//     // console.log( 'Test suite ',testSuite.name,_global_.wTests[ testSuite.name ].logger );
-//
-//   }
-//
-//   return self;
-// }
-
-//
-
 function testAll()
 {
   var self = this;
+  var logger = self.logger || _global_.logger;
 
   _.assert( arguments.length === 0 );
 
-  self.logger.log( 'Launching all test suites' );
+  logger.logUp( 'Launching all test suites ..' );
 
   for( var t in wTests )
   {
+    if( wTests[ t ].abstract )
+    continue;
     self.test( t );
   }
 
+  wTestSuite._suiteCon.thenDo( function()
+  {
+
+    logger.logDown( 'All test suites ran out.' );
+
+  });
+
+  return wTestSuite._suiteCon.thenSplit();
 }
 
 //
 
-function test( _suite )
+function test( )
 {
   var proto = this;
   var args = arguments;
 
   _.assert( this === Self );
-  _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  if( _suite === undefined )
+  if( arguments.lenggth === 0 )
   return testAll();
 
-  var suite = wTestSuite.instanceByName( _suite );
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var _suite = arguments[ a ];
+    var suite = wTestSuite.instanceByName( _suite );
 
-  _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
-  _.assert( _.strIsNotEmpty( suite.name ),'testing suite should has name' );
-  _.assert( _.objectIs( suite.tests ),'testing suite should has map with test routines' );
+    _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
+    _.assert( _.strIsNotEmpty( suite.name ),'testing suite should has ( name )' );
+    _.assert( _.objectIs( suite.tests ),'testing suite should has map with test routines ( tests )' );
 
-  return suite._testSuiteRunDelayed();
+    suite._testSuiteRunLater();
+  }
+
+  return wTestSuite._suiteCon.thenSplit();
 }
-
-// --
-//
-// --
-
-// var Statics =
-// {
-//
-//   // EPS : 1e-5,
-//
-//   // safe : 1,
-//   // usingSourceCode : 1,
-//   // verbosity : 0,
-//
-//   // _conSyn : null,
-//   // logger : logger,
-//
-// }
 
 // --
 // prototype
@@ -125,22 +99,25 @@ function test( _suite )
 var Self =
 {
 
-
-  // tester
-
-  /* register : register, */
+  // routine
 
   testAll : testAll,
   test : test,
 
-  //
+  // var
+
+  verbosity : null,
+  logger : null,
+
+  currentSuite : null,
 
   _full : true,
 
 }
 
-// _.mapExtend( Self,Statics );
+//
 
+Object.preventExtensions( Self );
 wTools.Testing = Self;
 
 if( typeof module !== 'undefined' && module !== null )
@@ -151,8 +128,29 @@ if( typeof module !== 'undefined' && module !== null )
 
 var wTestsWas = _global_.wTests;
 _global_.wTests = wTestSuite.instancesMap;
-debugger;
 if( wTestsWas )
 wTestSuite.prototype._registerSuites( wTestsWas );
+
+//
+
+if( 1 )
+_.timeReady( function()
+{
+
+  // debugger;
+  Self.verbosity = 0;
+  //Self.logger = wLoggerToJstructure({ coloring : 0 });
+
+  // _.Testing.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
+  _.Testing.test( 'FileProvider.SimpleStructure' )
+  .thenDo( function()
+  {
+    debugger;
+    if( Self.logger )
+    logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+    debugger;
+  });
+
+});
 
 })();

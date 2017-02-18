@@ -160,6 +160,7 @@ function reportNew()
 {
   var suite = this;
 
+  debugger;
   _.assert( !suite.report );
   var report = suite.report = {};
   report.passed = 0;
@@ -174,6 +175,9 @@ function reportNew()
 function _testSuiteRunLater()
 {
   var suite = this;
+
+  // console.log( '_testSuiteRunLater' );
+  // console.log( _.diagnosticStack() );
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -228,6 +232,7 @@ function _testSuiteRunAct()
   if( _.Testing.logger !== null )
   suite.logger = _.Testing.logger;
 
+  suite.report = null;
   suite.reportNew();
 
   var onEachStage = function onEachStage( testRoutine,iteration,iterator )
@@ -250,7 +255,7 @@ function _testSuiteRunAct()
 function _testSuiteBegin()
 {
   var suite = this;
-  // debugger;
+  debugger;
 
   var msg =
   [
@@ -282,17 +287,18 @@ function _testSuiteEnd()
 
   var msg =
   [
+    _.toStr( suite.report,{ wrap : 0, multiline : 1 } )+'\n\n'
+  ];
+
+  debugger;
+  suite.logger.log( _.strColor.style( msg,[ suite.report.failed === 0 ? 'good' : 'bad' ] ) );
+
+  var msg =
+  [
     'Testing of test suite ( ' + suite.name + ' ) finished ' + ( suite.report.failed === 0 ? 'good' : 'with fails' ) + '.'
   ];
 
   suite.logger.logDown( _.strColor.style( msg,[ suite.report.failed === 0 ? 'good' : 'bad','topic' ] ) );
-
-  var msg =
-  [
-    _.toStr( suite.report,{ wrap : 0, multiline : 1 } )+'\n\n'
-  ];
-
-  suite.logger.log( _.strColor.style( msg,[ suite.report.failed === 0 ? 'good' : 'bad' ] ) );
 
   // debugger;
   return suite;
@@ -311,7 +317,7 @@ function _testRoutineRun( name,testRoutine )
 
   var testRoutineDescriptor = Object.create( suite );
   testRoutineDescriptor.routine = testRoutine;
-  // testRoutineDescriptor.name = name;
+  // testRoutineDescriptor.routine.name = name;
   testRoutineDescriptor.description = '';
   testRoutineDescriptor.suite = suite;
   testRoutineDescriptor._caseIndex = 0;
@@ -322,14 +328,15 @@ function _testRoutineRun( name,testRoutine )
   _.assert( _.routineIs( testRoutine ) );
   _.assert( _.strIsNotEmpty( testRoutine.name ),'Test routine should have name, few test routine of test suite',suite.name,'does not' );
   _.assert( testRoutine.name === name );
-  // _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'Test routine descriptor should have name' );
+  // _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'Test routine descriptor should have name' );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,suite ) );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,testRoutineDescriptor ) );
   _.assert( arguments.length === 2 );
 
   /* */
 
-  wTestSuite._routineCon.thenDo( function()
+  return wTestSuite._routineCon
+  .thenDo( function()
   {
 
     suite._testRoutineBegin( testRoutineDescriptor );
@@ -366,7 +373,8 @@ function _testRoutineRun( name,testRoutine )
     });
 
     return result;
-  });
+  })
+  .thenSplit();
 
 }
 
@@ -378,9 +386,10 @@ function _testRoutineBegin( testRoutineDescriptor )
 
   var msg =
   [
-    'Running test routine ( ' + testRoutineDescriptor.name + ' ) ..'
+    'Running test routine ( ' + testRoutineDescriptor.routine.name + ' ) ..'
   ];
 
+  debugger;
   suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
 
   _.assert( !suite.currentRoutine );
@@ -394,16 +403,18 @@ function _testRoutineEnd( testRoutineDescriptor,success )
 {
   var suite = this;
 
-  _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'test routine should have name' );
+  _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === testRoutineDescriptor );
   suite.currentRoutine = null;
+
+  debugger;
 
   if( success )
   {
 
     var msg =
     [
-      'Passed test routine ( ' + testRoutineDescriptor.name + ' ).'
+      'Passed test routine ( ' + testRoutineDescriptor.routine.name + ' ).'
     ];
     suite.logger.logDown( _.strColor.style( msg,[ 'good','neutral' ] ) );
 
@@ -413,7 +424,7 @@ function _testRoutineEnd( testRoutineDescriptor,success )
 
     var msg =
     [
-      'Failed test routine ( ' + testRoutineDescriptor.name + ' ).'
+      'Failed test routine ( ' + testRoutineDescriptor.routine.name + ' ).'
     ];
     suite.logger.logDown( _.strColor.style( msg,[ 'bad','neutral' ] ) );
 
@@ -1033,10 +1044,10 @@ function _currentTestCaseTextGet( value,hint )
   _.assert( hint === undefined || _.strIs( hint ) );
   _.assert( testRoutineDescriptor._testRoutineDescriptorIs );
   _.assert( testRoutineDescriptor._caseIndex >= 0 );
-  _.assert( _.strIsNotEmpty( testRoutineDescriptor.name ),'test routine descriptor should have name' );
+  _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine descriptor should have name' );
 
   var result = '' +
-    'Test routine( ' + testRoutineDescriptor.name + ' ) : ' +
+    'Test routine( ' + testRoutineDescriptor.routine.name + ' ) : ' +
     'test case' + ( testRoutineDescriptor.description ? ( '( ' + testRoutineDescriptor.description + ' )' ) : '' ) +
     ' # ' + testRoutineDescriptor._caseIndex
   ;

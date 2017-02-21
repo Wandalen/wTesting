@@ -106,35 +106,6 @@ function extendBy()
 // etc
 // --
 
-// function _register()
-// {
-//   var suite = this;
-//
-//   _.assert( arguments.length > 0 );
-//
-//   for( var a = 0 ; a < arguments.length ; a++ )
-//   {
-//
-//     var testSuite = arguments[ a ];
-//
-//     _.assert( _.strIsNotEmpty( testSuite.name ),'Test suite should have name' );
-//     _.assert( !_global_.wTests[ testSuite.name ],'Test suite with name',testSuite.name,'already registered!' );
-//
-//     _global_.wTests[ testSuite.name ] = wTestSuite( testSuite );
-//
-//     debugger;
-//
-//     _.assert( _global_.wTests[ testSuite.name ] instanceof Self );
-//
-//     // console.log( 'Test suite ',testSuite.name,_global_.wTests[ testSuite.name ].logger );
-//
-//   }
-//
-//   return suite;
-// }
-
-//
-
 function _registerSuites( suites )
 {
   var suite = this;
@@ -160,7 +131,6 @@ function reportNew()
 {
   var suite = this;
 
-  debugger;
   _.assert( !suite.report );
   var report = suite.report = {};
   report.passed = 0;
@@ -176,22 +146,19 @@ function _testSuiteRunLater()
 {
   var suite = this;
 
-  // console.log( '_testSuiteRunLater' );
-  // console.log( _.diagnosticStack() );
-
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   return wTestSuite._suiteCon
-  .thenDo( _.routineSeal( _,_.timeReady,[] ) )
-  // .thenDo( _.routineSeal( _,_.timeOut,[ 10000 ] ) )
-  .thenDo( function()
+  .doThen( _.routineSeal( _,_.timeReady,[] ) )
+  // .doThen( _.routineSeal( _,_.timeOut,[ 10000 ] ) )
+  .doThen( function()
   {
 
     return suite._testSuiteRunAct();
 
   })
-  .thenSplit();
+  .splitThen();
 }
 
 //
@@ -207,13 +174,13 @@ function _testSuiteRunNow()
   /* */
 
   return wTestSuite._suiteCon
-  .thenDo( function()
+  .doThen( function()
   {
 
     return suite._testSuiteRunAct();
 
   })
-  .thenSplit();
+  .splitThen();
 }
 
 //
@@ -233,7 +200,7 @@ function _testSuiteRunAct()
   suite.logger = _.Testing.logger;
 
   suite.report = null;
-  suite.reportNew(); 
+  suite.reportNew();
 
   var onEachStage = function onEachStage( testRoutine,iteration,iterator )
   {
@@ -255,11 +222,12 @@ function _testSuiteRunAct()
 function _testSuiteBegin()
 {
   var suite = this;
+
   debugger;
 
   var msg =
   [
-    'Starting testing of test suite ( ' + suite.name + ' ) ..'
+    'Starting testing of test suite ( ' + suite.name + ' ) ..',
   ];
 
   suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
@@ -287,7 +255,7 @@ function _testSuiteEnd()
 
   var msg =
   [
-    _.toStr( suite.report,{ wrap : 0, multiline : 1 } )+'\n\n'
+    '' + _.toStr( suite.report,{ wrap : 0, multiline : 1 } )
   ];
 
   debugger;
@@ -336,7 +304,7 @@ function _testRoutineRun( name,testRoutine )
   /* */
 
   return wTestSuite._routineCon
-  .thenDo( function()
+  .doThen( function()
   {
 
     suite._testRoutineBegin( testRoutineDescriptor );
@@ -365,7 +333,7 @@ function _testRoutineRun( name,testRoutine )
 
     result = wConsequence.from( result );
 
-    result.thenDo( function( err )
+    result.doThen( function( err )
     {
       if( err )
       suite.exceptionReport( err,testRoutineDescriptor );
@@ -374,7 +342,7 @@ function _testRoutineRun( name,testRoutine )
 
     return result;
   })
-  .thenSplit();
+  .splitThen();
 
 }
 
@@ -389,7 +357,6 @@ function _testRoutineBegin( testRoutineDescriptor )
     'Running test routine ( ' + testRoutineDescriptor.routine.name + ' ) ..'
   ];
 
-  debugger;
   suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
 
   _.assert( !suite.currentRoutine );
@@ -406,8 +373,6 @@ function _testRoutineEnd( testRoutineDescriptor,success )
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === testRoutineDescriptor );
   suite.currentRoutine = null;
-
-  debugger;
 
   if( success )
   {
@@ -703,6 +668,7 @@ function shouldThrowError( routine )
   var suite = this;
   var thrown = 0;
   var outcome;
+  var stack = _.diagnosticStack( 1,-1 );
 
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
@@ -723,7 +689,7 @@ function shouldThrowError( routine )
     catch( err )
     {
       thrown = 1;
-      outcome = suite.outcomeReportSpecial( 1,'error thrown by call as expected' );
+      outcome = suite.outcomeReportSpecial( 1,'error thrown by call as expected',stack );
     }
 
     /* */
@@ -735,26 +701,26 @@ function shouldThrowError( routine )
       {
         if( !err )
         {
-          outcome = suite.outcomeReportSpecial( 0,'error not thrown, but expected' );
+          outcome = suite.outcomeReportSpecial( 0,'error not thrown, but expected',stack );
         }
         else
         {
           thrown = 1;
           if( suite.verbosity )
           _.errLogOnce( err );
-          outcome = suite.outcomeReportSpecial( 1,'error thrown by consequence as expected' );
+          outcome = suite.outcomeReportSpecial( 1,'error thrown by consequence as expected',stack );
         }
         con.give( data );
       })
-      .thenDo( function( err,data )
+      .doThen( function( err,data )
       {
-        suite.outcomeReportSpecial( 0,'error thrown several times, something wrong' );
+        suite.outcomeReportSpecial( 0,'error thrown several times, something wrong',stack );
       });
     }
     else
     {
       if( !thrown )
-      outcome = suite.outcomeReportSpecial( 0,'error not thrown, but expected' );
+      outcome = suite.outcomeReportSpecial( 0,'error not thrown, but expected',stack );
       con.give();
     }
 
@@ -769,6 +735,7 @@ function mustNotThrowError( routine )
   var suite = this;
   var thrown = 0;
   var outcome;
+  var stack = _.diagnosticStack( 1,-1 );
 
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
@@ -790,7 +757,7 @@ function mustNotThrowError( routine )
     {
       thrown = 1;
       _.errLogOnce( err );
-      outcome = suite.outcomeReportSpecial( 0,'error thrown by call, something wrong' );
+      outcome = suite.outcomeReportSpecial( 0,'error thrown by call, something wrong',stack );
     }
 
     /* */
@@ -804,17 +771,17 @@ function mustNotThrowError( routine )
         {
           thrown = 1;
           _.errLogOnce( err );
-          outcome = suite.outcomeReportSpecial( 0,'error thrown by consequence, not expected' );
+          outcome = suite.outcomeReportSpecial( 0,'error thrown by consequence, not expected',stack );
         }
         else
         {
-          outcome = suite.outcomeReportSpecial( 1,'error not thrown' );
+          outcome = suite.outcomeReportSpecial( 1,'error not thrown',stack );
         }
         con.give( err,data );
       })
-      .thenDo( function( err,data )
+      .doThen( function( err,data )
       {
-        suite.outcomeReportSpecial( 0,'message sent several times, something wrong' );
+        suite.outcomeReportSpecial( 0,'message sent several times, something wrong',stack );
       });
     }
     else
@@ -837,21 +804,22 @@ function shouldMessageOnlyOnce( con )
   _.assert( con instanceof wConsequence );
 
   var state = suite.stateStore();
+  var stack = _.diagnosticStack( 1,-1 );
 
   con
   .got( function( err,data )
   {
     _.timeOut( 1000, function()
     {
-      suite.outcomeReportSpecial( 1,'message thrown at least once' );
+      suite.outcomeReportSpecial( 1,'message thrown at least once',stack );
       result.give( err,data );
     });
   })
-  .thenDo( function( err,data )
+  .doThen( function( err,data )
   {
     suite.stateStore();
     suite.stateRestore( state );
-    suite.outcomeReportSpecial( 0,'got several messages, expected only one' );
+    suite.outcomeReportSpecial( 0,'got several messages, expected only one',stack );
     suite.stateRestore();
   });
 
@@ -882,27 +850,28 @@ function _outcomeReporting( outcome )
 
 //
 
-function _outcomeReport( outcome,msg,details )
+function _outcomeReport( o )
 {
   var testRoutineDescriptor = this;
 
-  testRoutineDescriptor._outcomeReporting( outcome );
+  _.routineOptions( _outcomeReport,o );
+  _.assert( arguments.length === 1 );
 
-  _.assert( arguments.length === 3 );
+  testRoutineDescriptor._outcomeReporting( o.outcome );
 
-  if( outcome )
+  if( o.outcome )
   {
 
     if( testRoutineDescriptor.verbosity )
     {
 
       testRoutineDescriptor.logger.logUp();
-      if( details )
-      testRoutineDescriptor.logger.begin( 'details' ).log( details ).end( 'details' );
+      if( o.details )
+      testRoutineDescriptor.logger.begin( 'details' ).log( o.details ).end( 'details' );
 
-      msg = _.strColor.style( msg,'good' );
+      o.msg = _.strColor.style( o.msg,'good' );
 
-      testRoutineDescriptor.logger.begin( 'message' ).logDown( msg ).end( 'message' );
+      testRoutineDescriptor.logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
       testRoutineDescriptor.logger.log();
 
     }
@@ -914,44 +883,57 @@ function _outcomeReport( outcome,msg,details )
     var code;
     if( testRoutineDescriptor.usingSourceCode )
     {
-      debugger;
-      var _location = _.diagnosticLocation({ level : 3 }).full;
-      var _code = _.diagnosticCode({ level : 3 });
+      var _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 3 });
+      var _code = _.diagnosticCode({ location : _location });
+      // var _code = _.diagnosticCode({ level : 3 });
 
       if( _code )
-      code = '\n' + _location + '\n' + _code;
+      code = '\n' + _location.full + '\n' + _code;
       else
-      code = '\n' + _location;
-
+      code = '\n' + _location.full;
     }
 
     testRoutineDescriptor.logger.logUp();
-    if( details )
-    testRoutineDescriptor.logger.begin( 'details' ).error( details ).end( 'details' );
+    if( o.details )
+    testRoutineDescriptor.logger.begin( 'details' ).error( o.details ).end( 'details' );
 
     if( code )
     testRoutineDescriptor.logger.begin( 'source' ).error( code ).end( 'source' );
 
-    msg = _.strColor.style( msg,'bad' )
+    o.msg = _.strColor.style( o.msg,'bad' )
 
-    testRoutineDescriptor.logger.begin( 'message' ).errorDown( msg ).end( 'message' );
+    testRoutineDescriptor.logger.begin( 'message' ).errorDown( o.msg ).end( 'message' );
     testRoutineDescriptor.logger.log();
 
   }
 
 }
 
+_outcomeReport.defaults =
+{
+  outcome : null,
+  msg : null,
+  details : null,
+  stack : null,
+}
+
 //
 
-function outcomeReportSpecial( outcome,msg )
+function outcomeReportSpecial( outcome,msg,stack )
 {
   var testRoutineDescriptor = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2 || arguments.length === 3 );
 
   msg = testRoutineDescriptor._currentTestCaseTextGet( outcome,msg );
 
-  testRoutineDescriptor._outcomeReport( outcome,msg,'' );
+  testRoutineDescriptor._outcomeReport
+  ({
+    outcome : outcome,
+    msg : msg,
+    details : '',
+    stack : stack,
+  });
 
 }
 
@@ -981,7 +963,13 @@ function outcomeReportCompare( outcome,got,expected,path )
 
     var details = msgExpectedGot();
     var msg = testRoutineDescriptor._currentTestCaseTextGet( 1 );
-    testRoutineDescriptor._outcomeReport( outcome,msg,details );
+
+    testRoutineDescriptor._outcomeReport
+    ({
+      outcome : outcome,
+      msg : msg,
+      details : details,
+    });
 
   }
   else
@@ -1003,7 +991,12 @@ function outcomeReportCompare( outcome,got,expected,path )
 
     var msg = testRoutineDescriptor._currentTestCaseTextGet( 0 );
 
-    testRoutineDescriptor._outcomeReport( outcome,msg,details );
+    testRoutineDescriptor._outcomeReport
+    ({
+      outcome : outcome,
+      msg : msg,
+      details : details,
+    });
 
     debugger;
   }
@@ -1024,12 +1017,19 @@ function exceptionReport( err,testRoutineDescriptor )
   var msg =
   [
     testRoutineDescriptor._currentTestCaseTextGet() +
-    ' ... failed throwing error\n'
+    ' ... failed throwing error'
   ];
 
   var details = _.err( err ).toString();
 
-  testRoutineDescriptor._outcomeReport( 0,msg,details );
+  testRoutineDescriptor._outcomeReport
+  ({
+    outcome : 0,
+    msg : msg,
+    details : details,
+  });
+
+  // testRoutineDescriptor._outcomeReport( 0,msg,details );
 
 }
 

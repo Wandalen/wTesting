@@ -8,26 +8,16 @@ if( typeof module !== 'undefined' )
   if( typeof wBase === 'undefined' )
   try
   {
-    var _ = require( '../abase/wTools.s' );
+    require( '../abase/wTools.s' );
   }
   catch( err )
   {
-    var _ = require( 'wTools' );
+    require( 'wTools' );
   }
 
-  _.include( 'wTesting' );
+  var _ = wTools;
 
-  // require( '../wTools.s' );
-  // require( '../component/StringTools.s' );
-  //
-  // try
-  // {
-  //   require( '../../abase/xTesting/Testing.debug.s' );
-  // }
-  // catch( err )
-  // {
-  //   require( 'wTesting' );
-  // }
+  _.include( 'wTesting' );
 
 }
 

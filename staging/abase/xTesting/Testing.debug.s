@@ -55,7 +55,7 @@ function testAll()
     self.test( t );
   }
 
-  wTestSuite._suiteCon.thenDo( function()
+  wTestSuite._suiteCon.doThen( function()
   {
 
     logger.logDown( 'All test suites ran out.' );
@@ -143,7 +143,7 @@ _.timeReady( function()
 
   // _.Testing.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
   _.Testing.test( 'FileProvider.SimpleStructure' )
-  .thenDo( function()
+  .doThen( function()
   {
     debugger;
     if( Self.logger )

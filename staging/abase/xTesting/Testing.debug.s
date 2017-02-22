@@ -79,7 +79,7 @@ function test( )
   debugger;
 
   if( arguments.length === 0 )
-  return testAll();
+  return proto.testAll();
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {

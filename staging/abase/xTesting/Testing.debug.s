@@ -46,6 +46,8 @@ function testAll()
 
   _.assert( arguments.length === 0 );
 
+  debugger;
+
   logger.logUp( 'Launching all test suites ..' );
 
   for( var t in wTests )
@@ -74,7 +76,9 @@ function test( )
 
   _.assert( this === Self );
 
-  if( arguments.lenggth === 0 )
+  debugger;
+
+  if( arguments.length === 0 )
   return testAll();
 
   for( var a = 0 ; a < arguments.length ; a++ )

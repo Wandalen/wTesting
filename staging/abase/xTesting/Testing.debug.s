@@ -62,7 +62,7 @@ function testAll()
 
   });
 
-  return wTestSuite._suiteCon.thenSplit();
+  return wTestSuite._suiteCon.splitThen();
 }
 
 //
@@ -89,7 +89,7 @@ function test( )
     suite._testSuiteRunLater();
   }
 
-  return wTestSuite._suiteCon.thenSplit();
+  return wTestSuite._suiteCon.splitThen();
 }
 
 // --
@@ -133,7 +133,7 @@ wTestSuite.prototype._registerSuites( wTestsWas );
 
 //
 
-if( 1 )
+if( 0 )
 _.timeReady( function()
 {
 

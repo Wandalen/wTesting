@@ -27,6 +27,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = wTools;
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 // if( !_.toStr )
 // _.toStr = function(){ return String( arguments ) };
@@ -76,8 +77,6 @@ function test( )
 
   _.assert( this === Self );
 
-  debugger;
-
   if( arguments.length === 0 )
   return proto.testAll();
 
@@ -114,8 +113,8 @@ var Self =
   logger : null,
 
   currentSuite : null,
-
   _full : true,
+  sourceFilePath : sourceFilePath,
 
 }
 
@@ -137,24 +136,24 @@ wTestSuite.prototype._registerSuites( wTestsWas );
 
 //
 
-if( 0 )
-_.timeReady( function()
-{
-
-  // debugger;
-  Self.verbosity = 0;
-  //Self.logger = wLoggerToJstructure({ coloring : 0 });
-
-  // _.Testing.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
-  _.Testing.test( 'FileProvider.SimpleStructure' )
-  .doThen( function()
-  {
-    debugger;
-    if( Self.logger )
-    logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
-    debugger;
-  });
-
-});
+// if( 0 )
+// _.timeReady( function()
+// {
+//
+//   // debugger;
+//   Self.verbosity = 0;
+//   //Self.logger = wLoggerToJstructure({ coloring : 0 });
+//
+//   // _.Testing.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
+//   _.Testing.test( 'FileProvider.SimpleStructure' )
+//   .doThen( function()
+//   {
+//     debugger;
+//     if( Self.logger )
+//     logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+//     debugger;
+//   });
+//
+// });
 
 })();

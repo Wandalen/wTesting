@@ -14,19 +14,17 @@ if( typeof module !== 'undefined' )
     require( 'wTesting' );
   }
 
-  try
-  {
-    require( '../../abase/component/ArraySorted.s' );
-  }
-  catch( err )
-  {
-    require( 'wArraySorted.s' );
-  }
+  var _ = wTools;
+
+  _.include( 'wArraySorted' );
 
 }
 
+//
+
 var _ = wTools;
-var Self = {};
+var Parent = wTools.Testing;
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 // --
 // test
@@ -564,8 +562,12 @@ var arraySortedAdd = function arraySortedAdd( test )
 // proto
 // --
 
-var Proto =
+var Self =
 {
+
+  name : 'ArraySorted',
+  sourceFilePath : sourceFilePath,
+  verbosity : 0,
 
   tests :
   {
@@ -580,17 +582,11 @@ var Proto =
 
   },
 
-  name : 'ArraySorted',
-  verbosity : 0,
-
 };
 
-_.mapExtend( Self, Proto );
+//
 
-_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
 Self = wTestSuite( Self );
-
-// debugger;
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self.name );
 

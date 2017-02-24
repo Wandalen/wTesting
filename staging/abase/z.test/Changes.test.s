@@ -16,10 +16,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-_global_.wTests = _global_.wTests === undefined ? {} : _global_.wTests;
-
 var _ = wTools;
-var Self = {};
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 // --
 // common
@@ -576,10 +574,13 @@ function changesApply( test )
 // proto
 // --
 
-var Proto =
+var Self =
 {
 
-  tests:
+  name : 'wTools.Changes',
+  sourceFilePath : sourceFilePath,
+
+  tests :
   {
 
     changesExtend: changesExtend,
@@ -588,11 +589,8 @@ var Proto =
 
   },
 
-  name : 'wTools.Changes',
-
 };
 
-Object.setPrototypeOf( Self, Proto );
 Self = wTestSuite( Self );
 
 if( typeof module !== 'undefined' && !module.parent )

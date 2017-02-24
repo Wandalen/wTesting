@@ -60,7 +60,17 @@ function init( o )
   _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
 
   if( !( o instanceof Self ) )
-  _.assert( _.strIsNotEmpty( suite.name ),'Test suite expects name, but got',suite.name );
+  if( !_.strIsNotEmpty( suite.name ) )
+  {
+    debugger;
+    throw _.err( 'Test suite expects name, but got',suite.name );
+  }
+
+  if( !_.strIs( suite.sourceFilePath ) )
+  {
+    debugger;
+    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( sourceFilePath )' );
+  }
 
   return suite;
 }
@@ -231,6 +241,7 @@ function _testSuiteBegin()
   ];
 
   suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
+  suite.logger.log( 'At',suite.sourceFilePath );
   suite.logger.log();
 
   _.assert( !_.Testing.currentSuite );
@@ -306,6 +317,10 @@ function _testRoutineRun( name,testRoutine )
   return wTestSuite._routineCon
   .doThen( function()
   {
+
+    // var stack = _.diagnosticStack( 0,-1 );
+    // console.log( testRoutineDescriptor.routine.toString() );
+    // debugger;
 
     suite._testRoutineBegin( testRoutineDescriptor );
 
@@ -885,8 +900,6 @@ function _outcomeReport( o )
     {
       var _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 3 });
       var _code = _.diagnosticCode({ location : _location });
-      // var _code = _.diagnosticCode({ level : 3 });
-
       if( _code )
       code = '\n' + _location.full + '\n' + _code;
       else
@@ -1005,11 +1018,11 @@ function outcomeReportCompare( outcome,got,expected,path )
 
 //
 
-function exceptionReport( err,testRoutineDescriptor )
+function exceptionReport( err,testRoutineDescriptor,stack )
 {
   var suite = this;
 
-  // suite.report.failed += 1; xxxx
+  _.assert( arguments.length === 2 || arguments.length === 3 );
 
   if( testRoutineDescriptor.onError )
   testRoutineDescriptor.onError.call( suite,testRoutineDescriptor );
@@ -1020,6 +1033,8 @@ function exceptionReport( err,testRoutineDescriptor )
     ' ... failed throwing error'
   ];
 
+  err = _.err( err );
+
   var details = _.err( err ).toString();
 
   testRoutineDescriptor._outcomeReport
@@ -1027,6 +1042,7 @@ function exceptionReport( err,testRoutineDescriptor )
     outcome : 0,
     msg : msg,
     details : details,
+    stack : stack,
   });
 
   // testRoutineDescriptor._outcomeReport( 0,msg,details );
@@ -1073,6 +1089,7 @@ function _currentTestCaseTextGet( value,hint )
 var Composes =
 {
 
+  sourceFilePath : null,
   tests : null,
 
   verbosity : 0,

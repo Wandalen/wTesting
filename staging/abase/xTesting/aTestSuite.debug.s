@@ -18,6 +18,8 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
+  require( './bTestRoutine.debug.s' );
+
   var _ = wTools;
 
 }
@@ -142,9 +144,15 @@ function reportNew()
   var suite = this;
 
   _.assert( !suite.report );
-  var report = suite.report = {};
-  report.passed = 0;
-  report.failed = 0;
+  var report = suite.report = Object.create( null );
+
+  report[ 'case passes' ] = 0;
+  report[ 'case fails' ] = 0;
+
+  report[ 'routine passes' ] = 0;
+  report[ 'routine fails' ] = 0;
+
+  Object.preventExtensions( report );
 
 }
 
@@ -233,15 +241,16 @@ function _testSuiteBegin()
 {
   var suite = this;
 
-  debugger;
-
   var msg =
   [
     'Starting testing of test suite ( ' + suite.name + ' ) ..',
   ];
 
-  suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
-  suite.logger.log( 'At',suite.sourceFilePath );
+  debugger;
+  suite.logger.logUp( msg.join( '\n' ) );
+  // suite.logger.up();
+  suite.logger.log( _.strColor.fg( '' + suite.sourceFilePath,'yellow' ) );
+  // suite.logger.down();
   suite.logger.log();
 
   _.assert( !_.Testing.currentSuite );
@@ -270,14 +279,14 @@ function _testSuiteEnd()
   ];
 
   debugger;
-  suite.logger.log( _.strColor.style( msg,[ suite.report.failed === 0 ? 'good' : 'bad' ] ) );
+  suite.logger.log( _.strColor.style( msg,[ suite.report[ 'case fails' ] === 0 ? 'good' : 'bad' ] ) );
 
   var msg =
   [
-    'Testing of test suite ( ' + suite.name + ' ) finished ' + ( suite.report.failed === 0 ? 'good' : 'with fails' ) + '.'
+    'Testing of test suite ( ' + suite.name + ' ) finished ' + ( suite.report[ 'case fails' ] === 0 ? 'good' : 'with fails' ) + '.'
   ];
 
-  suite.logger.logDown( _.strColor.style( msg,[ suite.report.failed === 0 ? 'good' : 'bad','topic' ] ) );
+  suite.logger.logDown( _.strColor.style( msg,[ suite.report[ 'case fails' ] === 0 ? 'good' : 'bad' ] ) );
 
   // debugger;
   return suite;
@@ -292,24 +301,26 @@ function _testRoutineRun( name,testRoutine )
   var suite = this;
   var result = null;
   var report = suite.report;
-  var failed = report.failed;
+  var caseFails = report[ 'case fails' ];
 
-  var testRoutineDescriptor = Object.create( suite );
-  testRoutineDescriptor.routine = testRoutine;
-  // testRoutineDescriptor.routine.name = name;
-  testRoutineDescriptor.description = '';
-  testRoutineDescriptor.suite = suite;
-  testRoutineDescriptor._caseIndex = 0;
-  testRoutineDescriptor._testRoutineDescriptorIs = 1;
-  testRoutineDescriptor._storedStates = null;
-  Object.preventExtensions( testRoutineDescriptor );
+  var testRoutineDescriptor = wTestRoutine({ name : name, routine : testRoutine, suite : suite });
 
-  _.assert( _.routineIs( testRoutine ) );
-  _.assert( _.strIsNotEmpty( testRoutine.name ),'Test routine should have name, few test routine of test suite',suite.name,'does not' );
-  _.assert( testRoutine.name === name );
-  // _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'Test routine descriptor should have name' );
-  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,suite ) );
-  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,testRoutineDescriptor ) );
+  // var testRoutineDescriptor = Object.create( suite );
+  // testRoutineDescriptor.routine = testRoutine;
+  // // testRoutineDescriptor.routine.name = name;
+  // testRoutineDescriptor.description = '';
+  // testRoutineDescriptor.suite = suite;
+  // testRoutineDescriptor._caseIndex = 0;
+  // testRoutineDescriptor._testRoutineDescriptorIs = 1;
+  // testRoutineDescriptor._storedStates = null;
+  // Object.preventExtensions( testRoutineDescriptor );
+  //
+  // _.assert( _.routineIs( testRoutine ) );
+  // _.assert( _.strIsNotEmpty( testRoutine.name ),'Test routine should have name, few test routine of test suite',suite.name,'does not' );
+  // _.assert( testRoutine.name === name );
+  // // _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'Test routine descriptor should have name' );
+  // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,suite ) );
+  // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,testRoutineDescriptor ) );
   _.assert( arguments.length === 2 );
 
   /* */
@@ -352,7 +363,7 @@ function _testRoutineRun( name,testRoutine )
     {
       if( err )
       suite.exceptionReport( err,testRoutineDescriptor );
-      suite._testRoutineEnd( testRoutineDescriptor,failed === report.failed );
+      suite._testRoutineEnd( testRoutineDescriptor,caseFails === report[ 'case fails' ] );
     });
 
     return result;
@@ -372,10 +383,13 @@ function _testRoutineBegin( testRoutineDescriptor )
     'Running test routine ( ' + testRoutineDescriptor.routine.name + ' ) ..'
   ];
 
-  suite.logger.logUp( _.strColor.style( msg,[ 'topic','neutral' ] ) );
+  suite.logger.logUp( msg.join( '\n' ) );
 
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = testRoutineDescriptor;
+
+  suite.currentRoutineFails = 0;
+  suite.currentRoutinePasses = 0;
 
 }
 
@@ -387,7 +401,11 @@ function _testRoutineEnd( testRoutineDescriptor,success )
 
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === testRoutineDescriptor );
-  suite.currentRoutine = null;
+
+  if( suite.currentRoutineFails )
+  suite.report[ 'routine fails' ] += 1;
+  else
+  suite.report[ 'routine passes' ] += 1;
 
   if( success )
   {
@@ -412,6 +430,8 @@ function _testRoutineEnd( testRoutineDescriptor,success )
 
   suite.logger.log();
 
+  suite.currentRoutine = null;
+
 }
 
 // --
@@ -421,7 +441,7 @@ function _testRoutineEnd( testRoutineDescriptor,success )
 function stateStore()
 {
   var suite = this;
-  var result = {};
+  var result = Object.create( null );
 
   _.assert( arguments.length === 0 );
 
@@ -513,7 +533,7 @@ function shouldBe( outcome )
 function identical( got,expected )
 {
   var testRoutineDescriptor = this;
-  var options = {};
+  var options = Object.create( null );
 
   _.assert( arguments.length === 2 );
 
@@ -566,7 +586,7 @@ function identical( got,expected )
 function equivalent( got,expected,eps )
 {
   var testRoutineDescriptor = this;
-  var optionsForEntity = {};
+  var optionsForEntity = Object.create( null );
 
   if( eps === undefined )
   eps = testRoutineDescriptor.eps;
@@ -617,7 +637,7 @@ function equivalent( got,expected,eps )
 function contain( got,expected )
 {
   var testRoutineDescriptor = this;
-  var options = {};
+  var options = Object.create( null );
 
   var outcome = _.entityContain( got,expected,options );
 
@@ -847,17 +867,23 @@ function shouldMessageOnlyOnce( con )
 
 function _outcomeReporting( outcome )
 {
-  var suite = this;
+  var testRoutineDescriptor = this;
 
-  if( !suite._caseIndex )
-  suite._caseIndex = 1;
+  if( !testRoutineDescriptor._caseIndex )
+  testRoutineDescriptor._caseIndex = 1;
   else
-  suite._caseIndex += 1;
+  testRoutineDescriptor._caseIndex += 1;
 
   if( outcome )
-  suite.report.passed += 1;
+  {
+    testRoutineDescriptor.suite.currentRoutinePasses += 1;
+    testRoutineDescriptor.suite.report[ 'case passes' ] += 1;
+  }
   else
-  suite.report.failed += 1;
+  {
+    testRoutineDescriptor.suite.currentRoutineFails += 1;
+    testRoutineDescriptor.suite.report[ 'case fails' ] += 1;
+  }
 
   _.assert( arguments.length === 1 );
 
@@ -880,7 +906,7 @@ function _outcomeReport( o )
     if( testRoutineDescriptor.verbosity )
     {
 
-      testRoutineDescriptor.logger.logUp();
+      testRoutineDescriptor.logger.up();
       if( o.details )
       testRoutineDescriptor.logger.begin( 'details' ).log( o.details ).end( 'details' );
 
@@ -1063,7 +1089,7 @@ function _currentTestCaseTextGet( value,hint )
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine descriptor should have name' );
 
   var result = '' +
-    'Test routine( ' + testRoutineDescriptor.routine.name + ' ) : ' +
+    'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) : ' +
     'test case' + ( testRoutineDescriptor.description ? ( '( ' + testRoutineDescriptor.description + ' )' ) : '' ) +
     ' # ' + testRoutineDescriptor._caseIndex
   ;
@@ -1118,6 +1144,8 @@ var Restricts =
 {
   name : null,
   currentRoutine : null,
+  currentRoutineFails : null,
+  currentRoutinePasses : null,
 }
 
 var Statics =

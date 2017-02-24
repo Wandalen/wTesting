@@ -27,7 +27,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = wTools;
-var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
+var sourceFilePath = _.diagnosticLocation().full; // typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 // if( !_.toStr )
 // _.toStr = function(){ return String( arguments ) };
@@ -50,6 +50,7 @@ function testAll()
   debugger;
 
   logger.logUp( 'Launching all test suites ..' );
+  logger.log();
 
   for( var t in wTests )
   {
@@ -61,6 +62,7 @@ function testAll()
   wTestSuite._suiteCon.doThen( function()
   {
 
+    logger.log();
     logger.logDown( 'All test suites ran out.' );
 
   });
@@ -70,7 +72,7 @@ function testAll()
 
 //
 
-function test( )
+function test()
 {
   var proto = this;
   var args = arguments;
@@ -95,6 +97,25 @@ function test( )
   return wTestSuite._suiteCon.splitThen();
 }
 
+//
+
+function _testingReportNew()
+{
+  var proto = this;
+
+  self.testingReport = Object.create( null );
+
+  self.testingReport.testSuitesPassed = 0;
+  self.testingReport.testSuitesFailed = 0;
+
+  self.testingReport.testRoutinesPassed = 0;
+  self.testingReport.testRoutinesFailed = 0;
+
+  self.testingReport.testCasesPassed = 0;
+  self.testingReport.testCasesFailed = 0;
+
+}
+
 // --
 // prototype
 // --
@@ -107,6 +128,9 @@ var Self =
   testAll : testAll,
   test : test,
 
+  _testingReportNew : _testingReportNew,
+
+
   // var
 
   verbosity : null,
@@ -115,6 +139,8 @@ var Self =
   currentSuite : null,
   _full : true,
   sourceFilePath : sourceFilePath,
+
+  testingReport : null,
 
 }
 

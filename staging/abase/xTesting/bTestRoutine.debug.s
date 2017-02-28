@@ -60,7 +60,7 @@ var Self = function wTestRoutine( o )
   testRoutineDescriptor.routine = o.routine;
   testRoutineDescriptor.description = '';
   testRoutineDescriptor.suite = o.suite;
-  testRoutineDescriptor._caseIndex = 0;
+  testRoutineDescriptor._caseIndex = 1;
   testRoutineDescriptor._testRoutineDescriptorIs = 1;
   testRoutineDescriptor._storedStates = null;
   Object.preventExtensions( testRoutineDescriptor );

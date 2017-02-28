@@ -146,11 +146,11 @@ function reportNew()
   _.assert( !suite.report );
   var report = suite.report = Object.create( null );
 
-  report[ 'case passes' ] = 0;
-  report[ 'case fails' ] = 0;
+  report.testCasePasses = 0;
+  report.testCaseFails = 0;
 
-  report[ 'routine passes' ] = 0;
-  report[ 'routine fails' ] = 0;
+  report.testRoutinePasses = 0;
+  report.testRoutineFails = 0;
 
   Object.preventExtensions( report );
 
@@ -177,6 +177,7 @@ function _testSuiteRunLater()
 
   })
   .splitThen();
+
 }
 
 //
@@ -246,12 +247,16 @@ function _testSuiteBegin()
     'Starting testing of test suite ( ' + suite.name + ' ) ..',
   ];
 
-  debugger;
+  suite.logger.begin({ 'suite' : suite.name });
+
+  // debugger;
   suite.logger.logUp( msg.join( '\n' ) );
   // suite.logger.up();
   suite.logger.log( _.strColor.fg( '' + suite.sourceFilePath,'yellow' ) );
   // suite.logger.down();
   suite.logger.log();
+
+  suite.logger.end( 'suite' );
 
   _.assert( !_.Testing.currentSuite );
   _.Testing.currentSuite = suite;
@@ -267,26 +272,44 @@ function _testSuiteEnd()
 {
   var suite = this;
 
-  _.assert( _.Testing.currentSuite === suite );
-  _.Testing.currentSuite = null;
-
   if( suite.onSuitEnd )
   suite.onSuitEnd();
 
+  var ok = suite.report.testCaseFails === 0;
+
+  // var msg =
+  // [
+  //   '' + _.toStr( suite.report,{ wrap : 0, multiline : 1 } )
+  // ];
+
+  suite.logger.begin( 'suite','end' );
+
+  var msg = '';
+  msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
+  msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
+
+  suite.logger.log( _.strColor.style( msg,[ ok ? 'good' : 'bad' ] ) );
+
   var msg =
   [
-    '' + _.toStr( suite.report,{ wrap : 0, multiline : 1 } )
+    'Test suite ( ' + suite.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + '.'
   ];
 
-  debugger;
-  suite.logger.log( _.strColor.style( msg,[ suite.report[ 'case fails' ] === 0 ? 'good' : 'bad' ] ) );
+  suite.logger.logDown( _.strColor.style( msg,[ ok ? 'good' : 'bad' ] ) );
 
-  var msg =
-  [
-    'Testing of test suite ( ' + suite.name + ' ) finished ' + ( suite.report[ 'case fails' ] === 0 ? 'good' : 'with fails' ) + '.'
-  ];
+  suite.logger.end( 'suite','end' );
 
-  suite.logger.logDown( _.strColor.style( msg,[ suite.report[ 'case fails' ] === 0 ? 'good' : 'bad' ] ) );
+  _.Testing.report.testSuitePasses += ok ? 1 : 0;
+  _.Testing.report.testSuiteFailes += ok ? 0 : 1;
+
+  _.Testing.report.testRoutinePasses += suite.report.testRoutinePasses;
+  _.Testing.report.testRoutineFails += suite.report.testRoutineFails;
+
+  _.Testing.report.testCasePasses += suite.report.testCasePasses;
+  _.Testing.report.testCaseFails += suite.report.testCaseFails;
+
+  _.assert( _.Testing.currentSuite === suite );
+  _.Testing.currentSuite = null;
 
   // debugger;
   return suite;
@@ -301,26 +324,9 @@ function _testRoutineRun( name,testRoutine )
   var suite = this;
   var result = null;
   var report = suite.report;
-  var caseFails = report[ 'case fails' ];
-
+  var caseFails = report.testCaseFails;
   var testRoutineDescriptor = wTestRoutine({ name : name, routine : testRoutine, suite : suite });
 
-  // var testRoutineDescriptor = Object.create( suite );
-  // testRoutineDescriptor.routine = testRoutine;
-  // // testRoutineDescriptor.routine.name = name;
-  // testRoutineDescriptor.description = '';
-  // testRoutineDescriptor.suite = suite;
-  // testRoutineDescriptor._caseIndex = 0;
-  // testRoutineDescriptor._testRoutineDescriptorIs = 1;
-  // testRoutineDescriptor._storedStates = null;
-  // Object.preventExtensions( testRoutineDescriptor );
-  //
-  // _.assert( _.routineIs( testRoutine ) );
-  // _.assert( _.strIsNotEmpty( testRoutine.name ),'Test routine should have name, few test routine of test suite',suite.name,'does not' );
-  // _.assert( testRoutine.name === name );
-  // // _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'Test routine descriptor should have name' );
-  // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,suite ) );
-  // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,testRoutineDescriptor ) );
   _.assert( arguments.length === 2 );
 
   /* */
@@ -328,10 +334,6 @@ function _testRoutineRun( name,testRoutine )
   return wTestSuite._routineCon
   .doThen( function()
   {
-
-    // var stack = _.diagnosticStack( 0,-1 );
-    // console.log( testRoutineDescriptor.routine.toString() );
-    // debugger;
 
     suite._testRoutineBegin( testRoutineDescriptor );
 
@@ -346,7 +348,7 @@ function _testRoutineRun( name,testRoutine )
       }
       catch( err )
       {
-        suite.exceptionReport( err,testRoutineDescriptor );
+        suite.exceptionReport({ err : err , testRoutineDescriptor : testRoutineDescriptor });
       }
 
     }
@@ -357,13 +359,27 @@ function _testRoutineRun( name,testRoutine )
 
     /* */
 
-    result = wConsequence.from( result );
+    result = wConsequence.from( result,_.Testing.testRoutineTimeOut );
 
-    result.doThen( function( err )
+    result.doThen( function( err,data )
     {
+      // debugger;
+      // console.log( 'doThen',err,data );
+      if( data === _.timeOut )
+      err = _._err
+      ({
+        args : [ 'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) time out!' ],
+        usingSourceCode : 0,
+      });
+
       if( err )
-      suite.exceptionReport( err,testRoutineDescriptor );
-      suite._testRoutineEnd( testRoutineDescriptor,caseFails === report[ 'case fails' ] );
+      suite.exceptionReport
+      ({
+        err : err,
+        testRoutineDescriptor : testRoutineDescriptor,
+        usingSourceCode : data !== _.timeOut,
+      });
+      suite._testRoutineEnd( testRoutineDescriptor,caseFails === report.testCaseFails );
     });
 
     return result;
@@ -383,7 +399,11 @@ function _testRoutineBegin( testRoutineDescriptor )
     'Running test routine ( ' + testRoutineDescriptor.routine.name + ' ) ..'
   ];
 
+  suite.logger.begin({ 'routine' : testRoutineDescriptor.routine.name });
+
   suite.logger.logUp( msg.join( '\n' ) );
+
+  suite.logger.end( 'routine' );
 
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = testRoutineDescriptor;
@@ -403,9 +423,11 @@ function _testRoutineEnd( testRoutineDescriptor,success )
   _.assert( suite.currentRoutine === testRoutineDescriptor );
 
   if( suite.currentRoutineFails )
-  suite.report[ 'routine fails' ] += 1;
+  suite.report.testRoutineFails += 1;
   else
-  suite.report[ 'routine passes' ] += 1;
+  suite.report.testRoutinePasses += 1;
+
+  suite.logger.begin( 'routine','end' );
 
   if( success )
   {
@@ -427,6 +449,8 @@ function _testRoutineEnd( testRoutineDescriptor,success )
     suite.logger.logDown( _.strColor.style( msg,[ 'bad','neutral' ] ) );
 
   }
+
+  suite.logger.end( 'routine','end' );
 
   suite.logger.log();
 
@@ -724,7 +748,7 @@ function shouldThrowError( routine )
     catch( err )
     {
       thrown = 1;
-      outcome = suite.outcomeReportSpecial( 1,'error thrown by call as expected',stack );
+      outcome = suite.outcomeReportSpecial( 1,'error thrown( synchronously ) by call as expected',stack );
     }
 
     /* */
@@ -743,13 +767,13 @@ function shouldThrowError( routine )
           thrown = 1;
           if( suite.verbosity )
           _.errLogOnce( err );
-          outcome = suite.outcomeReportSpecial( 1,'error thrown by consequence as expected',stack );
+          outcome = suite.outcomeReportSpecial( 1,'error thrown( asynchronously ) as expected',stack );
         }
         con.give( data );
       })
       .doThen( function( err,data )
       {
-        suite.outcomeReportSpecial( 0,'error thrown several times, something wrong',stack );
+        suite.outcomeReportSpecial( 0,'message sent several times, something wrong',stack );
       });
     }
     else
@@ -844,7 +868,7 @@ function shouldMessageOnlyOnce( con )
   con
   .got( function( err,data )
   {
-    _.timeOut( 1000, function()
+    _.timeOut( 10, function()
     {
       suite.outcomeReportSpecial( 1,'message thrown at least once',stack );
       result.give( err,data );
@@ -852,10 +876,10 @@ function shouldMessageOnlyOnce( con )
   })
   .doThen( function( err,data )
   {
-    suite.stateStore();
-    suite.stateRestore( state );
-    suite.outcomeReportSpecial( 0,'got several messages, expected only one',stack );
-    suite.stateRestore();
+    // suite.stateStore();
+    // suite.stateRestore( state );
+    suite.outcomeReportSpecial( 0,'consequence got several messages, expected only one',stack );
+    // suite.stateRestore();
   });
 
   return result;
@@ -877,12 +901,12 @@ function _outcomeReporting( outcome )
   if( outcome )
   {
     testRoutineDescriptor.suite.currentRoutinePasses += 1;
-    testRoutineDescriptor.suite.report[ 'case passes' ] += 1;
+    testRoutineDescriptor.suite.report.testCasePasses += 1;
   }
   else
   {
     testRoutineDescriptor.suite.currentRoutineFails += 1;
-    testRoutineDescriptor.suite.report[ 'case fails' ] += 1;
+    testRoutineDescriptor.suite.report.testCaseFails += 1;
   }
 
   _.assert( arguments.length === 1 );
@@ -897,6 +921,9 @@ function _outcomeReport( o )
 
   _.routineOptions( _outcomeReport,o );
   _.assert( arguments.length === 1 );
+
+  testRoutineDescriptor.logger.begin({ 'case' : testRoutineDescriptor.description || testRoutineDescriptor._caseIndex });
+  testRoutineDescriptor.logger.begin({ 'caseIndex' : testRoutineDescriptor._caseIndex });
 
   testRoutineDescriptor._outcomeReporting( o.outcome );
 
@@ -922,7 +949,7 @@ function _outcomeReport( o )
   {
 
     var code;
-    if( testRoutineDescriptor.usingSourceCode )
+    if( testRoutineDescriptor.usingSourceCode && o.usingSourceCode )
     {
       var _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 3 });
       var _code = _.diagnosticCode({ location : _location });
@@ -946,6 +973,8 @@ function _outcomeReport( o )
 
   }
 
+  testRoutineDescriptor.logger.end( 'case','caseIndex' );
+
 }
 
 _outcomeReport.defaults =
@@ -954,6 +983,7 @@ _outcomeReport.defaults =
   msg : null,
   details : null,
   stack : null,
+  usingSourceCode : 1,
 }
 
 //
@@ -1044,35 +1074,44 @@ function outcomeReportCompare( outcome,got,expected,path )
 
 //
 
-function exceptionReport( err,testRoutineDescriptor,stack )
+function exceptionReport( o )
 {
   var suite = this;
 
-  _.assert( arguments.length === 2 || arguments.length === 3 );
+  _.routineOptions( exceptionReport,o );
+  _.assert( arguments.length === 1 );
 
-  if( testRoutineDescriptor.onError )
-  testRoutineDescriptor.onError.call( suite,testRoutineDescriptor );
+  if( o.testRoutineDescriptor.onError )
+  o.testRoutineDescriptor.onError.call( suite,o.testRoutineDescriptor );
 
   var msg =
   [
-    testRoutineDescriptor._currentTestCaseTextGet() +
+    o.testRoutineDescriptor._currentTestCaseTextGet() +
     ' ... failed throwing error'
   ];
 
-  err = _.err( err );
+  var err = _.err( o.err );
+  var details = err.toString();
 
-  var details = _.err( err ).toString();
-
-  testRoutineDescriptor._outcomeReport
+  o.testRoutineDescriptor._outcomeReport
   ({
     outcome : 0,
     msg : msg,
     details : details,
-    stack : stack,
+    stack : o.stack,
+    usingSourceCode : o.usingSourceCode
   });
 
   // testRoutineDescriptor._outcomeReport( 0,msg,details );
 
+}
+
+exceptionReport.defaults =
+{
+  err : null,
+  testRoutineDescriptor : null,
+  stack : null,
+  usingSourceCode : 1,
 }
 
 //
@@ -1090,7 +1129,7 @@ function _currentTestCaseTextGet( value,hint )
 
   var result = '' +
     'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) : ' +
-    'test case' + ( testRoutineDescriptor.description ? ( '( ' + testRoutineDescriptor.description + ' )' ) : '' ) +
+    'test case' + ( testRoutineDescriptor.description ? ( ' ( ' + testRoutineDescriptor.description + ' )' ) : '' ) +
     ' # ' + testRoutineDescriptor._caseIndex
   ;
 

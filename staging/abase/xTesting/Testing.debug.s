@@ -44,18 +44,30 @@ function exec()
 {
   var testing = this;
 
-  _.assert( arguments.length === 0 );
+  try
+  {
 
-  var appArgs = testing.applyAppArgs(); // xxx
-  var path = appArgs.subject || _.pathCurrent();
+    _.assert( arguments.length === 0 );
 
-  path = _.pathJoin( _.pathCurrent(),path );
+    var appArgs = testing.applyAppArgs(); // xxx
+    var path = appArgs.subject || _.pathCurrent();
 
-  // _.include( '../z.test/Path.path.test.s' );
-  // _.include( '../z.test/Path.all.test.s' );
-  testing.includeTestsFrom( path );
+    path = _.pathJoin( _.pathCurrent(),path );
 
-  testing.testAll();
+    // _.include( '../z.test/Path.path.test.s' );
+    // _.include( '../z.test/Path.all.test.s' );
+    testing.includeTestsFrom( path );
+
+    testing.testAll();
+
+  }
+  catch( err )
+  {
+    err = _.errLogOnce( err );
+    process.exitCode = -1;
+    // process.exit( -1 );
+    throw err;
+  }
 
 }
 
@@ -73,8 +85,12 @@ function registerHook()
   if( _global_.process )
   process.on( 'exit', function ()
   {
-    if( testing.report && testing.report.testSuiteFailes )
-    process.exitCode = 127;
+    if( testing.report && testing.report.testSuiteFailes && !process.exitCode )
+    {
+      var logger = testing.logger || _global_.logger;
+      logger.log( _.strColor.style( 'Errors!','bad' ) );
+      process.exitCode = -1;
+    }
   });
 
 }
@@ -89,11 +105,21 @@ function includeTestsFrom( path )
 
   var files = _.fileProvider.filesFind({ pathFile : path, ends : [ '.test.s','.test.ss' ], recursive : 1 });
 
-  console.log( 'files',_.entitySelect( files,'*.absolute' ) );
+  // console.log( 'files',_.entitySelect( files,'*.absolute' ) );
 
   for( var f = 0 ; f < files.length ; f++ )
-  if( files[ f ].stat.isFile() )
-  require( _.fileProvider.pathNativize( files[ f ].absolute ) );
+  {
+    if( !files[ f ].stat.isFile() )
+    continue;
+    var absolutePath = files[ f ].absolute;
+    // console.log( 'absolutePath',absolutePath );
+    // var hadTestCases = _.mapKeys( wTests ).length;
+
+    require( _.fileProvider.pathNativize( absolutePath ) );
+
+    // if( hadTestCases === _.mapKeys( wTests ).length )
+    // throw _.err( 'Test file "' + absolutePath + '" has no test suites, but should!' );
+  }
 
 }
 
@@ -223,7 +249,7 @@ function _testingBegin()
   logger.logUp( 'Launching several test suites ..' );
   else
   {
-    logger.logUp( 'Launching all test suites ..' );
+    logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suites ..' );
     logger.log( _.entitySelect( _.mapValues( wTests ),'*.sourceFilePath' ).join( '\n' ) );
   }
 
@@ -378,7 +404,7 @@ loggerToBook.defaults =
 
 var Options =
 {
-  testRoutineTimeOut : 3000,
+  testRoutineTimeOut : 20000,
   verbosity : null,
   logger : null,
 }

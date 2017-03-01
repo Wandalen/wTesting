@@ -253,7 +253,7 @@ function _testSuiteBegin()
   // debugger;
   suite.logger.logUp( msg.join( '\n' ) );
   // suite.logger.up();
-  suite.logger.log( _.strColor.fg( '' + suite.sourceFilePath,'yellow' ) );
+  suite.logger.log( _.strColor.style( 'at  ' + suite.sourceFilePath,'selected' ) );
   // suite.logger.down();
   suite.logger.log();
 
@@ -345,7 +345,7 @@ function _testRoutineRun( name,testRoutine )
 
       try
       {
-        result = testRoutineDescriptor.routine.call( suite,testRoutineDescriptor );
+        result = testRoutineDescriptor.routine.call( suite.special,testRoutineDescriptor );
       }
       catch( err )
       {
@@ -364,8 +364,6 @@ function _testRoutineRun( name,testRoutine )
 
     result.doThen( function( err,data )
     {
-      // debugger;
-      // console.log( 'doThen',err,data );
       if( data === _.timeOut )
       err = _._err
       ({
@@ -673,83 +671,36 @@ function contain( got,expected )
 
 //
 
-/**
- * Error throwing test. Expects one argument( routine ) - function to call or wConsequence instance.
- * If argument is a function runs it and checks if it throws an error. Otherwise if argument is a consequence  checks if it has a error message.
- * If its not a error or consequence contains more then one message test is failed. After check function reports result of test to the testing system.
- * If test is failed function also outputs additional information. Returns wConsequence instance to perform next call in chain.
- *
- * @param {Function|wConsequence} routine - Funtion to call or wConsequence instance.
- *
- * @example
- * function sometest( test )
- * {
- *  test.description = 'shouldThrowError';
- *  test.shouldThrowError( function()
- *  {
- *    throw _.err( 'Error' );
- *  });
- * }
- * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
- *
- * @example
- * function sometest( test )
- * {
- *  var consequence = new wConsequence().give();
- *  consequence
- *  .ifNoErrorThen( function()
- *  {
- *    test.description = 'shouldThrowError';
- *    var con = new wConsequence( )
- *    .error( _.err() ); //wConsequence instance with error message
- *    return test.shouldThrowError( con );//test passes
- *  })
- *  .ifNoErrorThen( function()
- *  {
- *    test.description = 'shouldThrowError2';
- *    var con = new wConsequence( )
- *    .error( _.err() )
- *    .error( _.err() ); //wConsequence instance with two error messages
- *    return test.shouldThrowError( con ); //test fails
- *  });
- *
- *  return consequence;
- * }
- * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
- *
- * @throws {Exception} If no arguments provided.
- * @throws {Exception} If passed argument is not a Routine.
- * @method shouldThrowError
- * @memberof wTools
- */
-
-function shouldThrowError( routine )
+function _shouldThrowError( o )
 {
   var suite = this;
   var thrown = 0;
   var outcome;
-  var stack = _.diagnosticStack( 1,-1 );
+  var stack = _.diagnosticStack( 2,-1 );
 
-  _.assert( _.routineIs( routine ) )
+  _.assert( _.routineIs( o.routine ),'shouldThrowErrorSync expects ( o.routine ) to call' );
   _.assert( arguments.length === 1 );
 
-  return wTestSuite._conSyn.got( function shouldThrowError()
+  return wTestSuite._conSyn.got( function shouldThrowErrorSync()
   {
 
     var con = this;
     var result;
-    if( routine instanceof wConsequence )
+    if( o.routine instanceof wConsequence )
     {
-      result = routine;
+      result = o.routine;
     }
     else try
     {
-      var result = routine.call( this );
+      result = o.routine.call( this );
     }
     catch( err )
     {
       thrown = 1;
-      outcome = suite.outcomeReportSpecial( 1,'error thrown( synchronously ) by call as expected',stack );
+      if( o.allowSyncError )
+      outcome = suite.outcomeReportSpecial( 1,'error thrown ( synchronously ) by call as expected',stack );
+      else
+      outcome = suite.outcomeReportSpecial( 0,'error thrown ( synchronously ) by call, but sync error is not expected',stack );
     }
 
     /* */
@@ -768,7 +719,10 @@ function shouldThrowError( routine )
           thrown = 1;
           if( suite.verbosity )
           _.errLogOnce( err );
+          if( o.allowAsyncError )
           outcome = suite.outcomeReportSpecial( 1,'error thrown( asynchronously ) as expected',stack );
+          else
+          outcome = suite.outcomeReportSpecial( 0,'error thrown( asynchronously ), but async error is not expected',stack );
         }
         con.give( data );
       })
@@ -788,6 +742,108 @@ function shouldThrowError( routine )
 
 }
 
+_shouldThrowError.defaults =
+{
+  routine : null,
+  allowSyncError : 1,
+  allowAsyncError : 1,
+}
+
+//
+
+function shouldThrowErrorAsync( routine )
+{
+  var suite = this;
+
+  return suite._shouldThrowError
+  ({
+    routine : routine,
+    allowSyncError : 0,
+    allowAsyncError : 1,
+  });
+
+}
+
+//
+
+function shouldThrowErrorSync( routine )
+{
+  var suite = this;
+
+  return suite._shouldThrowError
+  ({
+    routine : routine,
+    allowSyncError : 1,
+    allowAsyncError : 0,
+  });
+
+}
+
+//
+
+/**
+ * Error throwing test. Expects one argument( routine ) - function to call or wConsequence instance.
+ * If argument is a function runs it and checks if it throws an error. Otherwise if argument is a consequence  checks if it has a error message.
+ * If its not a error or consequence contains more then one message test is failed. After check function reports result of test to the testing system.
+ * If test is failed function also outputs additional information. Returns wConsequence instance to perform next call in chain.
+ *
+ * @param {Function|wConsequence} routine - Funtion to call or wConsequence instance.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.description = 'shouldThrowErrorSync';
+ *  test.shouldThrowErrorSync( function()
+ *  {
+ *    throw _.err( 'Error' );
+ *  });
+ * }
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  var consequence = new wConsequence().give();
+ *  consequence
+ *  .ifNoErrorThen( function()
+ *  {
+ *    test.description = 'shouldThrowErrorSync';
+ *    var con = new wConsequence( )
+ *    .error( _.err() ); //wConsequence instance with error message
+ *    return test.shouldThrowErrorSync( con );//test passes
+ *  })
+ *  .ifNoErrorThen( function()
+ *  {
+ *    test.description = 'shouldThrowError2';
+ *    var con = new wConsequence( )
+ *    .error( _.err() )
+ *    .error( _.err() ); //wConsequence instance with two error messages
+ *    return test.shouldThrowErrorSync( con ); //test fails
+ *  });
+ *
+ *  return consequence;
+ * }
+ * _.Testing.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @throws {Exception} If passed argument is not a Routine.
+ * @method shouldThrowErrorSync
+ * @memberof wTools
+ */
+
+function shouldThrowError_( routine )
+{
+  var suite = this;
+
+  return suite._shouldThrowError
+  ({
+    routine : routine,
+    allowSyncError : 1,
+    allowAsyncError : 1,
+  });
+
+}
+
 //
 
 function mustNotThrowError( routine )
@@ -800,7 +856,7 @@ function mustNotThrowError( routine )
   _.assert( _.routineIs( routine ) )
   _.assert( arguments.length === 1 );
 
-  return wTestSuite._conSyn.got( function shouldThrowError()
+  return wTestSuite._conSyn.got( function shouldThrowErrorSync()
   {
 
     var con = this;
@@ -972,6 +1028,7 @@ function _outcomeReport( o )
     testRoutineDescriptor.logger.begin( 'message' ).errorDown( o.msg ).end( 'message' );
     testRoutineDescriptor.logger.log();
 
+    debugger;
   }
 
   testRoutineDescriptor.logger.end( 'case','caseIndex' );
@@ -1245,7 +1302,11 @@ var Proto =
   equivalent : equivalent,
   contain : contain,
 
-  shouldThrowError : shouldThrowError,
+  _shouldThrowError : _shouldThrowError,
+  shouldThrowErrorSync : shouldThrowErrorSync,
+  shouldThrowErrorAsync : shouldThrowErrorAsync,
+  shouldThrowError_ : shouldThrowError_,
+
   mustNotThrowError : mustNotThrowError,
   shouldMessageOnlyOnce : shouldMessageOnlyOnce,
 

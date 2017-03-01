@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "Tool for convenient unit testing in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "contributors": [

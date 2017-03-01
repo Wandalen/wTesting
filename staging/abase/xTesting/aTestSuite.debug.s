@@ -241,6 +241,7 @@ function _testSuiteRunAct()
 function _testSuiteBegin()
 {
   var suite = this;
+  // debugger;
 
   var msg =
   [

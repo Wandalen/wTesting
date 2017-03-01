@@ -42,33 +42,75 @@ _.assert( _.Consequence,'wTesting needs wConsequence/staging/abase/syn/Consequen
 
 function exec()
 {
+  var testing = this;
 
   _.assert( arguments.length === 0 );
 
-  var path = process.argv[ 2 ] || _.pathCurrent();
-  console.log( 'argv :', process.argv );
+  var appArgs = testing.applyAppArgs(); // xxx
+  var path = appArgs.subject || _.pathCurrent();
 
   path = _.pathJoin( _.pathCurrent(),path );
 
-  _.include( '../z.test/Path.all.test.s' );
-  //_.includeFrom( path );
+  // _.include( '../z.test/Path.path.test.s' );
+  // _.include( '../z.test/Path.all.test.s' );
+  testing.includeTestsFrom( path );
 
-  this.testAll();
+  testing.testAll();
 
 }
 
-// function testAll()
-// {
-//   var testing = this;
 //
-//   debugger;
-//   return _.timeReady( function()
-//   {
-//     debugger;
-//     return testing._testAllAct();
-//   });
+
+function registerHook()
+{
+  var testing = this;
+
+  if( testing._registerHookDone )
+  return;
+
+  testing._registerHookDone = 1;
+
+  if( _global_.process )
+  process.on( 'exit', function ()
+  {
+    if( testing.report && testing.report.testSuiteFailes )
+    process.exitCode = 127;
+  });
+
+}
+
 //
-// }
+
+function includeTestsFrom( path )
+{
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( path ) );
+
+  var files = _.fileProvider.filesFind({ pathFile : path, ends : [ '.test.s','.test.ss' ], recursive : 1 });
+
+  console.log( 'files',_.entitySelect( files,'*.absolute' ) );
+
+  for( var f = 0 ; f < files.length ; f++ )
+  if( files[ f ].stat.isFile() )
+  require( _.fileProvider.pathNativize( files[ f ].absolute ) );
+
+}
+
+//
+
+function applyAppArgs()
+{
+  var testing = this;
+
+  _.assert( arguments.length === 0 );
+
+  var appArgs = _.appArgsInSubjectAndMapFormat();
+  if( appArgs.map )
+  _.mapExtend( testing,_.mapScreen( Options,appArgs.map ) );
+
+  return appArgs;
+}
 
 //
 
@@ -85,7 +127,7 @@ function _testAllAct()
   {
     if( wTests[ t ].abstract )
     continue;
-    testing.test( t );
+    testing._testAct( t );
   }
 
   wTestSuite._suiteCon.doThen( function()
@@ -102,32 +144,11 @@ var testAll = _.timeReadyJoin( undefined,_testAllAct );
 
 //
 
-// function test()
-// {
-//   var testing = this;
-//   var args = arguments;
-//
-//   debugger;
-//   return _.timeReady( function()
-//   {
-//     debugger;
-//     return testing._testAct.apply( testing,args );
-//   });
-//
-// }
-
-//
-
 function _testAct()
 {
   var testing = this;
 
   _.assert( this === Self );
-
-  if( arguments.length === 0 )
-  return testing._testAllAct();
-
-  testing._testingBegin( arguments );
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {
@@ -141,6 +162,23 @@ function _testAct()
     suite._testSuiteRunLater();
   }
 
+}
+
+//
+
+function _test()
+{
+  var testing = this;
+
+  _.assert( this === Self );
+
+  if( arguments.length === 0 )
+  return testing._testAllAct();
+
+  testing._testingBegin( arguments );
+
+  testing._testAct.apply( testing,arguments );
+
   return wTestSuite._suiteCon
   .splitThen( function()
   {
@@ -150,7 +188,7 @@ function _testAct()
 
 //
 
-var test = _.timeReadyJoin( undefined,_testAct );
+var test = _.timeReadyJoin( undefined,_test );
 
 //
 
@@ -178,15 +216,22 @@ function _testingBegin()
   var testing = this;
   var logger = testing.logger || _global_.logger;
 
+  testing.applyAppArgs();
+  testing.registerHook();
+
   if( arguments.length )
   logger.logUp( 'Launching several test suites ..' );
   else
-  logger.logUp( 'Launching all test suites ..' );
+  {
+    logger.logUp( 'Launching all test suites ..' );
+    logger.log( _.entitySelect( _.mapValues( wTests ),'*.sourceFilePath' ).join( '\n' ) );
+  }
 
   logger.log();
 
   testing._testingReportNew();
 
+  // debugger;
 }
 
 //
@@ -214,6 +259,7 @@ function _testingEnd()
 
   logger.logDown( msg );
 
+  // debugger;
 }
 
 // --
@@ -330,17 +376,28 @@ loggerToBook.defaults =
 // prototype
 // --
 
+var Options =
+{
+  testRoutineTimeOut : 3000,
+  verbosity : null,
+  logger : null,
+}
+
 var Self =
 {
 
   // routine
 
   exec : exec,
+  registerHook : registerHook,
+  includeTestsFrom : includeTestsFrom,
+  applyAppArgs : applyAppArgs,
 
   _testAllAct : _testAllAct,
   testAll : testAll,
 
   _testAct : _testAct,
+  _test : _test,
   test : test,
 
   _testingReportNew : _testingReportNew,
@@ -355,19 +412,17 @@ var Self =
 
   // var
 
-  testRoutineTimeOut : 3000,
-
-  verbosity : null,
-  logger : null,
-
   currentSuite : null,
-  _full : true,
-  sourceFilePath : sourceFilePath,
-
   report : null,
+
+  sourceFilePath : sourceFilePath,
+  _full : 0,
+  _registerHookDone : 0,
   constructor : function wTesting(){},
 
 }
+
+_.mapExtend( Self,Options );
 
 //
 

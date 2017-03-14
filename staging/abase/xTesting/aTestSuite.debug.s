@@ -24,6 +24,8 @@ if( typeof module !== 'undefined' )
 
 }
 
+console.log( _.diagnosticStack() );
+
 //
 
 var logger = null;

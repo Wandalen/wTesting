@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Tool for convenient unit testing in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "contributors": [
@@ -14,9 +14,8 @@
     }
   ],
   "license": "MIT",
-  "bin":
-  {
-    "wtest" : "staging/abase/xTesting/Testing.debug.s"
+  "bin": {
+    "wtest": "staging/abase/xTesting/Testing.debug.s"
   },
   "main": "staging/abase/xTesting/Testing.debug.s",
   "files": [

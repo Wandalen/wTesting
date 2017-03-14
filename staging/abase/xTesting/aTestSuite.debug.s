@@ -26,6 +26,7 @@ if( typeof module !== 'undefined' )
 
 //
 
+var logger = null;
 var _ = wTools;
 var Parent = null;
 var Self = function wTestSuite( o )
@@ -61,6 +62,13 @@ function init( o )
 
   _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
 
+  if( !suite.sourceFilePath )
+  suite.sourceFilePath = _.diagnosticLocation( 4 ).full;
+
+  if( !( o instanceof Self ) )
+  if( !_.strIsNotEmpty( suite.name ) )
+  suite.name = _.diagnosticLocation( suite.sourceFilePath ).nameLong;
+
   if( !( o instanceof Self ) )
   if( !_.strIsNotEmpty( suite.name ) )
   {
@@ -68,11 +76,11 @@ function init( o )
     throw _.err( 'Test suite expects name, but got',suite.name );
   }
 
-  if( !_.strIs( suite.sourceFilePath ) )
-  {
-    debugger;
-    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( sourceFilePath )' );
-  }
+  // if( !_.strIs( suite.sourceFilePath ) )
+  // {
+  //   debugger;
+  //   throw _.err( 'Test suite',suite.name,'expects a mandatory option ( sourceFilePath )' );
+  // }
 
   return suite;
 }
@@ -104,8 +112,8 @@ function extendBy()
     if( src.tests )
     _.mapSupplement( src.tests,suite.tests );
 
-    if( src.special )
-    _.mapSupplement( src.special,suite.special );
+    if( src.context )
+    _.mapSupplement( src.context,suite.context );
 
     _.mapExtend( suite,src );
 
@@ -156,6 +164,25 @@ function reportNew()
 
 }
 
+//
+
+// function _verbositySet( src )
+// {
+//   var suite = this;
+//
+//   _.assert( arguments.length === 1 );
+//
+//   if( !_.numberIsNotNan( src ) )
+//   src = 0;
+//
+//   suite[ symbolForVerbosity ] = src;
+//
+//   if( src !== null )
+//   if( suite.logger )
+//   suite.logger.verbosity = src;
+//
+// }
+
 // --
 // test suite run
 // --
@@ -167,9 +194,18 @@ function _testSuiteRunLater()
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
-  return wTestSuite._suiteCon
+  /* */
+
+  if( suite.override )
+  _.mapExtend( suite,suite.override );
+
+  // console.log( 'suite.override',suite.override );
+  var concurrent = suite.concurrent !== null ? suite.concurrent : _.Testing.concurrent;
+  var con = concurrent ? new wConsequence().give() : wTestSuite._suiteCon;
+  // console.log( 'concurrent',concurrent );
+
+  return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
-  // .doThen( _.routineSeal( _,_.timeOut,[ 10000 ] ) )
   .doThen( function()
   {
 
@@ -192,7 +228,15 @@ function _testSuiteRunNow()
 
   /* */
 
-  return wTestSuite._suiteCon
+  if( suite.override )
+  _.mapExtend( suite,suite.override );
+
+  // console.log( 'suite.override',suite.override );
+  var concurrent = suite.concurrent !== null ? suite.concurrent : _.Testing.concurrent;
+  var con = concurrent ? new wConsequence().give() : wTestSuite._suiteCon;
+  // console.log( 'concurrent',concurrent );
+
+  return con
   .doThen( function()
   {
 
@@ -212,26 +256,29 @@ function _testSuiteRunAct()
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
-  if( _.Testing.verbosity !== null )
-  suite.verbosity = _.Testing.verbosity;
-
-  if( _.Testing.logger !== null )
-  suite.logger = _.Testing.logger;
-
-  suite.report = null;
-  suite.reportNew();
-
-  var onEachStage = function onEachStage( testRoutine,iteration,iterator )
+  function handleStage( testRoutine,iteration,iterator )
   {
     return suite._testRoutineRun( iteration.key,testRoutine );
+  }
+
+  function handleEnd( err,data )
+  {
+    if( err )
+    {
+      suite.report.testCaseFails += 1;
+      _.Testing.report.testCaseFails += 1;
+    }
+    _.assert( _.Testing.sanitareTime >= 0 );
+
+    return _.timeOut( _.Testing.sanitareTime/2, _.routineSeal( suite,suite._testSuiteEnd,[] ) );
   }
 
   return _.execStages( tests,
   {
     manual : 1,
-    onEachRoutine : onEachStage,
+    onEachRoutine : handleStage,
     onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
-    onEnd : _.routineJoin( suite,suite._testSuiteEnd ),
+    onEnd : handleEnd,
   });
 
 }
@@ -241,29 +288,67 @@ function _testSuiteRunAct()
 function _testSuiteBegin()
 {
   var suite = this;
-  // debugger;
+  if( suite.debug )
+  debugger;
+
+  /* logger */
+
+  if( !suite.logger )
+  suite.logger = _.Testing.logger || _global_.logger;
+  if( suite.override && suite.override.logger )
+  suite.logger = suite.override.logger;
+
+  if( _.Testing.verbosity !== null )
+  suite.verbosity = _.Testing.verbosity-1;
+  else
+  suite.verbosity = suite.verbosity;
+
+  if( _.Testing.importanceOfNegative !== null )
+  suite.importanceOfNegative = _.Testing.importanceOfNegative;
+
+  if( _.Testing.verbosityOfDetails !== null )
+  suite.verbosityOfDetails = _.Testing.verbosityOfDetails;
+
+  if( suite.override )
+  _.mapExtend( suite,suite.override );
+
+  var logger = suite.logger;
+
+  /* report */
+
+  suite.report = null;
+  suite.reportNew();
+
+  /* */
+
+  logger.verbosityPush( suite.verbosity );
+  logger.begin({ verbosity : -2 });
 
   var msg =
   [
-    'Starting testing of test suite ( ' + suite.name + ' ) ..',
+    'Testing of test suite ( ' + suite.name + ' ) ..',
   ];
 
-  suite.logger.begin({ 'suite' : suite.name });
+  logger.begin({ 'suite' : suite.name });
 
-  // debugger;
-  suite.logger.logUp( msg.join( '\n' ) );
-  // suite.logger.up();
-  suite.logger.log( _.strColor.style( 'at  ' + suite.sourceFilePath,'selected' ) );
-  // suite.logger.down();
-  suite.logger.log();
+  logger.logUp( msg.join( '\n' ) );
 
-  suite.logger.end( 'suite' );
+  logger.log( _.strColor.style( 'at  ' + suite.sourceFilePath,'selected' ) );
 
-  _.assert( !_.Testing.currentSuite );
-  _.Testing.currentSuite = suite;
+  logger.mine( 'suite.content' ).log( '' );
 
-  if( suite.onSuitBegin )
-  suite.onSuitBegin();
+  logger.end( 'suite' );
+
+  _.assert( _.Testing.activeSuites.indexOf( suite ) === -1 );
+  _.Testing.activeSuites.push( suite );
+
+  logger.end({ verbosity : -2 });
+  logger.begin({ verbosity : suite.verbosityOfDetails });
+
+  /* */
+
+  if( suite.onSuiteBegin )
+  suite.onSuiteBegin.call( suite.context,suite );
 
 }
 
@@ -272,48 +357,90 @@ function _testSuiteBegin()
 function _testSuiteEnd()
 {
   var suite = this;
+  var logger = suite.logger;
 
-  if( suite.onSuitEnd )
-  suite.onSuitEnd();
+  if( suite.onSuiteEnd )
+  suite.onSuiteEnd.call( suite.context,suite );
+
+  /* */
+
+  logger.begin({ verbosity : -2 });
+
+  if( logger._mines[ 'suite.content' ] )
+  logger.mineFinit( 'suite.content' );
+  else
+  logger.log();
+
+  /* */
 
   var ok = suite.report.testCaseFails === 0;
 
-  // var msg =
-  // [
-  //   '' + _.toStr( suite.report,{ wrap : 0, multiline : 1 } )
-  // ];
-
-  suite.logger.begin( 'suite','end' );
+  if( logger )
+  logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+  if( logger )
+  logger.begin( 'suite','end' );
 
   var msg = '';
   msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
 
-  suite.logger.log( _.strColor.style( msg,[ ok ? 'good' : 'bad' ] ) );
+  logger.log( msg );
 
   var msg =
   [
     'Test suite ( ' + suite.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + '.'
   ];
 
-  suite.logger.logDown( _.strColor.style( msg,[ ok ? 'good' : 'bad' ] ) );
+  logger.begin({ verbosity : -1 });
+  logger.logDown( msg[ 0 ] );
+  logger.end({ verbosity : -1 });
 
-  suite.logger.end( 'suite','end' );
+  logger.begin({ verbosity : -2 });
+  logger.log();
+  logger.end({ verbosity : -2 });
 
-  _.Testing.report.testSuitePasses += ok ? 1 : 0;
-  _.Testing.report.testSuiteFailes += ok ? 0 : 1;
+  logger.end( 'suite','end' );
+  logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
 
-  _.Testing.report.testRoutinePasses += suite.report.testRoutinePasses;
-  _.Testing.report.testRoutineFails += suite.report.testRoutineFails;
+  logger.end({ verbosity : -2 });
+  logger.end({ verbosity : suite.verbosityOfDetails });
+  logger.verbosityPop();
 
-  _.Testing.report.testCasePasses += suite.report.testCasePasses;
-  _.Testing.report.testCaseFails += suite.report.testCaseFails;
+  /* */
 
-  _.assert( _.Testing.currentSuite === suite );
-  _.Testing.currentSuite = null;
+  if( suite.takingIntoAccount )
+  {
 
-  // debugger;
+    _.Testing.report.testSuitePasses += ok ? 1 : 0;
+    _.Testing.report.testSuiteFailes += ok ? 0 : 1;
+
+    _.Testing.report.testRoutinePasses += suite.report.testRoutinePasses;
+    _.Testing.report.testRoutineFails += suite.report.testRoutineFails;
+
+    _.Testing.report.testCasePasses += suite.report.testCasePasses;
+    _.Testing.report.testCaseFails += suite.report.testCaseFails;
+
+  }
+
+  _.assert( _.Testing.activeSuites.indexOf( suite ) !== -1 );
+  _.arrayRemoveOnce( _.Testing.activeSuites,suite );
+
+  if( suite.debug )
+  debugger;
+
   return suite;
+}
+
+//
+
+function onSuiteBegin( t )
+{
+}
+
+//
+
+function onSuiteEnd( t )
+{
 }
 
 // --
@@ -332,7 +459,7 @@ function _testRoutineRun( name,testRoutine )
 
   /* */
 
-  return wTestSuite._routineCon
+  return suite._routineCon
   .doThen( function()
   {
 
@@ -345,11 +472,16 @@ function _testRoutineRun( name,testRoutine )
 
       try
       {
-        result = testRoutineDescriptor.routine.call( suite.special,testRoutineDescriptor );
+        result = testRoutineDescriptor.routine.call( suite.context,testRoutineDescriptor );
       }
       catch( err )
       {
-        suite.exceptionReport({ err : err , testRoutineDescriptor : testRoutineDescriptor });
+        suite.exceptionReport
+        ({
+          err : err ,
+          testRoutineDescriptor : testRoutineDescriptor,
+          usingSourceCode : 0,
+        });
       }
 
     }
@@ -360,24 +492,41 @@ function _testRoutineRun( name,testRoutine )
 
     /* */
 
-    result = wConsequence.from( result,_.Testing.testRoutineTimeOut );
+    // result = wConsequence.from( result,testRoutine.testRoutineTimeOut || _.Testing.testRoutineTimeOut );
+
+    result = wConsequence.from( result );
+    result.andThen( suite._conSyn );
+    result = result.eitherThenSplit( _.timeOutError( testRoutine.testRoutineTimeOut || _.Testing.testRoutineTimeOut ) );
 
     result.doThen( function( err,data )
     {
-      if( data === _.timeOut )
+
+      if( err )
+      if( err.timeOut )
       err = _._err
       ({
         args : [ 'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) time out!' ],
         usingSourceCode : 0,
       });
 
+      // if( err )
+      // debugger;
+
       if( err )
-      suite.exceptionReport
-      ({
-        err : err,
-        testRoutineDescriptor : testRoutineDescriptor,
-        usingSourceCode : data !== _.timeOut,
-      });
+      {
+        testRoutineDescriptor.exceptionReport
+        ({
+          err : err,
+          testRoutineDescriptor : testRoutineDescriptor,
+          usingSourceCode : 0,
+          // usingSourceCode : data !== _.timeOut,
+        });
+      }
+      else
+      {
+        testRoutineDescriptor._outcomeReportBooleanNoSource( 1,'test routine has not thrown an error' )
+      }
+
       suite._testRoutineEnd( testRoutineDescriptor,caseFails === report.testCaseFails );
     });
 
@@ -398,11 +547,13 @@ function _testRoutineBegin( testRoutineDescriptor )
     'Running test routine ( ' + testRoutineDescriptor.routine.name + ' ) ..'
   ];
 
+  suite.logger.begin({ verbosity : -4 });
+
   suite.logger.begin({ 'routine' : testRoutineDescriptor.routine.name });
-
   suite.logger.logUp( msg.join( '\n' ) );
-
   suite.logger.end( 'routine' );
+
+  suite.logger.end({ verbosity : -4 });
 
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = testRoutineDescriptor;
@@ -414,7 +565,7 @@ function _testRoutineBegin( testRoutineDescriptor )
 
 //
 
-function _testRoutineEnd( testRoutineDescriptor,success )
+function _testRoutineEnd( testRoutineDescriptor,ok )
 {
   var suite = this;
 
@@ -427,31 +578,29 @@ function _testRoutineEnd( testRoutineDescriptor,success )
   suite.report.testRoutinePasses += 1;
 
   suite.logger.begin( 'routine','end' );
+  suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
 
-  if( success )
+  suite.logger.begin({ verbosity : -3 });
+
+  if( ok )
   {
 
-    var msg =
-    [
-      'Passed test routine ( ' + testRoutineDescriptor.routine.name + ' ).'
-    ];
-    suite.logger.logDown( _.strColor.style( msg,[ 'good','neutral' ] ) );
+    suite.logger.logDown( 'Passed test routine ( ' + testRoutineDescriptor.routine.name + ' ).' );
 
   }
   else
   {
 
-    var msg =
-    [
-      'Failed test routine ( ' + testRoutineDescriptor.routine.name + ' ).'
-    ];
-    suite.logger.logDown( _.strColor.style( msg,[ 'bad','neutral' ] ) );
+    suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
+    suite.logger.logDown( 'Failed test routine ( ' + testRoutineDescriptor.routine.name + ' ).' );
+    suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   }
 
+  suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
   suite.logger.end( 'routine','end' );
 
-  suite.logger.log();
+  suite.logger.end({ verbosity : -3 });
 
   suite.currentRoutine = null;
 
@@ -461,7 +610,7 @@ function _testRoutineEnd( testRoutineDescriptor,success )
 // store
 // --
 
-function stateStore()
+function caseCurrent()
 {
   var suite = this;
   var result = Object.create( null );
@@ -471,32 +620,62 @@ function stateStore()
   result.description = suite.description;
   result._caseIndex = suite._caseIndex;
 
-  suite._storedStates = suite._storedStates || [];
-  suite._storedStates.push( result );
+  return result;
+}
 
-  // console.log( 'stateStore',result._caseIndex );
+//
+
+function caseNext( description )
+{
+  var suite = this;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  if( !suite._caseIndex )
+  suite._caseIndex = 1;
+  else
+  suite._caseIndex += 1;
+
+  if( description !== undefined )
+  suite.description = description;
+
+  return suite.caseCurrent();
+}
+
+//
+
+function caseStore()
+{
+  var suite = this;
+  var result = suite.caseCurrent();
+
+  _.assert( arguments.length === 0 );
+
+  suite._casesStack.push( result );
 
   return result;
 }
 
 //
 
-function stateRestore( state )
+function caseRestore( acase )
 {
   var suite = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  // console.log( 'stateRestore',state );
-
-  if( !state )
+  if( acase )
   {
-    _.assert( _.arrayIs( suite._storedStates ) && suite._storedStates.length, 'stateRestore : no stored state' )
-    state = suite._storedStates.pop();
+    suite.caseStore();
+  }
+  else
+  {
+    _.assert( _.arrayIs( suite._casesStack ) && suite._casesStack.length, 'caseRestore : no stored case in stack' );
+    acase = suite._casesStack.pop();
   }
 
-  suite.description = state.description;
-  suite._caseIndex = state._caseIndex;
+  suite.description = acase.description;
+  suite._caseIndex = acase._caseIndex;
 
   return suite;
 }
@@ -515,7 +694,7 @@ function shouldBe( outcome )
   if( !outcome )
   debugger;
 
-  testRoutineDescriptor.outcomeReportSpecial( outcome,'expected true' )
+  testRoutineDescriptor._outcomeReportBoolean( outcome,'expected true' )
 
   return outcome;
 }
@@ -564,7 +743,7 @@ function identical( got,expected )
 
   _.assert( options.lastPath !== undefined );
 
-  testRoutineDescriptor.outcomeReportCompare( outcome,got,expected,options.lastPath );
+  testRoutineDescriptor._outcomeReportCompare( outcome,got,expected,options.lastPath );
 
   return outcome;
 }
@@ -605,7 +784,6 @@ function identical( got,expected )
  * @memberof wTools
  */
 
-
 function equivalent( got,expected,eps )
 {
   var testRoutineDescriptor = this;
@@ -620,7 +798,7 @@ function equivalent( got,expected,eps )
 
   var outcome = _.entityEquivalent( got,expected,optionsForEntity );
 
-  testRoutineDescriptor.outcomeReportCompare( outcome,got,expected,optionsForEntity.lastPath );
+  testRoutineDescriptor._outcomeReportCompare( outcome,got,expected,optionsForEntity.lastPath );
 
   return outcome;
 }
@@ -664,90 +842,317 @@ function contain( got,expected )
 
   var outcome = _.entityContain( got,expected,options );
 
-  testRoutineDescriptor.outcomeReportCompare( outcome,got,expected,options.lastPath );
+  testRoutineDescriptor._outcomeReportCompare( outcome,got,expected,options.lastPath );
 
   return outcome;
 }
 
 //
 
-function _shouldThrowError( o )
+function _shouldDo( o )
 {
   var suite = this;
   var thrown = 0;
-  var outcome;
+  var second = 0;
+  var reported = 0;
+  var good = 1;
   var stack = _.diagnosticStack( 2,-1 );
 
-  _.assert( _.routineIs( o.routine ),'shouldThrowErrorSync expects ( o.routine ) to call' );
+  // if( o.expectingSyncError || o.expectingAsyncError )
+  // o.ignoringError = 1;
+
+  _.routineOptions( _shouldDo,o );
+  _.assert( _.routineIs( o.routine ) );
   _.assert( arguments.length === 1 );
 
-  return wTestSuite._conSyn.got( function shouldThrowErrorSync()
-  {
+  var acase = suite.caseCurrent();
+  var con = suite._conSyn;
+  con.got();
 
-    var con = this;
-    var result;
-    if( o.routine instanceof wConsequence )
+  // console.log( 'acase',acase );
+
+  /* */
+
+  function begin( positive )
+  {
+    if( positive )
+    _.assert( !reported );
+    reported = 1;
+    good = positive;
+    suite.caseRestore( acase );
+    suite.logger.begin({ verbosity : positive ? -4 : -4+suite.importanceOfNegative });
+    suite.logger.begin({ connotation : positive ? 'positive' : 'negative' });
+  }
+
+  function end( positive )
+  {
+    suite.logger.end({ verbosity : positive ? -4 : -4+suite.importanceOfNegative  });
+    suite.logger.end({ connotation : positive ? 'positive' : 'negative' });
+    suite.caseRestore();
+  }
+
+  /* */
+
+  var result;
+  if( o.routine instanceof wConsequence )
+  {
+    result = o.routine;
+  }
+  else try
+  {
+    var result = o.routine.call( this );
+  }
+  catch( err )
+  {
+    debugger;
+
+    if( o.ignoringError )
     {
-      result = o.routine;
+      begin( 1 );
+      suite._outcomeReportBoolean( 1,'error throwen synchronously, no asynchronicity',stack );
+      end( 1 );
+      con.give();
+      throw err;
     }
-    else try
+
+    begin( o.expectingSyncError );
+
+    if( !_.errIsAttended( err ) )
+    suite.logger.log( _.errAttend( err ) );
+    thrown = 1;
+
+    if( o.expectingSyncError )
+    suite._outcomeReportBoolean( o.expectingSyncError,'error thrown synchronously as expected',stack );
+    else
+    suite._outcomeReportBoolean( o.expectingSyncError,'error thrown synchronously, something wrong',stack );
+
+    end( o.expectingSyncError );
+  }
+
+  if( !o.expectingAsyncError && o.expectingSyncError && !thrown )
+  {
+    begin( 0 );
+
+    suite._outcomeReportBoolean( 0,'error not thrown synchronously, but expected',stack );
+
+    end( 0 );
+  }
+
+  /* */
+
+  if( result instanceof wConsequence )
+  {
+    result.got( function( err,data )
     {
-      result = o.routine.call( this );
-    }
-    catch( err )
-    {
-      thrown = 1;
-      if( o.allowSyncError )
-      outcome = suite.outcomeReportSpecial( 1,'error thrown ( synchronously ) by call as expected',stack );
-      else
-      outcome = suite.outcomeReportSpecial( 0,'error thrown ( synchronously ) by call, but sync error is not expected',stack );
-    }
+
+      if( !o.ignoringError && !reported )
+      if( err )
+      {
+        begin( o.expectingAsyncError );
+
+        if( !_.errIsAttended( err ) )
+        suite.logger.log( _.errAttend( err ) );
+        thrown = 1;
+
+        if( o.expectingAsyncError )
+        suite._outcomeReportBoolean( o.expectingAsyncError,'error thrown asynchronously as expected',stack );
+        else
+        suite._outcomeReportBoolean( o.expectingAsyncError,'error thrown asynchronously, not expected',stack );
+
+        end( o.expectingAsyncError );
+      }
+      else if( o.expectingAsyncError )
+      {
+        begin( !o.expectingAsyncError );
+
+        if( !o.expectingAsyncError )
+        suite._outcomeReportBoolean( !o.expectingAsyncError,'error was not thrown asynchronously as expected',stack );
+        else
+        suite._outcomeReportBoolean( !o.expectingAsyncError,'error was not thrown asynchronously, but expected',stack );
+
+        end( !o.expectingAsyncError );
+      }
+
+      // console.log( 'c acase',acase );
+
+      if( !o.allowingMultipleMessages )
+      _.timeOut( 10,function()
+      {
+        if( second || reported )
+        {
+          con.give();
+          return;
+        }
+
+        begin( 1 );
+
+        suite._outcomeReportBoolean( 1,'looks like got only one message as expected',stack );
+
+        end( 1 );
+
+        con.give();
+      });
+
+    });
 
     /* */
 
-    if( result instanceof wConsequence )
+    if( !o.allowingMultipleMessages )
+    result.doThen( function( err,data )
     {
-      result
-      .got( function( err,data )
-      {
-        if( !err )
-        {
-          outcome = suite.outcomeReportSpecial( 0,'error not thrown, but expected',stack );
-        }
-        else
-        {
-          thrown = 1;
-          if( suite.verbosity )
-          _.errLogOnce( err );
-          if( o.allowAsyncError )
-          outcome = suite.outcomeReportSpecial( 1,'error thrown( asynchronously ) as expected',stack );
-          else
-          outcome = suite.outcomeReportSpecial( 0,'error thrown( asynchronously ), but async error is not expected',stack );
-        }
-        con.give( data );
-      })
-      .doThen( function( err,data )
-      {
-        suite.outcomeReportSpecial( 0,'message sent several times, something wrong',stack );
-      });
+      if( reported && !good )
+      return;
+
+      begin( 0 );
+
+      second = 1;
+
+      suite._outcomeReportBoolean( 0,'message got several times, something wrong',stack );
+
+      end( 0 );
+    });
+  }
+  else
+  {
+    if( o.expectingAsyncError && !thrown )
+    {
+      begin( 0 );
+
+      suite._outcomeReportBoolean( 0,'error not thrown asynchronously, but expected',stack );
+
+      end( 0 );
     }
-    else
+    else if( !o.expectingSyncError && !thrown )
     {
-      if( !thrown )
-      outcome = suite.outcomeReportSpecial( 0,'error not thrown, but expected',stack );
-      con.give();
+      begin( 1 );
+
+      suite._outcomeReportBoolean( 1,'no error thrown, as expected',stack );
+
+      end( 1 );
+    }
+    else if( o.expectingAsyncError && o.expectingSyncError && !thrown )
+    {
+      begin( 0 );
+
+      suite._outcomeReportBoolean( 0,'error not thrown, but expected either synchronosuly or asynchronously',stack );
+
+      end( 0 );
     }
 
-  });
+    // else
+    // {
+    //   begin( 0 );
+    //
+    //   debugger;
+    //   suite._outcomeReportBoolean( 0,'unknown outcome',stack );
+    //
+    //   end( 0 );
+    // }
+
+    con.give();
+  }
+
+  /* */
+
+  suite.caseNext()
 
 }
 
-_shouldThrowError.defaults =
+_shouldDo.defaults =
 {
   routine : null,
-  allowSyncError : 1,
-  allowAsyncError : 1,
+  expectingSyncError : 1,
+  expectingAsyncError : 1,
+  ignoringError : 0,
+  allowingMultipleMessages : 0,
 }
+
+//
+
+// function _shouldThrowError( o )
+// {
+//   var suite = this;
+//   var thrown = 0;
+//   var outcome;
+//   var stack = _.diagnosticStack( 2,-1 );
+//
+//   _.assert( _.routineIs( o.routine ),'shouldThrowErrorSync expects ( o.routine ) to call' );
+//   _.assert( arguments.length === 1 );
+//
+//   return suite._conSyn.got( function shouldThrowErrorSync()
+//   {
+//
+//     var con = this;
+//     var result;
+//     if( o.routine instanceof wConsequence )
+//     {
+//       result = o.routine;
+//     }
+//     else try
+//     {
+//       result = o.routine.call( this );
+//     }
+//     catch( err )
+//     {
+//       thrown = 1;
+//       if( o.expectingSyncError )
+//       outcome = suite._outcomeReportBoolean( 1,'error thrown ( synchronously ) by call as expected',stack );
+//       else
+//       outcome = suite._outcomeReportBoolean( 0,'error thrown ( synchronously ) by call, but sync error is not expected',stack );
+//     }
+//
+//     /* */
+//
+//     if( result instanceof wConsequence )
+//     {
+//       result
+//       .got( function( err,data )
+//       {
+//         if( !err )
+//         {
+//           outcome = suite._outcomeReportBoolean( 0,'error not thrown, but expected',stack );
+//         }
+//         else
+//         {
+//           thrown = 1;
+//
+//           suite.logger.begin({ verbosity : -7 });
+//           suite.logger.begin({ connotation : 'positive' });
+//           if( !_.errIsAttended( err ) )
+//           suite.logger.log( _.errLog( err ) );
+//           _.errAttend( err )
+//           suite.logger.end({ verbosity : -7 });
+//           suite.logger.end({ connotation : 'positive' });
+//
+//           if( o.expectingAsyncError )
+//           outcome = suite._outcomeReportBoolean( 1,'error thrown( asynchronously ) as expected',stack );
+//           else
+//           outcome = suite._outcomeReportBoolean( 0,'error thrown( asynchronously ), but async error is not expected',stack );
+//         }
+//         con.give( data );
+//       })
+//       .doThen( function( err,data )
+//       {
+//         suite._outcomeReportBoolean( 0,'message sent several times, something wrong',stack );
+//       });
+//     }
+//     else
+//     {
+//       if( !thrown )
+//       outcome = suite._outcomeReportBoolean( 0,'error not thrown, but expected',stack );
+//       con.give();
+//     }
+//
+//   });
+//
+// }
+//
+// _shouldThrowError.defaults =
+// {
+//   routine : null,
+//   expectingSyncError : 1,
+//   expectingAsyncError : 1,
+// }
 
 //
 
@@ -755,11 +1160,11 @@ function shouldThrowErrorAsync( routine )
 {
   var suite = this;
 
-  return suite._shouldThrowError
+  return suite._shouldDo
   ({
     routine : routine,
-    allowSyncError : 0,
-    allowAsyncError : 1,
+    expectingSyncError : 0,
+    expectingAsyncError : 1,
   });
 
 }
@@ -770,11 +1175,11 @@ function shouldThrowErrorSync( routine )
 {
   var suite = this;
 
-  return suite._shouldThrowError
+  return suite._shouldDo
   ({
     routine : routine,
-    allowSyncError : 1,
-    allowAsyncError : 0,
+    expectingSyncError : 1,
+    expectingAsyncError : 0,
   });
 
 }
@@ -831,116 +1236,196 @@ function shouldThrowErrorSync( routine )
  * @memberof wTools
  */
 
-function shouldThrowError_( routine )
+function shouldThrowError( routine )
 {
   var suite = this;
 
-  return suite._shouldThrowError
+  return suite._shouldDo
   ({
     routine : routine,
-    allowSyncError : 1,
-    allowAsyncError : 1,
+    expectingSyncError : 1,
+    expectingAsyncError : 1,
   });
 
 }
 
 //
+
+// function mustNotThrowError( routine )
+// {
+//   var suite = this;
+//   var thrown = 0;
+//   var outcome;
+//   var stack = _.diagnosticStack( 1,-1 );
+//
+//   _.assert( _.routineIs( routine ) );
+//   _.assert( arguments.length === 1 );
+//
+//   var acase = suite.caseCurrent();
+//   var con = suite._conSyn;
+//   con.got();
+//
+//   /* */
+//
+//   var result;
+//   if( routine instanceof wConsequence )
+//   {
+//     result = routine;
+//   }
+//   else try
+//   {
+//     var result = routine.call( this );
+//   }
+//   catch( err )
+//   {
+//     thrown = 1;
+//     suite.logger.begin({ verbosity : -4 });
+//     suite.logger.begin({ connotation : 'negative' });
+//     if( !_.errIsAttended( err ) )
+//     suite.logger.log( _.errLog( err ) );
+//     _.errAttend( err )
+//     suite.logger.end({ verbosity : -4 });
+//     suite.logger.end({ connotation : 'negative' });
+//     outcome = suite._outcomeReportBoolean( 0,'error thrown synchronously, something wrong',stack );
+//   }
+//
+//   /* */
+//
+//   if( result instanceof wConsequence )
+//   {
+//     result
+//     .got( function( err,data )
+//     {
+//       suite.caseRestore( acase );
+//       if( err )
+//       {
+//         thrown = 1;
+//         suite.logger.begin({ verbosity : -4 });
+//         suite.logger.begin({ connotation : 'negative' });
+//         if( !_.errIsAttended( err ) )
+//         suite.logger.log( _.err( err ) );
+//         _.errAttend( err )
+//         suite.logger.end({ verbosity : -4 });
+//         suite.logger.end({ connotation : 'negative' });
+//         outcome = suite._outcomeReportBoolean( 0,'error thrown asynchronously, not expected',stack );
+//       }
+//       else
+//       {
+//         outcome = suite._outcomeReportBoolean( 1,'error not thrown',stack );
+//       }
+//       suite.caseRestore();
+//       con.give( err,data );
+//     })
+//     .doThen( function( err,data )
+//     {
+//       suite.caseRestore( acase );
+//       suite._outcomeReportBoolean( 0,'message sent several times, something wrong',stack );
+//       suite.caseRestore();
+//     });
+//   }
+//   else
+//   {
+//     con.give();
+//   }
+//
+//   /* */
+//
+//   suite.caseNext()
+//
+//   return con;
+// }
 
 function mustNotThrowError( routine )
 {
   var suite = this;
-  var thrown = 0;
-  var outcome;
-  var stack = _.diagnosticStack( 1,-1 );
 
-  _.assert( _.routineIs( routine ) )
-  _.assert( arguments.length === 1 );
-
-  return wTestSuite._conSyn.got( function shouldThrowErrorSync()
-  {
-
-    var con = this;
-    var result;
-    if( routine instanceof wConsequence )
-    {
-      result = routine;
-    }
-    else try
-    {
-      var result = routine.call( this );
-    }
-    catch( err )
-    {
-      thrown = 1;
-      _.errLogOnce( err );
-      outcome = suite.outcomeReportSpecial( 0,'error thrown by call, something wrong',stack );
-    }
-
-    /* */
-
-    if( result instanceof wConsequence )
-    {
-      result
-      .got( function( err,data )
-      {
-        if( err )
-        {
-          thrown = 1;
-          _.errLogOnce( err );
-          outcome = suite.outcomeReportSpecial( 0,'error thrown by consequence, not expected',stack );
-        }
-        else
-        {
-          outcome = suite.outcomeReportSpecial( 1,'error not thrown',stack );
-        }
-        con.give( err,data );
-      })
-      .doThen( function( err,data )
-      {
-        suite.outcomeReportSpecial( 0,'message sent several times, something wrong',stack );
-      });
-    }
-    else
-    {
-      con.give();
-    }
-
+  return suite._shouldDo
+  ({
+    routine : routine,
+    ignoringError : 0,
+    expectingSyncError : 0,
+    expectingAsyncError : 0,
   });
 
 }
 
 //
 
-function shouldMessageOnlyOnce( con )
+function shouldMessageOnlyOnce( routine )
 {
   var suite = this;
-  var result = new wConsequence();
 
-  _.assert( arguments.length === 1 );
-  _.assert( con instanceof wConsequence );
-
-  var state = suite.stateStore();
-  var stack = _.diagnosticStack( 1,-1 );
-
-  con
-  .got( function( err,data )
-  {
-    _.timeOut( 10, function()
-    {
-      suite.outcomeReportSpecial( 1,'message thrown at least once',stack );
-      result.give( err,data );
-    });
-  })
-  .doThen( function( err,data )
-  {
-    // suite.stateStore();
-    // suite.stateRestore( state );
-    suite.outcomeReportSpecial( 0,'consequence got several messages, expected only one',stack );
-    // suite.stateRestore();
+  return suite._shouldDo
+  ({
+    routine : routine,
+    ignoringError : 1,
+    expectingSyncError : 0,
+    expectingAsyncError : 0,
   });
 
-  return result;
 }
+
+// function shouldMessageOnlyOnce( con )
+// {
+//   var suite = this;
+//   var result = new wConsequence();
+//
+//   _.assert( arguments.length === 1 );
+//   _.assert( con instanceof wConsequence );
+//
+//   // var state = suite.caseStore();
+//   var stack = _.diagnosticStack( 1,-1 );
+//
+//   con
+//   .got( function( err,data )
+//   {
+//     _.timeOut( 10, function()
+//     {
+//
+//       suite.caseRestore( acase );
+//
+//       suite.logger.begin({ verbosity : -4+suite.importanceOfNegative });
+//       suite.logger.begin({ connotation : 'negative' });
+//
+//       if( !_.errIsAttended( err ) )
+//       suite.logger.log( _.errAttend( err ) );
+//       thrown = 1;
+//
+//       suite._outcomeReportBoolean( 0,'message sent several times, something wrong',stack );
+//
+//       suite.logger.end({ verbosity : -4+suite.importanceOfNegative  });
+//       suite.logger.end({ connotation : 'negative' });
+//
+//       suite.caseRestore();
+//
+//       // suite._outcomeReportBoolean( 1,'message thrown at least once',stack );
+//       result.give( err,data );
+//     });
+//   })
+//   .doThen( function( err,data )
+//   {
+//     suite.caseRestore( acase );
+//
+//     suite.logger.begin({ verbosity : -4+suite.importanceOfNegative });
+//     suite.logger.begin({ connotation : 'negative' });
+//
+//     suite._outcomeReportBoolean( 0,'consequence got several messages, expected only one',stack );
+//
+//     suite.logger.end({ verbosity : -4+suite.importanceOfNegative  });
+//     suite.logger.end({ connotation : 'negative' });
+//
+//     suite.caseRestore();
+//
+//     // suite.caseStore();
+//     // suite.caseRestore( state );
+//     // suite._outcomeReportBoolean( 0,'consequence got several messages, expected only one',stack );
+//     // suite.caseRestore();
+//
+//     this.give( err,data );
+//   });
+//
+//   return result;
+// }
 
 // --
 // output
@@ -949,11 +1434,6 @@ function shouldMessageOnlyOnce( con )
 function _outcomeReporting( outcome )
 {
   var testRoutineDescriptor = this;
-
-  if( !testRoutineDescriptor._caseIndex )
-  testRoutineDescriptor._caseIndex = 1;
-  else
-  testRoutineDescriptor._caseIndex += 1;
 
   if( outcome )
   {
@@ -966,6 +1446,8 @@ function _outcomeReporting( outcome )
     testRoutineDescriptor.suite.report.testCaseFails += 1;
   }
 
+  testRoutineDescriptor.caseNext();
+
   _.assert( arguments.length === 1 );
 
 }
@@ -975,63 +1457,103 @@ function _outcomeReporting( outcome )
 function _outcomeReport( o )
 {
   var testRoutineDescriptor = this;
+  var logger = testRoutineDescriptor.logger;
+  var sourceCode = '';
 
   _.routineOptions( _outcomeReport,o );
   _.assert( arguments.length === 1 );
 
-  testRoutineDescriptor.logger.begin({ 'case' : testRoutineDescriptor.description || testRoutineDescriptor._caseIndex });
-  testRoutineDescriptor.logger.begin({ 'caseIndex' : testRoutineDescriptor._caseIndex });
+  /* */
 
-  testRoutineDescriptor._outcomeReporting( o.outcome );
-
-  if( o.outcome )
+  function sourceCodeGet()
   {
-
-    if( testRoutineDescriptor.verbosity )
-    {
-
-      testRoutineDescriptor.logger.up();
-      if( o.details )
-      testRoutineDescriptor.logger.begin( 'details' ).log( o.details ).end( 'details' );
-
-      o.msg = _.strColor.style( o.msg,'good' );
-
-      testRoutineDescriptor.logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
-      testRoutineDescriptor.logger.log();
-
-    }
-
-  }
-  else
-  {
-
     var code;
     if( testRoutineDescriptor.usingSourceCode && o.usingSourceCode )
     {
-      var _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 3 });
-      var _code = _.diagnosticCode({ location : _location });
+      var _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 4 });
+      var _code = _.diagnosticCode
+      ({
+        location : _location,
+        selectMode : 'end',
+        numberOfLines : 5,
+      });
       if( _code )
       code = '\n' + _location.full + '\n' + _code;
       else
       code = '\n' + _location.full;
     }
-
-    testRoutineDescriptor.logger.logUp();
-    if( o.details )
-    testRoutineDescriptor.logger.begin( 'details' ).error( o.details ).end( 'details' );
-
-    if( code )
-    testRoutineDescriptor.logger.begin( 'source' ).error( code ).end( 'source' );
-
-    o.msg = _.strColor.style( o.msg,'bad' )
-
-    testRoutineDescriptor.logger.begin( 'message' ).errorDown( o.msg ).end( 'message' );
-    testRoutineDescriptor.logger.log();
-
-    debugger;
+    return code;
   }
 
-  testRoutineDescriptor.logger.end( 'case','caseIndex' );
+  /* */
+
+  logger.begin({ verbosity : -5 });
+  logger.begin({ 'case' : testRoutineDescriptor.description || testRoutineDescriptor._caseIndex });
+  logger.begin({ 'caseIndex' : testRoutineDescriptor._caseIndex });
+
+  testRoutineDescriptor._outcomeReporting( o.outcome );
+
+  // debugger;
+  if( o.outcome )
+  {
+    logger.begin({ verbosity : -5 });
+    logger.up();
+    logger.begin({ 'connotation' : 'positive' });
+
+    logger.begin({ verbosity : -6 });
+
+    if( o.details )
+    logger.begin( 'details' ).log( o.details ).end( 'details' );
+
+    sourceCode = sourceCodeGet();
+    if( sourceCode )
+    logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+
+    logger.end({ verbosity : -6 });
+
+    logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+
+    logger.end({ 'connotation' : 'positive' });
+    if( logger.verbosityReserve() > 1 )
+    logger.log();
+
+    logger.end({ verbosity : -5 });
+  }
+  else
+  {
+
+    sourceCode = sourceCodeGet();
+
+    logger.begin({ verbosity : -5+testRoutineDescriptor.importanceOfNegative });
+
+    logger.up();
+    if( logger.verbosityReserve() > 1 )
+    logger.log();
+    logger.begin({ 'connotation' : 'negative' });
+
+    logger.begin({ verbosity : -6+testRoutineDescriptor.importanceOfNegative });
+
+    if( o.details )
+    logger.begin( 'details' ).log( o.details ).end( 'details' );
+
+    if( sourceCode )
+    logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+
+    logger.end({ verbosity : -6+testRoutineDescriptor.importanceOfNegative });
+
+    logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+
+    logger.end({ 'connotation' : 'negative' });
+    if( logger.verbosityReserve() > 1 )
+    logger.log();
+
+    logger.end({ verbosity : -5+testRoutineDescriptor.importanceOfNegative });
+
+    /*debugger;*/
+  }
+
+  logger.end( 'case','caseIndex' );
+  logger.end({ verbosity : -5 });
 
 }
 
@@ -1046,7 +1568,7 @@ _outcomeReport.defaults =
 
 //
 
-function outcomeReportSpecial( outcome,msg,stack )
+function _outcomeReportBoolean( outcome,msg,stack )
 {
   var testRoutineDescriptor = this;
 
@@ -1066,7 +1588,27 @@ function outcomeReportSpecial( outcome,msg,stack )
 
 //
 
-function outcomeReportCompare( outcome,got,expected,path )
+function _outcomeReportBooleanNoSource( outcome,msg )
+{
+  var testRoutineDescriptor = this;
+
+  _.assert( arguments.length === 2 );
+
+  msg = testRoutineDescriptor._currentTestCaseTextGet( outcome,msg );
+
+  testRoutineDescriptor._outcomeReport
+  ({
+    outcome : outcome,
+    msg : msg,
+    details : '',
+    usingSourceCode : 0,
+  });
+
+}
+
+//
+
+function _outcomeReportCompare( outcome,got,expected,path )
 {
   var testRoutineDescriptor = this;
 
@@ -1125,7 +1667,7 @@ function outcomeReportCompare( outcome,got,expected,path )
       details : details,
     });
 
-    debugger;
+    // debugger;
   }
 
 }
@@ -1142,13 +1684,8 @@ function exceptionReport( o )
   if( o.testRoutineDescriptor.onError )
   o.testRoutineDescriptor.onError.call( suite,o.testRoutineDescriptor );
 
-  var msg =
-  [
-    o.testRoutineDescriptor._currentTestCaseTextGet() +
-    ' ... failed throwing error'
-  ];
-
-  var err = _.err( o.err );
+  var msg = o.testRoutineDescriptor._currentTestCaseTextGet() + ' ... failed throwing error';
+  var err = _.errAttend( o.err );
   var details = err.toString();
 
   o.testRoutineDescriptor._outcomeReport
@@ -1185,9 +1722,10 @@ function _currentTestCaseTextGet( value,hint )
   _.assert( testRoutineDescriptor._caseIndex >= 0 );
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine descriptor should have name' );
 
+  var name = testRoutineDescriptor.routine.name + ( testRoutineDescriptor.description ? ' : ' + testRoutineDescriptor.description : '' );
+
   var result = '' +
-    'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) : ' +
-    'test case' + ( testRoutineDescriptor.description ? ( ' ( ' + testRoutineDescriptor.description + ' )' ) : '' ) +
+    'Test case' + ' ( ' + name + ' )' +
     ' # ' + testRoutineDescriptor._caseIndex
   ;
 
@@ -1206,6 +1744,12 @@ function _currentTestCaseTextGet( value,hint )
 }
 
 // --
+// var
+// --
+
+var symbolForVerbosity = Symbol.for( 'verbosity' );
+
+// --
 // relationships
 // --
 
@@ -1215,15 +1759,32 @@ var Composes =
   sourceFilePath : null,
   tests : null,
 
-  verbosity : 0,
+  verbosity : 2,
+  importanceOfNegative : 0,
+  verbosityOfDetails : -4,
+
   abstract : 0,
+  enabled : 1,
+  safe : 1,
+  takingIntoAccount : 1,
 
   usingSourceCode : 1,
 
-  safe : 1,
   eps : 1e-5,
-
   report : null,
+
+  concurrent : null,
+  testRoutineTimeOut : null,
+  debug : 0,
+
+  override : Object.create( null ),
+  _casesStack : [],
+
+  _routineCon : new wConsequence().give(),
+  _conSyn : new wConsequence().give(),
+
+  onSuiteBegin : onSuiteBegin,
+  onSuiteEnd : onSuiteEnd,
 
 }
 
@@ -1233,8 +1794,8 @@ var Aggregates =
 
 var Associates =
 {
-  logger : logger,
-  special : null,
+  logger : null,
+  context : null,
 }
 
 var Restricts =
@@ -1249,8 +1810,6 @@ var Statics =
 {
   usingUniqueNames : 1,
   _suiteCon : new wConsequence().give(),
-  _routineCon : new wConsequence().give(),
-  _conSyn : new wConsequence().give(),
 }
 
 // --
@@ -1271,15 +1830,20 @@ var Proto =
 
   _registerSuites : _registerSuites,
   reportNew : reportNew,
+  // _verbositySet : _verbositySet,
 
 
   // test suite run
 
+  run : _testSuiteRunNow,
   _testSuiteRunLater : _testSuiteRunLater,
   _testSuiteRunNow : _testSuiteRunNow,
   _testSuiteRunAct : _testSuiteRunAct,
   _testSuiteBegin : _testSuiteBegin,
   _testSuiteEnd : _testSuiteEnd,
+
+  onSuiteBegin : onSuiteBegin,
+  onSuiteEnd : onSuiteEnd,
 
 
   // test routine run
@@ -1289,10 +1853,12 @@ var Proto =
   _testRoutineEnd : _testRoutineEnd,
 
 
-  // state
+  // case
 
-  stateStore : stateStore,
-  stateRestore : stateRestore,
+  caseCurrent : caseCurrent,
+  caseNext : caseNext,
+  caseStore : caseStore,
+  caseRestore : caseRestore,
 
 
   // equalizer
@@ -1302,11 +1868,11 @@ var Proto =
   equivalent : equivalent,
   contain : contain,
 
-  _shouldThrowError : _shouldThrowError,
+  _shouldDo : _shouldDo,
+
   shouldThrowErrorSync : shouldThrowErrorSync,
   shouldThrowErrorAsync : shouldThrowErrorAsync,
-  shouldThrowError_ : shouldThrowError_,
-
+  shouldThrowError : shouldThrowError,
   mustNotThrowError : mustNotThrowError,
   shouldMessageOnlyOnce : shouldMessageOnlyOnce,
 
@@ -1316,8 +1882,9 @@ var Proto =
   _outcomeReporting : _outcomeReporting,
   _outcomeReport : _outcomeReport,
 
-  outcomeReportSpecial : outcomeReportSpecial,
-  outcomeReportCompare : outcomeReportCompare,
+  _outcomeReportBoolean : _outcomeReportBoolean,
+  _outcomeReportBooleanNoSource : _outcomeReportBooleanNoSource,
+  _outcomeReportCompare : _outcomeReportCompare,
 
   exceptionReport : exceptionReport,
 
@@ -1349,11 +1916,19 @@ wInstancing.mixin( Self );
 
 //
 
+// _.accessor
+// ({
+//   object : Self.prototype,
+//   prime : 1,
+//   names : { verbosity : verbosity },
+// });
+
+//
+
 _.accessorForbid( Self.prototype,
 {
   options : 'options',
-  // suite : 'suite',
-  context : 'context',
+  special : 'special',
 });
 
 // export

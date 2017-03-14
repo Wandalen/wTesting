@@ -58,15 +58,7 @@ echo $?
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wTesting === 'undefined' )
-  try
-  {
-    require( './Testing.debug.s' );
-  }
-  catch( err )
-  {
-    require( 'wTesting' );
-  }
+  require( './Testing.debug.s' );
 
   var _ = wTools;
 
@@ -966,7 +958,7 @@ var Self =
 
   debug : 1,
   name : 'TestingOfTesting',
-  verbosityOfDetails : 0,
+  // verbosityOfDetails : 0,
 
   tests :
   {

@@ -27,7 +27,21 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = wTools;
-var sourceFilePath = _.diagnosticLocation().full; // typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
+var sourceFilePath = _.diagnosticLocation().full;
+var sourceFileStack = _.diagnosticStack();
+
+if( _.Testing._isFullImplementation )
+{
+  console.log( 'WARING : wTesting included several times!' );
+  console.log( '' );
+  console.log( 'First time' );
+  console.log( _.Testing.sourceFileStack );
+  console.log( '' );
+  console.log( 'Second time' );
+  console.log( sourceFileStack );
+  console.log( '' );
+  return;
+}
 
 // if( !_.toStr )
 // _.toStr = function(){ return String( arguments ) };
@@ -684,7 +698,8 @@ var Self =
   includeFails : [],
 
   sourceFilePath : sourceFilePath,
-  _full : 0,
+  sourceFileStack : sourceFileStack,
+  _isFullImplementation : 1,
   _registerHookDone : 0,
 
   _bar : null,

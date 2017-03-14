@@ -24,8 +24,6 @@ if( typeof module !== 'undefined' )
 
 }
 
-console.log( _.diagnosticStack() );
-
 //
 
 var logger = null;
@@ -337,17 +335,22 @@ function _testSuiteBegin()
 
   logger.log( _.strColor.style( 'at  ' + suite.sourceFilePath,'selected' ) );
 
-  logger.mine( 'suite.content' ).log( '' );
-
   logger.end( 'suite' );
 
-  _.assert( _.Testing.activeSuites.indexOf( suite ) === -1 );
-  _.Testing.activeSuites.push( suite );
+  logger.mine( 'suite.content' ).log( '' );
 
   logger.end({ verbosity : -2 });
+
+  logger.begin({ verbosity : -6 });
+  logger.log( _.toStr( suite ) );
+  logger.end({ verbosity : -6 });
+
   logger.begin({ verbosity : suite.verbosityOfDetails });
 
   /* */
+
+  _.assert( _.Testing.activeSuites.indexOf( suite ) === -1 );
+  _.Testing.activeSuites.push( suite );
 
   if( suite.onSuiteBegin )
   suite.onSuiteBegin.call( suite.context,suite );

@@ -1061,6 +1061,7 @@ function _shouldDo( o )
 
   suite.caseNext()
 
+  return con.splitThen();
 }
 
 _shouldDo.defaults =

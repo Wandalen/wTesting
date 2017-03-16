@@ -20,6 +20,8 @@ if( typeof module !== 'undefined' )
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
 
+  _.includeAny( 'wEventHandler','' );
+
   _.include( 'wConsequence' );
   _.include( 'wFiles' );
   _.include( 'wLogger' );
@@ -64,18 +66,30 @@ function exec()
     _.assert( arguments.length === 0 );
 
     var appArgs = testing.applyAppArgs();
-    var path = appArgs.subject || _.pathCurrent();
 
+    logger.verbosityPush( testing.verbosity === null ? testing._defaultVerbosity : testing.verbosity );
+
+    var path = appArgs.subject || _.pathCurrent();
     path = _.pathJoin( _.pathCurrent(),path );
 
     testing.includeTestsFrom( path );
+
+    logger.verbosityPop();
+
+    if( [ 'test','suites.list' ].indexOf( testing.scenario ) === -1 )
+    throw _.errBriefly( 'Unknown scenario',testing.scenario );
+
+    if( testing.scenario === 'test' )
     testing.testAll();
+    else if( testing.scenario === 'suites.list' )
+    testing.testsList( testing.testsFilterOut() );
 
   }
   catch( err )
   {
     err = _.errLogOnce( err );
     process.exitCode = -1;
+    return;
     throw err;
   }
 
@@ -140,9 +154,15 @@ function includeTestsFrom( path )
     }
     catch( err )
     {
-      err = _.err( err );
+      err = _.errAttend( 'Cant include',absolutePath + '\n',err );
       testing.includeFails.push( err );
-      _.errLog( _.errBriefly( err ) );
+      // console.log( 'logger.verbosity',logger.verbosity );
+
+      if( logger.verbosity < 3 )
+      logger.log( _.errBriefly( err ) );
+      else
+      logger.log( err );
+
     }
 
     // if( hadTestCases === _.mapKeys( wTests ).length )
@@ -182,16 +202,18 @@ function _testAllAct()
 
   _.assert( arguments.length === 0 );
 
-  var suites = _.entityFilter( wTests,function( suite )
-  {
-    if( suite.abstract )
-    return;
-    if( suite.enabled !== undefined && !suite.enabled )
-    return;
-    return suite;
-  });
+  // var suites = _.entityFilter( wTests,function( suite )
+  // {
+  //   if( suite.abstract )
+  //   return;
+  //   if( suite.enabled !== undefined && !suite.enabled )
+  //   return;
+  //   return suite;
+  // });
 
-  testing._testingBegin();
+  var suites = testing.testsFilterOut( wTests );
+
+  testing._testingBegin( suites );
 
   for( var t in suites )
   {
@@ -226,8 +248,8 @@ function _testAct()
     var suite = wTestSuite.instanceByName( _suite );
 
     _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
-    _.assert( _.strIsNotEmpty( suite.name ),'test suite should has ( name )' );
-    _.assert( _.objectIs( suite.tests ),'test suite should has map with test routines ( tests )' );
+    _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
+    _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have it' );
 
     suite._testSuiteRunLater();
   }
@@ -245,20 +267,22 @@ function _test()
   if( arguments.length === 0 )
   return testing._testAllAct();
 
-  var suites = _.entityFilter( arguments,function( suite )
-  {
-    if( _.strIs( suite ) )
-    {
-      if( !wTests[ suite ] )
-      throw _.err( 'Testing : test suite',suite,'not found' );
-      suite = wTests[ suite ];
-    }
-    if( suite.abstract )
-    return;
-    if( suite.enabled !== undefined && !suite.enabled )
-    return;
-    return suite;
-  });
+  var suites = testing.testsFilterOut( arguments );
+
+  // var suites = _.entityFilter( arguments,function( suite )
+  // {
+  //   if( _.strIs( suite ) )
+  //   {
+  //     if( !wTests[ suite ] )
+  //     throw _.err( 'Testing : test suite',suite,'not found' );
+  //     suite = wTests[ suite ];
+  //   }
+  //   if( suite.abstract )
+  //   return;
+  //   if( suite.enabled !== undefined && !suite.enabled )
+  //   return;
+  //   return suite;
+  // });
 
   // console.log( 'suites',_.entityLength( suites ) );
 
@@ -287,10 +311,10 @@ function _testingBegin( tests )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  if( !testing.logger )
-  {
-    logger = testing.logger = new wLogger({ name : 'LoggerForTesting' });
-  }
+  // if( !testing.logger )
+  // {
+  //   logger = testing.logger = new wLogger({ name : 'LoggerForTesting' });
+  // }
 
   testing.applyAppArgs();
   testing.registerHook();
@@ -300,6 +324,7 @@ function _testingBegin( tests )
     logger.begin({ verbosity : -8 });
     logger.log( 'Barring console' );
     logger.end({ verbosity : -8 });
+    if( !wLogger.consoleIsBarred( console ) )
     testing._bar = wLogger.consoleBar({ outputLogger : logger, bar : 1 });
   }
 
@@ -309,19 +334,19 @@ function _testingBegin( tests )
   logger.log( '' );
   logger.end({ verbosity : -4 });
 
-  logger.verbosityPush( testing.verbosity === null ? 2 : testing.verbosity );
+  logger.verbosityPush( testing.verbosity === null ? testing._defaultVerbosity : testing.verbosity );
   logger.begin({ verbosity : -2 });
 
   if( tests !== undefined )
   {
-    logger.logUp( 'Launching several ( ' + tests.length + ' ) test suites ..' );
-    logger.log( _.entitySelect( tests,'*.name' ) );
+    logger.logUp( 'Launching several ( ' + _.entityLength( tests ) + ' ) test suites ..' );
+    testing.testsList( tests );
   }
   else
   {
     debugger;
     logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suites ..' );
-    logger.log( _.entitySelect( _.mapValues( wTests ),'*.sourceFilePath' ).join( '\n' ) );
+    testing.testsList( tests );
   }
 
   logger.log();
@@ -371,11 +396,62 @@ function _testingEnd()
   // logger._verbosityReport();
   // console.log( 'testing.logger',testing.logger );
 
-  if( testing.barringConsole )
+  if( testing.barringConsole && wLogger.consoleIsBarred( console ) )
   {
     testing._bar.bar = 0;
     wLogger.consoleBar( testing._bar );
   }
+
+}
+
+//
+
+function testsFilterOut( suites )
+{
+  var testing = this;
+  var logger = testing.logger;
+
+  // console.log( suites );
+
+  _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
+
+  var suites = suites || wTests;
+
+  var suites = _.entityFilter( suites,function( suite )
+  {
+    if( _.strIs( suite ) )
+    {
+      if( !wTests[ suite ] )
+      throw _.err( 'Testing : test suite',suite,'not found' );
+      suite = wTests[ suite ];
+    }
+    if( suite.abstract )
+    return;
+    if( suite.enabled !== undefined && !suite.enabled )
+    return;
+    return suite;
+  });
+
+  // debugger;
+
+  return suites;
+}
+
+//
+
+function testsList( suites )
+{
+  var testing = this;
+  var logger = testing.logger;
+  var suites = suites || wTests;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  logger.log( _.entitySelect( _.mapValues( suites ),'*.sourceFilePath' ).join( '\n' ) );
+
+  var l = _.entityLength( suites );
+
+  logger.log( l, l > 1 ? 'test suites' : 'test suite' );
 
 }
 
@@ -418,108 +494,6 @@ function _verbositySet( src )
   suite.logger.verbosity = src;
 
 }
-
-//
-
-// function _consoleBar( src )
-// {
-//   var testing = this;
-//   var logger = testing.logger;
-//
-//   _.assert( arguments.length === 1 || arguments.length === 2 );
-//
-//   if( src === undefined )
-//   src = 1;
-//
-//   _.assert( !!testing.barred !== !!src );
-//
-//   testing.barred = src;
-//
-//   if( src )
-//   {
-//
-//     logger.begin({ verbosity : -4 });
-//     logger.log( 'Shutting console' );
-//     logger.end({ verbosity : -4 });
-//
-//     _.assert( !testing._barLogger.inputs.length );
-//     _.assert( !testing._barLogger.outputs.length );
-//
-//     testing._loggerWasChainedToConsole = logger.outputUnchain( testing._originalConsole );
-//     logger.outputTo( testing._originalConsole,{ unbarring : 1, combining : 'rewrite' } );
-//
-//     testing._barLogger.permanentStyle = { bg : 'yellow' };
-//     testing._barLogger.inputFrom( testing._originalConsole,{ barring : 1 } );
-//     testing._barLogger.outputTo( logger );
-//
-//     // testing._barLogger.log( '_barLogger' );
-//     // logger.log( 'logger' );
-//
-//   }
-//   else
-//   {
-//
-//     debugger;
-//
-//     testing._barLogger.unchain();
-//
-//     logger.outputUnchain( testing._originalConsole );
-//     if( testing._loggerWasChainedToConsole )
-//     logger.outputTo( testing._originalConsole );
-//
-//     debugger;
-//
-//     testing._barLogger.log( '_barLogger' );
-//     logger.log( 'logger' );
-//
-//     debugger;
-//   }
-//
-// /*
-//
-//      barring         unbarring
-// console -> bar -> logger -> console
-//   ^
-//   |
-// others
-//
-// unbarring link is not transitive, but terminating
-// so no cycle
-//
-// */
-//
-// }
-
-//
-
-// function consoleBar( ownerName,src )
-// {
-//   var testing = this;
-//
-//   _.assert( arguments.length === 2 );
-//
-//   if( src )
-//   {
-//     _.assert( !testing._barringSuites[ ownwerName ] );
-//     testing._barringSuites[ ownwerName ] = src;
-//   }
-//   else
-//   {
-//     _.assert( testing._barringSuites[ ownwerName ] );
-//     delete testing._barringSuites[ ownwerName ];
-//   }
-//
-//   if( src && !testing.barred )
-//   {
-//     testing._consoleBar( ownerName,src );
-//   }
-//   else if( !src && testing.barred && _.mapKeys( testing._barringSuites ) === 0 )
-//   {
-//     testing._consoleBar( ownerName,src );
-//   }
-//
-//   return testing;
-// }
 
 // --
 // report generator
@@ -647,9 +621,9 @@ var Options =
   verbosity : null,
   verbosityOfDetails : null,
   importanceOfNegative : null,
-  logger : null,
   concurrent : 0,
   barringConsole : 1,
+  scenario : 'test',
 }
 
 // --
@@ -679,6 +653,9 @@ var Self =
   _testingBegin : _testingBegin,
   _testingEnd : _testingEnd,
 
+  testsFilterOut : testsFilterOut,
+  testsList : testsList,
+
 
   // etc
 
@@ -693,6 +670,8 @@ var Self =
 
   // var
 
+  logger : new wLogger({ name : 'LoggerForTesting' }),
+
   activeSuites : [],
   report : null,
   includeFails : [],
@@ -701,6 +680,7 @@ var Self =
   sourceFileStack : sourceFileStack,
   _isFullImplementation : 1,
   _registerHookDone : 0,
+  _defaultVerbosity : 2,
 
   _bar : null,
 

@@ -23,7 +23,7 @@
     "production"
   ],
   "scripts": {
-    "test": "node ./staging/abase/x"
+    "test": "wtest staging"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,9 @@
     "winstancing": "",
     "wConsequence": "",
     "wLogger": ""
+  },
+  "optionalDependencies": {
+    "wEventHandler": ""
   },
   "devDependencies": {
     "wTesting": ""

@@ -500,7 +500,12 @@ function _testRoutineRun( name,testRoutine )
     // result = wConsequence.from( result,testRoutine.testRoutineTimeOut || _.Testing.testRoutineTimeOut );
 
     result = wConsequence.from( result );
+
+    //result = result.after
     result.andThen( suite._conSyn );
+
+    // result.
+
     result = result.eitherThenSplit( _.timeOutError( testRoutine.testRoutineTimeOut || _.Testing.testRoutineTimeOut ) );
 
     result.doThen( function( err,data )
@@ -566,6 +571,9 @@ function _testRoutineBegin( testRoutineDescriptor )
   suite.currentRoutineFails = 0;
   suite.currentRoutinePasses = 0;
 
+  if( _.mixinHas( Self,'wEventHandler' ) )
+  testRoutineDescriptor.eventGive({ kind : 'routineBegin', testRoutine : testRoutineDescriptor });
+
 }
 
 //
@@ -576,6 +584,12 @@ function _testRoutineEnd( testRoutineDescriptor,ok )
 
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === testRoutineDescriptor );
+
+  if( _.mixinHas( Self,'wEventHandler' ) )
+  testRoutineDescriptor.eventGive({ kind : 'routineEnd', testRoutine : testRoutineDescriptor });
+
+  if( !suite.currentRoutinePasses )
+  suite.currentRoutineFails += 1;
 
   if( suite.currentRoutineFails )
   suite.report.testRoutineFails += 1;
@@ -699,9 +713,21 @@ function shouldBe( outcome )
   if( !outcome )
   debugger;
 
-  testRoutineDescriptor._outcomeReportBoolean( outcome,'expected true' )
+  testRoutineDescriptor._outcomeReportBoolean( outcome,'expected true' );
 
   return outcome;
+}
+
+//
+
+function shouldBeNotError( maybeErrror )
+{
+
+  _.assert( arguments.length === 1,'shouldBeNotError expects single argument' );
+
+  if( _.errIs( maybeErrror ) )
+  testRoutineDescriptor._outcomeReportBoolean( outcome,'expected true' );
+
 }
 
 //
@@ -885,13 +911,13 @@ function _shouldDo( o )
     reported = 1;
     good = positive;
     suite.caseRestore( acase );
-    suite.logger.begin({ verbosity : positive ? -4 : -4+suite.importanceOfNegative });
+    suite.logger.begin({ verbosity : positive ? -5 : -5+suite.importanceOfNegative });
     suite.logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
   function end( positive )
   {
-    suite.logger.end({ verbosity : positive ? -4 : -4+suite.importanceOfNegative  });
+    suite.logger.end({ verbosity : positive ? -5 : -5+suite.importanceOfNegative  });
     suite.logger.end({ connotation : positive ? 'positive' : 'negative' });
     suite.caseRestore();
   }
@@ -1493,7 +1519,7 @@ function _outcomeReport( o )
 
   /* */
 
-  logger.begin({ verbosity : -5 });
+  logger.begin({ verbosity : -4 });
   logger.begin({ 'case' : testRoutineDescriptor.description || testRoutineDescriptor._caseIndex });
   logger.begin({ 'caseIndex' : testRoutineDescriptor._caseIndex });
 
@@ -1502,7 +1528,7 @@ function _outcomeReport( o )
   // debugger;
   if( o.outcome )
   {
-    logger.begin({ verbosity : -5 });
+    logger.begin({ verbosity : -4 });
     logger.up();
     logger.begin({ 'connotation' : 'positive' });
 
@@ -1523,14 +1549,14 @@ function _outcomeReport( o )
     if( logger.verbosityReserve() > 1 )
     logger.log();
 
-    logger.end({ verbosity : -5 });
+    logger.end({ verbosity : -4 });
   }
   else
   {
 
     sourceCode = sourceCodeGet();
 
-    logger.begin({ verbosity : -5+testRoutineDescriptor.importanceOfNegative });
+    logger.begin({ verbosity : -4+testRoutineDescriptor.importanceOfNegative });
 
     logger.up();
     if( logger.verbosityReserve() > 1 )
@@ -1553,13 +1579,13 @@ function _outcomeReport( o )
     if( logger.verbosityReserve() > 1 )
     logger.log();
 
-    logger.end({ verbosity : -5+testRoutineDescriptor.importanceOfNegative });
+    logger.end({ verbosity : -4+testRoutineDescriptor.importanceOfNegative });
 
     /*debugger;*/
   }
 
   logger.end( 'case','caseIndex' );
-  logger.end({ verbosity : -5 });
+  logger.end({ verbosity : -4 });
 
 }
 
@@ -1767,7 +1793,7 @@ var Composes =
 
   verbosity : 2,
   importanceOfNegative : 0,
-  verbosityOfDetails : -4,
+  verbosityOfDetails : -6,
 
   abstract : 0,
   enabled : 1,
@@ -1870,9 +1896,11 @@ var Proto =
   // equalizer
 
   shouldBe : shouldBe,
+  shouldBeNotError : shouldBeNotError,
   identical : identical,
   equivalent : equivalent,
   contain : contain,
+
 
   _shouldDo : _shouldDo,
 
@@ -1919,6 +1947,8 @@ _.protoMake
 
 wCopyable.mixin( Self );
 wInstancing.mixin( Self );
+if( _.EventHandler )
+_.EventHandler.mixin( Self );
 
 //
 

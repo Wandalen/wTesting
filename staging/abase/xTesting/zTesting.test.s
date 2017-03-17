@@ -116,7 +116,9 @@ function identical( test )
   function r1( t )
   {
 
-    counter.testRoutine = t;
+    testRoutine = t;
+
+    console.log( 'testRoutine',testRoutine );
 
     t.identical( 0,0 );
     test.identical( t.report.testCasePasses, 1 );
@@ -138,8 +140,8 @@ function identical( test )
   .doThen( function( err,data )
   {
 
-    counter.acase = counter.testRoutine.caseCurrent();
-    test.identical( counter.acase._caseIndex, 5 );
+    var acase = testRoutine.caseCurrent();
+    test.identical( acase._caseIndex, 5 );
     test.identical( t.report.testCasePasses, 2 );
     test.identical( t.report.testCaseFails, 2 );
 
@@ -150,7 +152,9 @@ function identical( test )
   return result;
 }
 
-//
+// --
+// should
+// --
 
 function mustNotThrowError( test )
 {
@@ -883,6 +887,8 @@ function _throwingExperiment( test )
 
 }
 
+_throwingExperiment.experiment = 1;
+
 // --
 // special
 // --
@@ -915,8 +921,12 @@ function shouldThrowErrorSimpleSync( test )
 function shouldThrowErrorSimpleAsync( test )
 {
   var consequence = new wConsequence().give();
+  var counter = new CaseCounter();
 
-  debugger;
+  counter.testRoutine = test;
+  counter.next();
+
+  // debugger;
 
   consequence
   .ifNoErrorThen( function()
@@ -925,7 +935,7 @@ function shouldThrowErrorSimpleAsync( test )
     var con = _.timeOut( 50,function( err )
     {
       debugger;
-      throw _.err( 'something' );
+      throw _.err( 'async error' );
     });
     debugger;
     return test.shouldThrowErrorAsync( con );
@@ -936,7 +946,7 @@ function shouldThrowErrorSimpleAsync( test )
     var con = _.timeOut( 50,function( err )
     {
       debugger;
-      throw _.err( 'something' );
+      throw _.err( 'async error' );
     });
     debugger;
     return test.shouldThrowErrorAsync( con );
@@ -947,10 +957,14 @@ function shouldThrowErrorSimpleAsync( test )
 
     var acase = test.caseCurrent();
 
+    test.identical( test.report.testCasePasses-counter.prevCasePasses, 2 );
+    test.identical( test.report.testCaseFails-counter.prevCaseFails, 0 );
+
     test.identical( acase.description, 'b' );
-    test.identical( test.report.testCaseFails, 0 );
-    test.identical( test.report.testCasePasses, 7 );
     test.identical( acase._caseIndex, 3 );
+
+    // test.identical( test.report.testCasePasses, 3 );
+    // test.identical( test.report.testCaseFails, 0 );
 
   });
 
@@ -960,26 +974,23 @@ function shouldThrowErrorSimpleAsync( test )
 
 //
 
-function shouldThrowErrorChainAsync( test )
+function _chainedShould( test,o )
 {
-  var method = 'shouldThrowErrorAsync';
-  var throwingAsyncError = 1;
 
-  var method = 'mustNotThrowError';
-  var throwingAsyncError = 0;
-
+  var method = o.method;
   var counter = new CaseCounter();
 
   function row( t )
   {
+    var prefix = method + ' . ' + 'in row' + ' . ';
 
     counter.testRoutine = t;
 
     return new wConsequence().give()
-    .ifNoErrorThen( function()
+    .doThen( function()
     {
 
-      test.description = 'beginning of the test routine';
+      test.description = prefix + 'beginning of the test routine';
       counter.acase = counter.testRoutine.caseCurrent();
       test.identical( counter.acase._caseIndex, 1 );
       test.identical( t.report.testCasePasses, 0 );
@@ -987,18 +998,23 @@ function shouldThrowErrorChainAsync( test )
 
       var con = _.timeOut( 50,function( err )
       {
-        test.description = 'throw the first error';
+        test.description = prefix + 'give the first message';
         test.shouldBe( 1 );
-        if( throwingAsyncError )
-        throw _.err( 'something' );
+        if( o.throwingError === 'async' )
+        throw _.err( 'async error' );
+        else if( o.throwingError === 'sync' )
+        t[ method ]( function(){ throw _.err( 'sync error' ) } );
       });
 
+      if( o.throwingError === 'sync' )
+      return con;
+      else
       return t[ method ]( con );
     })
-    .ifNoErrorThen( function()
+    .doThen( function()
     {
 
-      test.description = 'first ' + method + ' done';
+      test.description = prefix + 'first ' + method + ' done';
       counter.acase = counter.testRoutine.caseCurrent();
       test.identical( counter.acase._caseIndex, 2 );
       test.identical( t.report.testCasePasses, 1 );
@@ -1006,18 +1022,23 @@ function shouldThrowErrorChainAsync( test )
 
       var con = _.timeOut( 50,function( err )
       {
-        test.description = 'throw the second error';
+        test.description = prefix + 'give the second message';
         test.shouldBe( 1 );
-        if( throwingAsyncError )
-        throw _.err( 'something' );
+        if( o.throwingError === 'async' )
+        throw _.err( 'async error' );
+        else if( o.throwingError === 'sync' )
+        t[ method ]( function(){ throw _.err( 'sync error' ) } );
       });
 
+      if( o.throwingError === 'sync' )
+      return con;
+      else
       return t[ method ]( con );
     })
-    .ifNoErrorThen( function()
+    .doThen( function()
     {
 
-      test.description = 'second ' + method + ' done';
+      test.description = prefix + 'second ' + method + ' done';
       counter.acase = counter.testRoutine.caseCurrent();
       test.identical( counter.acase._caseIndex, 3 );
       test.identical( t.report.testCasePasses, 2 );
@@ -1032,6 +1053,7 @@ function shouldThrowErrorChainAsync( test )
   function include( t )
   {
 
+    var prefix = method + ' . ' + 'include' + ' . ';
     counter.testRoutine = t;
 
     function second()
@@ -1039,44 +1061,73 @@ function shouldThrowErrorChainAsync( test )
       return _.timeOut( 50,function()
       {
 
-        test.description = 'first ' + method + ' done';
-        counter.acase = counter.testRoutine.caseCurrent();
-        test.identical( counter.acase._caseIndex, 3 );
+        test.description = prefix + 'first ' + method + ' done';
+
         test.identical( t.report.testCasePasses, 4 );
         test.identical( t.report.testCaseFails, 0 );
 
-        t[ method ]( _.timeOutError( 50 ) );
+        if( o.throwingError === 'sync' )
+        t[ method ]( function(){ throw _.err( 'sync error' ) } );
 
-        if( throwingAsyncError )
-        throw _.err( 'error' );
+        counter.acase = counter.testRoutine.caseCurrent();
+        test.identical( counter.acase._caseIndex, 3 );
+
+        if( o.throwingError === 'async' )
+        t[ method ]( _.timeOutError( 50 ) );
+        else if( !o.throwingError )
+        t[ method ]( _.timeOut( 50 ) );
+
+        if( o.throwingError === 'async' )
+        throw _.err( 'async error' );
       });
     }
 
     function first()
     {
-      return _.timeOut( 50,function()
+
+      var result = _.timeOut( 50,function()
       {
 
-        test.description = 'beginning of the test routine';
-        counter.acase = counter.testRoutine.caseCurrent();
-        test.identical( counter.acase._caseIndex, 2 );
+        test.description = prefix + 'first timeout of the included test routine ';
+
         test.identical( t.report.testCasePasses, 3 );
         test.identical( t.report.testCaseFails, 0 );
 
+        if( o.throwingError === 'sync' )
+        t[ method ]( function(){ throw _.err( 'sync error' ); } );
+
+        counter.acase = counter.testRoutine.caseCurrent();
+        test.identical( counter.acase._caseIndex, 2 );
+
+        if( o.throwingError === 'sync' )
+        return second();
+        else
         t[ method ]( second );
 
-        if( throwingAsyncError )
-        throw _.err( 'error' );
+        if( o.throwingError === 'async' )
+        throw _.err( 'async error' );
       });
+
+      return result;
     }
 
-    return t[ method ]( first );
+    test.description = prefix + 'beginning of the included test routine ';
 
+    if( o.throwingError === 'sync' )
+    return first();
+    else
+    return t[ method ]( first );
   };
 
   /* */
 
-  var t = wTestSuite({ tests : { row : row, include : include }, override : notTakingIntoAccount });
+  var t = wTestSuite
+  ({
+    tests : { row : row, include : include },
+    override : notTakingIntoAccount,
+    name : _.diagnosticLocation().name + '.' + method + '.' + o.throwingError,
+  });
+
   if( t.on )
   t.on( 'routineEnd',function( e )
   {
@@ -1085,6 +1136,7 @@ function shouldThrowErrorChainAsync( test )
 
     if( e.testRoutine.routine.name === 'row' )
     {
+      test.description = 'checking outcomes';
       counter.acase = counter.testRoutine.caseCurrent();
       test.identical( counter.acase._caseIndex, 4 );
       test.identical( t.report.testCasePasses, 3 );
@@ -1097,16 +1149,64 @@ function shouldThrowErrorChainAsync( test )
   .doThen( function( err,data )
   {
 
+    test.description = 'checking outcomes';
     counter.acase = counter.testRoutine.caseCurrent();
-    test.identical( counter.acase._caseIndex, 5 );
-    test.identical( t.report.testCasePasses, 7 );
-    test.identical( t.report.testCaseFails, 0 );
+    // test.identical( counter.acase._caseIndex, 5 );
+    // test.identical( t.report.testCasePasses, 7 );
+    // test.identical( t.report.testCaseFails, 0 );
 
     if( err )
     throw err;
   });
 
 }
+
+_chainedShould.experiment = 1;
+
+//
+
+function chainedShould( test )
+{
+  var con = wConsequence().give();
+
+  var iterations =
+  [
+    {
+      method : 'shouldThrowError',
+      throwingError : 'sync',
+    },
+    {
+      method : 'shouldThrowError',
+      throwingError : 'async',
+    },
+
+    {
+      method : 'shouldThrowErrorSync',
+      throwingError : 'sync',
+    },
+    {
+      method : 'shouldThrowErrorAsync',
+      throwingError : 'async',
+    },
+    {
+      method : 'mustNotThrowError',
+      throwingError : 0,
+    },
+
+    {
+      method : 'shouldMessageOnlyOnce',
+      throwingError : 0,
+    },
+
+  ]
+
+  for( var i = 0 ; i < iterations.length ; i++ )
+  con.ifNoErrorThen( _.routineSeal( this, _chainedShould, [ test,iterations[ i ] ] ) );
+
+  return con;
+}
+
+chainedShould.timeOut = 30000;
 
 // --
 // etc
@@ -1126,6 +1226,8 @@ function asyncExperiment( test )
   return con;
 }
 
+asyncExperiment.experiment = 1;
+
 //
 
 function failExperiment( test )
@@ -1137,6 +1239,8 @@ function failExperiment( test )
   test.identical( 0,1 );
 
 }
+
+failExperiment.experiment = 1;
 
 // --
 // proto
@@ -1153,25 +1257,27 @@ var Self =
   tests :
   {
 
-    // simplest : simplest,
-    // identical : identical,
+    simplest : simplest,
+    identical : identical,
 
-    // mustNotThrowError : mustNotThrowError,
-    // shouldThrowErrorSync : shouldThrowErrorSync,
-    // shouldThrowErrorAsync : shouldThrowErrorAsync,
-    // shouldThrowError : shouldThrowError,
-    // _throwingExperiment : _throwingExperiment,
+    // should
 
-    // sepcial
+    mustNotThrowError : mustNotThrowError,
+    shouldThrowErrorSync : shouldThrowErrorSync,
+    shouldThrowErrorAsync : shouldThrowErrorAsync,
+    shouldThrowError : shouldThrowError,
+    _throwingExperiment : _throwingExperiment,
 
-    // shouldThrowErrorSimpleSync : shouldThrowErrorSimpleSync,
-    // shouldThrowErrorSimpleAsync : shouldThrowErrorSimpleAsync,
-    shouldThrowErrorChainAsync : shouldThrowErrorChainAsync,
+    shouldThrowErrorSimpleSync : shouldThrowErrorSimpleSync,
+    shouldThrowErrorSimpleAsync : shouldThrowErrorSimpleAsync,
+
+    _chainedShould : _chainedShould,
+    chainedShould : chainedShould,
 
     // etc
 
-    // asyncExperiment : asyncExperiment,
-    // failExperiment : failExperiment,
+    asyncExperiment : asyncExperiment,
+    failExperiment : failExperiment,
 
   },
 

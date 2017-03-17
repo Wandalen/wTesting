@@ -41,7 +41,17 @@ var Self = function wTestSuite( o )
   if( o instanceof Self )
   return o;
   else
-  return new( _.routineJoin( Self, Self, arguments ) );
+  {
+    o = arguments[ 0 ] = o || {};
+    if( !o.sourceFilePath )
+    o.sourceFilePath = _.diagnosticLocation( 1 ).full + '';
+    return new( _.routineJoin( Self, Self, arguments ) );
+  }
+
+  o = arguments[ 0 ] = o || {};
+  if( !o.sourceFilePath )
+  o.sourceFilePath = _.diagnosticLocation( 1 ).full + '';
+
   return Self.prototype.init.apply( this,arguments );
 }
 
@@ -62,12 +72,18 @@ function init( o )
 
   _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
 
-  if( !suite.sourceFilePath )
-  suite.sourceFilePath = _.diagnosticLocation( 4 ).full;
+  // if( !suite.sourceFilePath )
+  // suite.sourceFilePath = _.diagnosticLocation( 4 ).full;
 
   if( !( o instanceof Self ) )
   if( !_.strIsNotEmpty( suite.name ) )
   suite.name = _.diagnosticLocation( suite.sourceFilePath ).nameLong;
+
+  if( !_.strIs( suite.sourceFilePath ) )
+  {
+    debugger;
+    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( sourceFilePath )' );
+  }
 
   if( !( o instanceof Self ) )
   if( !_.strIsNotEmpty( suite.name ) )
@@ -75,12 +91,6 @@ function init( o )
     debugger;
     throw _.err( 'Test suite expects name, but got',suite.name );
   }
-
-  // if( !_.strIs( suite.sourceFilePath ) )
-  // {
-  //   debugger;
-  //   throw _.err( 'Test suite',suite.name,'expects a mandatory option ( sourceFilePath )' );
-  // }
 
   return suite;
 }
@@ -258,6 +268,14 @@ function _testSuiteRunAct()
 
   function handleStage( testRoutine,iteration,iterator )
   {
+
+    if( ( !_.Testing.routine || !suite.takingIntoAccount ) && testRoutine.experiment )
+    return;
+
+    if( suite.takingIntoAccount )
+    if( _.Testing.routine && _.Testing.routine !== testRoutine.name )
+    return;
+
     return suite._testRoutineRun( iteration.key,testRoutine );
   }
 
@@ -497,16 +515,9 @@ function _testRoutineRun( name,testRoutine )
 
     /* */
 
-    // result = wConsequence.from( result,testRoutine.testRoutineTimeOut || _.Testing.testRoutineTimeOut );
-
     result = wConsequence.from( result );
-
-    //result = result.after
     result.andThen( suite._conSyn );
-
-    // result.
-
-    result = result.eitherThenSplit( _.timeOutError( testRoutine.testRoutineTimeOut || _.Testing.testRoutineTimeOut ) );
+    result = result.eitherThenSplit( _.timeOutError( testRoutine.timeOut || testRoutineDescriptor.testRoutineTimeOut || _.Testing.testRoutineTimeOut ) );
 
     result.doThen( function( err,data )
     {
@@ -534,7 +545,14 @@ function _testRoutineRun( name,testRoutine )
       }
       else
       {
-        testRoutineDescriptor._outcomeReportBooleanNoSource( 1,'test routine has not thrown an error' )
+        // var p = ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + ' / ' + testRoutineDescriptor.caseCurrent()._caseIndex;
+        // p += ' . ' + suite.currentRoutinePasses + ' / ' + ( suite.currentRoutinePasses + suite.currentRoutineFails );
+        testRoutineDescriptor._outcomeReportBoolean //._outcomeReportBooleanNoSource( 1,'test routine has not thrown an error ' + p );
+        ({
+          outcome : 1,
+          msg : 'test routine has not thrown an error',
+          usingSourceCode : 0,
+        });
       }
 
       suite._testRoutineEnd( testRoutineDescriptor,caseFails === report.testCaseFails );
@@ -571,7 +589,7 @@ function _testRoutineBegin( testRoutineDescriptor )
   suite.currentRoutineFails = 0;
   suite.currentRoutinePasses = 0;
 
-  if( _.mixinHas( Self,'wEventHandler' ) )
+  if( testRoutineDescriptor.eventGive )
   testRoutineDescriptor.eventGive({ kind : 'routineBegin', testRoutine : testRoutineDescriptor });
 
 }
@@ -585,11 +603,14 @@ function _testRoutineEnd( testRoutineDescriptor,ok )
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === testRoutineDescriptor );
 
-  if( _.mixinHas( Self,'wEventHandler' ) )
+  if( testRoutineDescriptor.eventGive )
   testRoutineDescriptor.eventGive({ kind : 'routineEnd', testRoutine : testRoutineDescriptor });
 
-  if( !suite.currentRoutinePasses )
-  suite.currentRoutineFails += 1;
+  if( !suite.currentRoutinePasses && !suite.currentRoutineFails )
+  {
+    suite.currentRoutineFails += 1;
+    suite.report.testCaseFails += 1;
+  }
 
   if( suite.currentRoutineFails )
   suite.report.testRoutineFails += 1;
@@ -707,13 +728,13 @@ function shouldBe( outcome )
 {
   var testRoutineDescriptor = this;
 
-  _.assert( _.boolLike( outcome ),'shouldBe expects single bool argument' )
+  _.assert( _.boolLike( outcome ),'shouldBe expects single bool argument' );
   _.assert( arguments.length === 1,'shouldBe expects single bool argument' );
 
   if( !outcome )
   debugger;
 
-  testRoutineDescriptor._outcomeReportBoolean( outcome,'expected true' );
+  testRoutineDescriptor._outcomeReportBoolean({ outcome : outcome, msg : 'expected true' });
 
   return outcome;
 }
@@ -726,7 +747,7 @@ function shouldBeNotError( maybeErrror )
   _.assert( arguments.length === 1,'shouldBeNotError expects single argument' );
 
   if( _.errIs( maybeErrror ) )
-  testRoutineDescriptor._outcomeReportBoolean( outcome,'expected true' );
+  testRoutineDescriptor._outcomeReportBoolean({ outcome : outcome, msg : 'expected variable is not error' });
 
 }
 
@@ -940,7 +961,12 @@ function _shouldDo( o )
     if( o.ignoringError )
     {
       begin( 1 );
-      suite._outcomeReportBoolean( 1,'error throwen synchronously, no asynchronicity',stack );
+      suite._outcomeReportBoolean
+      ({
+        outcome : 1,
+        msg : 'error throwen synchronously, no asynchronicity',
+        stack : stack,
+      });
       end( 1 );
       con.give();
       throw err;
@@ -953,9 +979,19 @@ function _shouldDo( o )
     thrown = 1;
 
     if( o.expectingSyncError )
-    suite._outcomeReportBoolean( o.expectingSyncError,'error thrown synchronously as expected',stack );
+    suite._outcomeReportBoolean
+    ({
+      outcome : o.expectingSyncError,
+      msg : 'error thrown synchronously as expected',
+      stack : stack,
+    });
     else
-    suite._outcomeReportBoolean( o.expectingSyncError,'error thrown synchronously, something wrong',stack );
+    suite._outcomeReportBoolean
+    ({
+      outcome : o.expectingSyncError,
+      msg : 'error thrown synchronously, something wrong',
+      stack : stack,
+    });
 
     end( o.expectingSyncError );
   }
@@ -964,7 +1000,12 @@ function _shouldDo( o )
   {
     begin( 0 );
 
-    suite._outcomeReportBoolean( 0,'error not thrown synchronously, but expected',stack );
+    suite._outcomeReportBoolean
+    ({
+      outcome : 0,
+      msg : 'error not thrown synchronously, but expected',
+      stack : stack,
+    });
 
     end( 0 );
   }
@@ -973,6 +1014,7 @@ function _shouldDo( o )
 
   if( result instanceof wConsequence )
   {
+
     result.got( function( err,data )
     {
 
@@ -986,9 +1028,19 @@ function _shouldDo( o )
         thrown = 1;
 
         if( o.expectingAsyncError )
-        suite._outcomeReportBoolean( o.expectingAsyncError,'error thrown asynchronously as expected',stack );
+        suite._outcomeReportBoolean
+        ({
+          outcome : o.expectingAsyncError,
+          msg : 'error thrown asynchronously as expected',
+          stack : stack,
+        });
         else
-        suite._outcomeReportBoolean( o.expectingAsyncError,'error thrown asynchronously, not expected',stack );
+        suite._outcomeReportBoolean
+        ({
+          outcome : o.expectingAsyncError,
+          msg : 'error thrown asynchronously, not expected',
+          stack : stack,
+        });
 
         end( o.expectingAsyncError );
       }
@@ -997,9 +1049,19 @@ function _shouldDo( o )
         begin( !o.expectingAsyncError );
 
         if( !o.expectingAsyncError )
-        suite._outcomeReportBoolean( !o.expectingAsyncError,'error was not thrown asynchronously as expected',stack );
+        suite._outcomeReportBoolean
+        ({
+          outcome : !o.expectingAsyncError,
+          msg : 'error was not thrown asynchronously as expected',
+          stack : stack,
+        });
         else
-        suite._outcomeReportBoolean( !o.expectingAsyncError,'error was not thrown asynchronously, but expected',stack );
+        suite._outcomeReportBoolean
+        ({
+          outcome : !o.expectingAsyncError,
+          msg : 'error was not thrown asynchronously, but expected',
+          stack : stack,
+        });
 
         end( !o.expectingAsyncError );
       }
@@ -1017,7 +1079,14 @@ function _shouldDo( o )
 
         begin( 1 );
 
-        suite._outcomeReportBoolean( 1,'looks like got only one message as expected',stack );
+        // console.log( stack );
+
+        suite._outcomeReportBoolean
+        ({
+          outcome : 1,
+          msg : 'looks like got only one message as expected',
+          stack : stack,
+        });
 
         end( 1 );
 
@@ -1038,18 +1107,30 @@ function _shouldDo( o )
 
       second = 1;
 
-      suite._outcomeReportBoolean( 0,'message got several times, something wrong',stack );
+      suite._outcomeReportBoolean
+      ({
+        outcome : 0,
+        msg : 'message got several times, something wrong',
+        stack : stack,
+      });
 
       end( 0 );
     });
+
   }
   else
   {
+
     if( o.expectingAsyncError && !thrown )
     {
       begin( 0 );
 
-      suite._outcomeReportBoolean( 0,'error not thrown asynchronously, but expected',stack );
+      suite._outcomeReportBoolean
+      ({
+        outcome : 0,
+        msg : 'error not thrown asynchronously, but expected',
+        stack : stack,
+      });
 
       end( 0 );
     }
@@ -1057,7 +1138,12 @@ function _shouldDo( o )
     {
       begin( 1 );
 
-      suite._outcomeReportBoolean( 1,'no error thrown, as expected',stack );
+      suite._outcomeReportBoolean
+      ({
+        outcome : 1,
+        msg : 'no error thrown, as expected',
+        stack : stack,
+      });
 
       end( 1 );
     }
@@ -1065,27 +1151,22 @@ function _shouldDo( o )
     {
       begin( 0 );
 
-      suite._outcomeReportBoolean( 0,'error not thrown, but expected either synchronosuly or asynchronously',stack );
+      suite._outcomeReportBoolean
+      ({
+        outcome : 0,
+        msg : 'error not thrown, but expected either synchronosuly or asynchronously',
+        stack : stack,
+      });
 
       end( 0 );
     }
-
-    // else
-    // {
-    //   begin( 0 );
-    //
-    //   debugger;
-    //   suite._outcomeReportBoolean( 0,'unknown outcome',stack );
-    //
-    //   end( 0 );
-    // }
 
     con.give();
   }
 
   /* */
 
-  suite.caseNext()
+  suite.caseNext();
 
   return con.splitThen();
 }
@@ -1098,93 +1179,6 @@ _shouldDo.defaults =
   ignoringError : 0,
   allowingMultipleMessages : 0,
 }
-
-//
-
-// function _shouldThrowError( o )
-// {
-//   var suite = this;
-//   var thrown = 0;
-//   var outcome;
-//   var stack = _.diagnosticStack( 2,-1 );
-//
-//   _.assert( _.routineIs( o.routine ),'shouldThrowErrorSync expects ( o.routine ) to call' );
-//   _.assert( arguments.length === 1 );
-//
-//   return suite._conSyn.got( function shouldThrowErrorSync()
-//   {
-//
-//     var con = this;
-//     var result;
-//     if( o.routine instanceof wConsequence )
-//     {
-//       result = o.routine;
-//     }
-//     else try
-//     {
-//       result = o.routine.call( this );
-//     }
-//     catch( err )
-//     {
-//       thrown = 1;
-//       if( o.expectingSyncError )
-//       outcome = suite._outcomeReportBoolean( 1,'error thrown ( synchronously ) by call as expected',stack );
-//       else
-//       outcome = suite._outcomeReportBoolean( 0,'error thrown ( synchronously ) by call, but sync error is not expected',stack );
-//     }
-//
-//     /* */
-//
-//     if( result instanceof wConsequence )
-//     {
-//       result
-//       .got( function( err,data )
-//       {
-//         if( !err )
-//         {
-//           outcome = suite._outcomeReportBoolean( 0,'error not thrown, but expected',stack );
-//         }
-//         else
-//         {
-//           thrown = 1;
-//
-//           suite.logger.begin({ verbosity : -7 });
-//           suite.logger.begin({ connotation : 'positive' });
-//           if( !_.errIsAttended( err ) )
-//           suite.logger.log( _.errLog( err ) );
-//           _.errAttend( err )
-//           suite.logger.end({ verbosity : -7 });
-//           suite.logger.end({ connotation : 'positive' });
-//
-//           if( o.expectingAsyncError )
-//           outcome = suite._outcomeReportBoolean( 1,'error thrown( asynchronously ) as expected',stack );
-//           else
-//           outcome = suite._outcomeReportBoolean( 0,'error thrown( asynchronously ), but async error is not expected',stack );
-//         }
-//         con.give( data );
-//       })
-//       .doThen( function( err,data )
-//       {
-//         suite._outcomeReportBoolean( 0,'message sent several times, something wrong',stack );
-//       });
-//     }
-//     else
-//     {
-//       if( !thrown )
-//       outcome = suite._outcomeReportBoolean( 0,'error not thrown, but expected',stack );
-//       con.give();
-//     }
-//
-//   });
-//
-// }
-//
-// _shouldThrowError.defaults =
-// {
-//   routine : null,
-//   expectingSyncError : 1,
-//   expectingAsyncError : 1,
-// }
 
 //
 
@@ -1283,90 +1277,6 @@ function shouldThrowError( routine )
 
 //
 
-// function mustNotThrowError( routine )
-// {
-//   var suite = this;
-//   var thrown = 0;
-//   var outcome;
-//   var stack = _.diagnosticStack( 1,-1 );
-//
-//   _.assert( _.routineIs( routine ) );
-//   _.assert( arguments.length === 1 );
-//
-//   var acase = suite.caseCurrent();
-//   var con = suite._conSyn;
-//   con.got();
-//
-//   /* */
-//
-//   var result;
-//   if( routine instanceof wConsequence )
-//   {
-//     result = routine;
-//   }
-//   else try
-//   {
-//     var result = routine.call( this );
-//   }
-//   catch( err )
-//   {
-//     thrown = 1;
-//     suite.logger.begin({ verbosity : -4 });
-//     suite.logger.begin({ connotation : 'negative' });
-//     if( !_.errIsAttended( err ) )
-//     suite.logger.log( _.errLog( err ) );
-//     _.errAttend( err )
-//     suite.logger.end({ verbosity : -4 });
-//     suite.logger.end({ connotation : 'negative' });
-//     outcome = suite._outcomeReportBoolean( 0,'error thrown synchronously, something wrong',stack );
-//   }
-//
-//   /* */
-//
-//   if( result instanceof wConsequence )
-//   {
-//     result
-//     .got( function( err,data )
-//     {
-//       suite.caseRestore( acase );
-//       if( err )
-//       {
-//         thrown = 1;
-//         suite.logger.begin({ verbosity : -4 });
-//         suite.logger.begin({ connotation : 'negative' });
-//         if( !_.errIsAttended( err ) )
-//         suite.logger.log( _.err( err ) );
-//         _.errAttend( err )
-//         suite.logger.end({ verbosity : -4 });
-//         suite.logger.end({ connotation : 'negative' });
-//         outcome = suite._outcomeReportBoolean( 0,'error thrown asynchronously, not expected',stack );
-//       }
-//       else
-//       {
-//         outcome = suite._outcomeReportBoolean( 1,'error not thrown',stack );
-//       }
-//       suite.caseRestore();
-//       con.give( err,data );
-//     })
-//     .doThen( function( err,data )
-//     {
-//       suite.caseRestore( acase );
-//       suite._outcomeReportBoolean( 0,'message sent several times, something wrong',stack );
-//       suite.caseRestore();
-//     });
-//   }
-//   else
-//   {
-//     con.give();
-//   }
-//
-//   /* */
-//
-//   suite.caseNext()
-//
-//   return con;
-// }
-
 function mustNotThrowError( routine )
 {
   var suite = this;
@@ -1396,68 +1306,6 @@ function shouldMessageOnlyOnce( routine )
   });
 
 }
-
-// function shouldMessageOnlyOnce( con )
-// {
-//   var suite = this;
-//   var result = new wConsequence();
-//
-//   _.assert( arguments.length === 1 );
-//   _.assert( con instanceof wConsequence );
-//
-//   // var state = suite.caseStore();
-//   var stack = _.diagnosticStack( 1,-1 );
-//
-//   con
-//   .got( function( err,data )
-//   {
-//     _.timeOut( 10, function()
-//     {
-//
-//       suite.caseRestore( acase );
-//
-//       suite.logger.begin({ verbosity : -4+suite.importanceOfNegative });
-//       suite.logger.begin({ connotation : 'negative' });
-//
-//       if( !_.errIsAttended( err ) )
-//       suite.logger.log( _.errAttend( err ) );
-//       thrown = 1;
-//
-//       suite._outcomeReportBoolean( 0,'message sent several times, something wrong',stack );
-//
-//       suite.logger.end({ verbosity : -4+suite.importanceOfNegative  });
-//       suite.logger.end({ connotation : 'negative' });
-//
-//       suite.caseRestore();
-//
-//       // suite._outcomeReportBoolean( 1,'message thrown at least once',stack );
-//       result.give( err,data );
-//     });
-//   })
-//   .doThen( function( err,data )
-//   {
-//     suite.caseRestore( acase );
-//
-//     suite.logger.begin({ verbosity : -4+suite.importanceOfNegative });
-//     suite.logger.begin({ connotation : 'negative' });
-//
-//     suite._outcomeReportBoolean( 0,'consequence got several messages, expected only one',stack );
-//
-//     suite.logger.end({ verbosity : -4+suite.importanceOfNegative  });
-//     suite.logger.end({ connotation : 'negative' });
-//
-//     suite.caseRestore();
-//
-//     // suite.caseStore();
-//     // suite.caseRestore( state );
-//     // suite._outcomeReportBoolean( 0,'consequence got several messages, expected only one',stack );
-//     // suite.caseRestore();
-//
-//     this.give( err,data );
-//   });
-//
-//   return result;
-// }
 
 // --
 // output
@@ -1600,43 +1448,54 @@ _outcomeReport.defaults =
 
 //
 
-function _outcomeReportBoolean( outcome,msg,stack )
+// function _outcomeReportBoolean( outcome,msg,stack )
+function _outcomeReportBoolean( o )
 {
   var testRoutineDescriptor = this;
 
-  _.assert( arguments.length === 2 || arguments.length === 3 );
+  _.assert( arguments.length === 1 );
+  _.routineOptions( _outcomeReportBoolean,o );
 
-  msg = testRoutineDescriptor._currentTestCaseTextGet( outcome,msg );
+  o.msg = testRoutineDescriptor._currentTestCaseTextMake( o.outcome,o.msg );
 
   testRoutineDescriptor._outcomeReport
   ({
-    outcome : outcome,
-    msg : msg,
+    outcome : o.outcome,
+    msg : o.msg,
     details : '',
-    stack : stack,
+    stack : o.stack,
+    usingSourceCode : o.usingSourceCode,
   });
 
+}
+
+_outcomeReportBoolean.defaults =
+{
+  outcome : null,
+  msg : null,
+  stack : null,
+  usingSourceCode : 1,
 }
 
 //
 
-function _outcomeReportBooleanNoSource( outcome,msg )
-{
-  var testRoutineDescriptor = this;
-
-  _.assert( arguments.length === 2 );
-
-  msg = testRoutineDescriptor._currentTestCaseTextGet( outcome,msg );
-
-  testRoutineDescriptor._outcomeReport
-  ({
-    outcome : outcome,
-    msg : msg,
-    details : '',
-    usingSourceCode : 0,
-  });
-
-}
+// function _outcomeReportBooleanNoSource( outcome,msg )
+// {
+//   var testRoutineDescriptor = this;
+//
+//   _.assert( arguments.length === 2 );
+//
+//   msg = testRoutineDescriptor._currentTestCaseTextMake( outcome,msg );
+//
+//   testRoutineDescriptor._outcomeReport
+//   ({
+//     outcome : outcome,
+//     msg : msg,
+//     details : '',
+//     usingSourceCode : 0,
+//   });
+//
+// }
 
 //
 
@@ -1663,7 +1522,7 @@ function _outcomeReportCompare( outcome,got,expected,path )
   {
 
     var details = msgExpectedGot();
-    var msg = testRoutineDescriptor._currentTestCaseTextGet( 1 );
+    var msg = testRoutineDescriptor._currentTestCaseTextMake( 1 );
 
     testRoutineDescriptor._outcomeReport
     ({
@@ -1690,7 +1549,7 @@ function _outcomeReportCompare( outcome,got,expected,path )
     if( _.strIs( expected ) && _.strIs( got ) )
     details += '\ndifference :\n' + _.strDifference( expected,got );
 
-    var msg = testRoutineDescriptor._currentTestCaseTextGet( 0 );
+    var msg = testRoutineDescriptor._currentTestCaseTextMake( 0 );
 
     testRoutineDescriptor._outcomeReport
     ({
@@ -1716,7 +1575,7 @@ function exceptionReport( o )
   if( o.testRoutineDescriptor.onError )
   o.testRoutineDescriptor.onError.call( suite,o.testRoutineDescriptor );
 
-  var msg = o.testRoutineDescriptor._currentTestCaseTextGet() + ' ... failed throwing error';
+  var msg = o.testRoutineDescriptor._currentTestCaseTextMake() + ' ... failed throwing error';
   var err = _.errAttend( o.err );
   var details = err.toString();
 
@@ -1743,7 +1602,7 @@ exceptionReport.defaults =
 
 //
 
-function _currentTestCaseTextGet( value,hint )
+function _currentTestCaseTextMake( value,hint )
 {
   var testRoutineDescriptor = this;
 
@@ -1794,6 +1653,7 @@ var Composes =
   verbosity : 2,
   importanceOfNegative : 0,
   verbosityOfDetails : -6,
+  barringConsole : null,
 
   abstract : 0,
   enabled : 1,
@@ -1917,12 +1777,12 @@ var Proto =
   _outcomeReport : _outcomeReport,
 
   _outcomeReportBoolean : _outcomeReportBoolean,
-  _outcomeReportBooleanNoSource : _outcomeReportBooleanNoSource,
+  // _outcomeReportBooleanNoSource : _outcomeReportBooleanNoSource,
   _outcomeReportCompare : _outcomeReportCompare,
 
   exceptionReport : exceptionReport,
 
-  _currentTestCaseTextGet : _currentTestCaseTextGet,
+  _currentTestCaseTextMake : _currentTestCaseTextMake,
 
 
   // relationships

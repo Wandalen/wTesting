@@ -65,7 +65,7 @@ function exec()
 
     _.assert( arguments.length === 0 );
 
-    var appArgs = testing.applyAppArgs();
+    var appArgs = testing.appArgsApply();
 
     logger.verbosityPush( testing.verbosity === null ? testing._defaultVerbosity : testing.verbosity );
 
@@ -97,14 +97,14 @@ function exec()
 
 //
 
-function registerHook()
+function _registerExitHandler()
 {
   var testing = this;
 
-  if( testing._registerHookDone )
+  if( testing._registerExitHandlerDone )
   return;
 
-  testing._registerHookDone = 1;
+  testing._registerExitHandlerDone = 1;
 
   if( _global_.process )
   process.on( 'exit', function ()
@@ -134,7 +134,8 @@ function includeTestsFrom( path )
   var files = _.fileProvider.filesFind
   ({
     pathFile : path,
-    ends : [ '.test.s','.test.ss' ], recursive : 1,
+    ends : [ '.test.s','.test.ss','.test.js' ],
+    recursive : 1,
     maskAll : _.pathRegexpMakeSafe(),
   });
 
@@ -173,7 +174,7 @@ function includeTestsFrom( path )
 
 //
 
-function applyAppArgs()
+function appArgsApply()
 {
   var testing = this;
   var logger = testing.logger || _global_.logger;
@@ -185,7 +186,9 @@ function applyAppArgs()
   {
     _.mapExtend( testing,_.mapScreen( Options,appArgs.map ) );
     if( testing.verbosity >= 8 )
-    logger.log( 'applyAppArgs',_.mapScreen( Options,appArgs.map ) );
+    logger.log( 'Raw application arguments :\n',_.toStr( appArgs,{ levels : 2 } ) );
+    if( testing.verbosity >= 5 )
+    logger.log( 'Application arguments :\n',_.toStr( _.mapScreen( Options,appArgs.map ),{ levels : 2 } ) );
   }
 
   return appArgs;
@@ -269,22 +272,8 @@ function _test()
 
   var suites = testing.testsFilterOut( arguments );
 
-  // var suites = _.entityFilter( arguments,function( suite )
-  // {
-  //   if( _.strIs( suite ) )
-  //   {
-  //     if( !wTests[ suite ] )
-  //     throw _.err( 'Testing : test suite',suite,'not found' );
-  //     suite = wTests[ suite ];
-  //   }
-  //   if( suite.abstract )
-  //   return;
-  //   if( suite.enabled !== undefined && !suite.enabled )
-  //   return;
-  //   return suite;
-  // });
-
-  // console.log( 'suites',_.entityLength( suites ) );
+  if( suites[ 0 ] && suites[ 0 ].barringConsole !== null && suites[ 0 ].barringConsole !== undefined )
+  testing.barringConsole = suites[ 0 ].barringConsole;
 
   testing._testingBegin( suites );
 
@@ -316,8 +305,8 @@ function _testingBegin( tests )
   //   logger = testing.logger = new wLogger({ name : 'LoggerForTesting' });
   // }
 
-  testing.applyAppArgs();
-  testing.registerHook();
+  testing.appArgsApply();
+  testing._registerExitHandler();
 
   if( testing.barringConsole )
   {
@@ -624,6 +613,7 @@ var Options =
   concurrent : 0,
   barringConsole : 1,
   scenario : 'test',
+  routine : null,
 }
 
 // --
@@ -636,9 +626,9 @@ var Self =
   // exec
 
   exec : exec,
-  registerHook : registerHook,
+  _registerExitHandler : _registerExitHandler,
   includeTestsFrom : includeTestsFrom,
-  applyAppArgs : applyAppArgs,
+  appArgsApply : appArgsApply,
 
 
   // run
@@ -679,7 +669,7 @@ var Self =
   sourceFilePath : sourceFilePath,
   sourceFileStack : sourceFileStack,
   _isFullImplementation : 1,
-  _registerHookDone : 0,
+  _registerExitHandlerDone : 0,
   _defaultVerbosity : 2,
 
   _bar : null,

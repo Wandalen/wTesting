@@ -59,6 +59,7 @@ _.assert( _.Consequence,'wTesting needs wConsequence/staging/abase/syn/Consequen
 function exec()
 {
   var testing = this;
+  var result;
 
   try
   {
@@ -80,9 +81,9 @@ function exec()
     throw _.errBriefly( 'Unknown scenario',testing.scenario );
 
     if( testing.scenario === 'test' )
-    testing.testAll();
+    result = testing.testAll();
     else if( testing.scenario === 'suites.list' )
-    testing.testsList( testing.testsFilterOut() );
+    testing.testsListPrint( testing.testsFilterOut() );
 
   }
   catch( err )
@@ -329,13 +330,13 @@ function _testingBegin( tests )
   if( tests !== undefined )
   {
     logger.logUp( 'Launching several ( ' + _.entityLength( tests ) + ' ) test suites ..' );
-    testing.testsList( tests );
+    testing.testsListPrint( tests );
   }
   else
   {
     debugger;
     logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suites ..' );
-    testing.testsList( tests );
+    testing.testsListPrint( tests );
   }
 
   logger.log();
@@ -353,8 +354,8 @@ function _testingEnd()
   var logger = testing.logger || _global_.logger;
   var ok = testing.report.testCaseFails === 0 && testing.report.testCasePasses > 0;
 
-  if( !ok && !_.appReturnCode() )
-  _.appReturnCode( -1 );
+  if( !ok && !_.appExitCode() )
+  _.appExitCode( -1 );
 
   var msg = '';
   msg += 'Passed test cases ' + ( testing.report.testCasePasses ) + ' / ' + ( testing.report.testCasePasses + testing.report.testCaseFails ) + '\n';
@@ -390,6 +391,11 @@ function _testingEnd()
     testing._bar.bar = 0;
     wLogger.consoleBar( testing._bar );
   }
+
+  _.timeOut( 500,function()
+  {
+    _.appExit();
+  });
 
 }
 
@@ -428,7 +434,7 @@ function testsFilterOut( suites )
 
 //
 
-function testsList( suites )
+function testsListPrint( suites )
 {
   var testing = this;
   var logger = testing.logger;
@@ -469,19 +475,32 @@ function _reportNew()
 
 function _verbositySet( src )
 {
-  var suite = this;
+  var testing = this;
 
   _.assert( arguments.length === 1 );
 
   if( !_.numberIsNotNan( src ) )
   src = 0;
 
-  suite[ symbolForVerbosity ] = src;
+  testing[ symbolForVerbosity ] = src;
 
   if( src !== null )
-  if( suite.logger )
-  suite.logger.verbosity = src;
+  if( testing.logger )
+  testing.logger.verbosity = src;
 
+}
+
+//
+
+function _canContinue()
+{
+  var testing = this;
+
+  if( testing.fails > 0 )
+  if( testing.fails <= testing.report.testCaseFails )
+  return false;
+
+  return true;
 }
 
 // --
@@ -614,6 +633,7 @@ var Options =
   barringConsole : 1,
   scenario : 'test',
   routine : null,
+  fails : null,
 }
 
 // --
@@ -644,13 +664,14 @@ var Self =
   _testingEnd : _testingEnd,
 
   testsFilterOut : testsFilterOut,
-  testsList : testsList,
+  testsListPrint : testsListPrint,
 
 
   // etc
 
   _reportNew : _reportNew,
   _verbositySet : _verbositySet,
+  _canContinue : _canContinue,
 
 
   // report generator

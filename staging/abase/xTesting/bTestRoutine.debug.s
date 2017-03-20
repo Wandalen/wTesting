@@ -53,7 +53,7 @@ var Self = function wTestRoutine( o )
   _.routineOptions( wTestRoutine,o );
 
   var testRoutineDescriptorParent = Object.create( o.suite );
-  testRoutineDescriptorParent.constructor = function wTestRoutine(){};
+  testRoutineDescriptorParent.constructor = Self;
   Object.preventExtensions( testRoutineDescriptorParent );
 
   var testRoutineDescriptor = Object.create( testRoutineDescriptorParent );
@@ -63,6 +63,13 @@ var Self = function wTestRoutine( o )
   testRoutineDescriptor._caseIndex = 1;
   testRoutineDescriptor._testRoutineDescriptorIs = 1;
   testRoutineDescriptor._storedStates = null;
+  testRoutineDescriptor._cancelCon = new wConsequence();
+  testRoutineDescriptor._returnCon = null;
+
+  testRoutineDescriptor._currentRoutineFails = 0;
+  testRoutineDescriptor._currentRoutinePasses = 0;
+
+
   Object.preventExtensions( testRoutineDescriptor );
 
   _.assert( _.routineIs( o.routine ) );

@@ -262,34 +262,34 @@ function _testSuiteRunAct()
 {
   var suite = this;
   var tests = suite.tests;
+  var logger = suite.logger || _.Testing.logger || _global_.logger;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
+  /* */
+
   function handleStage( testRoutine,iteration,iterator )
   {
-
-    if( ( !_.Testing.routine || !suite.takingIntoAccount ) && testRoutine.experiment )
-    return;
-
-    if( suite.takingIntoAccount )
-    if( _.Testing.routine && _.Testing.routine !== testRoutine.name )
-    return;
-
     return suite._testRoutineRun( iteration.key,testRoutine );
   }
+
+  /* */
 
   function handleEnd( err,data )
   {
     if( err )
     {
-      suite.report.testCaseFails += 1;
-      _.Testing.report.testCaseFails += 1;
+      debugger;
+      logger.log( _.err( 'Something very wrong, cant even launch the test suite\n',err ) );
+      suite._outcome( 0 );
     }
-    _.assert( _.Testing.sanitareTime >= 0 );
 
+    _.assert( _.Testing.sanitareTime >= 0 );
     return _.timeOut( _.Testing.sanitareTime/2, _.routineSeal( suite,suite._testSuiteEnd,[] ) );
   }
+
+  /* */
 
   return _.execStages( tests,
   {
@@ -308,6 +308,9 @@ function _testSuiteBegin()
   var suite = this;
   if( suite.debug )
   debugger;
+
+  if( !_.Testing._canContinue() )
+  return;
 
   /* logger */
 
@@ -440,8 +443,8 @@ function _testSuiteEnd()
     _.Testing.report.testRoutinePasses += suite.report.testRoutinePasses;
     _.Testing.report.testRoutineFails += suite.report.testRoutineFails;
 
-    _.Testing.report.testCasePasses += suite.report.testCasePasses;
-    _.Testing.report.testCaseFails += suite.report.testCaseFails;
+    // _.Testing.report.testCasePasses += suite.report.testCasePasses;
+    // _.Testing.report.testCaseFails += suite.report.testCaseFails;
 
   }
 
@@ -475,12 +478,24 @@ function _testRoutineRun( name,testRoutine )
   var suite = this;
   var result = null;
   var report = suite.report;
-  var caseFails = report.testCaseFails;
+
+  /* */
+
+  if( ( !_.Testing.routine || !suite.takingIntoAccount ) && testRoutine.experiment )
+  return;
+
+  if( suite.takingIntoAccount )
+  if( _.Testing.routine && _.Testing.routine !== testRoutine.name )
+  return;
+
+  if( !_.Testing._canContinue() )
+  return;
+
+  /* */
+
   var testRoutineDescriptor = wTestRoutine({ name : name, routine : testRoutine, suite : suite });
 
   _.assert( arguments.length === 2 );
-
-  /* */
 
   return suite._routineCon
   .doThen( function()
@@ -490,77 +505,80 @@ function _testRoutineRun( name,testRoutine )
 
     /* */
 
-    if( suite.safe )
+    try
     {
-
-      try
-      {
-        result = testRoutineDescriptor.routine.call( suite.context,testRoutineDescriptor );
-      }
-      catch( err )
-      {
-        suite.exceptionReport
-        ({
-          err : err ,
-          testRoutineDescriptor : testRoutineDescriptor,
-          usingSourceCode : 0,
-        });
-      }
-
+      result = testRoutineDescriptor.routine.call( suite.context,testRoutineDescriptor );
     }
-    else
+    catch( err )
     {
-      result = testRoutineDescriptor.routine.call( suite,testRoutineDescriptor );
+      result = new wConsequence().error( _.err( err ) );
     }
 
     /* */
 
-    result = wConsequence.from( result );
-    result.andThen( suite._conSyn );
-    result = result.eitherThenSplit( _.timeOutError( testRoutine.timeOut || testRoutineDescriptor.testRoutineTimeOut || _.Testing.testRoutineTimeOut ) );
+    var timeOut = testRoutine.timeOut || testRoutineDescriptor.testRoutineTimeOut || _.Testing.testRoutineTimeOut;
 
-    result.doThen( function( err,data )
-    {
+    result = testRoutineDescriptor._returnCon = wConsequence.from( result );
 
-      if( err )
-      if( err.timeOut )
-      err = _._err
-      ({
-        args : [ 'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) time out!' ],
-        usingSourceCode : 0,
-      });
+    // result.got( function( err,data ){ console.log( _.strTypeOf( err ) ); this.give( err,data ); } );
 
-      // if( err )
-      // debugger;
+    result.andThen( suite._inroutineCon );
 
-      if( err )
-      {
-        testRoutineDescriptor.exceptionReport
-        ({
-          err : err,
-          testRoutineDescriptor : testRoutineDescriptor,
-          usingSourceCode : 0,
-          // usingSourceCode : data !== _.timeOut,
-        });
-      }
-      else
-      {
-        // var p = ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + ' / ' + testRoutineDescriptor.caseCurrent()._caseIndex;
-        // p += ' . ' + suite.currentRoutinePasses + ' / ' + ( suite.currentRoutinePasses + suite.currentRoutineFails );
-        testRoutineDescriptor._outcomeReportBoolean //._outcomeReportBooleanNoSource( 1,'test routine has not thrown an error ' + p );
-        ({
-          outcome : 1,
-          msg : 'test routine has not thrown an error',
-          usingSourceCode : 0,
-        });
-      }
+    // result.got( function( err,data ){ console.log( _.strTypeOf( err ) ); this.give( err,data ); } );
 
-      suite._testRoutineEnd( testRoutineDescriptor,caseFails === report.testCaseFails );
-    });
+    result = result.eitherThenSplit([ _.timeOutError( timeOut ),testRoutineDescriptor._cancelCon ]);
+    result.doThen( _.routineJoin( testRoutineDescriptor,_testRoutineHandleReturn ) );
 
     return result;
   })
   .splitThen();
+
+}
+
+//
+
+function _testRoutineHandleReturn( err,msg )
+{
+  var testRoutineDescriptor = this;
+  var suite = testRoutineDescriptor.suite;
+
+  if( err )
+  if( err.timeOut )
+  err = _._err
+  ({
+    args : [ 'Test routine ( ' + testRoutineDescriptor.routine.name + ' ) time out!' ],
+    usingSourceCode : 0,
+  });
+
+  if( err )
+  {
+    testRoutineDescriptor.exceptionReport
+    ({
+      err : err,
+      testRoutineDescriptor : testRoutineDescriptor,
+      usingSourceCode : 0,
+      // usingSourceCode : data !== _.timeOut,
+    });
+  }
+  else
+  {
+    if( testRoutineDescriptor._currentRoutinePasses === 0 && testRoutineDescriptor._currentRoutineFails === 0 )
+    testRoutineDescriptor._outcomeReportBoolean
+    ({
+      outcome : 0,
+      msg : 'test routine has passed none test case',
+      usingSourceCode : 0,
+    });
+    else
+    testRoutineDescriptor._outcomeReportBoolean
+    ({
+      outcome : 1,
+      msg : 'test routine has not thrown an error',
+      usingSourceCode : 0,
+    });
+  }
+
+  suite._testRoutineEnd( testRoutineDescriptor,!testRoutineDescriptor._currentRoutineFails );
 
 }
 
@@ -586,8 +604,8 @@ function _testRoutineBegin( testRoutineDescriptor )
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = testRoutineDescriptor;
 
-  suite.currentRoutineFails = 0;
-  suite.currentRoutinePasses = 0;
+  // testRoutineDescriptor._currentRoutineFails = 0;
+  // testRoutineDescriptor._currentRoutinePasses = 0;
 
   if( testRoutineDescriptor.eventGive )
   testRoutineDescriptor.eventGive({ kind : 'routineBegin', testRoutine : testRoutineDescriptor });
@@ -606,13 +624,7 @@ function _testRoutineEnd( testRoutineDescriptor,ok )
   if( testRoutineDescriptor.eventGive )
   testRoutineDescriptor.eventGive({ kind : 'routineEnd', testRoutine : testRoutineDescriptor });
 
-  if( !suite.currentRoutinePasses && !suite.currentRoutineFails )
-  {
-    suite.currentRoutineFails += 1;
-    suite.report.testCaseFails += 1;
-  }
-
-  if( suite.currentRoutineFails )
+  if( testRoutineDescriptor._currentRoutineFails )
   suite.report.testRoutineFails += 1;
   else
   suite.report.testRoutinePasses += 1;
@@ -734,7 +746,11 @@ function shouldBe( outcome )
   if( !outcome )
   debugger;
 
-  testRoutineDescriptor._outcomeReportBoolean({ outcome : outcome, msg : 'expected true' });
+  testRoutineDescriptor._outcomeReportBoolean
+  ({
+    outcome : outcome,
+    msg : 'expected true',
+  });
 
   return outcome;
 }
@@ -743,11 +759,11 @@ function shouldBe( outcome )
 
 function shouldBeNotError( maybeErrror )
 {
+  var testRoutineDescriptor = this;
 
   _.assert( arguments.length === 1,'shouldBeNotError expects single argument' );
 
-  if( _.errIs( maybeErrror ) )
-  testRoutineDescriptor._outcomeReportBoolean({ outcome : outcome, msg : 'expected variable is not error' });
+  testRoutineDescriptor._outcomeReportBoolean({ outcome : !_.errIs( maybeErrror ), msg : 'expected variable is not error' });
 
 }
 
@@ -918,7 +934,7 @@ function _shouldDo( o )
   _.assert( arguments.length === 1 );
 
   var acase = suite.caseCurrent();
-  var con = suite._conSyn;
+  var con = suite._inroutineCon;
   con.got();
 
   // console.log( 'acase',acase );
@@ -1125,10 +1141,12 @@ function _shouldDo( o )
     {
       begin( 0 );
 
+      var msg = 'error not thrown' + ( o.expectingSyncError ? '' : ' asynchronously' ) + ', but expected';
+
       suite._outcomeReportBoolean
       ({
         outcome : 0,
-        msg : 'error not thrown asynchronously, but expected',
+        msg : msg,
         stack : stack,
       });
 
@@ -1311,22 +1329,65 @@ function shouldMessageOnlyOnce( routine )
 // output
 // --
 
+function _outcome( outcome )
+{
+
+  _.assert( arguments.length === 1 );
+
+  if( this.constructor === wTestRoutine )
+  {
+    var testRoutineDescriptor = this;
+
+    if( outcome )
+    {
+      testRoutineDescriptor._currentRoutinePasses += 1;
+      testRoutineDescriptor.suite.report.testCasePasses += 1;
+      _.Testing.report.testCasePasses += 1;
+    }
+    else
+    {
+      testRoutineDescriptor._currentRoutineFails += 1;
+      testRoutineDescriptor.suite.report.testCaseFails += 1;
+      _.Testing.report.testCaseFails += 1;
+    }
+
+    testRoutineDescriptor.caseNext();
+
+  }
+  else
+  {
+    var suite = this;
+
+    if( outcome )
+    {
+      _.Testing.report.testCasePasses += 1;
+      if( suite.report )
+      suite.report.testCasePasses += 1;
+    }
+    else
+    {
+      _.Testing.report.testCaseFails += 1;
+      if( suite.report )
+      suite.report.testCaseFails += 1;
+    }
+
+  }
+
+}
+
+//
+
 function _outcomeReporting( outcome )
 {
   var testRoutineDescriptor = this;
 
-  if( outcome )
-  {
-    testRoutineDescriptor.suite.currentRoutinePasses += 1;
-    testRoutineDescriptor.suite.report.testCasePasses += 1;
-  }
-  else
-  {
-    testRoutineDescriptor.suite.currentRoutineFails += 1;
-    testRoutineDescriptor.suite.report.testCaseFails += 1;
-  }
+  testRoutineDescriptor._outcome( outcome );
 
-  testRoutineDescriptor.caseNext();
+  if( !_.Testing._canContinue() )
+  {
+    testRoutineDescriptor._returnCon.cancel();
+    testRoutineDescriptor._cancelCon.error( _.err( 'Too many fails',_.Testing.fails, '<=', testRoutineDescriptor._currentRoutineFails ) );
+  }
 
   _.assert( arguments.length === 1 );
 
@@ -1448,7 +1509,6 @@ _outcomeReport.defaults =
 
 //
 
-// function _outcomeReportBoolean( outcome,msg,stack )
 function _outcomeReportBoolean( o )
 {
   var testRoutineDescriptor = this;
@@ -1476,26 +1536,6 @@ _outcomeReportBoolean.defaults =
   stack : null,
   usingSourceCode : 1,
 }
-
-//
-
-// function _outcomeReportBooleanNoSource( outcome,msg )
-// {
-//   var testRoutineDescriptor = this;
-//
-//   _.assert( arguments.length === 2 );
-//
-//   msg = testRoutineDescriptor._currentTestCaseTextMake( outcome,msg );
-//
-//   testRoutineDescriptor._outcomeReport
-//   ({
-//     outcome : outcome,
-//     msg : msg,
-//     details : '',
-//     usingSourceCode : 0,
-//   });
-//
-// }
 
 //
 
@@ -1576,6 +1616,8 @@ function exceptionReport( o )
   o.testRoutineDescriptor.onError.call( suite,o.testRoutineDescriptor );
 
   var msg = o.testRoutineDescriptor._currentTestCaseTextMake() + ' ... failed throwing error';
+  if( o.sync !== null )
+  msg += ( o.sync ? 'synchronously' : 'asynchronously' );
   var err = _.errAttend( o.err );
   var details = err.toString();
 
@@ -1598,6 +1640,7 @@ exceptionReport.defaults =
   testRoutineDescriptor : null,
   stack : null,
   usingSourceCode : 1,
+  sync : null,
 }
 
 //
@@ -1657,7 +1700,6 @@ var Composes =
 
   abstract : 0,
   enabled : 1,
-  safe : 1,
   takingIntoAccount : 1,
 
   usingSourceCode : 1,
@@ -1673,7 +1715,7 @@ var Composes =
   _casesStack : [],
 
   _routineCon : new wConsequence().give(),
-  _conSyn : new wConsequence().give(),
+  _inroutineCon : new wConsequence().give(),
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -1694,8 +1736,8 @@ var Restricts =
 {
   name : null,
   currentRoutine : null,
-  currentRoutineFails : null,
-  currentRoutinePasses : null,
+  // currentRoutineFails : null,
+  // currentRoutinePasses : null,
 }
 
 var Statics =
@@ -1761,7 +1803,6 @@ var Proto =
   equivalent : equivalent,
   contain : contain,
 
-
   _shouldDo : _shouldDo,
 
   shouldThrowErrorSync : shouldThrowErrorSync,
@@ -1773,11 +1814,11 @@ var Proto =
 
   // output
 
+  _outcome : _outcome,
   _outcomeReporting : _outcomeReporting,
   _outcomeReport : _outcomeReport,
 
   _outcomeReportBoolean : _outcomeReportBoolean,
-  // _outcomeReportBooleanNoSource : _outcomeReportBooleanNoSource,
   _outcomeReportCompare : _outcomeReportCompare,
 
   exceptionReport : exceptionReport,
@@ -1823,8 +1864,11 @@ _.EventHandler.mixin( Self );
 
 _.accessorForbid( Self.prototype,
 {
+  safe : 'safe',
   options : 'options',
   special : 'special',
+  currentRoutineFails : 'currentRoutineFails',
+  currentRoutinePasses : 'currentRoutinePasses',
 });
 
 // export

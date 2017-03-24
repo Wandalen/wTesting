@@ -887,7 +887,7 @@ function _throwingExperiment( test )
 
 }
 
-_throwingExperiment.experiment = 1;
+_throwingExperiment.experimental = 1;
 
 // --
 // special
@@ -1161,7 +1161,7 @@ function _chainedShould( test,o )
 
 }
 
-_chainedShould.experiment = 1;
+_chainedShould.experimental = 1;
 
 //
 
@@ -1226,7 +1226,7 @@ function asyncExperiment( test )
   return con;
 }
 
-asyncExperiment.experiment = 1;
+asyncExperiment.experimental = 1;
 
 //
 
@@ -1240,7 +1240,7 @@ function failExperiment( test )
 
 }
 
-failExperiment.experiment = 1;
+failExperiment.experimental = 1;
 
 // --
 // proto

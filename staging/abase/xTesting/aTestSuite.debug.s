@@ -481,7 +481,7 @@ function _testRoutineRun( name,testRoutine )
 
   /* */
 
-  if( ( !_.Testing.routine || !suite.takingIntoAccount ) && testRoutine.experiment )
+  if( ( !_.Testing.routine || !suite.takingIntoAccount ) && testRoutine.experimental )
   return;
 
   if( suite.takingIntoAccount )
@@ -972,7 +972,6 @@ function _shouldDo( o )
   }
   catch( err )
   {
-    debugger;
 
     if( o.ignoringError )
     {
@@ -980,7 +979,7 @@ function _shouldDo( o )
       suite._outcomeReportBoolean
       ({
         outcome : 1,
-        msg : 'error throwen synchronously, no asynchronicity',
+        msg : 'error throwen synchronously, ignored',
         stack : stack,
       });
       end( 1 );

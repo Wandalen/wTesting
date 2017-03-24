@@ -2,6 +2,14 @@
 
 'use strict';
 
+/*
+
+- move test routine methods out of test suite
+- implement routine only as option of test suite
+- manual launch of test suite + global tests execution should not give extra test suite runs
+
+*/
+
 if( typeof module !== 'undefined' )
 {
 

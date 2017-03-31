@@ -930,7 +930,7 @@ function _shouldDo( o )
   // o.ignoringError = 1;
 
   _.routineOptions( _shouldDo,o );
-  _.assert( _.routineIs( o.routine ) );
+  // _.assert( _.routineIs( o.routine ) );
   _.assert( arguments.length === 1 );
 
   var acase = suite.caseCurrent();
@@ -957,6 +957,22 @@ function _shouldDo( o )
     suite.logger.end({ verbosity : positive ? -5 : -5+suite.importanceOfNegative  });
     suite.logger.end({ connotation : positive ? 'positive' : 'negative' });
     suite.caseRestore();
+  }
+
+  /* */
+
+  if( !_.routineIs( o.routine ) )
+  {
+    begin( 0 );
+    suite._outcomeReportBoolean
+    ({
+      outcome : 0,
+      msg : 'expects Routine or Consequence, but got ' + _.strTypeOf( o.routine ),
+      stack : stack,
+    });
+    end( 0 );
+    con.give();
+    return con.splitThen();
   }
 
   /* */

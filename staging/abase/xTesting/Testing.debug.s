@@ -7,6 +7,21 @@
 - move test routine methods out of test suite
 - implement routine only as option of test suite
 - manual launch of test suite + global tests execution should not give extra test suite runs
+- after the last test case of test routine description should be changed
+
+- make possible switch off parents test routines
+
+fileStat : null
+
+- make "should/must not error" pass original messages through
+  test.description = 'mustNotThrowError must return con with message';
+
+  var con = new wConsequence().give( '123' );
+  test.mustNotThrowError( con )
+  .ifNoErrorThen( function( got )
+  {
+    test.identical( got, '123' );
+  })
 
 */
 
@@ -142,7 +157,7 @@ function includeTestsFrom( path )
 
   var files = _.fileProvider.filesFind
   ({
-    pathFile : path,
+    filePath : path,
     ends : [ '.test.s','.test.ss','.test.js' ],
     recursive : 1,
     maskAll : _.pathRegexpMakeSafe(),

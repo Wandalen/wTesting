@@ -1,4 +1,4 @@
-#! /usr/bin/env NODE
+#! /usr/bin/env node
 
 if( typeof module !== "undefined" )
 {

@@ -1592,7 +1592,7 @@ function _outcomeReportCompare( outcome,got,expected,path )
 
     var details = msgExpectedGot();
 
-    if( !_.atomicIs( got ) && !_.atomicIs( expected ) )
+    if( !_.atomicIs( got ) && !_.atomicIs( expected ) && path )
     details +=
     (
       '\nat : ' + path +

@@ -925,6 +925,7 @@ function _shouldDo( o )
   var reported = 0;
   var good = 1;
   var stack = _.diagnosticStack( 2,-1 );
+  var logger = suite.logger;
 
   // if( o.expectingSyncError || o.expectingAsyncError )
   // o.ignoringError = 1;
@@ -948,14 +949,14 @@ function _shouldDo( o )
     reported = 1;
     good = positive;
     suite.caseRestore( acase );
-    suite.logger.begin({ verbosity : positive ? -5 : -5+suite.importanceOfNegative });
-    suite.logger.begin({ connotation : positive ? 'positive' : 'negative' });
+    logger.begin({ verbosity : positive ? -5 : -5+suite.importanceOfNegative });
+    logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
   function end( positive )
   {
-    suite.logger.end({ verbosity : positive ? -5 : -5+suite.importanceOfNegative  });
-    suite.logger.end({ connotation : positive ? 'positive' : 'negative' });
+    logger.end({ verbosity : positive ? -5 : -5+suite.importanceOfNegative  });
+    logger.end({ connotation : positive ? 'positive' : 'negative' });
     suite.caseRestore();
   }
 
@@ -1005,9 +1006,13 @@ function _shouldDo( o )
 
     begin( o.expectingSyncError );
 
+    logger.begin({ verbosity : -6+( o.expectingSyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
+
     if( !_.errIsAttended( err ) )
-    suite.logger.log( _.errAttend( err ) );
+    logger.log( _.errAttend( err ) );
     thrown = 1;
+
+    logger.end({ verbosity : -6+( o.expectingSyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
 
     if( o.expectingSyncError )
     suite._outcomeReportBoolean
@@ -1054,9 +1059,13 @@ function _shouldDo( o )
       {
         begin( o.expectingAsyncError );
 
+        logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
+
         if( !_.errIsAttended( err ) )
-        suite.logger.log( _.errAttend( err ) );
+        logger.log( _.errAttend( err ) );
         thrown = 1;
+
+        logger.end({ verbosity : -6+( o.expectingAsyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
 
         if( o.expectingAsyncError )
         suite._outcomeReportBoolean

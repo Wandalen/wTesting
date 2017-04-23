@@ -203,6 +203,9 @@ function appArgsApply()
   var testing = this;
   var logger = testing.logger || _global_.logger;
 
+  if( testing._appArgsApplied )
+  return testing._appArgsApplied;
+
   _.assert( arguments.length === 0 );
 
   var appArgs = _.appArgsInSubjectAndMapFormat();
@@ -214,6 +217,8 @@ function appArgsApply()
     if( testing.verbosity >= 5 )
     logger.log( 'Application arguments :\n',_.toStr( _.mapScreen( Options,appArgs.map ),{ levels : 2 } ) );
   }
+
+  testing._appArgsApplied = appArgs;
 
   return appArgs;
 }
@@ -254,7 +259,7 @@ function _testAllAct()
     return testing._testingEnd();
   });
 
-  return wTestSuite._suiteCon.splitThen();
+  return wTestSuite._suiteCon.split();
 }
 
 //
@@ -305,7 +310,7 @@ function _test()
 
   return wTestSuite._suiteCon
   .timeOutThen( testing.sanitareTime )
-  .splitThen( function()
+  .split( function()
   {
     return testing._testingEnd();
   });
@@ -465,7 +470,7 @@ function testsListPrint( suites )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  logger.log( _.entitySelect( _.mapValues( suites ),'*.sourceFilePath' ).join( '\n' ) );
+  logger.log( _.entitySelect( _.entityVals( suites ),'*.sourceFilePath' ).join( '\n' ) );
 
   var l = _.entityLength( suites );
 
@@ -590,7 +595,7 @@ function loggerToBook( o )
       return result;
     });
 
-    cases = _.mapValues( cases );
+    cases = _.entityVals( cases );
 
     /* routine */
 
@@ -608,7 +613,7 @@ function loggerToBook( o )
   /* */
 
   logger.log( _.toStr( routines,{ levels : 1 } ) );
-  routines = _.mapValues( routines );
+  routines = _.entityVals( routines );
 
   /* */
 
@@ -717,6 +722,7 @@ var Self =
   _defaultVerbosity : 2,
 
   _bar : null,
+  _appArgsApplied : null,
 
   constructor : function wTesting(){},
 

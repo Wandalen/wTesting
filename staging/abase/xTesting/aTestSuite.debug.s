@@ -222,7 +222,7 @@ function _testSuiteRunLater()
     return suite._testSuiteRunAct();
 
   })
-  .splitThen();
+  .split();
 
 }
 
@@ -253,7 +253,7 @@ function _testSuiteRunNow()
     return suite._testSuiteRunAct();
 
   })
-  .splitThen();
+  .split();
 }
 
 //
@@ -531,7 +531,7 @@ function _testRoutineRun( name,testRoutine )
 
     return result;
   })
-  .splitThen();
+  .split();
 
 }
 
@@ -973,7 +973,7 @@ function _shouldDo( o )
     });
     end( 0 );
     con.give();
-    return con.splitThen();
+    return con.split();
   }
 
   /* */
@@ -1210,7 +1210,7 @@ function _shouldDo( o )
 
   suite.caseNext();
 
-  return con.splitThen();
+  return con.split();
 }
 
 _shouldDo.defaults =
@@ -1653,8 +1653,6 @@ function exceptionReport( o )
     stack : o.stack,
     usingSourceCode : o.usingSourceCode
   });
-
-  // testRoutineDescriptor._outcomeReport( 0,msg,details );
 
 }
 

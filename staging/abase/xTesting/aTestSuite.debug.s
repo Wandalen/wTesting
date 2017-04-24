@@ -429,7 +429,7 @@ function _testSuiteEnd()
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
 
   logger.end({ verbosity : -2 });
-  logger.end({ verbosity : suite.verbosityOfDetails });
+  logger.end({ verbosity : suite.verbosityOfDetails }); 
   logger.verbosityPop();
 
   /* */
@@ -1006,13 +1006,13 @@ function _shouldDo( o )
 
     begin( o.expectingSyncError );
 
-    logger.begin({ verbosity : -6+( o.expectingSyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
+    logger.begin({ verbosity : -6+( o.expectingSyncError ? 0 : suite.importanceOfNegative ) });
 
     if( !_.errIsAttended( err ) )
     logger.log( _.errAttend( err ) );
     thrown = 1;
 
-    logger.end({ verbosity : -6+( o.expectingSyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
+    logger.end({ verbosity : -6+( o.expectingSyncError ? 0 : suite.importanceOfNegative ) });
 
     if( o.expectingSyncError )
     suite._outcomeReportBoolean
@@ -1059,13 +1059,13 @@ function _shouldDo( o )
       {
         begin( o.expectingAsyncError );
 
-        logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
+        logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : suite.importanceOfNegative ) });
 
         if( !_.errIsAttended( err ) )
         logger.log( _.errAttend( err ) );
         thrown = 1;
 
-        logger.end({ verbosity : -6+( o.expectingAsyncError ? 0 : testRoutineDescriptor.importanceOfNegative ) });
+        logger.end({ verbosity : -6+( o.expectingAsyncError ? 0 : suite.importanceOfNegative ) });
 
         if( o.expectingAsyncError )
         suite._outcomeReportBoolean

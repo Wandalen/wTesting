@@ -188,8 +188,10 @@ function mustNotThrowError( test )
     test.description = 'throw unexpected error, synchronously';
     t.mustNotThrowError( function ()
     {
+      debugger;
       throw _.err( 'test' );
     });
+    debugger;
 
     counter.acase = t.caseCurrent();
     test.identical( counter.acase.description, 'a' );
@@ -283,6 +285,8 @@ function mustNotThrowError( test )
 
   return result;
 }
+
+mustNotThrowError.timeOut = 30000;
 
 //
 

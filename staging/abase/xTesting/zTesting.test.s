@@ -691,6 +691,46 @@ function shouldThrowError( test )
 
 //
 
+function shouldPassMessage( test )
+{
+  var counter = new CaseCounter();
+  // debugger;
+
+  test.description = 'mustNotThrowError must return con with message';
+
+  var con = new wConsequence().give( '123' );
+  test.mustNotThrowError( con )
+  .ifNoErrorThen( function( arg )
+  {
+    test.identical( arg, '123' );
+  });
+
+  var con = new wConsequence().give( '123' );
+  test.shouldMessageOnlyOnce( con )
+  .ifNoErrorThen( function( arg )
+  {
+    test.identical( arg, '123' );
+  });
+
+  test.description = 'mustNotThrowError must return con original error';
+
+  var errOriginal = _.err( 'Err' );
+  var con = new wConsequence().error( errOriginal );
+  test.shouldThrowError( con )
+  .doThen( function( err,arg )
+  {
+    // debugger;
+    test.identical( err,errOriginal );
+    _.errAttend( err );
+  });
+
+  return _.timeOut( 500 );
+}
+
+shouldPassMessage.timeOut = 30000;
+
+//
+
 function _throwingExperiment( test )
 {
   var t = test;
@@ -900,6 +940,8 @@ _throwingExperiment.experimental = 1;
 function shouldThrowErrorSimpleSync( test )
 {
 
+  test.identical( test._inroutineCon.messagesGet().length,1 );
+
   var consequence = new wConsequence().give();
   consequence
   .ifNoErrorThen( function()
@@ -930,10 +972,12 @@ function shouldThrowErrorSimpleAsync( test )
   counter.testRoutine = test;
   counter.next();
 
+  test.identical( test._inroutineCon.messagesGet().length,1 );
+
   // debugger;
 
   consequence
-  .ifNoErrorThen( function()
+  .doThen( function()
   {
     test.description = 'a';
     var con = _.timeOut( 50,function( err )
@@ -944,7 +988,7 @@ function shouldThrowErrorSimpleAsync( test )
     debugger;
     return test.shouldThrowErrorAsync( con );
   })
-  .ifNoErrorThen( function()
+  .doThen( function()
   {
     test.description = 'b';
     var con = _.timeOut( 50,function( err )
@@ -955,22 +999,22 @@ function shouldThrowErrorSimpleAsync( test )
     debugger;
     return test.shouldThrowErrorAsync( con );
   })
-  .ifNoErrorThen( function()
+  .doThen( function()
   {
     debugger;
 
     var acase = test.caseCurrent();
 
-    test.identical( test.report.testCasePasses-counter.prevCasePasses, 2 );
+    test.identical( test.report.testCasePasses-counter.prevCasePasses, 3 );
     test.identical( test.report.testCaseFails-counter.prevCaseFails, 0 );
 
     test.identical( acase.description, 'b' );
-    test.identical( acase._caseIndex, 3 );
+    test.identical( acase._caseIndex, 4 );
 
-    // test.identical( test.report.testCasePasses, 3 );
-    // test.identical( test.report.testCaseFails, 0 );
+    test.identical( test._inroutineCon.messagesGet().length,0 );
 
-  });
+  })
+  ;
 
 
   return consequence;
@@ -1067,14 +1111,14 @@ function _chainedShould( test,o )
 
         test.description = prefix + 'first ' + method + ' done';
 
-        test.identical( t.report.testCasePasses, 4 );
+        test.identical( t.report.testCasePasses, o.lowerCount ? 4 : 5 );
         test.identical( t.report.testCaseFails, 0 );
 
         if( o.throwingError === 'sync' )
         t[ method ]( function(){ throw _.err( 'sync error' ) } );
 
         counter.acase = counter.testRoutine.caseCurrent();
-        test.identical( counter.acase._caseIndex, 3 );
+        test.identical( counter.acase._caseIndex, o.lowerCount ? 3 : 4 );
 
         if( o.throwingError === 'async' )
         t[ method ]( _.timeOutError( 50 ) );
@@ -1149,6 +1193,8 @@ function _chainedShould( test,o )
 
   });
 
+  /* */
+
   return t.run()
   .doThen( function( err,data )
   {
@@ -1175,9 +1221,11 @@ function chainedShould( test )
 
   var iterations =
   [
+
     {
       method : 'shouldThrowError',
       throwingError : 'sync',
+      lowerCount : 1,
     },
     {
       method : 'shouldThrowError',
@@ -1187,11 +1235,14 @@ function chainedShould( test )
     {
       method : 'shouldThrowErrorSync',
       throwingError : 'sync',
+      lowerCount : 1,
     },
+
     {
       method : 'shouldThrowErrorAsync',
       throwingError : 'async',
     },
+
     {
       method : 'mustNotThrowError',
       throwingError : 0,
@@ -1270,6 +1321,7 @@ var Self =
     shouldThrowErrorSync : shouldThrowErrorSync,
     shouldThrowErrorAsync : shouldThrowErrorAsync,
     shouldThrowError : shouldThrowError,
+    shouldPassMessage : shouldPassMessage,
     _throwingExperiment : _throwingExperiment,
 
     shouldThrowErrorSimpleSync : shouldThrowErrorSimpleSync,

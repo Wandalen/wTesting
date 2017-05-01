@@ -429,7 +429,7 @@ function _testSuiteEnd()
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
 
   logger.end({ verbosity : -2 });
-  logger.end({ verbosity : suite.verbosityOfDetails }); 
+  logger.end({ verbosity : suite.verbosityOfDetails });
   logger.verbosityPop();
 
   /* */
@@ -518,6 +518,7 @@ function _testRoutineRun( name,testRoutine )
 
     var timeOut = testRoutine.timeOut || testRoutineDescriptor.testRoutineTimeOut || _.Testing.testRoutineTimeOut;
 
+    debugger;
     result = testRoutineDescriptor._returnCon = wConsequence.from( result );
 
     // result.got( function( err,data ){ console.log( _.strTypeOf( err ) ); this.give( err,data ); } );
@@ -526,7 +527,9 @@ function _testRoutineRun( name,testRoutine )
 
     // result.got( function( err,data ){ console.log( _.strTypeOf( err ) ); this.give( err,data ); } );
 
+    debugger;
     result = result.eitherThenSplit([ _.timeOutError( timeOut ),testRoutineDescriptor._cancelCon ]);
+    debugger;
     result.doThen( _.routineJoin( testRoutineDescriptor,_testRoutineHandleReturn ) );
 
     return result;
@@ -568,6 +571,7 @@ function _testRoutineHandleReturn( err,msg )
       outcome : 0,
       msg : 'test routine has passed none test case',
       usingSourceCode : 0,
+      usingDescription : 0,
     });
     else
     testRoutineDescriptor._outcomeReportBoolean
@@ -575,6 +579,7 @@ function _testRoutineHandleReturn( err,msg )
       outcome : 1,
       msg : 'test routine has not thrown an error',
       usingSourceCode : 0,
+      usingDescription : 0,
     });
   }
 
@@ -926,6 +931,7 @@ function _shouldDo( o )
   var good = 1;
   var stack = _.diagnosticStack( 2,-1 );
   var logger = suite.logger;
+  var err,arg;
 
   // if( o.expectingSyncError || o.expectingAsyncError )
   // o.ignoringError = 1;
@@ -935,8 +941,8 @@ function _shouldDo( o )
   _.assert( arguments.length === 1 );
 
   var acase = suite.caseCurrent();
-  var con = suite._inroutineCon;
-  con.got();
+  var con = suite._inroutineCon.got().split();
+  // con.got();
 
   // console.log( 'acase',acase );
 
@@ -944,6 +950,7 @@ function _shouldDo( o )
 
   function begin( positive )
   {
+    debugger;
     if( positive )
     _.assert( !reported );
     reported = 1;
@@ -972,8 +979,13 @@ function _shouldDo( o )
       stack : stack,
     });
     end( 0 );
+
+    debugger;
+    _.assert( !( o.routine instanceof wConsequence ) )
+    suite._inroutineCon.give();
     con.give();
-    return con.split();
+    // return con.split();
+    return con;
   }
 
   /* */
@@ -1000,7 +1012,9 @@ function _shouldDo( o )
         stack : stack,
       });
       end( 1 );
-      con.give();
+      debugger;
+      con.give( null,err );
+      suite._inroutineCon.give();
       throw err;
     }
 
@@ -1051,8 +1065,10 @@ function _shouldDo( o )
   if( result instanceof wConsequence )
   {
 
-    result.got( function( err,data )
+    result.got( function( _err,_arg )
     {
+      err = _err;
+      arg = _arg;
 
       if( !o.ignoringError && !reported )
       if( err )
@@ -1106,20 +1122,20 @@ function _shouldDo( o )
         end( !o.expectingAsyncError );
       }
 
-      // console.log( 'c acase',acase );
+      /* */
 
       if( !o.allowingMultipleMessages )
       _.timeOut( 10,function()
       {
         if( second || reported )
         {
-          con.give();
+          debugger;
+          con.give( err,arg );
+          suite._inroutineCon.give();
           return;
         }
 
         begin( 1 );
-
-        // console.log( stack );
 
         suite._outcomeReportBoolean
         ({
@@ -1130,7 +1146,8 @@ function _shouldDo( o )
 
         end( 1 );
 
-        con.give();
+        con.give( err,arg );
+        suite._inroutineCon.give();
       });
 
     });
@@ -1203,14 +1220,16 @@ function _shouldDo( o )
       end( 0 );
     }
 
-    con.give();
+    con.give( err,arg );
+    suite._inroutineCon.give();
   }
 
   /* */
 
   suite.caseNext();
 
-  return con.split();
+  return con;
+  // return con.split();
 }
 
 _shouldDo.defaults =
@@ -1362,16 +1381,20 @@ function _outcome( outcome )
   {
     var testRoutineDescriptor = this;
 
+    _.assert( testRoutineDescriptor.takingIntoAccount !== undefined );
+
     if( outcome )
     {
       testRoutineDescriptor._currentRoutinePasses += 1;
       testRoutineDescriptor.suite.report.testCasePasses += 1;
+      if( testRoutineDescriptor.takingIntoAccount )
       _.Testing.report.testCasePasses += 1;
     }
     else
     {
       testRoutineDescriptor._currentRoutineFails += 1;
       testRoutineDescriptor.suite.report.testCaseFails += 1;
+      if( testRoutineDescriptor.takingIntoAccount )
       _.Testing.report.testCaseFails += 1;
     }
 
@@ -1382,14 +1405,18 @@ function _outcome( outcome )
   {
     var suite = this;
 
+    _.assert( suite.takingIntoAccount !== undefined );
+
     if( outcome )
     {
+      if( suite.takingIntoAccount )
       _.Testing.report.testCasePasses += 1;
       if( suite.report )
       suite.report.testCasePasses += 1;
     }
     else
     {
+      if( suite.takingIntoAccount )
       _.Testing.report.testCaseFails += 1;
       if( suite.report )
       suite.report.testCaseFails += 1;
@@ -1514,7 +1541,7 @@ function _outcomeReport( o )
 
     logger.end({ verbosity : -4+testRoutineDescriptor.importanceOfNegative });
 
-    /*debugger;*/
+    debugger;
   }
 
   logger.end( 'case','caseIndex' );
@@ -1540,7 +1567,7 @@ function _outcomeReportBoolean( o )
   _.assert( arguments.length === 1 );
   _.routineOptions( _outcomeReportBoolean,o );
 
-  o.msg = testRoutineDescriptor._currentTestCaseTextMake( o.outcome,o.msg );
+  o.msg = testRoutineDescriptor._currentTestCaseTextMake( o.outcome,o.msg,o.usingDescription );
 
   testRoutineDescriptor._outcomeReport
   ({
@@ -1559,6 +1586,7 @@ _outcomeReportBoolean.defaults =
   msg : null,
   stack : null,
   usingSourceCode : 1,
+  usingDescription : 1,
 }
 
 //
@@ -1667,18 +1695,24 @@ exceptionReport.defaults =
 
 //
 
-function _currentTestCaseTextMake( value,hint )
+function _currentTestCaseTextMake( value,hint,usingDescription )
 {
   var testRoutineDescriptor = this;
 
-  _.assert( arguments.length === 0 || arguments.length === 1 || arguments.length === 2 );
+  if( usingDescription === undefined )
+  usingDescription = 1;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 || arguments.length === 2 || arguments.length === 3 );
   _.assert( value === undefined || _.boolLike( value ) );
   _.assert( hint === undefined || _.strIs( hint ) );
   _.assert( testRoutineDescriptor._testRoutineDescriptorIs );
   _.assert( testRoutineDescriptor._caseIndex >= 0 );
   _.assert( _.strIsNotEmpty( testRoutineDescriptor.routine.name ),'test routine descriptor should have name' );
 
-  var name = testRoutineDescriptor.routine.name + ( testRoutineDescriptor.description ? ' : ' + testRoutineDescriptor.description : '' );
+  var name = testRoutineDescriptor.routine.name;
+
+  if( testRoutineDescriptor.description && usingDescription )
+  name += ' : ' + testRoutineDescriptor.description;
 
   var result = '' +
     'Test case' + ' ( ' + name + ' )' +
@@ -1723,7 +1757,6 @@ var Composes =
   abstract : 0,
   enabled : 1,
   takingIntoAccount : 1,
-
   usingSourceCode : 1,
 
   eps : 1e-5,

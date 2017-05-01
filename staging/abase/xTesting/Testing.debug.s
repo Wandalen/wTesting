@@ -23,6 +23,9 @@ fileStat : null
     test.identical( got, '123' );
   })
 
+- improve inheritance
+- global search cant find test suites with inheritance
+
 */
 
 if( typeof module !== 'undefined' )

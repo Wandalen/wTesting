@@ -1474,6 +1474,10 @@ function _outcomeReport( o )
       else
       code = '\n' + _location.full;
     }
+
+    if( code )
+    code = '#colorTracking : 0#' + code + '#colorTracking : 1#';
+
     return code;
   }
 

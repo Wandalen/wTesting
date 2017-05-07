@@ -26,6 +26,9 @@ fileStat : null
 - improve inheritance
 - global search cant find test suites with inheritance
 
+- implement support of glob path
+- print information about case with color directive avoiding change of color state of logger
+
 */
 
 if( typeof module !== 'undefined' )

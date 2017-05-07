@@ -518,7 +518,6 @@ function _testRoutineRun( name,testRoutine )
 
     var timeOut = testRoutine.timeOut || testRoutineDescriptor.testRoutineTimeOut || _.Testing.testRoutineTimeOut;
 
-    debugger;
     result = testRoutineDescriptor._returnCon = wConsequence.from( result );
 
     // result.got( function( err,data ){ console.log( _.strTypeOf( err ) ); this.give( err,data ); } );
@@ -527,9 +526,9 @@ function _testRoutineRun( name,testRoutine )
 
     // result.got( function( err,data ){ console.log( _.strTypeOf( err ) ); this.give( err,data ); } );
 
-    debugger;
+    // debugger;
     result = result.eitherThenSplit([ _.timeOutError( timeOut ),testRoutineDescriptor._cancelCon ]);
-    debugger;
+    // debugger;
     result.doThen( _.routineJoin( testRoutineDescriptor,_testRoutineHandleReturn ) );
 
     return result;

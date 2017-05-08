@@ -1475,7 +1475,7 @@ function _outcomeReport( o )
     }
 
     if( code )
-    code = '#colorTracking : 0#' + code + '#colorTracking : 1#';
+    code = '#trackingColor : 0#' + code + '#trackingColor : 1#';
 
     return code;
   }

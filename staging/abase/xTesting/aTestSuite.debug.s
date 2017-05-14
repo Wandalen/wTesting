@@ -1544,7 +1544,7 @@ function _outcomeReport( o )
 
     logger.end({ verbosity : -4+testRoutineDescriptor.importanceOfNegative });
 
-    debugger;
+    // debugger;
   }
 
   logger.end( 'case','caseIndex' );
@@ -1899,7 +1899,7 @@ var Proto =
 
 _.protoMake
 ({
-  constructor : Self,
+  cls : Self,
   parent : Parent,
   extend : Proto,
 });

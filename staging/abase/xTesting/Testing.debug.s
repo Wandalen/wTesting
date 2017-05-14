@@ -161,6 +161,7 @@ function includeTestsFrom( path )
 
   logger.log( 'Include tests from :',path );
 
+  debugger;
   var files = _.fileProvider.filesFind
   ({
     filePath : path,
@@ -169,7 +170,7 @@ function includeTestsFrom( path )
     maskAll : _.pathRegexpMakeSafe(),
   });
 
-  // console.log( 'files',_.entitySelect( files,'*.absolute' ) );
+  logger.log( 'files',_.entitySelect( files,'*.absolute' ) );
 
   for( var f = 0 ; f < files.length ; f++ )
   {
@@ -236,7 +237,6 @@ function appArgsApply()
 function _testAllAct()
 {
   var testing = this;
-  debugger;
 
   _.assert( arguments.length === 0 );
 
@@ -552,7 +552,7 @@ function loggerToBook( o )
   _.routineOptions( loggerToBook,o );
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( o.logger instanceof wLoggerToJstructure );
+  _.assert( o.logger instanceof wPrinterToJstructure );
 
   var data = o.logger.outputData;
   var routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
@@ -771,7 +771,7 @@ _.Testing.exec();
 //
 //   // debugger;
 //   Self.verbosity = 0;
-//   //Self.logger = wLoggerToJstructure({ coloring : 0 });
+//   //Self.logger = wPrinterToJstructure({ coloring : 0 });
 //
 //   // _.Testing.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
 //   _.Testing.test( 'FileProvider.SimpleStructure' )

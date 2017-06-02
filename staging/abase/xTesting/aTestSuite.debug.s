@@ -306,6 +306,7 @@ function _testSuiteRunAct()
 function _testSuiteBegin()
 {
   var suite = this;
+
   if( suite.debug )
   debugger;
 
@@ -449,7 +450,7 @@ function _testSuiteEnd()
   }
 
   _.assert( _.Testing.activeSuites.indexOf( suite ) !== -1 );
-  _.arrayRemoveOnce( _.Testing.activeSuites,suite );
+  _.__arrayRemoveOnce( _.Testing.activeSuites,suite );
 
   if( suite.debug )
   debugger;
@@ -773,6 +774,31 @@ function shouldBeNotError( maybeErrror )
 
 //
 
+function notIdentical( got,expected )
+{
+  var testRoutineDescriptor = this;
+  var iterator = Object.create( null );
+
+  _.assert( arguments.length === 2 );
+
+  var outcome = _.entityIdentical( got,expected,iterator );
+
+  _.assert( iterator.lastPath !== undefined );
+
+  testRoutineDescriptor._outcomeReportCompare // ( !outcome,got,expected,iterator.lastPath );
+  ({
+    outcome : !outcome,
+    got : got,
+    expected : expected,
+    path : iterator.lastPath,
+    usingExtraDetails : 0,
+  });
+
+  return outcome;
+}
+
+//
+
 /**
  * Checks if test passes a specified condition by deep strict comparsing result of code execution( got )
  * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
@@ -807,15 +833,22 @@ function shouldBeNotError( maybeErrror )
 function identical( got,expected )
 {
   var testRoutineDescriptor = this;
-  var options = Object.create( null );
+  var iterator = Object.create( null );
 
   _.assert( arguments.length === 2 );
 
-  var outcome = _.entityIdentical( got,expected,options );
+  var outcome = _.entityIdentical( got,expected,iterator );
 
-  _.assert( options.lastPath !== undefined );
+  _.assert( iterator.lastPath !== undefined );
 
-  testRoutineDescriptor._outcomeReportCompare( outcome,got,expected,options.lastPath );
+  testRoutineDescriptor._outcomeReportCompare //( outcome,got,expected,iterator.lastPath );
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    path : iterator.lastPath,
+    usingExtraDetails : 1,
+  });
 
   return outcome;
 }
@@ -859,18 +892,25 @@ function identical( got,expected )
 function equivalent( got,expected,eps )
 {
   var testRoutineDescriptor = this;
-  var optionsForEntity = Object.create( null );
+  var iterator = Object.create( null );
 
   if( eps === undefined )
   eps = testRoutineDescriptor.eps;
 
-  optionsForEntity.eps = eps;
+  iterator.eps = eps;
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
 
-  var outcome = _.entityEquivalent( got,expected,optionsForEntity );
+  var outcome = _.entityEquivalent( got,expected,iterator );
 
-  testRoutineDescriptor._outcomeReportCompare( outcome,got,expected,optionsForEntity.lastPath );
+  testRoutineDescriptor._outcomeReportCompare // ( outcome,got,expected,iterator.lastPath );
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    path : iterator.lastPath,
+    usingExtraDetails : 1,
+  });
 
   return outcome;
 }
@@ -910,11 +950,18 @@ function equivalent( got,expected,eps )
 function contain( got,expected )
 {
   var testRoutineDescriptor = this;
-  var options = Object.create( null );
+  var iterator = Object.create( null );
 
-  var outcome = _.entityContain( got,expected,options );
+  var outcome = _.entityContain( got,expected,iterator );
 
-  testRoutineDescriptor._outcomeReportCompare( outcome,got,expected,options.lastPath );
+  testRoutineDescriptor._outcomeReportCompare // ( outcome,got,expected,iterator.lastPath );
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    path : iterator.lastPath,
+    usingExtraDetails : 1,
+  });
 
   return outcome;
 }
@@ -932,24 +979,16 @@ function _shouldDo( o )
   var logger = suite.logger;
   var err,arg;
 
-  // if( o.expectingSyncError || o.expectingAsyncError )
-  // o.ignoringError = 1;
-
   _.routineOptions( _shouldDo,o );
-  // _.assert( _.routineIs( o.routine ) );
   _.assert( arguments.length === 1 );
 
   var acase = suite.caseCurrent();
   var con = suite._inroutineCon.got().split();
-  // con.got();
-
-  // console.log( 'acase',acase );
 
   /* */
 
   function begin( positive )
   {
-    debugger;
     if( positive )
     _.assert( !reported );
     reported = 1;
@@ -1594,26 +1633,28 @@ _outcomeReportBoolean.defaults =
 
 //
 
-function _outcomeReportCompare( outcome,got,expected,path )
+// function _outcomeReportCompare( outcome,got,expected,path )
+function _outcomeReportCompare( o )
 {
   var testRoutineDescriptor = this;
 
   _.assert( testRoutineDescriptor._testRoutineDescriptorIs );
-  _.assert( arguments.length === 4 );
+  _.assert( arguments.length === 1 );
+  _.routineOptions( _outcomeReportCompare,o );
 
   /**/
 
   function msgExpectedGot()
   {
     return '' +
-    'got :\n' + _.toStr( got,{ stringWrapper : '' } ) + '\n' +
-    'expected :\n' + _.toStr( expected,{ stringWrapper : '' } ) +
+    'got :\n' + _.toStr( o.got,{ stringWrapper : '' } ) + '\n' +
+    'expected :\n' + _.toStr( o.expected,{ stringWrapper : '' } ) +
     '';
   }
 
   /**/
 
-  if( outcome )
+  if( o.outcome )
   {
 
     var details = msgExpectedGot();
@@ -1621,7 +1662,7 @@ function _outcomeReportCompare( outcome,got,expected,path )
 
     testRoutineDescriptor._outcomeReport
     ({
-      outcome : outcome,
+      outcome : o.outcome,
       msg : msg,
       details : details,
     });
@@ -1632,30 +1673,42 @@ function _outcomeReportCompare( outcome,got,expected,path )
 
     var details = msgExpectedGot();
 
-    if( !_.atomicIs( got ) && !_.atomicIs( expected ) && path )
+    if( o.usingExtraDetails )
+    if( !_.atomicIs( o.got ) && !_.atomicIs( o.expected ) && o.path )
     details +=
     (
-      '\nat : ' + path +
-      '\ngot :\n' + _.toStr( _.entitySelect( got,path ) ) +
-      '\nexpected :\n' + _.toStr( _.entitySelect( expected,path ) ) +
+      '\nat : ' + o.path +
+      '\ngot :\n' + _.toStr( _.entitySelect( o.got,o.path ) ) +
+      '\nexpected :\n' + _.toStr( _.entitySelect( o.expected,o.path ) ) +
       ''
     );
 
-    if( _.strIs( expected ) && _.strIs( got ) )
-    details += '\ndifference :\n' + _.strDifference( expected,got );
+    if( o.usingExtraDetails )
+    if( _.strIs( o.expected ) && _.strIs( o.got ) )
+    details += '\ndifference :\n' + _.strDifference( o.expected,o.got );
 
     var msg = testRoutineDescriptor._currentTestCaseTextMake( 0 );
 
     testRoutineDescriptor._outcomeReport
     ({
-      outcome : outcome,
+      outcome : o.outcome,
       msg : msg,
       details : details,
     });
 
-    // debugger;
+    if( testRoutineDescriptor.debug )
+    debugger;
   }
 
+}
+
+_outcomeReportCompare.defaults =
+{
+  outcome : null,
+  got : null,
+  expected : null,
+  path : null,
+  usingExtraDetails : 1,
 }
 
 //
@@ -1857,6 +1910,7 @@ var Proto =
 
   shouldBe : shouldBe,
   shouldBeNotError : shouldBeNotError,
+  notIdentical : notIdentical,
   identical : identical,
   equivalent : equivalent,
   contain : contain,

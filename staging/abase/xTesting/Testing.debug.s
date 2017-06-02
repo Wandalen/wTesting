@@ -161,7 +161,6 @@ function includeTestsFrom( path )
 
   logger.log( 'Include tests from :',path );
 
-  debugger;
   var files = _.fileProvider.filesFind
   ({
     filePath : path,
@@ -170,7 +169,7 @@ function includeTestsFrom( path )
     maskAll : _.pathRegexpMakeSafe(),
   });
 
-  logger.log( 'files',_.entitySelect( files,'*.absolute' ) );
+  /*logger.log( 'files',_.entitySelect( files,'*.absolute' ) );*/
 
   for( var f = 0 ; f < files.length ; f++ )
   {

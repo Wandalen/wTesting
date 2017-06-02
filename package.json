@@ -1,7 +1,7 @@
 {
   "name": "wTesting",
   "version": "0.3.24",
-  "engine": "node >= 5.0.0",
+  "engine": "node >= 6.0.0",
   "description": "Tool for convenient unit testing in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "contributors": [

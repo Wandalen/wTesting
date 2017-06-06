@@ -55,7 +55,7 @@ With options:
 
 ### Example
 
-```
+```javascript
 function myTest( test )
 {  
   /* describe what is going to happen */

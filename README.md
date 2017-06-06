@@ -54,21 +54,28 @@ With options:
 ```node path/to/suite verbosity : 5 routine : myTest```
 
 ### Example
+
 ```
 function myTest( test )
 {  
+  /* describe what is going to happen */
   test.description = 'info about test feature';
-  /* run some code and save result */
+
+  /* do it and save results */
   var got = 'abc'.indexOf( 'a' );
   var expected = 0;
+
   /* compare result with expected */
   test.identical( got, expected );
 }
 
 /*
-Map that describes test suite,
-contains name of the suite, map of test routines and other options
+Map that describes test suite, contains
+- name of the suite,
+- map of test routines
+- and other options
 */
+
 var testSuite =
 {
   name : 'name of my test suite',
@@ -80,6 +87,8 @@ var testSuite =
 
 /* Initilize test suite */
 testSuite = wTestSuite( testSuite );
+
 /* Run all tests of the suite */
 wTools.Testing.test( testSuite );
+
 ```

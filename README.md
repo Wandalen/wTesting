@@ -23,11 +23,11 @@ For convenience, each test feature may have own description, it can be provided 
 
 To get access to functionality of test package from test routine user must use first provided argument.
 
-#### Equalizers
+#### Assertions
 
-Equalizers are routines that are used in test routine to validate results of code execution.
+Assertions are routines that are used in test routine to validate results of code execution.
 
-List of mostly used equalizers:
+List of mostly used assertions:
 
 * identical - checks if two arguments are equal;
 * shouldBe - checks if result of provided expression is true;
@@ -35,6 +35,7 @@ List of mostly used equalizers:
 * mustNotThrowError - checks if code execution ends without error.
 
 #### Launch options
+
 * verbosity - level of detail of information in the output;
 * routine - name of test routine to run, other routines are ignored.
 

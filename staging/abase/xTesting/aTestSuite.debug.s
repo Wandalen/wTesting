@@ -271,7 +271,7 @@ function _testSuiteRunAct()
 
   function handleStage( testRoutine,iteration,iterator )
   {
-    return suite._testRoutineRun( iteration.key,testRoutine );
+    return suite._testRoutineRun_entry( iteration.key,testRoutine );
   }
 
   /* */
@@ -474,7 +474,7 @@ function onSuiteEnd( t )
 // test routine run
 // --
 
-function _testRoutineRun( name,testRoutine )
+function _testRoutineRun_entry( name,testRoutine )
 {
   var suite = this;
   var result = null;
@@ -499,7 +499,7 @@ function _testRoutineRun( name,testRoutine )
   _.assert( arguments.length === 2 );
 
   return suite._routineCon
-  .doThen( function()
+  .doThen( function _testRoutineRun()
   {
 
     suite._testRoutineBegin( testRoutineDescriptor );
@@ -983,7 +983,7 @@ function _shouldDo( o )
   _.assert( arguments.length === 1 );
 
   var acase = suite.caseCurrent();
-  var con = suite._inroutineCon.got().split();
+  var con = suite._inroutineCon.choke().split();
 
   /* */
 
@@ -1019,7 +1019,7 @@ function _shouldDo( o )
     end( 0 );
 
     debugger;
-    _.assert( !( o.routine instanceof wConsequence ) )
+    _.assert( !_.consequenceIs( o.routine ) )
     suite._inroutineCon.give();
     con.give();
     // return con.split();
@@ -1029,7 +1029,7 @@ function _shouldDo( o )
   /* */
 
   var result;
-  if( o.routine instanceof wConsequence )
+  if( _.consequenceIs( o.routine ) )
   {
     result = o.routine;
   }
@@ -1100,7 +1100,7 @@ function _shouldDo( o )
 
   /* */
 
-  if( result instanceof wConsequence )
+  if( _.consequenceIs( result ) )
   {
 
     result.got( function( _err,_arg )
@@ -1167,7 +1167,7 @@ function _shouldDo( o )
       {
         if( second || reported )
         {
-          debugger;
+          // debugger;
           con.give( err,arg );
           suite._inroutineCon.give();
           return;
@@ -1893,7 +1893,7 @@ var Proto =
 
   // test routine run
 
-  _testRoutineRun : _testRoutineRun,
+  _testRoutineRun_entry : _testRoutineRun_entry,
   _testRoutineBegin : _testRoutineBegin,
   _testRoutineEnd : _testRoutineEnd,
 

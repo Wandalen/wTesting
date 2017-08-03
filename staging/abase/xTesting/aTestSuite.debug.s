@@ -104,7 +104,7 @@ function copy( o )
   if( !( o instanceof Self ) )
   suite.name = o.name;
 
-  return wCopyable.copy.call( suite,o );
+  return wCopyable.prototype.copy.call( suite,o );
 }
 
 //
@@ -1951,7 +1951,7 @@ var Proto =
 
 //
 
-_.protoMake
+_.prototypeMake
 ({
   cls : Self,
   parent : Parent,

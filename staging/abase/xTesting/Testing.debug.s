@@ -29,6 +29,8 @@ fileStat : null
 - implement support of glob path
 - print information about case with color directive avoiding change of color state of logger
 
+- test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
+
 */
 
 if( typeof module !== 'undefined' )
@@ -638,7 +640,7 @@ function loggerToBook( o )
 
   /* */
 
-  var book = new wHiBook({ targetDom : _.domOccupyWindow(), onPageGet : handlePageGet });
+  var book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
   book.make();
   book.tree.treeSet({ elements : routines });
 

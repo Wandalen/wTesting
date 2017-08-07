@@ -26,26 +26,21 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = null;
-
 // var Self = function wTestRoutine( o )
 // {
-//   // if( !( this instanceof Self ) )
-//   // if( o instanceof Self )
-//   // return o;
-//   // else
-//   // return new( _.routineJoin( Self, Self, arguments ) );
-//   // return Self.prototype.init.apply( this,arguments );
+//   if( !( this instanceof Self ) )
+//   if( o instanceof Self )
+//   return o;
+//   else
+//   return new( _.routineJoin( Self, Self, arguments ) );
+//   return Self.prototype.init.apply( this,arguments );
 // }
 
 //
 
 var Self = function wTestRoutine( o )
+// function init( o )
 {
-  // var testRoutineDescriptor = this;
-  // var suite = this;
-  // var result = null;
-  // var report = suite.report;
-  // var caseFails = report.caseFails;
 
   if( ( this instanceof Self ) )
   throw _.err( 'Intended to be called without new' );
@@ -69,7 +64,6 @@ var Self = function wTestRoutine( o )
   testRoutineDescriptor._currentRoutineFails = 0;
   testRoutineDescriptor._currentRoutinePasses = 0;
 
-
   Object.preventExtensions( testRoutineDescriptor );
 
   _.assert( _.routineIs( o.routine ) );
@@ -90,6 +84,7 @@ var Self = function wTestRoutine( o )
 }
 
 Self.nameShort = 'TestRoutine';
+Self.prototype.strictEventHandling = 0; /* !!! fix that */
 
 Self.defaults =
 {
@@ -98,13 +93,42 @@ Self.defaults =
   suite : null,
 }
 
+// --
+// prototype
+// --
+
+// var Proto =
+// {
+//
+//   // inter
+//
+//   init : init,
+//
+//
+//   // relationships
+//
+//   constructor : Self,
+//   // Composes : Composes,
+//   // Aggregates : Aggregates,
+//   // Associates : Associates,
+//   // Restricts : Restricts,
+//   // Statics : Statics,
+//
+// }
+//
+// //
+//
+// _.prototypeMake
+// ({
+//   cls : Self,
+//   parent : Parent,
+//   extend : Proto,
+// });
+
 // export
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-
 _global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
-
-return Self;
 
 })();

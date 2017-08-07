@@ -1857,6 +1857,12 @@ var Statics =
   _suiteCon : new wConsequence().give(),
 }
 
+var Events =
+{
+  routineBegin : 'routineBegin',
+  routineEnd : 'routineEnd',
+}
+
 // --
 // prototype
 // --
@@ -1946,6 +1952,7 @@ var Proto =
   Associates : Associates,
   Restricts : Restricts,
   Statics : Statics,
+  Events : Events,
 
 }
 

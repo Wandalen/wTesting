@@ -31,6 +31,8 @@ fileStat : null
 
 - test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
 
+- test suite should not pass if 0 / 0 test checks
+
 */
 
 if( typeof module !== 'undefined' )
@@ -447,6 +449,7 @@ function testsFilterOut( suites )
 
   var suites = suites || wTests;
 
+  // debugger;
   var suites = _.entityFilter( suites,function( suite )
   {
     if( _.strIs( suite ) )
@@ -455,6 +458,7 @@ function testsFilterOut( suites )
       throw _.err( 'Testing : test suite',suite,'not found' );
       suite = wTests[ suite ];
     }
+    // debugger;
     if( suite.abstract )
     return;
     if( suite.enabled !== undefined && !suite.enabled )

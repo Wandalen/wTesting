@@ -3,11 +3,11 @@
 if( typeof module !== "undefined" )
 {
 
-  require( './Testing.debug.s' );
+  require( './Tester.debug.s' );
 
   var _ = wTools;
 
   // if( typeof module !== 'undefined' && !module.parent )
-  _.Testing.exec();
+  _.Tester.exec();
 
 }

@@ -5,11 +5,11 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( '../staging/abase/object/Testing.debug.s' );
+  require( '../staging/abase/object/Tester.debug.s' );
 
   try
   {
-    require( '../staging/abase/object/Testing.debug.s' );
+    require( '../staging/abase/object/Tester.debug.s' );
   }
   catch( err )
   {
@@ -129,6 +129,6 @@ var Proto =
 _.mapExtend( Self,Proto );
 
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Tester.test( Self );
 
 } )( );

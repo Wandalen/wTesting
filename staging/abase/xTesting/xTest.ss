@@ -3,7 +3,7 @@
 if( typeof module !== "undefined" )
 {
 
-  require( './Tester.debug.s' );
+  require( './cTester.debug.s' );
 
   var _ = wTools;
 

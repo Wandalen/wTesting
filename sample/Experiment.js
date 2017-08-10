@@ -5,11 +5,11 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( '../staging/abase/object/Tester.debug.s' );
+  require( '../staging/abase/object/сTester.debug.s' );
 
   try
   {
-    require( '../staging/abase/object/Tester.debug.s' );
+    require( '../staging/abase/object/сTester.debug.s' );
   }
   catch( err )
   {

@@ -15,10 +15,11 @@
     }
   ],
   "license": "MIT",
-  "bin": {
+  "bin":
+  {
     "wtest": "staging/abase/xTesting/xTest.ss"
   },
-  "main": "staging/abase/xTesting/Testing.debug.s",
+  "main": "staging/abase/xTesting/cTester.debug.s",
   "files": [
     "staging/abase/xTesting",
     "production"

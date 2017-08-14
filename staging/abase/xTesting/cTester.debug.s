@@ -44,6 +44,9 @@ fileStat : null
 
 + global / suite / routine basis statistic tracking
 
+- fails issue
+- implement barringConsole from test suite
+
 */
 
 if( typeof module !== 'undefined' )
@@ -102,7 +105,7 @@ _.assert( _.Consequence,'wTesting needs wConsequence/staging/abase/syn/Consequen
 
 function exec()
 {
-  var testing = this;
+  var tester = this;
   var result;
 
   try
@@ -110,24 +113,24 @@ function exec()
 
     _.assert( arguments.length === 0 );
 
-    var appArgs = testing.appArgsApply();
-    var path = testing.path;
+    var appArgs = tester.appArgsApply();
+    var path = tester.path;
 
-    if( !testing.scenariosHelpMap[ testing.settings.scenario ] )
-    throw _.errBriefly( 'Unknown scenario',testing.settings.scenario );
+    if( !tester.scenariosHelpMap[ tester.settings.scenario ] )
+    throw _.errBriefly( 'Unknown scenario',tester.settings.scenario );
 
-    if( testing.settings.scenario !== 'test' )
-    if( !testing[ testing.scenariosActionMap[ testing.settings.scenario ] ] )
-    throw _.errBriefly( 'Scenario',testing.settings.scenario,'is not implemented' );
+    if( tester.settings.scenario !== 'test' )
+    if( !tester[ tester.scenariosActionMap[ tester.settings.scenario ] ] )
+    throw _.errBriefly( 'Scenario',tester.settings.scenario,'is not implemented' );
 
-    if( testing.settings.scenario === 'test' )
+    if( tester.settings.scenario === 'test' )
     {
-      testing.includeTestsFrom( testing.path );
-      result = testing.testAll();
+      tester.includeTestsFrom( tester.path );
+      result = tester.testAll();
     }
     else
     {
-      testing[ testing.scenariosActionMap[ testing.settings.scenario ] ]();
+      tester[ tester.scenariosActionMap[ tester.settings.scenario ] ]();
     }
 
   }
@@ -147,19 +150,19 @@ function exec()
 
 function _registerExitHandler()
 {
-  var testing = this;
+  var tester = this;
 
-  if( testing._registerExitHandlerDone )
+  if( tester._registerExitHandlerDone )
   return;
 
-  testing._registerExitHandlerDone = 1;
+  tester._registerExitHandlerDone = 1;
 
   if( _global_.process )
   process.on( 'exit', function ()
   {
-    if( testing.report && testing.report.testSuiteFailes && !process.exitCode )
+    if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
     {
-      var logger = testing.logger || _global_.logger;
+      var logger = tester.logger || _global_.logger;
       logger.log( _.strColor.style( 'Errors!','negative' ) );
       process.exitCode = -1;
     }
@@ -171,12 +174,13 @@ function _registerExitHandler()
 
 function _includeTestsFrom( path )
 {
-  var testing = this;
-  var logger = testing.logger || _global_.logger;
+  var tester = this;
+  var logger = tester.logger || _global_.logger;
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( path ) );
 
+  if( tester.verbosity > 1 )
   logger.log( 'Include tests from :',path );
 
   var files = _.fileProvider.filesFind
@@ -200,7 +204,7 @@ function _includeTestsFrom( path )
     catch( err )
     {
       err = _.errAttend( 'Cant include',absolutePath + '\n',err );
-      testing.includeFails.push( err );
+      tester.includeFails.push( err );
 
       logger.error( _.strColor.fg( 'Cant include ' + absolutePath, 'red' ) );
       if( logger.verbosity > 3 )
@@ -215,13 +219,13 @@ function _includeTestsFrom( path )
 
 function includeTestsFrom( path )
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( path ) );
 
-  logger.verbosityPush( testing.verbosity === null ? testing._defaultVerbosity : testing.verbosity );
-  testing._includeTestsFrom( path );
+  logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
+  tester._includeTestsFrom( path );
   logger.verbosityPop();
 
 }
@@ -230,37 +234,36 @@ function includeTestsFrom( path )
 
 function appArgsApply()
 {
-  var testing = this;
-  var logger = testing.logger || _global_.logger;
+  var tester = this;
+  var logger = tester.logger || _global_.logger;
 
-  if( testing._appArgsApplied )
-  return testing._appArgsApplied;
+  if( tester._appArgsApplied )
+  return tester._appArgsApplied;
 
   _.assert( arguments.length === 0 );
-  _.mapExtend( testing.settings,testing.Settings );
+  _.mapExtend( tester.settings,tester.Settings );
 
   var appArgs = _.appArgsInSubjectAndMapFormat();
   if( appArgs.map )
   {
-    _.mapExtend( testing.settings,_.mapScreen( testing.Settings,appArgs.map ) );
-    if( testing.verbosity >= 8 )
+    _.mapExtend( tester.settings,_.mapScreen( tester.Settings,appArgs.map ) );
+    if( tester.verbosity >= 8 )
     logger.log( 'Raw application arguments :\n',_.toStr( appArgs,{ levels : 2 } ) );
-    if( testing.verbosity >= 5 )
-    logger.log( 'Application arguments :\n',_.toStr( _.mapScreen( testing.Settings,appArgs.map ),{ levels : 2 } ) );
+    if( tester.verbosity >= 5 )
+    logger.log( 'Application arguments :\n',_.toStr( _.mapScreen( tester.Settings,appArgs.map ),{ levels : 2 } ) );
 
     if( appArgs.map.verbosity === 0 && appArgs.map.usingBeep === undefined )
-    testing.settings.usingBeep = 0;
+    tester.settings.usingBeep = 0;
 
   }
 
-  testing._appArgsApplied = appArgs;
+  tester._appArgsApplied = appArgs;
 
-  testing.path = appArgs.subject || _.pathCurrent();
-  testing.path = _.pathJoin( _.pathCurrent(),testing.path );
+  tester.path = appArgs.subject || _.pathCurrent();
+  tester.path = _.pathJoin( _.pathCurrent(),tester.path );
 
-  debugger;
-  if( _.numberIs( testing.settings.verbosity ) )
-  testing.verbosity = testing.settings.verbosity;
+  if( _.numberIs( tester.settings.verbosity ) )
+  tester.verbosity = tester.settings.verbosity;
 
   return appArgs;
 }
@@ -269,13 +272,11 @@ function appArgsApply()
 
 function scenarioScenariosList()
 {
-  var testing = this;
+  var tester = this;
 
-  debugger;
+  _.assert( tester.settings.scenario === 'scenarios.list' );
 
-  _.assert( testing.settings.scenario === 'scenarios.list' );
-
-  logger.log( 'Scenarios :\n',_.toStr( testing.scenariosHelpMap,{ levels : 2 } ) );
+  logger.log( 'Scenarios :\n',_.toStr( tester.scenariosHelpMap,{ levels : 2 } ) );
 
 }
 
@@ -283,15 +284,13 @@ function scenarioScenariosList()
 
 function scenarioSuitesList()
 {
-  var testing = this;
+  var tester = this;
 
-  debugger;
+  _.assert( tester.settings.scenario === 'suites.list' );
 
-  _.assert( testing.settings.scenario === 'suites.list' );
+  tester.includeTestsFrom( tester.path );
 
-  testing.includeTestsFrom( testing.path );
-
-  testing.testsListPrint( testing.testsFilterOut() );
+  tester.testsListPrint( tester.testsFilterOut() );
 
 }
 
@@ -301,7 +300,7 @@ function scenarioSuitesList()
 
 function _testAllAct()
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( arguments.length === 0 );
 
@@ -314,20 +313,20 @@ function _testAllAct()
   //   return suite;
   // });
 
-  var suites = testing.testsFilterOut( wTests );
+  var suites = tester.testsFilterOut( wTests );
 
-  testing._testingBegin( suites );
+  tester._testingBegin( suites );
 
   for( var t in suites )
   {
-    testing._testAct( t );
+    tester._testAct( t );
   }
 
   wTestSuite._suiteCon
-  .timeOutThen( testing.settings.sanitareTime )
+  .timeOutThen( tester.settings.sanitareTime )
   .doThen( function()
   {
-    return testing._testingEnd();
+    return tester._testingEnd();
   });
 
   return wTestSuite._suiteCon.split();
@@ -341,7 +340,7 @@ var testAll = _.timeReadyJoin( undefined,_testAllAct );
 
 function _testAct()
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( this === Self );
 
@@ -363,27 +362,27 @@ function _testAct()
 
 function _test()
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( this === Self );
 
   if( arguments.length === 0 )
-  return testing._testAllAct();
+  return tester._testAllAct();
 
-  var suites = testing.testsFilterOut( arguments );
+  var suites = tester.testsFilterOut( arguments );
 
   if( suites[ 0 ] && suites[ 0 ].barringConsole !== null && suites[ 0 ].barringConsole !== undefined )
-  testing.settings.barringConsole = suites[ 0 ].barringConsole;
+  tester.settings.barringConsole = suites[ 0 ].barringConsole;
 
-  testing._testingBegin( suites );
+  tester._testingBegin( suites );
 
-  testing._testAct.apply( testing,suites );
+  tester._testAct.apply( tester,suites );
 
   return wTestSuite._suiteCon
-  .timeOutThen( testing.settings.sanitareTime )
+  .timeOutThen( tester.settings.sanitareTime )
   .split( function()
   {
-    return testing._testingEnd();
+    return tester._testingEnd();
   });
 }
 
@@ -395,53 +394,53 @@ var test = _.timeReadyJoin( undefined,_test );
 
 function _testingBegin( tests )
 {
-  var testing = this;
-  var logger = testing.logger;
+  var tester = this;
+  var logger = tester.logger;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.numberIs( testing.verbosity ) );
+  _.assert( _.numberIs( tester.verbosity ) );
 
-  testing.appArgsApply();
-  testing._registerExitHandler();
+  tester.appArgsApply();
+  tester._registerExitHandler();
 
-  logger.verbosityPush( testing.verbosity );
+  logger.verbosityPush( tester.verbosity );
   // logger._verbosityReport();
 
-  if( testing.settings.barringConsole )
+  if( tester.settings.barringConsole )
   {
     logger.begin({ verbosity : -8 });
     logger.log( 'Barring console' );
     logger.end({ verbosity : -8 });
     if( !wLogger.consoleIsBarred( console ) )
-    testing._bar = wLogger.consoleBar({ outputLogger : logger, bar : 1 });
+    tester._bar = wLogger.consoleBar({ outputLogger : logger, bar : 1 });
   }
 
   logger.begin({ verbosity : -4 });
   logger.log( 'Tester Settings :' );
-  logger.log( testing.settings );
+  logger.log( tester.settings );
   logger.log( '' );
   logger.end({ verbosity : -4 });
 
-  // logger.verbosityPush( testing.verbosity === null ? testing._defaultVerbosity : testing.verbosity );
-  // logger.verbosityPush( testing.verbosity );
+  // logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
+  // logger.verbosityPush( tester.verbosity );
   logger.begin({ verbosity : -2 });
 
   if( tests !== undefined )
   {
     logger.logUp( 'Launching several ( ' + _.entityLength( tests ) + ' ) test suites ..' );
-    testing.testsListPrint( tests );
+    tester.testsListPrint( tests );
   }
   else
   {
     debugger;
     logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suites ..' );
-    testing.testsListPrint( tests );
+    tester.testsListPrint( tests );
   }
 
   logger.log();
   logger.end({ verbosity : -2 });
 
-  testing._reportForm();
+  tester._reportForm();
 
 }
 
@@ -449,21 +448,21 @@ function _testingBegin( tests )
 
 function _testingEnd()
 {
-  var testing = this;
-  var logger = testing.logger || _global_.logger;
-  var ok = testing._reportIsPositive();
+  var tester = this;
+  var logger = tester.logger || _global_.logger;
+  var ok = tester._reportIsPositive();
 
-  if( testing.settings.usingBeep )
+  if( tester.settings.usingBeep )
   _.beep();
 
   if( !ok && !_.appExitCode() )
   {
-    if( testing.settings.usingBeep )
+    if( tester.settings.usingBeep )
     _.beep();
     _.appExitCode( -1 );
   }
 
-  var msg = testing._reportToStr();
+  var msg = tester._reportToStr();
 
   logger.begin({ verbosity : -2 });
   // logger.log();
@@ -485,12 +484,12 @@ function _testingEnd()
   logger.verbosityPop();
 
   // logger._verbosityReport();
-  // console.log( 'testing.logger',testing.logger );
+  // console.log( 'tester.logger',tester.logger );
 
-  if( testing.settings.barringConsole && wLogger.consoleIsBarred( console ) )
+  if( tester.settings.barringConsole && wLogger.consoleIsBarred( console ) )
   {
-    testing._bar.bar = 0;
-    wLogger.consoleBar( testing._bar );
+    tester._bar.bar = 0;
+    wLogger.consoleBar( tester._bar );
   }
 
   _.timeOut( 100,function()
@@ -504,8 +503,8 @@ function _testingEnd()
 
 function testsFilterOut( suites )
 {
-  var testing = this;
-  var logger = testing.logger;
+  var tester = this;
+  var logger = tester.logger;
 
   // console.log( suites );
 
@@ -539,8 +538,8 @@ function testsFilterOut( suites )
 
 function testsListPrint( suites )
 {
-  var testing = this;
-  var logger = testing.logger;
+  var tester = this;
+  var logger = tester.logger;
   var suites = suites || wTests;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -559,8 +558,8 @@ function testsListPrint( suites )
 
 function _reportForm()
 {
-  var testing = this;
-  var report = testing.report = Object.create( null );
+  var tester = this;
+  var report = tester.report = Object.create( null );
 
   report.errorsArray = [];
 
@@ -585,8 +584,8 @@ function _reportForm()
 
 function _reportToStr()
 {
-  var testing = this;
-  var report = testing.report;
+  var tester = this;
+  var report = tester.report;
   var msg = '';
 
   if( report.errorsArray.length )
@@ -604,15 +603,15 @@ function _reportToStr()
 
 function _reportIsPositive()
 {
-  var testing = this;
+  var tester = this;
 
-  if( testing.report.testCheckFails !== 0 )
+  if( tester.report.testCheckFails !== 0 )
   return false;
 
-  if( !( testing.report.testCheckPasses > 0 ) )
+  if( !( tester.report.testCheckPasses > 0 ) )
   return false;
 
-  if( testing.report.errorsArray.length )
+  if( tester.report.errorsArray.length )
   return false;
 
   return true;
@@ -622,18 +621,18 @@ function _reportIsPositive()
 
 function _verbositySet( src )
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( arguments.length === 1 );
 
   if( !_.numberIsNotNan( src ) )
   src = 0;
 
-  testing[ symbolForVerbosity ] = src;
+  tester[ symbolForVerbosity ] = src;
 
   if( src !== null )
-  if( testing.logger )
-  testing.logger.verbosity = src;
+  if( tester.logger )
+  tester.logger.verbosity = src;
 
 }
 
@@ -641,10 +640,10 @@ function _verbositySet( src )
 
 function _canContinue()
 {
-  var testing = this;
+  var tester = this;
 
-  if( testing.settings.fails > 0 )
-  if( testing.settings.fails <= testing.report.testCheckFails )
+  if( tester.settings.fails > 0 )
+  if( tester.settings.fails <= tester.report.testCheckFails )
   return false;
 
   return true;
@@ -654,18 +653,18 @@ function _canContinue()
 
 function _outcomeConsider( outcome )
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( testing === Self );
+  _.assert( tester === Self );
 
   if( outcome )
   {
-    testing.report.testCheckPasses += 1;
+    tester.report.testCheckPasses += 1;
   }
   else
   {
-    testing.report.testCheckFails += 1;
+    tester.report.testCheckFails += 1;
   }
 
 }
@@ -674,12 +673,12 @@ function _outcomeConsider( outcome )
 
 function _exceptionConsider( err )
 {
-  var testing = this;
+  var tester = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( testing === Self );
+  _.assert( tester === Self );
 
-  testing.report.errorsArray.push( err );
+  tester.report.errorsArray.push( err );
 
 }
 
@@ -687,8 +686,8 @@ function _exceptionConsider( err )
 
 function _testCaseConsider( outcome )
 {
-  var testing = this;
-  var report = testing.report;
+  var tester = this;
+  var report = tester.report;
 
   if( outcome )
   report.testCasePasses += 1;
@@ -861,7 +860,7 @@ var SettingsOfTester =
 
   routine : null,
   fails : null,
-  barringConsole : 1,
+  barringConsole : 0,
 
 }
 
@@ -876,7 +875,7 @@ var SettingsOfSuite =
   importanceOfNegative : null,
 
   routine : null,
-  barringConsole : 1,
+  barringConsole : 0,
 
 }
 

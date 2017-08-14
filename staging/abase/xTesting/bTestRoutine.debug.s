@@ -58,7 +58,7 @@ function init( o )
 
   _.assert( _.routineIs( self.routine ) );
   _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
-  _.assert( self.routine.name === self.name );
+  // _.assert( self.routine.name === self.name,'routine should have same name, but',self.routine.name, '!=', self.name );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self.suite ) );
   // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self ) );
   _.assert( Object.isPrototypeOf.call( wTestRoutineDescriptor.prototype,self ) );

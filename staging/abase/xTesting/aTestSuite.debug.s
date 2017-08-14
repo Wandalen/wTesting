@@ -85,8 +85,10 @@ function init( o )
   var inherit = o.inherit;
   delete o.inherit;
 
+  // debugger;
   if( o )
   suite.copy( o );
+  // debugger;
 
   suite._initialOptions = o;
 
@@ -129,8 +131,11 @@ function copy( o )
 {
   var suite = this;
 
-  if( !( o instanceof Self ) )
-  suite.name = o.name;
+  // if( !( o instanceof Self ) )
+  // suite.name = o.name;
+
+  if( ( o instanceof Self ) )
+  debugger;
 
   return wCopyable.prototype.copy.call( suite,o );
 }
@@ -551,7 +556,7 @@ function _testSuiteEnd()
   }
 
   _.assert( _.Tester.activeSuites.indexOf( suite ) !== -1 );
-  _.__arrayRemoveOnce( _.Tester.activeSuites,suite );
+  _.arrayRemoveOnce( _.Tester.activeSuites,suite );
 
   if( suite.debug )
   debugger;
@@ -781,7 +786,7 @@ var symbolForVerbosity = Symbol.for( 'verbosity' );
 var Composes =
 {
 
-
+  name : null,
   verbosity : 2,
   importanceOfDetails : 0,
   importanceOfNegative : 0,
@@ -829,7 +834,7 @@ var Associates =
 
 var Restricts =
 {
-  name : null,
+  // name : null,
   currentRoutine : null,
   _initialOptions : null,
 }

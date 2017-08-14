@@ -1126,7 +1126,7 @@ function _outcomeReport( o )
     }
 
     if( code )
-    code = '#trackingColor : 0#' + code + '#trackingColor : 1#';
+    code = ' #ignoreDirectives : 1# ' + code + ' #ignoreDirectives : 0# ';
 
     return code;
   }

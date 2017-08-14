@@ -295,6 +295,41 @@ function scenarioSuitesList()
 
 }
 
+//
+
+function scenarioOptionsList()
+{
+  var testing = this;
+
+  _.assert( testing.settings.scenario === 'options.list' );
+
+  var optionsList =
+  {
+    'wTesting options' : ' ',
+    scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
+    sanitareTime : 'Delay before run of next test suite.',
+    usingBeep : 'Make beep sound when work of tester is finished.',
+    routine : 'Name of test routine to run. If each test suite has that routine, it will be executed.',
+    fails : 'Maximal number of fails before shutdown.',
+    barringConsole : 'Enables catching of console output that occures during test run.',
+    testRoutineTimeOut : 'Limits the time that each test routine can work. If routine works too long timeOut error will be thrown.',
+    concurrent : 'Runs all test suites in parallel.',
+    verbosity : 'Level of details in tester output.',
+    importanceOfDetails : 'Importance of test details in output.',
+    importanceOfNegative : 'Importance of fails in output.'
+  }
+
+  var strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
+
+  logger.log( _.toStr( optionsList, strOptions ) );
+}
+
 // --
 // run
 // --

@@ -2230,10 +2230,10 @@ failExperiment.experimental = 1;
 var Self =
 {
 
-  debug : 1,
   name : 'TestingOfTesting',
-  verbosity : 7,
-  routine : 'simplest',
+  // verbosity : 7,
+  // routine : 'simplest',
+  // debug : 1,
 
   tests :
   {

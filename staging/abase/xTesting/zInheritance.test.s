@@ -7,7 +7,6 @@ if( typeof module !== 'undefined' )
 
   if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
   require( './cTester.debug.s' );
-
   var _ = wTools;
 
 }
@@ -18,7 +17,9 @@ var childSuiteName = 'childSuite';
 var firstParentName = 'parentSuite1';
 var secondParentName = 'parentSuite2';
 
-/* Parent 1 */
+// --
+// parent 1
+// --
 
 function test1( test )
 {
@@ -50,9 +51,9 @@ var ParentSuite1 =
 
 wTestSuite( ParentSuite1 );
 
-
-/* Parent 2 */
-
+// --
+// parent 2
+// --
 
 function test2( test )
 {
@@ -64,12 +65,20 @@ function test2( test )
   var tests = _.mapOwnKeys( wTests[ childSuiteName ].tests );
   test.identical( tests, [ 'test1', 'test2' ] );
   test.identical( wTests[ childSuiteName ].abstract, 0 );
-  test.identical( wTests[ firstParentName ].verbosity , wTests[ childSuiteName ].verbosity );
-  test.identical( wTests[ secondParentName ].debug , wTests[ childSuiteName ].debug );
+
+  console.log( '_.Tester.settings.verbosity',_.Tester.settings.verbosity );
+
+  if( _.Tester.settings.verbosity !== null && _.Tester.settings.verbosity !== undefined )
+  test.identical( wTests[ childSuiteName ].verbosity , _.Tester.settings.verbosity );
+  else
+  test.identical( wTests[ childSuiteName ].verbosity , wTests[ firstParentName ].verbosity );
+
+  test.identical( wTests[ childSuiteName ].debug, wTests[ secondParentName ].debug );
 
   test.identical( self.parentValue1 , 1 );
   test.identical( self.parentValue2 , 2 );
   test.identical( self.childValue , 3 );
+
 }
 
 var ParentSuite2 =
@@ -93,13 +102,14 @@ var ParentSuite2 =
 wTestSuite( ParentSuite2 );
 
 // --
-// proto
+// child
 // --
 
 function onSuiteEnd( t )
 {
   _.assert( routines.length === _.mapOwnKeys( t.tests ).length, 'All test routines must be executed' );
 }
+
 var childSuite =
 {
 
@@ -115,7 +125,6 @@ var childSuite =
   {
     childValue : 3
   },
-
 
 }
 

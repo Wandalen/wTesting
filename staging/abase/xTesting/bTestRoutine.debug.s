@@ -1085,8 +1085,9 @@ function _outcomeReportAct( outcome )
 
   if( !_.Tester._canContinue() )
   {
+    if( trd._returnCon )
     trd._returnCon.cancel();
-    trd._cancelCon.error( _.err( 'Too many fails',_.Tester.fails, '<=', trd.report.testCheckFails ) );
+    trd._cancelCon.error( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
   }
 
   _.assert( arguments.length === 1 );

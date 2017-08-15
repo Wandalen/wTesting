@@ -45,7 +45,7 @@ fileStat : null
 + global / suite / routine basis statistic tracking
 
 - fails issue
-- implement barringConsole from test suite
+- implement silencing from test suite
 
 */
 
@@ -304,13 +304,12 @@ function scenarioOptionsList()
 
   var optionsList =
   {
-    'wTesting options' : ' ',
     scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
     sanitareTime : 'Delay before run of next test suite.',
     usingBeep : 'Make beep sound when work of tester is finished.',
     routine : 'Name of test routine to run. If each test suite has that routine, it will be executed.',
     fails : 'Maximal number of fails before shutdown.',
-    barringConsole : 'Enables catching of console output that occures during test run.',
+    silencing : 'Enables catching of console output that occures during test run.',
     testRoutineTimeOut : 'Limits the time that each test routine can work. If routine works too long timeOut error will be thrown.',
     concurrent : 'Runs all test suites in parallel.',
     verbosity : 'Level of details in tester output.',
@@ -326,6 +325,7 @@ function scenarioOptionsList()
     multiline : 1
   };
 
+  logger.log( 'Tester options' );
   logger.log( _.toStr( optionsList, strOptions ) );
 }
 
@@ -406,8 +406,8 @@ function _test()
 
   var suites = tester.testsFilterOut( arguments );
 
-  if( suites[ 0 ] && suites[ 0 ].barringConsole !== null && suites[ 0 ].barringConsole !== undefined )
-  tester.settings.barringConsole = suites[ 0 ].barringConsole;
+  if( suites[ 0 ] && suites[ 0 ].silencing !== null && suites[ 0 ].silencing !== undefined )
+  tester.settings.silencing = suites[ 0 ].silencing;
 
   tester._testingBegin( suites );
 
@@ -441,7 +441,7 @@ function _testingBegin( tests )
   logger.verbosityPush( tester.verbosity );
   // logger._verbosityReport();
 
-  if( tester.settings.barringConsole )
+  if( tester.settings.silencing )
   {
     logger.begin({ verbosity : -8 });
     logger.log( 'Barring console' );
@@ -521,7 +521,7 @@ function _testingEnd()
   // logger._verbosityReport();
   // console.log( 'tester.logger',tester.logger );
 
-  if( tester.settings.barringConsole && wLogger.consoleIsBarred( console ) )
+  if( tester.settings.silencing && wLogger.consoleIsBarred( console ) )
   {
     tester._bar.bar = 0;
     wLogger.consoleBar( tester._bar );
@@ -895,7 +895,7 @@ var SettingsOfTester =
 
   routine : null,
   fails : null,
-  barringConsole : 0,
+  silencing : 0,
 
 }
 
@@ -910,7 +910,7 @@ var SettingsOfSuite =
   importanceOfNegative : null,
 
   routine : null,
-  barringConsole : 0,
+  silencing : 0,
 
 }
 
@@ -944,7 +944,7 @@ var Forbids =
   importanceOfNegative : 'importanceOfNegative',
 
   concurrent : 'concurrent',
-  barringConsole : 'barringConsole',
+  silencing : 'silencing',
   scenario : 'scenario',
   routine : 'routine',
   fails : 'fails',

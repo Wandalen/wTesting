@@ -175,7 +175,7 @@ function inherit()
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {
-    var src = arguments[ 0 ];
+    var src = arguments[ a ];
 
     _.assert( src instanceof Self );
 
@@ -795,7 +795,7 @@ var Composes =
   concurrent : 0,
 
   routine : null,
-  barringConsole : null,
+  silencing : null,
 
   /* */
 

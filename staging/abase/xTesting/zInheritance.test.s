@@ -12,110 +12,115 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = wTools;
-var routines = [];
-var childSuiteName = 'childSuite';
-var firstParentName = 'parentSuite1';
-var secondParentName = 'parentSuite2';
 
-// --
-// parent 1
-// --
-
-function test1( test )
+function inherit( test )
 {
-  var self = this;
+  var routines = [];
+  var childSuiteName = 'childSuite';
+  var firstParentName = 'parentSuite1';
+  var secondParentName = 'parentSuite2';
+  var checksCount = 0;
 
-  routines.push( test.name );
+  var notTakingIntoAccount = { logger : wLogger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-  test.description = 'check if child suite runs this test';
-  test.identical( _.Tester.activeSuites[ 0 ].name, childSuiteName );
-}
+  // --
+  // parent 1
+  // --
 
-var ParentSuite1 =
-{
-  name : firstParentName,
-  abstract : 1,
-  verbosity : 10,
-
-  context :
+  function test1( test )
   {
-    parentValue1 : 1
-  },
+    var self = this;
 
-  tests :
+    routines.push( test.name );
+
+    test.description = 'check if child suite runs this test';
+    test.identical( _.Tester.activeSuites[ 1 ].name, childSuiteName );
+    checksCount += test.checkCurrent()._checkIndex;
+  }
+
+  var ParentSuite1 =
   {
-    test1 : test1
-  },
+    name : firstParentName,
+    abstract : 1,
+    verbosity : 10,
+    override : notTakingIntoAccount,
 
-};
+    context :
+    {
+      parentValue1 : 1
+    },
 
-wTestSuite( ParentSuite1 );
+    tests :
+    {
+      test1 : test1
+    },
 
-// --
-// parent 2
-// --
+  };
 
-function test2( test )
-{
-  var self = this;
+  wTestSuite( ParentSuite1 );
 
-  routines.push( test.name );
+  // --
+  // parent 2
+  // --
 
-  test.description = 'check if child suite inherits tests, options, context from parent';
-  var tests = _.mapOwnKeys( wTests[ childSuiteName ].tests );
-  test.identical( tests, [ 'test1', 'test2' ] );
-  test.identical( wTests[ childSuiteName ].abstract, 0 );
-
-  console.log( '_.Tester.settings.verbosity',_.Tester.settings.verbosity );
-
-  if( _.Tester.settings.verbosity !== null && _.Tester.settings.verbosity !== undefined )
-  test.identical( wTests[ childSuiteName ].verbosity , _.Tester.settings.verbosity );
-  else
-  test.identical( wTests[ childSuiteName ].verbosity , wTests[ firstParentName ].verbosity );
-
-  test.identical( wTests[ childSuiteName ].debug, wTests[ secondParentName ].debug );
-
-  test.identical( self.parentValue1 , 1 );
-  test.identical( self.parentValue2 , 2 );
-  test.identical( self.childValue , 3 );
-
-}
-
-var ParentSuite2 =
-{
-  name : secondParentName,
-  abstract : 1,
-  debug : 1,
-
-  context :
+  function test2( test )
   {
-    parentValue2 : 2
-  },
+    var self = this;
 
-  tests :
+    routines.push( test.name );
+
+    test.description = 'check if child suite inherits tests, options, context from parent';
+    var tests = _.mapOwnKeys( wTests[ childSuiteName ].tests );
+    test.identical( tests, [ 'test1', 'test2' ] );
+    test.identical( wTests[ childSuiteName ].abstract, 0 );
+
+    console.log( '_.Tester.settings.verbosity',_.Tester.settings.verbosity );
+
+    if( _.Tester.settings.verbosity !== null && _.Tester.settings.verbosity !== undefined )
+    test.identical( wTests[ childSuiteName ].verbosity , _.Tester.settings.verbosity );
+    else
+    test.identical( wTests[ childSuiteName ].verbosity , wTests[ firstParentName ].verbosity );
+
+    test.identical( wTests[ childSuiteName ].debug, wTests[ secondParentName ].debug );
+
+    test.identical( self.parentValue1 , 1 );
+    test.identical( self.parentValue2 , 2 );
+    test.identical( self.childValue , 3 );
+
+    checksCount += test.checkCurrent()._checkIndex;
+  }
+
+  var ParentSuite2 =
   {
-    test2 : test2
-  },
+    name : secondParentName,
+    abstract : 1,
+    debug : 1,
+    override : notTakingIntoAccount,
 
-};
+    context :
+    {
+      parentValue2 : 2
+    },
 
-wTestSuite( ParentSuite2 );
+    tests :
+    {
+      test2 : test2
+    },
+
+  };
+
+  wTestSuite( ParentSuite2 );
 
 // --
 // child
 // --
-
-function onSuiteEnd( t )
-{
-  _.assert( routines.length === _.mapOwnKeys( t.tests ).length, 'All test routines must be executed' );
-}
 
 var childSuite =
 {
 
   name : childSuiteName,
   abstract : 0,
-  onSuiteEnd : onSuiteEnd,
+  override : notTakingIntoAccount,
 
   tests :
   {
@@ -128,10 +133,35 @@ var childSuite =
 
 }
 
-var Self = new wTestSuite( childSuite )
+var suite = new wTestSuite( childSuite )
 .inherit( wTests[ firstParentName ] )
 .inherit( wTests[ secondParentName] );
 
+return suite.run()
+.doThen( function()
+{
+  test.identical( suite.report.testCheckPasses, checksCount );
+  test.identical( suite.report.testCheckFails, 0 );
+  test.identical( suite.report.testRoutinePasses, _.mapOwnKeys( suite.tests ).length );
+  test.identical( routines.length, _.mapOwnKeys( suite.tests ).length );
+});
+}
+
+
+var Proto =
+{
+
+  name : 'Inheritance test',
+  verbosity : 5,
+
+  tests :
+  {
+    inherit : inherit
+  }
+}
+
+
+var Self = new wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 

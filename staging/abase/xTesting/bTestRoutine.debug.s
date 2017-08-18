@@ -1053,6 +1053,8 @@ function _outcomeConsider( outcome )
   {
     trd.report.testCheckFails += 1;
     trd.report.testCheckFailsOfTestCase += 1;
+    // console.log( 'wTestRoutineDescriptor.testCheckFailsOfTestCase += 1' )
+    // debugger;
   }
 
   trd.suite._outcomeConsider( outcome );

@@ -112,13 +112,15 @@ function identical( test )
   var testRoutine;
 
   test.identical( 0,0 );
+  // test.identical( 0,1 );
 
   function r1( t )
   {
 
     testRoutine = t;
 
-    console.log( 'testRoutine',testRoutine );
+    // console.log( 'testRoutine',testRoutine );
+    console.log( 'x' );
 
     t.identical( 0,0 );
     test.identical( t.suite.report.testCheckPasses, 1 );
@@ -184,7 +186,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
@@ -211,7 +213,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
@@ -238,7 +240,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
@@ -257,7 +259,7 @@ function shouldMessageOnlyOnce( test )
     debugger;
     var c4 = t.shouldMessageOnlyOnce( function()
     {
-      return _.timeOut( 150,function()
+      return _.timeOut( 250,function()
       {
         throw _.errAttend( 'error1' );
       });
@@ -270,7 +272,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       debugger;
       test.identical( c4.messagesGet().length, 1 );
@@ -290,7 +292,7 @@ function shouldMessageOnlyOnce( test )
     test.description = 'single async message, no error';
     var c5 = t.shouldMessageOnlyOnce( function()
     {
-      return _.timeOut( 150 );
+      return _.timeOut( 250 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -300,7 +302,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
@@ -319,7 +321,7 @@ function shouldMessageOnlyOnce( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.give( 'msg1' );
         con.give( 'msg2' );
@@ -335,7 +337,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
@@ -355,7 +357,7 @@ function shouldMessageOnlyOnce( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.error( 'error1' );
         con.error( 'error2' );
@@ -371,7 +373,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
@@ -396,7 +398,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
@@ -420,7 +422,7 @@ function shouldMessageOnlyOnce( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
@@ -432,7 +434,7 @@ function shouldMessageOnlyOnce( test )
 
     /* */
 
-    return _.timeOut( 450 );
+    return _.timeOut( 950 );
   }
 
   /* */
@@ -486,7 +488,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
@@ -513,7 +515,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
@@ -543,7 +545,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
@@ -560,7 +562,7 @@ function mustNotThrowError( test )
     test.description = 'throw unexpected error, asynchronously';
     var c4 = t.mustNotThrowError( function()
     {
-      return _.timeOut( 150,function()
+      return _.timeOut( 250,function()
       {
         throw _.err( 'test' );
       });
@@ -573,7 +575,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
@@ -590,7 +592,7 @@ function mustNotThrowError( test )
     test.description = 'single async message, no error';
     var c5 = t.mustNotThrowError( function()
     {
-      return _.timeOut( 150 );
+      return _.timeOut( 250 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -600,7 +602,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
@@ -619,7 +621,7 @@ function mustNotThrowError( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.give( 'msg1' );
         con.give( 'msg2' );
@@ -635,7 +637,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
@@ -655,7 +657,7 @@ function mustNotThrowError( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.error( 'error1' );
         con.error( 'error2' );
@@ -671,7 +673,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
@@ -695,7 +697,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
@@ -719,7 +721,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
@@ -731,7 +733,7 @@ function mustNotThrowError( test )
 
     /* */
 
-    return _.timeOut( 450 );
+    return _.timeOut( 950 );
   }
 
   /* */
@@ -784,7 +786,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
@@ -812,7 +814,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       debugger;
       test.identical( c2.messagesGet().length, 1 );
@@ -831,7 +833,7 @@ function shouldThrowErrorSync( test )
     test.description = 'throw unexpected asynchronous error';
     var c3 = t.shouldThrowErrorSync( function()
     {
-      return _.timeOut( 150,function()
+      return _.timeOut( 250,function()
       {
         throw _.err( 'test' );
       });
@@ -844,7 +846,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
@@ -862,7 +864,7 @@ function shouldThrowErrorSync( test )
     debugger;
     var c4 = t.shouldThrowErrorSync( function()
     {
-      return _.timeOut( 150 );
+      return _.timeOut( 250 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -872,7 +874,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
@@ -891,7 +893,7 @@ function shouldThrowErrorSync( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.give();
         con.give();
@@ -907,7 +909,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
@@ -926,7 +928,7 @@ function shouldThrowErrorSync( test )
     {
       var con = wConsequence().error( 'error' );
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.error( 'error' );
       });
@@ -941,7 +943,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
@@ -965,7 +967,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
@@ -989,7 +991,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
@@ -1001,7 +1003,7 @@ function shouldThrowErrorSync( test )
 
     /* */
 
-    return _.timeOut( 450 );
+    return _.timeOut( 950 );
   }
 
   var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
@@ -1054,7 +1056,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c1.messagesGet().length,1 );
       c1.got( function( err,arg )
@@ -1082,7 +1084,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
@@ -1099,7 +1101,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'throw expected asynchronous error';
     var c3 = t.shouldThrowErrorAsync( function()
     {
-      return _.timeOut( 150,function()
+      return _.timeOut( 250,function()
       {
         throw _.err( 'test' );
       });
@@ -1112,7 +1114,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
@@ -1129,7 +1131,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'single message while asynchronous error expected';
     var c4 = t.shouldThrowErrorAsync( function()
     {
-      return _.timeOut( 150 );
+      return _.timeOut( 250 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -1139,7 +1141,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
@@ -1158,7 +1160,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.error( 'error' );
       });
@@ -1173,7 +1175,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
@@ -1193,7 +1195,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.give();
         con.give();
@@ -1209,7 +1211,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
@@ -1228,7 +1230,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.error( 'error' );
         con.error( 'error' );
@@ -1244,7 +1246,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
@@ -1270,7 +1272,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
@@ -1294,7 +1296,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
@@ -1306,7 +1308,7 @@ function shouldThrowErrorAsync( test )
 
     /* */
 
-    return _.timeOut( 450 );
+    return _.timeOut( 950 );
   }
 
   /* */
@@ -1359,7 +1361,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
@@ -1386,7 +1388,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
@@ -1404,7 +1406,7 @@ function shouldThrowError( test )
     test.description = 'throw expected asynchronous error';
     var c3 = t.shouldThrowError( function()
     {
-      return _.timeOut( 150,function()
+      return _.timeOut( 250,function()
       {
         throw _.err( 'err1' );
       });
@@ -1417,7 +1419,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
@@ -1436,7 +1438,7 @@ function shouldThrowError( test )
     debugger;
     var c4 = t.shouldThrowError( function()
     {
-      return _.timeOut( 150 );
+      return _.timeOut( 250 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -1446,7 +1448,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
@@ -1465,7 +1467,7 @@ function shouldThrowError( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.give( 'arg1' );
         con.give( 'arg2' );
@@ -1481,7 +1483,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
@@ -1500,7 +1502,7 @@ function shouldThrowError( test )
     {
       var con = wConsequence();
 
-      _.timeOut( 150, function()
+      _.timeOut( 250, function()
       {
         con.error( 'error1' );
         con.error( 'error1' );
@@ -1516,7 +1518,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
@@ -1541,7 +1543,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
@@ -1565,7 +1567,7 @@ function shouldThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 300,function()
+    _.timeOut( 500,function()
     {
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
@@ -1577,7 +1579,7 @@ function shouldThrowError( test )
 
     /* */
 
-    return _.timeOut( 450 );
+    return _.timeOut( 950 );
   }
 
   var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
@@ -1634,7 +1636,7 @@ function shouldPassMessage( test )
     _.errAttend( err );
   });
 
-  return _.timeOut( 300 );
+  return _.timeOut( 500 );
 }
 
 shouldPassMessage.timeOut = 15000;
@@ -1654,7 +1656,7 @@ function _throwingExperiment( test )
   {
     var con = wConsequence().give();
 
-    _.timeOut( 150, function()
+    _.timeOut( 250, function()
     {
       con.give();
       con.give();
@@ -1684,7 +1686,7 @@ function _throwingExperiment( test )
   debugger;
   t.shouldThrowError( function()
   {
-    return _.timeOut( 150 );
+    return _.timeOut( 250 );
   });
 
   /* */
@@ -1707,7 +1709,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    return _.timeOut( 150,function()
+    return _.timeOut( 250,function()
     {
       throw _.err( 'test' );
     });
@@ -1717,7 +1719,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    return _.timeOut( 150 );
+    return _.timeOut( 250 );
   });
 
   t.identical( 0,0 );
@@ -1726,7 +1728,7 @@ function _throwingExperiment( test )
   {
     var con = wConsequence().give();
 
-    _.timeOut( 150, function()
+    _.timeOut( 250, function()
     {
       con.give();
       con.give();
@@ -1760,7 +1762,7 @@ function _throwingExperiment( test )
   test.description = 'single message';
   test.mustNotThrowError( function()
   {
-    return _.timeOut( 150 );
+    return _.timeOut( 250 );
   });
 
   /* */
@@ -1769,7 +1771,7 @@ function _throwingExperiment( test )
   {
     var con = wConsequence().give();
 
-    _.timeOut( 150, function()
+    _.timeOut( 250, function()
     {
       con.give();
       con.give();
@@ -1783,7 +1785,7 @@ function _throwingExperiment( test )
   debugger;
   test.shouldThrowErrorSync( function()
   {
-    return _.timeOut( 150 );
+    return _.timeOut( 250 );
   });
   debugger;
 
@@ -2234,6 +2236,7 @@ var Self =
   // verbosity : 7,
   // routine : 'simplest',
   // debug : 1,
+  silencing : 1,
 
   tests :
   {

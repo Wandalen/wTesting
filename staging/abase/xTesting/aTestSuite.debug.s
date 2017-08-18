@@ -257,6 +257,8 @@ function _reportToStr()
   msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
 
+  // suite.logger.log( 'suite.report.testCaseFails',suite.report.testCaseFails );
+
   return msg;
 }
 
@@ -754,6 +756,8 @@ function _exceptionConsider( err )
   _.assert( suite.constructor === Self );
 
   suite.report.errorsArray.push( err );
+
+  if( suite.takingIntoAccount )
   _.Tester._exceptionConsider( err );
 
 }
@@ -770,6 +774,7 @@ function _testCaseConsider( outcome )
   else
   report.testCaseFails += 1;
 
+  if( suite.takingIntoAccount )
   _.Tester._testCaseConsider( outcome );
 }
 

@@ -254,7 +254,6 @@ function appArgsApply()
 
     if( appArgs.map.verbosity === 0 && appArgs.map.usingBeep === undefined )
     tester.settings.usingBeep = 0;
-
   }
 
   tester._appArgsApplied = appArgs;
@@ -265,6 +264,7 @@ function appArgsApply()
   if( _.numberIs( tester.settings.verbosity ) )
   tester.verbosity = tester.settings.verbosity;
 
+  tester.appArgs = appArgs;
   return appArgs;
 }
 
@@ -406,9 +406,6 @@ function _test()
 
   var suites = tester.testsFilterOut( arguments );
 
-  if( suites[ 0 ] && suites[ 0 ].silencing !== null && suites[ 0 ].silencing !== undefined )
-  tester.settings.silencing = suites[ 0 ].silencing;
-
   tester._testingBegin( suites );
 
   tester._testAct.apply( tester,suites );
@@ -427,7 +424,7 @@ var test = _.timeReadyJoin( undefined,_test );
 
 //
 
-function _testingBegin( tests )
+function _testingBegin( suites )
 {
   var tester = this;
   var logger = tester.logger;
@@ -437,6 +434,14 @@ function _testingBegin( tests )
 
   tester.appArgsApply();
   tester._registerExitHandler();
+
+  // console.log( '-> suites.length',suites.length );
+  if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
+  if( suites[ 0 ] && suites[ 0 ].silencing !== null && suites[ 0 ].silencing !== undefined )
+  {
+    // console.log( '-> suites[ 0 ].silencing',suites[ 0 ].silencing );
+    tester.settings.silencing = suites[ 0 ].silencing;
+  }
 
   logger.verbosityPush( tester.verbosity );
   // logger._verbosityReport();
@@ -460,16 +465,16 @@ function _testingBegin( tests )
   // logger.verbosityPush( tester.verbosity );
   logger.begin({ verbosity : -2 });
 
-  if( tests !== undefined )
+  if( suites !== undefined )
   {
-    logger.logUp( 'Launching several ( ' + _.entityLength( tests ) + ' ) test suites ..' );
-    tester.testsListPrint( tests );
+    logger.logUp( 'Launching several ( ' + _.entityLength( suites ) + ' ) test suites ..' );
+    tester.testsListPrint( suites );
   }
   else
   {
     debugger;
     logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suites ..' );
-    tester.testsListPrint( tests );
+    tester.testsListPrint( suites );
   }
 
   logger.log();
@@ -631,6 +636,7 @@ function _reportToStr()
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
   msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
 
+  // tester.logger.log( 'report.testCaseFails',report.testCaseFails );
   return msg;
 }
 
@@ -644,6 +650,9 @@ function _reportIsPositive()
   return false;
 
   if( !( tester.report.testCheckPasses > 0 ) )
+  return false;
+
+  if( tester.report.testCaseFails !== 0 )
   return false;
 
   if( tester.report.errorsArray.length )
@@ -725,9 +734,15 @@ function _testCaseConsider( outcome )
   var report = tester.report;
 
   if( outcome )
-  report.testCasePasses += 1;
+  {
+    report.testCasePasses += 1;
+  }
   else
-  report.testCaseFails += 1;
+  {
+    report.testCaseFails += 1;
+    // console.log( 'report.testCaseFails += 1' );
+    // debugger;
+  }
 
 }
 
@@ -1040,6 +1055,7 @@ var Self =
   _bar : null,
   _appArgsApplied : null,
   path : null,
+  appArgs : null,
 
   constructor : function wTester(){},
 

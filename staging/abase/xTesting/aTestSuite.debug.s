@@ -458,7 +458,7 @@ function _testSuiteBegin()
 
   var msg =
   [
-    'Tester of test suite ( ' + suite.name + ' ) ..',
+    'Testing of test suite ( ' + suite.name + ' ) ..',
   ];
 
   logger.begin({ 'suite' : suite.name });
@@ -931,7 +931,7 @@ var Proto =
 
 //
 
-_.prototypeMake
+_.classMake
 ({
   cls : Self,
   parent : Parent,

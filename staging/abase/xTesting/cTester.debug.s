@@ -44,8 +44,10 @@ fileStat : null
 
 + global / suite / routine basis statistic tracking
 
-- fails issue
-- implement silencing from test suite
++ fails issue
++ implement silencing from test suite
+
+- no suite/tester sanitare period if errror
 
 */
 

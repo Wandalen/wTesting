@@ -152,7 +152,7 @@ var Proto =
 {
 
   name : 'Inheritance test',
-  verbosity : 5,
+  verbosity : 10,
 
   tests :
   {

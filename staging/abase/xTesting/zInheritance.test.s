@@ -24,9 +24,11 @@ function inherit( test )
 
   var notTakingIntoAccount = { logger : wLogger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
+  routines.push( test.name );
+
   // parent 1
 
-  function test1( test )
+  function test1()
   {
     var self = this;
 
@@ -60,7 +62,7 @@ function inherit( test )
 
   // parent 2
 
-  function test2( test )
+  function test2()
   {
     var self = this;
 
@@ -85,6 +87,7 @@ function inherit( test )
     test.identical( self.childValue , 3 );
 
     checksCount += test.checkCurrent()._checkIndex;
+
   }
 
   var ParentSuite2 =
@@ -135,12 +138,11 @@ function inherit( test )
   return suite.run()
   .doThen( function()
   {
-    test.identical( suite.report.testCheckPasses, checksCount );
-    test.identical( suite.report.testCheckFails, 0 );
-    test.identical( suite.report.testRoutinePasses, _.mapOwnKeys( suite.tests ).length );
-    test.identical( routines.length, _.mapOwnKeys( suite.tests ).length );
-  });
-
+    test.identical( test.report.testCheckPasses + routines.length, checksCount );
+    test.identical( test.report.testCheckFails, 0 );
+    test.identical( routines.length, 3 );
+    test.identical( _.mapOwnKeys( suite.tests ).length, 2 );
+  })
 }
 
 //
@@ -162,6 +164,6 @@ var Proto =
 
 var Self = new wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
+_.Tester.test( Self );
 
 })();

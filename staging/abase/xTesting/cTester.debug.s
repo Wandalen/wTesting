@@ -458,6 +458,9 @@ function _testingBegin( suites )
   tester.appArgsApply();
   tester._registerExitHandler();
 
+  if( !tester.appArgs.map )
+  tester.appArgs.map = Object.create( null );
+
   // console.log( '-> suites.length',suites.length );
   // debugger;
   if( !tester.appArgs || tester.appArgs.map.silencing === undefined )

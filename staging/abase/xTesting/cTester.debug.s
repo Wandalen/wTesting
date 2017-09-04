@@ -272,14 +272,67 @@ function appArgsApply()
 
 //
 
+function scenarioHelp()
+{
+  var tester = this;
+
+  tester.scenarioScenariosList();
+  tester.scenarioOptionsList();
+
+}
+
+//
+
 function scenarioScenariosList()
 {
   var tester = this;
 
-  _.assert( tester.settings.scenario === 'scenarios.list' );
+  // _.assert( tester.settings.scenario === 'scenarios.list' );
 
-  logger.log( 'Scenarios :\n',_.toStr( tester.scenariosHelpMap,{ levels : 2 } ) );
+  var strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
 
+  logger.log( 'Scenarios :\n',_.toStr( tester.scenariosHelpMap,strOptions ),'\n' );
+
+}
+
+//
+
+function scenarioOptionsList()
+{
+  var tester = this;
+
+  // _.assert( tester.settings.scenario === 'options.list' );
+
+  var optionsList =
+  {
+    scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
+    sanitareTime : 'Delay before run of the next test suite.',
+    usingBeep : 'Make beep sound after testing completion.',
+    routine : 'Name of only test routine to execute.',
+    fails : 'Maximum number of fails allowed before shutting down testing.',
+    silencing : 'Enables catching of console output that occures during test run.',
+    testRoutineTimeOut : 'Limits the time that each test routine can work. If execution of routine takes too long time then timeOut error will be thrown.',
+    concurrent : 'Runs test suite in parallel with other test suites.',
+    verbosity : 'Level of details in tester output. Zero for nothing, one for single line report, nine for maximum verbosity.',
+    importanceOfNegative : 'Importance of fails in output.'
+  }
+
+  var strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
+
+  logger.log( 'Tester options' );
+  logger.log( _.toStr( optionsList, strOptions ),'\n' );
 }
 
 //
@@ -294,41 +347,6 @@ function scenarioSuitesList()
 
   tester.testsListPrint( tester.testsFilterOut() );
 
-}
-
-//
-
-function scenarioOptionsList()
-{
-  var testing = this;
-
-  _.assert( testing.settings.scenario === 'options.list' );
-
-  var optionsList =
-  {
-    scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
-    sanitareTime : 'Delay before run of next test suite.',
-    usingBeep : 'Make beep sound when work of tester is finished.',
-    routine : 'Name of test routine to run. If each test suite has that routine, it will be executed.',
-    fails : 'Maximal number of fails before shutdown.',
-    silencing : 'Enables catching of console output that occures during test run.',
-    testRoutineTimeOut : 'Limits the time that each test routine can work. If routine works too long timeOut error will be thrown.',
-    concurrent : 'Runs all test suites in parallel.',
-    verbosity : 'Level of details in tester output.',
-    importanceOfDetails : 'Importance of test details in output.',
-    importanceOfNegative : 'Importance of fails in output.'
-  }
-
-  var strOptions =
-  {
-    levels : 3,
-    wrap : 0,
-    stringWrapper : '',
-    multiline : 1
-  };
-
-  logger.log( 'Tester options' );
-  logger.log( _.toStr( optionsList, strOptions ) );
 }
 
 // --
@@ -350,6 +368,7 @@ function _testAllAct()
   //   return suite;
   // });
 
+  // debugger;
   var suites = tester.testsFilterOut( wTests );
 
   tester._testingBegin( suites );
@@ -430,20 +449,24 @@ function _testingBegin( suites )
 {
   var tester = this;
   var logger = tester.logger;
+  var firstSuite = _.mapFirstPair( suites )[ 1 ];
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.numberIs( tester.verbosity ) );
+  _.assert( _.mapIs( suites ) );
 
   tester.appArgsApply();
   tester._registerExitHandler();
 
   // console.log( '-> suites.length',suites.length );
+  // debugger;
   if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
-  if( suites[ 0 ] && suites[ 0 ].silencing !== null && suites[ 0 ].silencing !== undefined )
+  if( firstSuite && firstSuite.silencing !== null && firstSuite.silencing !== undefined )
   {
-    // console.log( '-> suites[ 0 ].silencing',suites[ 0 ].silencing );
-    tester.settings.silencing = suites[ 0 ].silencing;
+    // console.log( '-> firstSuite.silencing',firstSuite.silencing );
+    tester.settings.silencing = firstSuite.silencing;
   }
+  // debugger;
 
   logger.verbosityPush( tester.verbosity );
   // logger._verbosityReport();
@@ -550,9 +573,10 @@ function testsFilterOut( suites )
 
   // console.log( suites );
 
-  _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
-
   var suites = suites || wTests;
+
+  _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
+  _.assert( _.objectIs( suites ) );
 
   // debugger;
   var suites = _.entityFilter( suites,function( suite )
@@ -946,8 +970,8 @@ var scenariosActionMap =
 {
   'test' : '',
   'help' : 'scenarioHelp',
-  'options.list' : 'scenarioOptionsList',
   'scenarios.list' : 'scenarioScenariosList',
+  'options.list' : 'scenarioOptionsList',
   'suites.list' : 'scenarioSuitesList',
 }
 
@@ -989,7 +1013,9 @@ var Self =
   includeTestsFrom : includeTestsFrom,
   appArgsApply : appArgsApply,
 
+  scenarioHelp : scenarioHelp,
   scenarioScenariosList : scenarioScenariosList,
+  scenarioOptionsList : scenarioOptionsList,
   scenarioSuitesList : scenarioSuitesList,
 
 

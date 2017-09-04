@@ -7,11 +7,12 @@ if( typeof module !== 'undefined' )
 
   if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
   require( './cTester.debug.s' );
-  var _ = wTools;
 
 }
 
 var _ = wTools;
+
+//
 
 function inherit( test )
 {
@@ -23,9 +24,7 @@ function inherit( test )
 
   var notTakingIntoAccount = { logger : wLogger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-  // --
   // parent 1
-  // --
 
   function test1( test )
   {
@@ -59,9 +58,7 @@ function inherit( test )
 
   wTestSuite( ParentSuite1 );
 
-  // --
   // parent 2
-  // --
 
   function test2( test )
   {
@@ -111,48 +108,49 @@ function inherit( test )
 
   wTestSuite( ParentSuite2 );
 
-// --
-// child
-// --
+  // child
 
-var childSuite =
-{
-
-  name : childSuiteName,
-  abstract : 0,
-  override : notTakingIntoAccount,
-
-  tests :
+  var childSuite =
   {
-  },
 
-  context :
+    name : childSuiteName,
+    abstract : 0,
+    override : notTakingIntoAccount,
+
+    tests :
+    {
+    },
+
+    context :
+    {
+      childValue : 3
+    },
+
+  }
+
+  var suite = new wTestSuite( childSuite )
+  .inherit( wTests[ firstParentName ] )
+  .inherit( wTests[ secondParentName] );
+
+  return suite.run()
+  .doThen( function()
   {
-    childValue : 3
-  },
+    test.identical( suite.report.testCheckPasses, checksCount );
+    test.identical( suite.report.testCheckFails, 0 );
+    test.identical( suite.report.testRoutinePasses, _.mapOwnKeys( suite.tests ).length );
+    test.identical( routines.length, _.mapOwnKeys( suite.tests ).length );
+  });
 
 }
 
-var suite = new wTestSuite( childSuite )
-.inherit( wTests[ firstParentName ] )
-.inherit( wTests[ secondParentName] );
-
-return suite.run()
-.doThen( function()
-{
-  test.identical( suite.report.testCheckPasses, checksCount );
-  test.identical( suite.report.testCheckFails, 0 );
-  test.identical( suite.report.testRoutinePasses, _.mapOwnKeys( suite.tests ).length );
-  test.identical( routines.length, _.mapOwnKeys( suite.tests ).length );
-});
-}
-
+//
 
 var Proto =
 {
 
   name : 'Inheritance test',
-  verbosity : 10,
+  // verbosity : 5,
+  silencing : 1,
 
   tests :
   {
@@ -160,6 +158,7 @@ var Proto =
   }
 }
 
+//
 
 var Self = new wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )

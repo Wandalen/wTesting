@@ -1133,7 +1133,7 @@ _global_.wTests = wTestSuite.instancesMap;
 if( wTestsWas )
 wTestSuite.prototype._registerSuites( wTestsWas );
 
-if( typeof module !== 'undefined' && !module.parent )
+if( typeof module !== 'undefined' && !module.parent && !module.isBrowser )
 _.Tester.exec();
 
 })();

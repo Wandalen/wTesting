@@ -367,8 +367,8 @@ function _testAllAct()
   //   return;
   //   return suite;
   // });
-
   // debugger;
+
   var suites = tester.testsFilterOut( wTests );
 
   tester._testingBegin( suites );
@@ -429,7 +429,7 @@ function _test()
 
   tester._testingBegin( suites );
 
-  tester._testAct.apply( tester,suites );
+  tester._testAct.apply( tester,_.mapVals( suites ) );
 
   return wTestSuite._suiteCon
   .timeOutThen( tester.settings.sanitareTime )
@@ -575,10 +575,26 @@ function testsFilterOut( suites )
 
   var suites = suites || wTests;
 
+  debugger;
+  if( _.arrayLike( suites ) )
+  {
+    var _suites = Object.create( null );
+    for( var s = 0 ; s < suites.length ; s++ )
+    {
+      var suite = suites[ s ];
+      if( _.strIs( suite ) )
+      _suites[ suite ] = suite;
+      else if( suite instanceof wTestSuite )
+      _suites[ suite.name ] = suite;
+      else _.assert( 0,'not tested' );
+    }
+    suites = _suites;
+  }
+
   _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
   _.assert( _.objectIs( suites ) );
 
-  // debugger;
+  debugger;
   var suites = _.entityFilter( suites,function( suite )
   {
     if( _.strIs( suite ) )
@@ -595,7 +611,7 @@ function testsFilterOut( suites )
     return suite;
   });
 
-  // debugger;
+  debugger;
 
   return suites;
 }

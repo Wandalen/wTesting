@@ -155,7 +155,8 @@ var Proto =
   tests :
   {
     inherit : inherit
-  }
+  },
+
 }
 
 //

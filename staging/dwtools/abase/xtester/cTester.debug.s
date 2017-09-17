@@ -49,6 +49,8 @@ fileStat : null
 
 - no suite/tester sanitare period if errror
 
+- time measurements out of test
+
 */
 
 if( typeof module !== 'undefined' )
@@ -178,6 +180,7 @@ function _includeTestsFrom( path )
 {
   var tester = this;
   var logger = tester.logger || _global_.logger;
+  var path = _.pathJoin( _.pathCurrent(),path );
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( path ) );
@@ -192,6 +195,13 @@ function _includeTestsFrom( path )
     recursive : 1,
     maskAll : _.pathRegexpMakeSafe(),
   });
+
+  if( !files.length )
+  {
+    var record = _.fileProvider.fileRecord( path );
+    if( record.stat && record.inclusion )
+    var files = [ record ];
+  }
 
   for( var f = 0 ; f < files.length ; f++ )
   {

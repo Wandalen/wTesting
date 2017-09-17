@@ -3,20 +3,7 @@
 'use strict';
 
 if( typeof module !== 'undefined' )
-{
-
-  require( '../staging/dwtools/abase/object/сTester.debug.s' );
-
-  try
-  {
-    require( '../staging/dwtools/abase/object/сTester.debug.s' );
-  }
-  catch( err )
-  {
-    require( 'wTesting' );
-  }
-
-}
+require( 'wTester' );
 
 var _ = wTools;
 var Self = {};

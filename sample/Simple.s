@@ -1,24 +1,7 @@
-( function _Simple_s_( ) {
-
 'use strict';
 
 if( typeof module !== 'undefined' )
-{
-
-  try
-  {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
-
-  var _ = wTools;
-
-  _.include( 'wTesting' );
-
-}
+require( 'wTester' );
 
 var _ = wTools;
 
@@ -109,5 +92,3 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self );
-
-} )( );

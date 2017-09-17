@@ -199,7 +199,7 @@ function _includeTestsFrom( path )
   if( !files.length )
   {
     var record = _.fileProvider.fileRecord( path );
-    if( record.stat && record.inclusion )
+    if( record.stat && !record.stat.isDirectory() && record.inclusion )
     var files = [ record ];
   }
 
@@ -417,7 +417,7 @@ function _testAct()
 
     _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
     _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
-    _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have it' );
+    _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
 
     suite._testSuiteRunLater();
   }

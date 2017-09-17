@@ -45,7 +45,7 @@
     "wEventHandler": ""
   },
   "devDependencies": {
-    "wTesting": ""
+    "wTesting": "."
   },
   "keywords": [
     "testing",

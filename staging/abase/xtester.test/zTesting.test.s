@@ -4,8 +4,8 @@
 
 /*
 
-node builder/include/dwtools/abase/xTesting/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
-node builder/include/dwtools/abase/xTesting/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
+node builder/include/dwtools/abase/xtester/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
+node builder/include/dwtools/abase/xtester/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
 
 node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:2 importanceOfDetails:0
 
@@ -17,7 +17,7 @@ builder/include/dwtools/abase/oclass/printer/z.test/Backend.test.ss
 builder/include/dwtools/abase/oclass/printer/z.test/Logger.test.s
 builder/include/dwtools/abase/oclass/printer/z.test/Other.test.s
 builder/include/dwtools/abase/oclass/printer/z.test/Browser.test.s
-builder/include/dwtools/abase/xTesting/zTesting.test.s
+builder/include/dwtools/abase/xtester/zTesting.test.s
 builder/include/dwtools/abase/z.test/ArraySorted.test.s
 builder/include/dwtools/abase/z.test/Consequence.test.s
 builder/include/dwtools/abase/z.test/EventHandler.test.s
@@ -40,13 +40,13 @@ node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:3 importanc
 
 -
 
-node builder/include/dwtools/abase/xTesting/zTesting.test.s
-node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8
-node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:4
-node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:4 importanceOfNegative:3
-node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:3 importanceOfNegative:3
+node builder/include/dwtools/abase/xtester/zTesting.test.s
+node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8
+node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8 verbosity:4
+node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8 verbosity:4 importanceOfNegative:3
+node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8 verbosity:3 importanceOfNegative:3
 
-node builder/Test builder/include/dwtools/abase/xTesting/zTesting.test.s
+node builder/Test builder/include/dwtools/abase/xtester/zTesting.test.s
 node builder/Test builder/include/dwtools/abase/z.test/Path.path.test.s
 node builder/Test builder/include/dwtools/abase/z.test
 node builder/Test builder/include/dwtools/abase/z.test verbosity:2

@@ -16,11 +16,11 @@
   ],
   "license": "MIT",
   "bin": {
-    "wtest": "staging/dwtools/abase/xTesting/xTest.ss"
+    "wtest": "staging/dwtools/abase/xtester/xTest.ss"
   },
-  "main": "staging/dwtools/abase/xTesting/cTester.debug.s",
+  "main": "staging/dwtools/abase/xtester/cTester.debug.s",
   "files": [
-    "staging/dwtools/abase/xTesting",
+    "staging/dwtools/abase/xtester",
     "production"
   ],
   "scripts": {

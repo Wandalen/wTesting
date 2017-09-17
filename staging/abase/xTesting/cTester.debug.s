@@ -57,7 +57,7 @@ if( typeof module !== 'undefined' )
   if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../abase/wTools.s' );
+    require( '../../Base.s' );
   }
   catch( err )
   {
@@ -97,9 +97,9 @@ if( _.Tester._isFullImplementation )
 // if( !_.toStr )
 // _.toStr = function(){ return String( arguments ) };
 
-_.assert( _.toStr,'wTesting needs wTools/staging/abase/akernel/StringTools.s' );
-_.assert( _.execStages,'wTesting needs wTools/staging/abase/akernel/ExecTools.s' );
-_.assert( _.Consequence,'wTesting needs wConsequence/staging/abase/syn/Consequence.s' );
+_.assert( _.toStr,'wTesting needs wTools/staging/dwtools/abase/layer1/StringTools.s' );
+_.assert( _.execStages,'wTesting needs wTools/staging/dwtools/abase/layer1/ExecTools.s' );
+_.assert( _.Consequence,'wTesting needs wConsequence/staging/dwtools/abase/oclass/Consequence.s' );
 
 // --
 // tester
@@ -160,7 +160,7 @@ function _registerExitHandler()
   tester._registerExitHandlerDone = 1;
 
   if( _global_.process )
-  process.on( 'exit', function ()
+  process.on( 'exit', function()
   {
     if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
     {
@@ -578,7 +578,7 @@ function testsFilterOut( suites )
 
   var suites = suites || wTests;
 
-  debugger;
+  // debugger;
   if( _.arrayLike( suites ) )
   {
     var _suites = Object.create( null );
@@ -597,7 +597,7 @@ function testsFilterOut( suites )
   _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
   _.assert( _.objectIs( suites ) );
 
-  debugger;
+  // debugger;
   var suites = _.entityFilter( suites,function( suite )
   {
     if( _.strIs( suite ) )
@@ -614,7 +614,7 @@ function testsFilterOut( suites )
     return suite;
   });
 
-  debugger;
+  // debugger;
 
   return suites;
 }

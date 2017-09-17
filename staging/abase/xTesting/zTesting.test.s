@@ -4,52 +4,52 @@
 
 /*
 
-node builder/include/abase/xTesting/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
-node builder/include/abase/xTesting/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
+node builder/include/dwtools/abase/xTesting/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
+node builder/include/dwtools/abase/xTesting/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
 
-node builder/include/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:2 importanceOfDetails:0
+node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:2 importanceOfDetails:0
 
-node builder/Test builder/include/abase/printer
-node builder/Test builder/include/abase/z.test
+node builder/Test builder/include/dwtools/abase/oclass/printer
+node builder/Test builder/include/dwtools/abase/z.test
 
-builder/include/abase/printer/z.test/Chaining.test.s
-builder/include/abase/printer/z.test/Backend.test.ss
-builder/include/abase/printer/z.test/Logger.test.s
-builder/include/abase/printer/z.test/Other.test.s
-builder/include/abase/printer/z.test/Browser.test.s
-builder/include/abase/xTesting/zTesting.test.s
-builder/include/abase/z.test/ArraySorted.test.s
-builder/include/abase/z.test/Consequence.test.s
-builder/include/abase/z.test/EventHandler.test.s
-builder/include/abase/z.test/String.test.s
-builder/include/abase/z.test/RegExp.test.s
-builder/include/abase/z.test/Map.test.s
-builder/include/abase/z.test/Changes.test.s
-builder/include/abase/z.test/ExecTools.test.s
-builder/include/abase/z.test/Path.path.test.s
-builder/include/abase/z.test/Path.url.test.s
-builder/include/abase/z.test/ProtoLike.test.s
-builder/include/abase/z.test/Sample.test.s
-
--
-
-node builder/include/abase/z.test/Path.path.test.s
-node builder/include/abase/z.test/Path.path.test.s verbosity:4
-node builder/include/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:3
-node builder/include/abase/z.test/Path.path.test.s verbosity:3 importanceOfNegative:3
+builder/include/dwtools/abase/oclass/printer/z.test/Chaining.test.s
+builder/include/dwtools/abase/oclass/printer/z.test/Backend.test.ss
+builder/include/dwtools/abase/oclass/printer/z.test/Logger.test.s
+builder/include/dwtools/abase/oclass/printer/z.test/Other.test.s
+builder/include/dwtools/abase/oclass/printer/z.test/Browser.test.s
+builder/include/dwtools/abase/xTesting/zTesting.test.s
+builder/include/dwtools/abase/z.test/ArraySorted.test.s
+builder/include/dwtools/abase/z.test/Consequence.test.s
+builder/include/dwtools/abase/z.test/EventHandler.test.s
+builder/include/dwtools/abase/z.test/String.test.s
+builder/include/dwtools/abase/z.test/RegExp.test.s
+builder/include/dwtools/abase/z.test/Map.test.s
+builder/include/dwtools/abase/z.test/Changes.test.s
+builder/include/dwtools/abase/z.test/ExecTools.test.s
+builder/include/dwtools/abase/z.test/Path.path.test.s
+builder/include/dwtools/abase/z.test/Path.url.test.s
+builder/include/dwtools/abase/z.test/ProtoLike.test.s
+builder/include/dwtools/abase/z.test/Sample.test.s
 
 -
 
-node builder/include/abase/xTesting/zTesting.test.s
-node builder/include/abase/xTesting/zTesting.test.s importanceOfDetails:-8
-node builder/include/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:4
-node builder/include/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:4 importanceOfNegative:3
-node builder/include/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:3 importanceOfNegative:3
+node builder/include/dwtools/abase/z.test/Path.path.test.s
+node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4
+node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:3
+node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:3 importanceOfNegative:3
 
-node builder/Test builder/include/abase/xTesting/zTesting.test.s
-node builder/Test builder/include/abase/z.test/Path.path.test.s
-node builder/Test builder/include/abase/z.test
-node builder/Test builder/include/abase/z.test verbosity:2
+-
+
+node builder/include/dwtools/abase/xTesting/zTesting.test.s
+node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8
+node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:4
+node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:4 importanceOfNegative:3
+node builder/include/dwtools/abase/xTesting/zTesting.test.s importanceOfDetails:-8 verbosity:3 importanceOfNegative:3
+
+node builder/Test builder/include/dwtools/abase/xTesting/zTesting.test.s
+node builder/Test builder/include/dwtools/abase/z.test/Path.path.test.s
+node builder/Test builder/include/dwtools/abase/z.test
+node builder/Test builder/include/dwtools/abase/z.test verbosity:2
 
 echo $?
 

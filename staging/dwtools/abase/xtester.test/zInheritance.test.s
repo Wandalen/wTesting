@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
 
   if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
-  require( './cTester.debug.s' );
+  require( '../xtester/cTester.debug.s' );
 
 }
 

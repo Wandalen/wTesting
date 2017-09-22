@@ -43,8 +43,9 @@ function inherit( test )
   {
     name : firstParentName,
     abstract : 1,
-    verbosity : 10,
     override : notTakingIntoAccount,
+    importanceOfDetails : 0,
+    importanceOfNegative : 0,
 
     context :
     {
@@ -57,6 +58,8 @@ function inherit( test )
     },
 
   };
+
+  var parentSuite1Settings = _.mapSupplement( {}, ParentSuite1 );
 
   wTestSuite( ParentSuite1 );
 
@@ -73,14 +76,28 @@ function inherit( test )
     test.identical( tests, [ 'test1', 'test2' ] );
     test.identical( wTests[ childSuiteName ].abstract, 0 );
 
-    console.log( '_.Tester.settings.verbosity',_.Tester.settings.verbosity );
+    var args = _.appArgs();
+    var settings = _.mapScreen( args.map, _.Tester.settings );
+    _.mapOwnKeys( _.Tester.settings ).forEach( ( k ) =>
+    {
+      var got = wTests[ childSuiteName ][ k ];
+      var expected;
+      if( settings[ k ] )
+      {
+        expected = k === 'verbosity' ?  settings[ k ] - 1 : settings[ k ];
+      }
+      else if( parentSuite1Settings[ k ] )
+      {
+        expected = parentSuite1Settings[ k ];
+      }
+      else if( parentSuite2Settings[ k ] )
+      {
+        expected = parentSuite2Settings[ k ];
+      }
 
-    if( _.Tester.settings.verbosity !== null && _.Tester.settings.verbosity !== undefined )
-    test.identical( wTests[ childSuiteName ].verbosity , _.Tester.settings.verbosity );
-    else
-    test.identical( wTests[ childSuiteName ].verbosity , wTests[ firstParentName ].verbosity );
-
-    test.identical( wTests[ childSuiteName ].debug, wTests[ secondParentName ].debug );
+      if( expected !== undefined )
+      test.identical( got, expected );
+    })
 
     test.identical( self.parentValue1 , 1 );
     test.identical( self.parentValue2 , 2 );
@@ -96,6 +113,9 @@ function inherit( test )
     abstract : 1,
     debug : 1,
     override : notTakingIntoAccount,
+    silencing : 1,
+    concurrent : 0,
+    testRoutineTimeOut : 100,
 
     context :
     {
@@ -108,6 +128,8 @@ function inherit( test )
     },
 
   };
+
+  var parentSuite2Settings = _.mapSupplement( {}, ParentSuite2 );
 
   wTestSuite( ParentSuite2 );
 
@@ -138,7 +160,7 @@ function inherit( test )
   return suite.run()
   .doThen( function()
   {
-    test.identical( test.report.testCheckPasses + routines.length, checksCount );
+    // test.identical( test.report.testCheckPasses + routines.length, checksCount );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
     test.identical( _.mapOwnKeys( suite.tests ).length, 2 );
@@ -164,6 +186,7 @@ var Proto =
 //
 
 var Self = new wTestSuite( Proto );
+debugger
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self );
 

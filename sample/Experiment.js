@@ -3,7 +3,7 @@
 'use strict';
 
 if( typeof module !== 'undefined' )
-require( 'wTester' );
+require( 'wTesting' );
 
 var _ = wTools;
 var Self = {};

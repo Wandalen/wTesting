@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
 
   if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
-  require( './cTester.debug.s' );
+  require( '../xtester/cTester.debug.s' );
 
 }
 
@@ -43,8 +43,9 @@ function inherit( test )
   {
     name : firstParentName,
     abstract : 1,
-    verbosity : 10,
     override : notTakingIntoAccount,
+    silencing : 0,
+    importanceOfDetails : 3,
 
     context :
     {
@@ -73,13 +74,10 @@ function inherit( test )
     test.identical( tests, [ 'test1', 'test2' ] );
     test.identical( wTests[ childSuiteName ].abstract, 0 );
 
-    console.log( '_.Tester.settings.verbosity',_.Tester.settings.verbosity );
-
-    if( _.Tester.settings.verbosity !== null && _.Tester.settings.verbosity !== undefined )
-    test.identical( wTests[ childSuiteName ].verbosity , _.Tester.settings.verbosity );
-    else
     test.identical( wTests[ childSuiteName ].verbosity , wTests[ firstParentName ].verbosity );
-
+    test.identical( wTests[ childSuiteName ].importanceOfDetails , wTests[ firstParentName ].importanceOfDetails );
+    test.identical( wTests[ childSuiteName ].silencing , wTests[ firstParentName ].silencing );
+    test.identical( wTests[ childSuiteName ].importanceOfNegative , wTests[ secondParentName ].importanceOfNegative );
     test.identical( wTests[ childSuiteName ].debug, wTests[ secondParentName ].debug );
 
     test.identical( self.parentValue1 , 1 );
@@ -96,6 +94,7 @@ function inherit( test )
     abstract : 1,
     debug : 1,
     override : notTakingIntoAccount,
+    importanceOfNegative : 4,
 
     context :
     {
@@ -119,6 +118,7 @@ function inherit( test )
     name : childSuiteName,
     abstract : 0,
     override : notTakingIntoAccount,
+    ignoreAppArgs : 1,
 
     tests :
     {
@@ -138,7 +138,7 @@ function inherit( test )
   return suite.run()
   .doThen( function()
   {
-    test.identical( test.report.testCheckPasses + routines.length, checksCount );
+    test.shouldBe( test.report.testCheckPasses > 9  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
     test.identical( _.mapOwnKeys( suite.tests ).length, 2 );
@@ -152,7 +152,7 @@ var Proto =
 
   name : 'Inheritance test',
   // verbosity : 5,
-  silencing : 1,
+  silencing : 0,
 
   tests :
   {
@@ -164,6 +164,7 @@ var Proto =
 //
 
 var Self = new wTestSuite( Proto );
+debugger
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self );
 

@@ -296,7 +296,7 @@ function _testSuiteSettingsAdjust()
   if( suite.override )
   _.mapExtend( suite,suite.override );
 
-  if( _.Tester.settings.concurrent !== null )
+  if( _.Tester.settings.concurrent !== null && !suite.ignoreAppArgs )
   suite.concurrent = _.Tester.settings.concurrent;
 
   /* */
@@ -304,18 +304,18 @@ function _testSuiteSettingsAdjust()
   if( !suite.logger )
   suite.logger = _.Tester.logger || _global_.logger;
 
-  if( _.Tester.settings.verbosity !== null )
+  if( _.Tester.settings.verbosity !== null && !suite.ignoreAppArgs )
   suite.verbosity = _.Tester.settings.verbosity-1;
   else
   suite.verbosity = suite.verbosity;
 
-  if( _.Tester.settings.importanceOfNegative !== null )
+  if( _.Tester.settings.importanceOfNegative !== null && !suite.ignoreAppArgs )
   suite.importanceOfNegative = _.Tester.settings.importanceOfNegative;
 
-  if( _.Tester.settings.importanceOfDetails !== null )
+  if( _.Tester.settings.importanceOfDetails !== null && !suite.ignoreAppArgs )
   suite.importanceOfDetails = _.Tester.settings.importanceOfDetails;
 
-  if( _.Tester.settings.routine !== null )
+  if( _.Tester.settings.routine !== null && !suite.ignoreAppArgs )
   suite.routine = _.Tester.settings.routine;
 
   /* */
@@ -811,6 +811,7 @@ var Composes =
   enabled : 1,
   takingIntoAccount : 1,
   usingSourceCode : 1,
+  ignoreAppArgs : 0,
 
   eps : 1e-5,
   report : null,

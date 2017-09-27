@@ -51,6 +51,10 @@ fileStat : null
 
 - time measurements out of test
 
+- sort-cuts for command line otpions
+
+- wanring if command line option is strange
+
 */
 
 if( typeof module !== 'undefined' )

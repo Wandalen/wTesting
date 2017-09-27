@@ -335,7 +335,7 @@ function shouldBeNotError( maybeErrror )
 
 //
 
-function notIdentical( got,expected )
+function isNotIdentical( got,expected )
 {
   var trd = this;
   var iterator = Object.create( null );
@@ -1505,7 +1505,7 @@ var Proto =
 
   shouldBe : shouldBe,
   shouldBeNotError : shouldBeNotError,
-  notIdentical : notIdentical,
+  isNotIdentical : isNotIdentical,
   identical : identical,
   equivalent : equivalent,
   contain : contain,

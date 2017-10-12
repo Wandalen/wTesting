@@ -55,6 +55,8 @@ fileStat : null
 
 - wanring if command line option is strange
 
+- issue if first test suite has silencing:0 and other silencing:1
+
 */
 
 if( typeof module !== 'undefined' )
@@ -171,7 +173,7 @@ function _registerExitHandler()
     if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
     {
       var logger = tester.logger || _global_.logger;
-      logger.log( _.strColor.style( 'Errors!','negative' ) );
+      logger.log( _.color.strFormat( 'Errors!','negative' ) );
       process.exitCode = -1;
     }
   });
@@ -215,14 +217,16 @@ function _includeTestsFrom( path )
 
     try
     {
+      debugger;
       require( _.fileProvider.pathNativize( absolutePath ) );
     }
     catch( err )
     {
+      debugger;
       err = _.errAttend( 'Cant include',absolutePath + '\n',err );
       tester.includeFails.push( err );
 
-      logger.error( _.strColor.fg( 'Cant include ' + absolutePath, 'red' ) );
+      logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
       if( logger.verbosity > 3 )
       logger.error( _.err( err ) );
     }
@@ -781,8 +785,9 @@ function _exceptionConsider( err )
   _.assert( arguments.length === 1 );
   _.assert( tester === Self );
 
-  tester.report.errorsArray.push( err );
+  err = _.errLogOnce( err );
 
+  tester.report.errorsArray.push( err );
 }
 
 //

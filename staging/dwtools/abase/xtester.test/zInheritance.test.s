@@ -164,7 +164,6 @@ var Proto =
 //
 
 var Self = new wTestSuite( Proto );
-debugger
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self );
 

@@ -465,7 +465,7 @@ function _testSuiteBegin()
 
   logger.logUp( msg.join( '\n' ) );
 
-  logger.log( _.strColor.style( 'at  ' + suite.sourceFilePath,'selected' ) );
+  logger.log( _.color.strFormat( 'at  ' + suite.sourceFilePath,'selected' ) );
 
   logger.end( 'suite' );
 
@@ -564,6 +564,18 @@ function _testSuiteEnd()
   debugger;
 
   return suite;
+}
+
+//
+
+function onRoutineBegin( t )
+{
+}
+
+//
+
+function onRoutineEnd( t )
+{
 }
 
 //
@@ -667,8 +679,16 @@ function _testRoutineBegin( trd )
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = trd;
 
-  if( trd.eventGive )
-  trd.eventGive({ kind : 'routineBegin', testRoutine : trd });
+  try
+  {
+    suite.onRoutineBegin.call( trd.context,trd );
+    if( trd.eventGive )
+    trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
+  }
+  catch( err )
+  {
+    suite._exceptionConsider( err );
+  }
 
 }
 
@@ -681,8 +701,16 @@ function _testRoutineEnd( trd,ok )
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  if( trd.eventGive )
-  trd.eventGive({ kind : 'routineEnd', testRoutine : trd });
+  try
+  {
+    suite.onRoutineEnd.call( trd.context,trd,ok );
+    if( trd.eventGive )
+    trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
+  }
+  catch( err )
+  {
+    suite._exceptionConsider( err );
+  }
 
   if( trd.report.testCheckFails )
   suite.report.testRoutineFails += 1;
@@ -822,6 +850,9 @@ var Composes =
 
   _routineCon : new wConsequence().give(),
   _inroutineCon : new wConsequence().give(),
+
+  onRoutineBegin : onRoutineBegin,
+  onRoutineEnd : onRoutineEnd,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

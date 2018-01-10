@@ -31,6 +31,7 @@ var _ = wTools;
 var Parent = null;
 var Self = function wTestSuite( o )
 {
+
   _.assert( arguments.length === 1 );
   _.assert( o );
 
@@ -40,32 +41,15 @@ var Self = function wTestSuite( o )
 
   _.assert( !( o instanceof Self ) );
 
-  if( !o.sourceFilePath )
-  o.sourceFilePath = _.diagnosticLocation( 1 ).full;
+  if( !o.suiteFilePath )
+  o.suiteFilePath = _.diagnosticLocation( 1 ).path
+
+  if( !o.suiteFileLocation )
+  o.suiteFileLocation = _.diagnosticLocation( 1 ).full
 
   if( !( this instanceof Self ) )
-  // if( o instanceof Self )
-  // return o;
-  // else
   return new( _.routineJoin( Self, Self, arguments ) );
   return Self.prototype.init.apply( this,arguments );
-
-  // if( !( this instanceof Self ) )
-  // if( o instanceof Self )
-  // return o;
-  // else
-  // {
-  //   o = arguments[ 0 ] = o || {};
-  //   if( !o.sourceFilePath )
-  //   o.sourceFilePath = _.diagnosticLocation( 1 ).full + '';
-  //   return new( _.routineJoin( Self, Self, arguments ) );
-  // }
-  //
-  // o = arguments[ 0 ] = o || {};
-  // if( !o.sourceFilePath )
-  // o.sourceFilePath = _.diagnosticLocation( 1 ).full + '';
-  //
-  // return Self.prototype.init.apply( this,arguments );
 }
 
 Self.nameShort = 'TestSuite';
@@ -96,17 +80,19 @@ function init( o )
 
   /* source path */
 
-  if( !_.strIs( suite.sourceFilePath ) )
+  if( !_.strIs( suite.suiteFileLocation ) )
   {
     debugger;
-    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( sourceFilePath )' );
+    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( suiteFileLocation )' );
   }
+
+  // console.log( 'suite.suiteFileLocation',suite.suiteFileLocation );
 
   /* name */
 
   if( !( o instanceof Self ) )
   if( !_.strIsNotEmpty( suite.name ) )
-  suite.name = _.diagnosticLocation( suite.sourceFilePath ).nameLong;
+  suite.name = _.diagnosticLocation( suite.suiteFileLocation ).nameLong;
 
   if( !( o instanceof Self ) )
   if( !_.strIsNotEmpty( suite.name ) )
@@ -296,27 +282,32 @@ function _testSuiteSettingsAdjust()
   if( suite.override )
   _.mapExtend( suite,suite.override );
 
-  if( _.Tester.settings.concurrent !== null && !suite.ignoreAppArgs )
-  suite.concurrent = _.Tester.settings.concurrent;
-
-  /* */
-
   if( !suite.logger )
   suite.logger = _.Tester.logger || _global_.logger;
 
-  if( _.Tester.settings.verbosity !== null && !suite.ignoreAppArgs )
-  suite.verbosity = _.Tester.settings.verbosity-1;
-  else
-  suite.verbosity = suite.verbosity;
+  if( !suite.ignoreAppArgs )
+  {
 
-  if( _.Tester.settings.importanceOfNegative !== null && !suite.ignoreAppArgs )
-  suite.importanceOfNegative = _.Tester.settings.importanceOfNegative;
+    for( var f in _.Tester.SettingsOfSuite )
+    if( _.Tester.settings[ f ] !== null )
+    suite[ f ] = _.Tester.settings[ f ];
 
-  if( _.Tester.settings.importanceOfDetails !== null && !suite.ignoreAppArgs )
-  suite.importanceOfDetails = _.Tester.settings.importanceOfDetails;
+    if( _.Tester.settings.verbosity !== null )
+    suite.verbosity = _.Tester.settings.verbosity-1;
 
-  if( _.Tester.settings.routine !== null && !suite.ignoreAppArgs )
-  suite.routine = _.Tester.settings.routine;
+  }
+
+  // if( _.Tester.settings.concurrent !== null && !suite.ignoreAppArgs )
+  // suite.concurrent = _.Tester.settings.concurrent;
+  //
+  // if( _.Tester.settings.importanceOfNegative !== null && !suite.ignoreAppArgs )
+  // suite.importanceOfNegative = _.Tester.settings.importanceOfNegative;
+  //
+  // if( _.Tester.settings.importanceOfDetails !== null && !suite.ignoreAppArgs )
+  // suite.importanceOfDetails = _.Tester.settings.importanceOfDetails;
+  //
+  // if( _.Tester.settings.routine !== null && !suite.ignoreAppArgs )
+  // suite.routine = _.Tester.settings.routine;
 
   /* */
 
@@ -415,7 +406,8 @@ function _testSuiteRunAct()
     }
 
     _.assert( _.Tester.settings.sanitareTime >= 0 );
-    return _.timeOut( _.Tester.settings.sanitareTime / 2, _.routineSeal( suite,suite._testSuiteEnd,[] ) );
+
+    return _.timeOut( _.Tester.settings.sanitareTime, _.routineSeal( suite,suite._testSuiteEnd,[] ) );
   }
 
   /* */
@@ -465,7 +457,7 @@ function _testSuiteBegin()
 
   logger.logUp( msg.join( '\n' ) );
 
-  logger.log( _.color.strFormat( 'at  ' + suite.sourceFilePath,'selected' ) );
+  logger.log( _.color.strFormat( 'at  ' + suite.suiteFileLocation,'selected' ) );
 
   logger.end( 'suite' );
 
@@ -484,8 +476,8 @@ function _testSuiteBegin()
   _.assert( _.Tester.activeSuites.indexOf( suite ) === -1 );
   _.Tester.activeSuites.push( suite );
 
-  if( suite.onSuiteBegin )
-  suite.onSuiteBegin.call( suite.context,suite );
+  if( suite.onSuitBegin )
+  suite.onSuitBegin.call( suite.context,suite );
 
 }
 
@@ -496,8 +488,8 @@ function _testSuiteEnd()
   var suite = this;
   var logger = suite.logger;
 
-  if( suite.onSuiteEnd )
-  suite.onSuiteEnd.call( suite.context,suite );
+  if( suite.onSuitEnd )
+  suite.onSuitEnd.call( suite.context,suite );
 
   /* */
 
@@ -580,13 +572,13 @@ function onRoutineEnd( t )
 
 //
 
-function onSuiteBegin( t )
+function onSuitBegin( t )
 {
 }
 
 //
 
-function onSuiteEnd( t )
+function onSuitEnd( t )
 {
 }
 
@@ -830,9 +822,12 @@ var Composes =
   routine : null,
   silencing : null,
 
+  platforms : null,
+
   /* */
 
-  sourceFilePath : null,
+  suiteFilePath : null,
+  suiteFileLocation : null,
   tests : null,
 
   abstract : 0,
@@ -854,8 +849,8 @@ var Composes =
   onRoutineBegin : onRoutineBegin,
   onRoutineEnd : onRoutineEnd,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuitBegin : onSuitBegin,
+  onSuitEnd : onSuitEnd,
 
 }
 
@@ -871,7 +866,6 @@ var Associates =
 
 var Restricts =
 {
-  // name : null,
   currentRoutine : null,
   _initialOptions : null,
 }
@@ -931,8 +925,8 @@ var Proto =
   _testSuiteBegin : _testSuiteBegin,
   _testSuiteEnd : _testSuiteEnd,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuitBegin : onSuitBegin,
+  onSuitEnd : onSuitEnd,
 
 
   // test routine run

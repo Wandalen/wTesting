@@ -396,7 +396,7 @@ function identical( got,expected )
   var trd = this;
   var iterator = Object.create( null );
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2,'expects two arguments' );
 
   var outcome = _.entityIdentical( got,expected,iterator );
 
@@ -460,7 +460,7 @@ function equivalent( got,expected,eps )
 
   iterator.eps = eps;
 
-  _.assert( arguments.length === 2 || arguments.length === 3 );
+  _.assert( arguments.length === 2 || arguments.length === 3,'expects two or three arguments' );
 
   var outcome = _.entityEquivalent( got,expected,iterator );
 
@@ -512,6 +512,8 @@ function contain( got,expected )
 {
   var trd = this;
   var iterator = Object.create( null );
+
+  _.assert( arguments.length === 2,'expects two arguments' );
 
   var outcome = _.entityContain( got,expected,iterator );
 

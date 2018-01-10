@@ -53,9 +53,12 @@ fileStat : null
 
 - sort-cuts for command line otpions
 
-- wanring if command line option is strange
+- warning if command line option is strange
+- warning if test routine has unknown fields
 
 - issue if first test suite has silencing:0 and other silencing:1
+
+- less static information with verbosity:7, to introduce higher verbosity levels
 
 */
 
@@ -83,10 +86,12 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wLogger' );
 
+  // _.includeAny( 'wScriptLauncher' );
+
 }
 
 var _ = wTools;
-var sourceFilePath = _.diagnosticLocation().full;
+var sourceFileLocation = _.diagnosticLocation().full;
 var sourceFileStack = _.diagnosticStack();
 
 if( _.Tester._isFullImplementation )
@@ -217,7 +222,6 @@ function _includeTestsFrom( path )
 
     try
     {
-      debugger;
       require( _.fileProvider.pathNativize( absolutePath ) );
     }
     catch( err )
@@ -647,7 +651,7 @@ function testsListPrint( suites )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  logger.log( _.entitySelect( _.entityVals( suites ),'*.sourceFilePath' ).join( '\n' ) );
+  logger.log( _.entitySelect( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
 
   var l = _.entityLength( suites );
 
@@ -922,7 +926,7 @@ function loggerToBook( o )
   /* */
 
   var book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
-  book.make();
+  book.form();
   book.tree.treeSet({ elements : routines });
 
 }
@@ -969,7 +973,8 @@ var SettingsOfTester =
 {
 
   scenario : 'test',
-  sanitareTime : 3000,
+  sanitareTime : 1000,
+
   usingBeep : 1,
 
   routine : null,
@@ -984,12 +989,15 @@ var SettingsOfSuite =
   testRoutineTimeOut : null,
   concurrent : null,
 
+  platforms : [ 'default' ],
+
   verbosity : null,
   importanceOfDetails : null,
   importanceOfNegative : null,
 
   routine : null,
-  silencing : 0,
+
+  // silencing : null,
 
 }
 
@@ -1110,8 +1118,9 @@ var Self =
   scenariosHelpMap : scenariosHelpMap,
   scenariosActionMap : scenariosActionMap,
 
-  sourceFilePath : sourceFilePath,
+  sourceFileLocation : sourceFileLocation,
   sourceFileStack : sourceFileStack,
+
   _isFullImplementation : 1,
   _registerExitHandlerDone : 0,
 

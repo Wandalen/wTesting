@@ -477,8 +477,16 @@ function _testSuiteBegin()
   _.Tester.activeSuites.push( suite );
 
   if( suite.onSuitBegin )
-  suite.onSuitBegin.call( suite.context,suite );
-
+  {
+    try
+    {
+      suite.onSuitBegin.call( suite.context,suite );
+    }
+    catch( err )
+    {
+      _.errLog( err );
+    }
+  }
 }
 
 //
@@ -489,7 +497,16 @@ function _testSuiteEnd()
   var logger = suite.logger;
 
   if( suite.onSuitEnd )
-  suite.onSuitEnd.call( suite.context,suite );
+  {
+    try
+    {
+      suite.onSuitEnd.call( suite.context,suite );
+    }
+    catch( err )
+    {
+      _.errLog( err );
+    }
+  }
 
   /* */
 

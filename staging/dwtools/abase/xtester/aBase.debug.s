@@ -115,7 +115,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wLogger' );
 
   debugger;
-  _.assert( !_globalReal_.wTestSuite,'wTester is already included' );
+  _.assert( !_globalReal_.Tester._isFullImplementation,'wTester is already included' );
 
   // _.includeAny( 'wScriptLauncher' );
 

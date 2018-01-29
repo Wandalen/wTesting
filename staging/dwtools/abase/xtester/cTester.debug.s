@@ -2,95 +2,8 @@
 
 'use strict';
 
-/*
-
-+ implement test case tracking
-
-+ move test routine methods out of test suite
-+ implement routine only as option of test suite
-
-+ adjust verbosity levels
-
-+ make possible switch off parents test routines
-
-fileStat : null
-
-+ make "should/must not error" pass original messages through
-  test.description = 'mustNotThrowError must return con with message';
-
-  var con = new wConsequence().give( '123' );
-  test.mustNotThrowError( con )
-  .ifNoErrorThen( function( got )
-  {
-    test.identical( got, '123' );
-  })
-
-+ improve inheritance
-+ global search cant find test suites with inheritance
-
-- implement options.list
-- print information about case with color directive avoiding change of color state of logger
-
-- implement support of glob path
-- manual launch of test suite + global tests execution should not give extra test suite runs
-
-+ after the last test case of test routine description should be changed
-
-+ test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
-
-+ test suite should not pass if 0 / 0 test checks
-
-+ track number of thrown errors
-
-+ global / suite / routine basis statistic tracking
-
-+ fails issue
-+ implement silencing from test suite
-
-- no suite/tester sanitare period if errror
-
-- time measurements out of test
-
-- sort-cuts for command line otpions
-
-- warning if command line option is strange
-- warning if test routine has unknown fields
-
-- issue if first test suite has silencing:0 and other silencing:1
-
-- less static information with verbosity:7, to introduce higher verbosity levels
-
-*/
-
-if( typeof module !== 'undefined' )
-{
-
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
-
-  var _ = wTools;
-
-  _.include( 'wCopyable' );
-  _.include( 'wInstancing' );
-
-  _.includeAny( 'wEventHandler','' );
-
-  _.include( 'wConsequence' );
-  _.include( 'wFiles' );
-  _.include( 'wLogger' );
-
-  // _.includeAny( 'wScriptLauncher' );
-
-}
-
-var _ = wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var sourceFileLocation = _.diagnosticLocation().full;
 var sourceFileStack = _.diagnosticStack();
 
@@ -104,6 +17,8 @@ if( _.Tester._isFullImplementation )
   console.log( 'Second time' );
   console.log( sourceFileStack );
   console.log( '' );
+  debugger;
+  _.assert( 0 );
   return;
 }
 
@@ -172,12 +87,12 @@ function _registerExitHandler()
 
   tester._registerExitHandlerDone = 1;
 
-  if( _global_.process )
+  if( _global.process )
   process.on( 'exit', function()
   {
     if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
     {
-      var logger = tester.logger || _global_.logger;
+      var logger = tester.logger || _global.logger;
       logger.log( _.color.strFormat( 'Errors!','negative' ) );
       process.exitCode = -1;
     }
@@ -190,7 +105,7 @@ function _registerExitHandler()
 function _includeTestsFrom( path )
 {
   var tester = this;
-  var logger = tester.logger || _global_.logger;
+  var logger = tester.logger || _global.logger;
   var path = _.pathJoin( _.pathCurrent(),path );
 
   _.assert( arguments.length === 1 );
@@ -244,6 +159,7 @@ function _includeTestsFrom( path )
 function includeTestsFrom( path )
 {
   var tester = this;
+  var logger = tester.logger || _global.logger;
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( path ) );
@@ -259,7 +175,7 @@ function includeTestsFrom( path )
 function appArgsApply()
 {
   var tester = this;
-  var logger = tester.logger || _global_.logger;
+  var logger = tester.logger || _global.logger;
 
   if( tester._appArgsApplied )
   return tester._appArgsApplied;
@@ -501,8 +417,8 @@ function _testingBegin( suites )
     logger.begin({ verbosity : -8 });
     logger.log( 'Barring console' );
     logger.end({ verbosity : -8 });
-    if( !wLogger.consoleIsBarred( console ) )
-    tester._bar = wLogger.consoleBar({ outputLogger : logger, bar : 1 });
+    if( !_.Logger.consoleIsBarred( console ) )
+    tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
   }
 
   logger.begin({ verbosity : -4 });
@@ -539,7 +455,7 @@ function _testingBegin( suites )
 function _testingEnd()
 {
   var tester = this;
-  var logger = tester.logger || _global_.logger;
+  var logger = tester.logger || _global.logger;
   var ok = tester._reportIsPositive();
 
   if( tester.settings.usingBeep )
@@ -576,10 +492,10 @@ function _testingEnd()
   // logger._verbosityReport();
   // console.log( 'tester.logger',tester.logger );
 
-  if( tester.settings.silencing && wLogger.consoleIsBarred( console ) )
+  if( tester.settings.silencing && _.Logger.consoleIsBarred( console ) )
   {
     tester._bar.bar = 0;
-    wLogger.consoleBar( tester._bar );
+    _.Logger.consoleBar( tester._bar );
   }
 
   _.timeOut( 100,function()
@@ -829,7 +745,7 @@ function loggerToBook( o )
   _.routineOptions( loggerToBook,o );
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( o.logger instanceof wPrinterToJstructure );
+  _.assert( o.logger instanceof wPrinterToJs );
 
   var data = o.logger.outputData;
   var routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
@@ -947,7 +863,7 @@ function bookExperiment()
 
     // debugger;
     Self.verbosity = 0;
-    //Self.logger = wPrinterToJstructure({ coloring : 0 });
+    //Self.logger = wPrinterToJs({ coloring : 0 });
 
     // _.Tester.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
     _.Tester.test( 'FileProvider.SimpleStructure' )
@@ -1109,7 +1025,7 @@ var Self =
 
   settings : Object.create( null ),
 
-  logger : new wLogger({ name : 'LoggerForTesting' }),
+  logger : new _.Logger({ name : 'LoggerForTesting' }),
 
   activeSuites : [],
   report : null,
@@ -1150,21 +1066,10 @@ _.accessor
 //
 
 Object.preventExtensions( Self );
-wTools.Tester = Self;
+_.assert( !_globalReal_.wTester );
+_globalReal_.wTester = _.Tester = Self;
 
 if( typeof module !== 'undefined' && module !== null )
-{
-  require( './aTestSuite.debug.s' );
-  module[ 'exports' ] = Self;
-}
-
-var wTestsWas = _global_.wTests;
-_global_.wTests = wTestSuite.instancesMap;
-
-if( wTestsWas )
-wTestSuite.prototype._registerSuites( wTestsWas );
-
-if( typeof module !== 'undefined' && !module.parent && !module.isBrowser )
-_.Tester.exec();
+module[ 'exports' ] = Self;
 
 })();

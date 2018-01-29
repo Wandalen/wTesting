@@ -58,15 +58,17 @@ echo $?
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
+  if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
   require( '../xtester/cTester.debug.s' );
 
-  var _ = wTools;
+  var _ = _global_.wTools;
+
+  _.include( 'wLogger' );
 
 }
 
-var _ = wTools;
-var notTakingIntoAccount = { logger : wLogger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
+var _ = _global_.wTools;
+var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
 //
 
@@ -319,7 +321,7 @@ function shouldMessageOnlyOnce( test )
     test.description = 'not expected second message';
     var c6 = t.shouldMessageOnlyOnce( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -355,7 +357,7 @@ function shouldMessageOnlyOnce( test )
     test.description = 'not expected second error';
     var c7 = t.shouldMessageOnlyOnce( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -389,7 +391,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.shouldMessageOnlyOnce( wConsequence().give( 'arg' ) );
+    var c8 = t.shouldMessageOnlyOnce( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -413,7 +415,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.shouldMessageOnlyOnce( wConsequence().error( 'error' ) );
+    var c9 = t.shouldMessageOnlyOnce( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -619,7 +621,7 @@ function mustNotThrowError( test )
     test.description = 'not expected second message';
     var c6 = t.mustNotThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -655,7 +657,7 @@ function mustNotThrowError( test )
     test.description = 'not expected second error';
     var c7 = t.mustNotThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -688,7 +690,7 @@ function mustNotThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.mustNotThrowError( wConsequence().give( 'arg' ) );
+    var c8 = t.mustNotThrowError( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -712,7 +714,7 @@ function mustNotThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.mustNotThrowError( wConsequence().error( 'error' ) );
+    var c9 = t.mustNotThrowError( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -891,7 +893,7 @@ function shouldThrowErrorSync( test )
     test.description = 'not expected second message';
     var c5 = t.shouldThrowErrorSync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -926,7 +928,7 @@ function shouldThrowErrorSync( test )
     test.description = 'not expected second error';
     var c6 = t.shouldThrowErrorSync( function()
     {
-      var con = wConsequence().error( 'error' );
+      var con = _.Consequence().error( 'error' );
 
       _.timeOut( 250, function()
       {
@@ -958,7 +960,7 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c7 = t.shouldThrowErrorSync( wConsequence().give( 'arg' ) );
+    var c7 = t.shouldThrowErrorSync( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -982,7 +984,7 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c8 = t.shouldThrowErrorSync( wConsequence().error( 'error' ) );
+    var c8 = t.shouldThrowErrorSync( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -1158,7 +1160,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'expected async string error';
     var c5 = t.shouldThrowErrorAsync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1193,7 +1195,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'not expected second message';
     var c6 = t.shouldThrowErrorAsync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1228,7 +1230,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'not expected second error';
     var c7 = t.shouldThrowErrorAsync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1263,7 +1265,7 @@ function shouldThrowErrorAsync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.shouldThrowErrorAsync( wConsequence().give( 'arg' ) );
+    var c8 = t.shouldThrowErrorAsync( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -1287,7 +1289,7 @@ function shouldThrowErrorAsync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.shouldThrowErrorAsync( wConsequence().error( 'error' ) );
+    var c9 = t.shouldThrowErrorAsync( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -1465,7 +1467,7 @@ function shouldThrowError( test )
     test.description = 'not expected second message';
     var c5 = t.shouldThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1500,7 +1502,7 @@ function shouldThrowError( test )
     test.description = 'not expected second error';
     var c6 = t.shouldThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1534,7 +1536,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.shouldThrowError( wConsequence().give( 'arg' ) );
+    var c8 = t.shouldThrowError( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -1558,7 +1560,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.shouldThrowError( wConsequence().error( 'error' ) );
+    var c9 = t.shouldThrowError( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -1610,14 +1612,14 @@ function shouldPassMessage( test )
 
   test.description = 'mustNotThrowError must return con with message';
 
-  var con = new wConsequence().give( '123' );
+  var con = new _.Consequence().give( '123' );
   test.mustNotThrowError( con )
   .ifNoErrorThen( function( arg )
   {
     test.identical( arg, '123' );
   });
 
-  var con = new wConsequence().give( '123' );
+  var con = new _.Consequence().give( '123' );
   test.shouldMessageOnlyOnce( con )
   .ifNoErrorThen( function( arg )
   {
@@ -1627,7 +1629,7 @@ function shouldPassMessage( test )
   test.description = 'mustNotThrowError must return con original error';
 
   var errOriginal = _.err( 'Err' );
-  var con = new wConsequence().error( errOriginal );
+  var con = new _.Consequence().error( errOriginal );
   test.shouldThrowError( con )
   .doThen( function( err,arg )
   {
@@ -1654,7 +1656,7 @@ function _throwingExperiment( test )
   debugger;
   t.mustNotThrowError( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 250, function()
     {
@@ -1670,7 +1672,7 @@ function _throwingExperiment( test )
   debugger;
   t.shouldThrowError( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 2000, function()
     {
@@ -1726,7 +1728,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 250, function()
     {
@@ -1769,7 +1771,7 @@ function _throwingExperiment( test )
 
   test.shouldThrowErrorSync( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 250, function()
     {
@@ -1830,7 +1832,7 @@ function _throwingExperiment( test )
   test.description = 'not expected second message';
   test.mustNotThrowError( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 1000, function()
     {
@@ -1854,7 +1856,7 @@ function shouldThrowErrorSimpleSync( test )
 
   test.identical( test._inroutineCon.messagesGet().length,1 );
 
-  var consequence = new wConsequence().give();
+  var consequence = new _.Consequence().give();
   consequence
   .ifNoErrorThen( function()
   {
@@ -1878,7 +1880,7 @@ function shouldThrowErrorSimpleSync( test )
 
 function shouldThrowErrorSimpleAsync( test )
 {
-  var consequence = new wConsequence().give();
+  var consequence = new _.Consequence().give();
   var counter = new CheckCounter();
 
   counter.testRoutine = test;
@@ -1952,7 +1954,7 @@ function _chainedShould( test,o )
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.testCheckFails, 0 );
 
-    return new wConsequence().give()
+    return new _.Consequence().give()
     .doThen( function()
     {
 
@@ -2141,7 +2143,7 @@ _chainedShould.experimental = 1;
 
 function chainedShould( test )
 {
-  var con = wConsequence().give();
+  var con = _.Consequence().give();
 
   var iterations =
   [

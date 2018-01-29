@@ -2,32 +2,11 @@
 
 'use strict';
 
-var isBrowser = true;
-if( typeof module !== 'undefined' )
-{
-
-  isBrowser = false;
-
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
-
-  require( './bTestRoutine.debug.s' );
-
-  var _ = wTools;
-
-}
+var _ = _global_.wTools;
 
 //
 
 var logger = null;
-var _ = wTools;
 var Parent = null;
 var Self = function wTestSuite( o )
 {
@@ -123,7 +102,7 @@ function copy( o )
   if( ( o instanceof Self ) )
   debugger;
 
-  return wCopyable.prototype.copy.call( suite,o );
+  return _.Copyable.prototype.copy.call( suite,o );
 }
 
 //
@@ -335,7 +314,9 @@ function _testSuiteRunLater()
 
   suite._testSuiteSettingsAdjust();
 
-  var con = suite.concurrent ? new wConsequence().give() : wTestSuite._suiteCon;
+  var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
+
+  debugger;
 
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
@@ -363,7 +344,7 @@ function _testSuiteRunNow()
 
   suite._testSuiteSettingsAdjust();
 
-  var con = suite.concurrent ? new wConsequence().give() : wTestSuite._suiteCon;
+  var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
 
   return con
   .doThen( function()
@@ -623,7 +604,7 @@ function _testRoutineRun_entry( name,testRoutine )
 
   /* */
 
-  var trd = wTestRoutineDescriptor
+  var trd = _.TestRoutineDescriptor
   ({
     name : name,
     routine : testRoutine,
@@ -647,14 +628,14 @@ function _testRoutineRun_entry( name,testRoutine )
     }
     catch( err )
     {
-      result = new wConsequence().error( _.err( err ) );
+      result = new _.Consequence().error( _.err( err ) );
     }
 
     /* */
 
     var timeOut = testRoutine.timeOut || trd.testRoutineTimeOut || _.Tester.settings.testRoutineTimeOut;
 
-    result = trd._returnCon = wConsequence.from( result );
+    result = trd._returnCon = _.Consequence.from( result );
 
     result.andThen( suite._inroutineCon );
     result = result.eitherThenSplit([ _.timeOutError( timeOut ),trd._cancelCon ]);
@@ -860,8 +841,8 @@ var Composes =
 
   override : Object.create( null ),
 
-  _routineCon : new wConsequence().give(),
-  _inroutineCon : new wConsequence().give(),
+  _routineCon : new _.Consequence().give(),
+  _inroutineCon : new _.Consequence().give(),
 
   onRoutineBegin : onRoutineBegin,
   onRoutineEnd : onRoutineEnd,
@@ -890,7 +871,7 @@ var Restricts =
 var Statics =
 {
   usingUniqueNames : 1,
-  _suiteCon : new wConsequence().give(),
+  _suiteCon : new _.Consequence().give(),
 }
 
 var Events =
@@ -981,8 +962,8 @@ _.classMake
   extend : Proto,
 });
 
-wCopyable.mixin( Self );
-wInstancing.mixin( Self );
+_.Copyable.mixin( Self );
+_.Instancing.mixin( Self );
 if( _.EventHandler )
 _.EventHandler.mixin( Self );
 
@@ -992,6 +973,6 @@ _.accessorForbid( Self.prototype,Forbids );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+_globalReal_[ Self.name ] = _global_[ Self.name ] = _[ Self.nameShort ] = Self;
 
 })();

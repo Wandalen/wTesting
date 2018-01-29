@@ -2,29 +2,9 @@
 
 'use strict';
 
-var isBrowser = true;
-if( typeof module !== 'undefined' )
-{
-
-  isBrowser = false;
-
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
-
-  var _ = wTools;
-
-}
-
 //
 
-var _ = wTools;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wTestRoutineDescriptor( o )
 {
@@ -51,7 +31,7 @@ function init( o )
   if( o )
   self.copy( o );
 
-  self._cancelCon = new wConsequence();
+  self._cancelCon = new _.Consequence();
   self._returnCon = null;
 
   self._reportForm();
@@ -59,9 +39,9 @@ function init( o )
   _.assert( _.routineIs( self.routine ) );
   _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
   // _.assert( self.routine.name === self.name,'routine should have same name, but',self.routine.name, '!=', self.name );
-  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self.suite ) );
+  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,self.suite ) );
   // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self ) );
-  _.assert( Object.isPrototypeOf.call( wTestRoutineDescriptor.prototype,self ) );
+  _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
   _.assert( arguments.length === 1 );
 
   var proxy =
@@ -223,7 +203,7 @@ function checkNext( description )
 {
   var trd = this;
 
-  _.assert( trd instanceof wTestRoutineDescriptor );
+  _.assert( trd instanceof Self );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   if( !trd._checksStack.length )
@@ -388,7 +368,7 @@ function isNotIdentical( got,expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function identical( got,expected )
@@ -447,7 +427,7 @@ function identical( got,expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function equivalent( got,expected,eps )
@@ -505,7 +485,7 @@ function equivalent( got,expected,eps )
  *
  * @throws {Exception} If no arguments provided.
  * @method contain
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function contain( got,expected )
@@ -547,7 +527,7 @@ function _shouldDo( o )
 
   var acheck = trd.checkCurrent();
   trd._inroutineCon.choke();
-  var con = new wConsequence();
+  var con = new _.Consequence();
 
   /* */
 
@@ -962,7 +942,7 @@ function shouldThrowErrorSync( routine )
  * @example
  * function sometest( test )
  * {
- *  var consequence = new wConsequence().give();
+ *  var consequence = new _.Consequence().give();
  *  consequence
  *  .ifNoErrorThen( function()
  *  {
@@ -987,7 +967,7 @@ function shouldThrowErrorSync( routine )
  * @throws {Exception} If no arguments provided.
  * @throws {Exception} If passed argument is not a Routine.
  * @method shouldThrowErrorSync
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function shouldThrowError( routine )
@@ -1558,7 +1538,7 @@ _.classMake
   extend : Proto,
 });
 
-wCopyable.mixin( Self );
+_.Copyable.mixin( Self );
 
 _.accessorForbid( Self.prototype,Forbids );
 _.accessor( Self.prototype,Accessors );
@@ -1567,6 +1547,6 @@ _.accessor( Self.prototype,Accessors );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+_[ Self.nameShort ] = Self;
 
 })();

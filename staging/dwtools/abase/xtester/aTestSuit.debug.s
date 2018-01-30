@@ -113,21 +113,21 @@ function extendBy()
 
   throw _.err( 'extendBy is deprecated, please, use inherit' );
 
-  for( var a = 0 ; a < arguments.length ; a++ )
-  {
-    var src = arguments[ 0 ];
-
-    _.assert( _.mapIs( src ) );
-
-    if( src.tests )
-    _.mapSupplement( src.tests,suit.tests );
-
-    if( src.context )
-    _.mapSupplement( src.context,suit.context );
-
-    _.mapExtend( suit,src );
-
-  }
+  // for( var a = 0 ; a < arguments.length ; a++ )
+  // {
+  //   var src = arguments[ 0 ];
+  //
+  //   _.assert( _.mapIs( src ) );
+  //
+  //   if( src.tests )
+  //   _.mapSupplement( src.tests,suit.tests );
+  //
+  //   if( src.context )
+  //   _.mapSupplement( src.context,suit.context );
+  //
+  //   _.mapExtend( suit,src );
+  //
+  // }
 
   return suit;
 }
@@ -180,69 +180,6 @@ function _registerSuits( suits )
   }
 
   return suit;
-}
-
-//
-
-function _reportForm()
-{
-  var suit = this;
-
-  _.assert( !suit.report );
-  var report = suit.report = Object.create( null );
-
-  report.errorsArray = [];
-
-  report.testCheckPasses = 0;
-  report.testCheckFails = 0;
-
-  report.testCasePasses = 0;
-  report.testCaseFails = 0;
-  report.testCaseNumber = 0;
-
-  report.testRoutinePasses = 0;
-  report.testRoutineFails = 0;
-
-  Object.preventExtensions( report );
-
-}
-
-//
-
-function _reportToStr()
-{
-  var suit = this;
-
-  var msg = '';
-
-  if( suit.report.errorsArray.length )
-  msg += 'Thrown ' + ( suit.report.errorsArray.length ) + ' error(s)\n';
-
-  msg += 'Passed test checks ' + ( suit.report.testCheckPasses ) + ' / ' + ( suit.report.testCheckPasses + suit.report.testCheckFails ) + '\n';
-  msg += 'Passed test cases ' + ( suit.report.testCasePasses ) + ' / ' + ( suit.report.testCasePasses + suit.report.testCaseFails ) + '\n';
-  msg += 'Passed test routines ' + ( suit.report.testRoutinePasses ) + ' / ' + ( suit.report.testRoutinePasses + suit.report.testRoutineFails ) + '';
-
-  // suit.logger.log( 'suit.report.testCaseFails',suit.report.testCaseFails );
-
-  return msg;
-}
-
-//
-
-function _reportIsPositive()
-{
-  var testing = this;
-
-  if( testing.report.testCheckFails !== 0 )
-  return false;
-
-  if( !( testing.report.testCheckPasses > 0 ) )
-  return false;
-
-  if( testing.report.errorsArray.length )
-  return false;
-
-  return true;
 }
 
 // --
@@ -385,8 +322,10 @@ function _testSuitRunAct()
     }
 
     _.assert( _.Tester.settings.sanitareTime >= 0 );
-
-    return _.timeOut( _.Tester.settings.sanitareTime, _.routineSeal( suit,suit._testSuitEnd,[] ) );
+    if( suit._reportIsPositive() )
+    return _.timeOut( _.Tester.settings.sanitareTime, () => suit._testSuitEnd() );
+    else
+    return suit._testSuitEnd();
   }
 
   /* */
@@ -435,9 +374,8 @@ function _testSuitBegin()
 
   if( suit.silencing )
   {
-    debugger;
     logger.begin({ verbosity : -8 });
-    logger.log( 'Barring console' );
+    logger.log( 'Silencing console' );
     logger.end({ verbosity : -8 });
     if( !_.Logger.consoleIsBarred( console ) )
     _.Tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
@@ -572,7 +510,6 @@ function _testSuitEnd()
 
   if( suit.silencing && _.Logger.consoleIsBarred( console ) )
   {
-    debugger;
     _.Tester._bar.bar = 0;
     _.Logger.consoleBar( _.Tester._bar );
   }
@@ -609,9 +546,7 @@ function onSuitEnd( t )
 {
 }
 
-// --
-// test routine run
-// --
+//
 
 function _testRoutineRun_entry( name,testRoutine )
 {
@@ -647,7 +582,7 @@ function _testRoutineRun_entry( name,testRoutine )
   .doThen( function _testRoutineRun()
   {
 
-    suit._testRoutineBegin( trd );
+    trd._testRoutineBegin();
 
     /* */
 
@@ -668,7 +603,9 @@ function _testRoutineRun_entry( name,testRoutine )
 
     result.andThen( suit._inroutineCon );
     result = result.eitherThenSplit([ _.timeOutError( timeOut ),trd._cancelCon ]);
-    result.doThen( _.routineJoin( trd,trd._testRoutineHandleReturn ) );
+
+    result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
+    result.doThen( () => trd._testRoutineEnd() );
 
     return result;
   })
@@ -678,91 +615,65 @@ function _testRoutineRun_entry( name,testRoutine )
 
 //
 
-function _testRoutineBegin( trd )
+function _reportForm()
 {
   var suit = this;
 
-  var msg =
-  [
-    'Running test routine ( ' + trd.routine.name + ' ) ..'
-  ];
+  _.assert( !suit.report );
+  var report = suit.report = Object.create( null );
 
-  suit.logger.begin({ verbosity : -4 });
+  report.errorsArray = [];
 
-  suit.logger.begin({ 'routine' : trd.routine.name });
-  suit.logger.logUp( msg.join( '\n' ) );
-  suit.logger.end( 'routine' );
+  report.testCheckPasses = 0;
+  report.testCheckFails = 0;
 
-  suit.logger.end({ verbosity : -4 });
+  report.testCasePasses = 0;
+  report.testCaseFails = 0;
+  report.testCaseNumber = 0;
 
-  _.assert( !suit.currentRoutine );
-  suit.currentRoutine = trd;
+  report.testRoutinePasses = 0;
+  report.testRoutineFails = 0;
 
-  try
-  {
-    suit.onRoutineBegin.call( trd.context,trd );
-    if( trd.eventGive )
-    trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
-  }
-  catch( err )
-  {
-    suit._exceptionConsider( err );
-  }
+  Object.preventExtensions( report );
 
 }
 
 //
 
-function _testRoutineEnd( trd,ok )
+function _reportToStr()
 {
   var suit = this;
 
-  _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
-  _.assert( suit.currentRoutine === trd );
+  var msg = '';
 
-  try
-  {
-    suit.onRoutineEnd.call( trd.context,trd,ok );
-    if( trd.eventGive )
-    trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
-  }
-  catch( err )
-  {
-    suit._exceptionConsider( err );
-  }
+  if( suit.report.errorsArray.length )
+  msg += 'Thrown ' + ( suit.report.errorsArray.length ) + ' error(s)\n';
 
-  if( trd.report.testCheckFails )
-  suit.report.testRoutineFails += 1;
-  else
-  suit.report.testRoutinePasses += 1;
+  msg += 'Passed test checks ' + ( suit.report.testCheckPasses ) + ' / ' + ( suit.report.testCheckPasses + suit.report.testCheckFails ) + '\n';
+  msg += 'Passed test cases ' + ( suit.report.testCasePasses ) + ' / ' + ( suit.report.testCasePasses + suit.report.testCaseFails ) + '\n';
+  msg += 'Passed test routines ' + ( suit.report.testRoutinePasses ) + ' / ' + ( suit.report.testRoutinePasses + suit.report.testRoutineFails ) + '';
 
-  suit.logger.begin( 'routine','end' );
-  suit.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+  // suit.logger.log( 'suit.report.testCaseFails',suit.report.testCaseFails );
 
-  suit.logger.begin({ verbosity : -3 });
+  return msg;
+}
 
-  if( ok )
-  {
+//
 
-    suit.logger.logDown( 'Passed test routine ( ' + trd.routine.name + ' ).' );
+function _reportIsPositive()
+{
+  var testing = this;
 
-  }
-  else
-  {
+  if( testing.report.testCheckFails !== 0 )
+  return false;
 
-    suit.logger.begin({ verbosity : -3+suit.importanceOfNegative });
-    suit.logger.logDown( 'Failed test routine ( ' + trd.routine.name + ' ).' );
-    suit.logger.end({ verbosity : -3+suit.importanceOfNegative });
+  if( !( testing.report.testCheckPasses > 0 ) )
+  return false;
 
-  }
+  if( testing.report.errorsArray.length )
+  return false;
 
-  suit.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
-  suit.logger.end( 'routine','end' );
-
-  suit.logger.end({ verbosity : -3 });
-
-  suit.currentRoutine = null;
-
+  return true;
 }
 
 // --
@@ -937,9 +848,6 @@ var Proto =
   // etc
 
   _registerSuits : _registerSuits,
-  _reportForm : _reportForm,
-  _reportToStr : _reportToStr,
-  _reportIsPositive : _reportIsPositive,
 
 
   // test suit run
@@ -955,12 +863,14 @@ var Proto =
   onSuitBegin : onSuitBegin,
   onSuitEnd : onSuitEnd,
 
-
-  // test routine run
-
   _testRoutineRun_entry : _testRoutineRun_entry,
-  _testRoutineBegin : _testRoutineBegin,
-  _testRoutineEnd : _testRoutineEnd,
+
+
+  // report
+
+  _reportForm : _reportForm,
+  _reportToStr : _reportToStr,
+  _reportIsPositive : _reportIsPositive,
 
 
   // output

@@ -31,7 +31,7 @@ if( typeof module !== 'undefined' )
   }
 
   if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
-  require( '../xtester/cTester.debug.s' );
+  require( '../xtester/aBase.debug.s' );
 
   var _ = _global_.wTools;
 
@@ -416,7 +416,7 @@ function shouldMessageOnlyOnce( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
     test.identical( suit.report.testCheckPasses, 17 );
     test.identical( suit.report.testCheckFails, 2 );
@@ -710,7 +710,7 @@ function mustNotThrowError( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
     test.identical( suit.report.testCheckPasses, 14 );
     test.identical( suit.report.testCheckFails, 5 );
@@ -975,7 +975,7 @@ function shouldThrowErrorSync( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 18 );
     test.identical( suit.report.testCheckPasses, 10 );
     test.identical( suit.report.testCheckFails, 7 );
@@ -1278,7 +1278,7 @@ function shouldThrowErrorAsync( test )
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.shouldBe( test.logger.outputs.length > 0 );
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
     test.identical( suit.report.testCheckPasses, 13 );
     test.identical( suit.report.testCheckFails, 6 );
@@ -1545,7 +1545,7 @@ function shouldThrowError( test )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 18 );
     test.identical( suit.report.testCheckPasses, 12 );
     test.identical( suit.report.testCheckFails, 5 );
@@ -2164,6 +2164,38 @@ function failExperiment( test )
 
 failExperiment.experimental = 1;
 
+//
+
+function mustNotThrowErrorExperiment( test )
+{
+
+  test.description = 'mustNotThrowError experiment';
+
+  debugger;
+  var con = test.mustNotThrowError( function()
+  {
+    debugger;
+    xxx
+    console.log( 'x' );
+    return _.timeOut( 500 );
+  });
+  debugger;
+
+  // var con = test.shouldMessageOnlyOnce( function()
+  // {
+  //   throw _.err( 'err1' );
+  // });
+
+  // var con = test.shouldThrowError( function()
+  // {
+  //   throw _.err( 'err1' );
+  // });
+
+  return con;
+}
+
+mustNotThrowErrorExperiment.experimental = 1;
+
 // --
 // proto
 // --
@@ -2183,27 +2215,28 @@ var Self =
     simplest : simplest,
     identical : identical,
 
-    // // should
-    //
-    // shouldMessageOnlyOnce : shouldMessageOnlyOnce,
-    // mustNotThrowError : mustNotThrowError,
-    // shouldThrowErrorSync : shouldThrowErrorSync,
-    // shouldThrowErrorAsync : shouldThrowErrorAsync,
-    // shouldThrowError : shouldThrowError,
-    //
-    // shouldPassMessage : shouldPassMessage,
-    // _throwingExperiment : _throwingExperiment,
-    //
-    // shouldThrowErrorSimpleSync : shouldThrowErrorSimpleSync,
-    // shouldThrowErrorSimpleAsync : shouldThrowErrorSimpleAsync,
-    //
-    // _chainedShould : _chainedShould,
-    // chainedShould : chainedShould,
-    //
-    // // etc
-    //
-    // asyncExperiment : asyncExperiment,
-    // failExperiment : failExperiment,
+    // should
+
+    shouldMessageOnlyOnce : shouldMessageOnlyOnce,
+    mustNotThrowError : mustNotThrowError,
+    shouldThrowErrorSync : shouldThrowErrorSync,
+    shouldThrowErrorAsync : shouldThrowErrorAsync,
+    shouldThrowError : shouldThrowError,
+
+    shouldPassMessage : shouldPassMessage,
+    _throwingExperiment : _throwingExperiment,
+
+    shouldThrowErrorSimpleSync : shouldThrowErrorSimpleSync,
+    shouldThrowErrorSimpleAsync : shouldThrowErrorSimpleAsync,
+
+    _chainedShould : _chainedShould,
+    chainedShould : chainedShould,
+
+    // etc
+
+    asyncExperiment : asyncExperiment,
+    failExperiment : failExperiment,
+    mustNotThrowErrorExperiment : mustNotThrowErrorExperiment,
 
   },
 

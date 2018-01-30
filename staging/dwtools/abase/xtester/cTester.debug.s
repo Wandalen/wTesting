@@ -112,7 +112,7 @@ function _includeTestsFrom( path )
   _.assert( _.strIs( path ) );
 
   if( tester.verbosity > 1 )
-  logger.log( 'Include tests from :',path );
+  logger.log( 'Includes tests from :',path,'\n' );
 
   var files = _.fileProvider.filesFind
   ({
@@ -317,7 +317,10 @@ function _testAllAct()
   }
 
   wTestSuit._suitCon
-  .timeOutThen( tester.settings.sanitareTime )
+  .doThen( function() {
+    if( tester._reportIsPositive() )
+    return _.timeOut( tester.settings.sanitareTime );
+  })
   .doThen( function()
   {
     return tester._testingEnd();
@@ -370,7 +373,10 @@ function _test()
   tester._testAct.apply( tester,_.mapVals( suits ) );
 
   return wTestSuit._suitCon
-  .timeOutThen( tester.settings.sanitareTime )
+  .doThen( function() {
+    if( tester._reportIsPositive() )
+    return _.timeOut( tester.settings.sanitareTime );
+  })
   .split( function()
   {
     return tester._testingEnd();
@@ -429,7 +435,7 @@ function _testingBegin( suits )
 
   // logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
   // logger.verbosityPush( tester.verbosity );
-  logger.begin({ verbosity : -2 });
+  logger.begin({ verbosity : -3 });
 
   if( suits !== undefined )
   {
@@ -439,12 +445,12 @@ function _testingBegin( suits )
   else
   {
     debugger;
-    logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suits ..' );
+    logger.logUp( 'Launching all known ( ' + _.entityLength( wTests ) + ' ) test suits ..' );
     tester.testsListPrint( suits );
   }
 
   logger.log();
-  logger.end({ verbosity : -2 });
+  logger.end({ verbosity : -3 });
 
   tester._reportForm();
 

@@ -29,10 +29,14 @@ fileStat : null
 + global search cant find test suits with inheritance
 
 - implement options.list
+
 - print information about case with color directive avoiding change of color state of logger
 
 - implement support of glob path
+
 - manual launch of test suit + global tests execution should not give extra test suit runs
+
+- run test suit only once, even if asked several
 
 + after the last test case of test routine description should be changed
 
@@ -45,24 +49,27 @@ fileStat : null
 + global / suit / routine basis statistic tracking
 
 + fails issue
+
 + implement silencing from test suit
 
-- no suit/tester sanitare period if errror
++ no suit/tester sanitare period if errror
 
-- time measurements out of test
+- time measurements of testing
 
 - sort-cuts for command line otpions
 
 - warning if command line option is strange
+
 - warning if test routine has unknown fields
 
-- issue if first test suit has silencing:0 and other silencing:1
++ issue if first test suit has silencing:0 and other silencing:1
 
-- less static information with verbosity:7, to introduce higher verbosity levels
++ less static information with verbosity:7, to introduce higher verbosity levels
 
 - make onSuitBegin, onSuitEnd asynchronous
 
-- when error not throwen under test.mustNotThrowError have "error was not thrown asynchronously, but expected"
++ when error not throwen under test.mustNotThrowError have "error was not thrown asynchronously, but expected"
+
 
 */
 

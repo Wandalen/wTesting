@@ -23,7 +23,7 @@ if( typeof module !== 'undefined' )
   }
 
   if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
-  require( '../xtester/cTester.debug.s' );
+  require( '../xtester/aBase.debug.s' );
 
   var _ = _global_.wTools;
 
@@ -174,7 +174,7 @@ var Proto =
 
   name : 'wTesting / Inheritance test',
   // verbosity : 5,
-  silencing : 0,
+  silencing : 1,
 
   tests :
   {

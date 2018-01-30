@@ -316,8 +316,6 @@ function _testSuiteRunLater()
 
   var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
 
-  debugger;
-
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
   .doThen( function()

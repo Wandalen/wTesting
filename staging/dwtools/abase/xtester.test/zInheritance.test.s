@@ -22,8 +22,13 @@ if( typeof module !== 'undefined' )
     require( toolsPath )/*hhh*/;
   }
 
+  if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
+  require( '../xtester/cTester.debug.s' );
+
   var _ = _global_.wTools;
-  _.include( 'wTesting' );
+
+  _.include( 'wLogger' );
+  _.include( 'wConsequence' );
 
 }
 

@@ -577,7 +577,7 @@ function _shouldDo( o )
 
     if( o.ignoringError )
     {
-      debugger;
+      // debugger;
       begin( 1 );
 
       trd._outcomeReportBoolean
@@ -764,6 +764,8 @@ function _shouldDo( o )
     {
       err = _err;
       arg = _arg;
+
+      debugger;
 
       if( !o.ignoringError && !reported )
       if( err && !o.expectingAsyncError )

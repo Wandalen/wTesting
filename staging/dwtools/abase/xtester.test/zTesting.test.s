@@ -36,6 +36,7 @@ if( typeof module !== 'undefined' )
   var _ = _global_.wTools;
 
   _.include( 'wLogger' );
+  _.include( 'wConsequence' );
 
 }
 
@@ -148,7 +149,6 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
     test.description = 'does not throw error';
-    debugger;
     var c1 = t.shouldMessageOnlyOnce( function()
     {
     });
@@ -165,7 +165,6 @@ function shouldMessageOnlyOnce( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( arg === undefined );
       });
@@ -230,11 +229,11 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.description = 'throw unexpected error, asynchronously';
-    debugger;
     var c4 = t.shouldMessageOnlyOnce( function()
     {
       return _.timeOut( 250,function()
       {
+        debugger;
         throw _.errAttend( 'error1' );
       });
     });
@@ -418,6 +417,7 @@ function shouldMessageOnlyOnce( test )
   .doThen( function( err,data )
   {
 
+    debugger;
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.identical( counter.acheck.description, 'a' );

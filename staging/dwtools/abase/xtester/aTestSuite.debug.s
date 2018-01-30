@@ -435,7 +435,7 @@ function _testSuiteBegin()
 
   if( suite.silencing )
   {
-    // debugger;
+    debugger;
     logger.begin({ verbosity : -8 });
     logger.log( 'Barring console' );
     logger.end({ verbosity : -8 });

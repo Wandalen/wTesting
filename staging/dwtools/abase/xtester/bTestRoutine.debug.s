@@ -765,8 +765,6 @@ function _shouldDo( o )
       err = _err;
       arg = _arg;
 
-      debugger;
-
       if( !o.ignoringError && !reported )
       if( err && !o.expectingAsyncError )
       reportAsync();

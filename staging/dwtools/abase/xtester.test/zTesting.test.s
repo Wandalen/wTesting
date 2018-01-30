@@ -231,10 +231,8 @@ function shouldMessageOnlyOnce( test )
     test.description = 'throw unexpected error, asynchronously';
     var c4 = t.shouldMessageOnlyOnce( function()
     {
-      debugger;
       return _.timeOut( 250,function()
       {
-        debugger;
         throw _.errAttend( 'error1' );
       });
     });
@@ -248,11 +246,9 @@ function shouldMessageOnlyOnce( test )
 
     _.timeOut( 500,function()
     {
-      debugger;
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( _.errIs( arg ) );
         test.shouldBe( _.strHas( arg.message,'error1' ) );
@@ -418,14 +414,13 @@ function shouldMessageOnlyOnce( test )
   .doThen( function( err,data )
   {
 
-    debugger;
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck._checkIndex, 20 );
-    // test.identical( suite.report.testCheckPasses, 17 );
-    // test.identical( suite.report.testCheckFails, 2 );
-    // test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck._checkIndex, 20 );
+    test.identical( suite.report.testCheckPasses, 17 );
+    test.identical( suite.report.testCheckFails, 2 );
+    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -451,7 +446,6 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
     test.description = 'does not throw error';
-    debugger;
     var c1 = t.mustNotThrowError( function()
     {
     });
@@ -468,7 +462,6 @@ function mustNotThrowError( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( arg === undefined );
       });
@@ -504,14 +497,11 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    debugger;
     test.description = 'throw unexpected error, synchronously';
     var c3 = t.mustNotThrowError( function()
     {
-      debugger;
       throw _.err( 'test' );
     });
-    debugger;
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -776,7 +766,6 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'expected synchronous error';
-    debugger;
     var c2 = t.shouldThrowErrorSync( function()
     {
       throw _.err( 'test' );
@@ -791,11 +780,9 @@ function shouldThrowErrorSync( test )
 
     _.timeOut( 500,function()
     {
-      debugger;
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( _.errIs( arg ) );
       });
@@ -836,7 +823,6 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'single message, while synchronous error expected';
-    debugger;
     var c4 = t.shouldThrowErrorSync( function()
     {
       return _.timeOut( 250 );
@@ -1019,7 +1005,6 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
     test.description = 'simplest, does not throw error, but expected';
-    debugger;
     var c1 = t.shouldThrowErrorAsync( function()
     {
     });
@@ -1046,7 +1031,6 @@ function shouldThrowErrorAsync( test )
     t.identical( 0,0 );
 
     test.description = 'throw unexpected synchronous error';
-    debugger;
     var c2 = t.shouldThrowErrorAsync( function()
     {
       throw _.err( 'test' );
@@ -1155,7 +1139,6 @@ function shouldThrowErrorAsync( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( arg === 'error' );
       });
@@ -1226,7 +1209,6 @@ function shouldThrowErrorAsync( test )
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( _.errIs( err ) );
         test.shouldBe( _.strHas( err.message,'got more than one message' ) );
         test.shouldBe( !arg );
@@ -1410,7 +1392,6 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'single message, but error expected';
-    debugger;
     var c4 = t.shouldThrowError( function()
     {
       return _.timeOut( 250 );
@@ -1626,7 +1607,6 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   t.mustNotThrowError( function()
   {
     var con = _.Consequence().give();
@@ -1642,7 +1622,6 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   t.shouldThrowError( function()
   {
     var con = _.Consequence().give();
@@ -1658,7 +1637,6 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   t.shouldThrowError( function()
   {
     return _.timeOut( 250 );
@@ -1727,7 +1705,6 @@ function _throwingExperiment( test )
   /* */
 
   test.description = 'simplest, does not throw error,  but expected';
-  debugger;
   test.shouldThrowErrorAsync( function()
   {
   });
@@ -1757,23 +1734,19 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   test.shouldThrowErrorSync( function()
   {
     return _.timeOut( 250 );
   });
-  debugger;
 
   /* */
 
-  debugger;
   test.mustNotThrowError( function()
   {
   });
 
   test.identical( 0,0 );
 
-  debugger;
   test.mustNotThrowError( function()
   {
     throw _.err( 'test' );
@@ -1861,18 +1834,14 @@ function shouldThrowErrorSimpleAsync( test )
 
   test.identical( test._inroutineCon.messagesGet().length,1 );
 
-  // debugger;
-
   consequence
   .doThen( function()
   {
     test.description = 'a';
     var con = _.timeOut( 50,function( err )
     {
-      debugger;
       throw _.err( 'async error' );
     });
-    debugger;
     return test.shouldThrowErrorAsync( con );
   })
   .doThen( function()
@@ -1880,16 +1849,12 @@ function shouldThrowErrorSimpleAsync( test )
     test.description = 'b';
     var con = _.timeOut( 50,function( err )
     {
-      debugger;
       throw _.err( 'async error' );
     });
-    debugger;
     return test.shouldThrowErrorAsync( con );
   })
   .doThen( function()
   {
-    debugger;
-
     var acheck = test.checkCurrent();
 
     test.identical( test.report.testCheckPasses-counter.prevCheckPasses, 3 );
@@ -2180,7 +2145,6 @@ function asyncExperiment( test )
   {
   });
 
-  debugger;
   return con;
 }
 

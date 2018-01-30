@@ -264,7 +264,7 @@ function _testSuiteSettingsAdjust()
   if( !suite.logger )
   suite.logger = _.Tester.logger || _global_.logger;
 
-  if( !suite.ignoreAppArgs )
+  if( !suite.ignoringTesterOptions )
   {
 
     for( var f in _.Tester.SettingsOfSuite )
@@ -276,16 +276,16 @@ function _testSuiteSettingsAdjust()
 
   }
 
-  // if( _.Tester.settings.concurrent !== null && !suite.ignoreAppArgs )
+  // if( _.Tester.settings.concurrent !== null && !suite.ignoringTesterOptions )
   // suite.concurrent = _.Tester.settings.concurrent;
   //
-  // if( _.Tester.settings.importanceOfNegative !== null && !suite.ignoreAppArgs )
+  // if( _.Tester.settings.importanceOfNegative !== null && !suite.ignoringTesterOptions )
   // suite.importanceOfNegative = _.Tester.settings.importanceOfNegative;
   //
-  // if( _.Tester.settings.importanceOfDetails !== null && !suite.ignoreAppArgs )
+  // if( _.Tester.settings.importanceOfDetails !== null && !suite.ignoringTesterOptions )
   // suite.importanceOfDetails = _.Tester.settings.importanceOfDetails;
   //
-  // if( _.Tester.settings.routine !== null && !suite.ignoreAppArgs )
+  // if( _.Tester.settings.routine !== null && !suite.ignoringTesterOptions )
   // suite.routine = _.Tester.settings.routine;
 
   /* */
@@ -422,6 +422,27 @@ function _testSuiteBegin()
   suite.report = null;
   suite._reportForm();
 
+  /* silencing */
+
+  // if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
+  // if( firstSuite && firstSuite.silencing !== null && firstSuite.silencing !== undefined )
+  // {
+  //   tester.settings.silencing = firstSuite.silencing;
+  // }
+
+  // logger.verbosityPush( tester.verbosity );
+  // logger._verbosityReport();
+
+  if( suite.silencing )
+  {
+    debugger;
+    logger.begin({ verbosity : -8 });
+    logger.log( 'Barring console' );
+    logger.end({ verbosity : -8 });
+    if( !_.Logger.consoleIsBarred( console ) )
+    _.Tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
+  }
+
   /* */
 
   logger.verbosityPush( suite.verbosity );
@@ -498,7 +519,6 @@ function _testSuiteEnd()
 
   /* */
 
-  // var ok = suite.report.testCheckFails === 0;
   var ok = suite._reportIsPositive();
 
   if( logger )
@@ -547,6 +567,17 @@ function _testSuiteEnd()
 
   _.assert( _.Tester.activeSuites.indexOf( suite ) !== -1 );
   _.arrayRemoveOnce( _.Tester.activeSuites,suite );
+
+  /* silencing */
+
+  if( suite.silencing && _.Logger.consoleIsBarred( console ) )
+  {
+    debugger;
+    _.Tester._bar.bar = 0;
+    _.Logger.consoleBar( _.Tester._bar );
+  }
+
+  /* */
 
   if( suite.debug )
   debugger;
@@ -830,7 +861,7 @@ var Composes =
   enabled : 1,
   takingIntoAccount : 1,
   usingSourceCode : 1,
-  ignoreAppArgs : 0,
+  ignoringTesterOptions : 0,
 
   eps : 1e-5,
   report : null,

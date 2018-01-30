@@ -399,17 +399,15 @@ function _testingBegin( suites )
   if( !tester.appArgs.map )
   tester.appArgs.map = Object.create( null );
 
-  // console.log( '-> suites.length',suites.length );
-  // debugger;
+/*
+
   if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
   if( firstSuite && firstSuite.silencing !== null && firstSuite.silencing !== undefined )
   {
-    // console.log( '-> firstSuite.silencing',firstSuite.silencing );
     tester.settings.silencing = firstSuite.silencing;
   }
-  // debugger;
 
-  logger.verbosityPush( tester.verbosity );
+  // logger.verbosityPush( tester.verbosity );
   // logger._verbosityReport();
 
   if( tester.settings.silencing )
@@ -420,6 +418,8 @@ function _testingBegin( suites )
     if( !_.Logger.consoleIsBarred( console ) )
     tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
   }
+
+*/
 
   logger.begin({ verbosity : -4 });
   logger.log( 'Tester Settings :' );
@@ -491,13 +491,13 @@ function _testingEnd()
 
   // logger._verbosityReport();
   // console.log( 'tester.logger',tester.logger );
-
+/*
   if( tester.settings.silencing && _.Logger.consoleIsBarred( console ) )
   {
     tester._bar.bar = 0;
     _.Logger.consoleBar( tester._bar );
   }
-
+*/
   _.timeOut( 100,function()
   {
     _.appExit();
@@ -895,7 +895,6 @@ var SettingsOfTester =
 
   routine : null,
   fails : null,
-  silencing : 0,
 
 }
 
@@ -912,8 +911,7 @@ var SettingsOfSuite =
   importanceOfNegative : null,
 
   routine : null,
-
-  // silencing : null,
+  silencing : null,
 
 }
 

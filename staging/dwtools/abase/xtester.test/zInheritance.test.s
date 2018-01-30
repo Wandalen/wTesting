@@ -135,7 +135,7 @@ function inherit( test )
     name : childSuiteName,
     abstract : 0,
     override : notTakingIntoAccount,
-    ignoreAppArgs : 1,
+    ignoringTesterOptions : 1,
 
     tests :
     {

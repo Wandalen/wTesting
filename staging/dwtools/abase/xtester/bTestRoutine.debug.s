@@ -37,10 +37,10 @@ function init( o )
   self._reportForm();
 
   _.assert( _.routineIs( self.routine ) );
-  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
+  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suit',self.suit.name,'does not have name' );
   // _.assert( self.routine.name === self.name,'routine should have same name, but',self.routine.name, '!=', self.name );
-  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,self.suite ) );
-  // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self ) );
+  _.assert( Object.isPrototypeOf.call( _.TestSuit.prototype,self.suit ) );
+  // _.assert( Object.isPrototypeOf.call( wTestSuit.prototype,self ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
   _.assert( arguments.length === 1 );
 
@@ -50,7 +50,7 @@ function init( o )
     {
       if( obj[ k ] !== undefined )
       return obj[ k ];
-      return obj.suite[ k ];
+      return obj.suit[ k ];
     }
   }
 
@@ -88,7 +88,7 @@ function _reportForm()
 function _testRoutineHandleReturn( err,msg )
 {
   var trd = this;
-  var suite = trd.suite;
+  var suit = trd.suit;
 
   if( err )
   if( err.timeOut )
@@ -127,7 +127,7 @@ function _testRoutineHandleReturn( err,msg )
     });
   }
 
-  suite._testRoutineEnd( trd,!trd.report.testCheckFails );
+  suit._testRoutineEnd( trd,!trd.report.testCheckFails );
 
 }
 
@@ -177,7 +177,7 @@ function _testCaseConsider( outcome )
   else
   report.testCaseFails += 1;
 
-  trd.suite._testCaseConsider( outcome );
+  trd.suit._testCaseConsider( outcome );
 }
 
 // --
@@ -1039,7 +1039,7 @@ function _outcomeConsider( outcome )
     // debugger;
   }
 
-  trd.suite._outcomeConsider( outcome );
+  trd.suit._outcomeConsider( outcome );
 
   trd.checkNext();
 
@@ -1055,7 +1055,7 @@ function _exceptionConsider( err )
   _.assert( trd.constructor === Self );
 
   trd.report.errorsArray.push( err );
-  trd.suite._exceptionConsider( err );
+  trd.suit._exceptionConsider( err );
 
 }
 
@@ -1409,7 +1409,7 @@ var Aggregates =
 
 var Associates =
 {
-  suite : null,
+  suit : null,
   routine : null,
 }
 

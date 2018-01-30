@@ -5,10 +5,10 @@
 var _ = _global_.wTools;
 
 var testsWas = _globalReal_.wTests;
-_globalReal_.wTests = _global_.wTests = wTestSuite.instancesMap;
+_globalReal_.wTests = _global_.wTests = wTestSuit.instancesMap;
 
 if( testsWas )
-wTestSuite.prototype._registerSuites( testsWas );
+wTestSuit.prototype._registerSuits( testsWas );
 
 if( _global_._UsingWtoolsPrivately_ )
 {
@@ -16,7 +16,7 @@ if( _global_._UsingWtoolsPrivately_ )
 }
 
 _.assert( _global_.wTools === _ );
-_.assert( _globalReal_.wTestSuite );
+_.assert( _globalReal_.wTestSuit );
 _.assert( !_globalReal_.wTestRoutineDescriptor );
 _.assert( _globalReal_.wTests );
 _.assert( _globalReal_.wTester );

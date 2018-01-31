@@ -5,51 +5,6 @@
 /*
 
 node builder/include/dwtools/abase/xtester/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
-node builder/include/dwtools/abase/xtester/zTesting.test.s verbosity:6 importanceOfNegative:2 importanceOfDetails:0
-
-node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:2 importanceOfDetails:0
-
-node builder/Test builder/include/dwtools/abase/oclass/printer
-node builder/Test builder/include/dwtools/abase/z.test
-
-builder/include/dwtools/abase/oclass/printer/z.test/Chaining.test.s
-builder/include/dwtools/abase/oclass/printer/z.test/Backend.test.ss
-builder/include/dwtools/abase/oclass/printer/z.test/Logger.test.s
-builder/include/dwtools/abase/oclass/printer/z.test/Other.test.s
-builder/include/dwtools/abase/oclass/printer/z.test/Browser.test.s
-builder/include/dwtools/abase/xtester/zTesting.test.s
-builder/include/dwtools/abase/z.test/ArraySorted.test.s
-builder/include/dwtools/abase/z.test/Consequence.test.s
-builder/include/dwtools/abase/z.test/EventHandler.test.s
-builder/include/dwtools/abase/z.test/String.test.s
-builder/include/dwtools/abase/z.test/RegExp.test.s
-builder/include/dwtools/abase/z.test/Map.test.s
-builder/include/dwtools/abase/z.test/Changes.test.s
-builder/include/dwtools/abase/z.test/ExecTools.test.s
-builder/include/dwtools/abase/z.test/Path.path.test.s
-builder/include/dwtools/abase/z.test/Path.url.test.s
-builder/include/dwtools/abase/z.test/ProtoLike.test.s
-builder/include/dwtools/abase/z.test/Sample.test.s
-
--
-
-node builder/include/dwtools/abase/z.test/Path.path.test.s
-node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4
-node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:4 importanceOfNegative:3
-node builder/include/dwtools/abase/z.test/Path.path.test.s verbosity:3 importanceOfNegative:3
-
--
-
-node builder/include/dwtools/abase/xtester/zTesting.test.s
-node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8
-node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8 verbosity:4
-node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8 verbosity:4 importanceOfNegative:3
-node builder/include/dwtools/abase/xtester/zTesting.test.s importanceOfDetails:-8 verbosity:3 importanceOfNegative:3
-
-node builder/Test builder/include/dwtools/abase/xtester/zTesting.test.s
-node builder/Test builder/include/dwtools/abase/z.test/Path.path.test.s
-node builder/Test builder/include/dwtools/abase/z.test
-node builder/Test builder/include/dwtools/abase/z.test verbosity:2
 
 echo $?
 
@@ -58,15 +13,35 @@ echo $?
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
-  require( '../xtester/cTester.debug.s' );
+  if( typeof _global_ === 'undefined' || typeof _global_.wBase === 'undefined' )
+  {
+    let toolsPath = '../../../dwtools/Base.s';
+    let _externalTools = 0;
+    try
+    {
+      require.resolve( toolsPath )/*fff*/;
+    }
+    catch( err )
+    {
+      _externalTools = 1;
+      require( 'wTools' );
+    }
+    if( !_externalTools )
+    require( toolsPath )/*fff*/;
+  }
 
-  var _ = wTools;
+  if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
+  require( '../xtester/aBase.debug.s' );
+
+  var _ = _global_.wTools;
+
+  _.include( 'wLogger' );
+  _.include( 'wConsequence' );
 
 }
 
-var _ = wTools;
-var notTakingIntoAccount = { logger : wLogger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
+var _ = _global_.wTools;
+var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
 //
 
@@ -100,8 +75,8 @@ function simplest( test )
 
   test.identical( 0,0 );
 
-  test.identical( test.suite.report.testCheckPasses, 1 );
-  test.identical( test.suite.report.testCheckFails, 0 );
+  test.identical( test.suit.report.testCheckPasses, 1 );
+  test.identical( test.suit.report.testCheckFails, 0 );
 
 }
 
@@ -123,29 +98,29 @@ function identical( test )
     console.log( 'x' );
 
     t.identical( 0,0 );
-    test.identical( t.suite.report.testCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails, 0 );
 
     t.identical( 0,false );
-    test.identical( t.suite.report.testCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails, 1 );
 
     t.identical( 0,1 );
-    test.identical( t.suite.report.testCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails, 2 );
+    test.identical( t.suit.report.testCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails, 2 );
 
   }
 
-  var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
 
-  var result = suite.run()
+  var result = suit.run()
   .doThen( function( err,data )
   {
 
     var acheck = testRoutine.checkCurrent();
     test.identical( acheck._checkIndex, 5 );
-    test.identical( suite.report.testCheckPasses, 2 );
-    test.identical( suite.report.testCheckFails, 2 );
+    test.identical( suit.report.testCheckPasses, 2 );
+    test.identical( suit.report.testCheckFails, 2 );
 
     if( err )
     throw err;
@@ -174,7 +149,6 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
     test.description = 'does not throw error';
-    debugger;
     var c1 = t.shouldMessageOnlyOnce( function()
     {
     });
@@ -182,8 +156,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -191,7 +165,6 @@ function shouldMessageOnlyOnce( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( arg === undefined );
       });
@@ -209,8 +182,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -236,8 +209,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -256,7 +229,6 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.description = 'throw unexpected error, asynchronously';
-    debugger;
     var c4 = t.shouldMessageOnlyOnce( function()
     {
       return _.timeOut( 250,function()
@@ -268,17 +240,15 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
     {
-      debugger;
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( _.errIs( arg ) );
         test.shouldBe( _.strHas( arg.message,'error1' ) );
@@ -298,8 +268,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -319,7 +289,7 @@ function shouldMessageOnlyOnce( test )
     test.description = 'not expected second message';
     var c6 = t.shouldMessageOnlyOnce( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -333,8 +303,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -355,7 +325,7 @@ function shouldMessageOnlyOnce( test )
     test.description = 'not expected second error';
     var c7 = t.shouldMessageOnlyOnce( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -369,8 +339,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -389,13 +359,13 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.shouldMessageOnlyOnce( wConsequence().give( 'arg' ) );
+    var c8 = t.shouldMessageOnlyOnce( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -413,13 +383,13 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.shouldMessageOnlyOnce( wConsequence().error( 'error' ) );
+    var c9 = t.shouldMessageOnlyOnce( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -439,18 +409,18 @@ function shouldMessageOnlyOnce( test )
 
   /* */
 
-  var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
-  var result = suite.run()
+  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var result = suit.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
-    test.identical( suite.report.testCheckPasses, 17 );
-    test.identical( suite.report.testCheckFails, 2 );
-    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( suit.report.testCheckPasses, 17 );
+    test.identical( suit.report.testCheckFails, 2 );
+    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -476,7 +446,6 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
     test.description = 'does not throw error';
-    debugger;
     var c1 = t.mustNotThrowError( function()
     {
     });
@@ -484,8 +453,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -493,7 +462,6 @@ function mustNotThrowError( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( arg === undefined );
       });
@@ -511,8 +479,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -529,20 +497,17 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    debugger;
     test.description = 'throw unexpected error, synchronously';
     var c3 = t.mustNotThrowError( function()
     {
-      debugger;
       throw _.err( 'test' );
     });
-    debugger;
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -571,8 +536,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -598,8 +563,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -619,7 +584,7 @@ function mustNotThrowError( test )
     test.description = 'not expected second message';
     var c6 = t.mustNotThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -633,8 +598,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -655,7 +620,7 @@ function mustNotThrowError( test )
     test.description = 'not expected second error';
     var c7 = t.mustNotThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -669,8 +634,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -688,13 +653,13 @@ function mustNotThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.mustNotThrowError( wConsequence().give( 'arg' ) );
+    var c8 = t.mustNotThrowError( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -712,13 +677,13 @@ function mustNotThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.mustNotThrowError( wConsequence().error( 'error' ) );
+    var c9 = t.mustNotThrowError( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -738,18 +703,18 @@ function mustNotThrowError( test )
 
   /* */
 
-  var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
-  var result = suite.run()
+  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var result = suit.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
-    test.identical( suite.report.testCheckPasses, 14 );
-    test.identical( suite.report.testCheckFails, 5 );
-    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( suit.report.testCheckPasses, 14 );
+    test.identical( suit.report.testCheckFails, 5 );
+    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -782,8 +747,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -801,7 +766,6 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'expected synchronous error';
-    debugger;
     var c2 = t.shouldThrowErrorSync( function()
     {
       throw _.err( 'test' );
@@ -810,17 +774,15 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
     {
-      debugger;
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( _.errIs( arg ) );
       });
@@ -842,8 +804,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -861,7 +823,6 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'single message, while synchronous error expected';
-    debugger;
     var c4 = t.shouldThrowErrorSync( function()
     {
       return _.timeOut( 250 );
@@ -870,8 +831,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -891,7 +852,7 @@ function shouldThrowErrorSync( test )
     test.description = 'not expected second message';
     var c5 = t.shouldThrowErrorSync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -905,8 +866,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -926,7 +887,7 @@ function shouldThrowErrorSync( test )
     test.description = 'not expected second error';
     var c6 = t.shouldThrowErrorSync( function()
     {
-      var con = wConsequence().error( 'error' );
+      var con = _.Consequence().error( 'error' );
 
       _.timeOut( 250, function()
       {
@@ -939,8 +900,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -958,13 +919,13 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c7 = t.shouldThrowErrorSync( wConsequence().give( 'arg' ) );
+    var c7 = t.shouldThrowErrorSync( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -982,13 +943,13 @@ function shouldThrowErrorSync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c8 = t.shouldThrowErrorSync( wConsequence().error( 'error' ) );
+    var c8 = t.shouldThrowErrorSync( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1006,19 +967,19 @@ function shouldThrowErrorSync( test )
     return _.timeOut( 950 );
   }
 
-  var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
 
-  var result = suite.run()
+  var result = suit.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 18 );
-    test.identical( suite.report.testCheckPasses, 10 );
-    test.identical( suite.report.testCheckFails, 7 );
-    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( suit.report.testCheckPasses, 10 );
+    test.identical( suit.report.testCheckFails, 7 );
+    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -1044,7 +1005,6 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
     test.description = 'simplest, does not throw error, but expected';
-    debugger;
     var c1 = t.shouldThrowErrorAsync( function()
     {
     });
@@ -1052,8 +1012,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1071,7 +1031,6 @@ function shouldThrowErrorAsync( test )
     t.identical( 0,0 );
 
     test.description = 'throw unexpected synchronous error';
-    debugger;
     var c2 = t.shouldThrowErrorAsync( function()
     {
       throw _.err( 'test' );
@@ -1080,8 +1039,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1110,8 +1069,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1137,8 +1096,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1158,7 +1117,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'expected async string error';
     var c5 = t.shouldThrowErrorAsync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1171,8 +1130,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1180,7 +1139,6 @@ function shouldThrowErrorAsync( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( err === null );
         test.shouldBe( arg === 'error' );
       });
@@ -1193,7 +1151,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'not expected second message';
     var c6 = t.shouldThrowErrorAsync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1207,8 +1165,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1228,7 +1186,7 @@ function shouldThrowErrorAsync( test )
     test.description = 'not expected second error';
     var c7 = t.shouldThrowErrorAsync( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1242,8 +1200,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1251,7 +1209,6 @@ function shouldThrowErrorAsync( test )
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
       {
-        debugger;
         test.shouldBe( _.errIs( err ) );
         test.shouldBe( _.strHas( err.message,'got more than one message' ) );
         test.shouldBe( !arg );
@@ -1263,13 +1220,13 @@ function shouldThrowErrorAsync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.shouldThrowErrorAsync( wConsequence().give( 'arg' ) );
+    var c8 = t.shouldThrowErrorAsync( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1287,13 +1244,13 @@ function shouldThrowErrorAsync( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.shouldThrowErrorAsync( wConsequence().error( 'error' ) );
+    var c9 = t.shouldThrowErrorAsync( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1313,19 +1270,19 @@ function shouldThrowErrorAsync( test )
 
   /* */
 
-  var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
-  var result = suite.run()
+  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var result = suit.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.shouldBe( test.logger.outputs.length > 0 );
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
-    test.identical( suite.report.testCheckPasses, 13 );
-    test.identical( suite.report.testCheckFails, 6 );
-    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( suit.report.testCheckPasses, 13 );
+    test.identical( suit.report.testCheckFails, 6 );
+    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -1357,8 +1314,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1384,8 +1341,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1415,8 +1372,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1435,7 +1392,6 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'single message, but error expected';
-    debugger;
     var c4 = t.shouldThrowError( function()
     {
       return _.timeOut( 250 );
@@ -1444,8 +1400,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1465,7 +1421,7 @@ function shouldThrowError( test )
     test.description = 'not expected second message';
     var c5 = t.shouldThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1479,8 +1435,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1500,7 +1456,7 @@ function shouldThrowError( test )
     test.description = 'not expected second error';
     var c6 = t.shouldThrowError( function()
     {
-      var con = wConsequence();
+      var con = _.Consequence();
 
       _.timeOut( 250, function()
       {
@@ -1514,8 +1470,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1534,13 +1490,13 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with argument';
-    var c8 = t.shouldThrowError( wConsequence().give( 'arg' ) );
+    var c8 = t.shouldThrowError( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1558,13 +1514,13 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.shouldThrowError( wConsequence().error( 'error' ) );
+    var c9 = t.shouldThrowError( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1582,18 +1538,18 @@ function shouldThrowError( test )
     return _.timeOut( 950 );
   }
 
-  var suite = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
 
-  var result = suite.run()
+  var result = suit.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
-    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 18 );
-    test.identical( suite.report.testCheckPasses, 12 );
-    test.identical( suite.report.testCheckFails, 5 );
-    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( suit.report.testCheckPasses, 12 );
+    test.identical( suit.report.testCheckFails, 5 );
+    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -1610,14 +1566,14 @@ function shouldPassMessage( test )
 
   test.description = 'mustNotThrowError must return con with message';
 
-  var con = new wConsequence().give( '123' );
+  var con = new _.Consequence().give( '123' );
   test.mustNotThrowError( con )
   .ifNoErrorThen( function( arg )
   {
     test.identical( arg, '123' );
   });
 
-  var con = new wConsequence().give( '123' );
+  var con = new _.Consequence().give( '123' );
   test.shouldMessageOnlyOnce( con )
   .ifNoErrorThen( function( arg )
   {
@@ -1627,7 +1583,7 @@ function shouldPassMessage( test )
   test.description = 'mustNotThrowError must return con original error';
 
   var errOriginal = _.err( 'Err' );
-  var con = new wConsequence().error( errOriginal );
+  var con = new _.Consequence().error( errOriginal );
   test.shouldThrowError( con )
   .doThen( function( err,arg )
   {
@@ -1651,10 +1607,9 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   t.mustNotThrowError( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 250, function()
     {
@@ -1667,10 +1622,9 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   t.shouldThrowError( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 2000, function()
     {
@@ -1683,7 +1637,6 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   t.shouldThrowError( function()
   {
     return _.timeOut( 250 );
@@ -1726,7 +1679,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 250, function()
     {
@@ -1744,15 +1697,14 @@ function _throwingExperiment( test )
 
     counter.acheck = t.checkCurrent();
     console.log( 'checkIndex',acheck._checkIndex, 13 );
-    console.log( 'testCheckPasses',test.suite.report.testCheckPasses, 8 );
-    console.log( 'testCheckFails',test.suite.report.testCheckFails, 4 );
+    console.log( 'testCheckPasses',test.suit.report.testCheckPasses, 8 );
+    console.log( 'testCheckFails',test.suit.report.testCheckFails, 4 );
 
   });
 
   /* */
 
   test.description = 'simplest, does not throw error,  but expected';
-  debugger;
   test.shouldThrowErrorAsync( function()
   {
   });
@@ -1769,7 +1721,7 @@ function _throwingExperiment( test )
 
   test.shouldThrowErrorSync( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 250, function()
     {
@@ -1782,23 +1734,19 @@ function _throwingExperiment( test )
 
   /* */
 
-  debugger;
   test.shouldThrowErrorSync( function()
   {
     return _.timeOut( 250 );
   });
-  debugger;
 
   /* */
 
-  debugger;
   test.mustNotThrowError( function()
   {
   });
 
   test.identical( 0,0 );
 
-  debugger;
   test.mustNotThrowError( function()
   {
     throw _.err( 'test' );
@@ -1830,7 +1778,7 @@ function _throwingExperiment( test )
   test.description = 'not expected second message';
   test.mustNotThrowError( function()
   {
-    var con = wConsequence().give();
+    var con = _.Consequence().give();
 
     _.timeOut( 1000, function()
     {
@@ -1854,7 +1802,7 @@ function shouldThrowErrorSimpleSync( test )
 
   test.identical( test._inroutineCon.messagesGet().length,1 );
 
-  var consequence = new wConsequence().give();
+  var consequence = new _.Consequence().give();
   consequence
   .ifNoErrorThen( function()
   {
@@ -1878,7 +1826,7 @@ function shouldThrowErrorSimpleSync( test )
 
 function shouldThrowErrorSimpleAsync( test )
 {
-  var consequence = new wConsequence().give();
+  var consequence = new _.Consequence().give();
   var counter = new CheckCounter();
 
   counter.testRoutine = test;
@@ -1886,18 +1834,14 @@ function shouldThrowErrorSimpleAsync( test )
 
   test.identical( test._inroutineCon.messagesGet().length,1 );
 
-  // debugger;
-
   consequence
   .doThen( function()
   {
     test.description = 'a';
     var con = _.timeOut( 50,function( err )
     {
-      debugger;
       throw _.err( 'async error' );
     });
-    debugger;
     return test.shouldThrowErrorAsync( con );
   })
   .doThen( function()
@@ -1905,16 +1849,12 @@ function shouldThrowErrorSimpleAsync( test )
     test.description = 'b';
     var con = _.timeOut( 50,function( err )
     {
-      debugger;
       throw _.err( 'async error' );
     });
-    debugger;
     return test.shouldThrowErrorAsync( con );
   })
   .doThen( function()
   {
-    debugger;
-
     var acheck = test.checkCurrent();
 
     test.identical( test.report.testCheckPasses-counter.prevCheckPasses, 3 );
@@ -1949,18 +1889,18 @@ function _chainedShould( test,o )
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck._checkIndex, 1 );
-    test.identical( suite.report.testCheckPasses, 0 );
-    test.identical( suite.report.testCheckFails, 0 );
+    test.identical( suit.report.testCheckPasses, 0 );
+    test.identical( suit.report.testCheckFails, 0 );
 
-    return new wConsequence().give()
+    return new _.Consequence().give()
     .doThen( function()
     {
 
       test.description = prefix + 'beginning of the test routine';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 1 );
-      test.identical( t.suite.report.testCheckPasses, 0 );
-      test.identical( t.suite.report.testCheckFails, 0 );
+      test.identical( t.suit.report.testCheckPasses, 0 );
+      test.identical( t.suit.report.testCheckFails, 0 );
 
       var con = _.timeOut( 50,function( err )
       {
@@ -1983,8 +1923,8 @@ function _chainedShould( test,o )
       test.description = prefix + 'first ' + method + ' done';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 2 );
-      test.identical( t.suite.report.testCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails, 0 );
+      test.identical( t.suit.report.testCheckPasses, 1 );
+      test.identical( t.suit.report.testCheckFails, 0 );
 
       var con = _.timeOut( 50,function( err )
       {
@@ -2007,8 +1947,8 @@ function _chainedShould( test,o )
       test.description = prefix + 'second ' + method + ' done';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 3 );
-      test.identical( t.suite.report.testCheckPasses, 2 );
-      test.identical( t.suite.report.testCheckFails, 0 );
+      test.identical( t.suit.report.testCheckPasses, 2 );
+      test.identical( t.suit.report.testCheckFails, 0 );
 
     });
 
@@ -2029,8 +1969,8 @@ function _chainedShould( test,o )
 
         test.description = prefix + 'first ' + method + ' done';
 
-        test.identical( t.suite.report.testCheckPasses, o.lowerCount ? 4 : 5 );
-        test.identical( t.suite.report.testCheckFails, 0 );
+        test.identical( t.suit.report.testCheckPasses, o.lowerCount ? 4 : 5 );
+        test.identical( t.suit.report.testCheckFails, 0 );
 
         if( o.throwingError === 'sync' )
         t[ method ]( function(){ throw _.err( 'sync error' ) } );
@@ -2058,8 +1998,8 @@ function _chainedShould( test,o )
 
         test.description = prefix + 'first timeout of the included test routine ';
 
-        test.identical( t.suite.report.testCheckPasses, 3 );
-        test.identical( t.suite.report.testCheckFails, 0 );
+        test.identical( t.suit.report.testCheckPasses, 3 );
+        test.identical( t.suit.report.testCheckFails, 0 );
 
         if( o.throwingError === 'sync' )
         t[ method ]( function(){ throw _.err( 'sync error' ); } );
@@ -2092,15 +2032,15 @@ function _chainedShould( test,o )
 
   /* */
 
-  var suite = wTestSuite
+  var suit = wTestSuit
   ({
     tests : { row : row, include : include },
     override : notTakingIntoAccount,
     name : _.diagnosticLocation().name + '.' + method + '.' + o.throwingError,
   });
 
-  if( suite.on )
-  suite.on( 'routineEnd',function( e )
+  if( suit.on )
+  suit.on( 'routineEnd',function( e )
   {
 
     // console.log( 'routineEnd',e.testRoutine.routine.name );
@@ -2110,15 +2050,15 @@ function _chainedShould( test,o )
       test.description = 'checking outcomes';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 4 );
-      test.identical( suite.report.testCheckPasses, 3 );
-      test.identical( suite.report.testCheckFails, 0 );
+      test.identical( suit.report.testCheckPasses, 3 );
+      test.identical( suit.report.testCheckFails, 0 );
     }
 
   });
 
   /* */
 
-  return suite.run()
+  return suit.run()
   .doThen( function( err,data )
   {
 
@@ -2126,8 +2066,8 @@ function _chainedShould( test,o )
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck._checkIndex, 5 ); /* 4 */
-    test.identical( suite.report.testCheckPasses, 7 ); /* 6 */
-    test.identical( suite.report.testCheckFails, 0 );
+    test.identical( suit.report.testCheckPasses, 7 ); /* 6 */
+    test.identical( suit.report.testCheckFails, 0 );
 
     if( err )
     throw err;
@@ -2141,7 +2081,7 @@ _chainedShould.experimental = 1;
 
 function chainedShould( test )
 {
-  var con = wConsequence().give();
+  var con = _.Consequence().give();
 
   var iterations =
   [
@@ -2205,7 +2145,6 @@ function asyncExperiment( test )
   {
   });
 
-  debugger;
   return con;
 }
 
@@ -2225,240 +2164,37 @@ function failExperiment( test )
 
 failExperiment.experimental = 1;
 
-
 //
 
-function timeOut( test )
+function mustNotThrowErrorExperiment( test )
 {
-  var delay = 300;
-  var testCon = new wConsequence().give()
 
-  /* */
+  test.description = 'mustNotThrowError experiment';
 
-  .doThen( function()
+  debugger;
+  var con = test.mustNotThrowError( function()
   {
-    if( !Config.debug )
-    return;
+    debugger;
+    xxx
+    console.log( 'x' );
+    return _.timeOut( 500 );
+  });
+  debugger;
 
-    test.description = 'delay must be number';
-    test.shouldThrowError( () => _.timeOut( 'x' ) )
+  // var con = test.shouldMessageOnlyOnce( function()
+  // {
+  //   throw _.err( 'err1' );
+  // });
 
-    test.description = 'if two arguments provided, second must consequence/routine';
-    test.shouldThrowError( () => _.timeOut( 0, 'x' ) )
+  // var con = test.shouldThrowError( function()
+  // {
+  //   throw _.err( 'err1' );
+  // });
 
-    test.description = 'if four arguments provided, third must routine';
-    test.shouldThrowError( () => _.timeOut( 0, {}, 'x', [] ) )
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay only';
-    var timeBefore = _.timeNow();
-    return _.timeOut( delay )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
-      test.shouldBe( _.routineIs( got ) );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + routine';
-    var timeBefore = _.timeNow();
-    return _.timeOut( delay, () => {} )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
-      test.identical( got, undefined );
-      test.identical( err, null );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + routine that returns a value';
-    var timeBefore = _.timeNow();
-    var value = 'value';
-    return _.timeOut( delay, () => value )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
-      test.identical( got, value );
-      test.identical( err, null );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + routine that returns a consequence';
-    var timeBefore = _.timeNow();
-    return _.timeOut( delay, () => _.timeOut( delay ) )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
-      test.shouldBe( _.routineIs( got ) );
-      test.identical( err, null );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + routine that calls another timeOut';
-    var timeBefore = _.timeNow();
-    return _.timeOut( delay, () => { _.timeOut( delay ) } )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
-      test.identical( err, null );
-      test.identical( got, undefined );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + context + routine + arguments';
-    var timeBefore = _.timeNow();
-    function r( delay )
-    {
-      return delay / 2;
-    }
-    return _.timeOut( delay, undefined, r, [ delay ] )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
-      test.identical( got, delay / 2 );
-      test.identical( err, null );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + consequence';
-    var timeBefore = _.timeNow();
-
-    return _.timeOut( delay, _.timeOut( delay * 2 ) )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
-      test.shouldBe( _.routineIs( got ) );
-      test.identical( err, null );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + consequence that returns value';
-    var timeBefore = _.timeNow();
-    var val = 0;
-
-    return _.timeOut( delay, _.timeOut( delay * 2, () => val ) )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
-      test.identical( err, null );
-      test.identical( got, val );
-    })
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'delay + consequence + error';
-    var timeBefore = _.timeNow();
-
-    return _.timeOut( delay, _.timeOut( delay * 2, () => { throw 'err' } ) )
-    .doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
-      test.shouldBe( _.errIs( err ) );
-      test.identical( got, undefined );
-    });
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'stop timer with error';
-    var timeBefore = _.timeNow();
-
-    var t = _.timeOut( delay );
-    t.doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
-      test.identical( err, null );
-      test.identical( got, 'stop' )
-    })
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
-
-    return t;
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'stop timer with error, routine passed';
-    var timeBefore = _.timeNow();
-    var called = false;
-
-    var t = _.timeOut( delay, () => { called = true } );
-    t.doThen( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
-      test.identical( got, 'stop' );
-      test.identical( called, false );
-      test.identical( err, null )
-    })
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
-
-    return t;
-  })
-
-  /* */
-
-  .doThen( function()
-  {
-    test.description = 'give err after timeOut';
-    var timeBefore = _.timeNow();
-
-    var t = _.timeOut( delay, () => {} );
-    t.got( function( err, got )
-    {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
-      test.identical( got, undefined );
-      test.identical( err, null );
-    })
-
-    return _.timeOut( delay + 50, function()
-    {
-      t.error( 'stop' );
-      t.got( ( err, got ) => test.identical( err, 'stop' ) );
-    })
-
-    return t;
-  })
-
-  return testCon;
+  return con;
 }
+
+mustNotThrowErrorExperiment.experimental = 1;
 
 // --
 // proto
@@ -2467,7 +2203,7 @@ function timeOut( test )
 var Self =
 {
 
-  name : 'TestingOfTesting',
+  name : 'wTesting / general tests',
   // verbosity : 7,
   // routine : 'simplest',
   // debug : 1,
@@ -2500,13 +2236,13 @@ var Self =
 
     asyncExperiment : asyncExperiment,
     failExperiment : failExperiment,
-    timeOut : timeOut,
+    mustNotThrowErrorExperiment : mustNotThrowErrorExperiment,
 
   },
 
 }
 
-Self = wTestSuite( Self );
+Self = wTestSuit( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 

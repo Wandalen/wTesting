@@ -5,24 +5,46 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wTools === 'undefined' || !wTools.Tester._isFullImplementation )
-  require( '../xtester/cTester.debug.s' );
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
+  {
+    let toolsPath = '../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
+  }
+
+  if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
+  require( '../xtester/aBase.debug.s' );
+
+  var _ = _global_.wTools;
+
+  _.include( 'wLogger' );
+  _.include( 'wConsequence' );
 
 }
 
-var _ = wTools;
+var _ = _global_.wTools;
 
 //
 
 function inherit( test )
 {
   var routines = [];
-  var childSuiteName = 'childSuite';
-  var firstParentName = 'parentSuite1';
-  var secondParentName = 'parentSuite2';
+  var childSuitName = 'childSuit';
+  var firstParentName = 'parentSuit1';
+  var secondParentName = 'parentSuit2';
   var checksCount = 0;
 
-  var notTakingIntoAccount = { logger : wLogger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
+  var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
   routines.push( test.name );
 
@@ -34,12 +56,12 @@ function inherit( test )
 
     routines.push( test.name );
 
-    test.description = 'check if child suite runs this test';
-    test.identical( _.Tester.activeSuites[ 1 ].name, childSuiteName );
+    test.description = 'check if child suit runs this test';
+    test.identical( _.Tester.activeSuits[ 1 ].name, childSuitName );
     checksCount += test.checkCurrent()._checkIndex;
   }
 
-  var ParentSuite1 =
+  var ParentSuit1 =
   {
     name : firstParentName,
     abstract : 1,
@@ -59,7 +81,7 @@ function inherit( test )
 
   };
 
-  wTestSuite( ParentSuite1 );
+  wTestSuit( ParentSuit1 );
 
   // parent 2
 
@@ -69,16 +91,16 @@ function inherit( test )
 
     routines.push( test.name );
 
-    test.description = 'check if child suite inherits tests, options, context from parent';
-    var tests = _.mapOwnKeys( wTests[ childSuiteName ].tests );
+    test.description = 'check if child suit inherits tests, options, context from parent';
+    var tests = _.mapOwnKeys( wTests[ childSuitName ].tests );
     test.identical( tests, [ 'test1', 'test2' ] );
-    test.identical( wTests[ childSuiteName ].abstract, 0 );
+    test.identical( wTests[ childSuitName ].abstract, 0 );
 
-    test.identical( wTests[ childSuiteName ].verbosity , wTests[ firstParentName ].verbosity );
-    test.identical( wTests[ childSuiteName ].importanceOfDetails , wTests[ firstParentName ].importanceOfDetails );
-    test.identical( wTests[ childSuiteName ].silencing , wTests[ firstParentName ].silencing );
-    test.identical( wTests[ childSuiteName ].importanceOfNegative , wTests[ secondParentName ].importanceOfNegative );
-    test.identical( wTests[ childSuiteName ].debug, wTests[ secondParentName ].debug );
+    test.identical( wTests[ childSuitName ].verbosity , wTests[ firstParentName ].verbosity );
+    test.identical( wTests[ childSuitName ].importanceOfDetails , wTests[ firstParentName ].importanceOfDetails );
+    test.identical( wTests[ childSuitName ].silencing , wTests[ firstParentName ].silencing );
+    test.identical( wTests[ childSuitName ].importanceOfNegative , wTests[ secondParentName ].importanceOfNegative );
+    test.identical( wTests[ childSuitName ].debug, wTests[ secondParentName ].debug );
 
     test.identical( self.parentValue1 , 1 );
     test.identical( self.parentValue2 , 2 );
@@ -88,7 +110,7 @@ function inherit( test )
 
   }
 
-  var ParentSuite2 =
+  var ParentSuit2 =
   {
     name : secondParentName,
     abstract : 1,
@@ -108,17 +130,17 @@ function inherit( test )
 
   };
 
-  wTestSuite( ParentSuite2 );
+  wTestSuit( ParentSuit2 );
 
   // child
 
-  var childSuite =
+  var childSuit =
   {
 
-    name : childSuiteName,
+    name : childSuitName,
     abstract : 0,
     override : notTakingIntoAccount,
-    ignoreAppArgs : 1,
+    ignoringTesterOptions : 1,
 
     tests :
     {
@@ -131,17 +153,17 @@ function inherit( test )
 
   }
 
-  var suite = new wTestSuite( childSuite )
+  var suit = new wTestSuit( childSuit )
   .inherit( wTests[ firstParentName ] )
   .inherit( wTests[ secondParentName] );
 
-  return suite.run()
+  return suit.run()
   .doThen( function()
   {
     test.shouldBe( test.report.testCheckPasses > 9  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
-    test.identical( _.mapOwnKeys( suite.tests ).length, 2 );
+    test.identical( _.mapOwnKeys( suit.tests ).length, 2 );
   })
 }
 
@@ -150,9 +172,9 @@ function inherit( test )
 var Proto =
 {
 
-  name : 'Inheritance test',
+  name : 'wTesting / Inheritance test',
   // verbosity : 5,
-  silencing : 0,
+  silencing : 1,
 
   tests :
   {
@@ -163,7 +185,7 @@ var Proto =
 
 //
 
-var Self = new wTestSuite( Proto );
+var Self = new wTestSuit( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self );
 

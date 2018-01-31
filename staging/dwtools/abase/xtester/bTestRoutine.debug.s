@@ -2,29 +2,9 @@
 
 'use strict';
 
-var isBrowser = true;
-if( typeof module !== 'undefined' )
-{
-
-  isBrowser = false;
-
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
-
-  var _ = wTools;
-
-}
-
 //
 
-var _ = wTools;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wTestRoutineDescriptor( o )
 {
@@ -51,17 +31,17 @@ function init( o )
   if( o )
   self.copy( o );
 
-  self._cancelCon = new wConsequence();
+  self._cancelCon = new _.Consequence();
   self._returnCon = null;
 
   self._reportForm();
 
   _.assert( _.routineIs( self.routine ) );
-  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
+  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suit',self.suit.name,'does not have name' );
   // _.assert( self.routine.name === self.name,'routine should have same name, but',self.routine.name, '!=', self.name );
-  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self.suite ) );
-  // _.assert( Object.isPrototypeOf.call( wTestSuite.prototype,self ) );
-  _.assert( Object.isPrototypeOf.call( wTestRoutineDescriptor.prototype,self ) );
+  _.assert( Object.isPrototypeOf.call( _.TestSuit.prototype,self.suit ) );
+  // _.assert( Object.isPrototypeOf.call( wTestSuit.prototype,self ) );
+  _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
   _.assert( arguments.length === 1 );
 
   var proxy =
@@ -70,7 +50,7 @@ function init( o )
     {
       if( obj[ k ] !== undefined )
       return obj[ k ];
-      return obj.suite[ k ];
+      return obj.suit[ k ];
     }
   }
 
@@ -79,27 +59,100 @@ function init( o )
   return self;
 }
 
+// --
+// run
+// --
+
+function _testRoutineBegin()
+{
+  var trd = this;
+  var suit = trd.suit;
+
+  _.assert( arguments.length === 0 );
+
+  var msg =
+  [
+    'Running test routine ( ' + trd.routine.name + ' ) ..'
+  ];
+
+  suit.logger.begin({ verbosity : -4 });
+
+  suit.logger.begin({ 'routine' : trd.routine.name });
+  suit.logger.logUp( msg.join( '\n' ) );
+  suit.logger.end( 'routine' );
+
+  suit.logger.end({ verbosity : -4 });
+
+  _.assert( !suit.currentRoutine );
+  suit.currentRoutine = trd;
+
+  try
+  {
+    suit.onRoutineBegin.call( trd.context,trd );
+    if( trd.eventGive )
+    trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
+  }
+  catch( err )
+  {
+    suit._exceptionConsider( err );
+  }
+
+}
+
 //
 
-function _reportForm()
+function _testRoutineEnd()
 {
-  var self = this;
+  var trd = this;
+  var suit = trd.suit;
+  var ok = trd._reportIsPositive();
 
-  _.assert( !self.report );
-  var report = self.report = Object.create( null );
+  _.assert( arguments.length === 0 );
+  _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
+  _.assert( suit.currentRoutine === trd );
 
-  report.errorsArray = [];
+  try
+  {
+    suit.onRoutineEnd.call( trd.context,trd,ok );
+    if( trd.eventGive )
+    trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
+  }
+  catch( err )
+  {
+    suit._exceptionConsider( err );
+  }
 
-  report.testCheckPasses = 0;
-  report.testCheckFails = 0;
+  if( trd.report.testCheckFails )
+  suit.report.testRoutineFails += 1;
+  else
+  suit.report.testRoutinePasses += 1;
 
-  report.testCheckPassesOfTestCase = 0;
-  report.testCheckFailsOfTestCase = 0;
+  suit.logger.begin( 'routine','end' );
+  suit.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
 
-  report.testCasePasses = 0;
-  report.testCaseFails = 0;
+  suit.logger.begin({ verbosity : -3 });
 
-  Object.preventExtensions( report );
+  if( ok )
+  {
+
+    suit.logger.logDown( 'Passed test routine ( ' + trd.routine.name + ' ).' );
+
+  }
+  else
+  {
+
+    suit.logger.begin({ verbosity : -3+suit.importanceOfNegative });
+    suit.logger.logDown( 'Failed test routine ( ' + trd.routine.name + ' ).' );
+    suit.logger.end({ verbosity : -3+suit.importanceOfNegative });
+
+  }
+
+  suit.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+  suit.logger.end( 'routine','end' );
+
+  suit.logger.end({ verbosity : -3 });
+
+  suit.currentRoutine = null;
 
 }
 
@@ -108,7 +161,7 @@ function _reportForm()
 function _testRoutineHandleReturn( err,msg )
 {
   var trd = this;
-  var suite = trd.suite;
+  var suit = trd.suit;
 
   if( err )
   if( err.timeOut )
@@ -118,13 +171,13 @@ function _testRoutineHandleReturn( err,msg )
     usingSourceCode : 0,
   });
 
+  trd.description = '';
+
   if( err )
   {
     trd.exceptionReport
     ({
       err : err,
-      trd : trd,
-      usingSourceCode : 0,
     });
   }
   else
@@ -147,12 +200,10 @@ function _testRoutineHandleReturn( err,msg )
     });
   }
 
-  suite._testRoutineEnd( trd,!trd.report.testCheckFails );
-
 }
 
 // --
-//
+// case
 // --
 
 function _descriptionGet()
@@ -197,7 +248,7 @@ function _testCaseConsider( outcome )
   else
   report.testCaseFails += 1;
 
-  trd.suite._testCaseConsider( outcome );
+  trd.suit._testCaseConsider( outcome );
 }
 
 // --
@@ -223,7 +274,7 @@ function checkNext( description )
 {
   var trd = this;
 
-  _.assert( trd instanceof wTestRoutineDescriptor );
+  _.assert( trd instanceof Self );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   if( !trd._checksStack.length )
@@ -388,7 +439,7 @@ function isNotIdentical( got,expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function identical( got,expected )
@@ -447,7 +498,7 @@ function identical( got,expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function equivalent( got,expected,eps )
@@ -505,7 +556,7 @@ function equivalent( got,expected,eps )
  *
  * @throws {Exception} If no arguments provided.
  * @method contain
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function contain( got,expected )
@@ -547,7 +598,7 @@ function _shouldDo( o )
 
   var acheck = trd.checkCurrent();
   trd._inroutineCon.choke();
-  var con = new wConsequence();
+  var con = new _.Consequence();
 
   /* */
 
@@ -597,7 +648,7 @@ function _shouldDo( o )
 
     if( o.ignoringError )
     {
-      debugger;
+      // debugger;
       begin( 1 );
 
       trd._outcomeReportBoolean
@@ -613,10 +664,20 @@ function _shouldDo( o )
     {
       begin( o.expectingAsyncError );
 
-      logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });
-      if( !_.errIsAttended( err ) )
-      logger.log( _.errAttend( err ) );
-      logger.end({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });
+      debugger;
+      trd.exceptionReport
+      ({
+        err : err,
+        sync : 0,
+        considering : 0,
+      });
+
+      // logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });
+      // logger.begin({ 'connotation' : 'negative' });
+      // if( !_.errIsAttended( err ) )
+      // logger.log( _.errAttend( err ) );
+      // logger.end({ 'connotation' : 'negative' });
+      // logger.end({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });
 
       if( o.expectingAsyncError )
       trd._outcomeReportBoolean
@@ -644,7 +705,9 @@ function _shouldDo( o )
 
       var msg = 'error was not thrown asynchronously, but expected';
       if( o.expectingAsyncError )
-      var msg = 'error was thrown asynchronously as expected';
+      msg = 'error was thrown asynchronously as expected';
+      else if( !o.expectingAsyncError && !o.expectingSyncError && good )
+      msg = 'error was not thrown as expected';
 
       trd._outcomeReportBoolean
       ({
@@ -709,12 +772,20 @@ function _shouldDo( o )
       return con;
     }
 
-    logger.begin({ verbosity : -6+( o.expectingSyncError ? 0 : trd.importanceOfNegative ) });
+    trd.exceptionReport
+    ({
+      err : err,
+      sync : 1,
+      considering : 0,
+      outcome : o.expectingSyncError,
+    });
 
-    if( !_.errIsAttended( err ) )
-    logger.log( _.errAttend( err ) );
-
-    logger.end({ verbosity : -6+( o.expectingSyncError ? 0 : trd.importanceOfNegative ) });
+    // logger.begin({ verbosity : -6+( o.expectingSyncError ? 0 : trd.importanceOfNegative ) });
+    // logger.begin({ 'connotation' : 'negative' });
+    // if( !_.errIsAttended( err ) )
+    // logger.log( _.errAttend( err ) );
+    // logger.end({ 'connotation' : 'negative' });
+    // logger.end({ verbosity : -6+( o.expectingSyncError ? 0 : trd.importanceOfNegative ) });
 
     if( !o.ignoringError )
     {
@@ -738,7 +809,7 @@ function _shouldDo( o )
         trd._outcomeReportBoolean
         ({
           outcome : o.expectingSyncError,
-          msg : 'error thrown synchronously, something wrong',
+          msg : 'error thrown synchronously, what was not expected',
           stack : stack,
         });
 
@@ -784,6 +855,8 @@ function _shouldDo( o )
     {
       err = _err;
       arg = _arg;
+
+      debugger;
 
       if( !o.ignoringError && !reported )
       if( err && !o.expectingAsyncError )
@@ -962,7 +1035,7 @@ function shouldThrowErrorSync( routine )
  * @example
  * function sometest( test )
  * {
- *  var consequence = new wConsequence().give();
+ *  var consequence = new _.Consequence().give();
  *  consequence
  *  .ifNoErrorThen( function()
  *  {
@@ -987,7 +1060,7 @@ function shouldThrowErrorSync( routine )
  * @throws {Exception} If no arguments provided.
  * @throws {Exception} If passed argument is not a Routine.
  * @method shouldThrowErrorSync
- * @memberof wTools
+ * @memberof wTestRoutineDescriptor
  */
 
 function shouldThrowError( routine )
@@ -1059,7 +1132,7 @@ function _outcomeConsider( outcome )
     // debugger;
   }
 
-  trd.suite._outcomeConsider( outcome );
+  trd.suit._outcomeConsider( outcome );
 
   trd.checkNext();
 
@@ -1075,7 +1148,7 @@ function _exceptionConsider( err )
   _.assert( trd.constructor === Self );
 
   trd.report.errorsArray.push( err );
-  trd.suite._exceptionConsider( err );
+  trd.suit._exceptionConsider( err );
 
 }
 
@@ -1139,9 +1212,14 @@ function _outcomeReport( o )
   /* */
 
   logger.begin({ verbosity : -4 });
-  logger.begin({ 'check' : trd.description || trd._checkIndex });
-  logger.begin({ 'checkIndex' : trd._checkIndex });
 
+  if( o.considering )
+  {
+    logger.begin({ 'check' : trd.description || trd._checkIndex });
+    logger.begin({ 'checkIndex' : trd._checkIndex });
+  }
+
+  if( o.considering )
   trd._outcomeReportAct( o.outcome );
 
   if( o.outcome )
@@ -1201,6 +1279,7 @@ function _outcomeReport( o )
 
   }
 
+  if( o.considering )
   logger.end( 'check','checkIndex' );
   logger.end({ verbosity : -4 });
 
@@ -1213,6 +1292,7 @@ _outcomeReport.defaults =
   details : null,
   stack : null,
   usingSourceCode : 1,
+  considering : 1,
 }
 
 //
@@ -1224,7 +1304,12 @@ function _outcomeReportBoolean( o )
   _.assert( arguments.length === 1 );
   _.routineOptions( _outcomeReportBoolean,o );
 
-  o.msg = trd._currentTestCaseTextMake( o.outcome,o.msg,o.usingDescription );
+  o.msg = trd._reportTestCaseTextMake
+  ({
+    outcome : o.outcome,
+    msg : o.msg,
+    usingDescription : o.usingDescription,
+  });
 
   trd._outcomeReport
   ({
@@ -1278,7 +1363,7 @@ function _outcomeReportCompare( o )
   {
 
     var details = msgExpectedGot();
-    var msg = trd._currentTestCaseTextMake( 1 );
+    var msg = trd._reportTestCaseTextMake({ outcome : 1 });
 
     trd._outcomeReport
     ({
@@ -1307,7 +1392,7 @@ function _outcomeReportCompare( o )
     if( _.strIs( o.expected ) && _.strIs( o.got ) )
     details += '\ndifference :\n' + _.strDifference( o.expected,o.got );
 
-    var msg = trd._currentTestCaseTextMake( 0 );
+    var msg = trd._reportTestCaseTextMake({ outcome : 0 });
 
     trd._outcomeReport
     ({
@@ -1340,24 +1425,42 @@ function exceptionReport( o )
   _.routineOptions( exceptionReport,o );
   _.assert( arguments.length === 1 );
 
-  if( o.trd.onError )
-  o.trd.onError.call( trd,o.trd );
+  o.stack = o.stack || o.err.stack;
 
-  var msg = o.trd._currentTestCaseTextMake() + ' ... failed throwing error';
+  debugger;
+
+  if( trd.onError )
+  debugger;
+  if( trd.onError )
+  trd.onError.call( trd,o );
+
+  var msg = null;
+  if( o.considering )
+  {
+    msg = trd._reportTestCaseTextMake({ outcome : null }) + ' ... failed throwing error';
+  }
+  else
+  {
+    msg = 'Error throwen'
+  }
+
   if( o.sync !== null )
-  msg += ( o.sync ? 'synchronously' : 'asynchronously' );
+  msg += ( o.sync ? ' synchronously' : ' asynchronously' );
+
   var err = _.errAttend( o.err );
   var details = err.toString();
 
+  if( o.considering )
   trd._exceptionConsider( err );
 
-  o.trd._outcomeReport
+  trd._outcomeReport
   ({
-    outcome : 0,
+    outcome : o.outcome,
     msg : msg,
     details : details,
     stack : o.stack,
-    usingSourceCode : o.usingSourceCode
+    usingSourceCode : o.usingSourceCode,
+    considering : o.considering,
   });
 
 }
@@ -1365,31 +1468,73 @@ function exceptionReport( o )
 exceptionReport.defaults =
 {
   err : null,
-  trd : null,
   stack : null,
-  usingSourceCode : 1,
+  usingSourceCode : 0,
+  considering : 1,
+  outcome : 0,
   sync : null,
+}
+
+// --
+// report
+// --
+
+function _reportForm()
+{
+  var self = this;
+
+  _.assert( !self.report );
+  var report = self.report = Object.create( null );
+
+  report.errorsArray = [];
+
+  report.testCheckPasses = 0;
+  report.testCheckFails = 0;
+
+  report.testCheckPassesOfTestCase = 0;
+  report.testCheckFailsOfTestCase = 0;
+
+  report.testCasePasses = 0;
+  report.testCaseFails = 0;
+
+  Object.preventExtensions( report );
+
 }
 
 //
 
-function _currentTestCaseTextMake( value,hint,usingDescription )
+function _reportIsPositive()
+{
+  var self = this;
+
+  if( self.report.testCheckFails !== 0 )
+  return false;
+
+  if( !( self.report.testCheckPasses > 0 ) )
+  return false;
+
+  if( self.report.errorsArray.length )
+  return false;
+
+  return true;
+}
+
+//
+
+function _reportTestCaseTextMake( o )
 {
   var trd = this;
 
-  if( usingDescription === undefined )
-  usingDescription = 1;
-
-  _.assert( arguments.length === 0 || arguments.length === 1 || arguments.length === 2 || arguments.length === 3 );
-  _.assert( value === undefined || _.boolLike( value ) );
-  _.assert( hint === undefined || _.strIs( hint ) );
+  o = _.routineOptions( _reportTestCaseTextMake,o );
+  _.assert( arguments.length === 1 );
+  _.assert( o.outcome === null || _.boolLike( o.outcome ) );
+  _.assert( o.msg === null || _.strIs( o.msg ) );
   _.assert( trd._testRoutineDescriptorIs );
   _.assert( trd._checkIndex >= 0 );
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine descriptor should have name' );
 
   var name = trd.routine.name;
-
-  if( trd.description && usingDescription )
+  if( trd.description && o.usingDescription )
   name += ' : ' + trd.description;
 
   var result = '' +
@@ -1397,18 +1542,25 @@ function _currentTestCaseTextMake( value,hint,usingDescription )
     ' # ' + trd._checkIndex
   ;
 
-  if( hint )
-  result += ' : ' + hint;
+  if( o.msg )
+  result += ' : ' + o.msg;
 
-  if( value !== undefined )
+  if( o.outcome !== null )
   {
-    if( value )
+    if( o.outcome )
     result += ' ... ok';
     else
     result += ' ... failed';
   }
 
   return result;
+}
+
+_reportTestCaseTextMake.defaults =
+{
+  outcome : null,
+  msg : null,
+  usingDescription : 1,
 }
 
 // --
@@ -1429,7 +1581,7 @@ var Aggregates =
 
 var Associates =
 {
-  suite : null,
+  suit : null,
   routine : null,
 }
 
@@ -1479,8 +1631,11 @@ var Proto =
 
   init : init,
 
-  _reportForm : _reportForm,
 
+  // run
+
+  _testRoutineBegin : _testRoutineBegin,
+  _testRoutineEnd : _testRoutineEnd,
   _testRoutineHandleReturn : _testRoutineHandleReturn,
 
 
@@ -1533,7 +1688,12 @@ var Proto =
 
   exceptionReport : exceptionReport,
 
-  _currentTestCaseTextMake : _currentTestCaseTextMake,
+
+  // report
+
+  _reportForm : _reportForm,
+  _reportIsPositive : _reportIsPositive,
+  _reportTestCaseTextMake : _reportTestCaseTextMake,
 
 
   // relationships
@@ -1558,7 +1718,7 @@ _.classMake
   extend : Proto,
 });
 
-wCopyable.mixin( Self );
+_.Copyable.mixin( Self );
 
 _.accessorForbid( Self.prototype,Forbids );
 _.accessor( Self.prototype,Accessors );
@@ -1567,6 +1727,6 @@ _.accessor( Self.prototype,Accessors );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+_[ Self.nameShort ] = Self;
 
 })();

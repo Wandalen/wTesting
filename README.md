@@ -87,12 +87,48 @@ var testSuite =
 }
 
 /* Initilize test suite */
-testSuite = wTestSuite( testSuite );
+testSuite = wTestSuit( testSuite );
 
 /* Run all tests of the suite */
 wTools.Testing.test( testSuite );
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

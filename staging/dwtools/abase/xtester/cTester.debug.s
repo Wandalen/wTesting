@@ -2,95 +2,8 @@
 
 'use strict';
 
-/*
-
-+ implement test case tracking
-
-+ move test routine methods out of test suite
-+ implement routine only as option of test suite
-
-+ adjust verbosity levels
-
-+ make possible switch off parents test routines
-
-fileStat : null
-
-+ make "should/must not error" pass original messages through
-  test.description = 'mustNotThrowError must return con with message';
-
-  var con = new wConsequence().give( '123' );
-  test.mustNotThrowError( con )
-  .ifNoErrorThen( function( got )
-  {
-    test.identical( got, '123' );
-  })
-
-+ improve inheritance
-+ global search cant find test suites with inheritance
-
-- implement options.list
-- print information about case with color directive avoiding change of color state of logger
-
-- implement support of glob path
-- manual launch of test suite + global tests execution should not give extra test suite runs
-
-+ after the last test case of test routine description should be changed
-
-+ test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
-
-+ test suite should not pass if 0 / 0 test checks
-
-+ track number of thrown errors
-
-+ global / suite / routine basis statistic tracking
-
-+ fails issue
-+ implement silencing from test suite
-
-- no suite/tester sanitare period if errror
-
-- time measurements out of test
-
-- sort-cuts for command line otpions
-
-- warning if command line option is strange
-- warning if test routine has unknown fields
-
-- issue if first test suite has silencing:0 and other silencing:1
-
-- less static information with verbosity:7, to introduce higher verbosity levels
-
-*/
-
-if( typeof module !== 'undefined' )
-{
-
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
-
-  var _ = wTools;
-
-  _.include( 'wCopyable' );
-  _.include( 'wInstancing' );
-
-  _.includeAny( 'wEventHandler','' );
-
-  _.include( 'wConsequence' );
-  _.include( 'wFiles' );
-  _.include( 'wLogger' );
-
-  // _.includeAny( 'wScriptLauncher' );
-
-}
-
-var _ = wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var sourceFileLocation = _.diagnosticLocation().full;
 var sourceFileStack = _.diagnosticStack();
 
@@ -104,6 +17,8 @@ if( _.Tester._isFullImplementation )
   console.log( 'Second time' );
   console.log( sourceFileStack );
   console.log( '' );
+  debugger;
+  _.assert( 0 );
   return;
 }
 
@@ -172,12 +87,12 @@ function _registerExitHandler()
 
   tester._registerExitHandlerDone = 1;
 
-  if( _global_.process )
+  if( _global.process )
   process.on( 'exit', function()
   {
-    if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
+    if( tester.report && tester.report.testSuitFailes && !process.exitCode )
     {
-      var logger = tester.logger || _global_.logger;
+      var logger = tester.logger || _global.logger;
       logger.log( _.color.strFormat( 'Errors!','negative' ) );
       process.exitCode = -1;
     }
@@ -190,14 +105,14 @@ function _registerExitHandler()
 function _includeTestsFrom( path )
 {
   var tester = this;
-  var logger = tester.logger || _global_.logger;
+  var logger = tester.logger || _global.logger;
   var path = _.pathJoin( _.pathCurrent(),path );
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( path ) );
 
   if( tester.verbosity > 1 )
-  logger.log( 'Include tests from :',path );
+  logger.log( 'Includes tests from :',path,'\n' );
 
   var files = _.fileProvider.filesFind
   ({
@@ -244,6 +159,7 @@ function _includeTestsFrom( path )
 function includeTestsFrom( path )
 {
   var tester = this;
+  var logger = tester.logger || _global.logger;
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( path ) );
@@ -259,7 +175,7 @@ function includeTestsFrom( path )
 function appArgsApply()
 {
   var tester = this;
-  var logger = tester.logger || _global_.logger;
+  var logger = tester.logger || _global.logger;
 
   if( tester._appArgsApplied )
   return tester._appArgsApplied;
@@ -334,13 +250,13 @@ function scenarioOptionsList()
   var optionsList =
   {
     scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
-    sanitareTime : 'Delay before run of the next test suite.',
+    sanitareTime : 'Delay before run of the next test suit.',
     usingBeep : 'Make beep sound after testing completion.',
     routine : 'Name of only test routine to execute.',
     fails : 'Maximum number of fails allowed before shutting down testing.',
     silencing : 'Enables catching of console output that occures during test run.',
     testRoutineTimeOut : 'Limits the time that each test routine can work. If execution of routine takes too long time then timeOut error will be thrown.',
-    concurrent : 'Runs test suite in parallel with other test suites.',
+    concurrent : 'Runs test suit in parallel with other test suits.',
     verbosity : 'Level of details in tester output. Zero for nothing, one for single line report, nine for maximum verbosity.',
     importanceOfNegative : 'Importance of fails in output.'
   }
@@ -359,11 +275,11 @@ function scenarioOptionsList()
 
 //
 
-function scenarioSuitesList()
+function scenarioSuitsList()
 {
   var tester = this;
 
-  _.assert( tester.settings.scenario === 'suites.list' );
+  _.assert( tester.settings.scenario === 'suits.list' );
 
   tester.includeTestsFrom( tester.path );
 
@@ -381,33 +297,36 @@ function _testAllAct()
 
   _.assert( arguments.length === 0 );
 
-  // var suites = _.entityFilter( wTests,function( suite )
+  // var suits = _.entityFilter( wTests,function( suit )
   // {
-  //   if( suite.abstract )
+  //   if( suit.abstract )
   //   return;
-  //   if( suite.enabled !== undefined && !suite.enabled )
+  //   if( suit.enabled !== undefined && !suit.enabled )
   //   return;
-  //   return suite;
+  //   return suit;
   // });
   // debugger;
 
-  var suites = tester.testsFilterOut( wTests );
+  var suits = tester.testsFilterOut( wTests );
 
-  tester._testingBegin( suites );
+  tester._testingBegin( suits );
 
-  for( var t in suites )
+  for( var t in suits )
   {
     tester._testAct( t );
   }
 
-  wTestSuite._suiteCon
-  .timeOutThen( tester.settings.sanitareTime )
+  wTestSuit._suitCon
+  .doThen( function() {
+    if( tester._reportIsPositive() )
+    return _.timeOut( tester.settings.sanitareTime );
+  })
   .doThen( function()
   {
     return tester._testingEnd();
   });
 
-  return wTestSuite._suiteCon.split();
+  return wTestSuit._suitCon.split();
 }
 
 //
@@ -424,14 +343,14 @@ function _testAct()
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {
-    var _suite = arguments[ a ];
-    var suite = wTestSuite.instanceByName( _suite );
+    var _suit = arguments[ a ];
+    var suit = wTestSuit.instanceByName( _suit );
 
-    _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
-    _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
-    _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
+    _.assert( suit instanceof wTestSuit,'Test suit',_suit,'was not found' );
+    _.assert( _.strIsNotEmpty( suit.name ),'Test suit should has ( name )"' );
+    _.assert( _.objectIs( suit.tests ),'Test suit should has map with test routines ( tests ), but "' + suit.name + '" does not have such map' );
 
-    suite._testSuiteRunLater();
+    suit._testSuitRunLater();
   }
 
 }
@@ -447,14 +366,17 @@ function _test()
   if( arguments.length === 0 )
   return tester._testAllAct();
 
-  var suites = tester.testsFilterOut( arguments );
+  var suits = tester.testsFilterOut( arguments );
 
-  tester._testingBegin( suites );
+  tester._testingBegin( suits );
 
-  tester._testAct.apply( tester,_.mapVals( suites ) );
+  tester._testAct.apply( tester,_.mapVals( suits ) );
 
-  return wTestSuite._suiteCon
-  .timeOutThen( tester.settings.sanitareTime )
+  return wTestSuit._suitCon
+  .doThen( function() {
+    if( tester._reportIsPositive() )
+    return _.timeOut( tester.settings.sanitareTime );
+  })
   .split( function()
   {
     return tester._testingEnd();
@@ -467,15 +389,15 @@ var test = _.timeReadyJoin( undefined,_test );
 
 //
 
-function _testingBegin( suites )
+function _testingBegin( suits )
 {
   var tester = this;
   var logger = tester.logger;
-  var firstSuite = _.mapFirstPair( suites )[ 1 ];
+  var firstSuit = _.mapFirstPair( suits )[ 1 ];
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.numberIs( tester.verbosity ) );
-  _.assert( _.mapIs( suites ) );
+  _.assert( _.mapIs( suits ) );
 
   tester.appArgsApply();
   tester._registerExitHandler();
@@ -483,17 +405,15 @@ function _testingBegin( suites )
   if( !tester.appArgs.map )
   tester.appArgs.map = Object.create( null );
 
-  // console.log( '-> suites.length',suites.length );
-  // debugger;
-  if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
-  if( firstSuite && firstSuite.silencing !== null && firstSuite.silencing !== undefined )
-  {
-    // console.log( '-> firstSuite.silencing',firstSuite.silencing );
-    tester.settings.silencing = firstSuite.silencing;
-  }
-  // debugger;
+/*
 
-  logger.verbosityPush( tester.verbosity );
+  if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
+  if( firstSuit && firstSuit.silencing !== null && firstSuit.silencing !== undefined )
+  {
+    tester.settings.silencing = firstSuit.silencing;
+  }
+
+  // logger.verbosityPush( tester.verbosity );
   // logger._verbosityReport();
 
   if( tester.settings.silencing )
@@ -501,9 +421,11 @@ function _testingBegin( suites )
     logger.begin({ verbosity : -8 });
     logger.log( 'Barring console' );
     logger.end({ verbosity : -8 });
-    if( !wLogger.consoleIsBarred( console ) )
-    tester._bar = wLogger.consoleBar({ outputLogger : logger, bar : 1 });
+    if( !_.Logger.consoleIsBarred( console ) )
+    tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
   }
+
+*/
 
   logger.begin({ verbosity : -4 });
   logger.log( 'Tester Settings :' );
@@ -513,22 +435,22 @@ function _testingBegin( suites )
 
   // logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
   // logger.verbosityPush( tester.verbosity );
-  logger.begin({ verbosity : -2 });
+  logger.begin({ verbosity : -3 });
 
-  if( suites !== undefined )
+  if( suits !== undefined )
   {
-    logger.logUp( 'Launching several ( ' + _.entityLength( suites ) + ' ) test suites ..' );
-    tester.testsListPrint( suites );
+    logger.logUp( 'Launching several ( ' + _.entityLength( suits ) + ' ) test suits ..' );
+    tester.testsListPrint( suits );
   }
   else
   {
     debugger;
-    logger.logUp( 'Launching all known ( ' + _.mapKeys( wTests ).length + ' ) test suites ..' );
-    tester.testsListPrint( suites );
+    logger.logUp( 'Launching all known ( ' + _.entityLength( wTests ) + ' ) test suits ..' );
+    tester.testsListPrint( suits );
   }
 
   logger.log();
-  logger.end({ verbosity : -2 });
+  logger.end({ verbosity : -3 });
 
   tester._reportForm();
 
@@ -539,7 +461,7 @@ function _testingBegin( suites )
 function _testingEnd()
 {
   var tester = this;
-  var logger = tester.logger || _global_.logger;
+  var logger = tester.logger || _global.logger;
   var ok = tester._reportIsPositive();
 
   if( tester.settings.usingBeep )
@@ -575,13 +497,13 @@ function _testingEnd()
 
   // logger._verbosityReport();
   // console.log( 'tester.logger',tester.logger );
-
-  if( tester.settings.silencing && wLogger.consoleIsBarred( console ) )
+/*
+  if( tester.settings.silencing && _.Logger.consoleIsBarred( console ) )
   {
     tester._bar.bar = 0;
-    wLogger.consoleBar( tester._bar );
+    _.Logger.consoleBar( tester._bar );
   }
-
+*/
   _.timeOut( 100,function()
   {
     _.appExit();
@@ -591,71 +513,71 @@ function _testingEnd()
 
 //
 
-function testsFilterOut( suites )
+function testsFilterOut( suits )
 {
   var tester = this;
   var logger = tester.logger;
 
-  // console.log( suites );
+  // console.log( suits );
 
-  var suites = suites || wTests;
+  var suits = suits || wTests;
 
   // debugger;
-  if( _.arrayLike( suites ) )
+  if( _.arrayLike( suits ) )
   {
-    var _suites = Object.create( null );
-    for( var s = 0 ; s < suites.length ; s++ )
+    var _suits = Object.create( null );
+    for( var s = 0 ; s < suits.length ; s++ )
     {
-      var suite = suites[ s ];
-      if( _.strIs( suite ) )
-      _suites[ suite ] = suite;
-      else if( suite instanceof wTestSuite )
-      _suites[ suite.name ] = suite;
+      var suit = suits[ s ];
+      if( _.strIs( suit ) )
+      _suits[ suit ] = suit;
+      else if( suit instanceof wTestSuit )
+      _suits[ suit.name ] = suit;
       else _.assert( 0,'not tested' );
     }
-    suites = _suites;
+    suits = _suits;
   }
 
   _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
-  _.assert( _.objectIs( suites ) );
+  _.assert( _.objectIs( suits ) );
 
   // debugger;
-  var suites = _.entityFilter( suites,function( suite )
+  var suits = _.entityFilter( suits,function( suit )
   {
-    if( _.strIs( suite ) )
+    if( _.strIs( suit ) )
     {
-      if( !wTests[ suite ] )
-      throw _.err( 'Tester : test suite',suite,'not found' );
-      suite = wTests[ suite ];
+      if( !wTests[ suit ] )
+      throw _.err( 'Tester : test suit',suit,'not found' );
+      suit = wTests[ suit ];
     }
     // debugger;
-    if( suite.abstract )
+    if( suit.abstract )
     return;
-    if( suite.enabled !== undefined && !suite.enabled )
+    if( suit.enabled !== undefined && !suit.enabled )
     return;
-    return suite;
+    return suit;
   });
 
   // debugger;
 
-  return suites;
+  return suits;
 }
 
 //
 
-function testsListPrint( suites )
+function testsListPrint( suits )
 {
   var tester = this;
   var logger = tester.logger;
-  var suites = suites || wTests;
+  var suits = suits || wTests;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  logger.log( _.entitySelect( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
+  logger.log( _.entitySelect( _.entityVals( suits ),'*.suitFileLocation' ).join( '\n' ) );
 
-  var l = _.entityLength( suites );
+  var l = _.entityLength( suits );
 
-  logger.log( l, l > 1 ? 'test suites' : 'test suite' );
+  logger.log( l, l > 1 ? 'test suits' : 'test suit' );
 
 }
 
@@ -680,8 +602,8 @@ function _reportForm()
   report.testRoutinePasses = 0;
   report.testRoutineFails = 0;
 
-  report.testSuitePasses = 0;
-  report.testSuiteFailes = 0;
+  report.testSuitPasses = 0;
+  report.testSuitFailes = 0;
 
   Object.preventExtensions( report );
 
@@ -701,7 +623,7 @@ function _reportToStr()
   msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
   msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
-  msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
+  msg += 'Passed test suits ' + ( report.testSuitPasses ) + ' / ' + ( report.testSuitPasses + report.testSuitFailes ) + '';
 
   // tester.logger.log( 'report.testCaseFails',report.testCaseFails );
   return msg;
@@ -829,7 +751,7 @@ function loggerToBook( o )
   _.routineOptions( loggerToBook,o );
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( o.logger instanceof wPrinterToJstructure );
+  _.assert( o.logger instanceof wPrinterToJs );
 
   var data = o.logger.outputData;
   var routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
@@ -947,7 +869,7 @@ function bookExperiment()
 
     // debugger;
     Self.verbosity = 0;
-    //Self.logger = wPrinterToJstructure({ coloring : 0 });
+    //Self.logger = wPrinterToJs({ coloring : 0 });
 
     // _.Tester.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
     _.Tester.test( 'FileProvider.SimpleStructure' )
@@ -979,11 +901,10 @@ var SettingsOfTester =
 
   routine : null,
   fails : null,
-  silencing : 0,
 
 }
 
-var SettingsOfSuite =
+var SettingsOfSuit =
 {
 
   testRoutineTimeOut : null,
@@ -996,12 +917,11 @@ var SettingsOfSuite =
   importanceOfNegative : null,
 
   routine : null,
-
-  // silencing : null,
+  silencing : null,
 
 }
 
-var Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuite );
+var Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuit );
 
 var scenariosHelpMap =
 {
@@ -1009,7 +929,7 @@ var scenariosHelpMap =
   'help' : 'get help',
   'options.list' : 'list available options',
   'scenarios.list' : 'list available scenarios',
-  'suites.list' : 'list available suites',
+  'suits.list' : 'list available suits',
 }
 
 var scenariosActionMap =
@@ -1018,7 +938,7 @@ var scenariosActionMap =
   'help' : 'scenarioHelp',
   'scenarios.list' : 'scenarioScenariosList',
   'options.list' : 'scenarioOptionsList',
-  'suites.list' : 'scenarioSuitesList',
+  'suits.list' : 'scenarioSuitsList',
 }
 
 var Forbids =
@@ -1062,7 +982,7 @@ var Self =
   scenarioHelp : scenarioHelp,
   scenarioScenariosList : scenarioScenariosList,
   scenarioOptionsList : scenarioOptionsList,
-  scenarioSuitesList : scenarioSuitesList,
+  scenarioSuitsList : scenarioSuitsList,
 
 
   // run
@@ -1104,14 +1024,14 @@ var Self =
   // var
 
   SettingsOfTester : SettingsOfTester,
-  SettingsOfSuite : SettingsOfSuite,
+  SettingsOfSuit : SettingsOfSuit,
   Settings : Settings,
 
   settings : Object.create( null ),
 
-  logger : new wLogger({ name : 'LoggerForTesting' }),
+  logger : new _.Logger({ name : 'LoggerForTesting' }),
 
-  activeSuites : [],
+  activeSuits : [],
   report : null,
   includeFails : [],
 
@@ -1150,21 +1070,10 @@ _.accessor
 //
 
 Object.preventExtensions( Self );
-wTools.Tester = Self;
+_.assert( !_globalReal_.wTester );
+_globalReal_.wTester = _.Tester = Self;
 
 if( typeof module !== 'undefined' && module !== null )
-{
-  require( './aTestSuite.debug.s' );
-  module[ 'exports' ] = Self;
-}
-
-var wTestsWas = _global_.wTests;
-_global_.wTests = wTestSuite.instancesMap;
-
-if( wTestsWas )
-wTestSuite.prototype._registerSuites( wTestsWas );
-
-if( typeof module !== 'undefined' && !module.parent && !module.isBrowser )
-_.Tester.exec();
+module[ 'exports' ] = Self;
 
 })();

@@ -377,7 +377,7 @@ function _testSuitBegin()
     logger.begin({ verbosity : -8 });
     logger.log( 'Silencing console' );
     logger.end({ verbosity : -8 });
-    if( !_.Logger.consoleIsBarred( console ) )
+    if( !_.consoleIsBarred( console ) )
     _.Tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
   }
 
@@ -508,7 +508,7 @@ function _testSuitEnd()
 
   /* silencing */
 
-  if( suit.silencing && _.Logger.consoleIsBarred( console ) )
+  if( suit.silencing && _.consoleIsBarred( console ) )
   {
     _.Tester._bar.bar = 0;
     _.Logger.consoleBar( _.Tester._bar );

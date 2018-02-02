@@ -670,6 +670,7 @@ function _shouldDo( o )
         err : err,
         sync : 0,
         considering : 0,
+        outcome : o.expectingAsyncError,
       });
 
       // logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });

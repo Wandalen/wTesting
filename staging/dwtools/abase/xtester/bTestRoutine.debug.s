@@ -1428,8 +1428,6 @@ function exceptionReport( o )
 
   o.stack = o.stack || o.err.stack;
 
-  debugger;
-
   if( trd.onError )
   debugger;
   if( trd.onError )

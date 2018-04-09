@@ -849,7 +849,7 @@ function loggerToBook( o )
 
   var book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
   book.form();
-  book.tree.treeSet({ elements : routines });
+  book.tree.treeApply({ elements : routines });
 
 }
 

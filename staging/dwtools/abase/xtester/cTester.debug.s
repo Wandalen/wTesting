@@ -477,15 +477,12 @@ function _testingEnd()
   var msg = tester._reportToStr();
 
   logger.begin({ verbosity : -2 });
-  // logger.log();
 
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( msg );
   logger.end({ verbosity : -2 });
 
-  // logger._verbosityReport();
   logger.begin({ verbosity : -1 });
-  // logger._verbosityReport();
   var msg = 'Tester .. ' + ( ok ? 'ok' : 'failed' );
   logger.logDown( msg );
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
@@ -495,15 +492,8 @@ function _testingEnd()
 
   logger.verbosityPop();
 
-  // logger._verbosityReport();
-  // console.log( 'tester.logger',tester.logger );
-/*
-  if( tester.settings.silencing && _.Logger.consoleIsBarred( console ) )
-  {
-    tester._bar.bar = 0;
-    _.Logger.consoleBar( tester._bar );
-  }
-*/
+  debugger;
+  if( !ok )
   _.timeOut( 100,function()
   {
     _.appExit();

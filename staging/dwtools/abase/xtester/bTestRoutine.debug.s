@@ -397,7 +397,7 @@ function isNotIdentical( got,expected )
 
   _.assert( iterator.lastPath !== undefined );
 
-  trd._outcomeReportCompare // ( !outcome,got,expected,iterator.lastPath );
+  trd._outcomeReportCompare
   ({
     outcome : !outcome,
     got : got,
@@ -453,7 +453,7 @@ function identical( got,expected )
 
   _.assert( iterator.lastPath !== undefined );
 
-  trd._outcomeReportCompare //( outcome,got,expected,iterator.lastPath );
+  trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
@@ -515,7 +515,7 @@ function equivalent( got,expected,eps )
 
   var outcome = _.entityEquivalent( got,expected,iterator );
 
-  trd._outcomeReportCompare // ( outcome,got,expected,iterator.lastPath );
+  trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
@@ -568,7 +568,7 @@ function contain( got,expected )
 
   var outcome = _.entityContain( got,expected,iterator );
 
-  trd._outcomeReportCompare // ( outcome,got,expected,iterator.lastPath );
+  trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
@@ -1353,8 +1353,8 @@ function _outcomeReportCompare( o )
   function msgExpectedGot()
   {
     return '' +
-    'got :\n' + _.toStr( o.got,{ stringWrapper : '' } ) + '\n' +
-    'expected :\n' + _.toStr( o.expected,{ stringWrapper : '' } ) +
+    'got :\n' + _.toStr( o.got,{ stringWrapper : '\'' } ) + '\n' +
+    'expected :\n' + _.toStr( o.expected,{ stringWrapper : '\'' } ) +
     '';
   }
 

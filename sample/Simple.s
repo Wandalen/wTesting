@@ -1,9 +1,44 @@
+( function _Sample_test_s_( ) {
+
 'use strict';
 
-if( typeof module !== 'undefined' )
-require( 'wTesting' );
+/*
 
-var _ = wTools;
+to run this test
+from the project directory run
+
+npm install
+node ./staging/z.test/Sample.test.s
+
+*/
+
+if( typeof module !== 'undefined' )
+{
+
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
+  {
+    let toolsPath = '../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath );
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath );
+  }
+
+  var _ = _global_.wTools;
+
+  _.include( 'wTesting' );
+
+}
+
+var _ = _global_.wTools;
 
 //
 
@@ -42,32 +77,34 @@ function arrayFromRange( test )
 
   /**/
 
-  if( !Config.debug )
-  return;
-
-  test.description = 'extra argument';
-  test.shouldThrowError( function()
+  if( Config.debug )
   {
-    _.arrayFromRange( [ 1,3 ],'wrong arguments' );
-  });
 
-  test.description = 'argument not wrapped into array';
-  test.shouldThrowError( function()
-  {
-    _.arrayFromRange( 1,3 );
-  });
+    test.description = 'extra argument';
+    test.shouldThrowErrorSync( function()
+    {
+      _.arrayFromRange( [ 1,3 ],'wrong arguments' );
+    });
 
-  test.description = 'wrong type of argument';
-  test.shouldThrowError( function()
-  {
-    _.arrayFromRange( 'wrong arguments' );
-  });
+    test.description = 'argument not wrapped into array';
+    test.shouldThrowErrorSync( function()
+    {
+      _.arrayFromRange( 1,3 );
+    });
 
-  test.description = 'no arguments'
-  test.shouldThrowError( function()
-  {
-    _.arrayFromRange();
-  });
+    test.description = 'wrong type of argument';
+    test.shouldThrowErrorSync( function()
+    {
+      _.arrayFromRange( 'wrong arguments' );
+    });
+
+    test.description = 'no arguments'
+    test.shouldThrowErrorSync( function()
+    {
+      _.arrayFromRange();
+    });
+
+  }
 
 }
 
@@ -76,7 +113,8 @@ function arrayFromRange( test )
 var Self =
 {
 
-  name : 'Simple Sample',
+  name : 'simple1',
+  silencing : 1,
 
   tests :
   {
@@ -87,8 +125,8 @@ var Self =
 
 }
 
-//
-
 Self = wTestSuit( Self );
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self );
+_.Tester.test( Self.name );
+
+} )( );

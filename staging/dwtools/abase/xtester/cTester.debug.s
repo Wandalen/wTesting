@@ -224,6 +224,7 @@ function scenarioHelp()
 function scenarioScenariosList()
 {
   var tester = this;
+  var logger = tester.logger;
 
   // _.assert( tester.settings.scenario === 'scenarios.list' );
 
@@ -244,6 +245,7 @@ function scenarioScenariosList()
 function scenarioOptionsList()
 {
   var tester = this;
+  var logger = tester.logger;
 
   // _.assert( tester.settings.scenario === 'options.list' );
 
@@ -278,6 +280,7 @@ function scenarioOptionsList()
 function scenarioSuitsList()
 {
   var tester = this;
+  var logger = tester.logger;
 
   _.assert( tester.settings.scenario === 'suits.list' );
 

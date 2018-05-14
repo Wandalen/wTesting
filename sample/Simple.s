@@ -77,34 +77,32 @@ function arrayFromRange( test )
 
   /**/
 
-  if( Config.debug )
+  if( !Config.debug )
+  return;
+
+  test.description = 'extra argument';
+  test.shouldThrowErrorSync( function()
   {
+    _.arrayFromRange( [ 1,3 ],'wrong arguments' );
+  });
 
-    test.description = 'extra argument';
-    test.shouldThrowErrorSync( function()
-    {
-      _.arrayFromRange( [ 1,3 ],'wrong arguments' );
-    });
+  test.description = 'argument not wrapped into array';
+  test.shouldThrowErrorSync( function()
+  {
+    _.arrayFromRange( 1,3 );
+  });
 
-    test.description = 'argument not wrapped into array';
-    test.shouldThrowErrorSync( function()
-    {
-      _.arrayFromRange( 1,3 );
-    });
+  test.description = 'wrong type of argument';
+  test.shouldThrowErrorSync( function()
+  {
+    _.arrayFromRange( 'wrong arguments' );
+  });
 
-    test.description = 'wrong type of argument';
-    test.shouldThrowErrorSync( function()
-    {
-      _.arrayFromRange( 'wrong arguments' );
-    });
-
-    test.description = 'no arguments'
-    test.shouldThrowErrorSync( function()
-    {
-      _.arrayFromRange();
-    });
-
-  }
+  test.description = 'no arguments'
+  test.shouldThrowErrorSync( function()
+  {
+    _.arrayFromRange();
+  });
 
 }
 

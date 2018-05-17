@@ -864,8 +864,8 @@ function bookExperiment()
     Self.verbosity = 0;
     //Self.logger = wPrinterToJs({ coloring : 0 });
 
-    // _.Tester.test( 'Logger other test','Consequence','FileProvider.SimpleStructure' )
-    _.Tester.test( 'FileProvider.SimpleStructure' )
+    // _.Tester.test( 'Logger other test','Consequence','FileProvider.Extract' )
+    _.Tester.test( 'FileProvider.Extract' )
     .doThen( function()
     {
       debugger;

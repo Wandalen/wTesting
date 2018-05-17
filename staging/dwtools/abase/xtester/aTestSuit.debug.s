@@ -422,6 +422,7 @@ function _testSuitBegin()
     }
     catch( err )
     {
+      debugger; /* !!! err not handled properly, if silencing : 1 */
       _.errLog( err );
     }
   }

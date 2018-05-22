@@ -2478,6 +2478,8 @@ function timeOut( test )
   return testCon;
 }
 
+timeOut.timeOut = 30000;
+
 // --
 // proto
 // --
@@ -2517,7 +2519,7 @@ var Self =
     asyncExperiment : asyncExperiment,
     failExperiment : failExperiment,
     mustNotThrowErrorExperiment : mustNotThrowErrorExperiment,
-    timeOut : timeOut
+    timeOut : timeOut,
 
   },
 

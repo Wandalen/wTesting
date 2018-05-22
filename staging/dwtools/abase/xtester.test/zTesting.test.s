@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
     let _externalTools = 0;
     try
     {
-      require.resolve( toolsPath )/*fff*/;
+      require.resolve( toolsPath );
     }
     catch( err )
     {
@@ -27,7 +27,7 @@ if( typeof module !== 'undefined' )
       require( 'wTools' );
     }
     if( !_externalTools )
-    require( toolsPath )/*fff*/;
+    require( toolsPath );
   }
 
   if( typeof _globalReal_ === 'undefined' || !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation )
@@ -2486,9 +2486,7 @@ var Self =
 {
 
   name : 'wTesting / general tests',
-  // verbosity : 7,
-  // routine : 'simplest',
-  // debug : 1,
+  verbosity : 9,
   silencing : 1,
 
   tests :

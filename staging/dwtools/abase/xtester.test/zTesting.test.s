@@ -2488,7 +2488,7 @@ var Self =
 {
 
   name : 'wTesting / general tests',
-  verbosity : 9,
+  // verbosity : 9,
   silencing : 1,
 
   tests :

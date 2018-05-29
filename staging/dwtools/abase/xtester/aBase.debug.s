@@ -5,16 +5,10 @@
 /*
 
 + implement test case tracking
-
 + move test routine methods out of test suit
 + implement routine only as option of test suit
-
 + adjust verbosity levels
-
-+ make possible switch off parents test routines
-
-fileStat : null
-
++ make possible switch off parents test routines : fileStat : null
 + make "should/must not error" pass original messages through
   test.description = 'mustNotThrowError must return con with message';
 
@@ -27,8 +21,18 @@ fileStat : null
 
 + improve inheritance
 + global search cant find test suits with inheritance
-
-- implement options.list
++ after the last test case of test routine description should be changed
++ test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
++ test suit should not pass if 0 / 0 test checks
++ track number of thrown errors
++ global / suit / routine basis statistic tracking
++ fails issue
++ implement silencing from test suit
++ no suit/tester sanitare period if errror
++ issue if first test suit has silencing:0 and other silencing:1
++ less static information with verbosity:7, to introduce higher verbosity levels
++ when error not throwen under test.mustNotThrowError have "error was not thrown asynchronously, but expected"
++ implement scenario options.list
 
 - print information about case with color directive avoiding change of color state of logger
 
@@ -38,38 +42,17 @@ fileStat : null
 
 - run test suit only once, even if asked several
 
-+ after the last test case of test routine description should be changed
-
-+ test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
-
-+ test suit should not pass if 0 / 0 test checks
-
-+ track number of thrown errors
-
-+ global / suit / routine basis statistic tracking
-
-+ fails issue
-
-+ implement silencing from test suit
-
-+ no suit/tester sanitare period if errror
-
 - time measurements of testing
 
-- sort-cuts for command line otpions
+- sort-cuts for command line otpions : h,r..
 
 - warning if command line option is strange
 
 - warning if test routine has unknown fields
 
-+ issue if first test suit has silencing:0 and other silencing:1
-
-+ less static information with verbosity:7, to introduce higher verbosity levels
-
 - make onSuitBegin, onSuitEnd asynchronous
 
-+ when error not throwen under test.mustNotThrowError have "error was not thrown asynchronously, but expected"
-
+- tester should has its own copy of environment, even if included from test suit file
 
 */
 

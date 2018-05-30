@@ -50,6 +50,8 @@
 
 - warning if test routine has unknown fields
 
+- warning if no test suit under path found
+
 - make onSuitBegin, onSuitEnd asynchronous
 
 - tester should has its own copy of environment, even if included from test suit file

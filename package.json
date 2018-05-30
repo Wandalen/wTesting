@@ -39,7 +39,8 @@
     "wCopyable": "",
     "winstancing": "",
     "wConsequence": "",
-    "wLogger": ""
+    "wLogger": "",
+    "wFiles": ""
   },
   "optionalDependencies": {
     "wEventHandler": ""

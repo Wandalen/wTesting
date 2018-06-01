@@ -56,6 +56,8 @@
 
 - tester should has its own copy of environment, even if included from test suit file
 
+- checkers ( identical, contain, equivalent ... ) should return boolean
+
 */
 
 var _global = undefined;

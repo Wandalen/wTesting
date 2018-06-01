@@ -619,7 +619,6 @@ function _shouldDo( o )
   {
     _.assert( arguments.length === 2 );
 
-    // debugger;
     logger.end({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
     logger.end({ connotation : positive ? 'positive' : 'negative' });
 

@@ -422,7 +422,7 @@ function _testSuitEnd()
   var suit = this;
   var logger = suit.logger;
 
-  if( _global_.process )
+  if( _global_.process && suit._testSuitEnd_joined )
   _global_.process.removeListener( 'exit', suit._testSuitEnd_joined );
 
   if( suit.onSuitEnd )
@@ -743,7 +743,7 @@ var Composes =
   name : null,
   verbosity : 2,
   importanceOfDetails : 0,
-  importanceOfNegative : 0,
+  importanceOfNegative : 9,
 
   testRoutineTimeOut : 5000,
   concurrent : 0,

@@ -402,25 +402,15 @@ function _testSuitBegin()
     catch( err )
     {
       debugger; /* !!! err not handled properly, if silencing : 1 */
+      suit._exceptionConsider( err );
       _.errLog( err );
       return false;
     }
   }
 
-  // process.on( 'exit', function()
-  // {
-  //   debugger;
-  //   console.log( 'Tester : exiting . . .' );
-  // });
-  //
-  // process.on( 'SIGINT',function()
-  // {
-  //   console.log( 'SIGINT' );
-  //   process.exit();
-  // });
-  //
-  // process.on( 'SIGUSR1', () => console.log( 'SIGUSR1' ) );
-  // process.on( 'SIGUSR2', () => console.log( 'SIGUSR2' ) );
+  suit._testSuitEnd_joined = _.routineJoin( suit,_testSuitEnd );
+  if( _global_.process )
+  _global_.process.on( 'exit', suit._testSuitEnd_joined );
 
   return true;
 }
@@ -431,6 +421,9 @@ function _testSuitEnd()
 {
   var suit = this;
   var logger = suit.logger;
+
+  if( _global_.process )
+  _global_.process.removeListener( 'exit', suit._testSuitEnd_joined );
 
   if( suit.onSuitEnd )
   {
@@ -804,6 +797,7 @@ var Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
+  _testSuitEnd_joined : null,
 }
 
 var Statics =

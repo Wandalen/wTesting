@@ -82,6 +82,8 @@ function _registerExitHandler()
 {
   var tester = this;
 
+  _.appRepairExitHandler();
+
   if( tester._registerExitHandlerDone )
   return;
 
@@ -93,6 +95,7 @@ function _registerExitHandler()
     if( tester.report && tester.report.testSuitFailes && !process.exitCode )
     {
       var logger = tester.logger || _global.logger;
+      debugger;
       logger.log( _.color.strFormat( 'Errors!','negative' ) );
       process.exitCode = -1;
     }
@@ -401,36 +404,12 @@ function _testingBegin( suits )
   if( !tester.appArgs.map )
   tester.appArgs.map = Object.create( null );
 
-/*
-
-  if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
-  if( firstSuit && firstSuit.silencing !== null && firstSuit.silencing !== undefined )
-  {
-    tester.settings.silencing = firstSuit.silencing;
-  }
-
-  // logger.verbosityPush( tester.verbosity );
-  // logger._verbosityReport();
-
-  if( tester.settings.silencing )
-  {
-    logger.begin({ verbosity : -8 });
-    logger.log( 'Barring console' );
-    logger.end({ verbosity : -8 });
-    if( !_.Logger.consoleIsBarred( console ) )
-    tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
-  }
-
-*/
-
   logger.begin({ verbosity : -4 });
   logger.log( 'Tester Settings :' );
   logger.log( tester.settings );
   logger.log( '' );
   logger.end({ verbosity : -4 });
 
-  // logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
-  // logger.verbosityPush( tester.verbosity );
   logger.begin({ verbosity : -3 });
 
   if( suits !== undefined )

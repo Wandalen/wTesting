@@ -1288,7 +1288,7 @@ timeOutError.timeOut = 30000;
 var Self =
 {
 
-  name : 'Time',
+  name : 'Time' + Math.random(),
   silencing : 1,
 
   tests :

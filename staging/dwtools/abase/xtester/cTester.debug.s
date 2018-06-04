@@ -260,7 +260,7 @@ function scenarioOptionsList()
     testRoutineTimeOut : 'Limits the time that each test routine can work. If execution of routine takes too long time then timeOut error will be thrown.',
     concurrent : 'Runs test suit in parallel with other test suits.',
     verbosity : 'Level of details in tester output. Zero for nothing, one for single line report, nine for maximum verbosity.',
-    importanceOfNegative : 'Importance of fails in output.'
+    importanceOfNegative : 'Increase verbosity of test checks which fails.'
   }
 
   var strOptions =

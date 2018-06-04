@@ -58,6 +58,8 @@
 
 - checkers ( identical, contain, equivalent ... ) should return boolean
 
+- fire onSuitEnd if user terminated process earlier
+
 */
 
 var _global = undefined;

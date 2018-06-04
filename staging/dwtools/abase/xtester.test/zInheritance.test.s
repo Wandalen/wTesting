@@ -1,6 +1,6 @@
 ( function _zInheritance_test_s_( ) {
 
-'use strict'; 
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -175,6 +175,7 @@ var Proto =
   name : 'wTesting / Inheritance test',
   // verbosity : 5,
   silencing : 1,
+  enabled : 0, // !!!
 
   tests :
   {

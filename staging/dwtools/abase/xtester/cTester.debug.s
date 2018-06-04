@@ -89,6 +89,7 @@ function _registerExitHandler()
 
   tester._registerExitHandlerDone = 1;
 
+  if( 0 )
   if( _global.process )
   process.on( 'exit', function()
   {
@@ -426,6 +427,8 @@ function _testingBegin( suits )
 
   logger.log();
   logger.end({ verbosity : -3 });
+
+  tester._cancelCon.cancel();
 
   tester._reportForm();
 
@@ -1001,6 +1004,7 @@ var Self =
   settings : Object.create( null ),
 
   logger : new _.Logger({ name : 'LoggerForTesting' }),
+  _cancelCon : new _.Consequence(),
 
   activeSuits : [],
   report : null,

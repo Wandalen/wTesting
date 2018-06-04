@@ -402,15 +402,15 @@ function _testSuitBegin()
     catch( err )
     {
       debugger; /* !!! err not handled properly, if silencing : 1 */
-      suit._exceptionConsider( err );
-      _.errLog( err );
+      suit.exceptionReport({ err : err });
+      // _.errLog( err );
       return false;
     }
   }
 
-  suit._testSuitEnd_joined = _.routineJoin( suit,_testSuitEnd );
+  suit._testSuitTerminated_joined = _.routineJoin( suit,_testSuitTerminated );
   if( _global_.process )
-  _global_.process.on( 'exit', suit._testSuitEnd_joined );
+  _global_.process.on( 'exit', suit._testSuitTerminated_joined );
 
   return true;
 }
@@ -422,8 +422,8 @@ function _testSuitEnd()
   var suit = this;
   var logger = suit.logger;
 
-  if( _global_.process && suit._testSuitEnd_joined )
-  _global_.process.removeListener( 'exit', suit._testSuitEnd_joined );
+  if( _global_.process && suit._testSuitTerminated_joined )
+  _global_.process.removeListener( 'exit', suit._testSuitTerminated_joined );
 
   if( suit.onSuitEnd )
   {
@@ -515,6 +515,20 @@ function _testSuitEnd()
 
 //
 
+function _testSuitTerminated()
+{
+  var suit = this;
+  debugger;
+  // console.log( 'aaa' );
+  // _.Tester._cancelCon.error( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
+  suit.exceptionReport({ err : _.err( 'Terminated by user' ) });
+  // console.log( 'bbb' );
+  suit._testSuitEnd();
+  // console.log( 'ccc' );
+}
+
+//
+
 function onRoutineBegin( t )
 {
 }
@@ -593,7 +607,7 @@ function _testRoutineRun_entry( name,testRoutine )
     result = trd._returnCon = _.Consequence.from( result );
 
     result.andThen( suit._inroutineCon );
-    result = result.eitherThenSplit([ _.timeOutError( timeOut ),trd._cancelCon ]);
+    result = result.eitherThenSplit([ _.timeOutError( timeOut ),_.Tester._cancelCon ]);
 
     result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
     result.doThen( () => trd._testRoutineEnd() );
@@ -668,7 +682,7 @@ function _reportIsPositive()
 }
 
 // --
-// output
+// consider
 // --
 
 function _outcomeConsider( outcome )
@@ -725,6 +739,33 @@ function _testCaseConsider( outcome )
 
   if( suit.takingIntoAccount )
   _.Tester._testCaseConsider( outcome );
+}
+
+//
+
+function exceptionReport( o )
+{
+  var suit = this;
+  var logger = suit.logger || _.Tester.settings.logger || _global_.logger;
+
+  _.routineOptions( exceptionReport,o );
+  _.assert( arguments.length === 1 );
+
+  var err = _.err( o.err );
+
+  if( o.considering )
+  suit._exceptionConsider( err );
+
+  logger.begin({ verbosity : 9 });
+  _.errLog( err );
+  logger.end({ verbosity : 9 });
+
+}
+
+exceptionReport.defaults =
+{
+  err : null,
+  considering : 1,
 }
 
 // --
@@ -797,7 +838,7 @@ var Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
-  _testSuitEnd_joined : null,
+  _testSuitTerminated_joined : null,
 }
 
 var Statics =
@@ -851,6 +892,7 @@ var Proto =
   _testSuitRunAct : _testSuitRunAct,
   _testSuitBegin : _testSuitBegin,
   _testSuitEnd : _testSuitEnd,
+  _testSuitTerminated : _testSuitTerminated,
 
   onSuitBegin : onSuitBegin,
   onSuitEnd : onSuitEnd,
@@ -865,11 +907,12 @@ var Proto =
   _reportIsPositive : _reportIsPositive,
 
 
-  // output
+  // consider
 
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
   _testCaseConsider : _testCaseConsider,
+  exceptionReport : exceptionReport,
 
 
   // relationships

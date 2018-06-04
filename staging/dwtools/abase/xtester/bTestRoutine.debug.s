@@ -31,7 +31,7 @@ function init( o )
   if( o )
   self.copy( o );
 
-  self._cancelCon = new _.Consequence();
+  // self._cancelCon = new _.Consequence();
   self._returnCon = null;
 
   self._reportForm();
@@ -1166,7 +1166,7 @@ function _outcomeReportAct( outcome )
   {
     if( trd._returnCon )
     trd._returnCon.cancel();
-    trd._cancelCon.error( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
+    _.Tester._cancelCon.error( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
   }
 
   _.assert( arguments.length === 1 );
@@ -1200,7 +1200,6 @@ function _outcomeReport( o )
       });
       if( _code )
       code = '\n' + _code;
-      // code = '\n' + _location.full + '\n' + _code;
       else
       code = '\n' + _location.full;
     }
@@ -1591,7 +1590,7 @@ var Restricts =
   _checkIndex : 1,
   _testRoutineDescriptorIs : 1,
 
-  _cancelCon : null,
+  // _cancelCon : null,
   _returnCon : null,
 
   report : null,

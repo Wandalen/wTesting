@@ -213,18 +213,6 @@ function _testSuitSettingsAdjust()
 
   }
 
-  // if( _.Tester.settings.concurrent !== null && !suit.ignoringTesterOptions )
-  // suit.concurrent = _.Tester.settings.concurrent;
-  //
-  // if( _.Tester.settings.importanceOfNegative !== null && !suit.ignoringTesterOptions )
-  // suit.importanceOfNegative = _.Tester.settings.importanceOfNegative;
-  //
-  // if( _.Tester.settings.importanceOfDetails !== null && !suit.ignoringTesterOptions )
-  // suit.importanceOfDetails = _.Tester.settings.importanceOfDetails;
-  //
-  // if( _.Tester.settings.routine !== null && !suit.ignoringTesterOptions )
-  // suit.routine = _.Tester.settings.routine;
-
   /* */
 
   if( suit.override )
@@ -317,7 +305,7 @@ function _testSuitRunAct()
     if( err )
     {
       debugger;
-      logger.log( _.err( 'Something very wrong, cant even launch the test suit\n',err ) );
+      logger.log( _.err( 'Something is wrong, cant even launch the test suit\n',err ) );
       suit._outcomeConsider( 0 );
     }
 
@@ -362,15 +350,6 @@ function _testSuitBegin()
   suit._reportForm();
 
   /* silencing */
-
-  // if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
-  // if( firstSuit && firstSuit.silencing !== null && firstSuit.silencing !== undefined )
-  // {
-  //   tester.settings.silencing = firstSuit.silencing;
-  // }
-
-  // logger.verbosityPush( tester.verbosity );
-  // logger._verbosityReport();
 
   if( suit.silencing )
   {
@@ -424,8 +403,17 @@ function _testSuitBegin()
     {
       debugger; /* !!! err not handled properly, if silencing : 1 */
       _.errLog( err );
+      return false;
     }
   }
+
+  process.on( 'exit', function()
+  {
+    debugger;
+    console.log( 'Tester : exiting . . .' );
+  });
+
+  return true;
 }
 
 //

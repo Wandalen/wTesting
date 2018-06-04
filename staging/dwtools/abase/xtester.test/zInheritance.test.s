@@ -175,7 +175,6 @@ var Proto =
   name : 'wTesting / Inheritance test',
   // verbosity : 5,
   silencing : 1,
-  enabled : 0, // !!!
 
   tests :
   {

@@ -300,16 +300,6 @@ function _testAllAct()
 
   _.assert( arguments.length === 0 );
 
-  // var suits = _.entityFilter( wTests,function( suit )
-  // {
-  //   if( suit.abstract )
-  //   return;
-  //   if( suit.enabled !== undefined && !suit.enabled )
-  //   return;
-  //   return suit;
-  // });
-  // debugger;
-
   var suits = tester.testsFilterOut( wTests );
 
   tester._testingBegin( suits );
@@ -352,6 +342,9 @@ function _testAct()
     _.assert( suit instanceof wTestSuit,'Test suit',_suit,'was not found' );
     _.assert( _.strIsNotEmpty( suit.name ),'Test suit should has ( name )"' );
     _.assert( _.objectIs( suit.tests ),'Test suit should has map with test routines ( tests ), but "' + suit.name + '" does not have such map' );
+
+    if( !suit.enabled )
+    continue;
 
     suit._testSuitRunLater();
   }
@@ -510,12 +503,8 @@ function testsFilterOut( suits )
 {
   var tester = this;
   var logger = tester.logger;
-
-  // console.log( suits );
-
   var suits = suits || wTests;
 
-  // debugger;
   if( _.arrayLike( suits ) )
   {
     var _suits = Object.create( null );
@@ -534,7 +523,6 @@ function testsFilterOut( suits )
   _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
   _.assert( _.objectIs( suits ) );
 
-  // debugger;
   var suits = _.entityFilter( suits,function( suit )
   {
     if( _.strIs( suit ) )
@@ -543,15 +531,12 @@ function testsFilterOut( suits )
       throw _.err( 'Tester : test suit',suit,'not found' );
       suit = wTests[ suit ];
     }
-    // debugger;
     if( suit.abstract )
     return;
-    if( suit.enabled !== undefined && !suit.enabled )
-    return;
+    // if( suit.enabled !== undefined && !suit.enabled )
+    // return;
     return suit;
   });
-
-  // debugger;
 
   return suits;
 }
@@ -566,7 +551,19 @@ function testsListPrint( suits )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  logger.log( _.entitySelect( _.entityVals( suits ),'*.suitFileLocation' ).join( '\n' ) );
+  _.each( suits,function( suit,k )
+  {
+    if( suit.enabled )
+    logger.log( suit.suitFileLocation, '-', ( suit.enabled ? 'enabled' : 'disabled' ) );
+  });
+
+  _.each( suits,function( suit,k )
+  {
+    if( !suit.enabled )
+    logger.log( suit.suitFileLocation, '-', ( suit.enabled ? 'enabled' : 'disabled' ) );
+  });
+
+  // logger.log( _.entitySelect( _.entityVals( suits ),'*.suitFileLocation' ).join( '\n' ) );
 
   var l = _.entityLength( suits );
 

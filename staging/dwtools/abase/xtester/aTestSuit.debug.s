@@ -407,11 +407,20 @@ function _testSuitBegin()
     }
   }
 
-  process.on( 'exit', function()
-  {
-    debugger;
-    console.log( 'Tester : exiting . . .' );
-  });
+  // process.on( 'exit', function()
+  // {
+  //   debugger;
+  //   console.log( 'Tester : exiting . . .' );
+  // });
+  //
+  // process.on( 'SIGINT',function()
+  // {
+  //   console.log( 'SIGINT' );
+  //   process.exit();
+  // });
+  //
+  // process.on( 'SIGUSR1', () => console.log( 'SIGUSR1' ) );
+  // process.on( 'SIGUSR2', () => console.log( 'SIGUSR2' ) );
 
   return true;
 }

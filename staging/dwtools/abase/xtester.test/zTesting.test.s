@@ -2204,7 +2204,7 @@ var Self =
 
   name : 'wTesting / general tests',
   silencing : 1,
-  // enabled : 0, // !!!
+  enabled : 0, // !!!
   // verbosity : 3,
   // routine : 'timeOut',
 

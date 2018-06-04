@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "wTools": "",
+    "wexectools": "",
     "wProto": "",
     "wCopyable": "",
     "winstancing": "",

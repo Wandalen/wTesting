@@ -111,6 +111,8 @@ function _testRoutineEnd()
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suit.currentRoutine === trd );
 
+  _.assert( suit.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Console is missing in logger`s outputs, probably logger was modified in test routine:', _.strQuote( trd.routine.name ) );
+
   try
   {
     suit.onRoutineEnd.call( trd.context,trd,ok );

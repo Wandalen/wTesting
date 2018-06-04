@@ -488,6 +488,8 @@ function _testingEnd()
 
   logger.verbosityPop();
 
+  _.assert( logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have console in outputs.' );
+
   debugger;
   if( !ok )
   _.timeOut( 100,function()

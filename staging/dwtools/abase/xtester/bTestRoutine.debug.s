@@ -111,7 +111,27 @@ function _testRoutineEnd()
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suit.currentRoutine === trd );
 
-  _.assert( suit.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Console is missing in logger`s outputs, probably logger was modified in test routine:', _.strQuote( trd.routine.name ) );
+  var suitHasConsoleInOutputs = suit.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
+
+  if( !suitHasConsoleInOutputs )
+  {
+    var bar = _.Tester._bar.bar;
+
+    _.Tester._bar.bar = 0;
+    suit.logger.consoleBar( _.Tester._bar );
+
+    if( bar )
+    {
+      _.Tester._bar.bar = bar;
+      suit.logger.consoleBar( _.Tester._bar );
+    }
+
+    var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified in, suit:', _.strQuote( suit.name ),'test routine:', _.strQuote( trd.routine.name ) );
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+  }
 
   try
   {

@@ -103,6 +103,7 @@ if( typeof module !== 'undefined' )
 
   var _ = _global_.wTools;
 
+  _.include( 'wExecTools' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
   _.includeAny( 'wEventHandler','' );
@@ -110,9 +111,9 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wLogger' );
 
-  _.assert( !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation,'wTester is already included' );
-
   // _.includeAny( 'wScriptLauncher' );
+
+  _.assert( !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation,'wTester is already included' );
 
   require( './aTestSuit.debug.s' );
   require( './bTestRoutine.debug.s' );

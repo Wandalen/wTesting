@@ -82,17 +82,21 @@ function _registerExitHandler()
 {
   var tester = this;
 
+  _.appRepairExitHandler();
+
   if( tester._registerExitHandlerDone )
   return;
 
   tester._registerExitHandlerDone = 1;
 
+  if( 0 )
   if( _global.process )
   process.on( 'exit', function()
   {
     if( tester.report && tester.report.testSuitFailes && !process.exitCode )
     {
       var logger = tester.logger || _global.logger;
+      debugger;
       logger.log( _.color.strFormat( 'Errors!','negative' ) );
       process.exitCode = -1;
     }
@@ -143,7 +147,7 @@ function _includeTestsFrom( path )
     {
       debugger;
       err = _.errAttend( 'Cant include',absolutePath + '\n',err );
-      tester.includeFails.push( err );
+      tester.report.includeFails.push( err );
 
       logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
       if( logger.verbosity > 3 )
@@ -300,16 +304,6 @@ function _testAllAct()
 
   _.assert( arguments.length === 0 );
 
-  // var suits = _.entityFilter( wTests,function( suit )
-  // {
-  //   if( suit.abstract )
-  //   return;
-  //   if( suit.enabled !== undefined && !suit.enabled )
-  //   return;
-  //   return suit;
-  // });
-  // debugger;
-
   var suits = tester.testsFilterOut( wTests );
 
   tester._testingBegin( suits );
@@ -352,6 +346,9 @@ function _testAct()
     _.assert( suit instanceof wTestSuit,'Test suit',_suit,'was not found' );
     _.assert( _.strIsNotEmpty( suit.name ),'Test suit should has ( name )"' );
     _.assert( _.objectIs( suit.tests ),'Test suit should has map with test routines ( tests ), but "' + suit.name + '" does not have such map' );
+
+    if( !suit.enabled )
+    continue;
 
     suit._testSuitRunLater();
   }
@@ -408,36 +405,12 @@ function _testingBegin( suits )
   if( !tester.appArgs.map )
   tester.appArgs.map = Object.create( null );
 
-/*
-
-  if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
-  if( firstSuit && firstSuit.silencing !== null && firstSuit.silencing !== undefined )
-  {
-    tester.settings.silencing = firstSuit.silencing;
-  }
-
-  // logger.verbosityPush( tester.verbosity );
-  // logger._verbosityReport();
-
-  if( tester.settings.silencing )
-  {
-    logger.begin({ verbosity : -8 });
-    logger.log( 'Barring console' );
-    logger.end({ verbosity : -8 });
-    if( !_.Logger.consoleIsBarred( console ) )
-    tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
-  }
-
-*/
-
   logger.begin({ verbosity : -4 });
   logger.log( 'Tester Settings :' );
   logger.log( tester.settings );
   logger.log( '' );
   logger.end({ verbosity : -4 });
 
-  // logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
-  // logger.verbosityPush( tester.verbosity );
   logger.begin({ verbosity : -3 });
 
   if( suits !== undefined )
@@ -454,6 +427,8 @@ function _testingBegin( suits )
 
   logger.log();
   logger.end({ verbosity : -3 });
+
+  tester._cancelCon.cancel();
 
   tester._reportForm();
 
@@ -512,12 +487,8 @@ function testsFilterOut( suits )
 {
   var tester = this;
   var logger = tester.logger;
-
-  // console.log( suits );
-
   var suits = suits || wTests;
 
-  // debugger;
   if( _.arrayLike( suits ) )
   {
     var _suits = Object.create( null );
@@ -536,7 +507,6 @@ function testsFilterOut( suits )
   _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
   _.assert( _.objectIs( suits ) );
 
-  // debugger;
   var suits = _.entityFilter( suits,function( suit )
   {
     if( _.strIs( suit ) )
@@ -545,15 +515,12 @@ function testsFilterOut( suits )
       throw _.err( 'Tester : test suit',suit,'not found' );
       suit = wTests[ suit ];
     }
-    // debugger;
     if( suit.abstract )
     return;
-    if( suit.enabled !== undefined && !suit.enabled )
-    return;
+    // if( suit.enabled !== undefined && !suit.enabled )
+    // return;
     return suit;
   });
-
-  // debugger;
 
   return suits;
 }
@@ -568,7 +535,19 @@ function testsListPrint( suits )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  logger.log( _.entitySelect( _.entityVals( suits ),'*.suitFileLocation' ).join( '\n' ) );
+  _.each( suits,function( suit,k )
+  {
+    if( suit.enabled )
+    logger.log( suit.suitFileLocation, '-', ( suit.enabled ? 'enabled' : 'disabled' ) );
+  });
+
+  _.each( suits,function( suit,k )
+  {
+    if( !suit.enabled )
+    logger.log( suit.suitFileLocation, '-', ( suit.enabled ? 'enabled' : 'disabled' ) );
+  });
+
+  // logger.log( _.entitySelect( _.entityVals( suits ),'*.suitFileLocation' ).join( '\n' ) );
 
   var l = _.entityLength( suits );
 
@@ -586,6 +565,7 @@ function _reportForm()
   var report = tester.report = Object.create( null );
 
   report.errorsArray = [];
+  report.includeFails = [];
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -629,17 +609,21 @@ function _reportToStr()
 function _reportIsPositive()
 {
   var tester = this;
+  var report = tester.report;
 
-  if( tester.report.testCheckFails !== 0 )
+  if( report.testCheckFails !== 0 )
   return false;
 
-  if( !( tester.report.testCheckPasses > 0 ) )
+  if( !( report.testCheckPasses > 0 ) )
   return false;
 
-  if( tester.report.testCaseFails !== 0 )
+  if( report.testCaseFails !== 0 )
   return false;
 
-  if( tester.report.errorsArray.length )
+  if( report.errorsArray.length )
+  return false;
+
+  if( report.includeFails.length )
   return false;
 
   return true;
@@ -675,6 +659,14 @@ function _canContinue()
   return false;
 
   return true;
+}
+
+//
+
+function cancel( err )
+{
+  var tester = this;
+  tester._cancelCon.error( _.err( err ) );
 }
 
 //
@@ -1004,6 +996,7 @@ var Self =
 
   _verbositySet : _verbositySet,
   _canContinue : _canContinue,
+  cancel : cancel,
 
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
@@ -1025,10 +1018,10 @@ var Self =
   settings : Object.create( null ),
 
   logger : new _.Logger({ name : 'LoggerForTesting' }),
+  _cancelCon : new _.Consequence(),
 
   activeSuits : [],
   report : null,
-  includeFails : [],
 
   scenariosHelpMap : scenariosHelpMap,
   scenariosActionMap : scenariosActionMap,

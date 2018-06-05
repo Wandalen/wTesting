@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-if( typeof module !== 'undefined' ) /*bbb*/
+if( typeof module !== 'undefined' ) 
 {
 
   _SeparatingTester_ = 1;

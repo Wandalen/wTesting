@@ -213,18 +213,6 @@ function _testSuitSettingsAdjust()
 
   }
 
-  // if( _.Tester.settings.concurrent !== null && !suit.ignoringTesterOptions )
-  // suit.concurrent = _.Tester.settings.concurrent;
-  //
-  // if( _.Tester.settings.importanceOfNegative !== null && !suit.ignoringTesterOptions )
-  // suit.importanceOfNegative = _.Tester.settings.importanceOfNegative;
-  //
-  // if( _.Tester.settings.importanceOfDetails !== null && !suit.ignoringTesterOptions )
-  // suit.importanceOfDetails = _.Tester.settings.importanceOfDetails;
-  //
-  // if( _.Tester.settings.routine !== null && !suit.ignoringTesterOptions )
-  // suit.routine = _.Tester.settings.routine;
-
   /* */
 
   if( suit.override )
@@ -317,7 +305,7 @@ function _testSuitRunAct()
     if( err )
     {
       debugger;
-      logger.log( _.err( 'Something very wrong, cant even launch the test suit\n',err ) );
+      logger.log( _.err( 'Something is wrong, cant even launch the test suit\n',err ) );
       suit._outcomeConsider( 0 );
     }
 
@@ -362,15 +350,6 @@ function _testSuitBegin()
   suit._reportForm();
 
   /* silencing */
-
-  // if( !tester.appArgs || tester.appArgs.map.silencing === undefined )
-  // if( firstSuit && firstSuit.silencing !== null && firstSuit.silencing !== undefined )
-  // {
-  //   tester.settings.silencing = firstSuit.silencing;
-  // }
-
-  // logger.verbosityPush( tester.verbosity );
-  // logger._verbosityReport();
 
   if( suit.silencing )
   {
@@ -423,9 +402,17 @@ function _testSuitBegin()
     catch( err )
     {
       debugger; /* !!! err not handled properly, if silencing : 1 */
-      _.errLog( err );
+      suit.exceptionReport({ err : err });
+      // _.errLog( err );
+      return false;
     }
   }
+
+  suit._testSuitTerminated_joined = _.routineJoin( suit,_testSuitTerminated );
+  if( _global_.process )
+  _global_.process.on( 'exit', suit._testSuitTerminated_joined );
+
+  return true;
 }
 
 //
@@ -434,6 +421,9 @@ function _testSuitEnd()
 {
   var suit = this;
   var logger = suit.logger;
+
+  if( _global_.process && suit._testSuitTerminated_joined )
+  _global_.process.removeListener( 'exit', suit._testSuitTerminated_joined );
 
   if( suit.onSuitEnd )
   {
@@ -525,6 +515,16 @@ function _testSuitEnd()
 
 //
 
+function _testSuitTerminated()
+{
+  var suit = this;
+  suit.exceptionReport({ err : _.err( 'Terminated by user' ) });
+  _.Tester.cancel( 'Terminated by user' );
+  suit._testSuitEnd();
+}
+
+//
+
 function onRoutineBegin( t )
 {
 }
@@ -603,7 +603,7 @@ function _testRoutineRun_entry( name,testRoutine )
     result = trd._returnCon = _.Consequence.from( result );
 
     result.andThen( suit._inroutineCon );
-    result = result.eitherThenSplit([ _.timeOutError( timeOut ),trd._cancelCon ]);
+    result = result.eitherThenSplit([ _.timeOutError( timeOut ),_.Tester._cancelCon ]);
 
     result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
     result.doThen( () => trd._testRoutineEnd() );
@@ -678,7 +678,7 @@ function _reportIsPositive()
 }
 
 // --
-// output
+// consider
 // --
 
 function _outcomeConsider( outcome )
@@ -737,6 +737,33 @@ function _testCaseConsider( outcome )
   _.Tester._testCaseConsider( outcome );
 }
 
+//
+
+function exceptionReport( o )
+{
+  var suit = this;
+  var logger = suit.logger || _.Tester.settings.logger || _global_.logger;
+
+  _.routineOptions( exceptionReport,o );
+  _.assert( arguments.length === 1 );
+
+  var err = _.err( o.err );
+
+  if( o.considering )
+  suit._exceptionConsider( err );
+
+  logger.begin({ verbosity : 9 });
+  _.errLog( err );
+  logger.end({ verbosity : 9 });
+
+}
+
+exceptionReport.defaults =
+{
+  err : null,
+  considering : 1,
+}
+
 // --
 // var
 // --
@@ -753,7 +780,7 @@ var Composes =
   name : null,
   verbosity : 2,
   importanceOfDetails : 0,
-  importanceOfNegative : 0,
+  importanceOfNegative : 9,
 
   testRoutineTimeOut : 5000,
   concurrent : 0,
@@ -807,6 +834,7 @@ var Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
+  _testSuitTerminated_joined : null,
 }
 
 var Statics =
@@ -860,6 +888,7 @@ var Proto =
   _testSuitRunAct : _testSuitRunAct,
   _testSuitBegin : _testSuitBegin,
   _testSuitEnd : _testSuitEnd,
+  _testSuitTerminated : _testSuitTerminated,
 
   onSuitBegin : onSuitBegin,
   onSuitEnd : onSuitEnd,
@@ -874,11 +903,12 @@ var Proto =
   _reportIsPositive : _reportIsPositive,
 
 
-  // output
+  // consider
 
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
   _testCaseConsider : _testCaseConsider,
+  exceptionReport : exceptionReport,
 
 
   // relationships

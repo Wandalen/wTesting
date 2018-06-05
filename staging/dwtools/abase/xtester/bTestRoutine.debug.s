@@ -1166,7 +1166,7 @@ function _outcomeReportAct( outcome )
   {
     if( trd._returnCon )
     trd._returnCon.cancel();
-    _.Tester._cancelCon.error( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
+    _.Tester.cancel( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
   }
 
   _.assert( arguments.length === 1 );
@@ -1212,7 +1212,7 @@ function _outcomeReport( o )
 
   /* */
 
-  logger.begin({ verbosity : -4 });
+  logger.begin({ verbosity : o.verbosity });
 
   if( o.considering )
   {
@@ -1225,11 +1225,11 @@ function _outcomeReport( o )
 
   if( o.outcome )
   {
-    logger.begin({ verbosity : -4 });
+    logger.begin({ verbosity : o.verbosity });
     logger.up();
     logger.begin({ 'connotation' : 'positive' });
 
-    logger.begin({ verbosity : -5 });
+    logger.begin({ verbosity : o.verbosity-1 });
 
     if( o.details )
     logger.begin( 'details' ).log( o.details ).end( 'details' );
@@ -1238,7 +1238,7 @@ function _outcomeReport( o )
     if( sourceCode )
     logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
 
-    logger.end({ verbosity : -5 });
+    logger.end({ verbosity : o.verbosity-1 });
 
     logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
 
@@ -1246,21 +1246,21 @@ function _outcomeReport( o )
     if( logger.verbosityReserve() > 1 )
     logger.log();
 
-    logger.end({ verbosity : -4 });
+    logger.end({ verbosity : o.verbosity });
   }
   else
   {
 
     sourceCode = sourceCodeGet();
 
-    logger.begin({ verbosity : -4+trd.importanceOfNegative });
+    logger.begin({ verbosity : o.verbosity+trd.importanceOfNegative });
 
     logger.up();
     if( logger.verbosityReserve() > 1 )
     logger.log();
     logger.begin({ 'connotation' : 'negative' });
 
-    logger.begin({ verbosity : -5+trd.importanceOfNegative });
+    logger.begin({ verbosity : o.verbosity-1+trd.importanceOfNegative });
 
     if( o.details )
     logger.begin( 'details' ).log( o.details ).end( 'details' );
@@ -1268,7 +1268,7 @@ function _outcomeReport( o )
     if( sourceCode )
     logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
 
-    logger.end({ verbosity : -5+trd.importanceOfNegative });
+    logger.end({ verbosity : o.verbosity-1+trd.importanceOfNegative });
 
     logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
 
@@ -1276,13 +1276,13 @@ function _outcomeReport( o )
     if( logger.verbosityReserve() > 1 )
     logger.log();
 
-    logger.end({ verbosity : -4+trd.importanceOfNegative });
+    logger.end({ verbosity : o.verbosity+trd.importanceOfNegative });
 
   }
 
   if( o.considering )
   logger.end( 'check','checkIndex' );
-  logger.end({ verbosity : -4 });
+  logger.end({ verbosity : o.verbosity });
 
 }
 
@@ -1294,6 +1294,7 @@ _outcomeReport.defaults =
   stack : null,
   usingSourceCode : 1,
   considering : 1,
+  verbosity : -4,
 }
 
 //

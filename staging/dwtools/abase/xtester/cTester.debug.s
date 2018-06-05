@@ -147,7 +147,7 @@ function _includeTestsFrom( path )
     {
       debugger;
       err = _.errAttend( 'Cant include',absolutePath + '\n',err );
-      tester.includeFails.push( err );
+      tester.report.includeFails.push( err );
 
       logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
       if( logger.verbosity > 3 )
@@ -565,6 +565,7 @@ function _reportForm()
   var report = tester.report = Object.create( null );
 
   report.errorsArray = [];
+  report.includeFails = [];
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -608,17 +609,21 @@ function _reportToStr()
 function _reportIsPositive()
 {
   var tester = this;
+  var report = tester.report;
 
-  if( tester.report.testCheckFails !== 0 )
+  if( report.testCheckFails !== 0 )
   return false;
 
-  if( !( tester.report.testCheckPasses > 0 ) )
+  if( !( report.testCheckPasses > 0 ) )
   return false;
 
-  if( tester.report.testCaseFails !== 0 )
+  if( report.testCaseFails !== 0 )
   return false;
 
-  if( tester.report.errorsArray.length )
+  if( report.errorsArray.length )
+  return false;
+
+  if( report.includeFails.length )
   return false;
 
   return true;
@@ -654,6 +659,14 @@ function _canContinue()
   return false;
 
   return true;
+}
+
+//
+
+function cancel( err )
+{
+  var tester = this;
+  tester._cancelCon.error( _.err( err ) );
 }
 
 //
@@ -983,6 +996,7 @@ var Self =
 
   _verbositySet : _verbositySet,
   _canContinue : _canContinue,
+  cancel : cancel,
 
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
@@ -1008,7 +1022,6 @@ var Self =
 
   activeSuits : [],
   report : null,
-  includeFails : [],
 
   scenariosHelpMap : scenariosHelpMap,
   scenariosActionMap : scenariosActionMap,

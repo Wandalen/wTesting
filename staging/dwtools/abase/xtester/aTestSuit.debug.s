@@ -518,13 +518,9 @@ function _testSuitEnd()
 function _testSuitTerminated()
 {
   var suit = this;
-  debugger;
-  // console.log( 'aaa' );
-  // _.Tester._cancelCon.error( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
   suit.exceptionReport({ err : _.err( 'Terminated by user' ) });
-  // console.log( 'bbb' );
+  _.Tester.cancel( 'Terminated by user' );
   suit._testSuitEnd();
-  // console.log( 'ccc' );
 }
 
 //

@@ -324,6 +324,7 @@ function _testSuitRunAct()
     onEachRoutine : handleStage,
     onBegin : _.routineJoin( suit,suit._testSuitBegin ),
     onEnd : handleEnd,
+    delay : 10, 
   });
 
 }

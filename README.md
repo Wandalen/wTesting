@@ -1,15 +1,11 @@
 
 # wTesting [![Build Status](https://travis-ci.org/Wandalen/wTesting.svg?branch=master)](https://travis-ci.org/Wandalen/wTesting)
 
-Tool for unit testing in Java Script. Package provides intuitive interface, simple tests structure, async code handling using [wConsequnce](https://github.com/Wandalen/wConsequence), colorful report output with multiple levels of details, running all suites from directory, supports running in browser and much more.
+Tool for unit testing in Java Script. Package provides intuitive interface, simple tests structure, async code handling using [wConsequnce](https://github.com/Wandalen/wConsequence), colorful report output with multiple levels of details, running all suits from directory, supports running in browser and much more.
 
 ### Installation
 
-For local use:
-
-```npm install wTesting```
-
-For global use through name `wtest` :
+To install :
 
 ```npm install -g wTesting```
 
@@ -17,7 +13,7 @@ For global use through name `wtest` :
 
 #### Description
 
-Test suite is a set of test routines in one file, each test routine is a set of test features( cases ).
+Test suit is a set of test routines in one file, each test routine is a set of test features( cases ).
 Test feature is a combination of code execution and validation of obtained results, that is aimed to check some aspect of the program.
 
 For convenience, each test feature may have own description, it can be provided through `description` field.
@@ -42,17 +38,17 @@ List of mostly used assertions:
 
 #### How to run
 
-Locally expects path to file that contains test suite:
+Locally expects path to file that contains test suit:
 
-```node path/to/suite```
+```node path/to/suit```
 
-Globally expects path to folder that contains many test suites( files ), but also can work with single suite:
+Globally expects path to folder that contains many test suits( files ), but also can work with single suit:
 
-```wtest path/to/folder/with/suites```
+```wtest path/to/folder/with/suits```
 
 With options:
 
-```node path/to/suite verbosity : 5 routine : myTest```
+```node path/to/suit verbosity : 5 routine : myTest```
 
 ### Example
 
@@ -71,93 +67,25 @@ function myTest( test )
 }
 
 /*
-Map that describes test suite, contains
-- name of the suite,
+Map that describes test suit, contains
+- name of the suit,
 - map of test routines
 - and other options
 */
 
 var testSuite =
 {
-  name : 'name of my test suite',
+  name : 'name of my test suit',
   tests :
   {
       myTest : myTest
   }
 }
 
-/* Initilize test suite */
+/* Initilize test suit */
 testSuite = wTestSuit( testSuite );
 
-/* Run all tests of the suite */
+/* Run all tests of the suit */
 wTools.Testing.test( testSuite );
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

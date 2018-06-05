@@ -127,7 +127,7 @@ function _testRoutineEnd()
     }
 
     var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified in, suit:', _.strQuote( suit.name ),'test routine:', _.strQuote( trd.routine.name ) );
-    trd.exceptionReport
+    suit.exceptionReport
     ({
       err : err,
     });

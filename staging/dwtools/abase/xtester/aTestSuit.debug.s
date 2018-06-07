@@ -2,7 +2,7 @@
 
 'use strict';
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 
 //
 
@@ -324,7 +324,7 @@ function _testSuitRunAct()
     onEachRoutine : handleStage,
     onBegin : _.routineJoin( suit,suit._testSuitBegin ),
     onEnd : handleEnd,
-    delay : 10, 
+    delay : 10,
   });
 
 }
@@ -402,9 +402,8 @@ function _testSuitBegin()
     }
     catch( err )
     {
-      debugger; /* !!! err not handled properly, if silencing : 1 */
+      debugger;
       suit.exceptionReport({ err : err });
-      // _.errLog( err );
       return false;
     }
   }
@@ -665,6 +664,9 @@ function _reportToStr()
 function _reportIsPositive()
 {
   var testing = this;
+
+  if( _.appExitCode() !== undefined && _.appExitCode() !== 0 )
+  return false;
 
   if( testing.report.testCheckFails !== 0 )
   return false;

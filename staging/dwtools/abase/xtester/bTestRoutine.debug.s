@@ -4,7 +4,7 @@
 
 //
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = null;
 var Self = function wTestRoutineDescriptor( o )
 {
@@ -31,16 +31,13 @@ function init( o )
   if( o )
   self.copy( o );
 
-  // self._cancelCon = new _.Consequence();
   self._returnCon = null;
 
   self._reportForm();
 
   _.assert( _.routineIs( self.routine ) );
   _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suit',self.suit.name,'does not have name' );
-  // _.assert( self.routine.name === self.name,'routine should have same name, but',self.routine.name, '!=', self.name );
   _.assert( Object.isPrototypeOf.call( _.TestSuit.prototype,self.suit ) );
-  // _.assert( Object.isPrototypeOf.call( wTestSuit.prototype,self ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
   _.assert( arguments.length === 1 );
 
@@ -254,7 +251,6 @@ function testCaseNext()
   var report = trd.report;
 
   trd._testCaseConsider( !report.testCheckFailsOfTestCase );
-  // trd._testCaseConsider( report.testCheckPassesOfTestCase && !report.testCheckFailsOfTestCase );
 
 }
 
@@ -669,7 +665,6 @@ function _shouldDo( o )
 
     if( o.ignoringError )
     {
-      // debugger;
       begin( 1 );
 
       trd._outcomeReportBoolean
@@ -685,7 +680,6 @@ function _shouldDo( o )
     {
       begin( o.expectingAsyncError );
 
-      debugger;
       trd.exceptionReport
       ({
         err : err,
@@ -693,13 +687,6 @@ function _shouldDo( o )
         considering : 0,
         outcome : o.expectingAsyncError,
       });
-
-      // logger.begin({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });
-      // logger.begin({ 'connotation' : 'negative' });
-      // if( !_.errIsAttended( err ) )
-      // logger.log( _.errAttend( err ) );
-      // logger.end({ 'connotation' : 'negative' });
-      // logger.end({ verbosity : -6+( o.expectingAsyncError ? 0 : trd.importanceOfNegative ) });
 
       if( o.expectingAsyncError )
       trd._outcomeReportBoolean
@@ -802,13 +789,6 @@ function _shouldDo( o )
       outcome : o.expectingSyncError,
     });
 
-    // logger.begin({ verbosity : -6+( o.expectingSyncError ? 0 : trd.importanceOfNegative ) });
-    // logger.begin({ 'connotation' : 'negative' });
-    // if( !_.errIsAttended( err ) )
-    // logger.log( _.errAttend( err ) );
-    // logger.end({ 'connotation' : 'negative' });
-    // logger.end({ verbosity : -6+( o.expectingSyncError ? 0 : trd.importanceOfNegative ) });
-
     if( !o.ignoringError )
     {
 
@@ -841,8 +821,6 @@ function _shouldDo( o )
 
       return con;
     }
-
-    // end( o.expectingSyncError,err );
 
   }
 

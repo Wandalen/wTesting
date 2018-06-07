@@ -39,7 +39,6 @@
 - implement support of glob path
 
 - manual launch of test suit + global tests execution should not give extra test suit runs
-
 - run test suit only once, even if asked several
 
 - time measurements of testing
@@ -58,7 +57,7 @@
 
 - checkers ( identical, contain, equivalent ... ) should return boolean
 
-- fire onSuitEnd if user terminated process earlier
++ fire onSuitEnd if user terminated process earlier
 
 */
 
@@ -68,7 +67,7 @@ if( !_global && typeof global !== 'undefined' && global.global === global ) _glo
 if( !_global && typeof window !== 'undefined' && window.window === window ) _global = window;
 if( !_global && typeof self   !== 'undefined' && self.self === self ) _global = self;
 var _globalReal = _global;
-var _globalWas = _global._global_;
+var _globalWas = _global._global_ || _global;
 if( _global._global_ )
 _global = _global._global_;
 _global._global_ = _global;
@@ -77,20 +76,20 @@ _globalReal._globalReal_ = _globalReal;
 if( _globalReal_._SeparatingTester_ )
 {
   _global = _global._global_ = Object.create( _global._global_ );
-  _global._UsingWtoolsPrivately_ = true;
+  _global.WTOOLS_PRIVATE = true;
   _global._globalWas_ = _globalWas;
 }
 
 if( typeof module !== 'undefined' )
 {
 
-  if( !_global_.wBase || _global_._UsingWtoolsPrivately_ )
+  if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
   {
     let toolsPath = '../../../dwtools/Base.s';
     let _externalTools = 0;
     try
     {
-      require.resolve( toolsPath );
+      toolsPath = require.resolve( toolsPath );/*hhh*/
     }
     catch( err )
     {
@@ -101,7 +100,7 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _ = _global_.wTools;
+  var _global = _global_; var _ = _global_.wTools;
 
   _.include( 'wExecTools' );
   _.include( 'wCopyable' );

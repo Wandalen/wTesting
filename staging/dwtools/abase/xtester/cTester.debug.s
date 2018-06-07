@@ -3,7 +3,7 @@
 'use strict';
 
 var _global = _global_;
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var sourceFileLocation = _.diagnosticLocation().full;
 var sourceFileStack = _.diagnosticStack();
 
@@ -147,7 +147,7 @@ function _includeTestsFrom( path )
     {
       debugger;
       err = _.errAttend( 'Cant include',absolutePath + '\n',err );
-      tester.report.includeFails.push( err );
+      tester.includeFails.push( err );
 
       logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
       if( logger.verbosity > 3 )
@@ -565,7 +565,7 @@ function _reportForm()
   var report = tester.report = Object.create( null );
 
   report.errorsArray = [];
-  report.includeFails = [];
+  // report.includeFails = [];
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -611,6 +611,9 @@ function _reportIsPositive()
   var tester = this;
   var report = tester.report;
 
+  if( _.appExitCode() !== undefined && _.appExitCode() !== 0 )
+  return false;
+
   if( report.testCheckFails !== 0 )
   return false;
 
@@ -623,7 +626,7 @@ function _reportIsPositive()
   if( report.errorsArray.length )
   return false;
 
-  if( report.includeFails.length )
+  if( tester.includeFails.length )
   return false;
 
   return true;
@@ -1021,6 +1024,7 @@ var Self =
   _cancelCon : new _.Consequence(),
 
   activeSuits : [],
+  includeFails : [],
   report : null,
 
   scenariosHelpMap : scenariosHelpMap,

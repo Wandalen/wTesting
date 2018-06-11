@@ -123,7 +123,7 @@ function _includeTestsFrom( path )
     filePath : path,
     ends : [ '.test.s','.test.ss','.test.js' ],
     recursive : 1,
-    maskAll : _.pathRegexpMakeSafe(),
+    maskAll : _.regexpMakeSafe(),
   });
 
   if( !files.length )

@@ -187,7 +187,7 @@ function appArgsApply()
   _.assert( arguments.length === 0 );
   _.mapExtend( tester.settings,tester.Settings );
 
-  var appArgs = _.appArgsInSubjectAndMapFormat();
+  var appArgs = _.appArgsInSamFormat();
   if( appArgs.map )
   {
     _.mapExtend( tester.settings,_.mapScreen( tester.Settings,appArgs.map ) );

@@ -1,14 +1,15 @@
-(function _aTestSuit_debug_s_() {
+(function _aTestSuite_debug_s_() {
 
 'use strict';
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 //
 
 var logger = null;
 var Parent = null;
-var Self = function wTestSuit( o )
+var Self = function wTestSuite( o )
 {
 
   _.assert( arguments.length === 1 );
@@ -20,28 +21,28 @@ var Self = function wTestSuit( o )
 
   _.assert( !( o instanceof Self ) );
 
-  if( !o.suitFilePath )
-  o.suitFilePath = _.diagnosticLocation( 1 ).path
+  if( !o.suiteFilePath )
+  o.suiteFilePath = _.diagnosticLocation( 1 ).path
 
-  if( !o.suitFileLocation )
-  o.suitFileLocation = _.diagnosticLocation( 1 ).full
+  if( !o.suiteFileLocation )
+  o.suiteFileLocation = _.diagnosticLocation( 1 ).full
 
   if( !( this instanceof Self ) )
   return new( _.routineJoin( Self, Self, arguments ) );
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'TestSuit';
+Self.nameShort = 'TestSuite';
 
 //
 
 function init( o )
 {
-  var suit = this;
+  var suite = this;
 
-  _.instanceInit( suit );
+  _.instanceInit( suite );
 
-  Object.preventExtensions( suit );
+  Object.preventExtensions( suite );
 
   if( _.routineIs( o.inherit ) )
   delete o.inherit;
@@ -50,34 +51,34 @@ function init( o )
 
   // debugger;
   if( o )
-  suit.copy( o );
+  suite.copy( o );
   // debugger;
 
-  suit._initialOptions = o;
+  suite._initialOptions = o;
 
   _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
 
   /* source path */
 
-  if( !_.strIs( suit.suitFileLocation ) )
+  if( !_.strIs( suite.suiteFileLocation ) )
   {
     debugger;
-    throw _.err( 'Test suit',suit.name,'expects a mandatory option ( suitFileLocation )' );
+    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( suiteFileLocation )' );
   }
 
-  // console.log( 'suit.suitFileLocation',suit.suitFileLocation );
+  // console.log( 'suite.suiteFileLocation',suite.suiteFileLocation );
 
   /* name */
 
   if( !( o instanceof Self ) )
-  if( !_.strIsNotEmpty( suit.name ) )
-  suit.name = _.diagnosticLocation( suit.suitFileLocation ).nameLong;
+  if( !_.strIsNotEmpty( suite.name ) )
+  suite.name = _.diagnosticLocation( suite.suiteFileLocation ).nameLong;
 
   if( !( o instanceof Self ) )
-  if( !_.strIsNotEmpty( suit.name ) )
+  if( !_.strIsNotEmpty( suite.name ) )
   {
     debugger;
-    throw _.err( 'Test suit expects name, but got',suit.name );
+    throw _.err( 'Test suite expects name, but got',suite.name );
   }
 
   /* */
@@ -85,31 +86,31 @@ function init( o )
   if( inherit )
   debugger;
   if( inherit )
-  suit.inherit.apply( suit,inherit );
+  suite.inherit.apply( suite,inherit );
 
-  return suit;
+  return suite;
 }
 
 //
 
 function copy( o )
 {
-  var suit = this;
+  var suite = this;
 
   // if( !( o instanceof Self ) )
-  // suit.name = o.name;
+  // suite.name = o.name;
 
   if( ( o instanceof Self ) )
   debugger;
 
-  return _.Copyable.prototype.copy.call( suit,o );
+  return _.Copyable.prototype.copy.call( suite,o );
 }
 
 //
 
 function extendBy()
 {
-  var suit = this;
+  var suite = this;
 
   throw _.err( 'extendBy is deprecated, please, use inherit' );
 
@@ -120,23 +121,23 @@ function extendBy()
   //   _.assert( _.mapIs( src ) );
   //
   //   if( src.tests )
-  //   _.mapSupplement( src.tests,suit.tests );
+  //   _.mapSupplement( src.tests,suite.tests );
   //
   //   if( src.context )
-  //   _.mapSupplement( src.context,suit.context );
+  //   _.mapSupplement( src.context,suite.context );
   //
-  //   _.mapExtend( suit,src );
+  //   _.mapExtend( suite,src );
   //
   // }
 
-  return suit;
+  return suite;
 }
 
 //
 
 function inherit()
 {
-  var suit = this;
+  var suite = this;
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {
@@ -145,108 +146,108 @@ function inherit()
     _.assert( src instanceof Self );
 
     if( src.tests )
-    _.mapSupplement( suit.tests,src.tests );
+    _.mapSupplement( suite.tests,src.tests );
 
     if( src.context )
-    _.mapSupplement( suit.context,src.context );
+    _.mapSupplement( suite.context,src.context );
 
-    var extend = _.mapBut( src._initialOptions,suit._initialOptions );
-    _.mapExtend( suit,extend );
-    _.mapExtend( suit._initialOptions,extend );
+    var extend = _.mapBut( src._initialOptions,suite._initialOptions );
+    _.mapExtend( suite,extend );
+    _.mapExtend( suite._initialOptions,extend );
 
   }
 
-  return suit;
+  return suite;
 }
 
 // --
 // etc
 // --
 
-function _registerSuits( suits )
+function _registerSuites( suites )
 {
-  var suit = this;
+  var suite = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.mapIs( suits ) );
+  _.assert( _.mapIs( suites ) );
 
-  for( var s in suits ) try
+  for( var s in suites ) try
   {
-    Self( suits[ s ] );
+    Self( suites[ s ] );
   }
   catch( err )
   {
-    throw _.errLog( 'Cant make test suit',s,'\n',err );
+    throw _.errLog( 'Cant make test suite',s,'\n',err );
   }
 
-  return suit;
+  return suite;
 }
 
 // --
-// test suit run
+// test suite run
 // --
 
-function _testSuitSettingsAdjust()
+function _testSuiteSettingsAdjust()
 {
-  var suit = this;
+  var suite = this;
 
-  _.assert( suit instanceof Self );
+  _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   /* */
 
-  if( suit.override )
-  _.mapExtend( suit,suit.override );
+  if( suite.override )
+  _.mapExtend( suite,suite.override );
 
-  if( !suit.logger )
-  suit.logger = _.Tester.logger || _global_.logger;
+  if( !suite.logger )
+  suite.logger = _.Tester.logger || _global_.logger;
 
-  if( !suit.ignoringTesterOptions )
+  if( !suite.ignoringTesterOptions )
   {
 
-    for( var f in _.Tester.SettingsOfSuit )
+    for( var f in _.Tester.SettingsOfSuite )
     if( _.Tester.settings[ f ] !== null )
-    suit[ f ] = _.Tester.settings[ f ];
+    suite[ f ] = _.Tester.settings[ f ];
 
     if( _.Tester.settings.verbosity !== null )
-    suit.verbosity = _.Tester.settings.verbosity-1;
+    suite.verbosity = _.Tester.settings.verbosity-1;
 
   }
 
   /* */
 
-  if( suit.override )
-  _.mapExtend( suit,suit.override );
+  if( suite.override )
+  _.mapExtend( suite,suite.override );
 
   /* */
 
-  _.assert( suit.concurrent !== null && suit.concurrent !== undefined );
+  _.assert( suite.concurrent !== null && suite.concurrent !== undefined );
   _.assert( _.Tester.settings.sanitareTime >= 0 );
-  _.assert( _.numberIs( suit.verbosity ) );
+  _.assert( _.numberIs( suite.verbosity ) );
 
 }
 
 //
 
-function _testSuitRunLater()
+function _testSuiteRunLater()
 {
-  var suit = this;
+  var suite = this;
 
-  _.assert( suit instanceof Self );
+  _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   /* */
 
-  suit._testSuitSettingsAdjust();
+  suite._testSuiteSettingsAdjust();
 
-  var con = suit.concurrent ? new _.Consequence().give() : wTestSuit._suitCon;
+  var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
 
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
   .doThen( function()
   {
 
-    return suit._testSuitRunAct();
+    return suite._testSuiteRunAct();
 
   })
   .split();
@@ -255,25 +256,25 @@ function _testSuitRunLater()
 
 //
 
-function _testSuitRunNow()
+function _testSuiteRunNow()
 {
-  var suit = this;
-  var tests = suit.tests;
+  var suite = this;
+  var tests = suite.tests;
 
-  _.assert( suit instanceof Self );
+  _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   /* */
 
-  suit._testSuitSettingsAdjust();
+  suite._testSuiteSettingsAdjust();
 
-  var con = suit.concurrent ? new _.Consequence().give() : wTestSuit._suitCon;
+  var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
 
   return con
   .doThen( function()
   {
 
-    return suit._testSuitRunAct();
+    return suite._testSuiteRunAct();
 
   })
   .split();
@@ -281,20 +282,20 @@ function _testSuitRunNow()
 
 //
 
-function _testSuitRunAct()
+function _testSuiteRunAct()
 {
-  var suit = this;
-  var tests = suit.tests;
-  var logger = suit.logger || _.Tester.settings.logger || _global_.logger;
+  var suite = this;
+  var tests = suite.tests;
+  var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
 
-  _.assert( suit instanceof Self );
+  _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   /* */
 
   function handleStage( testRoutine,iteration,iterator )
   {
-    return suit._testRoutineRun_entry( iteration.key,testRoutine );
+    return suite._testRoutineRun_entry( iteration.key,testRoutine );
   }
 
   /* */
@@ -305,15 +306,15 @@ function _testSuitRunAct()
     if( err )
     {
       debugger;
-      logger.log( _.err( 'Something is wrong, cant even launch the test suit\n',err ) );
-      suit._outcomeConsider( 0 );
+      logger.log( _.err( 'Something is wrong, cant even launch the test suite\n',err ) );
+      suite._outcomeConsider( 0 );
     }
 
     _.assert( _.Tester.settings.sanitareTime >= 0 );
-    if( suit._reportIsPositive() )
-    return _.timeOut( _.Tester.settings.sanitareTime, () => suit._testSuitEnd() );
+    if( suite._reportIsPositive() )
+    return _.timeOut( _.Tester.settings.sanitareTime, () => suite._testSuiteEnd() );
     else
-    return suit._testSuitEnd();
+    return suite._testSuiteEnd();
   }
 
   /* */
@@ -322,7 +323,7 @@ function _testSuitRunAct()
   {
     manual : 1,
     onEachRoutine : handleStage,
-    onBegin : _.routineJoin( suit,suit._testSuitBegin ),
+    onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
     onEnd : handleEnd,
     delay : 10,
   });
@@ -331,11 +332,11 @@ function _testSuitRunAct()
 
 //
 
-function _testSuitBegin()
+function _testSuiteBegin()
 {
-  var suit = this;
+  var suite = this;
 
-  if( suit.debug )
+  if( suite.debug )
   debugger;
 
   if( !_.Tester._canContinue() )
@@ -343,16 +344,16 @@ function _testSuitBegin()
 
   /* logger */
 
-  var logger = suit.logger;
+  var logger = suite.logger;
 
   /* report */
 
-  suit.report = null;
-  suit._reportForm();
+  suite.report = null;
+  suite._reportForm();
 
   /* silencing */
 
-  if( suit.silencing )
+  if( suite.silencing )
   {
     logger.begin({ verbosity : -8 });
     logger.log( 'Silencing console' );
@@ -363,73 +364,73 @@ function _testSuitBegin()
 
   /* */
 
-  logger.verbosityPush( suit.verbosity );
+  logger.verbosityPush( suite.verbosity );
   logger.begin({ verbosity : -2 });
 
   var msg =
   [
-    'Testing of test suit ( ' + suit.name + ' ) ..',
+    'Testing of test suite ( ' + suite.name + ' ) ..',
   ];
 
-  logger.begin({ 'suit' : suit.name });
+  logger.begin({ 'suite' : suite.name });
 
   logger.logUp( msg.join( '\n' ) );
 
-  logger.log( _.color.strFormat( 'at  ' + suit.suitFileLocation,'selected' ) );
+  logger.log( _.color.strFormat( 'at  ' + suite.suiteFileLocation,'selected' ) );
 
-  logger.end( 'suit' );
+  logger.end( 'suite' );
 
-  logger.mine( 'suit.content' ).log( '' );
+  logger.mine( 'suite.content' ).log( '' );
 
   logger.end({ verbosity : -2 });
 
   logger.begin({ verbosity : -6 });
-  logger.log( _.toStr( suit ) );
+  logger.log( _.toStr( suite ) );
   logger.end({ verbosity : -6 });
 
-  logger.begin({ verbosity : -6 + suit.importanceOfDetails });
+  logger.begin({ verbosity : -6 + suite.importanceOfDetails });
 
   /* */
 
-  _.assert( _.Tester.activeSuits.indexOf( suit ) === -1 );
-  _.Tester.activeSuits.push( suit );
+  _.assert( _.Tester.activeSuites.indexOf( suite ) === -1 );
+  _.Tester.activeSuites.push( suite );
 
-  if( suit.onSuitBegin )
+  if( suite.onSuiteBegin )
   {
     try
     {
-      suit.onSuitBegin.call( suit.context,suit );
+      suite.onSuiteBegin.call( suite.context,suite );
     }
     catch( err )
     {
       debugger;
-      suit.exceptionReport({ err : err });
+      suite.exceptionReport({ err : err });
       return false;
     }
   }
 
-  suit._testSuitTerminated_joined = _.routineJoin( suit,_testSuitTerminated );
+  suite._testSuiteTerminated_joined = _.routineJoin( suite,_testSuiteTerminated );
   if( _global_.process )
-  _global_.process.on( 'exit', suit._testSuitTerminated_joined );
+  _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
 
   return true;
 }
 
 //
 
-function _testSuitEnd()
+function _testSuiteEnd()
 {
-  var suit = this;
-  var logger = suit.logger;
+  var suite = this;
+  var logger = suite.logger;
 
-  if( _global_.process && suit._testSuitTerminated_joined )
-  _global_.process.removeListener( 'exit', suit._testSuitTerminated_joined );
+  if( _global_.process && suite._testSuiteTerminated_joined )
+  _global_.process.removeListener( 'exit', suite._testSuiteTerminated_joined );
 
-  if( suit.onSuitEnd )
+  if( suite.onSuiteEnd )
   {
     try
     {
-      suit.onSuitEnd.call( suit.context,suit );
+      suite.onSuiteEnd.call( suite.context,suite );
     }
     catch( err )
     {
@@ -441,27 +442,27 @@ function _testSuitEnd()
 
   logger.begin({ verbosity : -2 });
 
-  if( logger._mines[ 'suit.content' ] )
-  logger.mineFinit( 'suit.content' );
+  if( logger._mines[ 'suite.content' ] )
+  logger.mineFinit( 'suite.content' );
   else
   logger.log();
 
   /* */
 
-  var ok = suit._reportIsPositive();
+  var ok = suite._reportIsPositive();
 
   if( logger )
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   if( logger )
-  logger.begin( 'suit','end' );
+  logger.begin( 'suite','end' );
 
-  var msg = suit._reportToStr();
+  var msg = suite._reportToStr();
 
   logger.log( msg );
 
   var msg =
   [
-    'Test suit ( ' + suit.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + '.'
+    'Test suite ( ' + suite.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + '.'
   ];
 
   logger.begin({ verbosity : -1 });
@@ -472,34 +473,34 @@ function _testSuitEnd()
   logger.log();
   logger.end({ verbosity : -2 });
 
-  logger.end( 'suit','end' );
+  logger.end( 'suite','end' );
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
 
   logger.end({ verbosity : -2 });
-  logger.end({ verbosity : -6 + suit.importanceOfDetails });
+  logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
 
   // console.log( 'x' );
 
   /* */
 
-  if( suit.takingIntoAccount )
+  if( suite.takingIntoAccount )
   {
 
-    _.Tester.report.testSuitPasses += ok ? 1 : 0;
-    _.Tester.report.testSuitFailes += ok ? 0 : 1;
+    _.Tester.report.testSuitePasses += ok ? 1 : 0;
+    _.Tester.report.testSuiteFailes += ok ? 0 : 1;
 
-    _.Tester.report.testRoutinePasses += suit.report.testRoutinePasses;
-    _.Tester.report.testRoutineFails += suit.report.testRoutineFails;
+    _.Tester.report.testRoutinePasses += suite.report.testRoutinePasses;
+    _.Tester.report.testRoutineFails += suite.report.testRoutineFails;
 
   }
 
-  _.assert( _.Tester.activeSuits.indexOf( suit ) !== -1 );
-  _.arrayRemoveOnce( _.Tester.activeSuits,suit );
+  _.assert( _.Tester.activeSuites.indexOf( suite ) !== -1 );
+  _.arrayRemoveOnce( _.Tester.activeSuites,suite );
 
   /* silencing */
 
-  if( suit.silencing && _.Logger.consoleIsBarred( console ) )
+  if( suite.silencing && _.Logger.consoleIsBarred( console ) )
   {
     _.Tester._bar.bar = 0;
     _.Logger.consoleBar( _.Tester._bar );
@@ -507,20 +508,20 @@ function _testSuitEnd()
 
   /* */
 
-  if( suit.debug )
+  if( suite.debug )
   debugger;
 
-  return suit;
+  return suite;
 }
 
 //
 
-function _testSuitTerminated()
+function _testSuiteTerminated()
 {
-  var suit = this;
-  suit.exceptionReport({ err : _.err( 'Terminated by user' ) });
+  var suite = this;
+  suite.exceptionReport({ err : _.err( 'Terminated by user' ) });
   _.Tester.cancel( 'Terminated by user' );
-  suit._testSuitEnd();
+  suite._testSuiteEnd();
 }
 
 //
@@ -537,13 +538,13 @@ function onRoutineEnd( t )
 
 //
 
-function onSuitBegin( t )
+function onSuiteBegin( t )
 {
 }
 
 //
 
-function onSuitEnd( t )
+function onSuiteEnd( t )
 {
 }
 
@@ -551,17 +552,17 @@ function onSuitEnd( t )
 
 function _testRoutineRun_entry( name,testRoutine )
 {
-  var suit = this;
+  var suite = this;
   var result = null;
-  var report = suit.report;
+  var report = suite.report;
 
   /* */
 
-  if( ( !suit.routine || !suit.takingIntoAccount ) && testRoutine.experimental )
+  if( ( !suite.routine || !suite.takingIntoAccount ) && testRoutine.experimental )
   return;
 
-  if( suit.takingIntoAccount )
-  if( suit.routine && suit.routine !== testRoutine.name )
+  if( suite.takingIntoAccount )
+  if( suite.routine && suite.routine !== testRoutine.name )
   return;
 
   if( !_.Tester._canContinue() )
@@ -573,13 +574,13 @@ function _testRoutineRun_entry( name,testRoutine )
   ({
     name : name,
     routine : testRoutine,
-    suit : suit,
+    suite : suite,
   });
 
   _.assert( _.routineIs( trd._testRoutineHandleReturn ) );
   _.assert( arguments.length === 2 );
 
-  return suit._routineCon
+  return suite._routineCon
   .doThen( function _testRoutineRun()
   {
 
@@ -589,7 +590,7 @@ function _testRoutineRun_entry( name,testRoutine )
 
     try
     {
-      result = trd.routine.call( suit.context,trd );
+      result = trd.routine.call( suite.context,trd );
     }
     catch( err )
     {
@@ -602,7 +603,7 @@ function _testRoutineRun_entry( name,testRoutine )
 
     result = trd._returnCon = _.Consequence.from( result );
 
-    result.andThen( suit._inroutineCon );
+    result.andThen( suite._inroutineCon );
     result = result.eitherThenSplit([ _.timeOutError( timeOut ),_.Tester._cancelCon ]);
 
     result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
@@ -618,10 +619,10 @@ function _testRoutineRun_entry( name,testRoutine )
 
 function _reportForm()
 {
-  var suit = this;
+  var suite = this;
 
-  _.assert( !suit.report );
-  var report = suit.report = Object.create( null );
+  _.assert( !suite.report );
+  var report = suite.report = Object.create( null );
 
   report.errorsArray = [];
 
@@ -643,18 +644,18 @@ function _reportForm()
 
 function _reportToStr()
 {
-  var suit = this;
+  var suite = this;
 
   var msg = '';
 
-  if( suit.report.errorsArray.length )
-  msg += 'Thrown ' + ( suit.report.errorsArray.length ) + ' error(s)\n';
+  if( suite.report.errorsArray.length )
+  msg += 'Thrown ' + ( suite.report.errorsArray.length ) + ' error(s)\n';
 
-  msg += 'Passed test checks ' + ( suit.report.testCheckPasses ) + ' / ' + ( suit.report.testCheckPasses + suit.report.testCheckFails ) + '\n';
-  msg += 'Passed test cases ' + ( suit.report.testCasePasses ) + ' / ' + ( suit.report.testCasePasses + suit.report.testCaseFails ) + '\n';
-  msg += 'Passed test routines ' + ( suit.report.testRoutinePasses ) + ' / ' + ( suit.report.testRoutinePasses + suit.report.testRoutineFails ) + '';
+  msg += 'Passed test checks ' + ( suite.report.testCheckPasses ) + ' / ' + ( suite.report.testCheckPasses + suite.report.testCheckFails ) + '\n';
+  msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
+  msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
 
-  // suit.logger.log( 'suit.report.testCaseFails',suit.report.testCaseFails );
+  // suite.logger.log( 'suite.report.testCaseFails',suite.report.testCaseFails );
 
   return msg;
 }
@@ -686,24 +687,24 @@ function _reportIsPositive()
 
 function _outcomeConsider( outcome )
 {
-  var suit = this;
+  var suite = this;
 
   _.assert( arguments.length === 1 );
   _.assert( this.constructor === Self );
-  _.assert( suit.takingIntoAccount !== undefined );
+  _.assert( suite.takingIntoAccount !== undefined );
 
   if( outcome )
   {
-    if( suit.report )
-    suit.report.testCheckPasses += 1;
+    if( suite.report )
+    suite.report.testCheckPasses += 1;
   }
   else
   {
-    if( suit.report )
-    suit.report.testCheckFails += 1;
+    if( suite.report )
+    suite.report.testCheckFails += 1;
   }
 
-  if( suit.takingIntoAccount )
+  if( suite.takingIntoAccount )
   _.Tester._outcomeConsider( outcome );
 
 }
@@ -712,14 +713,14 @@ function _outcomeConsider( outcome )
 
 function _exceptionConsider( err )
 {
-  var suit = this;
+  var suite = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( suit.constructor === Self );
+  _.assert( suite.constructor === Self );
 
-  suit.report.errorsArray.push( err );
+  suite.report.errorsArray.push( err );
 
-  if( suit.takingIntoAccount )
+  if( suite.takingIntoAccount )
   _.Tester._exceptionConsider( err );
 
 }
@@ -728,15 +729,15 @@ function _exceptionConsider( err )
 
 function _testCaseConsider( outcome )
 {
-  var suit = this;
-  var report = suit.report;
+  var suite = this;
+  var report = suite.report;
 
   if( outcome )
   report.testCasePasses += 1;
   else
   report.testCaseFails += 1;
 
-  if( suit.takingIntoAccount )
+  if( suite.takingIntoAccount )
   _.Tester._testCaseConsider( outcome );
 }
 
@@ -744,8 +745,8 @@ function _testCaseConsider( outcome )
 
 function exceptionReport( o )
 {
-  var suit = this;
-  var logger = suit.logger || _.Tester.settings.logger || _global_.logger;
+  var suite = this;
+  var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
 
   _.routineOptions( exceptionReport,o );
   _.assert( arguments.length === 1 );
@@ -753,7 +754,7 @@ function exceptionReport( o )
   var err = _.err( o.err );
 
   if( o.considering )
-  suit._exceptionConsider( err );
+  suite._exceptionConsider( err );
 
   logger.begin({ verbosity : 9 });
   _.errLog( err );
@@ -795,8 +796,8 @@ var Composes =
 
   /* */
 
-  suitFilePath : null,
-  suitFileLocation : null,
+  suiteFilePath : null,
+  suiteFileLocation : null,
   tests : null,
 
   abstract : 0,
@@ -818,8 +819,8 @@ var Composes =
   onRoutineBegin : onRoutineBegin,
   onRoutineEnd : onRoutineEnd,
 
-  onSuitBegin : onSuitBegin,
-  onSuitEnd : onSuitEnd,
+  onSuiteBegin : onSuiteBegin,
+  onSuiteEnd : onSuiteEnd,
 
 }
 
@@ -837,13 +838,13 @@ var Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
-  _testSuitTerminated_joined : null,
+  _testSuiteTerminated_joined : null,
 }
 
 var Statics =
 {
   usingUniqueNames : 1,
-  _suitCon : new _.Consequence().give(),
+  _suiteCon : new _.Consequence().give(),
 }
 
 var Events =
@@ -859,11 +860,11 @@ var Forbids =
   special : 'special',
   currentRoutineFails : 'currentRoutineFails',
   currentRoutinePasses : 'currentRoutinePasses',
-  SettingsOfSuit : 'SettingsOfSuit',
+  SettingsOfSuite : 'SettingsOfSuite',
 }
 
 // --
-// prototype
+// define class
 // --
 
 var Proto =
@@ -879,22 +880,22 @@ var Proto =
 
   // etc
 
-  _registerSuits : _registerSuits,
+  _registerSuites : _registerSuites,
 
 
-  // test suit run
+  // test suite run
 
-  _testSuitSettingsAdjust : _testSuitSettingsAdjust,
-  _testSuitRunLater : _testSuitRunLater,
-  run : _testSuitRunNow,
-  _testSuitRunNow : _testSuitRunNow,
-  _testSuitRunAct : _testSuitRunAct,
-  _testSuitBegin : _testSuitBegin,
-  _testSuitEnd : _testSuitEnd,
-  _testSuitTerminated : _testSuitTerminated,
+  _testSuiteSettingsAdjust : _testSuiteSettingsAdjust,
+  _testSuiteRunLater : _testSuiteRunLater,
+  run : _testSuiteRunNow,
+  _testSuiteRunNow : _testSuiteRunNow,
+  _testSuiteRunAct : _testSuiteRunAct,
+  _testSuiteBegin : _testSuiteBegin,
+  _testSuiteEnd : _testSuiteEnd,
+  _testSuiteTerminated : _testSuiteTerminated,
 
-  onSuitBegin : onSuitBegin,
-  onSuitEnd : onSuitEnd,
+  onSuiteBegin : onSuiteBegin,
+  onSuiteEnd : onSuiteEnd,
 
   _testRoutineRun_entry : _testRoutineRun_entry,
 

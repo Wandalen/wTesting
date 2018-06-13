@@ -111,7 +111,7 @@ function identical( test )
 
   }
 
-  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
 
   var result = suit.run()
   .doThen( function( err,data )
@@ -409,7 +409,7 @@ function shouldMessageOnlyOnce( test )
 
   /* */
 
-  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
   var result = suit.run()
   .doThen( function( err,data )
   {
@@ -703,7 +703,7 @@ function mustNotThrowError( test )
 
   /* */
 
-  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
   var result = suit.run()
   .doThen( function( err,data )
   {
@@ -967,7 +967,7 @@ function shouldThrowErrorSync( test )
     return _.timeOut( 950 );
   }
 
-  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
 
   var result = suit.run()
   .doThen( function( err,data )
@@ -1270,7 +1270,7 @@ function shouldThrowErrorAsync( test )
 
   /* */
 
-  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
   var result = suit.run()
   .doThen( function( err,data )
   {
@@ -1538,7 +1538,7 @@ function shouldThrowError( test )
     return _.timeOut( 950 );
   }
 
-  var suit = wTestSuit({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
 
   var result = suit.run()
   .doThen( function( err,data )
@@ -2032,7 +2032,7 @@ function _chainedShould( test,o )
 
   /* */
 
-  var suit = wTestSuit
+  var suit = wTestSuite
   ({
     tests : { row : row, include : include },
     override : notTakingIntoAccount,
@@ -2196,7 +2196,7 @@ function mustNotThrowErrorExperiment( test )
 mustNotThrowErrorExperiment.experimental = 1;
 
 // --
-// proto
+// define class
 // --
 
 var Self =
@@ -2241,7 +2241,7 @@ var Self =
 
 }
 
-Self = wTestSuit( Self );
+Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 

@@ -5,8 +5,8 @@
 /*
 
 + implement test case tracking
-+ move test routine methods out of test suit
-+ implement routine only as option of test suit
++ move test routine methods out of test suite
++ implement routine only as option of test suite
 + adjust verbosity levels
 + make possible switch off parents test routines : fileStat : null
 + make "should/must not error" pass original messages through
@@ -20,26 +20,27 @@
   })
 
 + improve inheritance
-+ global search cant find test suits with inheritance
++ global search cant find test suites with inheritance
 + after the last test case of test routine description should be changed
 + test.identical( undefined,undefined ) -> strange output, replacing undefined by null!
-+ test suit should not pass if 0 / 0 test checks
++ test suite should not pass if 0 / 0 test checks
 + track number of thrown errors
-+ global / suit / routine basis statistic tracking
++ global / suite / routine basis statistic tracking
 + fails issue
-+ implement silencing from test suit
-+ no suit/tester sanitare period if errror
-+ issue if first test suit has silencing:0 and other silencing:1
++ implement silencing from test suite
++ no suite/tester sanitare period if errror
++ issue if first test suite has silencing:0 and other silencing:1
 + less static information with verbosity:7, to introduce higher verbosity levels
 + when error not throwen under test.mustNotThrowError have "error was not thrown asynchronously, but expected"
 + implement scenario options.list
++ fire onSuiteEnd if user terminated process earlier
 
 - print information about case with color directive avoiding change of color state of logger
 
 - implement support of glob path
 
-- manual launch of test suit + global tests execution should not give extra test suit runs
-- run test suit only once, even if asked several
+- manual launch of test suite + global tests execution should not give extra test suite runs
+- run test suite only once, even if asked several
 
 - time measurements of testing
 
@@ -49,15 +50,13 @@
 
 - warning if test routine has unknown fields
 
-- warning if no test suit under path found
+- warning if no test suite under path found
 
-- make onSuitBegin, onSuitEnd asynchronous
+- make onSuiteBegin, onSuiteEnd asynchronous
 
-- tester should has its own copy of environment, even if included from test suit file
+- tester should has its own copy of environment, even if included from test suite file
 
 - checkers ( identical, contain, equivalent ... ) should return boolean
-
-+ fire onSuitEnd if user terminated process earlier
 
 */
 
@@ -114,7 +113,7 @@ if( typeof module !== 'undefined' )
 
   _.assert( !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation,'wTester is already included' );
 
-  require( './aTestSuit.debug.s' );
+  require( './aTestSuite.debug.s' );
   require( './bTestRoutine.debug.s' );
   require( './cTester.debug.s' );
   require( './zLast.debug.s' );

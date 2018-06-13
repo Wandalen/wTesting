@@ -81,7 +81,7 @@ function inherit( test )
 
   };
 
-  wTestSuit( ParentSuit1 );
+  wTestSuite( ParentSuit1 );
 
   // parent 2
 
@@ -130,7 +130,7 @@ function inherit( test )
 
   };
 
-  wTestSuit( ParentSuit2 );
+  wTestSuite( ParentSuit2 );
 
   // child
 
@@ -153,7 +153,7 @@ function inherit( test )
 
   }
 
-  var suit = new wTestSuit( childSuit )
+  var suit = new wTestSuite( childSuit )
   .inherit( wTests[ firstParentName ] )
   .inherit( wTests[ secondParentName] );
 
@@ -185,7 +185,7 @@ var Proto =
 
 //
 
-var Self = new wTestSuit( Proto );
+var Self = new wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self );
 

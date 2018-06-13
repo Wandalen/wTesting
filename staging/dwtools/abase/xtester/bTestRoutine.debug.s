@@ -36,8 +36,8 @@ function init( o )
   self._reportForm();
 
   _.assert( _.routineIs( self.routine ) );
-  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suit',self.suit.name,'does not have name' );
-  _.assert( Object.isPrototypeOf.call( _.TestSuit.prototype,self.suit ) );
+  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
+  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,self.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
   _.assert( arguments.length === 1 );
 
@@ -47,7 +47,7 @@ function init( o )
     {
       if( obj[ k ] !== undefined )
       return obj[ k ];
-      return obj.suit[ k ];
+      return obj.suite[ k ];
     }
   }
 
@@ -63,7 +63,7 @@ function init( o )
 function _testRoutineBegin()
 {
   var trd = this;
-  var suit = trd.suit;
+  var suite = trd.suite;
 
   _.assert( arguments.length === 0 );
 
@@ -72,26 +72,26 @@ function _testRoutineBegin()
     'Running test routine ( ' + trd.routine.name + ' ) ..'
   ];
 
-  suit.logger.begin({ verbosity : -4 });
+  suite.logger.begin({ verbosity : -4 });
 
-  suit.logger.begin({ 'routine' : trd.routine.name });
-  suit.logger.logUp( msg.join( '\n' ) );
-  suit.logger.end( 'routine' );
+  suite.logger.begin({ 'routine' : trd.routine.name });
+  suite.logger.logUp( msg.join( '\n' ) );
+  suite.logger.end( 'routine' );
 
-  suit.logger.end({ verbosity : -4 });
+  suite.logger.end({ verbosity : -4 });
 
-  _.assert( !suit.currentRoutine );
-  suit.currentRoutine = trd;
+  _.assert( !suite.currentRoutine );
+  suite.currentRoutine = trd;
 
   try
   {
-    suit.onRoutineBegin.call( trd.context,trd );
+    suite.onRoutineBegin.call( trd.context,trd );
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
   }
   catch( err )
   {
-    suit._exceptionConsider( err );
+    suite._exceptionConsider( err );
   }
 
 }
@@ -101,30 +101,30 @@ function _testRoutineBegin()
 function _testRoutineEnd()
 {
   var trd = this;
-  var suit = trd.suit;
+  var suite = trd.suite;
   var ok = trd._reportIsPositive();
 
   _.assert( arguments.length === 0 );
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
-  _.assert( suit.currentRoutine === trd );
+  _.assert( suite.currentRoutine === trd );
 
-  var suitHasConsoleInOutputs = suit.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
+  var suiteHasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
 
-  if( !suitHasConsoleInOutputs )
+  if( !suiteHasConsoleInOutputs )
   {
     var bar = _.Tester._bar.bar;
 
     _.Tester._bar.bar = 0;
-    suit.logger.consoleBar( _.Tester._bar );
+    suite.logger.consoleBar( _.Tester._bar );
 
     if( bar )
     {
       _.Tester._bar.bar = bar;
-      suit.logger.consoleBar( _.Tester._bar );
+      suite.logger.consoleBar( _.Tester._bar );
     }
 
-    var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified in, suit:', _.strQuote( suit.name ),'test routine:', _.strQuote( trd.routine.name ) );
-    suit.exceptionReport
+    var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified in, suite:', _.strQuote( suite.name ),'test routine:', _.strQuote( trd.routine.name ) );
+    suite.exceptionReport
     ({
       err : err,
     });
@@ -132,46 +132,46 @@ function _testRoutineEnd()
 
   try
   {
-    suit.onRoutineEnd.call( trd.context,trd,ok );
+    suite.onRoutineEnd.call( trd.context,trd,ok );
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
   }
   catch( err )
   {
-    suit._exceptionConsider( err );
+    suite._exceptionConsider( err );
   }
 
   if( trd.report.testCheckFails )
-  suit.report.testRoutineFails += 1;
+  suite.report.testRoutineFails += 1;
   else
-  suit.report.testRoutinePasses += 1;
+  suite.report.testRoutinePasses += 1;
 
-  suit.logger.begin( 'routine','end' );
-  suit.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+  suite.logger.begin( 'routine','end' );
+  suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
 
-  suit.logger.begin({ verbosity : -3 });
+  suite.logger.begin({ verbosity : -3 });
 
   if( ok )
   {
 
-    suit.logger.logDown( 'Passed test routine ( ' + trd.routine.name + ' ).' );
+    suite.logger.logDown( 'Passed test routine ( ' + trd.routine.name + ' ).' );
 
   }
   else
   {
 
-    suit.logger.begin({ verbosity : -3+suit.importanceOfNegative });
-    suit.logger.logDown( 'Failed test routine ( ' + trd.routine.name + ' ).' );
-    suit.logger.end({ verbosity : -3+suit.importanceOfNegative });
+    suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
+    suite.logger.logDown( 'Failed test routine ( ' + trd.routine.name + ' ).' );
+    suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   }
 
-  suit.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
-  suit.logger.end( 'routine','end' );
+  suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+  suite.logger.end( 'routine','end' );
 
-  suit.logger.end({ verbosity : -3 });
+  suite.logger.end({ verbosity : -3 });
 
-  suit.currentRoutine = null;
+  suite.currentRoutine = null;
 
 }
 
@@ -180,7 +180,7 @@ function _testRoutineEnd()
 function _testRoutineHandleReturn( err,msg )
 {
   var trd = this;
-  var suit = trd.suit;
+  var suite = trd.suite;
 
   if( err )
   if( err.timeOut )
@@ -266,7 +266,7 @@ function _testCaseConsider( outcome )
   else
   report.testCaseFails += 1;
 
-  trd.suit._testCaseConsider( outcome );
+  trd.suite._testCaseConsider( outcome );
 }
 
 // --
@@ -1132,7 +1132,7 @@ function _outcomeConsider( outcome )
     // debugger;
   }
 
-  trd.suit._outcomeConsider( outcome );
+  trd.suite._outcomeConsider( outcome );
 
   trd.checkNext();
 
@@ -1148,7 +1148,7 @@ function _exceptionConsider( err )
   _.assert( trd.constructor === Self );
 
   trd.report.errorsArray.push( err );
-  trd.suit._exceptionConsider( err );
+  trd.suite._exceptionConsider( err );
 
 }
 
@@ -1579,7 +1579,7 @@ var Aggregates =
 
 var Associates =
 {
-  suit : null,
+  suite : null,
   routine : null,
 }
 
@@ -1619,7 +1619,7 @@ var Accessors =
 }
 
 // --
-// prototype
+// define class
 // --
 
 var Proto =

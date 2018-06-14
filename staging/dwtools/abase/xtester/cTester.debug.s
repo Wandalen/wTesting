@@ -3,7 +3,8 @@
 'use strict';
 
 var _global = _global_;
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var sourceFileLocation = _.diagnosticLocation().full;
 var sourceFileStack = _.diagnosticStack();
 
@@ -21,9 +22,6 @@ if( _.Tester._isFullImplementation )
   _.assert( 0 );
   return;
 }
-
-// if( !_.toStr )
-// _.toStr = function(){ return String( arguments ) };
 
 _.assert( _.toStr,'wTesting needs wTools/staging/dwtools/abase/layer1/StringTools.s' );
 _.assert( _.execStages,'wTesting needs wTools/staging/dwtools/abase/layer1/ExecTools.s' );
@@ -93,7 +91,7 @@ function _registerExitHandler()
   if( _global.process )
   process.on( 'exit', function()
   {
-    if( tester.report && tester.report.testSuitFailes && !process.exitCode )
+    if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
     {
       var logger = tester.logger || _global.logger;
       debugger;
@@ -256,13 +254,13 @@ function scenarioOptionsList()
   var optionsList =
   {
     scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
-    sanitareTime : 'Delay before run of the next test suit.',
+    sanitareTime : 'Delay before run of the next test suite.',
     usingBeep : 'Make beep sound after testing completion.',
     routine : 'Name of only test routine to execute.',
     fails : 'Maximum number of fails allowed before shutting down testing.',
     silencing : 'Enables catching of console output that occures during test run.',
     testRoutineTimeOut : 'Limits the time that each test routine can work. If execution of routine takes too long time then timeOut error will be thrown.',
-    concurrent : 'Runs test suit in parallel with other test suits.',
+    concurrent : 'Runs test suite in parallel with other test suites.',
     verbosity : 'Level of details in tester output. Zero for nothing, one for single line report, nine for maximum verbosity.',
     importanceOfNegative : 'Increase verbosity of test checks which fails.'
   }
@@ -281,12 +279,12 @@ function scenarioOptionsList()
 
 //
 
-function scenarioSuitsList()
+function scenarioSuitesList()
 {
   var tester = this;
   var logger = tester.logger;
 
-  _.assert( tester.settings.scenario === 'suits.list' );
+  _.assert( tester.settings.scenario === 'suites.list' );
 
   tester.includeTestsFrom( tester.path );
 
@@ -304,16 +302,16 @@ function _testAllAct()
 
   _.assert( arguments.length === 0 );
 
-  var suits = tester.testsFilterOut( wTests );
+  var suites = tester.testsFilterOut( wTests );
 
-  tester._testingBegin( suits );
+  tester._testingBegin( suites );
 
-  for( var t in suits )
+  for( var t in suites )
   {
     tester._testAct( t );
   }
 
-  wTestSuit._suitCon
+  wTestSuite._suiteCon
   .doThen( function() {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
@@ -323,7 +321,7 @@ function _testAllAct()
     return tester._testingEnd();
   });
 
-  return wTestSuit._suitCon.split();
+  return wTestSuite._suiteCon.split();
 }
 
 //
@@ -340,17 +338,17 @@ function _testAct()
 
   for( var a = 0 ; a < arguments.length ; a++ )
   {
-    var _suit = arguments[ a ];
-    var suit = wTestSuit.instanceByName( _suit );
+    var _suite = arguments[ a ];
+    var suite = wTestSuite.instanceByName( _suite );
 
-    _.assert( suit instanceof wTestSuit,'Test suit',_suit,'was not found' );
-    _.assert( _.strIsNotEmpty( suit.name ),'Test suit should has ( name )"' );
-    _.assert( _.objectIs( suit.tests ),'Test suit should has map with test routines ( tests ), but "' + suit.name + '" does not have such map' );
+    _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
+    _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
+    _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
 
-    if( !suit.enabled )
+    if( !suite.enabled )
     continue;
 
-    suit._testSuitRunLater();
+    suite._testSuiteRunLater();
   }
 
 }
@@ -366,13 +364,13 @@ function _test()
   if( arguments.length === 0 )
   return tester._testAllAct();
 
-  var suits = tester.testsFilterOut( arguments );
+  var suites = tester.testsFilterOut( arguments );
 
-  tester._testingBegin( suits );
+  tester._testingBegin( suites );
 
-  tester._testAct.apply( tester,_.mapVals( suits ) );
+  tester._testAct.apply( tester,_.mapVals( suites ) );
 
-  return wTestSuit._suitCon
+  return wTestSuite._suiteCon
   .doThen( function() {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
@@ -389,15 +387,15 @@ var test = _.timeReadyJoin( undefined,_test );
 
 //
 
-function _testingBegin( suits )
+function _testingBegin( suites )
 {
   var tester = this;
   var logger = tester.logger;
-  var firstSuit = _.mapFirstPair( suits )[ 1 ];
+  var firstSuite = _.mapFirstPair( suites )[ 1 ];
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.numberIs( tester.verbosity ) );
-  _.assert( _.mapIs( suits ) );
+  _.assert( _.mapIs( suites ) );
 
   tester.appArgsApply();
   tester._registerExitHandler();
@@ -413,16 +411,16 @@ function _testingBegin( suits )
 
   logger.begin({ verbosity : -3 });
 
-  if( suits !== undefined )
+  if( suites !== undefined )
   {
-    logger.logUp( 'Launching several ( ' + _.entityLength( suits ) + ' ) test suits ..' );
-    tester.testsListPrint( suits );
+    logger.logUp( 'Launching several ( ' + _.entityLength( suites ) + ' ) test suites ..' );
+    tester.testsListPrint( suites );
   }
   else
   {
     debugger;
-    logger.logUp( 'Launching all known ( ' + _.entityLength( wTests ) + ' ) test suits ..' );
-    tester.testsListPrint( suits );
+    logger.logUp( 'Launching all known ( ' + _.entityLength( wTests ) + ' ) test suites ..' );
+    tester.testsListPrint( suites );
   }
 
   logger.log();
@@ -483,75 +481,75 @@ function _testingEnd()
 
 //
 
-function testsFilterOut( suits )
+function testsFilterOut( suites )
 {
   var tester = this;
   var logger = tester.logger;
-  var suits = suits || wTests;
+  var suites = suites || wTests;
 
-  if( _.arrayLike( suits ) )
+  if( _.arrayLike( suites ) )
   {
-    var _suits = Object.create( null );
-    for( var s = 0 ; s < suits.length ; s++ )
+    var _suites = Object.create( null );
+    for( var s = 0 ; s < suites.length ; s++ )
     {
-      var suit = suits[ s ];
-      if( _.strIs( suit ) )
-      _suits[ suit ] = suit;
-      else if( suit instanceof wTestSuit )
-      _suits[ suit.name ] = suit;
+      var suite = suites[ s ];
+      if( _.strIs( suite ) )
+      _suites[ suite ] = suite;
+      else if( suite instanceof wTestSuite )
+      _suites[ suite.name ] = suite;
       else _.assert( 0,'not tested' );
     }
-    suits = _suits;
+    suites = _suites;
   }
 
   _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
-  _.assert( _.objectIs( suits ) );
+  _.assert( _.objectIs( suites ) );
 
-  var suits = _.entityFilter( suits,function( suit )
+  var suites = _.entityFilter( suites,function( suite )
   {
-    if( _.strIs( suit ) )
+    if( _.strIs( suite ) )
     {
-      if( !wTests[ suit ] )
-      throw _.err( 'Tester : test suit',suit,'not found' );
-      suit = wTests[ suit ];
+      if( !wTests[ suite ] )
+      throw _.err( 'Tester : test suite',suite,'not found' );
+      suite = wTests[ suite ];
     }
-    if( suit.abstract )
+    if( suite.abstract )
     return;
-    // if( suit.enabled !== undefined && !suit.enabled )
+    // if( suite.enabled !== undefined && !suite.enabled )
     // return;
-    return suit;
+    return suite;
   });
 
-  return suits;
+  return suites;
 }
 
 //
 
-function testsListPrint( suits )
+function testsListPrint( suites )
 {
   var tester = this;
   var logger = tester.logger;
-  var suits = suits || wTests;
+  var suites = suites || wTests;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  _.each( suits,function( suit,k )
+  _.each( suites,function( suite,k )
   {
-    if( suit.enabled )
-    logger.log( suit.suitFileLocation, '-', ( suit.enabled ? 'enabled' : 'disabled' ) );
+    if( suite.enabled )
+    logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  _.each( suits,function( suit,k )
+  _.each( suites,function( suite,k )
   {
-    if( !suit.enabled )
-    logger.log( suit.suitFileLocation, '-', ( suit.enabled ? 'enabled' : 'disabled' ) );
+    if( !suite.enabled )
+    logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  // logger.log( _.entitySelect( _.entityVals( suits ),'*.suitFileLocation' ).join( '\n' ) );
+  // logger.log( _.entitySelect( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
 
-  var l = _.entityLength( suits );
+  var l = _.entityLength( suites );
 
-  logger.log( l, l > 1 ? 'test suits' : 'test suit' );
+  logger.log( l, l > 1 ? 'test suites' : 'test suite' );
 
 }
 
@@ -577,8 +575,8 @@ function _reportForm()
   report.testRoutinePasses = 0;
   report.testRoutineFails = 0;
 
-  report.testSuitPasses = 0;
-  report.testSuitFailes = 0;
+  report.testSuitePasses = 0;
+  report.testSuiteFailes = 0;
 
   Object.preventExtensions( report );
 
@@ -598,7 +596,7 @@ function _reportToStr()
   msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
   msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
-  msg += 'Passed test suits ' + ( report.testSuitPasses ) + ' / ' + ( report.testSuitPasses + report.testSuitFailes ) + '';
+  msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
 
   // tester.logger.log( 'report.testCaseFails',report.testCaseFails );
   return msg;
@@ -894,7 +892,7 @@ var SettingsOfTester =
 
 }
 
-var SettingsOfSuit =
+var SettingsOfSuite =
 {
 
   testRoutineTimeOut : null,
@@ -911,7 +909,7 @@ var SettingsOfSuit =
 
 }
 
-var Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuit );
+var Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuite );
 
 var scenariosHelpMap =
 {
@@ -919,7 +917,7 @@ var scenariosHelpMap =
   'help' : 'get help',
   'options.list' : 'list available options',
   'scenarios.list' : 'list available scenarios',
-  'suits.list' : 'list available suits',
+  'suites.list' : 'list available suites',
 }
 
 var scenariosActionMap =
@@ -928,7 +926,7 @@ var scenariosActionMap =
   'help' : 'scenarioHelp',
   'scenarios.list' : 'scenarioScenariosList',
   'options.list' : 'scenarioOptionsList',
-  'suits.list' : 'scenarioSuitsList',
+  'suites.list' : 'scenarioSuitesList',
 }
 
 var Forbids =
@@ -955,7 +953,7 @@ var Accessors =
 }
 
 // --
-// prototype
+// define class
 // --
 
 var Self =
@@ -972,7 +970,7 @@ var Self =
   scenarioHelp : scenarioHelp,
   scenarioScenariosList : scenarioScenariosList,
   scenarioOptionsList : scenarioOptionsList,
-  scenarioSuitsList : scenarioSuitsList,
+  scenarioSuitesList : scenarioSuitesList,
 
 
   // run
@@ -1015,7 +1013,7 @@ var Self =
   // var
 
   SettingsOfTester : SettingsOfTester,
-  SettingsOfSuit : SettingsOfSuit,
+  SettingsOfSuite : SettingsOfSuite,
   Settings : Settings,
 
   settings : Object.create( null ),
@@ -1023,7 +1021,7 @@ var Self =
   logger : new _.Logger({ name : 'LoggerForTesting' }),
   _cancelCon : new _.Consequence(),
 
-  activeSuits : [],
+  activeSuites : [],
   includeFails : [],
   report : null,
 

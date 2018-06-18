@@ -58,6 +58,8 @@
 
 - checkers ( identical, contain, equivalent ... ) should return boolean
 
+- routine : 'some', routine : some - should work both variants
+
 */
 
 var _global = undefined;

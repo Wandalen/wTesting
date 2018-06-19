@@ -64,7 +64,8 @@ function timeOut( test )
     return _.timeOut( delay )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.shouldBe( _.routineIs( got ) );
     });
   })
@@ -78,7 +79,8 @@ function timeOut( test )
     return _.timeOut( delay, () => {} )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.identical( err, null );
     });
@@ -94,7 +96,8 @@ function timeOut( test )
     return _.timeOut( delay, () => value )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, value );
       test.identical( err, null );
     });
@@ -109,7 +112,8 @@ function timeOut( test )
     return _.timeOut( delay, () => _.timeOut( delay ) )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay * 2 );
       test.shouldBe( _.routineIs( got ) );
       test.identical( err, null );
     });
@@ -124,7 +128,8 @@ function timeOut( test )
     return _.timeOut( delay, () => { _.timeOut( delay ) } )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( err, null );
       test.identical( got, undefined );
     });
@@ -143,7 +148,8 @@ function timeOut( test )
     return _.timeOut( delay, undefined, r, [ delay ] )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, delay / 2 );
       test.identical( err, null );
     });
@@ -159,7 +165,8 @@ function timeOut( test )
     return _.timeOut( delay, _.timeOut( delay * 2 ) )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay * 2 );
       test.shouldBe( _.routineIs( got ) );
       test.identical( err, null );
     });
@@ -176,7 +183,8 @@ function timeOut( test )
     return _.timeOut( delay, _.timeOut( delay * 2, () => val ) )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay * 2 );
       test.identical( err, null );
       test.identical( got, val );
     })
@@ -192,7 +200,8 @@ function timeOut( test )
     return _.timeOut( delay, _.timeOut( delay * 2, () => { throw 'err' } ) )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay * 2 );
       test.shouldBe( _.errIs( err ) );
       test.identical( got, undefined );
     });
@@ -208,11 +217,12 @@ function timeOut( test )
     var t = _.timeOut( delay );
     t.doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( err, null );
       test.identical( got, 'stop' )
     })
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
 
     return t;
   })
@@ -228,12 +238,13 @@ function timeOut( test )
     var t = _.timeOut( delay, () => { called = true } );
     t.doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, 'stop' );
       test.identical( called, false );
       test.identical( err, null )
     })
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
 
     return t;
   })
@@ -248,7 +259,8 @@ function timeOut( test )
     var t = _.timeOut( delay, () => {} );
     t.got( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.identical( err, null );
     })
@@ -279,7 +291,8 @@ function timeOut( test )
       t.got( ( err, got ) => test.identical( got, msg ) );
       t.got( ( err, got ) =>
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.identical( got, returnValue );
       })
     })
@@ -300,15 +313,15 @@ function timeOut( test )
     var t = _.timeOut( delay, () => { called = true } );
     t.doThen( function( err, got )
     {
-      var time = _.timeNow() - timeBefore;
+      var elapsedTime = _.timeNow() - timeBefore;
       // test.description = 'stop timer with error + arg, routine passed, time:' + time;
-      console.log( 'time', time );
-      test.shouldBe( time >= delay / 2 );
+      // console.log( 'time', time );
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, [ stop, arg ] );
       test.identical( called, false );
       test.identical( err, null )
     })
-    _.timeOut( delay/ 2, () => t.give( stop, arg ) );
+    _.timeOut( delay / 2, () => t.give( stop, arg ) );
 
     return t;
   })
@@ -343,7 +356,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( _.routineIs( got ) );
       });
       test.identical( t.messagesGet().length, 1 );
@@ -368,7 +382,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === undefined );
         test.shouldBe( err === null );
       });
@@ -395,7 +410,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === value );
         test.shouldBe( err === null );
       });
@@ -421,7 +437,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( _.routineIs( got ));
         test.shouldBe( err === null );
       });
@@ -447,7 +464,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === undefined );
         test.shouldBe( err === null );
       });
@@ -477,7 +495,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === delay / 2 );
         test.shouldBe( err === null );
       });
@@ -498,13 +517,14 @@ function timeOutAsync( test )
     test.description = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( delay );
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
     return new _.Consequence().first( t )
     .doThen( function()
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay / 2 );
         test.shouldBe( got === 'stop' );
         test.shouldBe( err === null );
       });
@@ -527,14 +547,15 @@ function timeOutAsync( test )
     var called = false;
 
     var t = _.timeOut( delay, () => { called = true } );
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
 
     return new _.Consequence().first( t )
     .doThen( function()
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay / 2 );
         test.identical( got, 'stop' );
         test.identical( called, false );
         test.identical( err, null )
@@ -563,7 +584,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.identical( got, undefined );
         test.identical( err, null );
       })
@@ -603,7 +625,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( _.routineIs( got ) );
       });
       test.identical( t.messagesGet().length, 1 );
@@ -628,7 +651,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === undefined );
         test.shouldBe( err === null );
       });
@@ -655,7 +679,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === value );
         test.shouldBe( err === null );
       });
@@ -681,7 +706,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( _.routineIs( got ));
         test.shouldBe( err === null );
       });
@@ -707,7 +733,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === undefined );
         test.shouldBe( err === null );
       });
@@ -737,7 +764,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === delay / 2 );
         test.shouldBe( err === null );
       });
@@ -758,13 +786,14 @@ function timeOutAsync( test )
     test.description = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( delay );
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
     return new _.Consequence().first( t )
     .doThen( function()
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay / 2 );
         test.shouldBe( got === 'stop' );
         test.shouldBe( err === null );
         test.identical( t.messagesGet().length, 0 );
@@ -785,14 +814,15 @@ function timeOutAsync( test )
     var called = false;
 
     var t = _.timeOut( delay, () => { called = true } );
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
 
     return new _.Consequence().first( t )
     .doThen( function()
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay / 2 );
         test.identical( got, 'stop' );
         test.identical( called, false );
         test.identical( err, null );
@@ -818,7 +848,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.identical( got, undefined );
         test.identical( err, null );
       })
@@ -859,7 +890,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( _.routineIs( got ) );
       });
       test.identical( t.messagesGet().length, 1 );
@@ -884,7 +916,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === undefined );
         test.shouldBe( err === null );
       });
@@ -911,7 +944,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === value );
         test.shouldBe( err === null );
       });
@@ -937,7 +971,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( _.routineIs( got ));
         test.shouldBe( err === null );
       });
@@ -963,7 +998,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === undefined );
         test.shouldBe( err === null );
       });
@@ -993,7 +1029,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.shouldBe( got === delay / 2 );
         test.shouldBe( err === null );
       });
@@ -1014,13 +1051,14 @@ function timeOutAsync( test )
     test.description = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( delay );
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
     return new _.Consequence().first( t )
     .doThen( function()
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay / 2 );
         test.shouldBe( got === 'stop' );
         test.shouldBe( err === null );
       });
@@ -1043,14 +1081,15 @@ function timeOutAsync( test )
     var called = false;
 
     var t = _.timeOut( delay, () => { called = true } );
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
 
     return new _.Consequence().first( t )
     .doThen( function()
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay / 2 );
         test.identical( got, 'stop' );
         test.identical( called, false );
         test.identical( err, null )
@@ -1079,7 +1118,8 @@ function timeOutAsync( test )
     {
       t.got( function( err, got )
       {
-        test.shouldBe( _.timeNow() - timeBefore >= delay );
+        var elapsedTime = _.timeNow() - timeBefore;
+        test.shouldBe( elapsedTime >= delay );
         test.identical( got, undefined );
         test.identical( err, null );
       })
@@ -1128,7 +1168,8 @@ function timeOutError( test )
     return _.timeOutError( delay )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.shouldBe( _.errIs( err ) );
     });
   })
@@ -1142,7 +1183,8 @@ function timeOutError( test )
     return _.timeOutError( delay, () => {} )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.shouldBe( _.errIs( err ) );
     });
@@ -1158,7 +1200,8 @@ function timeOutError( test )
     return _.timeOutError( delay, () => value )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.shouldBe( _.errIs( err ) );
     });
@@ -1173,7 +1216,8 @@ function timeOutError( test )
     return _.timeOutError( delay, () => _.timeOut( delay ) )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay * 2 );
       test.identical( got, undefined );
       test.shouldBe( _.errIs( err ) );
     });
@@ -1188,7 +1232,8 @@ function timeOutError( test )
     return _.timeOutError( delay, () => { _.timeOut( delay ) } )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.shouldBe( _.errIs( err ) );
     });
@@ -1207,7 +1252,8 @@ function timeOutError( test )
     return _.timeOutError( delay, undefined, r, [ delay ] )
     .doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.shouldBe( _.errIs( err ) );
     });
@@ -1223,8 +1269,8 @@ function timeOutError( test )
     return _.timeOutError( delay, _.timeOut( delay * 2 ) )
     .doThen( function( err, got )
     {
-      console.log( 'xxx' );
-      test.shouldBe( _.timeNow() - timeBefore >= delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay * 3 );
       test.identical( got, undefined );
       test.shouldBe( _.errIs( err ) );
     });
@@ -1241,7 +1287,8 @@ function timeOutError( test )
     var t = _.timeOutError( delay );
     t.doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.shouldBe( !!err );
       test.identical( t.messagesGet().length, 0 );
@@ -1262,13 +1309,14 @@ function timeOutError( test )
     var t = _.timeOutError( delay, () => { called = true } );
     t.doThen( function( err, got )
     {
-      test.shouldBe( _.timeNow() - timeBefore >= delay / 2 );
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.shouldBe( elapsedTime >= delay );
       test.identical( got, undefined );
       test.identical( called, false );
       test.shouldBe( !!err );
       test.identical( t.messagesGet().length, 0 );
     })
-    _.timeOut( delay/ 2, () => t.error( 'stop' ) );
+    _.timeOut( delay / 2, () => t.error( 'stop' ) );
 
     return t;
   })

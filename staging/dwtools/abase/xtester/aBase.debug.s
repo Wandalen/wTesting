@@ -67,14 +67,14 @@ if( !_global && typeof Global !== 'undefined' && Global.Global === Global ) _glo
 if( !_global && typeof global !== 'undefined' && global.global === global ) _global = global;
 if( !_global && typeof window !== 'undefined' && window.window === window ) _global = window;
 if( !_global && typeof self   !== 'undefined' && self.self === self ) _global = self;
-var _globalReal = _global;
+var _realGlobal = _global;
 var _globalWas = _global._global_ || _global;
 if( _global._global_ )
 _global = _global._global_;
 _global._global_ = _global;
-_globalReal._globalReal_ = _globalReal;
+_realGlobal._realGlobal_ = _realGlobal;
 
-if( _globalReal_._SeparatingTester_ )
+if( _realGlobal_._SeparatingTester_ )
 {
   _global = _global._global_ = Object.create( _global._global_ );
   _global.WTOOLS_PRIVATE = true;
@@ -113,7 +113,7 @@ if( typeof module !== 'undefined' )
 
   // _.includeAny( 'wScriptLauncher' );
 
-  _.assert( !_globalReal_.wTester || !_globalReal_.wTester._isFullImplementation,'wTester is already included' );
+  _.assert( !_realGlobal_.wTester || !_realGlobal_.wTester._isFullImplementation,'wTester is already included' );
 
   require( './aTestSuite.debug.s' );
   require( './bTestRoutine.debug.s' );

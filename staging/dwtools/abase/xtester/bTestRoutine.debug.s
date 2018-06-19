@@ -360,21 +360,28 @@ function shouldBe( outcome )
 {
   var trd = this;
 
-  // _.assert( _.boolLike( outcome ),'shouldBe expects single bool argument' );
-  // _.assert( arguments.length === 1,'shouldBe expects single bool argument' );
+  // trd.exceptionReport
+  // ({
+  //   err : _.err( 'shouldBe expects single bool argument' ),
+  // });
 
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
-  trd._outcomeReportBoolean
-  ({
-    outcome : 0,
-    msg : 'shouldBe expects single bool argument',
-  });
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'shouldBe expects single bool argument',
+    });
+  }
   else
-  trd._outcomeReportBoolean
-  ({
-    outcome : outcome,
-    msg : 'expected true',
-  });
+  {
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'expected true',
+    });
+  }
 
   return outcome;
 }
@@ -384,22 +391,27 @@ function shouldBe( outcome )
 function shouldBeNotError( maybeErrror )
 {
   var trd = this;
-
-  // _.assert( arguments.length === 1,'shouldBeNotError expects single argument' );
+  var outcome = !_.errIs( maybeErrror );
 
   if( arguments.length !== 1 )
-  trd._outcomeReportBoolean
-  ({
-    outcome : 0,
-    msg : 'shouldBeNotError expects single argument',
-  });
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'shouldBeNotError expects single argument',
+    });
+  }
   else
-  trd._outcomeReportBoolean
-  ({
-    outcome : !_.errIs( maybeErrror ),
-    msg : 'expected variable is not error',
-  });
+  {
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'expected variable is not error',
+    });
+  }
 
+  return outcome;
 }
 
 //

@@ -947,6 +947,6 @@ _.accessorForbid( Self.prototype,Forbids );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_globalReal_[ Self.name ] = _global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_realGlobal_[ Self.name ] = _global_[ Self.name ] = _[ Self.nameShort ] = Self;
 
 })();

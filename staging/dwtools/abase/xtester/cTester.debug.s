@@ -1060,8 +1060,8 @@ _.accessor
 //
 
 Object.preventExtensions( Self );
-_.assert( !_globalReal_.wTester );
-_globalReal_.wTester = _.Tester = Self;
+_.assert( !_realGlobal_.wTester );
+_realGlobal_.wTester = _.Tester = Self;
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

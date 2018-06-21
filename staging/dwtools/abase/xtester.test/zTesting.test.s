@@ -2131,6 +2131,1037 @@ function chainedShould( test )
 
 chainedShould.timeOut = 30000;
 
+//
+
+function shouldBeReturn( test )
+{
+  function _shouldBeReturn( t )
+  {
+    var got = t.shouldBe( 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( 0 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( {} );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( [] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( t.shouldBe );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe( true, false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBe();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { shouldBeReturn : _shouldBeReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function shouldBeNotErrorReturn( test )
+{
+  function _shouldBeNotErrorReturn( t )
+  {
+    var got = t.shouldBeNotError( 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( 0 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( false );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( {} );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( [] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( t.shouldBe );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( true, false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( _.err( 'msg' ) );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldBeNotError( new Error( 'msg' ) );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { shouldBeNotErrorReturn : _shouldBeNotErrorReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function isNotIdenticalReturn( test )
+{
+  function _isNotIdenticalReturn( t )
+  {
+    var got = t.isNotIdentical( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( 1,'1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( '1','1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.isNotIdentical( t.isNotIdentical, t.isNotIdentical );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.isNotIdentical() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { isNotIdenticalReturn : _isNotIdenticalReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function identicalReturn( test )
+{
+  function _identicalReturn( t )
+  {
+    var got = t.identical( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( 1,'1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( '1','1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( true, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( false, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( [ 1 ], [ 1 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( [ 1 ], [ 2 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.identical( t.isNotIdentical, t.isNotIdentical );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.identical() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { identicalReturn  : _identicalReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function equivalentReturn( test )
+{
+  function _equivalentReturn( t )
+  {
+    var got = t.equivalent( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1,'1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( '1',1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( '1','1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( true, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( false, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( [ 1 ], [ 1 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( [ 1 ], [ 2 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( t.isNotIdentical, t.isNotIdentical );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1, 1.1, 0.1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1.05, 1, 0.1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.equivalent() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { equivalentReturn : _equivalentReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function containReturn( test )
+{
+  function _containReturn( t )
+  {
+    var got = t.contain( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( 1,'1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( '1',1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( '1','1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( true, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( false, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( [ 1 ], [ 1 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( [ 1 ], [ 2 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( [ 1,2,3,4 ], 5 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( [ 1,2,3,4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( [ 1,2,3,4 ], [ 4,5 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( [ 1,2,3,4 ], [ 3,4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.contain( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.contain() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { containReturn : _containReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function shouldThrowErrorSyncReturn( test )
+{
+  function _shouldThrowErrorSyncReturn( t )
+  {
+    var got = t.shouldThrowErrorSync( () => true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldThrowErrorSync( () => { throw _.err( 1 ) } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.shouldThrowErrorSync( () => _.Consequence().error( 1 ) );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.shouldThrowErrorSync() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { shouldThrowErrorSyncReturn : _shouldThrowErrorSyncReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function shouldThrowErrorAsyncReturn( test )
+{
+  function _shouldThrowErrorAsyncReturn( t )
+  {
+    var con = _.Consequence().give()
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowErrorAsync( () => true )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowErrorAsync( () => { throw _.err( 1 ) } )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowErrorAsync( _.Consequence().give( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowErrorAsync( _.Consequence().error( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowErrorAsync( _.timeOutError( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    if( !Config.debug )
+    return con;
+
+    con.ifNoErrorThen( () =>
+    {
+      return test.shouldThrowError( () => t.shouldThrowErrorAsync() )
+    })
+
+    return con;
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { shouldThrowErrorAsyncReturn : _shouldThrowErrorAsyncReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function shouldThrowErrorReturn( test )
+{
+  function _shouldThrowErrorReturn( t )
+  {
+    var con = _.Consequence().give()
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowError( () => true )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, null );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowError( () => { throw _.err( 1 ) } )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowError( _.Consequence().give( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, null );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowError( _.Consequence().error( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( got, 1 );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowError( _.timeOutError( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    return con;
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { shouldThrowErrorReturn : _shouldThrowErrorReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function mustNotThrowErrorReturn( test )
+{
+  function _mustNotThrowErrorReturn( t )
+  {
+    var con = _.Consequence().give()
+
+    .ifNoErrorThen( () =>
+    {
+      return t.mustNotThrowError( () => true )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( got, true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.mustNotThrowError( () => { throw _.err( 1 ) } )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, null );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.mustNotThrowError( _.Consequence().give( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( got, 1 );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.mustNotThrowError( _.Consequence().error( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, 1 );
+        test.identical( got, null );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.mustNotThrowError( _.timeOutError( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, null );
+      })
+    })
+
+    return con;
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { mustNotThrowErrorReturn : _mustNotThrowErrorReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+//
+
+function shouldMessageOnlyOnceReturn( test )
+{
+  function _shouldMessageOnlyOnceReturn( t )
+  {
+    var con = _.Consequence().give()
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( () => 1 )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( got, 1 );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( () => { throw _.err( 1 ) } )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( _.Consequence().give( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( got, 1 );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( () => _.Consequence().give( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( got, 1 );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( _.Consequence().error( _.err( 1 ) ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( () => _.Consequence().error( _.err( 1 ) ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      var con = _.timeOut( 1, () => _.timeOut( 1 ) )
+      return t.shouldMessageOnlyOnce( con )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.rouitimeIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      var con = _.timeOut( 1, () => _.timeOut( 1 ) )
+      return t.shouldMessageOnlyOnce( () => con )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.rouitimeIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( _.timeOutError( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( () => _.timeOutError( 1 ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, null );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      var con = _.Consequence().give( 1 ).give( 2 );
+      return t.shouldMessageOnlyOnce( con )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, null );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      var con = _.Consequence().give( 1 ).give( 2 );
+      return t.shouldMessageOnlyOnce( () => con )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, null );
+      })
+    })
+
+    return con;
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { shouldMessageOnlyOnceReturn : _shouldMessageOnlyOnceReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
 // --
 // etc
 // --
@@ -2230,6 +3261,23 @@ var Self =
 
     _chainedShould : _chainedShould,
     chainedShould : chainedShould,
+
+    //return
+
+    shouldBeReturn : shouldBeReturn,
+    shouldBeNotErrorReturn : shouldBeNotErrorReturn,
+    isNotIdenticalReturn : isNotIdenticalReturn,
+    identicalReturn : identicalReturn,
+    equivalentReturn : equivalentReturn,
+    containReturn : containReturn,
+
+    shouldThrowErrorSyncReturn : shouldThrowErrorSyncReturn,
+    shouldThrowErrorAsyncReturn : shouldThrowErrorAsyncReturn,
+    shouldThrowErrorReturn : shouldThrowErrorReturn,
+    mustNotThrowErrorReturn : mustNotThrowErrorReturn,
+    shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
+
+    //
 
     // etc
 

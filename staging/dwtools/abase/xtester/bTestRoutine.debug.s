@@ -423,13 +423,13 @@ function isNotIdentical( got,expected )
 
   _.assert( arguments.length === 2 );
 
-  var outcome = _.entityIdentical( got,expected,iterator );
+  var outcome = !_.entityIdentical( got,expected,iterator );
 
   _.assert( iterator.lastPath !== undefined );
 
   trd._outcomeReportCompare
   ({
-    outcome : !outcome,
+    outcome : outcome,
     got : got,
     expected : expected,
     path : iterator.lastPath,

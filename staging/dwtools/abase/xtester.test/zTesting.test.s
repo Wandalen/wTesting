@@ -3162,6 +3162,596 @@ function shouldMessageOnlyOnceReturn( test )
   return suite.run();
 }
 
+//
+
+function eqReturn( test )
+{
+  function _eqReturn( t )
+  {
+    var got = t.eq( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( 1,'1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( '1',1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( '1','1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( true, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( false, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( [ 1 ], [ 1 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( [ 1 ], [ 2 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( t.isNotIdentical, t.isNotIdentical );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.eq( test.isNotIdentical, t.isNotIdentical );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.eq() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { eqReturn : _eqReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function neReturn( test )
+{
+  function _neReturn( t )
+  {
+    var got = t.ne( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( 1,2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( 1,'1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( '1',1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( '1','1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( t.isNotIdentical, t.isNotIdentical );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ne( test.isNotIdentical, t.isNotIdentical );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.ne() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { neReturn : _neReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function gtReturn( test )
+{
+  function _gtReturn( t )
+  {
+    var got = t.gt( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.gt( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.gt( 2,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.gt( 1.01,1.01 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.gt( 1.01,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.gt( 1.01,1.02 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.gt( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.gt( d2,d1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.ne() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { gtReturn : _gtReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function geReturn( test )
+{
+  function _geReturn( t )
+  {
+    var got = t.ge( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ge( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ge( 2,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ge( 1.01,1.01 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ge( 1.01,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.ge( 1.01,1.02 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+
+    var got = t.ge( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.ge( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.ge( d2,d1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.ge() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { geReturn : _geReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function ltReturn( test )
+{
+  function _ltReturn( t )
+  {
+    var got = t.lt( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.lt( 1,2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.lt( 2,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.lt( 1.01,1.01 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.lt( 1.01,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.lt( 1.01,1.02 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+
+    var got = t.lt( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.lt( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.lt( d2,d1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.lt() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { ltReturn : _ltReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function leReturn( test )
+{
+  function _leReturn( t )
+  {
+    var got = t.le( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.le( 1,2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.le( 2,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.le( 1.01,1.01 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.le( 1.01,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.le( 1.01,1.02 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+
+    var got = t.le( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.le( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
+    d1.setSeconds( 20 );
+    d2.setSeconds( 30 );
+
+    var got = t.le( d2,d1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.le() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { leReturn : _leReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+
 // --
 // etc
 // --
@@ -3235,7 +3825,7 @@ var Self =
 
   name : 'wTesting / general tests',
   silencing : 1,
-  enabled : 0, // !!!
+  enabled : 1, // !!!
   // verbosity : 3,
   // routine : 'timeOut',
 
@@ -3278,6 +3868,13 @@ var Self =
     shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
 
     //
+
+    eqReturn : eqReturn,
+    neReturn : neReturn,
+    gtReturn : gtReturn,
+    geReturn : geReturn,
+    ltReturn : ltReturn,
+    leReturn : leReturn,
 
     // etc
 

@@ -3428,6 +3428,15 @@ function gtReturn( test )
 
     var d1 = new Date( Date.now() );
     var d2 = new Date( d1.geTime() );
+
+    var got = t.gt( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.geTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 

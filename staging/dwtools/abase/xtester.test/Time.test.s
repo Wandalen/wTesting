@@ -1338,6 +1338,7 @@ var Self =
 
   name : 'Time' + Math.random(),
   silencing : 1,
+  enabled : 0, // !!!
 
   tests :
   {

@@ -3,7 +3,6 @@
 'use strict';
 
 var _global = _global_;
-var _global = _global_;
 var _ = _global_.wTools;
 var sourceFileLocation = _.diagnosticLocation().full;
 var sourceFileStack = _.diagnosticStack();

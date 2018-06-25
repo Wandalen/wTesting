@@ -8,7 +8,7 @@ var testsWas = _realGlobal_.wTests;
 _realGlobal_.wTests = _global_.wTests = wTestSuite.instancesMap;
 
 if( testsWas )
-wTestSuite.prototype._registerSuites( testsWas );
+wTestSuite.prototype._testSuitesRegister( testsWas );
 
 if( _global_.WTOOLS_PRIVATE )
 {

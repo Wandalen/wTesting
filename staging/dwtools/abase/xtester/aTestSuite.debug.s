@@ -34,7 +34,9 @@ var Self = function wTestSuite( o )
 
 Self.nameShort = 'TestSuite';
 
-//
+// --
+// inter
+// --
 
 function init( o )
 {
@@ -164,7 +166,7 @@ function inherit()
 // etc
 // --
 
-function _registerSuites( suites )
+function _testSuitesRegister( suites )
 {
   var suite = this;
 
@@ -880,7 +882,7 @@ var Proto =
 
   // etc
 
-  _registerSuites : _registerSuites,
+  _testSuitesRegister : _testSuitesRegister,
 
 
   // test suite run
@@ -923,6 +925,7 @@ var Proto =
   Associates : Associates,
   Restricts : Restricts,
   Statics : Statics,
+  Forbids : Forbids,
   Events : Events,
 
 }
@@ -940,8 +943,6 @@ _.Copyable.mixin( Self );
 _.Instancing.mixin( Self );
 if( _.EventHandler )
 _.EventHandler.mixin( Self );
-
-_.accessorForbid( Self.prototype,Forbids );
 
 // export
 

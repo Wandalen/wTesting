@@ -2303,71 +2303,71 @@ function shouldBeNotErrorReturn( test )
 
 //
 
-function isNotIdenticalReturn( test )
+function notIdenticalReturn( test )
 {
   function _isNotIdenticalReturn( t )
   {
-    var got = t.isNotIdentical( 1,1 );
+    var got = t.notIdentical( 1,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( 1,'1' );
+    var got = t.notIdentical( 1,'1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( '1','1' );
+    var got = t.notIdentical( '1','1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( true, true );
+    var got = t.notIdentical( true, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( false, true );
+    var got = t.notIdentical( false, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( [ 1 ], [ 1 ] );
+    var got = t.notIdentical( [ 1 ], [ 1 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( [ 1 ], [ 2 ] );
+    var got = t.notIdentical( [ 1 ], [ 2 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( { a : 1 }, { a : 1 } );
+    var got = t.notIdentical( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( { a : 1 }, { a : 2 } );
+    var got = t.notIdentical( { a : 1 }, { a : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( test, t );
+    var got = t.notIdentical( test, t );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.isNotIdentical( t.isNotIdentical, t.isNotIdentical );
+    var got = t.notIdentical( t.notIdentical, t.notIdentical );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -2376,7 +2376,7 @@ function isNotIdenticalReturn( test )
     if( !Config.debug )
     return;
 
-    test.shouldThrowError( () => t.isNotIdentical() );
+    test.shouldThrowError( () => t.notIdentical() );
 
   }
 
@@ -2384,7 +2384,7 @@ function isNotIdenticalReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { isNotIdenticalReturn : _isNotIdenticalReturn },
+    tests : { notIdenticalReturn : _isNotIdenticalReturn },
     override : notTakingIntoAccount,
     name : test.name
   });
@@ -2466,7 +2466,7 @@ function identicalReturn( test )
 
     //
 
-    var got = t.identical( t.isNotIdentical, t.isNotIdentical );
+    var got = t.identical( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -2571,7 +2571,7 @@ function equivalentReturn( test )
 
     //
 
-    var got = t.equivalent( t.isNotIdentical, t.isNotIdentical );
+    var got = t.equivalent( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -2601,6 +2601,123 @@ function equivalentReturn( test )
   var suite = wTestSuite
   ({
     tests : { equivalentReturn : _equivalentReturn },
+    override : notTakingIntoAccount,
+    name : test.name
+  });
+
+  /* */
+
+  return suite.run();
+}
+
+//
+
+function notEquivalentReturn( test )
+{
+  function _notEquivalentReturn( t )
+  {
+    var got = t.equivalent( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1,'1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( '1',1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( '1','1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( true, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( false, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( [ 1 ], [ 1 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( [ 1 ], [ 2 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( t.notIdentical, t.notIdentical );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1, 1.1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    var got = t.equivalent( 1.05, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    //
+
+    if( !Config.debug )
+    return;
+
+    test.shouldThrowError( () => t.equivalent() );
+
+  }
+
+  //
+
+  var suite = wTestSuite
+  ({
+    tests : { notEquivalentReturn : _notEquivalentReturn },
     override : notTakingIntoAccount,
     name : test.name
   });
@@ -3164,89 +3281,89 @@ function shouldMessageOnlyOnceReturn( test )
 
 //
 
-function eqReturn( test )
+function ilReturn( test )
 {
-  function _eqReturn( t )
+  function _ilReturn( t )
   {
-    var got = t.eq( 1,1 );
+    var got = t.il( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( 1,2 );
+    var got = t.il( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( 1,'1' );
+    var got = t.il( 1,'1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( '1',1 );
+    var got = t.il( '1',1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( '1','1' );
+    var got = t.il( '1','1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( true, true );
+    var got = t.il( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( false, true );
+    var got = t.il( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( [ 1 ], [ 1 ] );
+    var got = t.il( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( [ 1 ], [ 2 ] );
+    var got = t.il( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( { a : 1 }, { a : 1 } );
+    var got = t.il( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( { a : 1 }, { a : 2 } );
+    var got = t.il( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( test, t );
+    var got = t.il( test, t );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( t.isNotIdentical, t.isNotIdentical );
+    var got = t.il( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.eq( test.isNotIdentical, t.isNotIdentical );
+    var got = t.il( test.notIdentical, t.notIdentical );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -3255,7 +3372,7 @@ function eqReturn( test )
     if( !Config.debug )
     return;
 
-    test.shouldThrowError( () => t.eq() );
+    test.shouldThrowError( () => t.il() );
 
   }
 
@@ -3263,7 +3380,7 @@ function eqReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { eqReturn : _eqReturn },
+    tests : { ilReturn : _ilReturn },
     override : notTakingIntoAccount,
     name : test.name
   });
@@ -3275,89 +3392,89 @@ function eqReturn( test )
 
 //
 
-function neReturn( test )
+function niReturn( test )
 {
-  function _neReturn( t )
+  function _niReturn( t )
   {
-    var got = t.ne( 1,1 );
+    var got = t.ni( 1,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( 1,2 );
+    var got = t.ni( 1,2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( 1,'1' );
+    var got = t.ni( 1,'1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( '1',1 );
+    var got = t.ni( '1',1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( '1','1' );
+    var got = t.ni( '1','1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( true, true );
+    var got = t.ni( true, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( false, true );
+    var got = t.ni( false, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( [ 1 ], [ 1 ] );
+    var got = t.ni( [ 1 ], [ 1 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( [ 1 ], [ 2 ] );
+    var got = t.ni( [ 1 ], [ 2 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( { a : 1 }, { a : 1 } );
+    var got = t.ni( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( { a : 1 }, { a : 2 } );
+    var got = t.ni( { a : 1 }, { a : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( test, t );
+    var got = t.ni( test, t );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( t.isNotIdentical, t.isNotIdentical );
+    var got = t.ni( t.notIdentical, t.notIdentical );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     //
 
-    var got = t.ne( test.isNotIdentical, t.isNotIdentical );
+    var got = t.ni( test.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -3366,7 +3483,7 @@ function neReturn( test )
     if( !Config.debug )
     return;
 
-    test.shouldThrowError( () => t.ne() );
+    test.shouldThrowError( () => t.ni() );
 
   }
 
@@ -3374,7 +3491,7 @@ function neReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { neReturn : _neReturn },
+    tests : { niReturn : _niReturn },
     override : notTakingIntoAccount,
     name : test.name
   });
@@ -3460,7 +3577,7 @@ function gtReturn( test )
     if( !Config.debug )
     return;
 
-    test.shouldThrowError( () => t.ne() );
+    test.shouldThrowError( () => t.ni() );
 
   }
 
@@ -3863,25 +3980,27 @@ var Self =
 
     //return
 
-    shouldBeReturn : shouldBeReturn,
-    shouldBeNotErrorReturn : shouldBeNotErrorReturn,
-    isNotIdenticalReturn : isNotIdenticalReturn,
-    identicalReturn : identicalReturn,
-    equivalentReturn : equivalentReturn,
-    containReturn : containReturn,
+    // shouldBeReturn : shouldBeReturn,
+    // shouldBeNotErrorReturn : shouldBeNotErrorReturn,
+    // identicalReturn : identicalReturn,
+    // notIdenticalReturn : notIdenticalReturn,
+    // equivalentReturn : equivalentReturn,
+    // notEquivalentReturn : notEquivalentReturn,
+    // containReturn : containReturn,
+    //
+    // shouldThrowErrorSyncReturn : shouldThrowErrorSyncReturn,
+    // shouldThrowErrorAsyncReturn : shouldThrowErrorAsyncReturn,
+    // shouldThrowErrorReturn : shouldThrowErrorReturn,
+    // mustNotThrowErrorReturn : mustNotThrowErrorReturn,
+    // shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
 
-    shouldThrowErrorSyncReturn : shouldThrowErrorSyncReturn,
-    shouldThrowErrorAsyncReturn : shouldThrowErrorAsyncReturn,
-    shouldThrowErrorReturn : shouldThrowErrorReturn,
-    mustNotThrowErrorReturn : mustNotThrowErrorReturn,
-    shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
-
-    eqReturn : eqReturn,
-    neReturn : neReturn,
-    gtReturn : gtReturn,
-    geReturn : geReturn,
-    ltReturn : ltReturn,
-    leReturn : leReturn,
+    // ilReturn : ilReturn,
+    // niReturn : niReturn,
+    //
+    // gtReturn : gtReturn,
+    // geReturn : geReturn,
+    // ltReturn : ltReturn,
+    // leReturn : leReturn,
 
     // etc
 

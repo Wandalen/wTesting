@@ -360,11 +360,6 @@ function shouldBe( outcome )
 {
   var trd = this;
 
-  // trd.exceptionReport
-  // ({
-  //   err : _.err( 'shouldBe expects single bool argument' ),
-  // });
-
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
     outcome = false;
@@ -416,31 +411,6 @@ function shouldBeNotError( maybeErrror )
 
 //
 
-function isNotIdentical( got,expected )
-{
-  var trd = this;
-  var iterator = Object.create( null );
-
-  _.assert( arguments.length === 2 );
-
-  var outcome = !_.entityIdentical( got,expected,iterator );
-
-  _.assert( iterator.lastPath !== undefined );
-
-  trd._outcomeReportCompare
-  ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
-    path : iterator.lastPath,
-    usingExtraDetails : 0,
-  });
-
-  return outcome;
-}
-
-//
-
 /**
  * Checks if test passes a specified condition by deep strict comparsing result of code execution( got )
  * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
@@ -476,12 +446,32 @@ function identical( got,expected )
 {
   var trd = this;
   var iterator = Object.create( null );
-
-  _.assert( arguments.length === 2,'expects two arguments' );
-
   var outcome = _.entityIdentical( got,expected,iterator );
 
-  _.assert( iterator.lastPath !== undefined );
+  // _.assert( arguments.length === 2,'expects two arguments' );
+  // _.assert( iterator.lastPath !== undefined );
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'identical expects two argument',
+    });
+    return outcome;
+  }
+
+  if( iterator.lastPath === undefined )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'something wrong with entityIdentical',
+    });
+    return outcome;
+  }
 
   trd._outcomeReportCompare
   ({
@@ -490,6 +480,48 @@ function identical( got,expected )
     expected : expected,
     path : iterator.lastPath,
     usingExtraDetails : 1,
+  });
+
+  return outcome;
+}
+
+//
+
+function notIdentical( got,expected )
+{
+  var trd = this;
+  var iterator = Object.create( null );
+  var outcome = !_.entityIdentical( got,expected,iterator );
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'notIdentical expects two argument',
+    });
+    return outcome;
+  }
+
+  if( iterator.lastPath === undefined )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'something wrong with entityIdentical',
+    });
+    return outcome;
+  }
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    path : iterator.lastPath,
+    usingExtraDetails : 0,
   });
 
   return outcome;
@@ -541,9 +573,29 @@ function equivalent( got,expected,eps )
 
   iterator.eps = eps;
 
-  _.assert( arguments.length === 2 || arguments.length === 3,'expects two or three arguments' );
+  var outcome = _.entityEquivalent( got, expected, iterator );
 
-  var outcome = _.entityEquivalent( got,expected,iterator );
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'equivalent expects two argument',
+    });
+    return outcome;
+  }
+
+  if( iterator.lastPath === undefined )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'something wrong with entityIdentical',
+    });
+    return outcome;
+  }
 
   trd._outcomeReportCompare
   ({
@@ -556,6 +608,55 @@ function equivalent( got,expected,eps )
 
   return outcome;
 }
+
+//
+
+function notEquivalent( got,expected )
+{
+  var trd = this;
+  var iterator = Object.create( null );
+
+  if( eps === undefined )
+  eps = trd.eps;
+
+  iterator.eps = eps;
+
+  var outcome = !_.entityEquivalent( got, expected, iterator );
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'notEquivalent expects two argument',
+    });
+    return outcome;
+  }
+
+  if( iterator.lastPath === undefined )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'something wrong with entityIdentical',
+    });
+    return outcome;
+  }
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    path : iterator.lastPath,
+    usingExtraDetails : 1,
+  });
+
+  return outcome;
+}
+
 
 //
 
@@ -594,9 +695,29 @@ function contain( got,expected )
   var trd = this;
   var iterator = Object.create( null );
 
-  _.assert( arguments.length === 2,'expects two arguments' );
-
   var outcome = _.entityContain( got,expected,iterator );
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'contain expects two argument',
+    });
+    return outcome;
+  }
+
+  if( iterator.lastPath === undefined )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'something wrong with entityIdentical',
+    });
+    return outcome;
+  }
 
   trd._outcomeReportCompare
   ({
@@ -604,6 +725,64 @@ function contain( got,expected )
     got : got,
     expected : expected,
     path : iterator.lastPath,
+    usingExtraDetails : 1,
+  });
+
+  return outcome;
+}
+
+//
+
+function gt( got, than )
+{
+  var trd = this;
+  var outcome = got > than;
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'gt expects two argument',
+    });
+    return outcome;
+  }
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    usingExtraDetails : 1,
+  });
+
+  return outcome;
+}
+
+//
+
+function ge( got, than )
+{
+  var trd = this;
+  var outcome = got >= than;
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+    trd._outcomeReportBoolean
+    ({
+      outcome : outcome,
+      msg : 'gt expects two argument',
+    });
+    return outcome;
+  }
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
     usingExtraDetails : 1,
   });
 
@@ -1672,17 +1851,21 @@ var Proto =
 
   shouldBe : shouldBe,
   shouldBeNotError : shouldBeNotError,
-  isNotIdentical : isNotIdentical,
   identical : identical,
+  notIdentical : notIdentical,
   equivalent : equivalent,
+  notEquivalent : notEquivalent,
   contain : contain,
 
-  eq : eq,
-  ne : ne,
+  il : identical,
+  ni : notIdentical,
+  el : equivalent,
+  ne : notEquivalent,
+
   gt : gt,
   ge : ge,
-  lt : lt,
-  le : le,
+  // lt : lt,
+  // le : le,
 
   _shouldDo : _shouldDo,
 

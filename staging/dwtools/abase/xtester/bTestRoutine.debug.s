@@ -1677,6 +1677,13 @@ var Proto =
   equivalent : equivalent,
   contain : contain,
 
+  eq : eq,
+  ne : ne,
+  gt : gt,
+  ge : ge,
+  lt : lt,
+  le : le,
+
   _shouldDo : _shouldDo,
 
   shouldThrowErrorSync : shouldThrowErrorSync,

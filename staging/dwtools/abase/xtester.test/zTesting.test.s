@@ -3876,8 +3876,6 @@ var Self =
     mustNotThrowErrorReturn : mustNotThrowErrorReturn,
     shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
 
-    //
-
     eqReturn : eqReturn,
     neReturn : neReturn,
     gtReturn : gtReturn,

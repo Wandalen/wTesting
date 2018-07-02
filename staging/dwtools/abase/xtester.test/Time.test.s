@@ -1403,7 +1403,7 @@ timeOutMode11.timeOut = 30000;
 var Self =
 {
 
-  name : 'Tools/time/' + Math.floor( Math.random()*100000 ),
+  name : 'Tools/Time/' + Math.floor( Math.random()*100000 ),
   silencing : 1,
   // enabled : 0, // !!!
 

@@ -1,4 +1,4 @@
-( function _zTesting_test_s_( ) {
+( function _General_test_s_( ) {
 
 'use strict';
 
@@ -40,8 +40,9 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_; var _ = _global_.wTools;
-var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
+var _global = _global_;
+var _ = _global_.wTools;
+var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0, routine : null };
 
 //
 
@@ -75,8 +76,8 @@ function simplest( test )
 
   test.identical( 0,0 );
 
-  test.identical( test.suit.report.testCheckPasses, 1 );
-  test.identical( test.suit.report.testCheckFails, 0 );
+  test.identical( test.suite.report.testCheckPasses, 1 );
+  test.identical( test.suite.report.testCheckFails, 0 );
 
 }
 
@@ -98,29 +99,34 @@ function identical( test )
     console.log( 'x' );
 
     t.identical( 0,0 );
-    test.identical( t.suit.report.testCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails, 0 );
 
     t.identical( 0,false );
-    test.identical( t.suit.report.testCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails, 1 );
 
     t.identical( 0,1 );
-    test.identical( t.suit.report.testCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails, 2 );
+    test.identical( t.suite.report.testCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails, 2 );
 
   }
 
-  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
 
-  var result = suit.run()
+  var result = suite.run()
   .doThen( function( err,data )
   {
 
     var acheck = testRoutine.checkCurrent();
     test.identical( acheck._checkIndex, 5 );
-    test.identical( suit.report.testCheckPasses, 2 );
-    test.identical( suit.report.testCheckFails, 2 );
+    test.identical( suite.report.testCheckPasses, 2 );
+    test.identical( suite.report.testCheckFails, 2 );
 
     if( err )
     throw err;
@@ -156,8 +162,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -165,8 +171,8 @@ function shouldMessageOnlyOnce( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === undefined );
+        test.is( err === undefined );
+        test.is( arg === undefined );
       });
     });
 
@@ -182,8 +188,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -191,8 +197,8 @@ function shouldMessageOnlyOnce( test )
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'msg' );
+        test.is( err === undefined );
+        test.is( arg === 'msg' );
       });
     });
 
@@ -209,8 +215,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -218,9 +224,9 @@ function shouldMessageOnlyOnce( test )
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( _.errIs( arg ) );
-        test.shouldBe( _.strHas( arg.message,'error1' ) );
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
+        test.is( _.strHas( arg.message,'error1' ) );
       });
     });
 
@@ -240,8 +246,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -249,9 +255,9 @@ function shouldMessageOnlyOnce( test )
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( _.errIs( arg ) );
-        test.shouldBe( _.strHas( arg.message,'error1' ) );
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
+        test.is( _.strHas( arg.message,'error1' ) );
       });
     });
 
@@ -268,8 +274,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -277,8 +283,8 @@ function shouldMessageOnlyOnce( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === _.timeOut );
+        test.is( err === undefined );
+        test.is( arg === _.timeOut );
       });
     });
 
@@ -303,8 +309,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -312,9 +318,9 @@ function shouldMessageOnlyOnce( test )
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( _.strHas( err.message,'got more than one message' ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message,'got more than one message' ) );
+        test.is( !arg );
       });
     });
 
@@ -339,8 +345,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -348,9 +354,9 @@ function shouldMessageOnlyOnce( test )
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( _.strHas( err.message,'got more than one message' ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message,'got more than one message' ) );
+        test.is( !arg );
       });
     });
 
@@ -364,8 +370,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -373,8 +379,8 @@ function shouldMessageOnlyOnce( test )
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'arg' );
+        test.is( err === undefined );
+        test.is( arg === 'arg' );
       });
     });
 
@@ -388,8 +394,8 @@ function shouldMessageOnlyOnce( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -397,8 +403,8 @@ function shouldMessageOnlyOnce( test )
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'error' );
+        test.is( err === undefined );
+        test.is( arg === 'error' );
       });
     });
 
@@ -409,8 +415,13 @@ function shouldMessageOnlyOnce( test )
 
   /* */
 
-  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
-  var result = suit.run()
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+  var result = suite.run()
   .doThen( function( err,data )
   {
 
@@ -418,9 +429,9 @@ function shouldMessageOnlyOnce( test )
 
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
-    test.identical( suit.report.testCheckPasses, 17 );
-    test.identical( suit.report.testCheckFails, 2 );
-    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
+    test.identical( suite.report.testCheckPasses, 17 );
+    test.identical( suite.report.testCheckFails, 2 );
+    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -453,8 +464,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -462,8 +473,8 @@ function mustNotThrowError( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === undefined );
+        test.is( err === undefined );
+        test.is( arg === undefined );
       });
     });
 
@@ -479,8 +490,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -488,8 +499,8 @@ function mustNotThrowError( test )
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'msg' );
+        test.is( err === undefined );
+        test.is( arg === 'msg' );
       });
     });
 
@@ -506,8 +517,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -515,8 +526,8 @@ function mustNotThrowError( test )
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -536,8 +547,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -545,8 +556,8 @@ function mustNotThrowError( test )
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -563,8 +574,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -572,8 +583,8 @@ function mustNotThrowError( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === _.timeOut );
+        test.is( err === undefined );
+        test.is( arg === _.timeOut );
       });
     });
 
@@ -598,8 +609,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -607,9 +618,9 @@ function mustNotThrowError( test )
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( _.strHas( err.message,'got more than one message' ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message,'got more than one message' ) );
+        test.is( !arg );
       });
     });
 
@@ -634,8 +645,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -643,8 +654,8 @@ function mustNotThrowError( test )
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
       {
-        test.shouldBe( err === 'error1' );
-        test.shouldBe( !arg );
+        test.is( err === 'error1' );
+        test.is( !arg );
       });
     });
 
@@ -658,8 +669,8 @@ function mustNotThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -667,23 +678,30 @@ function mustNotThrowError( test )
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'arg' );
+        test.is( err === undefined );
+        test.is( arg === 'arg' );
       });
     });
 
     /* */
 
+    test.identical( counter.prevCheckIndex, 17 );
+    test.identical( counter.prevCheckPasses, 10 );
+    test.identical( counter.prevCheckFails, 1 );
+
     t.identical( 0,0 );
 
     test.description = 'consequence with error';
-    var c9 = t.mustNotThrowError( _.Consequence().error( 'error' ) );
+    debugger;
+    var c9 = t.mustNotThrowError( _.Consequence({ tag : 'strange' }).error( 'error' ) );
+    debugger;
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 ); /* !!! 0 */
+
     counter.next();
 
     _.timeOut( 500,function()
@@ -691,8 +709,8 @@ function mustNotThrowError( test )
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
       {
-        test.shouldBe( err === 'error' );
-        test.shouldBe( !arg );
+        test.is( err === 'error' );
+        test.is( !arg );
       });
     });
 
@@ -703,8 +721,13 @@ function mustNotThrowError( test )
 
   /* */
 
-  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
-  var result = suit.run()
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+  var result = suite.run()
   .doThen( function( err,data )
   {
 
@@ -712,9 +735,9 @@ function mustNotThrowError( test )
 
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
-    test.identical( suit.report.testCheckPasses, 14 );
-    test.identical( suit.report.testCheckFails, 5 );
-    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
+    test.identical( suite.report.testCheckPasses, 14 );
+    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -747,8 +770,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -756,8 +779,8 @@ function shouldThrowErrorSync( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -774,8 +797,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -783,8 +806,8 @@ function shouldThrowErrorSync( test )
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( _.errIs( arg ) );
+        test.is( err === null );
+        test.is( _.errIs( arg ) );
       });
     });
 
@@ -804,8 +827,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -813,8 +836,8 @@ function shouldThrowErrorSync( test )
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -831,8 +854,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -840,8 +863,8 @@ function shouldThrowErrorSync( test )
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -866,8 +889,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -875,8 +898,8 @@ function shouldThrowErrorSync( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -900,8 +923,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -909,8 +932,8 @@ function shouldThrowErrorSync( test )
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -924,8 +947,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -933,8 +956,8 @@ function shouldThrowErrorSync( test )
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -948,8 +971,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -957,8 +980,8 @@ function shouldThrowErrorSync( test )
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -967,9 +990,14 @@ function shouldThrowErrorSync( test )
     return _.timeOut( 950 );
   }
 
-  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
 
-  var result = suit.run()
+  var result = suite.run()
   .doThen( function( err,data )
   {
 
@@ -977,9 +1005,9 @@ function shouldThrowErrorSync( test )
 
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 18 );
-    test.identical( suit.report.testCheckPasses, 10 );
-    test.identical( suit.report.testCheckFails, 7 );
-    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
+    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -995,7 +1023,7 @@ function shouldThrowErrorAsync( test )
 
   var counter = new CheckCounter();
 
-  test.shouldBe( test.logger.outputs.length > 0 );
+  test.is( test.logger.outputs.length > 0 );
 
   function r1( t )
   {
@@ -1012,8 +1040,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1021,8 +1049,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c1.messagesGet().length,1 );
       c1.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1039,8 +1067,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1048,8 +1076,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1069,8 +1097,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1078,8 +1106,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( _.errIs( arg ) );
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
       });
     });
 
@@ -1096,8 +1124,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1105,8 +1133,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1130,8 +1158,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1139,8 +1167,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'error' );
+        test.is( err === undefined );
+        test.is( arg === 'error' );
       });
     });
 
@@ -1165,8 +1193,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1174,8 +1202,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1200,8 +1228,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1209,9 +1237,9 @@ function shouldThrowErrorAsync( test )
       test.identical( c7.messagesGet().length, 1 );
       c7.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( _.strHas( err.message,'got more than one message' ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message,'got more than one message' ) );
+        test.is( !arg );
       });
     });
 
@@ -1225,8 +1253,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 ); /* !!! 0 */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1234,8 +1262,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1249,8 +1277,8 @@ function shouldThrowErrorAsync( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1258,8 +1286,8 @@ function shouldThrowErrorAsync( test )
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'error' );
+        test.is( err === undefined );
+        test.is( arg === 'error' );
       });
     });
 
@@ -1270,19 +1298,24 @@ function shouldThrowErrorAsync( test )
 
   /* */
 
-  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
-  var result = suit.run()
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+  var result = suite.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.shouldBe( test.logger.outputs.length > 0 );
+    test.is( test.logger.outputs.length > 0 );
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 20 );
-    test.identical( suit.report.testCheckPasses, 13 );
-    test.identical( suit.report.testCheckFails, 6 );
-    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
+    test.identical( suite.report.testCheckPasses, 13 );
+    test.identical( suite.report.testCheckFails, 6 );
+    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -1314,8 +1347,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1323,8 +1356,8 @@ function shouldThrowError( test )
       test.identical( c1.messagesGet().length, 1 );
       c1.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1341,8 +1374,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1350,9 +1383,9 @@ function shouldThrowError( test )
       test.identical( c2.messagesGet().length, 1 );
       c2.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( _.errIs( arg ) );
-        test.shouldBe( _.strHas( arg.messge,'err1' ) );
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
+        test.is( _.strHas( arg.messge,'err1' ) );
       });
     });
 
@@ -1372,8 +1405,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1381,9 +1414,9 @@ function shouldThrowError( test )
       test.identical( c3.messagesGet().length, 1 );
       c3.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( _.errIs( arg ) );
-        test.shouldBe( _.strHas( arg.messge,'err1' ) );
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
+        test.is( _.strHas( arg.messge,'err1' ) );
       });
     });
 
@@ -1400,8 +1433,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1409,8 +1442,8 @@ function shouldThrowError( test )
       test.identical( c4.messagesGet().length, 1 );
       c4.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1435,8 +1468,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1444,8 +1477,8 @@ function shouldThrowError( test )
       test.identical( c5.messagesGet().length, 1 );
       c5.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1470,8 +1503,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1479,9 +1512,9 @@ function shouldThrowError( test )
       test.identical( c6.messagesGet().length, 1 );
       c6.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( _.strHas( err.message,'got more than one message' ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message,'got more than one message' ) );
+        test.is( !arg );
       });
     });
 
@@ -1495,8 +1528,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 ); /* !!! 0 */
     counter.next();
 
     _.timeOut( 500,function()
@@ -1504,8 +1537,8 @@ function shouldThrowError( test )
       test.identical( c8.messagesGet().length, 1 );
       c8.got( function( err,arg )
       {
-        test.shouldBe( _.errIs( err ) );
-        test.shouldBe( !arg );
+        test.is( _.errIs( err ) );
+        test.is( !arg );
       });
     });
 
@@ -1519,8 +1552,8 @@ function shouldThrowError( test )
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck._checkIndex-counter.prevCheckIndex, 2 );
-    test.identical( t.suit.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suit.report.testCheckFails-counter.prevCheckFails, 0 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.timeOut( 500,function()
@@ -1528,8 +1561,8 @@ function shouldThrowError( test )
       test.identical( c9.messagesGet().length, 1 );
       c9.got( function( err,arg )
       {
-        test.shouldBe( err === null );
-        test.shouldBe( arg === 'error' );
+        test.is( err === undefined );
+        test.is( arg === 'error' );
       });
     });
 
@@ -1538,18 +1571,23 @@ function shouldThrowError( test )
     return _.timeOut( 950 );
   }
 
-  var suit = wTestSuite({ tests : { r1 : r1 }, override : notTakingIntoAccount });
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
 
-  var result = suit.run()
+  var result = suite.run()
   .doThen( function( err,data )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck._checkIndex, 18 );
-    test.identical( suit.report.testCheckPasses, 12 );
-    test.identical( suit.report.testCheckFails, 5 );
-    test.identical( counter.acheck._checkIndex,suit.report.testCheckPasses+suit.report.testCheckFails+1 );
+    test.identical( suite.report.testCheckPasses, 12 );
+    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( counter.acheck._checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )
     throw err;
@@ -1587,8 +1625,8 @@ function shouldPassMessage( test )
   test.shouldThrowError( con )
   .doThen( function( err,arg )
   {
-    test.identical( err,null );
-    test.identical( arg,errOriginal );
+    test.identical( err, undefined );
+    test.identical( arg, errOriginal );
     _.errAttend( err );
   });
 
@@ -1697,8 +1735,8 @@ function _throwingExperiment( test )
 
     counter.acheck = t.checkCurrent();
     console.log( 'checkIndex',acheck._checkIndex, 13 );
-    console.log( 'testCheckPasses',test.suit.report.testCheckPasses, 8 );
-    console.log( 'testCheckFails',test.suit.report.testCheckFails, 4 );
+    console.log( 'testCheckPasses',test.suite.report.testCheckPasses, 8 );
+    console.log( 'testCheckFails',test.suite.report.testCheckFails, 4 );
 
   });
 
@@ -1863,7 +1901,7 @@ function shouldThrowErrorSimpleAsync( test )
     test.identical( acheck.description, 'b' );
     test.identical( acheck._checkIndex, 4 );
 
-    test.identical( test._inroutineCon.messagesGet().length,0 );
+    test.identical( test._inroutineCon.messagesGet().length,0 ); /* !!! 1 */
 
   })
   ;
@@ -1889,8 +1927,8 @@ function _chainedShould( test,o )
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck._checkIndex, 1 );
-    test.identical( suit.report.testCheckPasses, 0 );
-    test.identical( suit.report.testCheckFails, 0 );
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.testCheckFails, 0 );
 
     return new _.Consequence().give()
     .doThen( function()
@@ -1899,13 +1937,13 @@ function _chainedShould( test,o )
       test.description = prefix + 'beginning of the test routine';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 1 );
-      test.identical( t.suit.report.testCheckPasses, 0 );
-      test.identical( t.suit.report.testCheckFails, 0 );
+      test.identical( t.suite.report.testCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails, 0 );
 
       var con = _.timeOut( 50,function( err )
       {
         test.description = prefix + 'give the first message';
-        test.shouldBe( 1 );
+        test.is( 1 );
         if( o.throwingError === 'async' )
         throw _.err( 'async error' );
         else if( o.throwingError === 'sync' )
@@ -1923,13 +1961,13 @@ function _chainedShould( test,o )
       test.description = prefix + 'first ' + method + ' done';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 2 );
-      test.identical( t.suit.report.testCheckPasses, 1 );
-      test.identical( t.suit.report.testCheckFails, 0 );
+      test.identical( t.suite.report.testCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails, 0 );
 
       var con = _.timeOut( 50,function( err )
       {
         test.description = prefix + 'give the second message';
-        test.shouldBe( 1 );
+        test.is( 1 );
         if( o.throwingError === 'async' )
         throw _.err( 'async error' );
         else if( o.throwingError === 'sync' )
@@ -1947,8 +1985,8 @@ function _chainedShould( test,o )
       test.description = prefix + 'second ' + method + ' done';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 3 );
-      test.identical( t.suit.report.testCheckPasses, 2 );
-      test.identical( t.suit.report.testCheckFails, 0 );
+      test.identical( t.suite.report.testCheckPasses, 2 );
+      test.identical( t.suite.report.testCheckFails, 0 );
 
     });
 
@@ -1962,6 +2000,44 @@ function _chainedShould( test,o )
     var prefix = method + ' . ' + 'include' + ' . ';
     counter.testRoutine = t;
 
+    test.description = prefix + 'beginning of the included test routine ';
+
+    if( o.throwingError === 'sync' )
+    return first();
+    else
+    return t[ method ]( first );
+
+    function first()
+    {
+
+      var result = _.timeOut( 50,function()
+      {
+
+        test.description = prefix + 'first timeout of the included test routine ';
+
+        test.identical( t.suite.report.testCheckPasses, 3 );
+        test.identical( t.suite.report.testCheckFails, 0 );
+
+        if( o.throwingError === 'sync' )
+        t[ method ]( function(){ throw _.err( 'sync error' ); } );
+
+        counter.acheck = counter.testRoutine.checkCurrent();
+        test.identical( counter.acheck._checkIndex, 2 );
+
+        if( o.throwingError === 'sync' )
+        {
+          return second();
+        }
+        else
+        t[ method ]( second );
+
+        if( o.throwingError === 'async' )
+        throw _.err( 'async error' );
+      });
+
+      return result;
+    }
+
     function second()
     {
       return _.timeOut( 50,function()
@@ -1969,14 +2045,14 @@ function _chainedShould( test,o )
 
         test.description = prefix + 'first ' + method + ' done';
 
-        test.identical( t.suit.report.testCheckPasses, o.lowerCount ? 4 : 5 );
-        test.identical( t.suit.report.testCheckFails, 0 );
+        test.identical( t.suite.report.testCheckPasses, 4 );
+        test.identical( t.suite.report.testCheckFails, 0 );
 
         if( o.throwingError === 'sync' )
         t[ method ]( function(){ throw _.err( 'sync error' ) } );
 
         counter.acheck = counter.testRoutine.checkCurrent();
-        test.identical( counter.acheck._checkIndex, o.lowerCount ? 3 : 4 );
+        test.identical( counter.acheck._checkIndex, 3 );
 
         if( o.throwingError === 'async' )
         t[ method ]( _.timeOutError( 50 ) );
@@ -1990,57 +2066,20 @@ function _chainedShould( test,o )
       });
     }
 
-    function first()
-    {
-
-      var result = _.timeOut( 50,function()
-      {
-
-        test.description = prefix + 'first timeout of the included test routine ';
-
-        test.identical( t.suit.report.testCheckPasses, 3 );
-        test.identical( t.suit.report.testCheckFails, 0 );
-
-        if( o.throwingError === 'sync' )
-        t[ method ]( function(){ throw _.err( 'sync error' ); } );
-
-        counter.acheck = counter.testRoutine.checkCurrent();
-        test.identical( counter.acheck._checkIndex, 2 );
-
-        if( o.throwingError === 'sync' )
-        {
-          // t.identical( 1,1 );
-          return second();
-        }
-        else
-        t[ method ]( second );
-
-        if( o.throwingError === 'async' )
-        throw _.err( 'async error' );
-      });
-
-      return result;
-    }
-
-    test.description = prefix + 'beginning of the included test routine ';
-
-    if( o.throwingError === 'sync' )
-    return first();
-    else
-    return t[ method ]( first );
   };
 
   /* */
 
-  var suit = wTestSuite
+  var suite = wTestSuite
   ({
     tests : { row : row, include : include },
     override : notTakingIntoAccount,
-    name : _.diagnosticLocation().name + '.' + method + '.' + o.throwingError,
+    ignoringTesterOptions : 1,
+    name : _.diagnosticLocation().name + '/' + method + '/' + o.throwingError,
   });
 
-  if( suit.on )
-  suit.on( 'routineEnd',function( e )
+  if( suite.on )
+  suite.on( 'routineEnd',function( e )
   {
 
     // console.log( 'routineEnd',e.testRoutine.routine.name );
@@ -2050,15 +2089,15 @@ function _chainedShould( test,o )
       test.description = 'checking outcomes';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 4 );
-      test.identical( suit.report.testCheckPasses, 3 );
-      test.identical( suit.report.testCheckFails, 0 );
+      test.identical( suite.report.testCheckPasses, 3 );
+      test.identical( suite.report.testCheckFails, 0 );
     }
 
   });
 
   /* */
 
-  return suit.run()
+  return suite.run()
   .doThen( function( err,data )
   {
 
@@ -2066,8 +2105,8 @@ function _chainedShould( test,o )
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck._checkIndex, 5 ); /* 4 */
-    test.identical( suit.report.testCheckPasses, 7 ); /* 6 */
-    test.identical( suit.report.testCheckFails, 0 );
+    test.identical( suite.report.testCheckPasses, 7 ); /* 6 */
+    test.identical( suite.report.testCheckFails, 0 );
 
     if( err )
     throw err;
@@ -2083,42 +2122,39 @@ function chainedShould( test )
 {
   var con = _.Consequence().give();
 
+  /* qqq : double check _hasConsoleInOutputs */
+
   var iterations =
   [
 
     {
       method : 'shouldThrowError',
       throwingError : 'sync',
-      lowerCount : 1,
     },
+
     {
       method : 'shouldThrowError',
       throwingError : 'async',
-      lowerCount : 1,
     },
 
     {
       method : 'shouldThrowErrorSync',
       throwingError : 'sync',
-      lowerCount : 1,
     },
 
     {
       method : 'shouldThrowErrorAsync',
       throwingError : 'async',
-      lowerCount : 1,
     },
 
     {
       method : 'mustNotThrowError',
       throwingError : 0,
-      lowerCount : 1,
     },
 
     {
       method : 'shouldMessageOnlyOnce',
       throwingError : 0,
-      lowerCount : 1,
     },
 
   ]
@@ -2133,773 +2169,1274 @@ chainedShould.timeOut = 30000;
 
 //
 
-function shouldBeReturn( test )
+function isReturn( test )
 {
-  function _shouldBeReturn( t )
-  {
-    var got = t.shouldBe( 1 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( 0 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( '1' );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( true );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( false );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( {} );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( [] );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( t.shouldBe );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe( true, false );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBe();
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-  }
-
-  //
 
   var suite = wTestSuite
   ({
-    tests : { shouldBeReturn : _shouldBeReturn },
+    tests : { returnTest : returnTest },
     override : notTakingIntoAccount,
-    name : test.name
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
   });
+
+  return suite.run();
 
   /* */
 
-  return suite.run();
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckFails, 9 );
+    test.identical( suite.report.errorsArray.length, 7 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
+    var got = t.is( 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.is( 0 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.is( true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.is( false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'not bool-like, string';
+
+    var got = t.is( '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'not bool-like, map';
+
+    var got = t.is( {} );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'not bool-like, array';
+
+    var got = t.is( [] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'not bool-like, routine';
+
+    var got = t.is( t.is );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.is( true, false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'no arguments';
+
+    var got = t.is();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.is( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
 }
 
 //
 
-function shouldBeNotErrorReturn( test )
+function isNotReturn( test )
 {
-  function _shouldBeNotErrorReturn( t )
-  {
-    var got = t.shouldBeNotError( 1 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( 0 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( '1' );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( true );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( false );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( {} );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( [] );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( t.shouldBe );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( true, false );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError();
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( _.err( 'msg' ) );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.shouldBeNotError( new Error( 'msg' ) );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-  }
-
-  //
 
   var suite = wTestSuite
   ({
-    tests : { shouldBeNotErrorReturn : _shouldBeNotErrorReturn },
+    tests : { returnTest : returnTest },
     override : notTakingIntoAccount,
-    name : test.name
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
   });
+
+  return suite.run();
 
   /* */
 
-  return suite.run();
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckFails, 9 );
+    test.identical( suite.report.errorsArray.length, 7 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
+    debugger;
+    var got = t.isNot( 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+    debugger;
+
+    /* */
+
+    var got = t.isNot( 0 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNot( true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNot( false );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'not bool-like, string';
+
+    var got = t.isNot( '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'not bool-like, map';
+
+    var got = t.isNot( {} );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'not bool-like, array';
+
+    var got = t.isNot( [] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'not bool-like, routine';
+
+    var got = t.isNot( t.isNot );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.isNot( true, false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'no arguments';
+
+    var got = t.isNot();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.isNot( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
 }
 
 //
 
-function notIdenticalReturn( test )
+function isNotErrorReturn( test )
 {
-  function _isNotIdenticalReturn( t )
-  {
-    var got = t.notIdentical( 1,1 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( 1,'1' );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( '1','1' );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( true, true );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( false, true );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( [ 1 ], [ 1 ] );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( [ 1 ], [ 2 ] );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( { a : 1 }, { a : 1 } );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( { a : 1 }, { a : 2 } );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( test, t );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.notIdentical( t.notIdentical, t.notIdentical );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    if( !Config.debug )
-    return;
-
-    test.shouldThrowError( () => t.notIdentical() );
-
-  }
-
-  //
 
   var suite = wTestSuite
   ({
-    tests : { notIdenticalReturn : _isNotIdenticalReturn },
+    tests : { returnTest : returnTest },
     override : notTakingIntoAccount,
-    name : test.name
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
   });
+
+  return suite.run();
 
   /* */
 
-  return suite.run();
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
+    var got = t.isNotError( 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( 0 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( false );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( {} );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( [] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( t.is );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( _.err( 'msg' ) );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.isNotError( new Error( 'msg' ) );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'no arguments';
+
+    var got = t.isNotError();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.isNotError( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.isNotError( true, false );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
 }
 
 //
 
 function identicalReturn( test )
 {
-  function _identicalReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
   {
+    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckFails, 8 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
     var got = t.identical( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( 1,'1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( '1','1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+
+    var got = t.identical( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
 
     var got = t.identical( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
+    debugger;
     var got = t.identical( test, t );
+    debugger;
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.identical( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
 
-    test.shouldThrowError( () => t.identical() );
+    var got = t.identical();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
+    test.description = 'extra arguments';
+
+    var got = t.identical( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    debugger;
   }
 
-  //
+}
+
+//
+
+function notIdenticalReturn( test )
+{
 
   var suite = wTestSuite
   ({
-    tests : { identicalReturn  : _identicalReturn },
+    tests : { returnTest : returnTest },
     override : notTakingIntoAccount,
-    name : test.name
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
   });
+
+  return suite.run();
 
   /* */
 
-  return suite.run();
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 6 );
+    test.identical( suite.report.testCheckFails, 9 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notIdentical( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( 1,'1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( '1','1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+
+    var got = t.notIdentical( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notIdentical( t.notIdentical, t.notIdentical );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'no arguments';
+
+    var got = t.notIdentical();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.notIdentical( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
 }
 
 //
 
 function equivalentReturn( test )
 {
-  function _equivalentReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
   {
+    test.identical( suite.report.testCheckPasses, 16 );
+    test.identical( suite.report.testCheckFails, 14 );
+    test.identical( suite.report.errorsArray.length, 5 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
     var got = t.equivalent( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( 1,'1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( '1',1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( '1','1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+
+    var got = t.equivalent( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
 
     var got = t.equivalent( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( test, t );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.equivalent( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    var got = t.equivalent( 1, 1.1, 0.1 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( 1.05, 1, 0.1 );
+    t.suite.accuracy = 0.1;
+    var got = t.equivalent( 1, 1.05 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
 
-    if( !Config.debug )
-    return;
+    t.suite.accuracy = null;
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
 
-    test.shouldThrowError( () => t.equivalent() );
+    /* */
+
+    t.accuracy = 0.01;
+    var got = t.equivalent( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy < t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    test.description = 'third argument is accuracy';
+
+    var got = t.equivalent( 1, 1.05, 0.01 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.equivalent( 1, 1.05, 0.1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'third argument is options map with accuracy';
+
+    var got = t.equivalent( 1, 1.05, { accuracy : 0.01 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.equivalent( 1, 1.05, { accuracy : 0.1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.accuracy = 0.1;
+    var got = t.equivalent( 1, 1.05 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.accuracy = null;
+    t.suite.accuracy = 0.01;
+    var got = t.equivalent( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+    var got = t.equivalent( 1, 1.005 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.equivalent( 1, 1 + 1e-11 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    test.description = 'no arguments';
+
+    var got = t.equivalent();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.equivalent( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.equivalent( 1.05, 1, null )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.equivalent( 1.05, 1, 'x' )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.equivalent( 1.05, 1, [] )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { equivalentReturn : _equivalentReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function notEquivalentReturn( test )
 {
-  function _notEquivalentReturn( t )
-  {
-    var got = t.equivalent( 1,1 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( 1,2 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( 1,'1' );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( '1',1 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( '1','1' );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( true, true );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( false, true );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( [ 1 ], [ 1 ] );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( [ 1 ], [ 2 ] );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( { a : 1 }, { a : 1 } );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( { a : 1 }, { a : 2 } );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( test, t );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( t.notIdentical, t.notIdentical );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( 1, 1.1 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    var got = t.equivalent( 1.05, 1 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
-
-    if( !Config.debug )
-    return;
-
-    test.shouldThrowError( () => t.equivalent() );
-
-  }
-
-  //
 
   var suite = wTestSuite
   ({
-    tests : { notEquivalentReturn : _notEquivalentReturn },
+    tests : { returnTest : returnTest },
     override : notTakingIntoAccount,
-    name : test.name
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
   });
+
+  return suite.run();
 
   /* */
 
-  return suite.run();
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( suite.report.testCheckFails, 20 );
+    test.identical( suite.report.errorsArray.length, 5 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
+    var got = t.notEquivalent( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( 1,2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( 1,'1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( '1',1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( '1','1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+    var got = t.notEquivalent( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notEquivalent( t.notIdentical, t.notIdentical );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.suite.accuracy = 0.1;
+    var got = t.notEquivalent( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    t.suite.accuracy = null;
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    t.accuracy = 0.01;
+    var got = t.notEquivalent( 1, 1.05 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy < t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    t.accuracy = 0.1;
+    var got = t.notEquivalent( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.accuracy = null;
+    t.suite.accuracy = 0.1;
+    var got = t.notEquivalent( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.notEquivalent( 1, 1 + 1e-11 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    test.description = 'third argument is accuracy';
+
+    var got = t.notEquivalent( 1, 1.05, 0.01 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.notEquivalent( 1, 1.05, 0.1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'third argument is options map with accuracy';
+
+    var got = t.notEquivalent( 1, 1.05, { accuracy : 0.01 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.notEquivalent( 1, 1.05, { accuracy : 0.1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'no arguments';
+
+    var got = t.notEquivalent();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.notEquivalent( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.notEquivalent( 1.05, 1, null )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.notEquivalent( 1.05, 1, 'x' )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.notEquivalent( 1.05, 1, [] )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
 }
 
 //
 
 function containReturn( test )
 {
-  function _containReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 7 );
+    test.identical( suite.report.testCheckFails, 12 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var got = t.contain( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( 1,'1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( '1',1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( '1','1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( [ 1,2,3,4 ], 5 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( [ 1,2,3,4 ], 4 );
-    test.identical( got, true );
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( [ 1,2,3,4 ], [ 4,5 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( [ 1,2,3,4 ], [ 3,4 ] );
-    test.identical( got, true );
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.contain( { a : 1, b : 2 }, { b : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
 
-    test.shouldThrowError( () => t.contain() );
+    var got = t.contain();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.contain( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { containReturn : _containReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function shouldThrowErrorSyncReturn( test )
 {
-  function _shouldThrowErrorSyncReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
   {
+    test.identical( suite.report.testCheckPasses, 2 );
+    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( suite.report.errorsArray.length, 3 );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
     var got = t.shouldThrowErrorSync( () => true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.shouldThrowErrorSync( () => { throw _.err( 1 ) } );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
+    test.identical( !!got, true );
+    test.identical( _.errIs( got ), true );
 
-    //
+    /* */
 
     var got = t.shouldThrowErrorSync( () => _.Consequence().error( 1 ) );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
+    var got = t.shouldThrowErrorSync()
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
-    test.shouldThrowError( () => t.shouldThrowErrorSync() );
+    test.description = 'not routines';
+    var got = t.shouldThrowErrorSync( 'x' )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'several functions';
+    var got = t.shouldThrowErrorSync( function(){}, function(){} )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { shouldThrowErrorSyncReturn : _shouldThrowErrorSyncReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function shouldThrowErrorAsyncReturn( test )
 {
-  function _shouldThrowErrorAsyncReturn( t )
+
+  var done = 0;
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckFails, 6 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.identical( done, 1 );
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var con = _.Consequence().give()
 
@@ -2935,11 +3472,21 @@ function shouldThrowErrorAsyncReturn( test )
 
     .ifNoErrorThen( () =>
     {
+      return t.shouldThrowErrorAsync( _.Consequence().error( _.err( 'error!' ) ) )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( err, undefined );
+        test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
       return t.shouldThrowErrorAsync( _.Consequence().error( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
-        test.identical( _.errIs( got ), true );
+        test.identical( err, undefined );
+        test.identical( got, 1 );
       })
     })
 
@@ -2948,41 +3495,80 @@ function shouldThrowErrorAsyncReturn( test )
       return t.shouldThrowErrorAsync( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
 
-    if( !Config.debug )
-    return con;
-
-    con.ifNoErrorThen( () =>
+    .ifNoErrorThen( () =>
     {
-      return test.shouldThrowError( () => t.shouldThrowErrorAsync() )
+      test.description = 'no arguments';
+      return t.shouldThrowErrorAsync()
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'not routines';
+      return t.shouldThrowErrorAsync( 'x' )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'several functions';
+      return t.shouldThrowErrorAsync( function(){}, function(){} )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+        done = 1;
+      })
     })
 
     return con;
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { shouldThrowErrorAsyncReturn : _shouldThrowErrorAsyncReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function shouldThrowErrorReturn( test )
 {
-  function _shouldThrowErrorReturn( t )
+
+  var done = 0;
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.identical( done, 1 );
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var con = _.Consequence().give()
 
@@ -2992,7 +3578,7 @@ function shouldThrowErrorReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
-        test.identical( got, null );
+        test.identical( got, undefined );
       })
     })
 
@@ -3001,7 +3587,7 @@ function shouldThrowErrorReturn( test )
       return t.shouldThrowError( () => { throw _.err( 1 ) } )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
@@ -3012,7 +3598,7 @@ function shouldThrowErrorReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
-        test.identical( got, null );
+        test.identical( got, undefined );
       })
     })
 
@@ -3021,7 +3607,7 @@ function shouldThrowErrorReturn( test )
       return t.shouldThrowError( _.Consequence().error( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( got, 1 );
       })
     })
@@ -3031,33 +3617,80 @@ function shouldThrowErrorReturn( test )
       return t.shouldThrowError( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'no arguments';
+      return t.shouldThrowError()
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'not routines';
+      return t.shouldThrowError( 'x' )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldThrowError( function(){}, function(){} )
+      .doThen( ( err, got ) =>
+      {
+        test.description = 'several functions';
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+        done = 1;
       })
     })
 
     return con;
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { shouldThrowErrorReturn : _shouldThrowErrorReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function mustNotThrowErrorReturn( test )
 {
-  function _mustNotThrowErrorReturn( t )
+
+  var done = 0;
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckFails, 6 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.identical( done, 1 );
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var con = _.Consequence().give()
 
@@ -3066,7 +3699,7 @@ function mustNotThrowErrorReturn( test )
       return t.mustNotThrowError( () => true )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( got, true );
       })
     })
@@ -3077,7 +3710,7 @@ function mustNotThrowErrorReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
-        test.identical( got, null );
+        test.identical( got, undefined );
       })
     })
 
@@ -3086,7 +3719,7 @@ function mustNotThrowErrorReturn( test )
       return t.mustNotThrowError( _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( got, 1 );
       })
     })
@@ -3097,7 +3730,7 @@ function mustNotThrowErrorReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( err, 1 );
-        test.identical( got, null );
+        test.identical( got, undefined );
       })
     })
 
@@ -3107,34 +3740,79 @@ function mustNotThrowErrorReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
-        test.identical( got, null );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'no arguments';
+      return t.mustNotThrowError()
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'not routines';
+      return t.mustNotThrowError( 'x' )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.mustNotThrowError( function(){}, function(){} )
+      .doThen( ( err, got ) =>
+      {
+        test.description = 'several functions';
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+        done = 1;
       })
     })
 
     return con;
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { mustNotThrowErrorReturn : _mustNotThrowErrorReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
-
-//
 
 //
 
 function shouldMessageOnlyOnceReturn( test )
 {
-  function _shouldMessageOnlyOnceReturn( t )
+
+  var done = 0;
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 11 );
+    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.identical( done, 1 );
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var con = _.Consequence().give()
 
@@ -3143,7 +3821,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => 1 )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( got, 1 );
       })
     })
@@ -3153,7 +3831,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => { throw _.err( 1 ) } )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
@@ -3163,7 +3841,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( got, 1 );
       })
     })
@@ -3173,7 +3851,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( got, 1 );
       })
     })
@@ -3183,7 +3861,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( _.Consequence().error( _.err( 1 ) ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
@@ -3193,7 +3871,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => _.Consequence().error( _.err( 1 ) ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
@@ -3204,8 +3882,8 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( con )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
-        test.identical( _.rouitimeIs( got ), true );
+        test.identical( err, undefined );
+        test.identical( _.routineIs( got ), true );
       })
     })
 
@@ -3215,8 +3893,8 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => con )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
-        test.identical( _.rouitimeIs( got ), true );
+        test.identical( err, undefined );
+        test.identical( _.routineIs( got ), true );
       })
     })
 
@@ -3225,7 +3903,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
@@ -3235,7 +3913,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
       {
-        test.identical( err, null );
+        test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
       })
     })
@@ -3247,7 +3925,7 @@ function shouldMessageOnlyOnceReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
-        test.identical( got, null );
+        test.identical( got, undefined );
       })
     })
 
@@ -3258,302 +3936,859 @@ function shouldMessageOnlyOnceReturn( test )
       .doThen( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
-        test.identical( got, null );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'no arguments';
+      return t.shouldMessageOnlyOnce()
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      test.description = 'not routines';
+      return t.shouldMessageOnlyOnce( 'x' )
+      .doThen( ( err, got ) =>
+      {
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+      })
+    })
+
+    .ifNoErrorThen( () =>
+    {
+      return t.shouldMessageOnlyOnce( function(){}, function(){} )
+      .doThen( ( err, got ) =>
+      {
+        test.description = 'several functions';
+        test.identical( _.errIs( err ), true );
+        test.identical( got, undefined );
+        done = 1;
       })
     })
 
     return con;
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { shouldMessageOnlyOnceReturn : _shouldMessageOnlyOnceReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function ilReturn( test )
 {
-  function _ilReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
   {
+    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckFails, 8 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
     var got = t.il( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( 1,'1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
-
-    var got = t.il( '1',1 );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    //
+    /* */
 
     var got = t.il( '1','1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+
+    var got = t.il( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
 
     var got = t.il( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
+    debugger;
     var got = t.il( test, t );
+    debugger;
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.il( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    var got = t.il( test.notIdentical, t.notIdentical );
+    test.description = 'no arguments';
+
+    var got = t.il();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    test.description = 'extra arguments';
 
-    if( !Config.debug )
-    return;
-
-    test.shouldThrowError( () => t.il() );
+    var got = t.il( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { ilReturn : _ilReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function niReturn( test )
 {
-  function _niReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 6 );
+    test.identical( suite.report.testCheckFails, 9 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var got = t.ni( 1,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
-
-    var got = t.ni( 1,2 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
+    /* */
 
     var got = t.ni( 1,'1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
-
-    var got = t.ni( '1',1 );
-    test.identical( got, true );
-    test.identical( _.boolIs( got ), true );
-
-    //
+    /* */
 
     var got = t.ni( '1','1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ni( true, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ni( false, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+
+    var got = t.ni( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
 
     var got = t.ni( [ 1 ], [ 1 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ni( [ 1 ], [ 2 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ni( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ni( { a : 1 }, { a : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ni( test, t );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    var got = t.ni( t.notIdentical, t.notIdentical );
+    var got = t.ni( t.ni, t.ni );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    var got = t.ni( test.notIdentical, t.notIdentical );
-    test.identical( got, true );
+    test.description = 'no arguments';
+
+    var got = t.ni();
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    test.description = 'extra arguments';
 
-    if( !Config.debug )
-    return;
-
-    test.shouldThrowError( () => t.ni() );
+    var got = t.ni( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
+}
+
+//
+
+function etReturn( test )
+{
 
   var suite = wTestSuite
   ({
-    tests : { niReturn : _niReturn },
+    tests : { returnTest : returnTest },
     override : notTakingIntoAccount,
-    name : test.name
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
   });
+
+  return suite.run();
 
   /* */
 
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 16 );
+    test.identical( suite.report.testCheckFails, 14 );
+    test.identical( suite.report.errorsArray.length, 5 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
+    var got = t.et( 1,1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( 1,2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( 1,'1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( '1',1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( '1','1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+
+    var got = t.et( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( true, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( false, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( [ 1 ], [ 1 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( [ 1 ], [ 2 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.et( t.notIdentical, t.notIdentical );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.suite.accuracy = 0.1;
+    var got = t.et( 1, 1.05 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    t.suite.accuracy = null;
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    t.accuracy = 0.01;
+    var got = t.et( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy < t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    test.description = 'third argument is accuracy';
+
+    var got = t.et( 1, 1.05, 0.01 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.et( 1, 1.05, 0.1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'third argument is options map with accuracy';
+
+    var got = t.et( 1, 1.05, { accuracy : 0.01 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.et( 1, 1.05, { accuracy : 0.1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.accuracy = 0.1;
+    var got = t.et( 1, 1.05 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.accuracy = null;
+    t.suite.accuracy = 0.01;
+    var got = t.et( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+    var got = t.et( 1, 1.005 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.et( 1, 1 + 1e-11 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    test.description = 'no arguments';
+
+    var got = t.et();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.et( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.et( 1.05, 1, null )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.et( 1.05, 1, 'x' )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.et( 1.05, 1, [] )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function neReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
   return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( suite.report.testCheckFails, 20 );
+    test.identical( suite.report.errorsArray.length, 5 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
+    var got = t.ne( 1,1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( 1,2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( 1,'1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( '1',1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( '1','1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1 );
+    var got = t.ne( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.ne( t.notIdentical, t.notIdentical );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.suite.accuracy = 0.1;
+    var got = t.ne( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    t.suite.accuracy = null;
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    t.accuracy = 0.01;
+    var got = t.ne( 1, 1.05 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy < t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    t.accuracy = 0.1;
+    var got = t.ne( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    t.accuracy = null;
+    t.suite.accuracy = 0.1;
+    var got = t.ne( 1, 1.05 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.ne( 1, 1 + 1e-11 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.is( t.suite.accuracy === t.accuracy );
+    test.is( _.numberIs( t.suite.accuracy ) );
+    test.is( _.numberIs( t.accuracy ) );
+
+    /* */
+
+    test.description = 'third argument is accuracy';
+
+    var got = t.ne( 1, 1.05, 0.01 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.ne( 1, 1.05, 0.1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'third argument is options map with accuracy';
+
+    var got = t.ne( 1, 1.05, { accuracy : 0.01 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    var got = t.ne( 1, 1.05, { accuracy : 0.1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.description = 'no arguments';
+
+    var got = t.ne();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.ne( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.ne( 1.05, 1, null )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.ne( 1.05, 1, 'x' )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.ne( 1.05, 1, [] )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
 }
 
 //
 
 function gtReturn( test )
 {
-  function _gtReturn( t )
+
+  test.description = 'trivial';
+
+  var got = test.gt( 2,1 );
+  test.identical( got, true );
+
+  test.description = 'suite';
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
   {
+    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckFails, 10 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    if( suite.report.errorsArray.length )
+    console.log( suite.report.errorsArray[ 0 ] );
+
+    test.description = 'trivial';
+
+    var got = test.gt( 2,1 );
+    test.identical( got, true );
+
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+
     var got = t.gt( 1,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.gt( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.gt( 2,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.gt( 1.01,1.01 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.gt( 1.01,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.gt( 1.01,1.02 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1 );
 
     var got = t.gt( d1,d2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
+
+    var got = t.gt( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3561,10 +4796,10 @@ function gtReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3572,82 +4807,125 @@ function gtReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
 
-    test.shouldThrowError( () => t.ni() );
+    var got = t.gt();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.gt( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.gt( 1.05, 1, 0.1 )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { gtReturn : _gtReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function geReturn( test )
 {
-  function _geReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckFails, 6 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    if( suite.report.errorsArray.length )
+    console.log( suite.report.errorsArray[ 0 ] );
+
+    test.description = 'trivial';
+
+    var got = test.ge( 2,1 );
+    test.identical( got, true );
+    var got = test.ge( 2,2 );
+    test.identical( got, true );
+
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var got = t.ge( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ge( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ge( 2,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ge( 1.01,1.01 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ge( 1.01,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.ge( 1.01,1.02 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1 );
 
     var got = t.ge( d1,d2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
+
+    var got = t.ge( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3655,10 +4933,10 @@ function geReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3666,82 +4944,123 @@ function geReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
 
-    test.shouldThrowError( () => t.ge() );
+    var got = t.ge();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.ge( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.ge( 1.05, 1, 0.1 )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { geReturn : _geReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function ltReturn( test )
 {
-  function _ltReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckFails, 10 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+
+    test.description = 'trivial';
+
+    var got = test.lt( 2,3 );
+    test.identical( got, true );
+
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var got = t.lt( 1,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.lt( 1,2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.lt( 2,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.lt( 1.01,1.01 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.lt( 1.01,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.lt( 1.01,1.02 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1 );
 
     var got = t.lt( d1,d2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
+
+    var got = t.lt( d1,d2 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3749,10 +5068,10 @@ function ltReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3760,82 +5079,125 @@ function ltReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
 
-    test.shouldThrowError( () => t.lt() );
+    var got = t.lt();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.lt( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.lt( 1.05, 1, 0.1 )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { ltReturn : _ltReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 //
 
 function leReturn( test )
 {
-  function _leReturn( t )
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest : returnTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd : onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckFails, 6 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+
+    test.description = 'trivial';
+
+    var got = test.le( 2,3 );
+    test.identical( got, true );
+    var got = test.le( 2,2 );
+    test.identical( got, true );
+
+  }
+
+  /* */
+
+  function returnTest( t )
   {
     var got = t.le( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.le( 1,2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.le( 2,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.le( 1.01,1.01 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.le( 1.01,1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var got = t.le( 1.01,1.02 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1 );
 
     var got = t.le( d1,d2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
+
+    var got = t.le( d1,d2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var d1 = new Date( Date.now() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3843,10 +5205,10 @@ function leReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
     var d1 = new Date( Date.now() );
-    var d2 = new Date( d1.geTime() );
+    var d2 = new Date( d1.getTime() );
     d1.setSeconds( 20 );
     d2.setSeconds( 30 );
 
@@ -3854,27 +5216,28 @@ function leReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    //
+    /* */
 
-    if( !Config.debug )
-    return;
+    test.description = 'no arguments';
 
-    test.shouldThrowError( () => t.le() );
+    var got = t.le();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.le( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.description = 'extra arguments';
+
+    var got = t.le( 1.05, 1, 0.1 )
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
   }
 
-  //
-
-  var suite = wTestSuite
-  ({
-    tests : { leReturn : _leReturn },
-    override : notTakingIntoAccount,
-    name : test.name
-  });
-
-  /* */
-
-  return suite.run();
 }
 
 
@@ -3918,14 +5281,11 @@ function mustNotThrowErrorExperiment( test )
 
   test.description = 'mustNotThrowError experiment';
 
-  debugger;
   var con = test.mustNotThrowError( function()
   {
-    debugger;
     console.log( 'x' );
     return _.timeOut( 500 );
   });
-  debugger;
 
   // var con = test.shouldMessageOnlyOnce( function()
   // {
@@ -3949,11 +5309,14 @@ mustNotThrowErrorExperiment.experimental = 1;
 var Self =
 {
 
-  name : 'wTesting / general tests',
+  name : 'Tools/tester/General',
   silencing : 1,
-  enabled : 1, // !!!
-  // verbosity : 3,
-  // routine : 'timeOut',
+  enabled : 1,
+  // routine : 'mustNotThrowError',
+
+  context :
+  {
+  },
 
   tests :
   {
@@ -3980,27 +5343,33 @@ var Self =
 
     //return
 
-    // shouldBeReturn : shouldBeReturn,
-    // shouldBeNotErrorReturn : shouldBeNotErrorReturn,
-    // identicalReturn : identicalReturn,
-    // notIdenticalReturn : notIdenticalReturn,
-    // equivalentReturn : equivalentReturn,
-    // notEquivalentReturn : notEquivalentReturn,
-    // containReturn : containReturn,
-    //
-    // shouldThrowErrorSyncReturn : shouldThrowErrorSyncReturn,
-    // shouldThrowErrorAsyncReturn : shouldThrowErrorAsyncReturn,
-    // shouldThrowErrorReturn : shouldThrowErrorReturn,
-    // mustNotThrowErrorReturn : mustNotThrowErrorReturn,
-    // shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
+    isReturn : isReturn,
+    isNotReturn : isNotReturn,
+    isNotErrorReturn : isNotErrorReturn,
 
-    // ilReturn : ilReturn,
-    // niReturn : niReturn,
-    //
-    // gtReturn : gtReturn,
-    // geReturn : geReturn,
-    // ltReturn : ltReturn,
-    // leReturn : leReturn,
+    identicalReturn : identicalReturn,
+    notIdenticalReturn : notIdenticalReturn,
+    equivalentReturn : equivalentReturn,
+    notEquivalentReturn : notEquivalentReturn,
+    containReturn : containReturn,
+
+    shouldThrowErrorSyncReturn : shouldThrowErrorSyncReturn,
+    shouldThrowErrorAsyncReturn : shouldThrowErrorAsyncReturn,
+    shouldThrowErrorReturn : shouldThrowErrorReturn,
+    mustNotThrowErrorReturn : mustNotThrowErrorReturn,
+    shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
+
+    ilReturn : ilReturn,
+    niReturn : niReturn,
+    etReturn : etReturn,
+    neReturn : neReturn,
+
+    /* */
+
+    gtReturn : gtReturn,
+    geReturn : geReturn,
+    ltReturn : ltReturn,
+    leReturn : leReturn,
 
     // etc
 

@@ -4,7 +4,8 @@
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wTestRoutineDescriptor( o )
 {
@@ -39,7 +40,7 @@ function init( o )
   _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
   _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,self.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   var proxy =
   {
@@ -64,6 +65,9 @@ function _testRoutineBegin()
 {
   var trd = this;
   var suite = trd.suite;
+
+  /* qqq : double check _hasConsoleInOutputs */
+  suite._hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
 
   _.assert( arguments.length === 0 );
 
@@ -108,11 +112,13 @@ function _testRoutineEnd()
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  var suiteHasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
+  /* qqq : double check _hasConsoleInOutputs */
+  var _hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
 
-  if( !suiteHasConsoleInOutputs )
+  if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
   {
     var bar = _.Tester._bar.bar;
+    debugger;
 
     _.Tester._bar.bar = 0;
     suite.logger.consoleBar( _.Tester._bar );
@@ -123,7 +129,7 @@ function _testRoutineEnd()
       suite.logger.consoleBar( _.Tester._bar );
     }
 
-    var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified in, suite:', _.strQuote( suite.name ),'test routine:', _.strQuote( trd.routine.name ) );
+    var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified' + '\n at' + trd.nameFull );
     suite.exceptionReport
     ({
       err : err,
@@ -154,14 +160,14 @@ function _testRoutineEnd()
   if( ok )
   {
 
-    suite.logger.logDown( 'Passed test routine ( ' + trd.routine.name + ' ).' );
+    suite.logger.logDown( 'Passed test routine ( ' + trd.nameFull + ' ).' ); // xxx
 
   }
   else
   {
 
     suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
-    suite.logger.logDown( 'Failed test routine ( ' + trd.routine.name + ' ).' );
+    suite.logger.logDown( 'Failed test routine ( ' + trd.nameFull + ' ).' ); // xxx
     suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   }
@@ -186,7 +192,7 @@ function _testRoutineHandleReturn( err,msg )
   if( err.timeOut )
   err = _._err
   ({
-    args : [ 'Test routine ( ' + trd.routine.name + ' ) time out!' ],
+    args : [ 'Test routine ( ' + trd.nameFull + ' ) time out!' ],
     usingSourceCode : 0,
   });
 
@@ -295,14 +301,6 @@ function checkNext( description )
   _.assert( trd instanceof Self );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  if( !trd._checksStack.length )
-  if( trd.name === 'row' || trd.name === 'include' )
-  {
-    console.log( 'trd._checkIndex',trd._checkIndex );
-    console.log( _.diagnosticStack() );
-    debugger;
-  }
-
   if( !trd._checkIndex )
   trd._checkIndex = 1;
   else
@@ -356,21 +354,30 @@ function checkRestore( acheck )
 // equalizer
 // --
 
-function shouldBe( outcome )
+function is( outcome )
 {
   var trd = this;
 
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
+
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'shouldBe expects single bool argument',
+      err : '"is" expects single bool argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"is" expects single bool argument',
+    // });
+
   }
   else
   {
+    outcome = !!outcome;
     trd._outcomeReportBoolean
     ({
       outcome : outcome,
@@ -383,19 +390,63 @@ function shouldBe( outcome )
 
 //
 
-function shouldBeNotError( maybeErrror )
+function isNot( outcome )
 {
   var trd = this;
-  var outcome = !_.errIs( maybeErrror );
 
-  if( arguments.length !== 1 )
+  if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
+
     outcome = false;
+
+    trd.exceptionReport
+    ({
+      err : '"isNot" expects single bool argument',
+    });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"isNot" expects single bool argument',
+    // });
+
+  }
+  else
+  {
+    outcome = !outcome;
     trd._outcomeReportBoolean
     ({
       outcome : outcome,
-      msg : 'shouldBeNotError expects single argument',
+      msg : 'expected false',
     });
+  }
+
+  return outcome;
+}
+
+//
+
+function isNotError( maybeError )
+{
+  var trd = this;
+  var outcome = !_.errIs( maybeError );
+
+  if( arguments.length !== 1 )
+  {
+
+    outcome = false;
+
+    trd.exceptionReport
+    ({
+      err : '"isNotError" expects single argument',
+    });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"isNotError" expects single argument',
+    // });
+
   }
   else
   {
@@ -445,24 +496,46 @@ function shouldBeNotError( maybeErrror )
 function identical( got,expected )
 {
   var trd = this;
-  var iterator = Object.create( null );
-  var outcome = _.entityIdentical( got,expected,iterator );
 
-  // _.assert( arguments.length === 2,'expects two arguments' );
-  // _.assert( iterator.lastPath !== undefined );
+  /* */
+
+  try
+  {
+    var iterator = Object.create( null );
+    var outcome = _.entityIdentical( got,expected,iterator );
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
+
+  /* */
 
   if( arguments.length !== 2 )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'identical expects two argument',
+      err : '"identical" expects two argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"identical" expects two argument',
+    // });
+
     return outcome;
   }
 
-  if( iterator.lastPath === undefined )
+  /* */
+
+  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
     trd._outcomeReportBoolean
@@ -473,14 +546,18 @@ function identical( got,expected )
     return outcome;
   }
 
+  /* */
+
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.lastPath,
+    path : iterator.iterator.lastPath,
     usingExtraDetails : 1,
   });
+
+  /* */
 
   return outcome;
 }
@@ -490,21 +567,46 @@ function identical( got,expected )
 function notIdentical( got,expected )
 {
   var trd = this;
-  var iterator = Object.create( null );
-  var outcome = !_.entityIdentical( got,expected,iterator );
+
+  /* */
+
+  try
+  {
+    var iterator = Object.create( null );
+    var outcome = !_.entityIdentical( got,expected,iterator );
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
+
+  /* */
 
   if( arguments.length !== 2 )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'notIdentical expects two argument',
+      err : '"notIdentical" expects two argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"notIdentical" expects two argument',
+    // });
+
     return outcome;
   }
 
-  if( iterator.lastPath === undefined )
+  /* */
+
+  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
     trd._outcomeReportBoolean
@@ -515,12 +617,14 @@ function notIdentical( got,expected )
     return outcome;
   }
 
+  /* */
+
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.lastPath,
+    path : iterator.iterator.lastPath,
     usingExtraDetails : 0,
   });
 
@@ -532,14 +636,14 @@ function notIdentical( got,expected )
 /**
  * Checks if test passes a specified condition by deep soft comparsing result of code execution( got )
  * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects. Two entities are equivalent if
- * difference between their values are less or equal to( eps ). Example: ( got - expected ) <= ( eps ).
+ * difference between their values are less or equal to( accuracy ). Example: ( got - expected ) <= ( accuracy ).
  * If entity( got ) is equivalent to entity( expected ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
  *
  * @param {*} got - Source entity.
  * @param {*} expected - Target entity.
- * @param {*} [ eps=1e-5 ] - Maximal distance between two values.
+ * @param {*} [ accuracy=1e-5 ] - Maximal distance between two values.
  *
  * @example
  * function sometest( test )
@@ -547,14 +651,14 @@ function notIdentical( got,expected )
  *  test.description = 'single number';
  *  var got = 0.5;
  *  var expected = 1;
- *  var eps = 0.5;
- *  test.equivalent( got, expected, eps );//returns true
+ *  var accuracy = 0.5;
+ *  test.equivalent( got, expected, accuracy );//returns true
  *
  *  test.description = 'single number';
  *  var got = 0.5;
  *  var expected = 2;
- *  var eps = 0.5;
- *  test.equivalent( got, expected, eps );//returns false
+ *  var accuracy = 0.5;
+ *  test.equivalent( got, expected, accuracy );//returns false
  * }
  * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
  *
@@ -563,30 +667,55 @@ function notIdentical( got,expected )
  * @memberof wTestRoutineDescriptor
  */
 
-function equivalent( got,expected,eps )
+function equivalent( got, expected, options )
 {
   var trd = this;
-  var iterator = Object.create( null );
 
-  if( eps === undefined )
-  eps = trd.eps;
+  /* */
 
-  iterator.eps = eps;
+  try
+  {
+    var iterator = Object.create( null );
+    iterator.accuracy = trd.accuracy;
+    if( _.mapIs( options ) )
+    _.mapExtend( iterator, options )
+    else if( _.numberIs( options ) )
+    iterator.accuracy = options;
+    else _.assert( options === undefined );
+    var outcome = _.entityEquivalent( got, expected, iterator );
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
 
-  var outcome = _.entityEquivalent( got, expected, iterator );
+  /* */
 
-  if( arguments.length !== 2 )
+  if( arguments.length !== 2 && arguments.length !== 3 )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'equivalent expects two argument',
+      err : '"equivalent" expects two argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"equivalent" expects two argument',
+    // });
+
     return outcome;
   }
 
-  if( iterator.lastPath === undefined )
+  /* */
+
+  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
     trd._outcomeReportBoolean
@@ -597,12 +726,14 @@ function equivalent( got,expected,eps )
     return outcome;
   }
 
+  /* */
+
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.lastPath,
+    path : iterator.iterator.lastPath,
     usingExtraDetails : 1,
   });
 
@@ -611,30 +742,55 @@ function equivalent( got,expected,eps )
 
 //
 
-function notEquivalent( got,expected )
+function notEquivalent( got, expected, options )
 {
   var trd = this;
-  var iterator = Object.create( null );
 
-  if( eps === undefined )
-  eps = trd.eps;
+  /* */
 
-  iterator.eps = eps;
-
-  var outcome = !_.entityEquivalent( got, expected, iterator );
-
-  if( arguments.length !== 2 )
+  try
   {
-    outcome = false;
-    trd._outcomeReportBoolean
+    var iterator = Object.create( null );
+    iterator.accuracy = trd.accuracy;
+    if( _.mapIs( options ) )
+    _.mapExtend( iterator, options )
+    else if( _.numberIs( options ) )
+    iterator.accuracy = options;
+    else _.assert( options === undefined );
+    var outcome = !_.entityEquivalent( got, expected, iterator );
+  }
+  catch( err )
+  {
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'notEquivalent expects two argument',
+      err : err,
     });
-    return outcome;
+    return false;
   }
 
-  if( iterator.lastPath === undefined )
+  /* */
+
+  if( arguments.length !== 2 && arguments.length !== 3 )
+  {
+    outcome = false;
+
+    trd.exceptionReport
+    ({
+      err : '"notEquivalent" expects two argument',
+    });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"equivalent" expects two argument',
+    // });
+    return outcome;
+
+  }
+
+  /* */
+
+  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
     trd._outcomeReportBoolean
@@ -645,12 +801,14 @@ function notEquivalent( got,expected )
     return outcome;
   }
 
+  /* */
+
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.lastPath,
+    path : iterator.iterator.lastPath,
     usingExtraDetails : 1,
   });
 
@@ -693,22 +851,46 @@ function notEquivalent( got,expected )
 function contain( got,expected )
 {
   var trd = this;
-  var iterator = Object.create( null );
 
-  var outcome = _.entityContain( got,expected,iterator );
+  /* */
+
+  try
+  {
+    var iterator = Object.create( null );
+    var outcome = _.entityContain( got, expected, iterator );
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
+
+  /* */
 
   if( arguments.length !== 2 )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'contain expects two argument',
+      err : '"contain" expects two argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"contain" expects two argument',
+    // });
+
     return outcome;
   }
 
-  if( iterator.lastPath === undefined )
+  /* */
+
+  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
     trd._outcomeReportBoolean
@@ -719,14 +901,18 @@ function contain( got,expected )
     return outcome;
   }
 
+  /* */
+
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.lastPath,
+    path : iterator.iterator.lastPath,
     usingExtraDetails : 1,
   });
+
+  /* */
 
   return outcome;
 }
@@ -737,23 +923,38 @@ function gt( got, than )
 {
   var trd = this;
   var outcome = got > than;
+  var diff = got - than;
+
+  /* */
 
   if( arguments.length !== 2 )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'gt expects two argument',
+      err : '"gt" expects two argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"gt" expects two argument',
+    // });
+
     return outcome;
   }
+
+  /* */
 
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
-    expected : expected,
+    expected : than,
+    nameOfPositiveExpected : 'greater than',
+    nameOfNegativeExpected : 'not greater than',
+    diff : diff,
     usingExtraDetails : 1,
   });
 
@@ -765,26 +966,137 @@ function gt( got, than )
 function ge( got, than )
 {
   var trd = this;
+  var greater = got > than;
   var outcome = got >= than;
+  var diff = got - than;
+
+  /* */
 
   if( arguments.length !== 2 )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'gt expects two argument',
+      err : '"ge" expects two argument',
     });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"ge" expects two argument',
+    // });
+
     return outcome;
   }
+
+  /* */
 
   trd._outcomeReportCompare
   ({
     outcome : outcome,
     got : got,
-    expected : expected,
+    expected : than,
+    nameOfPositiveExpected : greater ? 'greater than' : 'identical with',
+    nameOfNegativeExpected : 'not greater neither identical with',
+    diff : diff,
     usingExtraDetails : 1,
   });
+
+  /* */
+
+  return outcome;
+}
+
+//
+
+function lt( got, than )
+{
+  var trd = this;
+  var outcome = got < than;
+  var diff = got - than;
+
+  /* */
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+
+    trd.exceptionReport
+    ({
+      err : '"lt" expects two argument',
+    });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"gt" expects two argument',
+    // });
+
+    return outcome;
+  }
+
+  /* */
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : than,
+    nameOfPositiveExpected : 'less than',
+    nameOfNegativeExpected : 'not less than',
+    diff : diff,
+    usingExtraDetails : 1,
+  });
+
+  /* */
+
+  return outcome;
+}
+
+//
+
+function le( got, than )
+{
+  var trd = this;
+  var less = got < than;
+  var outcome = got <= than;
+  var diff = got - than;
+
+  /* */
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+
+    trd.exceptionReport
+    ({
+      err : '"le" expects two argument',
+    });
+
+    // trd._outcomeReportBoolean
+    // ({
+    //   outcome : outcome,
+    //   msg : '"ge" expects two argument',
+    // });
+
+    return outcome;
+  }
+
+  /* */
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : than,
+    nameOfPositiveExpected : less ? 'less than' : 'identical with',
+    nameOfNegativeExpected : 'not less neither identical with',
+    diff : diff,
+    usingExtraDetails : 1,
+  });
+
+  /* */
 
   return outcome;
 }
@@ -800,148 +1112,56 @@ function _shouldDo( o )
   var async = 0;
   var stack = _.diagnosticStack( 2,-1 );
   var logger = trd.logger;
-  var err,arg;
-
-  _.routineOptions( _shouldDo,o );
-  _.assert( arguments.length === 1 );
-
-  var acheck = trd.checkCurrent();
-  trd._inroutineCon.choke();
+  var err, arg;
   var con = new _.Consequence();
 
-  /* */
-
-  function begin( positive )
+  try
   {
-    if( positive )
-    _.assert( !reported );
-    good = positive;
-
-    if( reported || async )
-    trd.checkRestore( acheck );
-
-    logger.begin({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
-    logger.begin({ connotation : positive ? 'positive' : 'negative' });
+    _.routineOptions( _shouldDo,o );
+    _.assert( arguments.length === 1, 'expects single argument' );
+    _.assert( o.args.length === 1 );
+    _.assert( _.routineIs( o.args[ 0 ] ) );
   }
-
-  function end( positive,arg )
+  catch( err )
   {
-    _.assert( arguments.length === 2 );
-
-    logger.end({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
-    logger.end({ connotation : positive ? 'positive' : 'negative' });
-
-    if( reported )
-    debugger;
-    if( reported || async )
-    trd.checkRestore();
-
-    if( positive )
-    con.give( null,arg );
-    else
-    con.give( arg,null );
-
-    trd._inroutineCon.give();
-
-    reported = 1;
-  }
-
-  /* */
-
-  function reportAsync()
-  {
-
-    if( reported )
-    return;
-
-    if( o.ignoringError )
-    {
-      begin( 1 );
-
-      trd._outcomeReportBoolean
-      ({
-        outcome : 1,
-        msg : 'got single message',
-        stack : stack,
-      });
-
-      end( 1,err ? err : arg );
-    }
-    else if( err )
-    {
-      begin( o.expectingAsyncError );
-
-      trd.exceptionReport
-      ({
-        err : err,
-        sync : 0,
-        considering : 0,
-        outcome : o.expectingAsyncError,
-      });
-
-      if( o.expectingAsyncError )
-      trd._outcomeReportBoolean
-      ({
-        outcome : o.expectingAsyncError,
-        msg : 'error thrown asynchronously as expected',
-        stack : stack,
-      });
-      else
-      trd._outcomeReportBoolean
-      ({
-        outcome : o.expectingAsyncError,
-        msg : 'error thrown asynchronously, not expected',
-        stack : stack,
-      });
-
-      if( o.expectingAsyncError )
-      end( o.expectingAsyncError,err );
-      else
-      end( o.expectingAsyncError,err );
-    }
-    else
-    {
-      begin( !o.expectingAsyncError );
-
-      var msg = 'error was not thrown asynchronously, but expected';
-      if( o.expectingAsyncError )
-      msg = 'error was thrown asynchronously as expected';
-      else if( !o.expectingAsyncError && !o.expectingSyncError && good )
-      msg = 'error was not thrown as expected';
-
-      trd._outcomeReportBoolean
-      ({
-        outcome : !o.expectingAsyncError,
-        msg : msg,
-        stack : stack,
-      });
-
-      if( o.expectingAsyncError )
-      end( !o.expectingAsyncError,_.err( msg ) );
-      else
-      end( !o.expectingAsyncError,arg );
-
-    }
-
-  }
-
-  /* */
-
-  if( !_.routineIs( o.routine ) )
-  {
-
-    begin( 0 );
-    trd._outcomeReportBoolean
+    err = _.errRestack( err, 3 );
+    err = _._err
     ({
-      outcome : 0,
-      msg : 'expects Routine or Consequence, but got ' + _.strTypeOf( o.routine ),
-      stack : stack,
+      args : [ 'Illegal usage of should in', trd.nameFull, '\n', err ],
     });
-    end( 0,null );
-
-    _.assert( !_.consequenceIs( o.routine ) )
+    err = trd.exceptionReport
+    ({
+      err : err,
+    });
+    debugger;
+    con.error( err );
+    if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+    return false;
+    else
     return con;
   }
+
+  o.routine = o.args[ 0 ];
+  var acheck = trd.checkCurrent();
+  trd._inroutineCon.choke();
+
+  /* */
+
+  // if( !_.routineIs( o.routine ) )
+  // {
+  //
+  //   begin( 0 );
+  //   trd._outcomeReportBoolean
+  //   ({
+  //     outcome : 0,
+  //     msg : 'expects Routine or Consequence, but got ' + _.strTypeOf( o.routine ),
+  //     stack : stack,
+  //   });
+  //   end( 0,null );
+  //
+  //   _.assert( !_.consequenceIs( o.routine ) )
+  //   return con;
+  // }
 
   /* */
 
@@ -956,6 +1176,29 @@ function _shouldDo( o )
   }
   catch( _err )
   {
+    return handleError( _err );
+  }
+
+  /* no sync error, but expected */
+
+  if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
+  return handleLackOfSyncError();
+
+  /* */
+
+  if( _.consequenceIs( result ) )
+  handleAsyncResult()
+  else
+  handleSyncResult();
+
+  /* */
+
+  return con;
+
+  /* */
+
+  function handleError( _err )
+  {
 
     err = _err;
 
@@ -968,7 +1211,7 @@ function _shouldDo( o )
         msg : 'error throwen synchronously, ignored',
         stack : stack,
       });
-      end( 1,err );
+      end( 1, err );
       return con;
     }
 
@@ -1010,14 +1253,17 @@ function _shouldDo( o )
 
       end( o.expectingSyncError,err );
 
+      if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+      return err;
+      else
       return con;
     }
 
   }
 
-  /* no error, but expected */
+  /* */
 
-  if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
+  function handleLackOfSyncError()
   {
     begin( 0 );
 
@@ -1031,23 +1277,28 @@ function _shouldDo( o )
     });
 
     end( 0,_.err( msg ) );
-    return con;
+
+    return false;
   }
 
   /* */
 
-  if( _.consequenceIs( result ) )
+  function handleAsyncResult()
   {
 
     trd.checkNext();
     async = 1;
 
+    // if( result.tag === 'strange' )
+    // console.log( '1\n', result.toStr() );
     result.got( function( _err,_arg )
     {
+
+      // if( result.tag === 'strange' )
+      // console.log( '2\n', result.toStr() );
+
       err = _err;
       arg = _arg;
-
-      debugger;
 
       if( !o.ignoringError && !reported )
       if( err && !o.expectingAsyncError )
@@ -1116,7 +1367,10 @@ function _shouldDo( o )
     });
 
   }
-  else
+
+  /* */
+
+  function handleSyncResult()
   {
 
     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
@@ -1160,12 +1414,126 @@ function _shouldDo( o )
 
   /* */
 
-  return con;
+  function begin( positive )
+  {
+    if( positive )
+    _.assert( !reported );
+    good = positive;
+
+    if( reported || async )
+    trd.checkRestore( acheck );
+
+    logger.begin({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
+    logger.begin({ connotation : positive ? 'positive' : 'negative' });
+  }
+
+  /* */
+
+  function end( positive, arg )
+  {
+    _.assert( arguments.length === 2, 'expects exactly two argument' );
+
+    logger.end({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
+    logger.end({ connotation : positive ? 'positive' : 'negative' });
+
+    if( reported )
+    debugger;
+    if( reported || async )
+    trd.checkRestore();
+
+    if( positive )
+    con.give( undefined,arg );
+    else
+    con.give( arg,undefined );
+
+    trd._inroutineCon.give();
+
+    reported = 1;
+  }
+
+  /* */
+
+  function reportAsync()
+  {
+
+    if( reported )
+    return;
+
+    if( o.ignoringError )
+    {
+      begin( 1 );
+
+      trd._outcomeReportBoolean
+      ({
+        outcome : 1,
+        msg : 'got single message',
+        stack : stack,
+      });
+
+      end( 1, err ? err : arg );
+    }
+    else if( err )
+    {
+      begin( o.expectingAsyncError );
+
+      trd.exceptionReport
+      ({
+        err : err,
+        sync : 0,
+        considering : 0,
+        outcome : o.expectingAsyncError,
+      });
+
+      if( o.expectingAsyncError )
+      trd._outcomeReportBoolean
+      ({
+        outcome : o.expectingAsyncError,
+        msg : 'error thrown asynchronously as expected',
+        stack : stack,
+      });
+      else
+      trd._outcomeReportBoolean
+      ({
+        outcome : o.expectingAsyncError,
+        msg : 'error thrown asynchronously, not expected',
+        stack : stack,
+      });
+
+      end( o.expectingAsyncError, err );
+    }
+    else
+    {
+      begin( !o.expectingAsyncError );
+
+      var msg = 'error was not thrown asynchronously, but expected';
+      if( o.expectingAsyncError )
+      debugger;
+      if( o.expectingAsyncError )
+      msg = 'error was thrown asynchronously as expected';
+      else if( !o.expectingAsyncError && !o.expectingSyncError && good )
+      msg = 'error was not thrown as expected';
+
+      trd._outcomeReportBoolean
+      ({
+        outcome : !o.expectingAsyncError,
+        msg : msg,
+        stack : stack,
+      });
+
+      if( o.expectingAsyncError )
+      end( !o.expectingAsyncError,_.err( msg ) );
+      else
+      end( !o.expectingAsyncError,arg );
+
+    }
+
+  }
+
 }
 
 _shouldDo.defaults =
 {
-  routine : null,
+  args : null,
   expectingSyncError : 1,
   expectingAsyncError : 1,
   ignoringError : 0,
@@ -1180,7 +1548,7 @@ function shouldThrowErrorAsync( routine )
 
   return trd._shouldDo
   ({
-    routine : routine,
+    args : arguments,
     expectingSyncError : 0,
     expectingAsyncError : 1,
   });
@@ -1195,7 +1563,7 @@ function shouldThrowErrorSync( routine )
 
   return trd._shouldDo
   ({
-    routine : routine,
+    args : arguments,
     expectingSyncError : 1,
     expectingAsyncError : 0,
   });
@@ -1260,7 +1628,7 @@ function shouldThrowError( routine )
 
   return trd._shouldDo
   ({
-    routine : routine,
+    args : arguments,
     expectingSyncError : 1,
     expectingAsyncError : 1,
   });
@@ -1275,7 +1643,7 @@ function mustNotThrowError( routine )
 
   return trd._shouldDo
   ({
-    routine : routine,
+    args : arguments,
     ignoringError : 0,
     expectingSyncError : 0,
     expectingAsyncError : 0,
@@ -1291,7 +1659,7 @@ function shouldMessageOnlyOnce( routine )
 
   return trd._shouldDo
   ({
-    routine : routine,
+    args : arguments,
     ignoringError : 1,
     expectingSyncError : 0,
     expectingAsyncError : 0,
@@ -1307,7 +1675,7 @@ function _outcomeConsider( outcome )
 {
   var trd = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( trd.constructor === Self );
 
   if( outcome )
@@ -1335,7 +1703,7 @@ function _exceptionConsider( err )
 {
   var trd = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( trd.constructor === Self );
 
   trd.report.errorsArray.push( err );
@@ -1358,7 +1726,7 @@ function _outcomeReportAct( outcome )
     _.Tester.cancel( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
   }
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
 }
 
@@ -1371,7 +1739,7 @@ function _outcomeReport( o )
   var sourceCode = '';
 
   _.routineOptions( _outcomeReport,o );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   /* */
 
@@ -1412,62 +1780,92 @@ function _outcomeReport( o )
   if( o.considering )
   trd._outcomeReportAct( o.outcome );
 
-  if( o.outcome )
-  {
-    logger.begin({ verbosity : o.verbosity });
-    logger.up();
-    logger.begin({ 'connotation' : 'positive' });
+  /* */
 
-    logger.begin({ verbosity : o.verbosity-1 });
+  var verbosity = o.outcome ? 0 : trd.importanceOfNegative;
+  sourceCode = sourceCodeGet();
 
-    if( o.details )
-    logger.begin( 'details' ).log( o.details ).end( 'details' );
+  logger.begin({ verbosity : o.verbosity+verbosity });
 
-    sourceCode = sourceCodeGet();
-    if( sourceCode )
-    logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+  logger.up();
+  if( logger.verbosityReserve() > 1 )
+  logger.log();
+  logger.begin({ 'connotation' : o.outcome ? 'positive' : 'negative' });
 
-    logger.end({ verbosity : o.verbosity-1 });
+  logger.begin({ verbosity : o.verbosity-1+verbosity });
 
-    logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+  if( o.details )
+  logger.begin( 'details' ).log( o.details ).end( 'details' );
 
-    logger.end({ 'connotation' : 'positive' });
-    if( logger.verbosityReserve() > 1 )
-    logger.log();
+  if( sourceCode )
+  logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
 
-    logger.end({ verbosity : o.verbosity });
-  }
-  else
-  {
+  logger.end({ verbosity : o.verbosity-1+verbosity });
 
-    sourceCode = sourceCodeGet();
+  logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
 
-    logger.begin({ verbosity : o.verbosity+trd.importanceOfNegative });
+  logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
+  if( logger.verbosityReserve() > 1 )
+  logger.log();
 
-    logger.up();
-    if( logger.verbosityReserve() > 1 )
-    logger.log();
-    logger.begin({ 'connotation' : 'negative' });
+  logger.end({ verbosity : o.verbosity+verbosity });
 
-    logger.begin({ verbosity : o.verbosity-1+trd.importanceOfNegative });
-
-    if( o.details )
-    logger.begin( 'details' ).log( o.details ).end( 'details' );
-
-    if( sourceCode )
-    logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
-
-    logger.end({ verbosity : o.verbosity-1+trd.importanceOfNegative });
-
-    logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
-
-    logger.end({ 'connotation' : 'negative' });
-    if( logger.verbosityReserve() > 1 )
-    logger.log();
-
-    logger.end({ verbosity : o.verbosity+trd.importanceOfNegative });
-
-  }
+  // if( o.outcome )
+  // {
+  //   sourceCode = sourceCodeGet();
+  //
+  //   logger.begin({ verbosity : o.verbosity });
+  //   logger.up();
+  //   logger.begin({ 'connotation' : 'positive' });
+  //
+  //   logger.begin({ verbosity : o.verbosity-1 });
+  //
+  //   if( o.details )
+  //   logger.begin( 'details' ).log( o.details ).end( 'details' );
+  //
+  //   if( sourceCode )
+  //   logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+  //
+  //   logger.end({ verbosity : o.verbosity-1 });
+  //
+  //   logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+  //
+  //   logger.end({ 'connotation' : 'positive' });
+  //   if( logger.verbosityReserve() > 1 )
+  //   logger.log();
+  //
+  //   logger.end({ verbosity : o.verbosity });
+  // }
+  // else
+  // {
+  //   sourceCode = sourceCodeGet();
+  //
+  //   logger.begin({ verbosity : o.verbosity+trd.importanceOfNegative });
+  //
+  //   logger.up();
+  //   if( logger.verbosityReserve() > 1 )
+  //   logger.log();
+  //   logger.begin({ 'connotation' : 'negative' });
+  //
+  //   logger.begin({ verbosity : o.verbosity-1+trd.importanceOfNegative });
+  //
+  //   if( o.details )
+  //   logger.begin( 'details' ).log( o.details ).end( 'details' );
+  //
+  //   if( sourceCode )
+  //   logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+  //
+  //   logger.end({ verbosity : o.verbosity-1+trd.importanceOfNegative });
+  //
+  //   logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+  //
+  //   logger.end({ 'connotation' : 'negative' });
+  //   if( logger.verbosityReserve() > 1 )
+  //   logger.log();
+  //
+  //   logger.end({ verbosity : o.verbosity+trd.importanceOfNegative });
+  //
+  // }
 
   if( o.considering )
   logger.end( 'check','checkIndex' );
@@ -1492,7 +1890,7 @@ function _outcomeReportBoolean( o )
 {
   var trd = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( _outcomeReportBoolean,o );
 
   o.msg = trd._reportTestCaseTextMake
@@ -1528,15 +1926,40 @@ function _outcomeReportCompare( o )
 {
   var trd = this;
 
-  var got = o.got;
-  var expected = o.expected;
-
   _.assert( trd._testRoutineDescriptorIs );
-  _.assert( arguments.length === 1 );
-  _.routineOptions( _outcomeReportCompare,o );
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.routineOptionsWithUndefines( _outcomeReportCompare,o );
 
-  o.got = got;
-  o.expected = expected;
+  var nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
+  var details = '';
+
+  /**/
+
+  if( !o.outcome )
+  if( o.usingExtraDetails )
+  {
+    details += _.entityDiffDescription
+    ({
+      src1 : o.got,
+      src2 : o.expected,
+      path : o.path,
+      name1 : 'got',
+      name2 : 'expected',
+    });
+  }
+
+  var msg = trd._reportTestCaseTextMake({ outcome : o.outcome });
+
+  trd._outcomeReport
+  ({
+    outcome : o.outcome,
+    msg : msg,
+    details : details,
+  });
+
+  if( !o.outcome )
+  if( trd.debug )
+  debugger;
 
   /**/
 
@@ -1544,56 +1967,8 @@ function _outcomeReportCompare( o )
   {
     return '' +
     'got :\n' + _.toStr( o.got,{ stringWrapper : '\'' } ) + '\n' +
-    'expected :\n' + _.toStr( o.expected,{ stringWrapper : '\'' } ) +
+    nameOfExpected + ' :\n' + _.toStr( o.expected,{ stringWrapper : '\'' } ) +
     '';
-  }
-
-  /**/
-
-  if( o.outcome )
-  {
-
-    var details = msgExpectedGot();
-    var msg = trd._reportTestCaseTextMake({ outcome : 1 });
-
-    trd._outcomeReport
-    ({
-      outcome : o.outcome,
-      msg : msg,
-      details : details,
-    });
-
-  }
-  else
-  {
-
-    var details = msgExpectedGot();
-
-    if( o.usingExtraDetails )
-    if( !_.primitiveIs( o.got ) && !_.primitiveIs( o.expected ) && o.path )
-    details +=
-    (
-      '\nat : ' + o.path +
-      '\ngot :\n' + _.toStr( _.entitySelect( o.got,o.path ) ) +
-      '\nexpected :\n' + _.toStr( _.entitySelect( o.expected,o.path ) ) +
-      ''
-    );
-
-    if( o.usingExtraDetails )
-    if( _.strIs( o.expected ) && _.strIs( o.got ) )
-    details += '\ndifference :\n' + _.strDifference( o.expected,o.got );
-
-    var msg = trd._reportTestCaseTextMake({ outcome : 0 });
-
-    trd._outcomeReport
-    ({
-      outcome : o.outcome,
-      msg : msg,
-      details : details,
-    });
-
-    if( trd.debug )
-    debugger;
   }
 
 }
@@ -1602,6 +1977,9 @@ _outcomeReportCompare.defaults =
 {
   got : null,
   expected : null,
+  diff : null,
+  nameOfPositiveExpected : 'expected',
+  nameOfNegativeExpected : 'expected',
   outcome : null,
   path : null,
   usingExtraDetails : 1,
@@ -1614,7 +1992,7 @@ function exceptionReport( o )
   var trd = this;
 
   _.routineOptions( exceptionReport,o );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   o.stack = o.stack || o.err.stack;
 
@@ -1652,6 +2030,7 @@ function exceptionReport( o )
     considering : o.considering,
   });
 
+  return err;
 }
 
 exceptionReport.defaults =
@@ -1715,14 +2094,15 @@ function _reportTestCaseTextMake( o )
   var trd = this;
 
   o = _.routineOptions( _reportTestCaseTextMake,o );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( o.outcome === null || _.boolLike( o.outcome ) );
   _.assert( o.msg === null || _.strIs( o.msg ) );
   _.assert( trd._testRoutineDescriptorIs );
   _.assert( trd._checkIndex >= 0 );
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine descriptor should have name' );
 
-  var name = trd.routine.name;
+  // var name = trd.routine.name;
+  var name = trd.nameFull;
   if( trd.description && o.usingDescription )
   name += ' : ' + trd.description;
 
@@ -1753,15 +2133,52 @@ _reportTestCaseTextMake.defaults =
 }
 
 // --
-// relationships
+// etc
+// --
+
+function _accuracySet( accuracy )
+{
+  var trd = this;
+  if( !_.numberIs( accuracy ) )
+  accuracy = null;
+  trd[ accuracySymbol ] = accuracy;
+  return accuracy;
+}
+
+//
+
+function _accuracyGet( accuracy )
+{
+  var trd = this;
+  if( trd[ accuracySymbol ] !== null )
+  return trd[ accuracySymbol ];
+  return trd.suite.accuracy;
+}
+
+//
+
+function _nameFullGet()
+{
+  var trd = this;
+  return trd.suite.name + ' / ' + trd.name;
+}
+
+// --
+// var
 // --
 
 var descriptionSymbol = Symbol.for( 'description' );
+var accuracySymbol = Symbol.for( 'accuracy' );
+
+// --
+// relationships
+// --
 
 var Composes =
 {
   name : null,
   description : null,
+  accuracy : null,
 }
 
 var Aggregates =
@@ -1780,7 +2197,6 @@ var Restricts =
   _checkIndex : 1,
   _testRoutineDescriptorIs : 1,
 
-  // _cancelCon : null,
   _returnCon : null,
 
   report : null,
@@ -1798,15 +2214,22 @@ var Events =
 
 var Forbids =
 {
+  _cancelCon : '_cancelCon',
   _storedStates : '_storedStates',
   _currentRoutineFails : '_currentRoutineFails',
   _currentRoutinePasses : '_currentRoutinePasses',
+}
+
+var AccessorsReadOnly =
+{
+  nameFull : 'nameFull',
 }
 
 var Accessors =
 {
   description : 'description',
   will : 'will',
+  accuracy : 'accuracy',
 }
 
 // --
@@ -1820,13 +2243,11 @@ var Proto =
 
   init : init,
 
-
   // run
 
   _testRoutineBegin : _testRoutineBegin,
   _testRoutineEnd : _testRoutineEnd,
   _testRoutineHandleReturn : _testRoutineHandleReturn,
-
 
   // case
 
@@ -1838,7 +2259,6 @@ var Proto =
   testCaseNext : testCaseNext,
   _testCaseConsider : _testCaseConsider,
 
-
   // check
 
   checkCurrent : checkCurrent,
@@ -1846,11 +2266,12 @@ var Proto =
   checkStore : checkStore,
   checkRestore : checkRestore,
 
-
   // equalizer
 
-  shouldBe : shouldBe,
-  shouldBeNotError : shouldBeNotError,
+  is : is,
+  isNot : isNot,
+  isNotError : isNotError,
+
   identical : identical,
   notIdentical : notIdentical,
   equivalent : equivalent,
@@ -1859,13 +2280,13 @@ var Proto =
 
   il : identical,
   ni : notIdentical,
-  el : equivalent,
+  et : equivalent,
   ne : notEquivalent,
 
   gt : gt,
   ge : ge,
-  // lt : lt,
-  // le : le,
+  lt : lt,
+  le : le,
 
   _shouldDo : _shouldDo,
 
@@ -1874,7 +2295,6 @@ var Proto =
   shouldThrowError : shouldThrowError,
   mustNotThrowError : mustNotThrowError,
   shouldMessageOnlyOnce : shouldMessageOnlyOnce,
-
 
   // output
 
@@ -1888,13 +2308,17 @@ var Proto =
 
   exceptionReport : exceptionReport,
 
-
   // report
 
   _reportForm : _reportForm,
   _reportIsPositive : _reportIsPositive,
   _reportTestCaseTextMake : _reportTestCaseTextMake,
 
+  // etc
+
+  _accuracySet : _accuracySet,
+  _accuracyGet : _accuracyGet,
+  _nameFullGet : _nameFullGet,
 
   // relationships
 
@@ -1906,6 +2330,9 @@ var Proto =
   Restricts : Restricts,
   Statics : Statics,
   Events : Events,
+  Forbids : Forbids,
+  AccessorsReadOnly : AccessorsReadOnly,
+  Accessors : Accessors,
 
 }
 
@@ -1919,9 +2346,6 @@ _.classMake
 });
 
 _.Copyable.mixin( Self );
-
-_.accessorForbid( Self.prototype,Forbids );
-_.accessor( Self.prototype,Accessors );
 
 // export
 

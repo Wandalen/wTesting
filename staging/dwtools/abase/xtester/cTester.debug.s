@@ -109,7 +109,7 @@ function _includeTestsFrom( path )
   var logger = tester.logger || _global.logger;
   var path = _.pathJoin( _.pathCurrent(),path );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
 
   if( tester.verbosity > 1 )
@@ -162,7 +162,7 @@ function includeTestsFrom( path )
   var tester = this;
   var logger = tester.logger || _global.logger;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
 
   logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
@@ -593,7 +593,7 @@ function _reportToStr()
   msg += 'Thrown ' + ( report.errorsArray.length ) + ' error(s)\n';
 
   msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
-  msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
+  // msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
   msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
 
@@ -635,7 +635,7 @@ function _verbositySet( src )
 {
   var tester = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( !_.numberIsNotNan( src ) )
   src = 0;
@@ -675,7 +675,7 @@ function _outcomeConsider( outcome )
 {
   var tester = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tester === Self );
 
   if( outcome )
@@ -695,7 +695,7 @@ function _exceptionConsider( err )
 {
   var tester = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tester === Self );
 
   err = _.errLogOnce( err );

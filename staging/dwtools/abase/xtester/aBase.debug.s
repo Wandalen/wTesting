@@ -56,7 +56,7 @@
 
 - tester should has its own copy of environment, even if included from test suite file
 
-- checkers ( identical, contain, equivalent ... ) should return boolean
++ checkers ( identical, contain, equivalent ... ) should return boolean
 
 - routine : 'some', routine : some - should work both variants
 

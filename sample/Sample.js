@@ -111,7 +111,7 @@ function arrayFromRange( test )
 var Self =
 {
 
-  name : 'simple1',
+  name : 'sample',
   silencing : 1,
 
   tests :

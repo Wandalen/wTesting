@@ -1,4 +1,4 @@
-( function _zInheritance_test_s_( ) {
+( function _Inheritance_test_s_( ) {
 
 'use strict';
 
@@ -25,14 +25,15 @@ if( typeof module !== 'undefined' )
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isFullImplementation )
   require( '../xtester/aBase.debug.s' );
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
 
 }
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 //
 
@@ -160,7 +161,7 @@ function inherit( test )
   return suit.run()
   .doThen( function()
   {
-    test.shouldBe( test.report.testCheckPasses > 9  );
+    test.is( test.report.testCheckPasses > 9  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
     test.identical( _.mapOwnKeys( suit.tests ).length, 2 );
@@ -172,7 +173,7 @@ function inherit( test )
 var Proto =
 {
 
-  name : 'wTesting / Inheritance test',
+  name : 'Tools/tester/Inheritance',
   // verbosity : 5,
   silencing : 1,
 

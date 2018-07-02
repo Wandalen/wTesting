@@ -12,7 +12,7 @@ var Parent = null;
 var Self = function wTestSuite( o )
 {
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( o );
 
   if( !( this instanceof Self ) )
@@ -51,10 +51,11 @@ function init( o )
   var inherit = o.inherit;
   delete o.inherit;
 
-  // debugger;
+  if( o && o.tests !== undefined )
+  suite.tests = o.tests;
+
   if( o )
   suite.copy( o );
-  // debugger;
 
   suite._initialOptions = o;
 
@@ -155,7 +156,7 @@ function inherit()
 
     var extend = _.mapBut( src._initialOptions,suite._initialOptions );
     _.mapExtend( suite,extend );
-    _.mapExtend( suite._initialOptions,extend );
+    _.mapExtend( suite._initialOptions, extend );
 
   }
 
@@ -170,7 +171,7 @@ function _testSuitesRegister( suites )
 {
   var suite = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( suites ) );
 
   for( var s in suites ) try
@@ -185,6 +186,38 @@ function _testSuitesRegister( suites )
   return suite;
 }
 
+//
+
+function _accuracySet( accuracy )
+{
+  var suite = this;
+  if( !_.numberIs( accuracy ) )
+  accuracy = 1e-5;
+  suite[ accuracySymbol ] = accuracy;
+  return accuracy;
+}
+
+//
+
+function _routineSet( src )
+{
+  var suite = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( src === null || _.routineIs( src ) || _.strIs( src ) );
+
+  if( _.routineIs( src ) )
+  debugger;
+  if( _.routineIs( src ) )
+  suite[ routineSymbol ] = _.mapKeyWithValue( suite, src );
+  else
+  suite[ routineSymbol ] = src;
+
+  _.assert( suite.routine === null || suite.tests );
+  _.assert( suite.routine === null || suite.tests[ suite.routine ], 'Test suite', suite.name, 'does not have test routine', suite.routine );
+
+}
+
 // --
 // test suite run
 // --
@@ -192,6 +225,7 @@ function _testSuitesRegister( suites )
 function _testSuiteSettingsAdjust()
 {
   var suite = this;
+  var extend = Object.create( null );
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -199,7 +233,7 @@ function _testSuiteSettingsAdjust()
   /* */
 
   if( suite.override )
-  _.mapExtend( suite,suite.override );
+  _.mapExtend( extend, suite.override );
 
   if( !suite.logger )
   suite.logger = _.Tester.logger || _global_.logger;
@@ -207,19 +241,23 @@ function _testSuiteSettingsAdjust()
   if( !suite.ignoringTesterOptions )
   {
 
+    if( _.Tester.settings.verbosity !== null )
+    if( extend.verbosity === undefined )
+    extend.verbosity = _.Tester.settings.verbosity-1;
+
     for( var f in _.Tester.SettingsOfSuite )
     if( _.Tester.settings[ f ] !== null )
-    suite[ f ] = _.Tester.settings[ f ];
-
-    if( _.Tester.settings.verbosity !== null )
-    suite.verbosity = _.Tester.settings.verbosity-1;
+    if( extend[ f ] === undefined )
+    extend[ f ] = _.Tester.settings[ f ];
 
   }
 
   /* */
 
-  if( suite.override )
-  _.mapExtend( suite,suite.override );
+  // if( suite.override )
+  // _.mapExtend( suite,suite.override );
+
+  _.mapExtend( suite, extend );
 
   /* */
 
@@ -580,7 +618,7 @@ function _testRoutineRun_entry( name,testRoutine )
   });
 
   _.assert( _.routineIs( trd._testRoutineHandleReturn ) );
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   return suite._routineCon
   .doThen( function _testRoutineRun()
@@ -654,7 +692,7 @@ function _reportToStr()
   msg += 'Thrown ' + ( suite.report.errorsArray.length ) + ' error(s)\n';
 
   msg += 'Passed test checks ' + ( suite.report.testCheckPasses ) + ' / ' + ( suite.report.testCheckPasses + suite.report.testCheckFails ) + '\n';
-  msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
+  // msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
 
   // suite.logger.log( 'suite.report.testCaseFails',suite.report.testCaseFails );
@@ -691,7 +729,7 @@ function _outcomeConsider( outcome )
 {
   var suite = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( this.constructor === Self );
   _.assert( suite.takingIntoAccount !== undefined );
 
@@ -717,7 +755,7 @@ function _exceptionConsider( err )
 {
   var suite = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( suite.constructor === Self );
 
   suite.report.errorsArray.push( err );
@@ -751,7 +789,7 @@ function exceptionReport( o )
   var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
 
   _.routineOptions( exceptionReport,o );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   var err = _.err( o.err );
 
@@ -762,6 +800,7 @@ function exceptionReport( o )
   _.errLog( err );
   logger.end({ verbosity : 9 });
 
+  return err;
 }
 
 exceptionReport.defaults =
@@ -774,7 +813,8 @@ exceptionReport.defaults =
 // var
 // --
 
-var symbolForVerbosity = Symbol.for( 'verbosity' );
+var accuracySymbol = Symbol.for( 'accuracy' );
+var routineSymbol = Symbol.for( 'routine' );
 
 // --
 // relationships
@@ -808,7 +848,7 @@ var Composes =
   usingSourceCode : 1,
   ignoringTesterOptions : 0,
 
-  eps : 1e-5,
+  accuracy : 1e-5,
   report : null,
 
   debug : 0,
@@ -841,6 +881,7 @@ var Restricts =
   currentRoutine : null,
   _initialOptions : null,
   _testSuiteTerminated_joined : null,
+  _hasConsoleInOutputs : 0,
 }
 
 var Statics =
@@ -865,6 +906,12 @@ var Forbids =
   SettingsOfSuite : 'SettingsOfSuite',
 }
 
+var Accessors =
+{
+  accuracy : 'accuracy',
+  routine : 'routine',
+}
+
 // --
 // define class
 // --
@@ -879,11 +926,11 @@ var Proto =
   extendBy : extendBy,
   inherit : inherit,
 
-
   // etc
 
   _testSuitesRegister : _testSuitesRegister,
-
+  _accuracySet : _accuracySet,
+  _routineSet : _routineSet,
 
   // test suite run
 
@@ -925,8 +972,9 @@ var Proto =
   Associates : Associates,
   Restricts : Restricts,
   Statics : Statics,
-  Forbids : Forbids,
   Events : Events,
+  Forbids : Forbids,
+  Accessors : Accessors,
 
 }
 

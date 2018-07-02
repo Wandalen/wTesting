@@ -618,7 +618,7 @@ function _testRoutineRun_entry( name,testRoutine )
   });
 
   _.assert( _.routineIs( trd._testRoutineHandleReturn ) );
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   return suite._routineCon
   .doThen( function _testRoutineRun()
@@ -692,7 +692,7 @@ function _reportToStr()
   msg += 'Thrown ' + ( suite.report.errorsArray.length ) + ' error(s)\n';
 
   msg += 'Passed test checks ' + ( suite.report.testCheckPasses ) + ' / ' + ( suite.report.testCheckPasses + suite.report.testCheckFails ) + '\n';
-  // msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
+  msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
 
   // suite.logger.log( 'suite.report.testCaseFails',suite.report.testCaseFails );

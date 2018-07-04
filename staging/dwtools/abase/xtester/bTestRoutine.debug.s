@@ -819,7 +819,7 @@ function notEquivalent( got, expected, options )
 //
 
 /**
- * Checks if test passes a specified condition by deep contain comparsing result of code execution( got )
+ * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
  * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
  * If entity( got ) contains keys/values from entity( expected ) or they are indentical test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
@@ -834,21 +834,21 @@ function notEquivalent( got, expected, options )
  *  test.description = 'array';
  *  var got = [ 0, 1, 2 ];
  *  var expected = [ 0 ];
- *  test.contain( got, expected );//returns true
+ *  test.contains( got, expected );//returns true
  *
  *  test.description = 'array';
  *  var got = [ 0, 1, 2 ];
  *  var expected = [ 4 ];
- *  test.contain( got, expected );//returns false
+ *  test.contains( got, expected );//returns false
  * }
  * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @throws {Exception} If no arguments provided.
- * @method contain
+ * @method contains
  * @memberof wTestRoutineDescriptor
  */
 
-function contain( got,expected )
+function contains( got,expected )
 {
   var trd = this;
 
@@ -857,7 +857,7 @@ function contain( got,expected )
   try
   {
     var iterator = Object.create( null );
-    var outcome = _.entityContain( got, expected, iterator );
+    var outcome = _.entityContains( got, expected, iterator );
   }
   catch( err )
   {
@@ -876,14 +876,8 @@ function contain( got,expected )
 
     trd.exceptionReport
     ({
-      err : '"contain" expects two argument',
+      err : '"contains" expects two argument',
     });
-
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"contain" expects two argument',
-    // });
 
     return outcome;
   }
@@ -2276,7 +2270,7 @@ var Proto =
   notIdentical : notIdentical,
   equivalent : equivalent,
   notEquivalent : notEquivalent,
-  contain : contain,
+  contains : contains,
 
   il : identical,
   ni : notIdentical,

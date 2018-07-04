@@ -187,11 +187,11 @@ function appArgsApply()
   var appArgs = _.appArgsInSamFormat();
   if( appArgs.map )
   {
-    _.mapExtend( tester.settings,_.mapScreen( tester.Settings,appArgs.map ) );
+    _.mapExtend( tester.settings,_.mapOnly( appArgs.map, tester.Settings ) );
     if( tester.verbosity >= 8 )
     logger.log( 'Raw application arguments :\n',_.toStr( appArgs,{ levels : 2 } ) );
     if( tester.verbosity >= 5 )
-    logger.log( 'Application arguments :\n',_.toStr( _.mapScreen( tester.Settings,appArgs.map ),{ levels : 2 } ) );
+    logger.log( 'Application arguments :\n',_.toStr( _.mapOnly( appArgs.map, tester.Settings ),{ levels : 2 } ) );
 
     if( appArgs.map.verbosity === 0 && appArgs.map.usingBeep === undefined )
     tester.settings.usingBeep = 0;

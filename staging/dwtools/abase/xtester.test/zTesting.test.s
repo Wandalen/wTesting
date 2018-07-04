@@ -2935,6 +2935,8 @@ function equivalentReturn( test )
     test.is( _.numberIs( t.suite.accuracy ) );
     test.is( _.numberIs( t.accuracy ) );
 
+    debugger;
+
     /* */
 
     test.description = 'no arguments';
@@ -3228,97 +3230,97 @@ function containReturn( test )
 
   function returnTest( t )
   {
-    var got = t.contain( 1,1 );
+    var got = t.contains( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( 1,2 );
+    var got = t.contains( 1,2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( 1,'1' );
+    var got = t.contains( 1,'1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( '1',1 );
+    var got = t.contains( '1',1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( '1','1' );
+    var got = t.contains( '1','1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( true, true );
+    var got = t.contains( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( false, true );
+    var got = t.contains( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( [ 1 ], [ 1 ] );
+    var got = t.contains( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( [ 1 ], [ 2 ] );
+    var got = t.contains( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( [ 1,2,3,4 ], 5 );
+    var got = t.contains( [ 1,2,3,4 ], 5 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( [ 1,2,3,4 ], 4 );
+    var got = t.contains( [ 1,2,3,4 ], 4 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( [ 1,2,3,4 ], [ 4,5 ] );
+    var got = t.contains( [ 1,2,3,4 ], [ 4,5 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( [ 1,2,3,4 ], [ 3,4 ] );
+    var got = t.contains( [ 1,2,3,4 ], [ 3,4 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( { a : 1 }, { a : 1 } );
+    var got = t.contains( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( { a : 1 }, { a : 2 } );
+    var got = t.contains( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.contain( { a : 1, b : 2 }, { b : 2 } );
+    var got = t.contains( { a : 1, b : 2 }, { b : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -3326,13 +3328,13 @@ function containReturn( test )
 
     test.description = 'no arguments';
 
-    var got = t.contain();
+    var got = t.contains();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.description = 'extra arguments';
 
-    var got = t.contain( { a : 1 }, { a : 1 }, { a : 1 } );
+    var got = t.contains( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 

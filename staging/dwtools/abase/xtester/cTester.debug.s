@@ -586,8 +586,12 @@ function _reportForm()
 function _reportToStr()
 {
   var tester = this;
+  var appExitCode = _.appExitCode();
   var report = tester.report;
   var msg = '';
+
+  if( appExitCode !== undefined && appExitCode !== 0 )
+  msg = 'ExitCode : ' + appExitCode + '\n';
 
   if( report.errorsArray.length )
   msg += 'Thrown ' + ( report.errorsArray.length ) + ' error(s)\n';
@@ -597,7 +601,6 @@ function _reportToStr()
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
   msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
 
-  // tester.logger.log( 'report.testCaseFails',report.testCaseFails );
   return msg;
 }
 
@@ -608,7 +611,8 @@ function _reportIsPositive()
   var tester = this;
   var report = tester.report;
 
-  if( _.appExitCode() !== undefined && _.appExitCode() !== 0 )
+  var appExitCode = _.appExitCode();
+  if( appExitCode !== undefined && appExitCode !== 0 )
   return false;
 
   if( report.testCheckFails !== 0 )

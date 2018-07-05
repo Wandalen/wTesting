@@ -208,13 +208,13 @@ function _routineSet( src )
 
   if( _.routineIs( src ) )
   debugger;
-  if( _.routineIs( src ) )
-  suite[ routineSymbol ] = _.mapKeyWithValue( suite, src );
-  else
+  // if( _.routineIs( src ) )
+  // suite[ routineSymbol ] = _.mapKeyWithValue( suite, src );
+  // else
   suite[ routineSymbol ] = src;
 
-  _.assert( suite.routine === null || suite.tests );
-  _.assert( suite.routine === null || suite.tests[ suite.routine ], 'Test suite', suite.name, 'does not have test routine', suite.routine );
+  // _.assert( suite.routine === null || suite.tests );
+  // _.assert( suite.routine === null || suite.tests[ suite.routine ], 'Test suite', suite.name, 'does not have test routine', suite.routine );
 
 }
 
@@ -385,6 +385,15 @@ function _testSuiteBegin()
   /* logger */
 
   var logger = suite.logger;
+
+  /* test routine */
+
+  if( _.routineIs( suite.routine ) )
+  debugger;
+  if( _.routineIs( suite.routine ) )
+  suite.routine = _.mapKeyWithValue( suite, suite.routine );
+
+  _.assert( suite.routine === null || suite.tests[ suite.routine ], 'Test suite', suite.name, 'does not have test routine', suite.routine );
 
   /* report */
 
@@ -685,8 +694,11 @@ function _reportForm()
 function _reportToStr()
 {
   var suite = this;
-
   var msg = '';
+  var appExitCode = _.appExitCode();
+
+  if( appExitCode !== undefined && appExitCode !== 0 )
+  msg = 'ExitCode : ' + appExitCode + '\n';
 
   if( suite.report.errorsArray.length )
   msg += 'Thrown ' + ( suite.report.errorsArray.length ) + ' error(s)\n';
@@ -694,8 +706,6 @@ function _reportToStr()
   msg += 'Passed test checks ' + ( suite.report.testCheckPasses ) + ' / ' + ( suite.report.testCheckPasses + suite.report.testCheckFails ) + '\n';
   msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
-
-  // suite.logger.log( 'suite.report.testCaseFails',suite.report.testCaseFails );
 
   return msg;
 }
@@ -706,7 +716,8 @@ function _reportIsPositive()
 {
   var testing = this;
 
-  if( _.appExitCode() !== undefined && _.appExitCode() !== 0 )
+  var appExitCode = _.appExitCode();
+  if( appExitCode !== undefined && appExitCode !== 0 )
   return false;
 
   if( testing.report.testCheckFails !== 0 )
@@ -948,13 +959,11 @@ var Proto =
 
   _testRoutineRun_entry : _testRoutineRun_entry,
 
-
   // report
 
   _reportForm : _reportForm,
   _reportToStr : _reportToStr,
   _reportIsPositive : _reportIsPositive,
-
 
   // consider
 
@@ -962,7 +971,6 @@ var Proto =
   _exceptionConsider : _exceptionConsider,
   _testCaseConsider : _testCaseConsider,
   exceptionReport : exceptionReport,
-
 
   // relationships
 

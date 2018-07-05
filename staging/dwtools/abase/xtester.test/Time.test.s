@@ -49,7 +49,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.is( _.routineIs( got ) );
     });
   })
@@ -64,7 +64,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.identical( err, undefined );
     });
@@ -81,7 +81,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, value );
       test.identical( err, undefined );
     });
@@ -113,7 +113,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, undefined );
     });
@@ -133,7 +133,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, c.delay / 2 );
       test.identical( err, undefined );
     });
@@ -281,7 +281,7 @@ function timeOut( test )
     t.got( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.identical( err, undefined );
     });
@@ -313,7 +313,7 @@ function timeOut( test )
       t.got( ( err, got ) =>
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, returnValue );
       })
     })
@@ -383,7 +383,7 @@ function timeOutError( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.is( _.errIs( err ) );
     });
   })
@@ -398,7 +398,7 @@ function timeOutError( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
     });
@@ -415,7 +415,7 @@ function timeOutError( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
     });
@@ -447,7 +447,7 @@ function timeOutError( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
     });
@@ -467,7 +467,7 @@ function timeOutError( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeEps );
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
     });
@@ -568,7 +568,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ) );
       });
       test.identical( t.messagesGet().length, 1 );
@@ -594,7 +594,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got , undefined );
         test.is( err === undefined );
       });
@@ -622,7 +622,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( got === value );
         test.is( err === undefined );
       });
@@ -649,7 +649,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ));
         test.is( err === undefined );
       });
@@ -676,7 +676,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, _.timeOut );
         test.identical( err, undefined );
       });
@@ -707,7 +707,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, c.delay * 13 );
         test.identical( err, undefined );
       });
@@ -796,7 +796,7 @@ function timeOutMode01( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, undefined );
         test.identical( err, undefined );
       })
@@ -853,7 +853,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ) );
       });
       test.identical( t.messagesGet().length, 1 );
@@ -879,7 +879,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
@@ -907,7 +907,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( got === value );
         test.identical( err , undefined );
       });
@@ -934,7 +934,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ));
         test.identical( err , undefined );
       });
@@ -961,7 +961,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
@@ -992,7 +992,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( got === c.delay / 2 );
         test.identical( err , undefined );
       });
@@ -1076,7 +1076,7 @@ function timeOutMode10( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, undefined );
         test.identical( err, undefined );
       })
@@ -1134,7 +1134,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ) );
       });
       test.identical( t.messagesGet().length, 1 );
@@ -1160,7 +1160,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
@@ -1188,7 +1188,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( got === value );
         test.identical( err , undefined );
       });
@@ -1215,7 +1215,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ));
         test.identical( err , undefined );
       });
@@ -1242,7 +1242,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
@@ -1273,7 +1273,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( got === c.delay / 2 );
         test.identical( err , undefined );
       });
@@ -1362,7 +1362,7 @@ function timeOutMode11( test )
       t.got( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
-        test.ge( elapsedTime, c.delay-c.timeEps );
+        test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, undefined );
         test.identical( err, undefined );
       })
@@ -1409,7 +1409,7 @@ var Self =
 
   context :
   {
-    timeEps : 1,
+    timeAccuracy : 1,
     delay : 200,
   },
 

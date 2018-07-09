@@ -192,7 +192,7 @@ function _accuracySet( accuracy )
 {
   var suite = this;
   if( !_.numberIs( accuracy ) )
-  accuracy = 1e-5;
+  accuracy = 1e-7;
   suite[ accuracySymbol ] = accuracy;
   return accuracy;
 }
@@ -859,7 +859,7 @@ var Composes =
   usingSourceCode : 1,
   ignoringTesterOptions : 0,
 
-  accuracy : 1e-5,
+  accuracy : 1e-7,
   report : null,
 
   debug : 0,

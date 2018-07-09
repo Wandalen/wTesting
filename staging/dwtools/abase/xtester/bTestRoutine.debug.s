@@ -643,7 +643,7 @@ function notIdentical( got,expected )
  *
  * @param {*} got - Source entity.
  * @param {*} expected - Target entity.
- * @param {*} [ accuracy=1e-5 ] - Maximal distance between two values.
+ * @param {*} [ accuracy=1e-7 ] - Maximal distance between two values.
  *
  * @example
  * function sometest( test )

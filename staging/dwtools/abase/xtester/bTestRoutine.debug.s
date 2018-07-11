@@ -366,6 +366,7 @@ function is( outcome )
     trd.exceptionReport
     ({
       err : '"is" expects single bool argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -402,6 +403,7 @@ function isNot( outcome )
     trd.exceptionReport
     ({
       err : '"isNot" expects single bool argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -439,6 +441,7 @@ function isNotError( maybeError )
     trd.exceptionReport
     ({
       err : '"isNotError" expects single argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -522,6 +525,7 @@ function identical( got,expected )
     trd.exceptionReport
     ({
       err : '"identical" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -593,6 +597,7 @@ function notIdentical( got,expected )
     trd.exceptionReport
     ({
       err : '"notIdentical" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -702,6 +707,7 @@ function equivalent( got, expected, options )
     trd.exceptionReport
     ({
       err : '"equivalent" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -777,6 +783,7 @@ function notEquivalent( got, expected, options )
     trd.exceptionReport
     ({
       err : '"notEquivalent" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -877,6 +884,7 @@ function contains( got,expected )
     trd.exceptionReport
     ({
       err : '"contains" expects two argument',
+      level : 2,
     });
 
     return outcome;
@@ -928,6 +936,7 @@ function gt( got, than )
     trd.exceptionReport
     ({
       err : '"gt" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -973,6 +982,7 @@ function ge( got, than )
     trd.exceptionReport
     ({
       err : '"ge" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -1019,6 +1029,7 @@ function lt( got, than )
     trd.exceptionReport
     ({
       err : '"lt" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -1066,6 +1077,7 @@ function le( got, than )
     trd.exceptionReport
     ({
       err : '"le" expects two argument',
+      level : 2,
     });
 
     // trd._outcomeReportBoolean
@@ -1138,24 +1150,6 @@ function _shouldDo( o )
   o.routine = o.args[ 0 ];
   var acheck = trd.checkCurrent();
   trd._inroutineCon.choke();
-
-  /* */
-
-  // if( !_.routineIs( o.routine ) )
-  // {
-  //
-  //   begin( 0 );
-  //   trd._outcomeReportBoolean
-  //   ({
-  //     outcome : 0,
-  //     msg : 'expects Routine or Consequence, but got ' + _.strTypeOf( o.routine ),
-  //     stack : stack,
-  //   });
-  //   end( 0,null );
-  //
-  //   _.assert( !_.consequenceIs( o.routine ) )
-  //   return con;
-  // }
 
   /* */
 
@@ -2008,7 +2002,8 @@ function exceptionReport( o )
   if( o.sync !== null )
   msg += ( o.sync ? ' synchronously' : ' asynchronously' );
 
-  var err = _.errAttend( o.err );
+  var err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
+  _.errAttend( err );
   var details = err.toString();
 
   if( o.considering )
@@ -2030,6 +2025,7 @@ function exceptionReport( o )
 exceptionReport.defaults =
 {
   err : null,
+  level : null,
   stack : null,
   usingSourceCode : 0,
   considering : 1,

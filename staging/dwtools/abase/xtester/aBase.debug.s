@@ -10,7 +10,7 @@
 + adjust verbosity levels
 + make possible switch off parents test routines : fileStat : null
 + make "should/must not error" pass original messages through
-  test.description = 'mustNotThrowError must return con with message';
+  test.case = 'mustNotThrowError must return con with message';
 
   var con = new _.Consequence().give( '123' );
   test.mustNotThrowError( con )

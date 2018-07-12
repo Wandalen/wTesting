@@ -143,7 +143,7 @@ function _testRoutineEnd()
 
   trd.testCaseCloseIfAny();
 
-  if( trd._testsGroupsStack.length )
+  if( trd._testsGroupsStack.length && !trd._testsGroupError )
   {
     debugger;
     var err = trd.exceptionReport
@@ -333,6 +333,7 @@ function _descriptionWithNameColoredGet()
 {
   var trd = this;
   var result = trd.descriptionWithName;
+
   var splits = _.strSplit2
   ({
     src : result,
@@ -423,6 +424,7 @@ function testsGroupClose( groupName )
     ({
       err : err,
     });
+    trd._testsGroupError = err;
   }
   else
   {
@@ -645,12 +647,12 @@ function isNotError( maybeError )
  * @example
  * function someTest( test )
  * {
- *  test.description = 'single zero';
+ *  test.case = 'single zero';
  *  var got = 0;
  *  var expected = 0;
  *  test.identical( got, expected );//returns true
  *
- *  test.description = 'single number';
+ *  test.case = 'single number';
  *  var got = 2;
  *  var expected = 1;
  *  test.identical( got, expected );//returns false
@@ -810,13 +812,13 @@ function notIdentical( got,expected )
  * @example
  * function sometest( test )
  * {
- *  test.description = 'single number';
+ *  test.case = 'single number';
  *  var got = 0.5;
  *  var expected = 1;
  *  var accuracy = 0.5;
  *  test.equivalent( got, expected, accuracy );//returns true
  *
- *  test.description = 'single number';
+ *  test.case = 'single number';
  *  var got = 0.5;
  *  var expected = 2;
  *  var accuracy = 0.5;
@@ -985,12 +987,12 @@ function notEquivalent( got, expected, options )
  * @example
  * function sometest( test )
  * {
- *  test.description = 'array';
+ *  test.case = 'array';
  *  var got = [ 0, 1, 2 ];
  *  var expected = [ 0 ];
  *  test.contains( got, expected );//returns true
  *
- *  test.description = 'array';
+ *  test.case = 'array';
  *  var got = [ 0, 1, 2 ];
  *  var expected = [ 4 ];
  *  test.contains( got, expected );//returns false
@@ -1691,7 +1693,7 @@ function shouldThrowErrorSync( routine )
  * @example
  * function sometest( test )
  * {
- *  test.description = 'shouldThrowErrorSync';
+ *  test.case = 'shouldThrowErrorSync';
  *  test.shouldThrowErrorSync( function()
  *  {
  *    throw _.err( 'Error' );
@@ -1706,14 +1708,14 @@ function shouldThrowErrorSync( routine )
  *  consequence
  *  .ifNoErrorThen( function()
  *  {
- *    test.description = 'shouldThrowErrorSync';
+ *    test.case = 'shouldThrowErrorSync';
  *    var con = new wConsequence( )
  *    .error( _.err() ); //wConsequence instance with error message
  *    return test.shouldThrowErrorSync( con );//test passes
  *  })
  *  .ifNoErrorThen( function()
  *  {
- *    test.description = 'shouldThrowError2';
+ *    test.case = 'shouldThrowError2';
  *    var con = new wConsequence( )
  *    .error( _.err() )
  *    .error( _.err() ); //wConsequence instance with two error messages
@@ -2270,6 +2272,7 @@ var Restricts =
   _checkIndex : 1,
   _checksStack : [],
   _testsGroupIsCase : 0,
+  _testsGroupError : 0,
   _testsGroupsStack : [],
 
   _returnCon : null,
@@ -2293,7 +2296,6 @@ var Forbids =
   _storedStates : '_storedStates',
   _currentRoutineFails : '_currentRoutineFails',
   _currentRoutinePasses : '_currentRoutinePasses',
-  will : 'will',
 }
 
 var AccessorsReadOnly =
@@ -2308,6 +2310,7 @@ var AccessorsReadOnly =
 var Accessors =
 {
   description : 'description',
+  will : 'will',
   case : 'case',
   accuracy : 'accuracy',
 }
@@ -2333,6 +2336,8 @@ var Proto =
 
   // tests groups
 
+  _willGet : _descriptionGet,
+  _willSet : _descriptionSet,
   _descriptionGet : _descriptionGet,
   _descriptionSet : _descriptionSet,
   _descriptionFullGet : _descriptionFullGet,

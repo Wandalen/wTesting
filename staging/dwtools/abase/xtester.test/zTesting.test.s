@@ -154,7 +154,7 @@ function shouldMessageOnlyOnce( test )
     t.description = 'a';
 
     t.identical( 0,0 );
-    test.description = 'does not throw error';
+    test.case = 'does not throw error';
     var c1 = t.shouldMessageOnlyOnce( function()
     {
     });
@@ -179,7 +179,7 @@ function shouldMessageOnlyOnce( test )
     /* */
 
     t.identical( 0,0 );
-    test.description = 'does not throw error, string sync message';
+    test.case = 'does not throw error, string sync message';
     var c2 = t.shouldMessageOnlyOnce( function()
     {
       return 'msg'
@@ -206,7 +206,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw unexpected error, synchronously';
+    test.case = 'throw unexpected error, synchronously';
     var c3 = t.shouldMessageOnlyOnce( function()
     {
       throw _.errAttend( 'error1' );
@@ -234,7 +234,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw unexpected error, asynchronously';
+    test.case = 'throw unexpected error, asynchronously';
     var c4 = t.shouldMessageOnlyOnce( function()
     {
       return _.timeOut( 250,function()
@@ -265,7 +265,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'single async message, no error';
+    test.case = 'single async message, no error';
     var c5 = t.shouldMessageOnlyOnce( function()
     {
       return _.timeOut( 250 );
@@ -292,7 +292,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second message';
+    test.case = 'not expected second message';
     var c6 = t.shouldMessageOnlyOnce( function()
     {
       var con = _.Consequence();
@@ -328,7 +328,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second error';
+    test.case = 'not expected second error';
     var c7 = t.shouldMessageOnlyOnce( function()
     {
       var con = _.Consequence();
@@ -364,7 +364,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with argument';
+    test.case = 'consequence with argument';
     var c8 = t.shouldMessageOnlyOnce( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
@@ -388,7 +388,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with error';
+    test.case = 'consequence with error';
     var c9 = t.shouldMessageOnlyOnce( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
@@ -456,7 +456,7 @@ function mustNotThrowError( test )
     t.description = 'a';
 
     t.identical( 0,0 );
-    test.description = 'does not throw error';
+    test.case = 'does not throw error';
     var c1 = t.mustNotThrowError( function()
     {
     });
@@ -481,7 +481,7 @@ function mustNotThrowError( test )
     /* */
 
     t.identical( 0,0 );
-    test.description = 'does not throw error, string sync message';
+    test.case = 'does not throw error, string sync message';
     var c2 = t.mustNotThrowError( function()
     {
       return 'msg'
@@ -508,7 +508,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw unexpected error, synchronously';
+    test.case = 'throw unexpected error, synchronously';
     var c3 = t.mustNotThrowError( function()
     {
       throw _.err( 'test' );
@@ -535,7 +535,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw unexpected error, asynchronously';
+    test.case = 'throw unexpected error, asynchronously';
     var c4 = t.mustNotThrowError( function()
     {
       return _.timeOut( 250,function()
@@ -565,7 +565,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'single async message, no error';
+    test.case = 'single async message, no error';
     var c5 = t.mustNotThrowError( function()
     {
       return _.timeOut( 250 );
@@ -592,7 +592,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second message';
+    test.case = 'not expected second message';
     var c6 = t.mustNotThrowError( function()
     {
       var con = _.Consequence();
@@ -628,7 +628,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second error';
+    test.case = 'not expected second error';
     var c7 = t.mustNotThrowError( function()
     {
       var con = _.Consequence();
@@ -663,7 +663,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with argument';
+    test.case = 'consequence with argument';
     var c8 = t.mustNotThrowError( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
@@ -691,7 +691,7 @@ function mustNotThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with error';
+    test.case = 'consequence with error';
     debugger;
     var c9 = t.mustNotThrowError( _.Consequence({ tag : 'strange' }).error( 'error' ) );
     debugger;
@@ -762,7 +762,7 @@ function shouldThrowErrorSync( test )
     t.description = 'a';
 
     t.identical( 0,0 );
-    test.description = 'simplest, does not throw error, but expected';
+    test.case = 'simplest, does not throw error, but expected';
     var c1 = t.shouldThrowErrorSync( function()
     {
     });
@@ -788,7 +788,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'expected synchronous error';
+    test.case = 'expected synchronous error';
     var c2 = t.shouldThrowErrorSync( function()
     {
       throw _.err( 'test' );
@@ -815,7 +815,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw unexpected asynchronous error';
+    test.case = 'throw unexpected asynchronous error';
     var c3 = t.shouldThrowErrorSync( function()
     {
       return _.timeOut( 250,function()
@@ -845,7 +845,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'single message, while synchronous error expected';
+    test.case = 'single message, while synchronous error expected';
     var c4 = t.shouldThrowErrorSync( function()
     {
       return _.timeOut( 250 );
@@ -872,7 +872,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second message';
+    test.case = 'not expected second message';
     var c5 = t.shouldThrowErrorSync( function()
     {
       var con = _.Consequence();
@@ -907,7 +907,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second error';
+    test.case = 'not expected second error';
     var c6 = t.shouldThrowErrorSync( function()
     {
       var con = _.Consequence().error( 'error' );
@@ -941,7 +941,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with argument';
+    test.case = 'consequence with argument';
     var c7 = t.shouldThrowErrorSync( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
@@ -965,7 +965,7 @@ function shouldThrowErrorSync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with error';
+    test.case = 'consequence with error';
     var c8 = t.shouldThrowErrorSync( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
@@ -1032,7 +1032,7 @@ function shouldThrowErrorAsync( test )
     t.description = 'a';
 
     t.identical( 0,0 );
-    test.description = 'simplest, does not throw error, but expected';
+    test.case = 'simplest, does not throw error, but expected';
     var c1 = t.shouldThrowErrorAsync( function()
     {
     });
@@ -1058,7 +1058,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw unexpected synchronous error';
+    test.case = 'throw unexpected synchronous error';
     var c2 = t.shouldThrowErrorAsync( function()
     {
       throw _.err( 'test' );
@@ -1085,7 +1085,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw expected asynchronous error';
+    test.case = 'throw expected asynchronous error';
     var c3 = t.shouldThrowErrorAsync( function()
     {
       return _.timeOut( 250,function()
@@ -1115,7 +1115,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'single message while asynchronous error expected';
+    test.case = 'single message while asynchronous error expected';
     var c4 = t.shouldThrowErrorAsync( function()
     {
       return _.timeOut( 250 );
@@ -1142,7 +1142,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'expected async string error';
+    test.case = 'expected async string error';
     var c5 = t.shouldThrowErrorAsync( function()
     {
       var con = _.Consequence();
@@ -1176,7 +1176,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second message';
+    test.case = 'not expected second message';
     var c6 = t.shouldThrowErrorAsync( function()
     {
       var con = _.Consequence();
@@ -1211,7 +1211,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second error';
+    test.case = 'not expected second error';
     var c7 = t.shouldThrowErrorAsync( function()
     {
       var con = _.Consequence();
@@ -1247,7 +1247,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with argument';
+    test.case = 'consequence with argument';
     var c8 = t.shouldThrowErrorAsync( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
@@ -1271,7 +1271,7 @@ function shouldThrowErrorAsync( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with error';
+    test.case = 'consequence with error';
     var c9 = t.shouldThrowErrorAsync( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
@@ -1339,7 +1339,7 @@ function shouldThrowError( test )
     t.description = 'a';
 
     t.identical( 0,0 );
-    test.description = 'does not throw error, but expected';
+    test.case = 'does not throw error, but expected';
     var c1 = t.shouldThrowError( function()
     {
     });
@@ -1365,7 +1365,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw expected synchronous error';
+    test.case = 'throw expected synchronous error';
     var c2 = t.shouldThrowError( function()
     {
       throw _.err( 'err1' );
@@ -1393,7 +1393,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'throw expected asynchronous error';
+    test.case = 'throw expected asynchronous error';
     var c3 = t.shouldThrowError( function()
     {
       return _.timeOut( 250,function()
@@ -1424,7 +1424,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'single message, but error expected';
+    test.case = 'single message, but error expected';
     var c4 = t.shouldThrowError( function()
     {
       return _.timeOut( 250 );
@@ -1451,7 +1451,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second message';
+    test.case = 'not expected second message';
     var c5 = t.shouldThrowError( function()
     {
       var con = _.Consequence();
@@ -1486,7 +1486,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'not expected second error';
+    test.case = 'not expected second error';
     var c6 = t.shouldThrowError( function()
     {
       var con = _.Consequence();
@@ -1522,7 +1522,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with argument';
+    test.case = 'consequence with argument';
     var c8 = t.shouldThrowError( _.Consequence().give( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
@@ -1546,7 +1546,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
 
-    test.description = 'consequence with error';
+    test.case = 'consequence with error';
     var c9 = t.shouldThrowError( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
@@ -1602,7 +1602,7 @@ function shouldPassMessage( test )
 {
   var counter = new CheckCounter();
 
-  test.description = 'mustNotThrowError must return con with message';
+  test.case = 'mustNotThrowError must return con with message';
 
   var con = new _.Consequence().give( '123' );
   test.mustNotThrowError( con )
@@ -1618,7 +1618,7 @@ function shouldPassMessage( test )
     test.identical( arg, '123' );
   });
 
-  test.description = 'mustNotThrowError must return con original error';
+  test.case = 'mustNotThrowError must return con original error';
 
   var errOriginal = _.err( 'Err' );
   var con = new _.Consequence().error( errOriginal );
@@ -1742,14 +1742,14 @@ function _throwingExperiment( test )
 
   /* */
 
-  test.description = 'simplest, does not throw error,  but expected';
+  test.case = 'simplest, does not throw error,  but expected';
   test.shouldThrowErrorAsync( function()
   {
   });
 
   /* */
 
-  test.description = 'single message';
+  test.case = 'single message';
   test.mustNotThrowError( function()
   {
     return _.timeOut( 250 );
@@ -1794,14 +1794,14 @@ function _throwingExperiment( test )
 
   /* */
 
-  test.description = 'if passes dont appears in output/passed test checks/total counter';
+  test.case = 'if passes dont appears in output/passed test checks/total counter';
   test.mustNotThrowError( function()
   {
   });
 
   test.identical( 0,0 );
 
-  test.description = 'if not passes then appears in output/total counter';
+  test.case = 'if not passes then appears in output/total counter';
   test.mustNotThrowError( function()
   {
     return _.timeOut( 1000,function()
@@ -1813,7 +1813,7 @@ function _throwingExperiment( test )
 
   test.identical( 0,0 );
 
-  test.description = 'not expected second message';
+  test.case = 'not expected second message';
   test.mustNotThrowError( function()
   {
     var con = _.Consequence().give();
@@ -1875,7 +1875,7 @@ function shouldThrowErrorSimpleAsync( test )
   consequence
   .doThen( function()
   {
-    test.description = 'a';
+    test.case = 'a';
     var con = _.timeOut( 50,function( err )
     {
       throw _.err( 'async error' );
@@ -1884,7 +1884,7 @@ function shouldThrowErrorSimpleAsync( test )
   })
   .doThen( function()
   {
-    test.description = 'b';
+    test.case = 'b';
     var con = _.timeOut( 50,function( err )
     {
       throw _.err( 'async error' );
@@ -1934,7 +1934,7 @@ function _chainedShould( test,o )
     .doThen( function()
     {
 
-      test.description = prefix + 'beginning of the test routine';
+      test.case = prefix + 'beginning of the test routine';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 1 );
       test.identical( t.suite.report.testCheckPasses, 0 );
@@ -1942,7 +1942,7 @@ function _chainedShould( test,o )
 
       var con = _.timeOut( 50,function( err )
       {
-        test.description = prefix + 'give the first message';
+        test.case = prefix + 'give the first message';
         test.is( 1 );
         if( o.throwingError === 'async' )
         throw _.err( 'async error' );
@@ -1958,7 +1958,7 @@ function _chainedShould( test,o )
     .doThen( function()
     {
 
-      test.description = prefix + 'first ' + method + ' done';
+      test.case = prefix + 'first ' + method + ' done';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 2 );
       test.identical( t.suite.report.testCheckPasses, 1 );
@@ -1966,7 +1966,7 @@ function _chainedShould( test,o )
 
       var con = _.timeOut( 50,function( err )
       {
-        test.description = prefix + 'give the second message';
+        test.case = prefix + 'give the second message';
         test.is( 1 );
         if( o.throwingError === 'async' )
         throw _.err( 'async error' );
@@ -1982,7 +1982,7 @@ function _chainedShould( test,o )
     .doThen( function()
     {
 
-      test.description = prefix + 'second ' + method + ' done';
+      test.case = prefix + 'second ' + method + ' done';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 3 );
       test.identical( t.suite.report.testCheckPasses, 2 );
@@ -2000,7 +2000,7 @@ function _chainedShould( test,o )
     var prefix = method + ' . ' + 'include' + ' . ';
     counter.testRoutine = t;
 
-    test.description = prefix + 'beginning of the included test routine ';
+    test.case = prefix + 'beginning of the included test routine ';
 
     if( o.throwingError === 'sync' )
     return first();
@@ -2013,7 +2013,7 @@ function _chainedShould( test,o )
       var result = _.timeOut( 50,function()
       {
 
-        test.description = prefix + 'first timeout of the included test routine ';
+        test.case = prefix + 'first timeout of the included test routine ';
 
         test.identical( t.suite.report.testCheckPasses, 3 );
         test.identical( t.suite.report.testCheckFails, 0 );
@@ -2043,7 +2043,7 @@ function _chainedShould( test,o )
       return _.timeOut( 50,function()
       {
 
-        test.description = prefix + 'first ' + method + ' done';
+        test.case = prefix + 'first ' + method + ' done';
 
         test.identical( t.suite.report.testCheckPasses, 4 );
         test.identical( t.suite.report.testCheckFails, 0 );
@@ -2086,7 +2086,7 @@ function _chainedShould( test,o )
 
     if( e.testRoutine.routine.name === 'row' )
     {
-      test.description = 'checking outcomes';
+      test.case = 'checking outcomes';
       counter.acheck = counter.testRoutine.checkCurrent();
       test.identical( counter.acheck._checkIndex, 4 );
       test.identical( suite.report.testCheckPasses, 3 );
@@ -2101,7 +2101,7 @@ function _chainedShould( test,o )
   .doThen( function( err,data )
   {
 
-    test.description = 'checking outcomes';
+    test.case = 'checking outcomes';
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck._checkIndex, 5 ); /* 4 */
@@ -2223,43 +2223,43 @@ function isReturn( test )
 
     /* */
 
-    test.description = 'not bool-like, string';
+    test.case = 'not bool-like, string';
 
     var got = t.is( '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not bool-like, map';
+    test.case = 'not bool-like, map';
 
     var got = t.is( {} );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not bool-like, array';
+    test.case = 'not bool-like, array';
 
     var got = t.is( [] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not bool-like, routine';
+    test.case = 'not bool-like, routine';
 
     var got = t.is( t.is );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.is( true, false );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.is();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.is( { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -2327,43 +2327,43 @@ function isNotReturn( test )
 
     /* */
 
-    test.description = 'not bool-like, string';
+    test.case = 'not bool-like, string';
 
     var got = t.isNot( '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not bool-like, map';
+    test.case = 'not bool-like, map';
 
     var got = t.isNot( {} );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not bool-like, array';
+    test.case = 'not bool-like, array';
 
     var got = t.isNot( [] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not bool-like, routine';
+    test.case = 'not bool-like, routine';
 
     var got = t.isNot( t.isNot );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.isNot( true, false );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.isNot();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.isNot( { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -2465,19 +2465,19 @@ function isNotErrorReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.isNotError();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.isNotError( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.isNotError( true, false );
     test.identical( got, false );
@@ -2602,13 +2602,13 @@ function identicalReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.identical();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.identical( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -2725,13 +2725,13 @@ function notIdenticalReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.notIdentical();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.notIdentical( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -2887,7 +2887,7 @@ function equivalentReturn( test )
 
     /* */
 
-    test.description = 'third argument is accuracy';
+    test.case = 'third argument is accuracy';
 
     var got = t.equivalent( 1, 1.05, 0.01 );
     test.identical( got, false );
@@ -2899,7 +2899,7 @@ function equivalentReturn( test )
 
     /* */
 
-    test.description = 'third argument is options map with accuracy';
+    test.case = 'third argument is options map with accuracy';
 
     var got = t.equivalent( 1, 1.05, { accuracy : 0.01 } );
     test.identical( got, false );
@@ -2939,31 +2939,31 @@ function equivalentReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.equivalent();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.equivalent( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.equivalent( 1.05, 1, null )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.equivalent( 1.05, 1, 'x' )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.equivalent( 1.05, 1, [] )
     test.identical( got, false );
@@ -3141,7 +3141,7 @@ function notEquivalentReturn( test )
 
     /* */
 
-    test.description = 'third argument is accuracy';
+    test.case = 'third argument is accuracy';
 
     var got = t.notEquivalent( 1, 1.05, 0.01 );
     test.identical( got, true );
@@ -3153,7 +3153,7 @@ function notEquivalentReturn( test )
 
     /* */
 
-    test.description = 'third argument is options map with accuracy';
+    test.case = 'third argument is options map with accuracy';
 
     var got = t.notEquivalent( 1, 1.05, { accuracy : 0.01 } );
     test.identical( got, true );
@@ -3165,31 +3165,31 @@ function notEquivalentReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.notEquivalent();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.notEquivalent( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.notEquivalent( 1.05, 1, null )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.notEquivalent( 1.05, 1, 'x' )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.notEquivalent( 1.05, 1, [] )
     test.identical( got, false );
@@ -3326,13 +3326,13 @@ function containReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.contains();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.contains( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -3390,17 +3390,17 @@ function shouldThrowErrorSyncReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
     var got = t.shouldThrowErrorSync()
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'not routines';
+    test.case = 'not routines';
     var got = t.shouldThrowErrorSync( 'x' )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'several functions';
+    test.case = 'several functions';
     var got = t.shouldThrowErrorSync( function(){}, function(){} )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
@@ -3504,7 +3504,7 @@ function shouldThrowErrorAsyncReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'no arguments';
+      test.case = 'no arguments';
       return t.shouldThrowErrorAsync()
       .doThen( ( err, got ) =>
       {
@@ -3515,7 +3515,7 @@ function shouldThrowErrorAsyncReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'not routines';
+      test.case = 'not routines';
       return t.shouldThrowErrorAsync( 'x' )
       .doThen( ( err, got ) =>
       {
@@ -3526,7 +3526,7 @@ function shouldThrowErrorAsyncReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'several functions';
+      test.case = 'several functions';
       return t.shouldThrowErrorAsync( function(){}, function(){} )
       .doThen( ( err, got ) =>
       {
@@ -3626,7 +3626,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'no arguments';
+      test.case = 'no arguments';
       return t.shouldThrowError()
       .doThen( ( err, got ) =>
       {
@@ -3637,7 +3637,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'not routines';
+      test.case = 'not routines';
       return t.shouldThrowError( 'x' )
       .doThen( ( err, got ) =>
       {
@@ -3651,7 +3651,7 @@ function shouldThrowErrorReturn( test )
       return t.shouldThrowError( function(){}, function(){} )
       .doThen( ( err, got ) =>
       {
-        test.description = 'several functions';
+        test.case = 'several functions';
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
@@ -3748,7 +3748,7 @@ function mustNotThrowErrorReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'no arguments';
+      test.case = 'no arguments';
       return t.mustNotThrowError()
       .doThen( ( err, got ) =>
       {
@@ -3759,7 +3759,7 @@ function mustNotThrowErrorReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'not routines';
+      test.case = 'not routines';
       return t.mustNotThrowError( 'x' )
       .doThen( ( err, got ) =>
       {
@@ -3773,7 +3773,7 @@ function mustNotThrowErrorReturn( test )
       return t.mustNotThrowError( function(){}, function(){} )
       .doThen( ( err, got ) =>
       {
-        test.description = 'several functions';
+        test.case = 'several functions';
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
@@ -3944,7 +3944,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'no arguments';
+      test.case = 'no arguments';
       return t.shouldMessageOnlyOnce()
       .doThen( ( err, got ) =>
       {
@@ -3955,7 +3955,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( () =>
     {
-      test.description = 'not routines';
+      test.case = 'not routines';
       return t.shouldMessageOnlyOnce( 'x' )
       .doThen( ( err, got ) =>
       {
@@ -3969,7 +3969,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( function(){}, function(){} )
       .doThen( ( err, got ) =>
       {
-        test.description = 'several functions';
+        test.case = 'several functions';
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
@@ -4096,13 +4096,13 @@ function ilReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.il();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.il( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -4218,13 +4218,13 @@ function niReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.ni();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ni( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
@@ -4380,7 +4380,7 @@ function etReturn( test )
 
     /* */
 
-    test.description = 'third argument is accuracy';
+    test.case = 'third argument is accuracy';
 
     var got = t.et( 1, 1.05, 0.01 );
     test.identical( got, false );
@@ -4392,7 +4392,7 @@ function etReturn( test )
 
     /* */
 
-    test.description = 'third argument is options map with accuracy';
+    test.case = 'third argument is options map with accuracy';
 
     var got = t.et( 1, 1.05, { accuracy : 0.01 } );
     test.identical( got, false );
@@ -4430,31 +4430,31 @@ function etReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.et();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.et( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.et( 1.05, 1, null )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.et( 1.05, 1, 'x' )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.et( 1.05, 1, [] )
     test.identical( got, false );
@@ -4632,7 +4632,7 @@ function neReturn( test )
 
     /* */
 
-    test.description = 'third argument is accuracy';
+    test.case = 'third argument is accuracy';
 
     var got = t.ne( 1, 1.05, 0.01 );
     test.identical( got, true );
@@ -4644,7 +4644,7 @@ function neReturn( test )
 
     /* */
 
-    test.description = 'third argument is options map with accuracy';
+    test.case = 'third argument is options map with accuracy';
 
     var got = t.ne( 1, 1.05, { accuracy : 0.01 } );
     test.identical( got, true );
@@ -4656,31 +4656,31 @@ function neReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.ne();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ne( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ne( 1.05, 1, null )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ne( 1.05, 1, 'x' )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ne( 1.05, 1, [] )
     test.identical( got, false );
@@ -4695,12 +4695,12 @@ function neReturn( test )
 function gtReturn( test )
 {
 
-  test.description = 'trivial';
+  test.case = 'trivial';
 
   var got = test.gt( 2,1 );
   test.identical( got, true );
 
-  test.description = 'suite';
+  test.case = 'suite';
 
   var suite = wTestSuite
   ({
@@ -4723,7 +4723,7 @@ function gtReturn( test )
     if( suite.report.errorsArray.length )
     console.log( suite.report.errorsArray[ 0 ] );
 
-    test.description = 'trivial';
+    test.case = 'trivial';
 
     var got = test.gt( 2,1 );
     test.identical( got, true );
@@ -4811,19 +4811,19 @@ function gtReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.gt();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.gt( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.gt( 1.05, 1, 0.1 )
     test.identical( got, false );
@@ -4859,7 +4859,7 @@ function geReturn( test )
     if( suite.report.errorsArray.length )
     console.log( suite.report.errorsArray[ 0 ] );
 
-    test.description = 'trivial';
+    test.case = 'trivial';
 
     var got = test.ge( 2,1 );
     test.identical( got, true );
@@ -4948,19 +4948,19 @@ function geReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.ge();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ge( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.ge( 1.05, 1, 0.1 )
     test.identical( got, false );
@@ -4996,7 +4996,7 @@ function ltReturn( test )
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
 
-    test.description = 'trivial';
+    test.case = 'trivial';
 
     var got = test.lt( 2,3 );
     test.identical( got, true );
@@ -5083,19 +5083,19 @@ function ltReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.lt();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.lt( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.lt( 1.05, 1, 0.1 )
     test.identical( got, false );
@@ -5131,7 +5131,7 @@ function leReturn( test )
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
 
-    test.description = 'trivial';
+    test.case = 'trivial';
 
     var got = test.le( 2,3 );
     test.identical( got, true );
@@ -5220,19 +5220,19 @@ function leReturn( test )
 
     /* */
 
-    test.description = 'no arguments';
+    test.case = 'no arguments';
 
     var got = t.le();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.le( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.description = 'extra arguments';
+    test.case = 'extra arguments';
 
     var got = t.le( 1.05, 1, 0.1 )
     test.identical( got, false );
@@ -5267,7 +5267,7 @@ asyncExperiment.experimental = 1;
 function failExperiment( test )
 {
 
-  test.description = 'this test fails';
+  test.case = 'this test fails';
 
   test.identical( 0,1 );
   test.identical( 0,1 );
@@ -5281,7 +5281,7 @@ failExperiment.experimental = 1;
 function mustNotThrowErrorExperiment( test )
 {
 
-  test.description = 'mustNotThrowError experiment';
+  test.case = 'mustNotThrowError experiment';
 
   var con = test.mustNotThrowError( function()
   {

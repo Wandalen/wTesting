@@ -57,7 +57,7 @@ function inherit( test )
 
     routines.push( test.name );
 
-    test.description = 'check if child suit runs this test';
+    test.case = 'check if child suit runs this test';
     test.identical( _.Tester.activeSuits[ 1 ].name, childSuitName );
     checksCount += test.checkCurrent()._checkIndex;
   }
@@ -92,7 +92,7 @@ function inherit( test )
 
     routines.push( test.name );
 
-    test.description = 'check if child suit inherits tests, options, context from parent';
+    test.case = 'check if child suit inherits tests, options, context from parent';
     var tests = _.mapOwnKeys( wTests[ childSuitName ].tests );
     test.identical( tests, [ 'test1', 'test2' ] );
     test.identical( wTests[ childSuitName ].abstract, 0 );

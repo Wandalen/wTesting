@@ -43,7 +43,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay only';
+    test.case = 'delay only';
     var timeBefore = _.timeNow();
     return _.timeOut( c.delay )
     .doThen( function( err, got )
@@ -58,7 +58,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine';
+    test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     return _.timeOut( c.delay, () => {} )
     .doThen( function( err, got )
@@ -74,7 +74,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a value';
+    test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     return _.timeOut( c.delay, () => value )
@@ -91,7 +91,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a consequence';
+    test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     return _.timeOut( c.delay, () => _.timeOut( c.delay ) )
     .doThen( function( err, got )
@@ -107,7 +107,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that calls another timeOut';
+    test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     return _.timeOut( c.delay, () => { _.timeOut( c.delay ) } )
     .doThen( function( err, got )
@@ -123,7 +123,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + context + routine + arguments';
+    test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
     function r( delay )
     {
@@ -143,7 +143,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + consequence';
+    test.case = 'delay + consequence';
     var timeBefore = _.timeNow();
 
     return _.timeOut( c.delay, _.timeOut( c.delay * 2 ) )
@@ -160,7 +160,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + consequence that returns delayed value, launched serially';
+    test.case = 'delay + consequence that returns delayed value, launched serially';
     var timeBefore = _.timeNow();
     var val = 13;
 
@@ -178,7 +178,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + consequence that returns delayed value, launched concurrently';
+    test.case = 'delay + consequence that returns delayed value, launched concurrently';
     var timeBefore = _.timeNow();
     var val = 13;
 
@@ -196,7 +196,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + consequence that returns delayed value, launched concurrently';
+    test.case = 'delay + consequence that returns delayed value, launched concurrently';
     var timeBefore = _.timeNow();
 
     return _.timeOut( c.delay, _.timeOut( c.delay * 2, () => _.timeOut( c.delay * 2 ) ) )
@@ -213,7 +213,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'delay + consequence + error';
+    test.case = 'delay + consequence + error';
     var timeBefore = _.timeNow();
 
     return _.timeOut( c.delay, _.timeOut( c.delay * 2, () => { throw 'err' } ) )
@@ -230,7 +230,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error';
+    test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
 
     var t = _.timeOut( c.delay );
@@ -252,7 +252,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error, routine passed';
+    test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
     var called = false;
 
@@ -274,7 +274,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'give err after timeOut';
+    test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
 
     var t = _.timeOut( c.delay, () => {} );
@@ -299,7 +299,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'give msg before timeOut';
+    test.case = 'give msg before timeOut';
     var timeBefore = _.timeNow();
     var returnValue = 1;
     var msg = 2;
@@ -325,7 +325,7 @@ function timeOut( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error + arg, routine passed';
+    test.case = 'stop timer with error + arg, routine passed';
     var timeBefore = _.timeNow();
     var called = false;
     var stop = 'stop';
@@ -351,13 +351,13 @@ function timeOut( test )
     if( !Config.debug )
     return;
 
-    test.description = 'delay must be number';
+    test.case = 'delay must be number';
     test.shouldThrowError( () => _.timeOut( 'x' ) )
 
-    test.description = 'if two arguments provided, second must consequence/routine';
+    test.case = 'if two arguments provided, second must consequence/routine';
     test.shouldThrowError( () => _.timeOut( 0, 'x' ) )
 
-    test.description = 'if four arguments provided, third must routine';
+    test.case = 'if four arguments provided, third must routine';
     test.shouldThrowError( () => _.timeOut( 0, {}, 'x', [] ) )
   })
 
@@ -377,7 +377,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay only';
+    test.case = 'delay only';
     var timeBefore = _.timeNow();
     return _.timeOutError( c.delay )
     .doThen( function( err, got )
@@ -392,7 +392,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine';
+    test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     return _.timeOutError( c.delay, () => {} )
     .doThen( function( err, got )
@@ -408,7 +408,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a value';
+    test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     return _.timeOutError( c.delay, () => value )
@@ -425,7 +425,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a consequence';
+    test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     return _.timeOutError( c.delay, () => _.timeOut( c.delay ) )
     .doThen( function( err, got )
@@ -441,7 +441,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that calls another timeOut';
+    test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     return _.timeOutError( c.delay, () => { _.timeOut( c.delay ) } )
     .doThen( function( err, got )
@@ -457,7 +457,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay + context + routine + arguments';
+    test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
     function r( delay )
     {
@@ -477,7 +477,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'delay + consequence';
+    test.case = 'delay + consequence';
     var timeBefore = _.timeNow();
 
     return _.timeOutError( c.delay, _.timeOut( c.delay * 2 ) )
@@ -495,7 +495,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error';
+    test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
 
     var t = _.timeOutError( c.delay );
@@ -516,7 +516,7 @@ function timeOutError( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error, routine passed';
+    test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
     var called = false;
 
@@ -559,7 +559,7 @@ function timeOutMode01( test )
   .doThen( function()
   {
     debugger;
-    test.description = 'delay only';
+    test.case = 'delay only';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     return new _.Consequence().first( t )
@@ -585,7 +585,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine';
+    test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => {} );
     return new _.Consequence().first( t )
@@ -612,7 +612,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a value';
+    test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     var t = _.timeOut( c.delay, () => value );
@@ -640,7 +640,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a consequence';
+    test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
@@ -667,7 +667,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that calls another timeOut';
+    test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
@@ -694,7 +694,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'delay + context + routine + arguments';
+    test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
     function r( delay )
     {
@@ -725,7 +725,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error';
+    test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
@@ -753,7 +753,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error, routine passed';
+    test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
     var called = false;
 
@@ -785,7 +785,7 @@ function timeOutMode01( test )
 
   .doThen( function()
   {
-    test.description = 'give err after timeOut';
+    test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => {} );
 
@@ -844,7 +844,7 @@ function timeOutMode10( test )
   .doThen( () => _.Consequence.asyncModeSet([ 1, 0 ]) )
   .doThen( function()
   {
-    test.description = 'delay only';
+    test.case = 'delay only';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     return new _.Consequence().first( t )
@@ -870,7 +870,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine';
+    test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => {} );
     return new _.Consequence().first( t )
@@ -897,7 +897,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a value';
+    test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     var t = _.timeOut( c.delay, () => value );
@@ -925,7 +925,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a consequence';
+    test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
@@ -952,7 +952,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that calls another timeOut';
+    test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ) } );
     return new _.Consequence().first( t )
@@ -979,7 +979,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'delay + context + routine + arguments';
+    test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
     function r( delay )
     {
@@ -1010,7 +1010,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error';
+    test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
@@ -1036,7 +1036,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error, routine passed';
+    test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
     var called = false;
 
@@ -1065,7 +1065,7 @@ function timeOutMode10( test )
 
   .doThen( function()
   {
-    test.description = 'give err after timeOut';
+    test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => {} );
 
@@ -1125,7 +1125,7 @@ function timeOutMode11( test )
   .doThen( () => _.Consequence.asyncModeSet([ 1, 1 ]) )
   .doThen( function()
   {
-    test.description = 'delay only';
+    test.case = 'delay only';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     return new _.Consequence().first( t )
@@ -1151,7 +1151,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine';
+    test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => {} );
     return new _.Consequence().first( t )
@@ -1178,7 +1178,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a value';
+    test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     var t = _.timeOut( c.delay, () => value );
@@ -1206,7 +1206,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that returns a consequence';
+    test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
@@ -1233,7 +1233,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'delay + routine that calls another timeOut';
+    test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ) } );
     return new _.Consequence().first( t )
@@ -1260,7 +1260,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'delay + context + routine + arguments';
+    test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
     function r( delay )
     {
@@ -1291,7 +1291,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error';
+    test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
@@ -1319,7 +1319,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'stop timer with error, routine passed';
+    test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
     var called = false;
 
@@ -1351,7 +1351,7 @@ function timeOutMode11( test )
 
   .doThen( function()
   {
-    test.description = 'give err after timeOut';
+    test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => {} );
 

@@ -40,7 +40,7 @@ function exec()
 
     _.assert( arguments.length === 0 );
 
-    var appArgs = tester.appArgsApply();
+    tester.appArgsRead();
     var path = tester.path;
 
     if( !tester.scenariosHelpMap[ tester.settings.scenario ] )
@@ -94,7 +94,10 @@ function _registerExitHandler()
     {
       var logger = tester.logger || _global.logger;
       debugger;
-      logger.log( _.color.strFormat( 'Errors!','negative' ) );
+      if( tester.settings.coloring )
+      logger.error( _.color.strFormat( 'Errors!','negative' ) );
+      else
+      logger.error( 'Errors!' );
       process.exitCode = -1;
     }
   });
@@ -146,7 +149,11 @@ function _includeTestsFrom( path )
       err = _.errAttend( 'Cant include',absolutePath + '\n',err );
       tester.includeFails.push( err );
 
+      if( tester.settings.coloring )
       logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
+      else
+      logger.error( 'Cant include ' + absolutePath );
+
       if( logger.verbosity > 3 )
       logger.error( _.err( err ) );
     }
@@ -173,39 +180,55 @@ function includeTestsFrom( path )
 
 //
 
-function appArgsApply()
+function appArgsRead()
 {
   var tester = this;
   var logger = tester.logger || _global.logger;
+  var settings = tester.settings;
 
-  if( tester._appArgsApplied )
-  return tester._appArgsApplied;
+  if( tester._appArgs )
+  return tester._appArgs;
 
   _.assert( arguments.length === 0 );
-  _.mapExtend( tester.settings,tester.Settings );
+  _.mapExtend( settings, tester.Settings );
 
-  var appArgs = _.appArgsInSamFormat();
-  if( appArgs.map )
+  var readOptions =
   {
-    _.mapExtend( tester.settings,_.mapOnly( appArgs.map, tester.Settings ) );
-    if( tester.verbosity >= 8 )
-    logger.log( 'Raw application arguments :\n',_.toStr( appArgs,{ levels : 2 } ) );
-    if( tester.verbosity >= 5 )
-    logger.log( 'Application arguments :\n',_.toStr( _.mapOnly( appArgs.map, tester.Settings ),{ levels : 2 } ) );
-
-    if( appArgs.map.verbosity === 0 && appArgs.map.usingBeep === undefined )
-    tester.settings.usingBeep = 0;
+    dst : settings,
+    nameMap : tester.SettingsNameMap,
+    removing : 0,
+    only : 1,
   }
 
-  tester._appArgsApplied = appArgs;
+  var appArgs = _.appArgsReadTo( readOptions );
+  // var appArgs = _.appArgsInSamFormat();
+
+  _.assert( appArgs.map );
+
+  if( !appArgs.map )
+  appArgs.map = Object.create( null );
+
+  _.mapExtend( settings,_.mapOnly( appArgs.map, tester.Settings ) );
+
+  var v = settings.verbosity;
+  _.assert( v === null || v === undefined || _.numberIs( v ) || _.boolLike( v ) )
+  if( _.boolLike( v ) )
+  v = 1;
+
+  if( v >= 5 )
+  logger.log( 'Application arguments :\n',_.toStr( appArgs.map, { levels : 2 } ) );
+
+  if( settings.beeping === null )
+  settings.beeping = !!v;
+
+  tester._appArgs = appArgs;
 
   tester.path = appArgs.subject || _.pathCurrent();
-  tester.path = _.pathJoin( _.pathCurrent(),tester.path );
+  tester.path = _.pathJoin( _.pathCurrent(), tester.path );
 
-  if( _.numberIs( tester.settings.verbosity ) )
-  tester.verbosity = tester.settings.verbosity;
+  if( _.numberIs( v ) )
+  tester.verbosity = v;
 
-  tester.appArgs = appArgs;
   return appArgs;
 }
 
@@ -254,7 +277,7 @@ function scenarioOptionsList()
   {
     scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
     sanitareTime : 'Delay before run of the next test suite.',
-    usingBeep : 'Make beep sound after testing completion.',
+    beeping : 'Make beep sound after testing completion.',
     routine : 'Name of only test routine to execute.',
     fails : 'Maximum number of fails allowed before shutting down testing.',
     silencing : 'Enables catching of console output that occures during test run.',
@@ -396,11 +419,11 @@ function _testingBegin( suites )
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( suites ) );
 
-  tester.appArgsApply();
-  tester._registerExitHandler();
+  if( tester.settings.timing )
+  tester._testingBeginTime = _.timeNow();
 
-  if( !tester.appArgs.map )
-  tester.appArgs.map = Object.create( null );
+  tester.appArgsRead();
+  tester._registerExitHandler();
 
   logger.begin({ verbosity : -4 });
   logger.log( 'Tester Settings :' );
@@ -439,28 +462,43 @@ function _testingEnd()
   var logger = tester.logger || _global.logger;
   var ok = tester._reportIsPositive();
 
-  if( tester.settings.usingBeep )
+  if( tester.settings.beeping )
   _.beep();
 
   if( !ok && !_.appExitCode() )
   {
-    if( tester.settings.usingBeep )
+    if( tester.settings.beeping )
     _.beep();
     _.appExitCode( -1 );
   }
 
   var msg = tester._reportToStr();
-
   logger.begin({ verbosity : -2 });
 
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( msg );
   logger.end({ verbosity : -2 });
 
+  /* */
+
   logger.begin({ verbosity : -1 });
-  var msg = 'Tester ... ' + ( ok ? 'ok' : 'failed' );
+
+  var timingStr = '';
+  if( tester.settings.timing )
+  {
+    tester.report.timeSpent = _.timeNow() - tester._testingBeginTime;
+    timingStr = ' ... in ' + _.timeSpentFormat( tester.report.timeSpent );
+  }
+
+  var msg = 'Testing' + timingStr + ' ... '  + ( ok ? 'ok' : 'failed' );
+  msg = _.Tester.textColor( msg, ok );
+
   logger.logDown( msg );
+
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+
+  /* */
+
   logger.end({ verbosity : -1 });
 
   /* */
@@ -562,6 +600,7 @@ function _verbositySet( src )
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
+  debugger;
   if( !_.numberIsNotNan( src ) )
   src = 0;
 
@@ -604,10 +643,13 @@ function cancel( err )
 function _reportForm()
 {
   var tester = this;
+
+  _.assert( !tester.report, 'tester already has report' );
+
   var report = tester.report = Object.create( null );
 
+  report.timeSpent = null;
   report.errorsArray = [];
-  // report.includeFails = [];
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -684,9 +726,13 @@ function textColor( srcStr, connotation )
 {
 
   _.assert( arguments.length === 2 );
+  _.assert( _.boolLike( _.Tester.settings.coloring ) );
+
+  if( !_.Tester.settings.coloring )
+  return srcStr;
 
   var light = [ ' ok', ' failed' ];
-  var gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' ... ', ' .. ', ':' ];
+  var gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' in ', ' ... ', ' .. ', ':' ];
   var splits = _.strSplit2
   ({
     src : srcStr,
@@ -791,155 +837,155 @@ function _testCaseConsider( outcome )
 
 }
 
-// --
-// report formatter
-// --
-
-function loggerToBook( o )
-{
-
-  if( !o )
-  o = {};
-
-  o.logger = o.logger || _.Tester.logger;
-
-  _.routineOptions( loggerToBook,o );
-
-  _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( o.logger instanceof wPrinterToJs );
-
-  var data = o.logger.outputData;
-  var routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
-  logger.log( _.toStr( routines,{ levels : 1 } ) );
-
-  /* */
-
-  var routineHead;
-  routines = _.entityFilter( routines, function( routine,k )
-  {
-    routine.folderPath = _.pathDir( k );
-    routine.itemsPath = _.pathDir( routine.folderPath );
-    routine.itemsData = _.entitySelect( data,routine.itemsPath );
-
-    if( routine.tail )
-    {
-      routineHead.data.report = [ routine ];
-      _.mapSupplement( routineHead.attributes,_.mapBut( routine,{ text : 0 } ) );
-      return;
-    }
-
-    /* checks */
-
-    debugger;
-    var checks = _.entitySearch
-    ({
-      src : routine,
-      ins : 'check',
-      searchingValue : 0,
-      searchingSubstring : 0,
-      returnParent : 1,
-    });
-
-    var routineMore = [];
-    checks = _.entityFilter( checks, function( acheck,k )
-    {
-      if( !acheck.text )
-      return;
-      if( !acheck.tail )
-      {
-        routineMore.push( acheck );
-        return;
-      }
-
-      acheck.checkPath = _.pathDir( k );
-      var result = Object.create( null );
-      result.data = acheck;
-      debugger;
-      result.text = acheck.check + ' # '+ acheck.checkIndex;
-      result.attributes = _.mapBut( acheck,{ text : 0 } );
-
-      result.kind = 'terminal';
-      result.data.report = routineMore;
-      routineMore = [];
-      return result;
-    });
-
-    checks = _.entityVals( checks );
-
-    /* routine */
-
-    var result = Object.create( null );
-    result.kind = 'branch';
-    result.data = routine;
-    result.text = routine.routine;
-    result.elements = checks;
-    result.attributes = _.mapBut( routine,{ text : 0 } );
-
-    routineHead = result;
-    return result;
-  });
-
-  /* */
-
-  logger.log( _.toStr( routines,{ levels : 1 } ) );
-  routines = _.entityVals( routines );
-
-  /* */
-
-  function handlePageGet( node )
-  {
-    if( !node.data )
-    return '-';
-    var result = _.entitySelect( node.data.report,'*.text' );
-
-    if( node.data.check )
-    result = result.join( '\n' ) + '\n' + node.data.text;
-    else if( node.data.routine )
-    result = node.data.text + '\n' + _.entitySelect( node.elements,'*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
-
-    return result;
-  }
-
-  /* */
-
-  var book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
-  book.form();
-  book.tree.treeApply({ elements : routines });
-
-}
-
-loggerToBook.defaults =
-{
-  logger : null,
-}
-
+// // --
+// // report formatter
+// // --
 //
-
-function bookExperiment()
-{
-
-  if( 0 )
-  _.timeReady( function()
-  {
-
-    // debugger;
-    Self.verbosity = 0;
-    //Self.logger = wPrinterToJs({ coloring : 0 });
-
-    // _.Tester.test( 'Logger other test','Consequence','FileProvider.Extract' )
-
-    _.Tester.test( 'FileProvider.Extract' )
-    .doThen( function()
-    {
-      debugger;
-      if( Self.logger )
-      logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
-      debugger;
-    });
-
-  });
-
-}
+// function loggerToBook( o )
+// {
+//
+//   if( !o )
+//   o = {};
+//
+//   o.logger = o.logger || _.Tester.logger;
+//
+//   _.routineOptions( loggerToBook,o );
+//
+//   _.assert( arguments.length === 0 || arguments.length === 1 );
+//   _.assert( o.logger instanceof wPrinterToJs );
+//
+//   var data = o.logger.outputData;
+//   var routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
+//   logger.log( _.toStr( routines,{ levels : 1 } ) );
+//
+//   /* */
+//
+//   var routineHead;
+//   routines = _.entityFilter( routines, function( routine,k )
+//   {
+//     routine.folderPath = _.pathDir( k );
+//     routine.itemsPath = _.pathDir( routine.folderPath );
+//     routine.itemsData = _.entitySelect( data,routine.itemsPath );
+//
+//     if( routine.tail )
+//     {
+//       routineHead.data.report = [ routine ];
+//       _.mapSupplement( routineHead.attributes,_.mapBut( routine,{ text : 0 } ) );
+//       return;
+//     }
+//
+//     /* checks */
+//
+//     debugger;
+//     var checks = _.entitySearch
+//     ({
+//       src : routine,
+//       ins : 'check',
+//       searchingValue : 0,
+//       searchingSubstring : 0,
+//       returnParent : 1,
+//     });
+//
+//     var routineMore = [];
+//     checks = _.entityFilter( checks, function( acheck,k )
+//     {
+//       if( !acheck.text )
+//       return;
+//       if( !acheck.tail )
+//       {
+//         routineMore.push( acheck );
+//         return;
+//       }
+//
+//       acheck.checkPath = _.pathDir( k );
+//       var result = Object.create( null );
+//       result.data = acheck;
+//       debugger;
+//       result.text = acheck.check + ' # '+ acheck.checkIndex;
+//       result.attributes = _.mapBut( acheck,{ text : 0 } );
+//
+//       result.kind = 'terminal';
+//       result.data.report = routineMore;
+//       routineMore = [];
+//       return result;
+//     });
+//
+//     checks = _.entityVals( checks );
+//
+//     /* routine */
+//
+//     var result = Object.create( null );
+//     result.kind = 'branch';
+//     result.data = routine;
+//     result.text = routine.routine;
+//     result.elements = checks;
+//     result.attributes = _.mapBut( routine,{ text : 0 } );
+//
+//     routineHead = result;
+//     return result;
+//   });
+//
+//   /* */
+//
+//   logger.log( _.toStr( routines,{ levels : 1 } ) );
+//   routines = _.entityVals( routines );
+//
+//   /* */
+//
+//   function handlePageGet( node )
+//   {
+//     if( !node.data )
+//     return '-';
+//     var result = _.entitySelect( node.data.report,'*.text' );
+//
+//     if( node.data.check )
+//     result = result.join( '\n' ) + '\n' + node.data.text;
+//     else if( node.data.routine )
+//     result = node.data.text + '\n' + _.entitySelect( node.elements,'*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
+//
+//     return result;
+//   }
+//
+//   /* */
+//
+//   var book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
+//   book.form();
+//   book.tree.treeApply({ elements : routines });
+//
+// }
+//
+// loggerToBook.defaults =
+// {
+//   logger : null,
+// }
+//
+// //
+//
+// function bookExperiment()
+// {
+//
+//   if( 0 )
+//   _.timeReady( function()
+//   {
+//
+//     // debugger;
+//     Self.verbosity = 0;
+//     //Self.logger = wPrinterToJs({ coloring : 0 });
+//
+//     // _.Tester.test( 'Logger other test','Consequence','FileProvider.Extract' )
+//
+//     _.Tester.test( 'FileProvider.Extract' )
+//     .doThen( function()
+//     {
+//       debugger;
+//       if( Self.logger )
+//       logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+//       debugger;
+//     });
+//
+//   });
+//
+// }
 
 // --
 // var
@@ -947,32 +993,61 @@ function bookExperiment()
 
 var symbolForVerbosity = Symbol.for( 'verbosity' );
 
+var SettingsNameMap =
+{
+
+  'sanitareTime' : 'sanitareTime',
+  'fails' : 'fails',
+
+  'beeping' : 'beeping',
+  'coloring' : 'coloring',
+  'timing' : 'timing',
+
+  'scenario' : 'scenario',
+  'routine' : 'routine',
+  'r' : 'routine',
+
+  /**/
+
+  'testRoutineTimeOut' : 'testRoutineTimeOut',
+  'concurrent' : 'concurrent',
+  'platforms' : 'platforms',
+
+  'v' : 'verbosity',
+  'verbosity' : 'verbosity',
+  'importanceOfDetails' : 'importanceOfDetails',
+  'importanceOfNegative' : 'importanceOfNegative',
+  'silencing' : 'silencing',
+  'timing' : 'timing',
+
+}
+
 var SettingsOfTester =
 {
 
-  scenario : 'test',
   sanitareTime : 1000,
-
-  usingBeep : 1,
-
-  routine : null,
   fails : null,
+
+  beeping : null,
+  coloring : 1,
+  timing : 1,
+
+  scenario : 'test',
+  routine : null,
 
 }
 
 var SettingsOfSuite =
 {
 
+  routine : null,
   testRoutineTimeOut : null,
   concurrent : null,
-
   platforms : [ 'default' ],
 
   verbosity : null,
   importanceOfDetails : null,
   importanceOfNegative : null,
-
-  routine : null,
   silencing : null,
   timing : null,
 
@@ -1012,7 +1087,11 @@ var Forbids =
   scenario : 'scenario',
   routine : 'routine',
   fails : 'fails',
-  usingBeep : 'usingBeep',
+  beeping : 'beeping',
+
+  coloring : 'coloring',
+  timing : 'timing',
+  appArgs : 'appArgs',
 
 }
 
@@ -1034,7 +1113,7 @@ var Self =
   _registerExitHandler : _registerExitHandler,
   _includeTestsFrom : _includeTestsFrom,
   includeTestsFrom : includeTestsFrom,
-  appArgsApply : appArgsApply,
+  appArgsRead : appArgsRead,
 
   scenarioHelp : scenarioHelp,
   scenarioScenariosList : scenarioScenariosList,
@@ -1077,12 +1156,13 @@ var Self =
   _testCaseConsider : _testCaseConsider,
 
   // report formatter
-
-  loggerToBook : loggerToBook,
-  bookExperiment : bookExperiment,
+  //
+  // loggerToBook : loggerToBook,
+  // bookExperiment : bookExperiment,
 
   // var
 
+  SettingsNameMap : SettingsNameMap,
   SettingsOfTester : SettingsOfTester,
   SettingsOfSuite : SettingsOfSuite,
   Settings : Settings,
@@ -1102,6 +1182,7 @@ var Self =
   sourceFileLocation : sourceFileLocation,
   sourceFileStack : sourceFileStack,
 
+  _testingBeginTime : null,
   _isFullImplementation : 1,
   _registerExitHandlerDone : 0,
 
@@ -1109,9 +1190,9 @@ var Self =
   verbosity : 2,
 
   _barOptions : null,
-  _appArgsApplied : null,
+  _appArgs : null,
   path : null,
-  appArgs : null,
+  // appArgs : null,
 
   TestSuite : null,
   TestRoutineDescriptor : null,

@@ -184,7 +184,10 @@ function _testRoutineEnd()
 
   var timingStr = '';
   if( trd.timing )
-  timingStr = _.timeSpent( ' in ', trd._testRoutineBeginTime );
+  {
+    trd.report.timeSpent = _.timeNow() - trd._testRoutineBeginTime;
+    timingStr = ' in ' + _.timeSpentFormat( trd.report.timeSpent );
+  }
 
   var str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
 
@@ -297,8 +300,6 @@ function _descriptionFullGet()
 {
   var trd = this;
   var result = '';
-  // var right = _.color.strFormatForeground( ' > ', 'light cyan' );
-  // var left = _.color.strFormatForeground( ' < ', 'light cyan' );
   var right = ' > ';
   var left = ' < ';
 
@@ -331,7 +332,6 @@ function _descriptionWithNameGet()
   var trd = this;
   var description = trd.descriptionFull;
   var name = trd.nameFull;
-  // var slash = _.color.strFormatForeground( ' / ', 'light cyan' );
   var slash = ' / ';
   return name + slash + description
 }
@@ -1970,7 +1970,7 @@ function _outcomeReportCompare( o )
   var details = '';
 
   /**/
-
+xxx
   if( !o.outcome )
   if( o.usingExtraDetails )
   {
@@ -2094,9 +2094,11 @@ function _reportForm()
 {
   var trd = this;
 
-  _.assert( !trd.report );
+  _.assert( !trd.report, 'test routine already has report' );
+
   var report = trd.report = Object.create( null );
 
+  report.timeSpent = null;
   report.errorsArray = [];
 
   report.testCheckPasses = 0;
@@ -2144,12 +2146,6 @@ function _reportTextForTestCheck( o )
   _.assert( trd instanceof Self );
   _.assert( trd._checkIndex >= 0 );
   _.assert( _.strIsNotEmpty( trd.routine.name ), 'test routine should have name' );
-
-  // var name = trd.nameFull;
-  // if( trd.description && o.usingDescription )
-  // name += ' : ' + trd.description;
-
-  debugger;
 
   var result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
 
@@ -2204,7 +2200,6 @@ function _accuracyGet( accuracy )
 function _nameFullGet()
 {
   var trd = this;
-  // var slash = _.color.strFormatForeground( ' / ', 'light cyan' );
   var slash = ' / ';
   return trd.suite.name + slash + trd.name;
 }

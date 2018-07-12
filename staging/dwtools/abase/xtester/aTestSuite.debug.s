@@ -458,7 +458,10 @@ function _testSuiteBegin()
 
   logger.logUp( msg.join( '\n' ) );
 
+  if( _.Tester.settings.coloring )
   logger.log( _.color.strFormat( 'at  ' + suite.suiteFileLocation,'selected' ) );
+  else
+  logger.log( 'at  ' + suite.suiteFileLocation );
 
   logger.end( 'suite' );
 
@@ -544,7 +547,10 @@ function _testSuiteEnd()
 
   var timingStr = '';
   if( suite.timing )
-  timingStr = _.timeSpent( ' ... in ', suite._testSuiteBeginTime );
+  {
+    suite.report.timeSpent = _.timeNow() - suite._testSuiteBeginTime;
+    timingStr = ' ... in ' + _.timeSpentFormat( suite.report.timeSpent );
+  }
 
   var msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
 
@@ -704,9 +710,11 @@ function _reportForm()
 {
   var suite = this;
 
-  _.assert( !suite.report );
+  _.assert( !suite.report, 'test suite already has report' );
+
   var report = suite.report = Object.create( null );
 
+  report.timeSpent = null;
   report.errorsArray = [];
 
   report.testCheckPasses = 0;

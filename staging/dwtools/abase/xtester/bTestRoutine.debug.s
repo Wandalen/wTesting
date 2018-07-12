@@ -1302,7 +1302,7 @@ function _shouldDo( o )
 
     if( o.ignoringError )
     {
-      begin( 1 ); // xxx
+      begin( 1 );
       trd._outcomeReportBoolean
       ({
         outcome : 1,
@@ -1935,8 +1935,6 @@ function _outcomeReportBoolean( o )
     msg : o.msg,
     usingDescription : o.usingDescription,
   });
-
-// xxx
 
   trd._outcomeReport
   ({

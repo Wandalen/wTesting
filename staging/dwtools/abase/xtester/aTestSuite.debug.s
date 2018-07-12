@@ -413,6 +413,9 @@ function _testSuiteBegin()
   if( suite.debug )
   debugger;
 
+  if( suite.timing )
+  suite._testSuiteBeginTime = _.timeNow();
+
   if( !_.Tester._canContinue() )
   return;
 
@@ -448,7 +451,7 @@ function _testSuiteBegin()
 
   var msg =
   [
-    'Testing of test suite ( ' + suite.name + ' ) ..',
+    'Running test suite ( ' + suite.name + ' ) ..',
   ];
 
   logger.begin({ 'suite' : suite.name });
@@ -539,9 +542,13 @@ function _testSuiteEnd()
 
   logger.log( msg );
 
+  var timingStr = '';
+  if( suite.timing )
+  timingStr = _.timeSpent( ' in ', suite._testSuiteBeginTime );
+
   var msg =
   [
-    'Test suite ( ' + suite.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + '.'
+    'Test suite ( ' + suite.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + timingStr,
   ];
 
   logger.begin({ verbosity : -1 });
@@ -890,6 +897,7 @@ var Composes =
 
   name : null,
   verbosity : 2,
+  timing : 1,
   importanceOfDetails : 0,
   importanceOfNegative : 9,
 
@@ -947,6 +955,7 @@ var Restricts =
   _initialOptions : null,
   _testSuiteTerminated_joined : null,
   _hasConsoleInOutputs : 0,
+  _testSuiteBeginTime : null,
 }
 
 var Statics =

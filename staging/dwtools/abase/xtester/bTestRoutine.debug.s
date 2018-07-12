@@ -66,6 +66,9 @@ function _testRoutineBegin()
   var trd = this;
   var suite = trd.suite;
 
+  if( trd.timing )
+  trd._testRoutineBeginTime = _.timeNow();
+
   suite._hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
 
   _.assert( arguments.length === 0 );
@@ -179,17 +182,21 @@ function _testRoutineEnd()
 
   suite.logger.begin({ verbosity : -3 });
 
+  var timingStr = '';
+  if( trd.timing )
+  timingStr = _.timeSpent( ' in ', trd._testRoutineBeginTime );
+
   if( ok )
   {
 
-    suite.logger.logDown( 'Passed test routine ( ' + trd.nameFull + ' ).' );
+    suite.logger.logDown( 'Passed test routine ( ' + trd.nameFull + ' )' + timingStr );
 
   }
   else
   {
 
     suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
-    suite.logger.logDown( 'Failed test routine ( ' + trd.nameFull + ' ).' );
+    suite.logger.logDown( 'Failed test routine ( ' + trd.nameFull + ' )' + timingStr );
     suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   }
@@ -300,7 +307,12 @@ function _descriptionFullGet()
 
   if( trd._testsGroupIsCase )
   {
-    result = trd._testsGroupsStack.slice( 0, trd._testsGroupsStack.length-1 ).join( right ) + right + trd.case;
+    result = trd._testsGroupsStack.slice( 0, trd._testsGroupsStack.length-1 ).join( right );
+    if( result )
+    result += right + trd.case
+    else
+    result += trd.case
+    if( trd.will )
     result += left;
   }
   else
@@ -325,32 +337,6 @@ function _descriptionWithNameGet()
   // var slash = _.color.strFormatForeground( ' / ', 'light cyan' );
   var slash = ' / ';
   return name + slash + description
-}
-
-//
-
-function _descriptionWithNameColoredGet()
-{
-  var trd = this;
-  var result = trd.descriptionWithName;
-
-  var splits = _.strSplit2
-  ({
-    src : result,
-    delimeter : [ '/', ' < ', ' > ' ],
-    stripping : 0,
-    preservingDelimeters : 1,
-  });
-
-  splits = splits.map( function( e, i )
-  {
-    if( i % 2 )
-    return _.color.strFormat( e, { fg : 'light green' } );
-    else
-    return e;
-  });
-
-  return splits.join( '' );
 }
 
 //
@@ -2168,14 +2154,9 @@ function _reportTextForTestCheck( o )
   // if( trd.description && o.usingDescription )
   // name += ' : ' + trd.description;
 
-  var description = trd.descriptionWithNameColored;
+  debugger;
 
-  var result = '' +
-    'Test check' + ' ( ' + description + ' )' +
-    ' # ' + trd._checkIndex
-  ;
-
-// xxx
+  var result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
 
   if( o.msg )
   result += ' : ' + o.msg;
@@ -2187,6 +2168,8 @@ function _reportTextForTestCheck( o )
     else
     result += ' ... failed';
   }
+
+  result = _.Tester.textColor( result, o.outcome );
 
   return result;
 }
@@ -2275,6 +2258,7 @@ var Restricts =
   _testsGroupError : 0,
   _testsGroupsStack : [],
 
+  _testRoutineBeginTime : null,
   _returnCon : null,
   report : null,
 
@@ -2304,7 +2288,6 @@ var AccessorsReadOnly =
   nameFull : 'nameFull',
   descriptionFull : 'descriptionFull',
   descriptionWithName : 'descriptionWithName',
-  descriptionWithNameColored : 'descriptionWithNameColored',
 }
 
 var Accessors =
@@ -2342,7 +2325,6 @@ var Proto =
   _descriptionSet : _descriptionSet,
   _descriptionFullGet : _descriptionFullGet,
   _descriptionWithNameGet : _descriptionWithNameGet,
-  _descriptionWithNameColoredGet : _descriptionWithNameColoredGet,
 
   _caseGet : _caseGet,
   _caseSet : _caseSet,

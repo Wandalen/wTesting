@@ -678,6 +678,42 @@ function _reportIsPositive()
   return true;
 }
 
+//
+
+function textColor( srcStr, connotation )
+{
+
+  _.assert( arguments.length === 2 );
+
+  var light = [ ' ok', ' failed' ];
+  var gray = [ 'Test check', '/', ' # ', ' < ', ' > ', '(', ')', '...', ':' ];
+  var splits = _.strSplit2
+  ({
+    src : srcStr,
+    delimeter : _.arrayAppendArrays( [],[ light, gray ] ),
+    stripping : 0,
+    preservingDelimeters : 1,
+  });
+
+  splits = splits.map( function( e, i )
+  {
+    if( i % 2 === 0 )
+    return e;
+
+    return _.color.strFormat( e, { fg : ( connotation ? 'green' : 'red' ) } );
+
+    // if( i % 2 === 0 )
+    // return _.color.strFormat( e, { fg : ( connotation ? 'green' : 'red' ) } );
+
+    // if( _.arrayHas( light, e ) )
+    // return _.color.strFormat( e, { fg : ( connotation ? 'light green' : 'light red' ) } );
+    // else
+    // return _.color.strFormat( e, { fg : 'light black' } );
+  });
+
+  return splits.join( '' );
+}
+
 // --
 // consider
 // --
@@ -889,6 +925,7 @@ function bookExperiment()
     //Self.logger = wPrinterToJs({ coloring : 0 });
 
     // _.Tester.test( 'Logger other test','Consequence','FileProvider.Extract' )
+
     _.Tester.test( 'FileProvider.Extract' )
     .doThen( function()
     {
@@ -935,6 +972,7 @@ var SettingsOfSuite =
 
   routine : null,
   silencing : null,
+  timing : null,
 
 }
 
@@ -1021,6 +1059,7 @@ var Self =
   _reportForm : _reportForm,
   _reportToStr : _reportToStr,
   _reportIsPositive : _reportIsPositive,
+  textColor : textColor,
 
   // etc
 

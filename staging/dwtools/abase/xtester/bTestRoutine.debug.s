@@ -23,23 +23,23 @@ Self.nameShort = 'TestRoutineDescriptor';
 
 function init( o )
 {
-  var self = this;
+  var trd = this;
 
-  _.instanceInit( self );
+  _.instanceInit( trd );
 
-  Object.preventExtensions( self );
+  Object.preventExtensions( trd );
 
   if( o )
-  self.copy( o );
+  trd.copy( o );
 
-  self._returnCon = null;
+  trd._returnCon = null;
 
-  self._reportForm();
+  trd._reportForm();
 
-  _.assert( _.routineIs( self.routine ) );
-  _.assert( _.strIsNotEmpty( self.routine.name ),'Test routine should have name, ' + self.name + ' test routine of test suite',self.suite.name,'does not have name' );
-  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,self.suite ) );
-  _.assert( Object.isPrototypeOf.call( Self.prototype,self ) );
+  _.assert( _.routineIs( trd.routine ) );
+  _.assert( _.strIsNotEmpty( trd.routine.name ),'Test routine should have name, ' + trd.name + ' test routine of test suite',trd.suite.name,'does not have name' );
+  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,trd.suite ) );
+  _.assert( Object.isPrototypeOf.call( Self.prototype,trd ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
   var proxy =
@@ -52,9 +52,9 @@ function init( o )
     }
   }
 
-  var self = new Proxy( self, proxy );
+  var trd = new Proxy( trd, proxy );
 
-  return self;
+  return trd;
 }
 
 // --
@@ -66,7 +66,6 @@ function _testRoutineBegin()
   var trd = this;
   var suite = trd.suite;
 
-  /* qqq : double check _hasConsoleInOutputs */
   suite._hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
 
   _.assert( arguments.length === 0 );
@@ -95,7 +94,7 @@ function _testRoutineBegin()
   }
   catch( err )
   {
-    suite._exceptionConsider( err );
+    trd.exceptionReport({ err : err });
   }
 
 }
@@ -112,45 +111,68 @@ function _testRoutineEnd()
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  /* qqq : double check _hasConsoleInOutputs */
   var _hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
-
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
   {
-    var bar = _.Tester._bar.bar;
     debugger;
+    var wasBarred = suite.consoleBar( 0 );
 
-    _.Tester._bar.bar = 0;
-    suite.logger.consoleBar( _.Tester._bar );
-
-    if( bar )
-    {
-      _.Tester._bar.bar = bar;
-      suite.logger.consoleBar( _.Tester._bar );
-    }
+    // var barOptions = _.Tester._barOptions;
+    // var bar = barOptions.bar;
+    //
+    // barOptions.bar = 0;
+    // suite.logger.consoleBar( barOptions );
+    //
+    // if( bar )
+    // {
+    //   barOptions.bar = bar;
+    //   suite.logger.consoleBar( barOptions );
+    // }
 
     var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified' + '\n at' + trd.nameFull );
     suite.exceptionReport
     ({
       err : err,
     });
+
+    suite.consoleBar( wasBarred );
+
   }
+
+  /* groups stack */
+
+  trd.testCaseCloseIfAny();
+
+  if( trd._testsGroupsStack.length )
+  {
+    debugger;
+    var err = trd.exceptionReport
+    ({
+      err : _.err( 'Tests group', _.strQuote( trd.testsGroup ), 'was not closed' ),
+      usingSourceCode : 0,
+    });
+  }
+
+  /* on end */
 
   try
   {
-    suite.onRoutineEnd.call( trd.context,trd,ok );
+    suite.onRoutineEnd.call( trd.context, trd, ok );
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
   }
   catch( err )
   {
-    suite._exceptionConsider( err );
+    trd.exceptionReport({ err : err });
   }
 
-  if( trd.report.testCheckFails )
-  suite.report.testRoutineFails += 1;
-  else
-  suite.report.testRoutinePasses += 1;
+  /* */
+
+  suite._testRoutineConsider( ok );
+
+  suite.currentRoutine = null;
+
+  /* */
 
   suite.logger.begin( 'routine','end' );
   suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
@@ -160,14 +182,14 @@ function _testRoutineEnd()
   if( ok )
   {
 
-    suite.logger.logDown( 'Passed test routine ( ' + trd.nameFull + ' ).' ); // xxx
+    suite.logger.logDown( 'Passed test routine ( ' + trd.nameFull + ' ).' );
 
   }
   else
   {
 
     suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
-    suite.logger.logDown( 'Failed test routine ( ' + trd.nameFull + ' ).' ); // xxx
+    suite.logger.logDown( 'Failed test routine ( ' + trd.nameFull + ' ).' );
     suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   }
@@ -176,8 +198,6 @@ function _testRoutineEnd()
   suite.logger.end( 'routine','end' );
 
   suite.logger.end({ verbosity : -3 });
-
-  suite.currentRoutine = null;
 
 }
 
@@ -227,8 +247,26 @@ function _testRoutineHandleReturn( err,msg )
 
 }
 
+//
+
+function _interruptMaybe()
+{
+  var trd = this;
+
+  if( !_.Tester._canContinue() )
+  {
+    if( trd._returnCon )
+    trd._returnCon.cancel();
+    _.Tester.cancel( tester.report.errorsArray[ tester.report.errorsArray.length-1 ] );
+    // _.Tester.cancel( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
+  }
+
+  _.assert( arguments.length === 0, 'expects single argument' );
+
+}
+
 // --
-// case
+// tests groups
 // --
 
 function _descriptionGet()
@@ -244,36 +282,183 @@ function _descriptionSet( src )
   var trd = this;
   trd[ descriptionSymbol ] = src;
 
-  if( src )
-  trd.testCaseNext();
+  // if( src )
+  // trd.testCaseCloseIfAny();
 
 }
 
 //
 
-function testCaseNext()
+function _descriptionFullGet()
 {
   var trd = this;
-  var report = trd.report;
+  var result = '';
+  // var right = _.color.strFormatForeground( ' > ', 'light cyan' );
+  // var left = _.color.strFormatForeground( ' < ', 'light cyan' );
+  var right = ' > ';
+  var left = ' < ';
 
-  trd._testCaseConsider( !report.testCheckFailsOfTestCase );
-
-}
-
-//
-
-function _testCaseConsider( outcome )
-{
-  var trd = this;
-  var report = trd.report;
-
-  if( outcome )
-  report.testCasePasses += 1;
+  if( trd._testsGroupIsCase )
+  {
+    result = trd._testsGroupsStack.slice( 0, trd._testsGroupsStack.length-1 ).join( right ) + right + trd.case;
+    result += left;
+  }
   else
-  report.testCaseFails += 1;
+  {
+    result = trd._testsGroupsStack.join( right );
+    result += right;
+  }
 
-  trd.suite._testCaseConsider( outcome );
+  if( trd.description )
+  result += trd.description;
+
+  return result;
 }
+
+//
+
+function _descriptionWithNameGet()
+{
+  var trd = this;
+  var description = trd.descriptionFull;
+  var name = trd.nameFull;
+  // var slash = _.color.strFormatForeground( ' / ', 'light cyan' );
+  var slash = ' / ';
+  return name + slash + description
+}
+
+//
+
+function _descriptionWithNameColoredGet()
+{
+  var trd = this;
+  var result = trd.descriptionWithName;
+  var splits = _.strSplit2
+  ({
+    src : result,
+    delimeter : [ '/', ' < ', ' > ' ],
+    stripping : 0,
+    preservingDelimeters : 1,
+  });
+
+  splits = splits.map( function( e, i )
+  {
+    if( i % 2 )
+    return _.color.strFormat( e, { fg : 'light green' } );
+    else
+    return e;
+  });
+
+  return splits.join( '' );
+}
+
+//
+
+function _caseGet()
+{
+  var trd = this;
+  if( trd._testsGroupIsCase )
+  return trd.testsGroup;
+  else
+  return '';
+}
+
+//
+
+function _caseSet( src )
+{
+  var trd = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( !trd._testsGroupIsCase || trd.testsGroup );
+  _.assert( src === null || _.strIs( src ) );
+
+  trd.testCaseCloseIfAny();
+
+  if( src )
+  {
+    trd.testsGroupOpen( src );
+    trd._testsGroupIsCase = 1;
+  }
+
+}
+
+//
+
+function _testsGroupGet()
+{
+  var trd = this;
+  _.assert( arguments.length === 0, 'expects single argument' );
+  return trd._testsGroupsStack[ trd._testsGroupsStack.length-1 ] || '';
+}
+
+//
+
+function testsGroupOpen( groupName )
+{
+  var trd = this;
+  _.assert( arguments.length === 1, 'expects single argument' );
+  trd._testsGroupsStack.push( groupName );
+}
+
+//
+
+function testsGroupClose( groupName )
+{
+  var trd = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( trd.testsGroup !== groupName )
+  trd.testCaseCloseIfAny();
+
+  if( trd.testsGroup !== groupName )
+  {
+    var err = _._err
+    ({
+      args : [ 'Attempt to close not the topmost tests group', _.strQuote( groupName ), 'current tests group is', _.strQuote( trd.testsGroup ) ],
+      level : 2,
+    });
+    err = trd.exceptionReport
+    ({
+      err : err,
+    });
+  }
+  else
+  {
+    trd._testsGroupsStack.splice( trd._testsGroupsStack.length-1, 1 );
+  }
+
+  return trd.testsGroup;
+}
+
+//
+
+function testCaseCloseIfAny()
+{
+  var trd = this;
+  var report = trd.report;
+
+  if( trd._testsGroupIsCase )
+  {
+    _.assert( trd.testsGroup );
+    trd.testsGroupClose( trd.testsGroup );
+    trd._testCaseConsider( !report.testCheckFailsOfTestCase );
+    trd._testsGroupIsCase = 0;
+  }
+
+}
+
+// function testCaseCloseIfAny()
+// {
+//   var trd = this;
+//   var report = trd.report;
+//
+//   trd._testCaseConsider( !report.testCheckFailsOfTestCase );
+//
+// }
+//
+//
 
 // --
 // store
@@ -369,12 +554,6 @@ function is( outcome )
       level : 2,
     });
 
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"is" expects single bool argument',
-    // });
-
   }
   else
   {
@@ -405,12 +584,6 @@ function isNot( outcome )
       err : '"isNot" expects single bool argument',
       level : 2,
     });
-
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"isNot" expects single bool argument',
-    // });
 
   }
   else
@@ -443,12 +616,6 @@ function isNotError( maybeError )
       err : '"isNotError" expects single argument',
       level : 2,
     });
-
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"isNotError" expects single argument',
-    // });
 
   }
   else
@@ -528,12 +695,6 @@ function identical( got,expected )
       level : 2,
     });
 
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"identical" expects two argument',
-    // });
-
     return outcome;
   }
 
@@ -542,10 +703,10 @@ function identical( got,expected )
   if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'something wrong with entityIdentical',
+      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      level : 2,
     });
     return outcome;
   }
@@ -600,12 +761,6 @@ function notIdentical( got,expected )
       level : 2,
     });
 
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"notIdentical" expects two argument',
-    // });
-
     return outcome;
   }
 
@@ -614,11 +769,13 @@ function notIdentical( got,expected )
   if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'something wrong with entityIdentical',
+      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      level : 2,
     });
+
     return outcome;
   }
 
@@ -710,12 +867,6 @@ function equivalent( got, expected, options )
       level : 2,
     });
 
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"equivalent" expects two argument',
-    // });
-
     return outcome;
   }
 
@@ -724,10 +875,10 @@ function equivalent( got, expected, options )
   if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'something wrong with entityIdentical',
+      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      level : 2,
     });
     return outcome;
   }
@@ -786,13 +937,7 @@ function notEquivalent( got, expected, options )
       level : 2,
     });
 
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"equivalent" expects two argument',
-    // });
     return outcome;
-
   }
 
   /* */
@@ -800,11 +945,13 @@ function notEquivalent( got, expected, options )
   if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'something wrong with entityIdentical',
+      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      level : 2,
     });
+
     return outcome;
   }
 
@@ -895,11 +1042,13 @@ function contains( got,expected )
   if( !iterator.iterator || iterator.iterator.lastPath === undefined )
   {
     outcome = false;
-    trd._outcomeReportBoolean
+
+    trd.exceptionReport
     ({
-      outcome : outcome,
-      msg : 'something wrong with entityIdentical',
+      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      level : 2,
     });
+
     return outcome;
   }
 
@@ -938,12 +1087,6 @@ function gt( got, than )
       err : '"gt" expects two argument',
       level : 2,
     });
-
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"gt" expects two argument',
-    // });
 
     return outcome;
   }
@@ -984,12 +1127,6 @@ function ge( got, than )
       err : '"ge" expects two argument',
       level : 2,
     });
-
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"ge" expects two argument',
-    // });
 
     return outcome;
   }
@@ -1032,12 +1169,6 @@ function lt( got, than )
       level : 2,
     });
 
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"gt" expects two argument',
-    // });
-
     return outcome;
   }
 
@@ -1079,12 +1210,6 @@ function le( got, than )
       err : '"le" expects two argument',
       level : 2,
     });
-
-    // trd._outcomeReportBoolean
-    // ({
-    //   outcome : outcome,
-    //   msg : '"ge" expects two argument',
-    // });
 
     return outcome;
   }
@@ -1192,7 +1317,7 @@ function _shouldDo( o )
 
     if( o.ignoringError )
     {
-      begin( 1 );
+      begin( 1 ); // xxx
       trd._outcomeReportBoolean
       ({
         outcome : 1,
@@ -1277,13 +1402,8 @@ function _shouldDo( o )
     trd.checkNext();
     async = 1;
 
-    // if( result.tag === 'strange' )
-    // console.log( '1\n', result.toStr() );
     result.got( function( _err,_arg )
     {
-
-      // if( result.tag === 'strange' )
-      // console.log( '2\n', result.toStr() );
 
       err = _err;
       arg = _arg;
@@ -1656,8 +1776,23 @@ function shouldMessageOnlyOnce( routine )
 }
 
 // --
-// output
+// consider
 // --
+
+function _testCaseConsider( outcome )
+{
+  var trd = this;
+  var report = trd.report;
+
+  if( outcome )
+  report.testCasePasses += 1;
+  else
+  report.testCaseFails += 1;
+
+  trd.suite._testCaseConsider( outcome );
+}
+
+//
 
 function _outcomeConsider( outcome )
 {
@@ -1699,26 +1834,9 @@ function _exceptionConsider( err )
 
 }
 
-//
-
-function _outcomeReportAct( outcome )
-{
-  var trd = this;
-
-  trd._outcomeConsider( outcome );
-
-  if( !_.Tester._canContinue() )
-  {
-    if( trd._returnCon )
-    trd._returnCon.cancel();
-    _.Tester.cancel( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
-  }
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-
-}
-
-//
+// --
+// report
+// --
 
 function _outcomeReport( o )
 {
@@ -1728,6 +1846,55 @@ function _outcomeReport( o )
 
   _.routineOptions( _outcomeReport,o );
   _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( o.considering )
+  trd._outcomeConsider( o.outcome );
+
+  /* */
+
+  var verbosity = o.outcome ? 0 : trd.importanceOfNegative;
+  sourceCode = sourceCodeGet();
+
+  /* */
+
+  logger.begin({ verbosity : o.verbosity });
+
+  if( o.considering )
+  {
+    logger.begin({ 'check' : trd.description || trd._checkIndex });
+    logger.begin({ 'checkIndex' : trd._checkIndex });
+  }
+
+  logger.begin({ verbosity : o.verbosity+verbosity });
+
+  logger.up();
+  if( logger.verbosityReserve() > 1 )
+  logger.log();
+  logger.begin({ 'connotation' : o.outcome ? 'positive' : 'negative' });
+
+  logger.begin({ verbosity : o.verbosity-1+verbosity });
+
+  if( o.details )
+  logger.begin( 'details' ).log( o.details ).end( 'details' );
+
+  if( sourceCode )
+  logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+
+  logger.end({ verbosity : o.verbosity-1+verbosity });
+
+  logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+
+  logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
+  if( logger.verbosityReserve() > 1 )
+  logger.log();
+
+  logger.end({ verbosity : o.verbosity+verbosity });
+
+  if( o.considering )
+  logger.end( 'check','checkIndex' );
+  logger.end({ verbosity : o.verbosity });
+
+  trd._interruptMaybe();
 
   /* */
 
@@ -1755,110 +1922,6 @@ function _outcomeReport( o )
     return code;
   }
 
-  /* */
-
-  logger.begin({ verbosity : o.verbosity });
-
-  if( o.considering )
-  {
-    logger.begin({ 'check' : trd.description || trd._checkIndex });
-    logger.begin({ 'checkIndex' : trd._checkIndex });
-  }
-
-  if( o.considering )
-  trd._outcomeReportAct( o.outcome );
-
-  /* */
-
-  var verbosity = o.outcome ? 0 : trd.importanceOfNegative;
-  sourceCode = sourceCodeGet();
-
-  logger.begin({ verbosity : o.verbosity+verbosity });
-
-  logger.up();
-  if( logger.verbosityReserve() > 1 )
-  logger.log();
-  logger.begin({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-
-  logger.begin({ verbosity : o.verbosity-1+verbosity });
-
-  if( o.details )
-  logger.begin( 'details' ).log( o.details ).end( 'details' );
-
-  if( sourceCode )
-  logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
-
-  logger.end({ verbosity : o.verbosity-1+verbosity });
-
-  logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
-
-  logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-  if( logger.verbosityReserve() > 1 )
-  logger.log();
-
-  logger.end({ verbosity : o.verbosity+verbosity });
-
-  // if( o.outcome )
-  // {
-  //   sourceCode = sourceCodeGet();
-  //
-  //   logger.begin({ verbosity : o.verbosity });
-  //   logger.up();
-  //   logger.begin({ 'connotation' : 'positive' });
-  //
-  //   logger.begin({ verbosity : o.verbosity-1 });
-  //
-  //   if( o.details )
-  //   logger.begin( 'details' ).log( o.details ).end( 'details' );
-  //
-  //   if( sourceCode )
-  //   logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
-  //
-  //   logger.end({ verbosity : o.verbosity-1 });
-  //
-  //   logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
-  //
-  //   logger.end({ 'connotation' : 'positive' });
-  //   if( logger.verbosityReserve() > 1 )
-  //   logger.log();
-  //
-  //   logger.end({ verbosity : o.verbosity });
-  // }
-  // else
-  // {
-  //   sourceCode = sourceCodeGet();
-  //
-  //   logger.begin({ verbosity : o.verbosity+trd.importanceOfNegative });
-  //
-  //   logger.up();
-  //   if( logger.verbosityReserve() > 1 )
-  //   logger.log();
-  //   logger.begin({ 'connotation' : 'negative' });
-  //
-  //   logger.begin({ verbosity : o.verbosity-1+trd.importanceOfNegative });
-  //
-  //   if( o.details )
-  //   logger.begin( 'details' ).log( o.details ).end( 'details' );
-  //
-  //   if( sourceCode )
-  //   logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
-  //
-  //   logger.end({ verbosity : o.verbosity-1+trd.importanceOfNegative });
-  //
-  //   logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
-  //
-  //   logger.end({ 'connotation' : 'negative' });
-  //   if( logger.verbosityReserve() > 1 )
-  //   logger.log();
-  //
-  //   logger.end({ verbosity : o.verbosity+trd.importanceOfNegative });
-  //
-  // }
-
-  if( o.considering )
-  logger.end( 'check','checkIndex' );
-  logger.end({ verbosity : o.verbosity });
-
 }
 
 _outcomeReport.defaults =
@@ -1881,12 +1944,14 @@ function _outcomeReportBoolean( o )
   _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( _outcomeReportBoolean,o );
 
-  o.msg = trd._reportTestCaseTextMake
+  o.msg = trd._reportTextForTestCheck
   ({
     outcome : o.outcome,
     msg : o.msg,
     usingDescription : o.usingDescription,
   });
+
+// xxx
 
   trd._outcomeReport
   ({
@@ -1914,7 +1979,7 @@ function _outcomeReportCompare( o )
 {
   var trd = this;
 
-  _.assert( trd._testRoutineDescriptorIs );
+  _.assert( trd instanceof Self );
   _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptionsWithUndefines( _outcomeReportCompare,o );
 
@@ -1936,7 +2001,7 @@ function _outcomeReportCompare( o )
     });
   }
 
-  var msg = trd._reportTestCaseTextMake({ outcome : o.outcome });
+  var msg = trd._reportTextForTestCheck({ outcome : o.outcome });
 
   trd._outcomeReport
   ({
@@ -1982,17 +2047,22 @@ function exceptionReport( o )
   _.routineOptions( exceptionReport,o );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  o.stack = o.stack || o.err.stack;
-
   if( trd.onError )
   debugger;
-  if( trd.onError )
-  trd.onError.call( trd,o );
+  try
+  {
+    if( trd.onError )
+    trd.onError.call( trd,o );
+  }
+  catch( err2 )
+  {
+    logger.log( err2 );
+  }
 
   var msg = null;
   if( o.considering )
   {
-    msg = trd._reportTestCaseTextMake({ outcome : null }) + ' ... failed throwing error';
+    msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
   }
   else
   {
@@ -2005,6 +2075,8 @@ function exceptionReport( o )
   var err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
   _.errAttend( err );
   var details = err.toString();
+
+  o.stack = o.stack === null ? o.err.stack : o.stack;
 
   if( o.considering )
   trd._exceptionConsider( err );
@@ -2033,16 +2105,14 @@ exceptionReport.defaults =
   sync : null,
 }
 
-// --
-// report
-// --
+//
 
 function _reportForm()
 {
-  var self = this;
+  var trd = this;
 
-  _.assert( !self.report );
-  var report = self.report = Object.create( null );
+  _.assert( !trd.report );
+  var report = trd.report = Object.create( null );
 
   report.errorsArray = [];
 
@@ -2063,15 +2133,15 @@ function _reportForm()
 
 function _reportIsPositive()
 {
-  var self = this;
+  var trd = this;
 
-  if( self.report.testCheckFails !== 0 )
+  if( trd.report.testCheckFails !== 0 )
   return false;
 
-  if( !( self.report.testCheckPasses > 0 ) )
+  if( !( trd.report.testCheckPasses > 0 ) )
   return false;
 
-  if( self.report.errorsArray.length )
+  if( trd.report.errorsArray.length )
   return false;
 
   return true;
@@ -2079,27 +2149,31 @@ function _reportIsPositive()
 
 //
 
-function _reportTestCaseTextMake( o )
+function _reportTextForTestCheck( o )
 {
   var trd = this;
 
-  o = _.routineOptions( _reportTestCaseTextMake,o );
+  o = _.routineOptions( _reportTextForTestCheck,o );
+
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( o.outcome === null || _.boolLike( o.outcome ) );
   _.assert( o.msg === null || _.strIs( o.msg ) );
-  _.assert( trd._testRoutineDescriptorIs );
+  _.assert( trd instanceof Self );
   _.assert( trd._checkIndex >= 0 );
-  _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine descriptor should have name' );
+  _.assert( _.strIsNotEmpty( trd.routine.name ), 'test routine should have name' );
 
-  // var name = trd.routine.name;
-  var name = trd.nameFull;
-  if( trd.description && o.usingDescription )
-  name += ' : ' + trd.description;
+  // var name = trd.nameFull;
+  // if( trd.description && o.usingDescription )
+  // name += ' : ' + trd.description;
+
+  var description = trd.descriptionWithNameColored;
 
   var result = '' +
-    'Test check' + ' ( ' + name + ' )' +
+    'Test check' + ' ( ' + description + ' )' +
     ' # ' + trd._checkIndex
   ;
+
+// xxx
 
   if( o.msg )
   result += ' : ' + o.msg;
@@ -2115,7 +2189,7 @@ function _reportTestCaseTextMake( o )
   return result;
 }
 
-_reportTestCaseTextMake.defaults =
+_reportTextForTestCheck.defaults =
 {
   outcome : null,
   msg : null,
@@ -2150,7 +2224,9 @@ function _accuracyGet( accuracy )
 function _nameFullGet()
 {
   var trd = this;
-  return trd.suite.name + ' / ' + trd.name;
+  // var slash = _.color.strFormatForeground( ' / ', 'light cyan' );
+  var slash = ' / ';
+  return trd.suite.name + slash + trd.name;
 }
 
 // --
@@ -2159,6 +2235,13 @@ function _nameFullGet()
 
 var descriptionSymbol = Symbol.for( 'description' );
 var accuracySymbol = Symbol.for( 'accuracy' );
+
+var KnownFields =
+{
+  testRoutineTimeOut : null,
+  timeOut : null,
+  experiment : null,
+}
 
 // --
 // relationships
@@ -2185,17 +2268,19 @@ var Restricts =
 {
 
   _checkIndex : 1,
-  _testRoutineDescriptorIs : 1,
+  _checksStack : [],
+  _testsGroupIsCase : 0,
+  _testsGroupsStack : [],
 
   _returnCon : null,
-
   report : null,
-  _checksStack : [],
 
 }
 
 var Statics =
 {
+  KnownFields : KnownFields,
+  strictEventHandling : 0,
 }
 
 var Events =
@@ -2208,17 +2293,22 @@ var Forbids =
   _storedStates : '_storedStates',
   _currentRoutineFails : '_currentRoutineFails',
   _currentRoutinePasses : '_currentRoutinePasses',
+  will : 'will',
 }
 
 var AccessorsReadOnly =
 {
+  testsGroup : 'testsGroup',
   nameFull : 'nameFull',
+  descriptionFull : 'descriptionFull',
+  descriptionWithName : 'descriptionWithName',
+  descriptionWithNameColored : 'descriptionWithNameColored',
 }
 
 var Accessors =
 {
   description : 'description',
-  will : 'will',
+  case : 'case',
   accuracy : 'accuracy',
 }
 
@@ -2239,15 +2329,26 @@ var Proto =
   _testRoutineEnd : _testRoutineEnd,
   _testRoutineHandleReturn : _testRoutineHandleReturn,
 
-  // case
+  _interruptMaybe : _interruptMaybe,
+
+  // tests groups
 
   _descriptionGet : _descriptionGet,
   _descriptionSet : _descriptionSet,
-  _willGet : _descriptionGet,
-  _willSet : _descriptionSet,
+  _descriptionFullGet : _descriptionFullGet,
+  _descriptionWithNameGet : _descriptionWithNameGet,
+  _descriptionWithNameColoredGet : _descriptionWithNameColoredGet,
 
-  testCaseNext : testCaseNext,
-  _testCaseConsider : _testCaseConsider,
+  _caseGet : _caseGet,
+  _caseSet : _caseSet,
+
+  _testsGroupGet : _testsGroupGet,
+  testsGroupOpen : testsGroupOpen,
+  testsGroupClose : testsGroupClose,
+  open : testsGroupOpen,
+  close : testsGroupClose,
+
+  testCaseCloseIfAny : testCaseCloseIfAny,
 
   // check
 
@@ -2286,23 +2387,22 @@ var Proto =
   mustNotThrowError : mustNotThrowError,
   shouldMessageOnlyOnce : shouldMessageOnlyOnce,
 
-  // output
+  // consider
 
+  _testCaseConsider : _testCaseConsider,
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
 
-  _outcomeReportAct : _outcomeReportAct,
+  // report
+
   _outcomeReport : _outcomeReport,
   _outcomeReportBoolean : _outcomeReportBoolean,
   _outcomeReportCompare : _outcomeReportCompare,
-
   exceptionReport : exceptionReport,
-
-  // report
 
   _reportForm : _reportForm,
   _reportIsPositive : _reportIsPositive,
-  _reportTestCaseTextMake : _reportTestCaseTextMake,
+  _reportTextForTestCheck : _reportTextForTestCheck,
 
   // etc
 
@@ -2312,7 +2412,6 @@ var Proto =
 
   // relationships
 
-  strictEventHandling : 0,
   constructor : Self,
   Composes : Composes,
   Aggregates : Aggregates,
@@ -2341,6 +2440,6 @@ _.Copyable.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_[ Self.nameShort ] = Self;
+_.Tester[ Self.nameShort ] = Self;
 
 })();

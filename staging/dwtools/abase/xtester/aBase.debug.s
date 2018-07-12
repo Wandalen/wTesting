@@ -101,7 +101,8 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wExecTools' );
   _.include( 'wCopyable' );
@@ -110,6 +111,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wConsequence' );
   _.include( 'wFiles' );
   _.include( 'wLogger' );
+  _.include( 'wStringsExtra' );
 
   // _.includeAny( 'wScriptLauncher' );
 

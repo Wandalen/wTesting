@@ -110,31 +110,31 @@ function copy( o )
 }
 
 //
-
-function extendBy()
-{
-  var suite = this;
-
-  throw _.err( 'extendBy is deprecated, please, use inherit' );
-
-  // for( var a = 0 ; a < arguments.length ; a++ )
-  // {
-  //   var src = arguments[ 0 ];
-  //
-  //   _.assert( _.mapIs( src ) );
-  //
-  //   if( src.tests )
-  //   _.mapSupplement( src.tests,suite.tests );
-  //
-  //   if( src.context )
-  //   _.mapSupplement( src.context,suite.context );
-  //
-  //   _.mapExtend( suite,src );
-  //
-  // }
-
-  return suite;
-}
+//
+// function extendBy()
+// {
+//   var suite = this;
+//
+//   throw _.err( 'extendBy is deprecated, please, use inherit' );
+//
+//   // for( var a = 0 ; a < arguments.length ; a++ )
+//   // {
+//   //   var src = arguments[ 0 ];
+//   //
+//   //   _.assert( _.mapIs( src ) );
+//   //
+//   //   if( src.tests )
+//   //   _.mapSupplement( src.tests,suite.tests );
+//   //
+//   //   if( src.context )
+//   //   _.mapSupplement( src.context,suite.context );
+//   //
+//   //   _.mapExtend( suite,src );
+//   //
+//   // }
+//
+//   return suite;
+// }
 
 //
 
@@ -149,12 +149,12 @@ function inherit()
     _.assert( src instanceof Self );
 
     if( src.tests )
-    _.mapSupplement( suite.tests,src.tests );
+    _.mapSupplement( suite.tests, src.tests );
 
     if( src.context )
-    _.mapSupplement( suite.context,src.context );
+    _.mapSupplement( suite.context, src.context );
 
-    var extend = _.mapBut( src._initialOptions,suite._initialOptions );
+    var extend = _.mapBut( src._initialOptions, suite._initialOptions );
     _.mapExtend( suite,extend );
     _.mapExtend( suite._initialOptions, extend );
 
@@ -208,29 +208,68 @@ function _routineSet( src )
 
   if( _.routineIs( src ) )
   debugger;
-  // if( _.routineIs( src ) )
-  // suite[ routineSymbol ] = _.mapKeyWithValue( suite, src );
-  // else
+
   suite[ routineSymbol ] = src;
 
-  // _.assert( suite.routine === null || suite.tests );
-  // _.assert( suite.routine === null || suite.tests[ suite.routine ], 'Test suite', suite.name, 'does not have test routine', suite.routine );
+}
 
+//
+
+function consoleBar( value )
+{
+  var suite = this;
+  var logger = suite.logger;
+  var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.bar : false;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.boolLike( value ) );
+
+  if( value )
+  {
+    logger.begin({ verbosity : -8 });
+    logger.log( 'Silencing console' );
+    logger.end({ verbosity : -8 });
+    if( !_.Logger.consoleIsBarred( console ) )
+    _.Tester._barOptions = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
+  }
+  else
+  {
+    debugger;
+    if( _.Logger.consoleIsBarred( console ) )
+    {
+      _.Tester._barOptions.bar = 0;
+      _.Logger.consoleBar( _.Tester._barOptions );
+    }
+  }
+
+  return wasBarred;
 }
 
 // --
 // test suite run
 // --
 
-function _testSuiteSettingsAdjust()
+function _testSuiteRefine()
 {
   var suite = this;
-  var extend = Object.create( null );
 
+  /* verify */
+
+  _.assert( _.objectIs( suite.tests ) );
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   /* */
+
+  for( var r in suite.tests )
+  {
+    var testRoutine = suite.tests[ r ];
+    _.assertMapHasOnly( testRoutine, _.Tester.TestRoutineDescriptor.KnownFields, [ 'Test routine', testRoutine.nameFull, 'has unknown fields' ] );
+  }
+
+  /* extend */
+
+  var extend = Object.create( null );
 
   if( suite.override )
   _.mapExtend( extend, suite.override );
@@ -252,14 +291,9 @@ function _testSuiteSettingsAdjust()
 
   }
 
-  /* */
-
-  // if( suite.override )
-  // _.mapExtend( suite,suite.override );
-
   _.mapExtend( suite, extend );
 
-  /* */
+  /* validate */
 
   _.assert( suite.concurrent !== null && suite.concurrent !== undefined );
   _.assert( _.Tester.settings.sanitareTime >= 0 );
@@ -278,9 +312,9 @@ function _testSuiteRunLater()
 
   /* */
 
-  suite._testSuiteSettingsAdjust();
+  suite._testSuiteRefine();
 
-  var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
+  var con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
 
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
@@ -306,9 +340,9 @@ function _testSuiteRunNow()
 
   /* */
 
-  suite._testSuiteSettingsAdjust();
+  suite._testSuiteRefine();
 
-  var con = suite.concurrent ? new _.Consequence().give() : wTestSuite._suiteCon;
+  var con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
 
   return con
   .doThen( function()
@@ -404,11 +438,7 @@ function _testSuiteBegin()
 
   if( suite.silencing )
   {
-    logger.begin({ verbosity : -8 });
-    logger.log( 'Silencing console' );
-    logger.end({ verbosity : -8 });
-    if( !_.Logger.consoleIsBarred( console ) )
-    _.Tester._bar = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
+    suite.consoleBar( 1 );
   }
 
   /* */
@@ -529,8 +559,6 @@ function _testSuiteEnd()
   logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
 
-  // console.log( 'x' );
-
   /* */
 
   if( suite.takingIntoAccount )
@@ -549,10 +577,9 @@ function _testSuiteEnd()
 
   /* silencing */
 
-  if( suite.silencing && _.Logger.consoleIsBarred( console ) )
+  if( suite.silencing )
   {
-    _.Tester._bar.bar = 0;
-    _.Logger.consoleBar( _.Tester._bar );
+    suite.consoleBar( 0 );
   }
 
   /* */
@@ -619,7 +646,7 @@ function _testRoutineRun_entry( name,testRoutine )
 
   /* */
 
-  var trd = _.TestRoutineDescriptor
+  var trd = _.Tester.TestRoutineDescriptor
   ({
     name : name,
     routine : testRoutine,
@@ -653,7 +680,8 @@ function _testRoutineRun_entry( name,testRoutine )
     result = trd._returnCon = _.Consequence.from( result );
 
     result.andThen( suite._inroutineCon );
-    result = result.eitherThenSplit([ _.timeOutError( timeOut ),_.Tester._cancelCon ]);
+
+    result = result.eitherThenSplit([ _.timeOutError( timeOut ), _.Tester._cancelCon ]);
 
     result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
     result.doThen( () => trd._testRoutineEnd() );
@@ -773,6 +801,32 @@ function _exceptionConsider( err )
 
   if( suite.takingIntoAccount )
   _.Tester._exceptionConsider( err );
+
+}
+
+//
+
+function _testRoutineConsider( outcome )
+{
+  var suite = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( this.constructor === Self );
+  _.assert( suite.takingIntoAccount !== undefined );
+
+  if( outcome )
+  {
+    if( suite.report )
+    suite.report.testRoutinePasses += 1;
+  }
+  else
+  {
+    if( suite.report )
+    suite.report.testRoutinePasses += 1;
+  }
+
+  if( suite.takingIntoAccount )
+  _.Tester._outcomeConsider( outcome );
 
 }
 
@@ -934,7 +988,6 @@ var Proto =
 
   init : init,
   copy : copy,
-  extendBy : extendBy,
   inherit : inherit,
 
   // etc
@@ -942,10 +995,11 @@ var Proto =
   _testSuitesRegister : _testSuitesRegister,
   _accuracySet : _accuracySet,
   _routineSet : _routineSet,
+  consoleBar : consoleBar,
 
   // test suite run
 
-  _testSuiteSettingsAdjust : _testSuiteSettingsAdjust,
+  _testSuiteRefine : _testSuiteRefine,
   _testSuiteRunLater : _testSuiteRunLater,
   run : _testSuiteRunNow,
   _testSuiteRunNow : _testSuiteRunNow,
@@ -969,6 +1023,7 @@ var Proto =
 
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
+  _testRoutineConsider : _testRoutineConsider,
   _testCaseConsider : _testCaseConsider,
   exceptionReport : exceptionReport,
 
@@ -1004,6 +1059,7 @@ _.EventHandler.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
+_.Tester[ Self.nameShort ] = Self;
 _realGlobal_[ Self.name ] = _global_[ Self.name ] = _[ Self.nameShort ] = Self;
 
 })();

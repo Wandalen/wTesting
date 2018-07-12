@@ -310,7 +310,7 @@ function _testAllAct()
     tester._testAct( t );
   }
 
-  wTestSuite._suiteCon
+  _.Tester.TestSuite._suiteCon
   .doThen( function() {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
@@ -320,7 +320,7 @@ function _testAllAct()
     return tester._testingEnd();
   });
 
-  return wTestSuite._suiteCon.split();
+  return _.Tester.TestSuite._suiteCon.split();
 }
 
 //
@@ -338,9 +338,9 @@ function _testAct()
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var _suite = arguments[ a ];
-    var suite = wTestSuite.instanceByName( _suite );
+    var suite = _.Tester.TestSuite.instanceByName( _suite );
 
-    _.assert( suite instanceof wTestSuite,'Test suite',_suite,'was not found' );
+    _.assert( suite instanceof _.Tester.TestSuite,'Test suite',_suite,'was not found' );
     _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
     _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
 
@@ -369,7 +369,7 @@ function _test()
 
   tester._testAct.apply( tester,_.mapVals( suites ) );
 
-  return wTestSuite._suiteCon
+  return _.Tester.TestSuite._suiteCon
   .doThen( function() {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
@@ -494,7 +494,7 @@ function testsFilterOut( suites )
       var suite = suites[ s ];
       if( _.strIs( suite ) )
       _suites[ suite ] = suite;
-      else if( suite instanceof wTestSuite )
+      else if( suite instanceof _.Tester.TestSuite )
       _suites[ suite.name ] = suite;
       else _.assert( 0,'not tested' );
     }
@@ -554,6 +554,51 @@ function testsListPrint( suites )
 
 // --
 // etc
+// --
+
+function _verbositySet( src )
+{
+  var tester = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( !_.numberIsNotNan( src ) )
+  src = 0;
+
+  tester[ symbolForVerbosity ] = src;
+
+  if( src !== null )
+  if( tester.logger )
+  tester.logger.verbosity = src;
+
+}
+
+//
+
+function _canContinue()
+{
+  var tester = this;
+
+  if( tester.settings.fails > 0 )
+  if( tester.settings.fails <= tester.report.testCheckFails )
+  {
+    tester.report.errorsArray.push( _.err( 'Too many fails', _.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
+    return false;
+  }
+
+  return true;
+}
+
+//
+
+function cancel( err )
+{
+  var tester = this;
+  tester._cancelCon.error( _.err( err ) );
+}
+
+// --
+// report
 // --
 
 function _reportForm()
@@ -633,47 +678,9 @@ function _reportIsPositive()
   return true;
 }
 
-//
-
-function _verbositySet( src )
-{
-  var tester = this;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-
-  if( !_.numberIsNotNan( src ) )
-  src = 0;
-
-  tester[ symbolForVerbosity ] = src;
-
-  if( src !== null )
-  if( tester.logger )
-  tester.logger.verbosity = src;
-
-}
-
-//
-
-function _canContinue()
-{
-  var tester = this;
-
-  if( tester.settings.fails > 0 )
-  if( tester.settings.fails <= tester.report.testCheckFails )
-  return false;
-
-  return true;
-}
-
-//
-
-function cancel( err )
-{
-  var tester = this;
-  tester._cancelCon.error( _.err( err ) );
-}
-
-//
+// --
+// consider
+// --
 
 function _outcomeConsider( outcome )
 {
@@ -709,6 +716,27 @@ function _exceptionConsider( err )
 
 //
 
+function _testRoutineConsider( outcome )
+{
+  var tester = this;
+  var report = tester.report;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( tester === Self );
+
+  if( outcome )
+  {
+    report.testRoutinePasses += 1;
+  }
+  else
+  {
+    report.testRoutineFails += 1;
+  }
+
+}
+
+//
+
 function _testCaseConsider( outcome )
 {
   var tester = this;
@@ -721,8 +749,6 @@ function _testCaseConsider( outcome )
   else
   {
     report.testCaseFails += 1;
-    // console.log( 'report.testCaseFails += 1' );
-    // debugger;
   }
 
 }
@@ -975,7 +1001,6 @@ var Self =
   scenarioOptionsList : scenarioOptionsList,
   scenarioSuitesList : scenarioSuitesList,
 
-
   // run
 
   _testAllAct : _testAllAct,
@@ -991,27 +1016,29 @@ var Self =
   testsFilterOut : testsFilterOut,
   testsListPrint : testsListPrint,
 
-
-  // etc
+  // report
 
   _reportForm : _reportForm,
   _reportToStr : _reportToStr,
   _reportIsPositive : _reportIsPositive,
 
+  // etc
+
   _verbositySet : _verbositySet,
   _canContinue : _canContinue,
   cancel : cancel,
 
+  // consider
+
   _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
+  _testRoutineConsider : _testRoutineConsider,
   _testCaseConsider : _testCaseConsider,
-
 
   // report formatter
 
   loggerToBook : loggerToBook,
   bookExperiment : bookExperiment,
-
 
   // var
 
@@ -1040,10 +1067,13 @@ var Self =
   _defaultVerbosity : 2,
   verbosity : 2,
 
-  _bar : null,
+  _barOptions : null,
   _appArgsApplied : null,
   path : null,
   appArgs : null,
+
+  TestSuite : null,
+  TestRoutineDescriptor : null,
 
   constructor : function wTester(){},
 
@@ -1063,6 +1093,9 @@ _.accessor
 //
 
 Object.preventExtensions( Self );
+
+_.mapSupplementNulls( Self, _.Tester );
+
 _.assert( !_realGlobal_.wTester );
 _realGlobal_.wTester = _.Tester = Self;
 

@@ -1,12 +1,7 @@
 
 if( typeof module !== 'undefined' )
 require( 'wTesting' );
-
 var _ = _global_.wTools;
-
-/*
-
-*/
 
 //
 

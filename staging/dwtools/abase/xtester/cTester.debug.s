@@ -458,7 +458,7 @@ function _testingEnd()
   logger.end({ verbosity : -2 });
 
   logger.begin({ verbosity : -1 });
-  var msg = 'Tester .. ' + ( ok ? 'ok' : 'failed' );
+  var msg = 'Tester ... ' + ( ok ? 'ok' : 'failed' );
   logger.logDown( msg );
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.end({ verbosity : -1 });
@@ -686,7 +686,7 @@ function textColor( srcStr, connotation )
   _.assert( arguments.length === 2 );
 
   var light = [ ' ok', ' failed' ];
-  var gray = [ 'Test check', '/', ' # ', ' < ', ' > ', '(', ')', '...', ':' ];
+  var gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' ... ', ' .. ', ':' ];
   var splits = _.strSplit2
   ({
     src : srcStr,
@@ -697,6 +697,7 @@ function textColor( srcStr, connotation )
 
   splits = splits.map( function( e, i )
   {
+
     if( i % 2 === 0 )
     return e;
 
@@ -709,6 +710,7 @@ function textColor( srcStr, connotation )
     // return _.color.strFormat( e, { fg : ( connotation ? 'light green' : 'light red' ) } );
     // else
     // return _.color.strFormat( e, { fg : 'light black' } );
+
   });
 
   return splits.join( '' );

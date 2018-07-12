@@ -544,15 +544,14 @@ function _testSuiteEnd()
 
   var timingStr = '';
   if( suite.timing )
-  timingStr = _.timeSpent( ' in ', suite._testSuiteBeginTime );
+  timingStr = _.timeSpent( ' ... in ', suite._testSuiteBeginTime );
 
-  var msg =
-  [
-    'Test suite ( ' + suite.name + ' ) .. ' + ( ok ? 'ok' : 'failed' ) + timingStr,
-  ];
+  var msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
+
+  msg = _.Tester.textColor( msg, ok );
 
   logger.begin({ verbosity : -1 });
-  logger.logDown( msg[ 0 ] );
+  logger.logDown( msg );
   logger.end({ verbosity : -1 });
 
   logger.begin({ verbosity : -2 });

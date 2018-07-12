@@ -186,20 +186,17 @@ function _testRoutineEnd()
   if( trd.timing )
   timingStr = _.timeSpent( ' in ', trd._testRoutineBeginTime );
 
-  if( ok )
-  {
+  var str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
 
-    suite.logger.logDown( 'Passed test routine ( ' + trd.nameFull + ' )' + timingStr );
+  str = _.Tester.textColor( str, ok );
 
-  }
-  else
-  {
+  if( !ok )
+  suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
 
-    suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
-    suite.logger.logDown( 'Failed test routine ( ' + trd.nameFull + ' )' + timingStr );
-    suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
+  suite.logger.logDown( str );
 
-  }
+  if( !ok )
+  suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
   suite.logger.end( 'routine','end' );

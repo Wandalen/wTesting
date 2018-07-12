@@ -817,6 +817,7 @@ function notIdentical( got,expected )
 function equivalent( got, expected, options )
 {
   var trd = this;
+  var accuracy = trd.accuracy;
 
   /* */
 
@@ -829,6 +830,7 @@ function equivalent( got, expected, options )
     else if( _.numberIs( options ) )
     iterator.accuracy = options;
     else _.assert( options === undefined );
+    accuracy = iterator.accuracy;
     var outcome = _.entityEquivalent( got, expected, iterator );
   }
   catch( err )
@@ -877,6 +879,7 @@ function equivalent( got, expected, options )
     expected : expected,
     path : iterator.iterator.lastPath,
     usingExtraDetails : 1,
+    accuracy : accuracy,
   });
 
   return outcome;
@@ -887,6 +890,7 @@ function equivalent( got, expected, options )
 function notEquivalent( got, expected, options )
 {
   var trd = this;
+  var accuracy = trd.accuracy;
 
   /* */
 
@@ -899,6 +903,7 @@ function notEquivalent( got, expected, options )
     else if( _.numberIs( options ) )
     iterator.accuracy = options;
     else _.assert( options === undefined );
+    accuracy = iterator.accuracy;
     var outcome = !_.entityEquivalent( got, expected, iterator );
   }
   catch( err )
@@ -949,6 +954,7 @@ function notEquivalent( got, expected, options )
     expected : expected,
     path : iterator.iterator.lastPath,
     usingExtraDetails : 1,
+    accuracy : accuracy,
   });
 
   return outcome;
@@ -1970,17 +1976,18 @@ function _outcomeReportCompare( o )
   var details = '';
 
   /**/
-xxx
+
   if( !o.outcome )
   if( o.usingExtraDetails )
   {
     details += _.entityDiffDescription
     ({
+      name1 : 'got',
+      name2 : 'expected',
       src1 : o.got,
       src2 : o.expected,
       path : o.path,
-      name1 : 'got',
-      name2 : 'expected',
+      accuracy : o.accuracy,
     });
   }
 
@@ -2019,6 +2026,7 @@ _outcomeReportCompare.defaults =
   outcome : null,
   path : null,
   usingExtraDetails : 1,
+  accuracy : null,
 }
 
 //

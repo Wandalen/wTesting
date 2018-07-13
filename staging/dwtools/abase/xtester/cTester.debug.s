@@ -318,23 +318,62 @@ function scenarioSuitesList()
 // run
 // --
 
-function _testAllAct()
+function _suitesRun( suites )
 {
   var tester = this;
+  var logger = tester.logger;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 1 );
 
-  var suites = tester.testsFilterOut( wTests );
+  // var suites = tester.testsFilterOut( wTests );
 
   tester._testingBegin( suites );
 
-  for( var t in suites )
+  /* */
+
+  for( var s in suites )
   {
-    tester._testAct( t );
+    var suite = _.Tester.TestSuite.instanceByName( suites[ s ] );
+    suites[ s ] = suite;
+
+    if( !suite.enabled )
+    {
+      delete suites[ s ];
+      continue;
+    }
+
+    try
+    {
+      _.assert( suite instanceof _.Tester.TestSuite, 'Test suite', s, 'was not found' );
+      suite._testSuiteRefine();
+    }
+    catch( err )
+    {
+      err = _.errAttend( err );
+      logger.log( err.originalMessage );
+      return new _.Consequence().error( err );
+    }
+
   }
 
+  /* */
+
+  for( var s in suites )
+  {
+    var suite = suites[ s ];
+    suite._testSuiteRunSoon();
+  }
+
+  // for( var s in suites )
+  // {
+  //   tester._testAct( s );
+  // }
+
+  /* */
+
   _.Tester.TestSuite._suiteCon
-  .doThen( function() {
+  .doThen( function()
+  {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
   })
@@ -348,33 +387,65 @@ function _testAllAct()
 
 //
 
-var testAll = _.timeReadyJoin( undefined,_testAllAct );
-
-//
-
-function _testAct()
+function _testAllAct()
 {
   var tester = this;
 
-  _.assert( this === Self );
+  _.assert( arguments.length === 0 );
 
-  for( var a = 0 ; a < arguments.length ; a++ )
-  {
-    var _suite = arguments[ a ];
-    var suite = _.Tester.TestSuite.instanceByName( _suite );
+  var suites = tester.testsFilterOut( wTests );
 
-    _.assert( suite instanceof _.Tester.TestSuite,'Test suite',_suite,'was not found' );
-    _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
-    _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
-
-    if( !suite.enabled )
-    continue;
-
-    suite._testSuiteRunLater();
-  }
-
+  return tester._suitesRun( suites );
 }
 
+//
+
+var testAll = _.timeReadyJoin( undefined, _testAllAct );
+
+//
+//
+// function _testAct()
+// {
+//   var tester = this;
+//
+//   _.assert( this === Self ); xxx
+//
+//   // for( var a = 0 ; a < arguments.length ; a++ )
+//   // {
+//   //   var _suite = arguments[ a ];
+//   //   var suite = _.Tester.TestSuite.instanceByName( _suite );
+//   //
+//   //   _.assert( suite instanceof _.Tester.TestSuite,'Test suite',_suite,'was not found' );
+//   //   _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
+//   //   _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
+//   //
+//   //   if( !suite.enabled )
+//   //   continue;
+//   //
+//   //   suite._testSuiteRefine();
+//   // }
+//
+//   var suites = Object.create( null );
+//   for( var a = 0 ; a < arguments.length ; a++ )
+//   {
+//     var name = arguments[ a ];
+//     var suite = _.Tester.TestSuite.instanceByName( name );
+//
+//     _.assert( suite instanceof _.Tester.TestSuite, 'Test suite', name, 'was not found' );
+//     // _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
+//     // _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
+//
+//     // if( !suite.enabled )
+//     // continue;
+//
+//     // suite._testSuiteRunSoon();
+//
+//     suites[ s ]
+//   }
+//
+//   return tester._suitesRun( suites );
+// }
+//
 //
 
 function _test()
@@ -387,20 +458,23 @@ function _test()
   return tester._testAllAct();
 
   var suites = tester.testsFilterOut( arguments );
+  return tester._suitesRun( suites );
 
-  tester._testingBegin( suites );
+  // tester._testingBegin( suites );
+  //
+  // tester._testAct.apply( tester,_.mapVals( suites ) );
+  //
+  // return _.Tester.TestSuite._suiteCon
+  // .doThen( function()
+  // {
+  //   if( tester._reportIsPositive() )
+  //   return _.timeOut( tester.settings.sanitareTime );
+  // })
+  // .split( function()
+  // {
+  //   return tester._testingEnd();
+  // });
 
-  tester._testAct.apply( tester,_.mapVals( suites ) );
-
-  return _.Tester.TestSuite._suiteCon
-  .doThen( function() {
-    if( tester._reportIsPositive() )
-    return _.timeOut( tester.settings.sanitareTime );
-  })
-  .split( function()
-  {
-    return tester._testingEnd();
-  });
 }
 
 //
@@ -472,9 +546,12 @@ function _testingEnd()
     _.appExitCode( -1 );
   }
 
-  var msg = tester._reportToStr();
-  logger.begin({ verbosity : -2 });
+  /* */
 
+  debugger;
+  var msg = tester._reportToStr();
+  debugger;
+  logger.begin({ verbosity : -2 });
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( msg );
   logger.end({ verbosity : -2 });
@@ -600,7 +677,6 @@ function _verbositySet( src )
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  debugger;
   if( !_.numberIsNotNan( src ) )
   src = 0;
 
@@ -687,6 +763,8 @@ function _reportToStr()
   msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
   msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
+
+  debugger;
 
   return msg;
 }
@@ -1017,6 +1095,7 @@ var SettingsNameMap =
   'verbosity' : 'verbosity',
   'importanceOfDetails' : 'importanceOfDetails',
   'importanceOfNegative' : 'importanceOfNegative',
+  'n' : 'importanceOfNegative',
   'silencing' : 'silencing',
   'timing' : 'timing',
 
@@ -1122,10 +1201,12 @@ var Self =
 
   // run
 
+  _suitesRun : _suitesRun,
+
   _testAllAct : _testAllAct,
   testAll : testAll,
 
-  _testAct : _testAct,
+  // _testAct : _testAct,
   _test : _test,
   test : test,
 

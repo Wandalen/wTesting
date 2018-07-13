@@ -2223,7 +2223,7 @@ var KnownFields =
 {
   testRoutineTimeOut : null,
   timeOut : null,
-  experiment : null,
+  experimental : null,
 }
 
 // --

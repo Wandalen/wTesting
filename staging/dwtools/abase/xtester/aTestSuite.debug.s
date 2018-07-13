@@ -249,6 +249,21 @@ function consoleBar( value )
 // test suite run
 // --
 
+function run()
+{
+  var suite = this;
+
+  _.assert( arguments.length === 0 );
+
+  debugger;
+  suite._testSuiteRefine();
+  debugger;
+
+  return suite._testSuiteRunNow();
+}
+
+//
+
 function _testSuiteRefine()
 {
   var suite = this;
@@ -258,13 +273,21 @@ function _testSuiteRefine()
   _.assert( _.objectIs( suite.tests ) );
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
+  _.assert( _.strIsNotEmpty( suite.name ), 'Test suite should has {-name-}"' );
+  _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
+  _.assert( !suite._refined );
 
   /* */
 
   for( var r in suite.tests )
   {
     var testRoutine = suite.tests[ r ];
-    _.assertMapHasOnly( testRoutine, _.Tester.TestRoutineDescriptor.KnownFields, [ 'Test routine', testRoutine.nameFull, 'has unknown fields' ] );
+    _.assertMapHasOnly
+    (
+      testRoutine,
+      _.Tester.TestRoutineDescriptor.KnownFields,
+      [ 'Test routine', _.strQuote( testRoutine.name ), 'has unknown fields :' ]
+    );
   }
 
   /* extend */
@@ -293,6 +316,8 @@ function _testSuiteRefine()
 
   _.mapExtend( suite, extend );
 
+  suite._refined = 1;
+
   /* validate */
 
   _.assert( suite.concurrent !== null && suite.concurrent !== undefined );
@@ -303,16 +328,18 @@ function _testSuiteRefine()
 
 //
 
-function _testSuiteRunLater()
+function _testSuiteRunSoon()
 {
   var suite = this;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
+  _.assert( suite._refined );
 
-  /* */
+  debugger;
 
-  suite._testSuiteRefine();
+  // suite._testSuiteRefine();
+  // debugger;
 
   var con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
 
@@ -333,14 +360,17 @@ function _testSuiteRunLater()
 function _testSuiteRunNow()
 {
   var suite = this;
-  var tests = suite.tests;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
+  _.assert( suite._refined );
 
   /* */
 
-  suite._testSuiteRefine();
+  debugger;
+
+  // suite._testSuiteRefine();
+  // debugger;
 
   var con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
 
@@ -361,6 +391,8 @@ function _testSuiteRunAct()
   var suite = this;
   var tests = suite.tests;
   var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
+
+  debugger;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -963,6 +995,7 @@ var Restricts =
   _testSuiteTerminated_joined : null,
   _hasConsoleInOutputs : 0,
   _testSuiteBeginTime : null,
+  _refined : 0,
 }
 
 var Statics =
@@ -1015,9 +1048,9 @@ var Proto =
 
   // test suite run
 
+  run : run,
   _testSuiteRefine : _testSuiteRefine,
-  _testSuiteRunLater : _testSuiteRunLater,
-  run : _testSuiteRunNow,
+  _testSuiteRunSoon : _testSuiteRunSoon,
   _testSuiteRunNow : _testSuiteRunNow,
   _testSuiteRunAct : _testSuiteRunAct,
   _testSuiteBegin : _testSuiteBegin,

@@ -25,6 +25,8 @@ function init( o )
 {
   var trd = this;
 
+  trd[ accuracyEffectiveSymbol ] = null;
+
   _.instanceInit( trd );
 
   Object.preventExtensions( trd );
@@ -32,6 +34,16 @@ function init( o )
   if( o )
   trd.copy( o );
 
+  if( trd.routine.timeOut !== undefined )
+  trd.testRoutine = trd.routine.timeOut;
+  if( trd.routine.testRoutineTimeOut !== undefined )
+  trd.testRoutine = trd.routine.testRoutineTimeOut;
+  if( trd.routine.accuracy !== undefined )
+  trd.accuracy = trd.routine.accuracy;
+  if( trd.routine.experimental !== undefined )
+  trd.experimental = trd.routine.experimental;
+
+  trd._accuracyChange();
   trd._returnCon = null;
 
   trd._reportForm();
@@ -55,6 +67,28 @@ function init( o )
   var trd = new Proxy( trd, proxy );
 
   return trd;
+}
+
+//
+
+function refine()
+{
+  var trd = this;
+  var routine = trd.routine;
+
+  var preStr = 'Test routine ' + _.strQuote( trd.nameFull );
+
+  _.sureMapHasOnly
+  (
+    routine,
+    _.Tester.TestRoutineDescriptor.KnownFields,
+    [ preStr, 'has unknown fields :' ]
+  );
+
+  _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), preStr, 'expects number in field {-timeOut-} if defined' );
+  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.testRoutineTimeOut ), preStr, 'expects number in field {-testRoutineTimeOut-} if defined' );
+  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), preStr, 'expects number or range in field {-accuracy-} if defined' );
+
 }
 
 // --
@@ -223,7 +257,7 @@ function _testRoutineHandleReturn( err,msg )
     usingSourceCode : 0,
   });
 
-  trd.description = '';
+  trd.will = '';
 
   if( err )
   {
@@ -276,22 +310,18 @@ function _interruptMaybe()
 // tests groups
 // --
 
-function _descriptionGet()
+function _willGet()
 {
   var trd = this;
-  return trd[ descriptionSymbol ];
+  return trd[ willSymbol ];
 }
 
 //
 
-function _descriptionSet( src )
+function _willSet( src )
 {
   var trd = this;
-  trd[ descriptionSymbol ] = src;
-
-  // if( src )
-  // trd.testCaseCloseIfAny();
-
+  trd[ willSymbol ] = src;
 }
 
 //
@@ -316,11 +346,12 @@ function _descriptionFullGet()
   else
   {
     result = trd._testsGroupsStack.join( right );
-    result += right;
+    if( trd.will )
+    result += left;
   }
 
-  if( trd.description )
-  result += trd.description;
+  if( trd.will )
+  result += trd.will;
 
   return result;
 }
@@ -355,7 +386,7 @@ function _caseSet( src )
 
   _.assert( arguments.length === 1 );
   _.assert( !trd._testsGroupIsCase || trd.testsGroup );
-  _.assert( src === null || _.strIs( src ) );
+  _.assert( src === null || _.strIs( src ), 'expects string or null {-src-}, but got', _.strTypeOf( src ) );
 
   trd.testCaseCloseIfAny();
 
@@ -424,6 +455,8 @@ function testCaseCloseIfAny()
   var trd = this;
   var report = trd.report;
 
+  trd.will = '';
+
   if( trd._testsGroupIsCase )
   {
     _.assert( trd.testsGroup );
@@ -434,6 +467,28 @@ function testCaseCloseIfAny()
 
 }
 
+//
+
+function hasTestGroupExceptOfCase()
+{
+  var trd = this;
+  if( trd._testsGroupsStack.length === 0 )
+  return false;
+  if( trd._testsGroupIsCase && trd._testsGroupsStack.length === 1 )
+  return false;
+  return true;
+}
+
+//
+
+function _nameFullGet()
+{
+  var trd = this;
+  var slash = ' / ';
+  return trd.suite.name + slash + trd.name;
+}
+
+//
 // function testCaseCloseIfAny()
 // {
 //   var trd = this;
@@ -456,15 +511,16 @@ function checkCurrent()
 
   _.assert( arguments.length === 0 );
 
-  result.description = trd.description;
-  result._checkIndex = trd._checkIndex;
+  result.testsGroupsStack = trd._testsGroupsStack;
+  result.will = trd.will;
+  result.checkIndex = trd._checkIndex;
 
   return result;
 }
 
 //
 
-function checkNext( description )
+function checkNext( will )
 {
   var trd = this;
 
@@ -476,8 +532,8 @@ function checkNext( description )
   else
   trd._checkIndex += 1;
 
-  if( description !== undefined )
-  trd.description = description;
+  if( will !== undefined )
+  trd.will = will;
 
   return trd.checkCurrent();
 }
@@ -490,6 +546,7 @@ function checkStore()
   var result = trd.checkCurrent();
 
   _.assert( arguments.length === 0 );
+  // _.assert( !trd.hasTestGroupExceptOfCase(), trd._testsGroupsStack.length, trd._testsGroupIsCase );
 
   trd._checksStack.push( result );
 
@@ -507,6 +564,12 @@ function checkRestore( acheck )
   if( acheck )
   {
     trd.checkStore();
+    if( acheck === trd._checksStack[ trd._checksStack.length-1 ] )
+    {
+      debugger;
+      xxx
+      trd._checksStack.pop();
+    }
   }
   else
   {
@@ -514,8 +577,9 @@ function checkRestore( acheck )
     acheck = trd._checksStack.pop();
   }
 
-  trd.description = acheck.description;
-  trd._checkIndex = acheck._checkIndex;
+  trd._checkIndex = acheck.checkIndex;
+  trd._testsGroupsStack = acheck.testsGroupsStack;
+  trd.will = acheck.will;
 
   return trd;
 }
@@ -817,14 +881,14 @@ function notIdentical( got,expected )
 function equivalent( got, expected, options )
 {
   var trd = this;
-  var accuracy = trd.accuracy;
+  var accuracy = trd.accuracyEffective;
 
   /* */
 
   try
   {
     var iterator = Object.create( null );
-    iterator.accuracy = trd.accuracy;
+    iterator.accuracy = accuracy;
     if( _.mapIs( options ) )
     _.mapExtend( iterator, options )
     else if( _.numberIs( options ) )
@@ -890,14 +954,14 @@ function equivalent( got, expected, options )
 function notEquivalent( got, expected, options )
 {
   var trd = this;
-  var accuracy = trd.accuracy;
+  var accuracy = trd.accuracyEffective;
 
   /* */
 
   try
   {
     var iterator = Object.create( null );
-    iterator.accuracy = trd.accuracy;
+    iterator.accuracy = accuracy;
     if( _.mapIs( options ) )
     _.mapExtend( iterator, options )
     else if( _.numberIs( options ) )
@@ -1236,6 +1300,9 @@ function _shouldDo( o )
   var logger = trd.logger;
   var err, arg;
   var con = new _.Consequence();
+
+  if( !trd.shoulding )
+  return con.give();
 
   try
   {
@@ -1770,22 +1837,7 @@ function shouldMessageOnlyOnce( routine )
 // consider
 // --
 
-function _testCaseConsider( outcome )
-{
-  var trd = this;
-  var report = trd.report;
-
-  if( outcome )
-  report.testCasePasses += 1;
-  else
-  report.testCaseFails += 1;
-
-  trd.suite._testCaseConsider( outcome );
-}
-
-//
-
-function _outcomeConsider( outcome )
+function _testCheckConsider( outcome )
 {
   var trd = this;
 
@@ -1801,14 +1853,27 @@ function _outcomeConsider( outcome )
   {
     trd.report.testCheckFails += 1;
     trd.report.testCheckFailsOfTestCase += 1;
-    // console.log( 'wTestRoutineDescriptor.testCheckFailsOfTestCase += 1' )
-    // debugger;
   }
 
-  trd.suite._outcomeConsider( outcome );
+  trd.suite._testCheckConsider( outcome );
 
   trd.checkNext();
 
+}
+
+//
+
+function _testCaseConsider( outcome )
+{
+  var trd = this;
+  var report = trd.report;
+
+  if( outcome )
+  report.testCasePasses += 1;
+  else
+  report.testCaseFails += 1;
+
+  trd.suite._testCaseConsider( outcome );
 }
 
 //
@@ -1839,7 +1904,7 @@ function _outcomeReport( o )
   _.assert( arguments.length === 1, 'expects single argument' );
 
   if( o.considering )
-  trd._outcomeConsider( o.outcome );
+  trd._testCheckConsider( o.outcome );
 
   /* */
 
@@ -1970,7 +2035,7 @@ function _outcomeReportCompare( o )
 
   _.assert( trd instanceof Self );
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.routineOptionsWithUndefines( _outcomeReportCompare,o );
+  _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
 
   var nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
   var details = '';
@@ -1980,12 +2045,11 @@ function _outcomeReportCompare( o )
   if( !o.outcome )
   if( o.usingExtraDetails )
   {
-    details += _.entityDiffDescription
+    details += _.entityDiffExplanation
     ({
-      name1 : 'got',
-      name2 : 'expected',
-      src1 : o.got,
-      src2 : o.expected,
+      name1 : '- got',
+      name2 : '- expected',
+      srcs : [ o.got, o.expected ],
       path : o.path,
       accuracy : o.accuracy,
     });
@@ -2187,10 +2251,12 @@ _reportTextForTestCheck.defaults =
 function _accuracySet( accuracy )
 {
   var trd = this;
-  if( !_.numberIs( accuracy ) )
-  accuracy = null;
+
+  _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'expects number or range {-accuracy-}' );
+
   trd[ accuracySymbol ] = accuracy;
-  return accuracy;
+
+  return trd._accuracyChange();
 }
 
 //
@@ -2198,32 +2264,84 @@ function _accuracySet( accuracy )
 function _accuracyGet( accuracy )
 {
   var trd = this;
-  if( trd[ accuracySymbol ] !== null )
-  return trd[ accuracySymbol ];
-  return trd.suite.accuracy;
+  return trd[ accuracyEffectiveSymbol ];
 }
 
 //
 
-function _nameFullGet()
+function _accuracyEffectiveGet( accuracy )
 {
   var trd = this;
-  var slash = ' / ';
-  return trd.suite.name + slash + trd.name;
+  return trd[ accuracyEffectiveSymbol ];
+}
+
+//
+
+function _accuracyChange()
+{
+  var trd = this;
+  var result;
+
+  if( !trd.suite )
+  return null;
+
+  if( _.numberIs( trd[ accuracySymbol ] ) )
+  result = trd[ accuracySymbol ];
+  else
+  result = trd.suite.accuracy;
+
+  // if( trd.accuracyRange )
+  // debugger;
+  // if( trd.accuracyRange )
+
+  if( _.arrayIs( trd[ accuracySymbol ] ) )
+  result = _.numberClamp( result, trd[ accuracySymbol ] );
+
+  trd[ accuracyEffectiveSymbol ] = result;
+
+  return result;
+}
+
+//
+
+function _timeOutSet( timeOut )
+{
+  var trd = this;
+  if( !_.numberIs( timeOut ) )
+  timeOut = null;
+  trd[ timeOutSymbol ] = timeOut;
+  return timeOut;
+}
+
+//
+
+function _timeOutGet( timeOut )
+{
+  var trd = this;
+  if( trd[ timeOutSymbol ] !== null )
+  return trd[ timeOutSymbol ];
+  if( trd.suite.testRoutineTimeOut !== null )
+  return trd.suite.testRoutineTimeOut;
+  if( _.Tester.settings.testRoutineTimeOut !== null )
+  return _.Tester.settings.testRoutineTimeOut;
+  _.assert( 0 );
 }
 
 // --
 // var
 // --
 
-var descriptionSymbol = Symbol.for( 'description' );
+var willSymbol = Symbol.for( 'will' );
 var accuracySymbol = Symbol.for( 'accuracy' );
+var accuracyEffectiveSymbol = Symbol.for( 'accuracyEffective' );
+var timeOutSymbol = Symbol.for( 'timeOut' );
 
 var KnownFields =
 {
   testRoutineTimeOut : null,
   timeOut : null,
   experimental : null,
+  accuracy : null,
 }
 
 // --
@@ -2233,8 +2351,11 @@ var KnownFields =
 var Composes =
 {
   name : null,
-  description : null,
+  will : '',
   accuracy : null,
+  // accuracyRange : null,
+  timeOut : null,
+  experimental : 0,
 }
 
 var Aggregates =
@@ -2286,6 +2407,7 @@ var AccessorsReadOnly =
   nameFull : 'nameFull',
   descriptionFull : 'descriptionFull',
   descriptionWithName : 'descriptionWithName',
+  accuracyEffective : 'accuracyEffective',
 }
 
 var Accessors =
@@ -2294,6 +2416,7 @@ var Accessors =
   will : 'will',
   case : 'case',
   accuracy : 'accuracy',
+  timeOut : 'timeOut',
 }
 
 // --
@@ -2306,6 +2429,7 @@ var Proto =
   // inter
 
   init : init,
+  refine : refine,
 
   // run
 
@@ -2317,10 +2441,10 @@ var Proto =
 
   // tests groups
 
-  _willGet : _descriptionGet,
-  _willSet : _descriptionSet,
-  _descriptionGet : _descriptionGet,
-  _descriptionSet : _descriptionSet,
+  _willGet : _willGet,
+  _willSet : _willSet,
+  _descriptionGet : _willGet,
+  _descriptionSet : _willSet,
   _descriptionFullGet : _descriptionFullGet,
   _descriptionWithNameGet : _descriptionWithNameGet,
 
@@ -2334,6 +2458,8 @@ var Proto =
   close : testsGroupClose,
 
   testCaseCloseIfAny : testCaseCloseIfAny,
+  hasTestGroupExceptOfCase : hasTestGroupExceptOfCase,
+  _nameFullGet : _nameFullGet,
 
   // check
 
@@ -2374,8 +2500,8 @@ var Proto =
 
   // consider
 
+  _testCheckConsider : _testCheckConsider,
   _testCaseConsider : _testCaseConsider,
-  _outcomeConsider : _outcomeConsider,
   _exceptionConsider : _exceptionConsider,
 
   // report
@@ -2393,7 +2519,11 @@ var Proto =
 
   _accuracySet : _accuracySet,
   _accuracyGet : _accuracyGet,
-  _nameFullGet : _nameFullGet,
+  _accuracyEffectiveGet : _accuracyEffectiveGet,
+  _accuracyChange : _accuracyChange,
+
+  _timeOutGet : _timeOutGet,
+  _timeOutSet : _timeOutSet,
 
   // relationships
 

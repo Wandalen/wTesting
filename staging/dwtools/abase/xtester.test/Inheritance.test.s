@@ -174,8 +174,9 @@ var Proto =
 {
 
   name : 'Tools/tester/Inheritance',
-  // verbosity : 5,
   silencing : 1,
+  // enabled : 1,
+  // verbosity : 5,
 
   tests :
   {

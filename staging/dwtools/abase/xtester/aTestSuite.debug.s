@@ -191,9 +191,16 @@ function _testSuitesRegister( suites )
 function _accuracySet( accuracy )
 {
   var suite = this;
-  if( !_.numberIs( accuracy ) )
-  accuracy = 1e-7;
+
+  if( accuracy === null )
+  accuracy = _.accuracy;
+
+  _.assert( _.numberIs( accuracy ), 'expects number {-accuracy-}' );
   suite[ accuracySymbol ] = accuracy;
+
+  if( suite._refined )
+  suite.routineEach( ( trd ) => trd._accuracyChange() );
+
   return accuracy;
 }
 
@@ -221,25 +228,34 @@ function consoleBar( value )
   var logger = suite.logger;
   var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.bar : false;
 
-  _.assert( arguments.length === 1 );
-  _.assert( _.boolLike( value ) );
+  try
+  {
 
-  if( value )
-  {
-    logger.begin({ verbosity : -8 });
-    logger.log( 'Silencing console' );
-    logger.end({ verbosity : -8 });
-    if( !_.Logger.consoleIsBarred( console ) )
-    _.Tester._barOptions = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
-  }
-  else
-  {
-    debugger;
-    if( _.Logger.consoleIsBarred( console ) )
+    _.assert( arguments.length === 1 );
+    _.assert( _.boolLike( value ) );
+
+    if( value )
     {
-      _.Tester._barOptions.bar = 0;
-      _.Logger.consoleBar( _.Tester._barOptions );
+      logger.begin({ verbosity : -8 });
+      logger.log( 'Silencing console' );
+      logger.end({ verbosity : -8 });
+      if( !_.Logger.consoleIsBarred( console ) )
+      _.Tester._barOptions = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
     }
+    else
+    {
+      if( _.Logger.consoleIsBarred( console ) )
+      {
+        _.Tester._barOptions.bar = 0;
+        _.Logger.consoleBar( _.Tester._barOptions );
+      }
+    }
+
+  }
+  catch( err )
+  {
+    if( err )
+    console.error( err );
   }
 
   return wasBarred;
@@ -255,11 +271,9 @@ function run()
 
   _.assert( arguments.length === 0 );
 
-  debugger;
   suite._testSuiteRefine();
-  debugger;
 
-  return suite._testSuiteRunNow();
+  return suite._testSuiteRunSoon();
 }
 
 //
@@ -276,19 +290,6 @@ function _testSuiteRefine()
   _.assert( _.strIsNotEmpty( suite.name ), 'Test suite should has {-name-}"' );
   _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
   _.assert( !suite._refined );
-
-  /* */
-
-  for( var r in suite.tests )
-  {
-    var testRoutine = suite.tests[ r ];
-    _.assertMapHasOnly
-    (
-      testRoutine,
-      _.Tester.TestRoutineDescriptor.KnownFields,
-      [ 'Test routine', _.strQuote( testRoutine.name ), 'has unknown fields :' ]
-    );
-  }
 
   /* extend */
 
@@ -316,6 +317,29 @@ function _testSuiteRefine()
 
   _.mapExtend( suite, extend );
 
+  /* refine test routines */
+
+  for( var testRoutineName in suite.tests )
+  {
+    var testRoutine = suite.tests[ testRoutineName ];
+
+    _.assert( _.routineIs( testRoutine ) );
+
+    var trd = _.Tester.TestRoutineDescriptor
+    ({
+      name : testRoutineName,
+      routine : testRoutine,
+      suite : suite,
+    });
+
+    trd.refine();
+
+    suite.tests[ testRoutineName ] = trd;
+
+  }
+
+  /* */
+
   suite._refined = 1;
 
   /* validate */
@@ -336,8 +360,7 @@ function _testSuiteRunSoon()
   _.assert( arguments.length === 0 );
   _.assert( suite._refined );
 
-  debugger;
-
+  // debugger;
   // suite._testSuiteRefine();
   // debugger;
 
@@ -357,51 +380,34 @@ function _testSuiteRunSoon()
 
 //
 
-function _testSuiteRunNow()
-{
-  var suite = this;
-
-  _.assert( suite instanceof Self );
-  _.assert( arguments.length === 0 );
-  _.assert( suite._refined );
-
-  /* */
-
-  debugger;
-
-  // suite._testSuiteRefine();
-  // debugger;
-
-  var con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
-
-  return con
-  .doThen( function()
-  {
-
-    return suite._testSuiteRunAct();
-
-  })
-  .split();
-}
-
-//
-
 function _testSuiteRunAct()
 {
   var suite = this;
-  var tests = suite.tests;
+  var testRoutines = suite.tests;
   var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
-
-  debugger;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
 
   /* */
 
-  function handleStage( testRoutine,iteration,iterator )
+  return _.execStages( testRoutines,
   {
-    return suite._testRoutineRun_entry( iteration.key,testRoutine );
+    manual : 1,
+    onEachRoutine : handleStage,
+    onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
+    onEnd : handleEnd,
+    onRoutine : ( trd ) => trd.routine,
+    delay : 10,
+  });
+
+  /* */
+
+  debugger;
+  function handleStage( trd, iteration, iterator )
+  {
+    // return suite._testRoutineRun( iteration.key, testRoutine );
+    return suite._testRoutineRun( trd );
   }
 
   /* */
@@ -409,30 +415,14 @@ function _testSuiteRunAct()
   function handleEnd( err,data )
   {
 
-    if( err )
-    {
-      debugger;
-      logger.log( _.err( 'Something is wrong, cant even launch the test suite\n',err ) );
-      suite._outcomeConsider( 0 );
-    }
+    if( !( _.Tester.settings.sanitareTime >= 0 ) )
+    err = _.err( '{-sanitareTime-} should be greater than zero, but it is', _.Tester.settings.sanitareTime );
 
-    _.assert( _.Tester.settings.sanitareTime >= 0 );
     if( suite._reportIsPositive() )
-    return _.timeOut( _.Tester.settings.sanitareTime, () => suite._testSuiteEnd() );
+    return _.timeOut( _.Tester.settings.sanitareTime, () => suite._testSuiteEnd( err ) );
     else
-    return suite._testSuiteEnd();
+    return suite._testSuiteEnd( err );
   }
-
-  /* */
-
-  return _.execStages( tests,
-  {
-    manual : 1,
-    onEachRoutine : handleStage,
-    onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
-    onEnd : handleEnd,
-    delay : 10,
-  });
 
 }
 
@@ -461,8 +451,6 @@ function _testSuiteBegin()
   debugger;
   if( _.routineIs( suite.routine ) )
   suite.routine = _.mapKeyWithValue( suite, suite.routine );
-
-  _.assert( suite.routine === null || suite.tests[ suite.routine ], 'Test suite', suite.name, 'does not have test routine', suite.routine );
 
   /* report */
 
@@ -526,19 +514,46 @@ function _testSuiteBegin()
     }
   }
 
+  /* */
+
   suite._testSuiteTerminated_joined = _.routineJoin( suite,_testSuiteTerminated );
   if( _global_.process )
   _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
+
+  /* */
 
   return true;
 }
 
 //
 
-function _testSuiteEnd()
+function _testSuiteEnd( err )
 {
   var suite = this;
   var logger = suite.logger;
+
+  _.assert( arguments.length === 1 )
+
+  if( !err )
+  if( suite.routine !== null && !suite.tests[ suite.routine ] )
+  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ) );
+
+  if( err )
+  {
+    debugger;
+    suite.consoleBar( 0 );
+    console.error( '\nSomething wrong!' );
+    try
+    {
+      suite.exceptionReport({ err : err });
+      suite._testCheckConsider( 0 );
+    }
+    catch( err2 )
+    {
+      console.error( err );
+      console.error( err2 );
+    }
+  }
 
   if( _global_.process && suite._testSuiteTerminated_joined )
   _global_.process.removeListener( 'exit', suite._testSuiteTerminated_joined );
@@ -606,25 +621,14 @@ function _testSuiteEnd()
   /* */
 
   if( suite.takingIntoAccount )
-  {
+  _.Tester._testSuiteConsider( ok );
 
-    _.Tester.report.testSuitePasses += ok ? 1 : 0;
-    _.Tester.report.testSuiteFailes += ok ? 0 : 1;
-
-    _.Tester.report.testRoutinePasses += suite.report.testRoutinePasses;
-    _.Tester.report.testRoutineFails += suite.report.testRoutineFails;
-
-  }
-
-  _.assert( _.Tester.activeSuites.indexOf( suite ) !== -1 );
-  _.arrayRemoveOnce( _.Tester.activeSuites,suite );
+  _.arrayRemoveOnceStrictly( _.Tester.activeSuites, suite );
 
   /* silencing */
 
   if( suite.silencing )
-  {
-    suite.consoleBar( 0 );
-  }
+  suite.consoleBar( 0 );
 
   /* */
 
@@ -639,9 +643,11 @@ function _testSuiteEnd()
 function _testSuiteTerminated()
 {
   var suite = this;
-  suite.exceptionReport({ err : _.err( 'Terminated by user' ) });
+  debugger;
+  err = _.err( 'Terminated by user' );
+  // suite.exceptionReport({ err : _.err( 'Terminated by user' ) });
   _.Tester.cancel( 'Terminated by user' );
-  suite._testSuiteEnd();
+  suite._testSuiteEnd( err );
 }
 
 //
@@ -668,9 +674,11 @@ function onSuiteEnd( t )
 {
 }
 
-//
+// --
+// test routine
+// --
 
-function _testRoutineRun_entry( name,testRoutine )
+function _testRoutineRun( trd )
 {
   var suite = this;
   var result = null;
@@ -678,27 +686,20 @@ function _testRoutineRun_entry( name,testRoutine )
 
   /* */
 
-  if( ( !suite.routine || !suite.takingIntoAccount ) && testRoutine.experimental )
+  if( !_.Tester._canContinue() )
+  return;
+
+  if( ( !suite.routine || !suite.takingIntoAccount ) && trd.experimental ) /* xxx */
   return;
 
   if( suite.takingIntoAccount )
-  if( suite.routine && suite.routine !== testRoutine.name )
-  return;
-
-  if( !_.Tester._canContinue() )
+  if( suite.routine && suite.routine !== trd.name )
   return;
 
   /* */
 
-  var trd = _.Tester.TestRoutineDescriptor
-  ({
-    name : name,
-    routine : testRoutine,
-    suite : suite,
-  });
-
   _.assert( _.routineIs( trd._testRoutineHandleReturn ) );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   return suite._routineCon
   .doThen( function _testRoutineRun()
@@ -719,13 +720,11 @@ function _testRoutineRun_entry( name,testRoutine )
 
     /* */
 
-    var timeOut = testRoutine.timeOut || trd.testRoutineTimeOut || _.Tester.settings.testRoutineTimeOut;
-
     result = trd._returnCon = _.Consequence.from( result );
 
     result.andThen( suite._inroutineCon );
 
-    result = result.eitherThenSplit([ _.timeOutError( timeOut ), _.Tester._cancelCon ]);
+    result = result.eitherThenSplit([ _.timeOutError( trd.timeOut ), _.Tester._cancelCon ]);
 
     result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
     result.doThen( () => trd._testRoutineEnd() );
@@ -737,6 +736,27 @@ function _testRoutineRun_entry( name,testRoutine )
 }
 
 //
+
+function routineEach( onEach )
+{
+  var suite = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.routineIs( onEach ) );
+  _.assert( suite._refined );
+
+  for( var testRoutineName in suite.tests )
+  {
+    var testRoutine = suite.tests[ testRoutineName ];
+    onEach( testRoutine );
+  }
+
+  return suite;
+}
+
+// --
+// report
+// --
 
 function _reportForm()
 {
@@ -794,6 +814,9 @@ function _reportIsPositive()
   if( appExitCode !== undefined && appExitCode !== 0 )
   return false;
 
+  if( !testing.report )
+  return false;
+
   if( testing.report.testCheckFails !== 0 )
   return false;
 
@@ -810,7 +833,7 @@ function _reportIsPositive()
 // consider
 // --
 
-function _outcomeConsider( outcome )
+function _testCheckConsider( outcome )
 {
   var suite = this;
 
@@ -830,24 +853,24 @@ function _outcomeConsider( outcome )
   }
 
   if( suite.takingIntoAccount )
-  _.Tester._outcomeConsider( outcome );
+  _.Tester._testCheckConsider( outcome );
 
 }
 
 //
 
-function _exceptionConsider( err )
+function _testCaseConsider( outcome )
 {
   var suite = this;
+  var report = suite.report;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( suite.constructor === Self );
-
-  suite.report.errorsArray.push( err );
+  if( outcome )
+  report.testCasePasses += 1;
+  else
+  report.testCaseFails += 1;
 
   if( suite.takingIntoAccount )
-  _.Tester._exceptionConsider( err );
-
+  _.Tester._testCaseConsider( outcome );
 }
 
 //
@@ -868,28 +891,28 @@ function _testRoutineConsider( outcome )
   else
   {
     if( suite.report )
-    suite.report.testRoutinePasses += 1;
+    suite.report.testRoutineFails += 1;
   }
 
   if( suite.takingIntoAccount )
-  _.Tester._outcomeConsider( outcome );
+  _.Tester._testRoutineConsider( outcome );
 
 }
 
 //
 
-function _testCaseConsider( outcome )
+function _exceptionConsider( err )
 {
   var suite = this;
-  var report = suite.report;
 
-  if( outcome )
-  report.testCasePasses += 1;
-  else
-  report.testCaseFails += 1;
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( suite.constructor === Self );
+
+  suite.report.errorsArray.push( err );
 
   if( suite.takingIntoAccount )
-  _.Tester._testCaseConsider( outcome );
+  _.Tester._exceptionConsider( err );
+
 }
 
 //
@@ -935,17 +958,18 @@ var Composes =
 {
 
   name : null,
+
   verbosity : 2,
-  timing : 1,
   importanceOfDetails : 0,
   importanceOfNegative : 9,
 
+  silencing : null,
+  timing : 1,
+  shoulding : 1,
+
   testRoutineTimeOut : 5000,
   concurrent : 0,
-
   routine : null,
-  silencing : null,
-
   platforms : null,
 
   /* */
@@ -1051,7 +1075,7 @@ var Proto =
   run : run,
   _testSuiteRefine : _testSuiteRefine,
   _testSuiteRunSoon : _testSuiteRunSoon,
-  _testSuiteRunNow : _testSuiteRunNow,
+  // _testSuiteRunNow : _testSuiteRunNow,
   _testSuiteRunAct : _testSuiteRunAct,
   _testSuiteBegin : _testSuiteBegin,
   _testSuiteEnd : _testSuiteEnd,
@@ -1060,7 +1084,10 @@ var Proto =
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
 
-  _testRoutineRun_entry : _testRoutineRun_entry,
+  // test routines
+
+  _testRoutineRun : _testRoutineRun,
+  routineEach : routineEach,
 
   // report
 
@@ -1070,10 +1097,10 @@ var Proto =
 
   // consider
 
-  _outcomeConsider : _outcomeConsider,
-  _exceptionConsider : _exceptionConsider,
-  _testRoutineConsider : _testRoutineConsider,
+  _testCheckConsider : _testCheckConsider,
   _testCaseConsider : _testCaseConsider,
+  _testRoutineConsider : _testRoutineConsider,
+  _exceptionConsider : _exceptionConsider,
   exceptionReport : exceptionReport,
 
   // relationships

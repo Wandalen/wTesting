@@ -92,7 +92,7 @@ function _registerExitHandler()
   {
     if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
     {
-      var logger = tester.logger || _global.logger;
+      var logger = tester.logger;
       debugger;
       if( tester.settings.coloring )
       logger.error( _.color.strFormat( 'Errors!','negative' ) );
@@ -109,7 +109,7 @@ function _registerExitHandler()
 function _includeTestsFrom( path )
 {
   var tester = this;
-  var logger = tester.logger || _global.logger;
+  var logger = tester.logger;
   var path = _.pathJoin( _.pathCurrent(),path );
 
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -167,7 +167,7 @@ function _includeTestsFrom( path )
 function includeTestsFrom( path )
 {
   var tester = this;
-  var logger = tester.logger || _global.logger;
+  var logger = tester.logger;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
@@ -183,7 +183,7 @@ function includeTestsFrom( path )
 function appArgsRead()
 {
   var tester = this;
-  var logger = tester.logger || _global.logger;
+  var logger = tester.logger;
   var settings = tester.settings;
 
   if( tester._appArgs )
@@ -200,8 +200,16 @@ function appArgsRead()
     only : 1,
   }
 
-  var appArgs = _.appArgsReadTo( readOptions );
-  // var appArgs = _.appArgsInSamFormat();
+  try
+  {
+    var appArgs = _.appArgsReadTo( readOptions );
+    // var appArgs = _.appArgsInSamFormat();
+  }
+  catch ( err )
+  {
+    err = _.errBriefly( err );
+    throw err;
+  }
 
   _.assert( appArgs.map );
 
@@ -211,12 +219,9 @@ function appArgsRead()
   _.mapExtend( settings,_.mapOnly( appArgs.map, tester.Settings ) );
 
   var v = settings.verbosity;
-  _.assert( v === null || v === undefined || _.numberIs( v ) || _.boolLike( v ) )
-  if( _.boolLike( v ) )
+  _.assert( v === null || v === undefined || _.boolLike( v ) )
+  if( !_.boolLike( v ) )
   v = 1;
-
-  if( v >= 5 )
-  logger.log( 'Application arguments :\n',_.toStr( appArgs.map, { levels : 2 } ) );
 
   if( settings.beeping === null )
   settings.beeping = !!v;
@@ -278,13 +283,13 @@ function scenarioOptionsList()
     scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list".',
     sanitareTime : 'Delay before run of the next test suite.',
     beeping : 'Make beep sound after testing completion.',
-    routine : 'Name of only test routine to execute.',
+    routine : 'Name of only test routine to execute. Short-cut: "r".',
     fails : 'Maximum number of fails allowed before shutting down testing.',
     silencing : 'Enables catching of console output that occures during test run.',
     testRoutineTimeOut : 'Limits the time that each test routine can work. If execution of routine takes too long time then timeOut error will be thrown.',
     concurrent : 'Runs test suite in parallel with other test suites.',
-    verbosity : 'Level of details in tester output. Zero for nothing, one for single line report, nine for maximum verbosity.',
-    importanceOfNegative : 'Increase verbosity of test checks which fails.'
+    verbosity : 'Level of details in tester output. Zero for nothing, one for single line report, nine for maximum verbosity. Short-cut: "v".',
+    importanceOfNegative : 'Increase verbosity of test checks which fails. Short-cut: "n".',
   }
 
   var strOptions =
@@ -309,7 +314,6 @@ function scenarioSuitesList()
   _.assert( tester.settings.scenario === 'suites.list' );
 
   tester.includeTestsFrom( tester.path );
-
   tester.testsListPrint( tester.testsFilterOut() );
 
 }
@@ -325,16 +329,14 @@ function _suitesRun( suites )
 
   _.assert( arguments.length === 1 );
 
-  // var suites = tester.testsFilterOut( wTests );
-
-  tester._testingBegin( suites );
-
   /* */
 
+  var allSuites = _.mapExtend( null, suites );
   for( var s in suites )
   {
     var suite = _.Tester.TestSuite.instanceByName( suites[ s ] );
     suites[ s ] = suite;
+    allSuites[ s ] = suite;
 
     if( !suite.enabled )
     {
@@ -349,12 +351,21 @@ function _suitesRun( suites )
     }
     catch( err )
     {
+      // err = _.errBriefly( err );
+      err = _.errLogOnce( err );
       err = _.errAttend( err );
-      logger.log( err.originalMessage );
       return new _.Consequence().error( err );
     }
 
   }
+
+  if( !_.mapKeys( suites ).length )
+  {
+    tester.testsListPrint( allSuites );
+    logger.log( 'No enabled test suite to run.' );
+  }
+
+  tester._testingBegin( suites, allSuites );
 
   /* */
 
@@ -363,11 +374,6 @@ function _suitesRun( suites )
     var suite = suites[ s ];
     suite._testSuiteRunSoon();
   }
-
-  // for( var s in suites )
-  // {
-  //   tester._testAct( s );
-  // }
 
   /* */
 
@@ -403,50 +409,6 @@ function _testAllAct()
 var testAll = _.timeReadyJoin( undefined, _testAllAct );
 
 //
-//
-// function _testAct()
-// {
-//   var tester = this;
-//
-//   _.assert( this === Self ); xxx
-//
-//   // for( var a = 0 ; a < arguments.length ; a++ )
-//   // {
-//   //   var _suite = arguments[ a ];
-//   //   var suite = _.Tester.TestSuite.instanceByName( _suite );
-//   //
-//   //   _.assert( suite instanceof _.Tester.TestSuite,'Test suite',_suite,'was not found' );
-//   //   _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
-//   //   _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
-//   //
-//   //   if( !suite.enabled )
-//   //   continue;
-//   //
-//   //   suite._testSuiteRefine();
-//   // }
-//
-//   var suites = Object.create( null );
-//   for( var a = 0 ; a < arguments.length ; a++ )
-//   {
-//     var name = arguments[ a ];
-//     var suite = _.Tester.TestSuite.instanceByName( name );
-//
-//     _.assert( suite instanceof _.Tester.TestSuite, 'Test suite', name, 'was not found' );
-//     // _.assert( _.strIsNotEmpty( suite.name ),'Test suite should has ( name )"' );
-//     // _.assert( _.objectIs( suite.tests ),'Test suite should has map with test routines ( tests ), but "' + suite.name + '" does not have such map' );
-//
-//     // if( !suite.enabled )
-//     // continue;
-//
-//     // suite._testSuiteRunSoon();
-//
-//     suites[ s ]
-//   }
-//
-//   return tester._suitesRun( suites );
-// }
-//
-//
 
 function _test()
 {
@@ -459,22 +421,6 @@ function _test()
 
   var suites = tester.testsFilterOut( arguments );
   return tester._suitesRun( suites );
-
-  // tester._testingBegin( suites );
-  //
-  // tester._testAct.apply( tester,_.mapVals( suites ) );
-  //
-  // return _.Tester.TestSuite._suiteCon
-  // .doThen( function()
-  // {
-  //   if( tester._reportIsPositive() )
-  //   return _.timeOut( tester.settings.sanitareTime );
-  // })
-  // .split( function()
-  // {
-  //   return tester._testingEnd();
-  // });
-
 }
 
 //
@@ -483,15 +429,17 @@ var test = _.timeReadyJoin( undefined,_test );
 
 //
 
-function _testingBegin( suites )
+function _testingBegin( allSuites, runSuites )
 {
   var tester = this;
   var logger = tester.logger;
-  var firstSuite = _.mapFirstPair( suites )[ 1 ];
 
-  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( arguments.length === 2 );
   _.assert( _.numberIs( tester.verbosity ) );
-  _.assert( _.mapIs( suites ) );
+  _.assert( _.mapIs( allSuites ) );
+  _.assert( _.mapIs( runSuites ) );
+
+  tester._reportForm();
 
   if( tester.settings.timing )
   tester._testingBeginTime = _.timeNow();
@@ -499,32 +447,38 @@ function _testingBegin( suites )
   tester.appArgsRead();
   tester._registerExitHandler();
 
-  logger.begin({ verbosity : -4 });
+  logger.begin({ verbosity : -5 });
   logger.log( 'Tester Settings :' );
   logger.log( tester.settings );
   logger.log( '' );
-  logger.end({ verbosity : -4 });
+  logger.end({ verbosity : -5 });
 
   logger.begin({ verbosity : -3 });
 
-  if( suites !== undefined )
-  {
-    logger.logUp( 'Launching several ( ' + _.entityLength( suites ) + ' ) test suites ..' );
-    tester.testsListPrint( suites );
-  }
-  else
-  {
-    debugger;
-    logger.logUp( 'Launching all known ( ' + _.entityLength( wTests ) + ' ) test suites ..' );
-    tester.testsListPrint( suites );
-  }
+  /* */
+
+  // if( suites !== undefined )
+  // {
+    var total = _.entityLength( runSuites );
+    logger.logUp( 'Launching several ( ' + total + ' ) test suites ..' );
+    logger.begin({ verbosity : -5 });
+    tester.testsListPrint( allSuites );
+    logger.end({ verbosity : -5 });
+
+  // }
+  // else
+  // {
+  //   debugger;
+  //   logger.logUp( 'Launching all known ( ' + _.entityLength( wTests ) + ' ) test suites ..' );
+  //   tester.testsListPrint( suites );
+  // }
 
   logger.log();
   logger.end({ verbosity : -3 });
 
-  tester._cancelCon.cancel();
+  /* */
 
-  tester._reportForm();
+  tester._cancelCon.cancel();
 
 }
 
@@ -533,7 +487,7 @@ function _testingBegin( suites )
 function _testingEnd()
 {
   var tester = this;
-  var logger = tester.logger || _global.logger;
+  var logger = tester.logger;
   var ok = tester._reportIsPositive();
 
   if( tester.settings.beeping )
@@ -548,9 +502,7 @@ function _testingEnd()
 
   /* */
 
-  debugger;
   var msg = tester._reportToStr();
-  debugger;
   logger.begin({ verbosity : -2 });
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( msg );
@@ -764,8 +716,6 @@ function _reportToStr()
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
   msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
 
-  debugger;
-
   return msg;
 }
 
@@ -844,7 +794,7 @@ function textColor( srcStr, connotation )
 // consider
 // --
 
-function _outcomeConsider( outcome )
+function _testCheckConsider( outcome )
 {
   var tester = this;
 
@@ -864,16 +814,20 @@ function _outcomeConsider( outcome )
 
 //
 
-function _exceptionConsider( err )
+function _testCaseConsider( outcome )
 {
   var tester = this;
+  var report = tester.report;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( tester === Self );
+  if( outcome )
+  {
+    report.testCasePasses += 1;
+  }
+  else
+  {
+    report.testCaseFails += 1;
+  }
 
-  err = _.errLogOnce( err );
-
-  tester.report.errorsArray.push( err );
 }
 
 //
@@ -899,20 +853,37 @@ function _testRoutineConsider( outcome )
 
 //
 
-function _testCaseConsider( outcome )
+function _testSuiteConsider( outcome )
 {
   var tester = this;
   var report = tester.report;
 
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( tester === Self );
+
   if( outcome )
   {
-    report.testCasePasses += 1;
+    report.testSuitePasses += 1;
   }
   else
   {
-    report.testCaseFails += 1;
+    report.testSuiteFailes += 1;
   }
 
+}
+
+//
+
+function _exceptionConsider( err )
+{
+  var tester = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( tester === Self );
+
+  // err = _.errLogOnce( err );
+
+  tester.report.errorsArray.push( err );
 }
 
 // // --
@@ -1084,6 +1055,7 @@ var SettingsNameMap =
   'scenario' : 'scenario',
   'routine' : 'routine',
   'r' : 'routine',
+  'accuracy' : 'accuracy',
 
   /**/
 
@@ -1098,6 +1070,7 @@ var SettingsNameMap =
   'n' : 'importanceOfNegative',
   'silencing' : 'silencing',
   'timing' : 'timing',
+  'shoulding' : 'shoulding',
 
 }
 
@@ -1129,6 +1102,8 @@ var SettingsOfSuite =
   importanceOfNegative : null,
   silencing : null,
   timing : null,
+  shoulding : null,
+  accuracy : null,
 
 }
 
@@ -1206,7 +1181,6 @@ var Self =
   _testAllAct : _testAllAct,
   testAll : testAll,
 
-  // _testAct : _testAct,
   _test : _test,
   test : test,
 
@@ -1231,10 +1205,11 @@ var Self =
 
   // consider
 
-  _outcomeConsider : _outcomeConsider,
-  _exceptionConsider : _exceptionConsider,
-  _testRoutineConsider : _testRoutineConsider,
+  _testCheckConsider : _testCheckConsider,
   _testCaseConsider : _testCaseConsider,
+  _testRoutineConsider : _testRoutineConsider,
+  _testSuiteConsider : _testSuiteConsider,
+  _exceptionConsider : _exceptionConsider,
 
   // report formatter
   //

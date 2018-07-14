@@ -34,6 +34,13 @@
 + when error not throwen under test.mustNotThrowError have "error was not thrown asynchronously, but expected"
 + implement scenario options.list
 + fire onSuiteEnd if user terminated process earlier
++ time measurements of testing
++ sort-cuts for command line otpions : h,r..
++ warning if command line option is strange
++ warning if test routine has unknown fields
++ warning if no test suite under path found
++ checkers ( identical, contains, equivalent ... ) should return boolean
++ routine : 'some', routine : some - should work both variants
 
 - print information about case with color directive avoiding change of color state of logger
 
@@ -42,23 +49,14 @@
 - manual launch of test suite + global tests execution should not give extra test suite runs
 - run test suite only once, even if asked several
 
-- time measurements of testing
-
-- sort-cuts for command line otpions : h,r..
-
-- warning if command line option is strange
-
-- warning if test routine has unknown fields
-
-- warning if no test suite under path found
-
 - make onSuiteBegin, onSuiteEnd asynchronous
 
 - tester should has its own copy of environment, even if included from test suite file
 
-+ checkers ( identical, contains, equivalent ... ) should return boolean
+- implement caching source code reading
 
-- routine : 'some', routine : some - should work both variants
+- use script launcher
+- use multiple processes
 
 */
 

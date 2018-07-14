@@ -34,15 +34,7 @@ function init( o )
   if( o )
   trd.copy( o );
 
-  if( trd.routine.timeOut !== undefined )
-  trd.testRoutine = trd.routine.timeOut;
-  if( trd.routine.testRoutineTimeOut !== undefined )
-  trd.testRoutine = trd.routine.testRoutineTimeOut;
-  if( trd.routine.accuracy !== undefined )
-  trd.accuracy = trd.routine.accuracy;
-  if( trd.routine.experimental !== undefined )
-  trd.experimental = trd.routine.experimental;
-
+  trd._adoptRoutineFields();
   trd._accuracyChange();
   trd._returnCon = null;
 
@@ -85,9 +77,11 @@ function refine()
     [ preStr, 'has unknown fields :' ]
   );
 
+  _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), preStr, 'expects bool like in field {-experimental-} if defined' );
   _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), preStr, 'expects number in field {-timeOut-} if defined' );
-  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.testRoutineTimeOut ), preStr, 'expects number in field {-testRoutineTimeOut-} if defined' );
+  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), preStr, 'expects number in field {-routineTimeOut-} if defined' );
   _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), preStr, 'expects number or range in field {-accuracy-} if defined' );
+  _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), preStr, 'expects number in field {-rapidity-} if defined' );
 
 }
 
@@ -100,12 +94,15 @@ function _testRoutineBegin()
   var trd = this;
   var suite = trd.suite;
 
-  if( trd.timing )
+  if( _.Tester )
   trd._testRoutineBeginTime = _.timeNow();
+
+  _.arrayAppendOnceStrictly( _.Tester.activeRoutines, trd );
 
   suite._hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
 
   _.assert( arguments.length === 0 );
+  _.assert( trd._returned === null );
 
   var msg =
   [
@@ -151,7 +148,7 @@ function _testRoutineEnd()
   var _hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
   {
-    debugger;
+    debugger; /* xxx */
     var wasBarred = suite.consoleBar( 0 );
 
     // var barOptions = _.Tester._barOptions;
@@ -217,7 +214,7 @@ function _testRoutineEnd()
   suite.logger.begin({ verbosity : -3 });
 
   var timingStr = '';
-  if( trd.timing )
+  if( _.Tester )
   {
     trd.report.timeSpent = _.timeNow() - trd._testRoutineBeginTime;
     timingStr = ' in ' + _.timeSpentFormat( trd.report.timeSpent );
@@ -240,6 +237,8 @@ function _testRoutineEnd()
 
   suite.logger.end({ verbosity : -3 });
 
+  _.arrayRemoveOnceStrictly( _.Tester.activeRoutines, trd ); /* xxx */
+
 }
 
 //
@@ -251,11 +250,9 @@ function _testRoutineHandleReturn( err,msg )
 
   if( err )
   if( err.timeOut )
-  err = _._err
-  ({
-    args : [ 'Test routine ( ' + trd.nameFull + ' ) time out!' ],
-    usingSourceCode : 0,
-  });
+  err = trd._timeOutError();
+
+  trd._returned = [ err, msg ];
 
   trd.will = '';
 
@@ -290,20 +287,88 @@ function _testRoutineHandleReturn( err,msg )
 
 //
 
-function _interruptMaybe()
+function _interruptMaybe( throwing )
 {
   var trd = this;
 
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  if( trd._returned )
+  return false;
+
+  if( _.Tester._canceled )
+  return true;
+
   if( !_.Tester._canContinue() )
   {
-    if( trd._returnCon )
-    trd._returnCon.cancel();
-    _.Tester.cancel( tester.report.errorsArray[ tester.report.errorsArray.length-1 ] );
-    // _.Tester.cancel( _.err( 'Too many fails',_.Tester.settings.fails, '<=', trd.report.testCheckFails ) );
+    debugger; /* xxx */
+    // if( trd._returnCon )
+    // trd._returnCon.cancel();
+    var result = _.Tester.cancel();
+    if( throwing )
+    throw result;
+    return result;
   }
 
-  _.assert( arguments.length === 0, 'expects single argument' );
+  var elapsed = _.timeNow() - trd._testRoutineBeginTime;
+  if( elapsed > trd.timeOut )
+  {
+    var result = _.Tester.cancel( trd._timeOutError() );
+    if( throwing )
+    throw result;
+    return result;
+  }
 
+  return false;
+}
+
+//
+
+function _ableGet()
+{
+  var trd = this;
+  var suite = trd.suite;
+
+  _.assert( _.numberIs( _.Tester.settings.rapidity ) );
+
+  if( suite.routine )
+  return suite.routine === trd.name;
+
+  // if( ( !suite.routine || !suite.takingIntoAccount ) && trd.experimental )
+  if( trd.experimental )
+  return false;
+
+  // if( suite.takingIntoAccount )
+  // if( suite.routine && suite.routine !== trd.name )
+  // return false;
+
+  if( trd.rapidity < _.Tester.settings.rapidity )
+  return false;
+
+  return true;
+}
+
+//
+
+function _timeOutError()
+{
+  var trd = this;
+
+  var err = _._err
+  ({
+    args : [ 'Test routine ' + _.strQuote( trd.nameFull ) + ' timed out. TimeOut : ' + trd.timeOut + 'ms' ],
+    usingSourceCode : 0,
+  });
+
+  Object.defineProperty( err, 'timeOut',
+  {
+    enumerable : false,
+    configurable : false,
+    writable : false,
+    value : 1,
+  });
+
+  return err;
 }
 
 // --
@@ -321,7 +386,8 @@ function _willGet()
 function _willSet( src )
 {
   var trd = this;
-  trd[ willSymbol ] = src;
+  trd._interruptMaybe( 1 );
+  trd[ willSymbol ] = src
 }
 
 //
@@ -413,6 +479,9 @@ function testsGroupOpen( groupName )
 {
   var trd = this;
   _.assert( arguments.length === 1, 'expects single argument' );
+
+  trd._interruptMaybe( 1 );
+
   trd._testsGroupsStack.push( groupName );
 }
 
@@ -1950,7 +2019,7 @@ function _outcomeReport( o )
   logger.end( 'check','checkIndex' );
   logger.end({ verbosity : o.verbosity });
 
-  trd._interruptMaybe();
+  trd._interruptMaybe( 1 );
 
   /* */
 
@@ -2248,6 +2317,14 @@ _reportTextForTestCheck.defaults =
 // etc
 // --
 
+function _accuracyGet()
+{
+  var trd = this;
+  return trd[ accuracyEffectiveSymbol ];
+}
+
+//
+
 function _accuracySet( accuracy )
 {
   var trd = this;
@@ -2261,15 +2338,7 @@ function _accuracySet( accuracy )
 
 //
 
-function _accuracyGet( accuracy )
-{
-  var trd = this;
-  return trd[ accuracyEffectiveSymbol ];
-}
-
-//
-
-function _accuracyEffectiveGet( accuracy )
+function _accuracyEffectiveGet()
 {
   var trd = this;
   return trd[ accuracyEffectiveSymbol ];
@@ -2304,27 +2373,76 @@ function _accuracyChange()
 
 //
 
+function _timeOutGet()
+{
+  var trd = this;
+  if( trd[ timeOutSymbol ] !== null )
+  return trd[ timeOutSymbol ];
+  if( trd.suite.routineTimeOut !== null )
+  return trd.suite.routineTimeOut;
+  _.assert( 0 );
+}
+
+//
+
 function _timeOutSet( timeOut )
 {
   var trd = this;
-  if( !_.numberIs( timeOut ) )
-  timeOut = null;
+  _.assert( timeOut === null || _.numberIs( timeOut ) );
   trd[ timeOutSymbol ] = timeOut;
   return timeOut;
 }
 
 //
 
-function _timeOutGet( timeOut )
+function _rapidityGet()
 {
   var trd = this;
-  if( trd[ timeOutSymbol ] !== null )
-  return trd[ timeOutSymbol ];
-  if( trd.suite.testRoutineTimeOut !== null )
-  return trd.suite.testRoutineTimeOut;
-  if( _.Tester.settings.testRoutineTimeOut !== null )
-  return _.Tester.settings.testRoutineTimeOut;
+  if( trd[ rapiditySymbol ] !== null )
+  return trd[ rapiditySymbol ];
   _.assert( 0 );
+}
+
+//
+
+function _rapiditySet( rapidity )
+{
+  var trd = this;
+  _.assert( _.numberIs( rapidity ) );
+  trd[ rapiditySymbol ] = rapidity;
+  return rapidity;
+}
+
+//
+
+function _usingSourceCodeGet()
+{
+  var trd = this;
+  if( trd[ usingSourceCodeSymbol ] !== null )
+  return trd[ usingSourceCodeSymbol ];
+  if( trd.suite.usingSourceCode !== null )
+  return trd.suite.usingSourceCode;
+  _.assert( 0 );
+}
+
+//
+
+function _usingSourceCodeSet( usingSourceCode )
+{
+  var trd = this;
+  _.assert( usingSourceCode === null || _.boolLike( usingSourceCode ) );
+  trd[ usingSourceCodeSymbol ] = usingSourceCode;
+  return usingSourceCode;
+}
+
+//
+
+function _adoptRoutineFields()
+{
+  var trd = this;
+
+  _.mapExtendByDefined( trd, _.mapOnly( trd.routine, trd.KnownFields ) );
+
 }
 
 // --
@@ -2335,13 +2453,17 @@ var willSymbol = Symbol.for( 'will' );
 var accuracySymbol = Symbol.for( 'accuracy' );
 var accuracyEffectiveSymbol = Symbol.for( 'accuracyEffective' );
 var timeOutSymbol = Symbol.for( 'timeOut' );
+var rapiditySymbol = Symbol.for( 'rapidity' );
+var usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
 
 var KnownFields =
 {
-  testRoutineTimeOut : null,
-  timeOut : null,
   experimental : null,
+  routineTimeOut : null,
+  timeOut : null,
   accuracy : null,
+  rapidity : null,
+  usingSourceCode : null,
 }
 
 // --
@@ -2353,9 +2475,10 @@ var Composes =
   name : null,
   will : '',
   accuracy : null,
-  // accuracyRange : null,
+  rapidity : 3,
   timeOut : null,
   experimental : 0,
+  usingSourceCode : null,
 }
 
 var Aggregates =
@@ -2378,6 +2501,7 @@ var Restricts =
   _testsGroupsStack : [],
 
   _testRoutineBeginTime : null,
+  _returned : null,
   _returnCon : null,
   report : null,
 
@@ -2408,6 +2532,7 @@ var AccessorsReadOnly =
   descriptionFull : 'descriptionFull',
   descriptionWithName : 'descriptionWithName',
   accuracyEffective : 'accuracyEffective',
+  able : 'able',
 }
 
 var Accessors =
@@ -2417,6 +2542,8 @@ var Accessors =
   case : 'case',
   accuracy : 'accuracy',
   timeOut : 'timeOut',
+  rapidity : 'rapidity',
+  usingSourceCode : 'usingSourceCode',
 }
 
 // --
@@ -2438,6 +2565,8 @@ var Proto =
   _testRoutineHandleReturn : _testRoutineHandleReturn,
 
   _interruptMaybe : _interruptMaybe,
+  _ableGet : _ableGet,
+  _timeOutError : _timeOutError,
 
   // tests groups
 
@@ -2515,7 +2644,7 @@ var Proto =
   _reportIsPositive : _reportIsPositive,
   _reportTextForTestCheck : _reportTextForTestCheck,
 
-  // etc
+  // fields
 
   _accuracySet : _accuracySet,
   _accuracyGet : _accuracyGet,
@@ -2524,6 +2653,14 @@ var Proto =
 
   _timeOutGet : _timeOutGet,
   _timeOutSet : _timeOutSet,
+
+  _rapidityGet : _rapidityGet,
+  _rapiditySet : _rapiditySet,
+
+  _usingSourceCodeGet : _usingSourceCodeGet,
+  _usingSourceCodeSet : _usingSourceCodeSet,
+
+  _adoptRoutineFields : _adoptRoutineFields,
 
   // relationships
 

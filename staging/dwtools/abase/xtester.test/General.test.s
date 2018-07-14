@@ -3059,6 +3059,8 @@ function equivalentReturn( test )
 
 }
 
+equivalentReturn.timeOut = 30000;
+
 //
 
 function notEquivalentReturn( test )

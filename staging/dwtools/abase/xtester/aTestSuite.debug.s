@@ -435,15 +435,8 @@ function _testSuiteBegin()
   if( suite.debug )
   debugger;
 
-  if( suite.timing )
+  if( _.Tester.settings.timing )
   suite._testSuiteBeginTime = _.timeNow();
-
-  if( !_.Tester._canContinue() )
-  return;
-
-  /* logger */
-
-  var logger = suite.logger;
 
   /* test routine */
 
@@ -456,6 +449,22 @@ function _testSuiteBegin()
 
   suite.report = null;
   suite._reportForm();
+
+  /* tracking */
+
+  _.arrayAppendOnceStrictly( _.Tester.activeSuites, suite );
+
+  /* */
+
+  if( !_.Tester._canContinue() )
+  {
+    debugger; /* xxx */
+    return;
+  }
+
+  /* logger */
+
+  var logger = suite.logger;
 
   /* silencing */
 
@@ -497,9 +506,6 @@ function _testSuiteBegin()
 
   /* */
 
-  _.assert( _.Tester.activeSuites.indexOf( suite ) === -1 );
-  _.Tester.activeSuites.push( suite );
-
   if( suite.onSuiteBegin )
   {
     try
@@ -516,7 +522,7 @@ function _testSuiteBegin()
 
   /* */
 
-  suite._testSuiteTerminated_joined = _.routineJoin( suite,_testSuiteTerminated );
+  suite._testSuiteTerminated_joined = _.routineJoin( suite, _testSuiteTerminated );
   if( _global_.process )
   _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
 
@@ -534,9 +540,11 @@ function _testSuiteEnd( err )
 
   _.assert( arguments.length === 1 )
 
+  /* error */
+
   if( !err )
   if( suite.routine !== null && !suite.tests[ suite.routine ] )
-  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ) );
+  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ),'\n' );
 
   if( err )
   {
@@ -555,8 +563,12 @@ function _testSuiteEnd( err )
     }
   }
 
+  /* process exit handler */
+
   if( _global_.process && suite._testSuiteTerminated_joined )
   _global_.process.removeListener( 'exit', suite._testSuiteTerminated_joined );
+
+  /* on suite end */
 
   if( suite.onSuiteEnd )
   {
@@ -570,7 +582,7 @@ function _testSuiteEnd( err )
     }
   }
 
-  /* */
+  /* report */
 
   logger.begin({ verbosity : -2 });
 
@@ -579,7 +591,7 @@ function _testSuiteEnd( err )
   else
   logger.log();
 
-  /* */
+  /**/
 
   var ok = suite._reportIsPositive();
 
@@ -593,7 +605,7 @@ function _testSuiteEnd( err )
   logger.log( msg );
 
   var timingStr = '';
-  if( suite.timing )
+  if( _.Tester.settings.timing )
   {
     suite.report.timeSpent = _.timeNow() - suite._testSuiteBeginTime;
     timingStr = ' ... in ' + _.timeSpentFormat( suite.report.timeSpent );
@@ -623,6 +635,8 @@ function _testSuiteEnd( err )
   if( suite.takingIntoAccount )
   _.Tester._testSuiteConsider( ok );
 
+  /* tracking */
+
   _.arrayRemoveOnceStrictly( _.Tester.activeSuites, suite );
 
   /* silencing */
@@ -643,11 +657,10 @@ function _testSuiteEnd( err )
 function _testSuiteTerminated()
 {
   var suite = this;
-  debugger;
-  err = _.err( 'Terminated by user' );
-  // suite.exceptionReport({ err : _.err( 'Terminated by user' ) });
-  _.Tester.cancel( 'Terminated by user' );
-  suite._testSuiteEnd( err );
+  debugger; /* xxx */
+  var err = _.err( 'Terminated by user' );
+  _.Tester.cancel( err, 1 );
+  // suite._testSuiteEnd( err );
 }
 
 //
@@ -689,11 +702,7 @@ function _testRoutineRun( trd )
   if( !_.Tester._canContinue() )
   return;
 
-  if( ( !suite.routine || !suite.takingIntoAccount ) && trd.experimental ) /* xxx */
-  return;
-
-  if( suite.takingIntoAccount )
-  if( suite.routine && suite.routine !== trd.name )
+  if( !trd.able )
   return;
 
   /* */
@@ -964,10 +973,9 @@ var Composes =
   importanceOfNegative : 9,
 
   silencing : null,
-  timing : 1,
   shoulding : 1,
 
-  testRoutineTimeOut : 5000,
+  routineTimeOut : 5000,
   concurrent : 0,
   routine : null,
   platforms : null,
@@ -1042,6 +1050,7 @@ var Forbids =
   currentRoutineFails : 'currentRoutineFails',
   currentRoutinePasses : 'currentRoutinePasses',
   SettingsOfSuite : 'SettingsOfSuite',
+  timing : 'timing',
 }
 
 var Accessors =
@@ -1075,7 +1084,6 @@ var Proto =
   run : run,
   _testSuiteRefine : _testSuiteRefine,
   _testSuiteRunSoon : _testSuiteRunSoon,
-  // _testSuiteRunNow : _testSuiteRunNow,
   _testSuiteRunAct : _testSuiteRunAct,
   _testSuiteBegin : _testSuiteBegin,
   _testSuiteEnd : _testSuiteEnd,

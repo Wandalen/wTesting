@@ -1,6 +1,6 @@
 ( function _Time_test_s_( ) {
 
-'use strict';
+'use strict'; /**/ /**/
 
 if( typeof module !== 'undefined' )
 {
@@ -168,7 +168,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay * 3 );
+      test.ge( elapsedTime, c.delay * 3-timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, val );
     })
@@ -185,8 +185,8 @@ function timeOut( test )
     return _.timeOut( c.delay, _.timeOut( c.delay * 2, () => val ) )
     .doThen( function( err, got )
     {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay * 2 );
+      var elapsedTime = _.timeNow() - timeBefore; xxx
+      test.ge( elapsedTime, c.delay * 2-timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, val );
     })
@@ -203,7 +203,7 @@ function timeOut( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay * 4 );
+      test.ge( elapsedTime, c.delay * 4-timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, _.timeOut );
     })
@@ -484,7 +484,7 @@ function timeOutError( test )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay * 2 );
+      test.ge( elapsedTime, c.delay * 2-timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
     });

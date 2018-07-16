@@ -1,6 +1,6 @@
 (function _Tester_debug_s_() {
 
-'use strict';
+'use strict'; /**/
 
 var _global = _global_;
 var _ = _global_.wTools;
@@ -1110,7 +1110,7 @@ var ApplicationArgumentsMap =
   timing : 'Switch on/off measuing of time.',
   rapidity : 'How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3.',
 
-  routineTimeOut : 'Limits the time that each test routine can use. If execution of routine takes too long time then timeOut error will be thrown. Default is 5000 ms.',
+  routineTimeOut : 'Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.',
   concurrent : 'Runs test suite in parallel with other test suites.',
   concurrent : 'Runs test suite in parallel with other test suites.',
   verbosity : 'Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"',

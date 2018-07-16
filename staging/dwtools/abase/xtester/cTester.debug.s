@@ -360,9 +360,6 @@ function _testingBegin( allSuites, runSuites )
   if( tester.settings.timing )
   tester._testingBeginTime = _.timeNow();
 
-  tester.appArgsRead();
-  tester._registerExitHandler();
-
   logger.begin({ verbosity : -5 });
   logger.log( 'Tester Settings :' );
   logger.log( tester.settings );
@@ -459,6 +456,11 @@ function _suitesRun( suites )
   var logger = tester.logger;
 
   _.assert( arguments.length === 1 );
+
+  /* */
+
+  tester.appArgsRead();
+  tester._registerExitHandler();
 
   /* */
 

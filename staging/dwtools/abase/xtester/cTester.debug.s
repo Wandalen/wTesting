@@ -187,6 +187,8 @@ function appArgsRead()
   var logger = tester.logger;
   var settings = tester.settings;
 
+  debugger;
+
   if( tester._appArgs )
   return tester._appArgs;
 

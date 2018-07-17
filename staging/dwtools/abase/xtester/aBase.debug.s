@@ -60,6 +60,8 @@
 
 - switch off routine timeout if debugged
 
+- if timeout then print not "failed throwing error", but "failed with timeout"
+
 */
 
 var _global = undefined;

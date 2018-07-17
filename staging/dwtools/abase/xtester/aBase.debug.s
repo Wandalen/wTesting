@@ -1,6 +1,6 @@
 (function _aBase_debug_s_() {
 
-'use strict'; /**/
+'use strict';
 
 /*
 
@@ -57,6 +57,8 @@
 
 - use script launcher
 - use multiple processes
+
+- switch off routine timeout if debugged
 
 */
 

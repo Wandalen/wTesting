@@ -1,6 +1,6 @@
 (function _Tester_debug_s_() {
 
-'use strict'; /**/
+'use strict';
 
 var _global = _global_;
 var _ = _global_.wTools;
@@ -186,8 +186,6 @@ function appArgsRead()
   var tester = this;
   var logger = tester.logger;
   var settings = tester.settings;
-
-  debugger;
 
   if( tester._appArgs )
   return tester._appArgs;

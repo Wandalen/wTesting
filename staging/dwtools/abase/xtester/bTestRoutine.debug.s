@@ -1,6 +1,6 @@
 (function _bTestRoutine_debug_s_() {
 
-'use strict'; /**/
+'use strict';
 
 //
 
@@ -175,7 +175,7 @@ function _testRoutineEnd()
 
   /* groups stack */
 
-  trd.testCaseCloseIfAny();
+  trd.testCaseCloseIfExplicitly();
 
   if( trd._testsGroupsStack.length && !trd._testsGroupError )
   {
@@ -399,8 +399,8 @@ function _descriptionFullGet()
   var right = ' > ';
   var left = ' < ';
 
-  if( trd._testsGroupIsCase )
-  {
+  // if( trd._testsGroupOpenedExplicitly )
+  // {
     result = trd._testsGroupsStack.slice( 0, trd._testsGroupsStack.length-1 ).join( right );
     if( result )
     result += right + trd.case
@@ -408,13 +408,13 @@ function _descriptionFullGet()
     result += trd.case
     if( trd.will )
     result += left;
-  }
-  else
-  {
-    result = trd._testsGroupsStack.join( right );
-    if( trd.will )
-    result += left;
-  }
+  // }
+  // else
+  // {
+  //   result = trd._testsGroupsStack.join( right );
+  //   if( trd.will )
+  //   result += left;
+  // }
 
   if( trd.will )
   result += trd.will;
@@ -438,10 +438,11 @@ function _descriptionWithNameGet()
 function _caseGet()
 {
   var trd = this;
-  if( trd._testsGroupIsCase )
   return trd.testsGroup;
-  else
-  return '';
+  // if( trd._testsGroupOpenedExplicitly )
+  // return trd.testsGroup;
+  // else
+  // return '';
 }
 
 //
@@ -451,15 +452,16 @@ function _caseSet( src )
   var trd = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( !trd._testsGroupIsCase || trd.testsGroup );
+  // _.assert( !trd._testsGroupOpenedExplicitly || trd.testsGroup );
   _.assert( src === null || _.strIs( src ), 'expects string or null {-src-}, but got', _.strTypeOf( src ) );
 
-  trd.testCaseCloseIfAny();
+  // trd.testCaseCloseIfExplicitly();
+  trd._testsGroupChange();
 
-  if( src )
+  if( src !== null )
   {
     trd.testsGroupOpen( src );
-    trd._testsGroupIsCase = 1;
+    trd._testsGroupOpenedExplicitly = 1;
   }
 
 }
@@ -469,7 +471,7 @@ function _caseSet( src )
 function _testsGroupGet()
 {
   var trd = this;
-  _.assert( arguments.length === 0, 'expects single argument' );
+  _.assert( arguments.length === 0, 'expects no arguments' );
   return trd._testsGroupsStack[ trd._testsGroupsStack.length-1 ] || '';
 }
 
@@ -480,9 +482,14 @@ function testsGroupOpen( groupName )
   var trd = this;
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  trd._interruptMaybe( 1 );
+  trd._testsGroupChange();
 
   trd._testsGroupsStack.push( groupName );
+
+  trd._testsGroupIsCase = 1;
+  trd.report.testCheckPassesOfTestCase = 0;
+  trd.report.testCheckFailsOfTestCase = 0;
+
 }
 
 //
@@ -494,7 +501,7 @@ function testsGroupClose( groupName )
   _.assert( arguments.length === 1, 'expects single argument' );
 
   if( trd.testsGroup !== groupName )
-  trd.testCaseCloseIfAny();
+  trd.testCaseCloseIfExplicitly();
 
   if( trd.testsGroup !== groupName )
   {
@@ -514,24 +521,46 @@ function testsGroupClose( groupName )
     trd._testsGroupsStack.splice( trd._testsGroupsStack.length-1, 1 );
   }
 
+  if( trd._testsGroupIsCase )
+  {
+    if( trd.report.testCheckFailsOfTestCase > 0 || trd.report.testCheckPassesOfTestCase > 0 )
+    trd._testCaseConsider( !trd.report.testCheckFailsOfTestCase );
+  }
+
+  trd._testsGroupIsCase = 0;
+  trd._testsGroupChange();
+
   return trd.testsGroup;
 }
 
 //
 
-function testCaseCloseIfAny()
+function _testsGroupChange()
+{
+  var trd = this;
+  _.assert( arguments.length === 0, 'expects no arguments' );
+
+  trd.will = '';
+  trd.testCaseCloseIfExplicitly();
+  trd._interruptMaybe( 1 );
+
+}
+
+//
+
+function testCaseCloseIfExplicitly()
 {
   var trd = this;
   var report = trd.report;
 
-  trd.will = '';
+  // trd.will = '';
 
-  if( trd._testsGroupIsCase )
+  if( trd._testsGroupOpenedExplicitly )
   {
-    _.assert( trd.testsGroup );
+    trd._testsGroupOpenedExplicitly = 0;
+    _.assert( _.strIs( trd.testsGroup ) );
     trd.testsGroupClose( trd.testsGroup );
-    trd._testCaseConsider( !report.testCheckFailsOfTestCase );
-    trd._testsGroupIsCase = 0;
+    // trd._testCaseConsider( !report.testCheckFailsOfTestCase ); // xxx
   }
 
 }
@@ -543,7 +572,7 @@ function hasTestGroupExceptOfCase()
   var trd = this;
   if( trd._testsGroupsStack.length === 0 )
   return false;
-  if( trd._testsGroupIsCase && trd._testsGroupsStack.length === 1 )
+  if( trd._testsGroupOpenedExplicitly && trd._testsGroupsStack.length === 1 )
   return false;
   return true;
 }
@@ -558,7 +587,7 @@ function _nameFullGet()
 }
 
 //
-// function testCaseCloseIfAny()
+// function testCaseCloseIfExplicitly()
 // {
 //   var trd = this;
 //   var report = trd.report;
@@ -615,7 +644,7 @@ function checkStore()
   var result = trd.checkCurrent();
 
   _.assert( arguments.length === 0 );
-  // _.assert( !trd.hasTestGroupExceptOfCase(), trd._testsGroupsStack.length, trd._testsGroupIsCase );
+  // _.assert( !trd.hasTestGroupExceptOfCase(), trd._testsGroupsStack.length, trd._testsGroupOpenedExplicitly );
 
   trd._checksStack.push( result );
 
@@ -2496,6 +2525,7 @@ var Restricts =
 
   _checkIndex : 1,
   _checksStack : [],
+  _testsGroupOpenedExplicitly : 0,
   _testsGroupIsCase : 0,
   _testsGroupError : 0,
   _testsGroupsStack : [],
@@ -2586,7 +2616,8 @@ var Proto =
   open : testsGroupOpen,
   close : testsGroupClose,
 
-  testCaseCloseIfAny : testCaseCloseIfAny,
+  _testsGroupChange : _testsGroupChange,
+  testCaseCloseIfExplicitly : testCaseCloseIfExplicitly,
   hasTestGroupExceptOfCase : hasTestGroupExceptOfCase,
   _nameFullGet : _nameFullGet,
 

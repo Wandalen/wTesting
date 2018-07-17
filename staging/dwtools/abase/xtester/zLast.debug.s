@@ -1,6 +1,6 @@
 (function _zLast_debyg_s_() {
 
-'use strict';
+'use strict'; /**/
 
 var _global = _global_; var _ = _global_.wTools;
 

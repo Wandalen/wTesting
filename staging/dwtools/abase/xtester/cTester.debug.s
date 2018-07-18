@@ -1,6 +1,6 @@
 (function _Tester_debug_s_() {
 
-'use strict'; /**/
+'use strict';
 
 var _global = _global_;
 var _ = _global_.wTools;
@@ -350,6 +350,7 @@ function _testingBegin( allSuites, runSuites )
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( allSuites ) );
   _.assert( _.mapIs( runSuites ) );
+  _.assert( logger._hasOutput( _global_.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   tester._reportForm();
 
@@ -435,7 +436,10 @@ function _testingEnd()
 
   logger.verbosityPop();
 
-  _.assert( logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have console in outputs.' );
+  debugger;
+
+  // _.assert( logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have console in outputs.' );
+  _.assert( logger._hasOutput( _global_.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   debugger;
   if( !ok )
@@ -1295,7 +1299,7 @@ var Self =
 
   settings : Object.create( null ),
 
-  logger : new _.Logger({ name : 'LoggerForTesting' }),
+  logger : new _.Logger({ name : 'LoggerForTesting', output : logger }),
   _cancelCon : new _.Consequence(),
   _canceled : 0,
 

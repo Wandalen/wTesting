@@ -1,6 +1,6 @@
 (function _aTestSuite_debug_s_() {
 
-'use strict'; /**/
+'use strict';
 
 var _global = _global_;
 var _ = _global_.wTools;
@@ -254,7 +254,9 @@ function consoleBar( value )
   }
   catch( err )
   {
-    if( err )
+    if( err && err.toString )
+    console.error( err.toString() );
+    else
     console.error( err );
   }
 
@@ -558,8 +560,8 @@ function _testSuiteEnd( err )
     }
     catch( err2 )
     {
-      console.error( err );
       console.error( err2 );
+      console.error( err.toString() );
     }
   }
 

@@ -2,7 +2,8 @@
 
 'use strict';
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 var testsWas = _realGlobal_.wTests;
 _realGlobal_.wTests = _global_.wTests = wTestSuite.instancesMap;

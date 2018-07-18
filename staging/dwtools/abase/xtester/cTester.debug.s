@@ -26,6 +26,7 @@ _.assert( _.toStr, 'wTesting needs wTools/staging/dwtools/abase/layer1/StringToo
 _.assert( _.execStages, 'wTesting needs wTools/staging/dwtools/abase/layer1/ExecTools.s' );
 _.assert( _.Consequence, 'wTesting needs wConsequence/staging/dwtools/abase/oclass/Consequence.s' );
 _.assert( _.accuracy, 'wTesting needs wTools.accuracy' );
+_.assert( _.loggerIs( _global.logger ), 'wTesting needs wTools.Logger' );
 
 // --
 // tester
@@ -350,7 +351,7 @@ function _testingBegin( allSuites, runSuites )
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( allSuites ) );
   _.assert( _.mapIs( runSuites ) );
-  _.assert( logger._hasOutput( _global_.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( logger._hasOutput( _global.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   tester._reportForm();
 
@@ -439,7 +440,7 @@ function _testingEnd()
   debugger;
 
   // _.assert( logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have console in outputs.' );
-  _.assert( logger._hasOutput( _global_.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( logger._hasOutput( _global.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   debugger;
   if( !ok )
@@ -631,10 +632,10 @@ function _canContinue()
   // console.log( 'process.stdin._eventsCount', process.stdin._eventsCount )
 //
   // debugger;
-  // if( _global_.process )
+  // if( _global.process )
   // {
   //   // setImmediate( function(){} );
-  //   // _global_.process._tickCallback()
+  //   // _global.process._tickCallback()
   //   // EventEmitter.prototype.emit();
   // }
   // debugger;
@@ -1299,7 +1300,7 @@ var Self =
 
   settings : Object.create( null ),
 
-  logger : new _.Logger({ name : 'LoggerForTesting', output : logger }),
+  logger : new _.Logger({ name : 'LoggerForTesting', output : _global.logger }),
   _cancelCon : new _.Consequence(),
   _canceled : 0,
 

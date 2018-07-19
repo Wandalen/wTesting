@@ -197,7 +197,7 @@ function appArgsRead()
   var readOptions =
   {
     dst : settings,
-    nameMap : tester.SettingsNameMap,
+    namesMap : tester.SettingsNameMap,
     removing : 0,
     only : 1,
   }
@@ -436,8 +436,6 @@ function _testingEnd()
   /* */
 
   logger.verbosityPop();
-
-  debugger;
 
   // _.assert( logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have console in outputs.' );
   _.assert( logger._hasOutput( _global.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );

@@ -535,7 +535,7 @@ function suitesFilterOut( suites )
   var logger = tester.logger;
   var suites = suites || wTests;
 
-  if( _.arrayLike( suites ) )
+  if( _.longIs( suites ) )
   {
     var _suites = Object.create( null );
     for( var s = 0 ; s < suites.length ; s++ )
@@ -792,14 +792,23 @@ function _reportIsPositive()
 
 //
 
-function textColor( srcStr, connotation )
+function textColor( srcStr, format )
 {
 
   _.assert( arguments.length === 2 );
   _.assert( _.boolLike( _.Tester.settings.coloring ) );
+  _.assert( _.mapIs( format ) || _.strIs( format ) || _.boolLike( format ) );
 
   if( !_.Tester.settings.coloring )
   return srcStr;
+
+  if( !_.color || !_.color.strFormat )
+  return srcStr;
+
+  if( _.mapIs( format ) || _.strIs( format ) )
+  {
+    return _.color.strFormat( srcStr, format );
+  }
 
   var light = [ ' ok', ' failed' ];
   var gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' in ', ' ... ', ' .. ', ':' ];
@@ -817,13 +826,13 @@ function textColor( srcStr, connotation )
     if( i % 2 === 0 )
     return e;
 
-    return _.color.strFormat( e, { fg : ( connotation ? 'green' : 'red' ) } );
+    return _.color.strFormat( e, { fg : ( format ? 'green' : 'red' ) } );
 
     // if( i % 2 === 0 )
-    // return _.color.strFormat( e, { fg : ( connotation ? 'green' : 'red' ) } );
+    // return _.color.strFormat( e, { fg : ( format ? 'green' : 'red' ) } );
 
     // if( _.arrayHas( light, e ) )
-    // return _.color.strFormat( e, { fg : ( connotation ? 'light green' : 'light red' ) } );
+    // return _.color.strFormat( e, { fg : ( format ? 'light green' : 'light red' ) } );
     // else
     // return _.color.strFormat( e, { fg : 'light black' } );
 

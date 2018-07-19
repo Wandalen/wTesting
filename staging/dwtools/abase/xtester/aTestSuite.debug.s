@@ -489,10 +489,7 @@ function _testSuiteBegin()
 
   logger.logUp( msg.join( '\n' ) );
 
-  if( _.Tester.settings.coloring )
-  logger.log( _.color.strFormat( 'at  ' + suite.suiteFileLocation,'selected' ) );
-  else
-  logger.log( 'at  ' + suite.suiteFileLocation );
+  logger.log( _.Tester.textColor( 'at  ' + suite.suiteFileLocation, 'selected' ) );
 
   logger.end( 'suite' );
 
@@ -659,10 +656,9 @@ function _testSuiteEnd( err )
 function _testSuiteTerminated()
 {
   var suite = this;
-  debugger; /* xxx */
+  debugger;
   var err = _.err( 'Terminated by user' );
   _.Tester.cancel( err, 1 );
-  // suite._testSuiteEnd( err );
 }
 
 //

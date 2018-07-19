@@ -2330,6 +2330,7 @@ function _reportTextForTestCheck( o )
     result += ' ... failed';
   }
 
+  if( o.outcome !== null )
   result = _.Tester.textColor( result, o.outcome );
 
   return result;

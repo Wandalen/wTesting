@@ -2,10 +2,10 @@
 
 'use strict';
 
-var _global = _global_;
-var _ = _global_.wTools;
-var sourceFileLocation = _.diagnosticLocation().full;
-var sourceFileStack = _.diagnosticStack();
+let _global = _global_;
+let _ = _global_.wTools;
+let sourceFileLocation = _.diagnosticLocation().full;
+let sourceFileStack = _.diagnosticStack();
 
 if( _.Tester._isFullImplementation )
 {
@@ -34,8 +34,8 @@ _.assert( _.printerIs( _global.logger ), 'wTesting needs wTools.Logger' );
 
 function exec()
 {
-  var tester = this;
-  var result;
+  let tester = this;
+  let result;
 
   try
   {
@@ -43,7 +43,7 @@ function exec()
     _.assert( arguments.length === 0 );
 
     tester.appArgsRead();
-    var path = tester.path;
+    let path = tester.path;
 
     if( !tester.ScenariosHelpMap[ tester.settings.scenario ] )
     throw _.errBriefly( 'Unknown scenario',tester.settings.scenario );
@@ -79,7 +79,7 @@ function exec()
 
 function _registerExitHandler()
 {
-  var tester = this;
+  let tester = this;
 
   _.appRepairExitHandler();
 
@@ -94,7 +94,7 @@ function _registerExitHandler()
   // {
   //   if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
   //   {
-  //     var logger = tester.logger;
+  //     let logger = tester.logger;
   //     debugger;
   //     if( tester.settings.coloring )
   //     logger.error( _.color.strFormat( 'Errors!','negative' ) );
@@ -110,9 +110,9 @@ function _registerExitHandler()
 
 function _includeTestsFrom( path )
 {
-  var tester = this;
-  var logger = tester.logger;
-  var path = _.pathJoin( _.pathCurrent(),path );
+  let tester = this;
+  let logger = tester.logger;
+  path = _.pathJoin( _.pathCurrent(),path );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
@@ -120,7 +120,7 @@ function _includeTestsFrom( path )
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :',path,'\n' );
 
-  var files = _.fileProvider.filesFind
+  let files = _.fileProvider.filesFind
   ({
     filePath : path,
     ends : [ '.test.s','.test.ss','.test.js' ],
@@ -130,16 +130,16 @@ function _includeTestsFrom( path )
 
   if( !files.length )
   {
-    var record = _.fileProvider.fileRecord( path );
+    let record = _.fileProvider.fileRecord( path );
     if( record.stat && !record.stat.isDirectory() && record.inclusion )
-    var files = [ record ];
+    files = [ record ];
   }
 
-  for( var f = 0 ; f < files.length ; f++ )
+  for( let f = 0 ; f < files.length ; f++ )
   {
     if( !files[ f ].stat.isFile() )
     continue;
-    var absolutePath = files[ f ].absolute;
+    let absolutePath = files[ f ].absolute;
 
     try
     {
@@ -168,8 +168,8 @@ function _includeTestsFrom( path )
 
 function includeTestsFrom( path )
 {
-  var tester = this;
-  var logger = tester.logger;
+  let tester = this;
+  let logger = tester.logger;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
@@ -184,9 +184,9 @@ function includeTestsFrom( path )
 
 function appArgsRead()
 {
-  var tester = this;
-  var logger = tester.logger;
-  var settings = tester.settings;
+  let tester = this;
+  let logger = tester.logger;
+  let settings = tester.settings;
 
   if( tester._appArgs )
   return tester._appArgs;
@@ -194,24 +194,18 @@ function appArgsRead()
   _.assert( arguments.length === 0 );
   _.mapExtend( settings, tester.Settings );
 
-  var readOptions =
+  let readOptions =
   {
     dst : settings,
     namesMap : tester.SettingsNameMap,
     removing : 0,
     only : 1,
+    throwing : 0,
   }
 
-  try
-  {
-    var appArgs = _.appArgsReadTo( readOptions );
-    // var appArgs = _.appArgsInSamFormat();
-  }
-  catch ( err )
-  {
-    err = _.errBriefly( err );
-    throw err;
-  }
+  let appArgs = _.appArgsReadTo( readOptions );
+  if( appArgs.err )
+  throw _.errBriefly( appArgs.err );
 
   _.assert( appArgs.map );
 
@@ -220,7 +214,7 @@ function appArgsRead()
 
   _.mapExtend( settings,_.mapOnly( appArgs.map, tester.Settings ) );
 
-  var v = settings.verbosity;
+  let v = settings.verbosity;
   _.assert( v === null || v === undefined || _.boolLike( v ) )
   if( !_.boolLike( v ) )
   v = 1;
@@ -243,7 +237,7 @@ function appArgsRead()
 
 function scenarioHelp()
 {
-  var tester = this;
+  let tester = this;
 
   tester.scenarioScenariosList();
   tester.scenarioOptionsList();
@@ -254,10 +248,10 @@ function scenarioHelp()
 
 function scenarioScenariosList()
 {
-  var tester = this;
-  var logger = tester.logger;
+  let tester = this;
+  let logger = tester.logger;
 
-  var strOptions =
+  let strOptions =
   {
     levels : 3,
     wrap : 0,
@@ -273,10 +267,10 @@ function scenarioScenariosList()
 
 function scenarioOptionsList()
 {
-  var tester = this;
-  var logger = tester.logger;
+  let tester = this;
+  let logger = tester.logger;
 
-  var strOptions =
+  let strOptions =
   {
     levels : 3,
     wrap : 0,
@@ -292,8 +286,8 @@ function scenarioOptionsList()
 
 function scenarioSuitesList()
 {
-  var tester = this;
-  var logger = tester.logger;
+  let tester = this;
+  let logger = tester.logger;
 
   _.assert( tester.settings.scenario === 'suites.list' );
 
@@ -308,44 +302,44 @@ function scenarioSuitesList()
 
 function _testAllAct()
 {
-  var tester = this;
+  let tester = this;
 
   _.assert( arguments.length === 0 );
 
-  var suites = tester.suitesFilterOut( wTests );
+  let suites = tester.suitesFilterOut( wTests );
 
   return tester._suitesRun( suites );
 }
 
 //
 
-var testAll = _.timeReadyJoin( undefined, _testAllAct );
+let testAll = _.timeReadyJoin( undefined, _testAllAct );
 
 //
 
 function _test()
 {
-  var tester = this;
+  let tester = this;
 
   _.assert( this === Self );
 
   if( arguments.length === 0 )
   return tester._testAllAct();
 
-  var suites = tester.suitesFilterOut( arguments );
+  let suites = tester.suitesFilterOut( arguments );
   return tester._suitesRun( suites );
 }
 
 //
 
-var test = _.timeReadyJoin( undefined,_test );
+let test = _.timeReadyJoin( undefined,_test );
 
 //
 
 function _testingBegin( allSuites, runSuites )
 {
-  var tester = this;
-  var logger = tester.logger;
+  let tester = this;
+  let logger = tester.logger;
 
   _.assert( arguments.length === 2 );
   _.assert( _.numberIs( tester.verbosity ) );
@@ -370,7 +364,7 @@ function _testingBegin( allSuites, runSuites )
 
   /* */
 
-  var total = _.entityLength( runSuites );
+  let total = _.entityLength( runSuites );
   logger.logUp( 'Launching several ( ' + total + ' ) test suites ..' );
   logger.begin({ verbosity : -5 });
   tester.suitesListPrint( allSuites );
@@ -389,9 +383,9 @@ function _testingBegin( allSuites, runSuites )
 
 function _testingEnd()
 {
-  var tester = this;
-  var logger = tester.logger;
-  var ok = tester._reportIsPositive();
+  let tester = this;
+  let logger = tester.logger;
+  let ok = tester._reportIsPositive();
 
   if( tester.settings.beeping )
   _.beep();
@@ -405,7 +399,7 @@ function _testingEnd()
 
   /* */
 
-  var msg = tester._reportToStr();
+  let msg = tester._reportToStr();
   logger.begin({ verbosity : -2 });
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( msg );
@@ -415,14 +409,14 @@ function _testingEnd()
 
   logger.begin({ verbosity : -1 });
 
-  var timingStr = '';
+  let timingStr = '';
   if( tester.settings.timing )
   {
     tester.report.timeSpent = _.timeNow() - tester._testingBeginTime;
     timingStr = ' ... in ' + _.timeSpentFormat( tester.report.timeSpent );
   }
 
-  var msg = 'Testing' + timingStr + ' ... '  + ( ok ? 'ok' : 'failed' );
+  msg = 'Testing' + timingStr + ' ... '  + ( ok ? 'ok' : 'failed' );
   msg = _.Tester.textColor( msg, ok );
 
   logger.logDown( msg );
@@ -452,8 +446,8 @@ function _testingEnd()
 
 function _suitesRun( suites )
 {
-  var tester = this;
-  var logger = tester.logger;
+  let tester = this;
+  let logger = tester.logger;
 
   _.assert( arguments.length === 1 );
 
@@ -464,10 +458,10 @@ function _suitesRun( suites )
 
   /* */
 
-  var allSuites = _.mapExtend( null, suites );
-  for( var s in suites )
+  let allSuites = _.mapExtend( null, suites );
+  for( let s in suites )
   {
-    var suite = _.Tester.TestSuite.instanceByName( suites[ s ] );
+    let suite = _.Tester.TestSuite.instanceByName( suites[ s ] );
     suites[ s ] = suite;
     allSuites[ s ] = suite;
 
@@ -484,7 +478,7 @@ function _suitesRun( suites )
     }
     catch( err )
     {
-      err = _.errBriefly( err );
+      // err = _.errBriefly( err );
       err = _.errLogOnce( err );
       err = _.errAttend( err );
       return new _.Consequence().error( err );
@@ -502,9 +496,9 @@ function _suitesRun( suites )
 
   /* */
 
-  for( var s in suites )
+  for( let s in suites )
   {
-    var suite = suites[ s ];
+    let suite = suites[ s ];
     suite._testSuiteRunSoon();
   }
 
@@ -528,16 +522,16 @@ function _suitesRun( suites )
 
 function suitesFilterOut( suites )
 {
-  var tester = this;
-  var logger = tester.logger;
-  var suites = suites || wTests;
+  let tester = this;
+  let logger = tester.logger;
+  suites = suites || wTests;
 
   if( _.longIs( suites ) )
   {
-    var _suites = Object.create( null );
-    for( var s = 0 ; s < suites.length ; s++ )
+    let _suites = Object.create( null );
+    for( let s = 0 ; s < suites.length ; s++ )
     {
-      var suite = suites[ s ];
+      let suite = suites[ s ];
       if( _.strIs( suite ) )
       _suites[ suite ] = suite;
       else if( suite instanceof _.Tester.TestSuite )
@@ -547,10 +541,10 @@ function suitesFilterOut( suites )
     suites = _suites;
   }
 
-  _.assert( arguments.length === 0 || arguments.length === 1,'expects none or single argument, but got',arguments.length );
+  _.assert( arguments.length === 0 || arguments.length === 1, 'expects none or single argument, but got', arguments.length );
   _.assert( _.objectIs( suites ) );
 
-  var suites = _.entityFilter( suites,function( suite )
+  suites = _.entityFilter( suites,function( suite )
   {
     if( _.strIs( suite ) )
     {
@@ -572,9 +566,9 @@ function suitesFilterOut( suites )
 
 function suitesListPrint( suites )
 {
-  var tester = this;
-  var logger = tester.logger;
-  var suites = suites || wTests;
+  let tester = this;
+  let logger = tester.logger;
+  suites = suites || wTests;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
@@ -592,7 +586,7 @@ function suitesListPrint( suites )
 
   // logger.log( _.entitySelect( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
 
-  var l = _.entityLength( suites );
+  let l = _.entityLength( suites );
 
   logger.log( l, l > 1 ? 'test suites' : 'test suite' );
 
@@ -604,7 +598,7 @@ function suitesListPrint( suites )
 
 function _verbositySet( src )
 {
-  var tester = this;
+  let tester = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -623,7 +617,7 @@ function _verbositySet( src )
 
 function _canContinue()
 {
-  var tester = this;
+  let tester = this;
 
   // console.log( 'process._eventsCount', process._eventsCount )
   // console.log( 'process.stdin._eventsCount', process.stdin._eventsCount )
@@ -638,12 +632,16 @@ function _canContinue()
   // debugger;
 
   if( tester._canceled )
-  return false;
+  {
+    debugger;
+    return false;
+  }
 
   if( tester.settings.fails > 0 )
   if( tester.settings.fails <= tester.report.testCheckFails )
   {
-    var err = _.err( 'Too many fails', _.Tester.settings.fails, '<=', trd.report.testCheckFails );
+    debugger;
+    let err = _.err( 'Too many fails', _.Tester.settings.fails, '<=', trd.report.testCheckFails );
     tester.report.errorsArray.push( err );
     return false;
   }
@@ -653,26 +651,38 @@ function _canContinue()
 
 //
 
-function cancel( err, terminatedByUser )
+// function cancel( err, terminatedByUser )
+function cancel()
 {
-  var tester = this;
+  let tester = this;
 
+  if( tester.settings.fails > 0 )
+  if( tester.settings.fails <= tester.report.testCheckFails )
+  o.global = 1;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  let o = _.routineOptions( cancel, arguments );
+
+  if( o.terminatedByUser )
+  o.global = 1;
   if( tester._canceled )
   return tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
 
-  if( err === undefined )
+  if( o.err === undefined )
   tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
-  err = _.err( err );
+  o.err = _.err( o.err );
 
-  tester._cancelCon.error( err );
-
-  tester._canceled = 1;
+  if( o.global )
+  {
+    tester._cancelCon.error( o.err );
+    tester._canceled = 1;
+  }
 
   /* */
 
   try
   {
-    for( var t = 0 ; t < tester.activeRoutines.length ; t++ )
+    for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnCon )
     {
       debugger; /* xxx */
@@ -687,12 +697,11 @@ function cancel( err, terminatedByUser )
 
   /* */
 
-  if( terminatedByUser )
-  try
+  if( o.terminatedByUser ) try
   {
     debugger; /* xxx */
-    for( var t = 0 ; t < tester.activeSuites.length ; t++ )
-    tester.activeSuites[ t ]._testSuiteEnd( err );
+    for( let t = 0 ; t < tester.activeSuites.length ; t++ )
+    tester.activeSuites[ t ]._testSuiteEnd( o.err );
   }
   catch( err2 )
   {
@@ -700,8 +709,14 @@ function cancel( err, terminatedByUser )
     console.log( err2 );
   }
 
-  return err;
+  return o.err;
 }
+
+let defaults = cancel.defaults = Object.create( null );
+
+defaults.err = null;
+defaults.terminatedByUser = 0;
+defaults.global = 0;
 
 // --
 // report
@@ -709,11 +724,11 @@ function cancel( err, terminatedByUser )
 
 function _reportForm()
 {
-  var tester = this;
+  let tester = this;
 
   _.assert( !tester.report, 'tester already has report' );
 
-  var report = tester.report = Object.create( null );
+  let report = tester.report = Object.create( null );
 
   report.timeSpent = null;
   report.errorsArray = [];
@@ -739,10 +754,10 @@ function _reportForm()
 
 function _reportToStr()
 {
-  var tester = this;
-  var appExitCode = _.appExitCode();
-  var report = tester.report;
-  var msg = '';
+  let tester = this;
+  let appExitCode = _.appExitCode();
+  let report = tester.report;
+  let msg = '';
 
   if( appExitCode !== undefined && appExitCode !== 0 )
   msg = 'ExitCode : ' + appExitCode + '\n';
@@ -762,10 +777,10 @@ function _reportToStr()
 
 function _reportIsPositive()
 {
-  var tester = this;
-  var report = tester.report;
+  let tester = this;
+  let report = tester.report;
 
-  var appExitCode = _.appExitCode();
+  let appExitCode = _.appExitCode();
   if( appExitCode !== undefined && appExitCode !== 0 )
   return false;
 
@@ -807,9 +822,9 @@ function textColor( srcStr, format )
     return _.color.strFormat( srcStr, format );
   }
 
-  var light = [ ' ok', ' failed' ];
-  var gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' in ', ' ... ', ' .. ', ':' ];
-  var splits = _.strSplit2
+  let light = [ ' ok', ' failed' ];
+  let gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' in ', ' ... ', ' .. ', ':' ];
+  let splits = _.strSplit2
   ({
     src : srcStr,
     delimeter : _.arrayAppendArrays( [],[ light, gray ] ),
@@ -844,7 +859,7 @@ function textColor( srcStr, format )
 
 function _testCheckConsider( outcome )
 {
-  var tester = this;
+  let tester = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tester === Self );
@@ -864,8 +879,8 @@ function _testCheckConsider( outcome )
 
 function _testCaseConsider( outcome )
 {
-  var tester = this;
-  var report = tester.report;
+  let tester = this;
+  let report = tester.report;
 
   if( outcome )
   {
@@ -882,8 +897,8 @@ function _testCaseConsider( outcome )
 
 function _testRoutineConsider( outcome )
 {
-  var tester = this;
-  var report = tester.report;
+  let tester = this;
+  let report = tester.report;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tester === Self );
@@ -903,8 +918,8 @@ function _testRoutineConsider( outcome )
 
 function _testSuiteConsider( outcome )
 {
-  var tester = this;
-  var report = tester.report;
+  let tester = this;
+  let report = tester.report;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tester === Self );
@@ -924,7 +939,7 @@ function _testSuiteConsider( outcome )
 
 function _exceptionConsider( err )
 {
-  var tester = this;
+  let tester = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tester === Self );
@@ -951,13 +966,13 @@ function _exceptionConsider( err )
 //   _.assert( arguments.length === 0 || arguments.length === 1 );
 //   _.assert( o.logger instanceof wPrinterToJs );
 //
-//   var data = o.logger.outputData;
-//   var routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
+//   let data = o.logger.outputData;
+//   let routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
 //   logger.log( _.toStr( routines,{ levels : 1 } ) );
 //
 //   /* */
 //
-//   var routineHead;
+//   let routineHead;
 //   routines = _.entityFilter( routines, function( routine,k )
 //   {
 //     routine.folderPath = _.pathDir( k );
@@ -974,7 +989,7 @@ function _exceptionConsider( err )
 //     /* checks */
 //
 //     debugger;
-//     var checks = _.entitySearch
+//     let checks = _.entitySearch
 //     ({
 //       src : routine,
 //       ins : 'check',
@@ -983,7 +998,7 @@ function _exceptionConsider( err )
 //       returnParent : 1,
 //     });
 //
-//     var routineMore = [];
+//     let routineMore = [];
 //     checks = _.entityFilter( checks, function( acheck,k )
 //     {
 //       if( !acheck.text )
@@ -995,7 +1010,7 @@ function _exceptionConsider( err )
 //       }
 //
 //       acheck.checkPath = _.pathDir( k );
-//       var result = Object.create( null );
+//       let result = Object.create( null );
 //       result.data = acheck;
 //       debugger;
 //       result.text = acheck.check + ' # '+ acheck.checkIndex;
@@ -1011,7 +1026,7 @@ function _exceptionConsider( err )
 //
 //     /* routine */
 //
-//     var result = Object.create( null );
+//     let result = Object.create( null );
 //     result.kind = 'branch';
 //     result.data = routine;
 //     result.text = routine.routine;
@@ -1033,7 +1048,7 @@ function _exceptionConsider( err )
 //   {
 //     if( !node.data )
 //     return '-';
-//     var result = _.entitySelect( node.data.report,'*.text' );
+//     let result = _.entitySelect( node.data.report,'*.text' );
 //
 //     if( node.data.check )
 //     result = result.join( '\n' ) + '\n' + node.data.text;
@@ -1045,7 +1060,7 @@ function _exceptionConsider( err )
 //
 //   /* */
 //
-//   var book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
+//   let book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
 //   book.form();
 //   book.tree.treeApply({ elements : routines });
 //
@@ -1085,12 +1100,12 @@ function _exceptionConsider( err )
 // }
 
 // --
-// var
+// let
 // --
 
-var symbolForVerbosity = Symbol.for( 'verbosity' );
+let symbolForVerbosity = Symbol.for( 'verbosity' );
 
-var ScenariosHelpMap =
+let ScenariosHelpMap =
 {
   'test' : 'run tests, default scenario',
   'help' : 'get help',
@@ -1099,7 +1114,7 @@ var ScenariosHelpMap =
   'suites.list' : 'list available suites',
 }
 
-var ScenariosActionMap =
+let ScenariosActionMap =
 {
   'test' : '',
   'help' : 'scenarioHelp',
@@ -1108,7 +1123,7 @@ var ScenariosActionMap =
   'suites.list' : 'scenarioSuitesList',
 }
 
-var ApplicationArgumentsMap =
+let ApplicationArgumentsMap =
 {
 
   scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list"',
@@ -1130,7 +1145,7 @@ var ApplicationArgumentsMap =
 
 }
 
-var SettingsNameMap =
+let SettingsNameMap =
 {
 
   'scenario' : 'scenario',
@@ -1159,7 +1174,7 @@ var SettingsNameMap =
 
 }
 
-var SettingsOfTester =
+let SettingsOfTester =
 {
 
   scenario : 'test',
@@ -1173,7 +1188,7 @@ var SettingsOfTester =
 
 }
 
-var SettingsOfSuite =
+let SettingsOfSuite =
 {
 
   routine : null,
@@ -1188,9 +1203,9 @@ var SettingsOfSuite =
 
 }
 
-var Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuite );
+let Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuite );
 
-var Rapidities =
+let Rapidities =
 [
   'slowest',
   'slow',
@@ -1199,7 +1214,7 @@ var Rapidities =
   'fastest',
 ]
 
-var Forbids =
+let Forbids =
 {
 
   importanceOfDetails : 'importanceOfDetails',
@@ -1226,7 +1241,7 @@ var Forbids =
 
 }
 
-var Accessors =
+let Accessors =
 {
   verbosity : 'verbosity',
 }
@@ -1235,7 +1250,7 @@ var Accessors =
 // define class
 // --
 
-var Self =
+let Self =
 {
 
   // exec
@@ -1293,7 +1308,7 @@ var Self =
   // loggerToBook : loggerToBook,
   // bookExperiment : bookExperiment,
 
-  // var
+  // let
 
   ScenariosHelpMap : ScenariosHelpMap,
   ScenariosActionMap : ScenariosActionMap,

@@ -12,7 +12,7 @@
 + make "should/must not error" pass original messages through
   test.case = 'mustNotThrowError must return con with message';
 
-  var con = new _.Consequence().give( '123' );
+  let con = new _.Consequence().give( '123' );
   test.mustNotThrowError( con )
   .ifNoErrorThen( function( got )
   {
@@ -64,13 +64,13 @@
 
 */
 
-var _global = undefined;
+let _global = undefined;
 if( !_global && typeof Global !== 'undefined' && Global.Global === Global ) _global = Global;
 if( !_global && typeof global !== 'undefined' && global.global === global ) _global = global;
 if( !_global && typeof window !== 'undefined' && window.window === window ) _global = window;
 if( !_global && typeof self   !== 'undefined' && self.self === self ) _global = self;
-var _realGlobal = _global;
-var _globalWas = _global._global_ || _global;
+let _realGlobal = _global;
+let _globalWas = _global._global_ || _global;
 if( _global._global_ )
 _global = _global._global_;
 _global._global_ = _global;
@@ -103,8 +103,8 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _global = _global_;
-  var _ = _global_.wTools;
+  let _global = _global_;
+  let _ = _global_.wTools;
 
   _.include( 'wExecTools' );
   _.include( 'wCopyable' );

@@ -4,10 +4,10 @@
 
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wTestRoutineDescriptor( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wTestRoutineDescriptor( o )
 {
   if( !( this instanceof Self ) )
   if( o instanceof Self )
@@ -23,7 +23,7 @@ Self.nameShort = 'TestRoutineDescriptor';
 
 function init( o )
 {
-  var trd = this;
+  let trd = this;
 
   trd[ accuracyEffectiveSymbol ] = null;
 
@@ -46,7 +46,7 @@ function init( o )
   _.assert( Object.isPrototypeOf.call( Self.prototype,trd ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var proxy =
+  let proxy =
   {
     get : function( obj, k )
     {
@@ -56,7 +56,7 @@ function init( o )
     }
   }
 
-  var trd = new Proxy( trd, proxy );
+  trd = new Proxy( trd, proxy );
 
   return trd;
 }
@@ -65,10 +65,10 @@ function init( o )
 
 function refine()
 {
-  var trd = this;
-  var routine = trd.routine;
+  let trd = this;
+  let routine = trd.routine;
 
-  var preStr = 'Test routine ' + _.strQuote( trd.nameFull );
+  let preStr = 'Test routine ' + _.strQuote( trd.nameFull );
 
   _.sureMapHasOnly
   (
@@ -91,8 +91,8 @@ function refine()
 
 function _testRoutineBegin()
 {
-  var trd = this;
-  var suite = trd.suite;
+  let trd = this;
+  let suite = trd.suite;
 
   if( _.Tester )
   trd._testRoutineBeginTime = _.timeNow();
@@ -104,7 +104,7 @@ function _testRoutineBegin()
   _.assert( arguments.length === 0 );
   _.assert( trd._returned === null );
 
-  var msg =
+  let msg =
   [
     'Running test routine ( ' + trd.routine.name + ' ) ..'
   ];
@@ -137,22 +137,22 @@ function _testRoutineBegin()
 
 function _testRoutineEnd()
 {
-  var trd = this;
-  var suite = trd.suite;
-  var ok = trd._reportIsPositive();
+  let trd = this;
+  let suite = trd.suite;
+  let ok = trd._reportIsPositive();
 
   _.assert( arguments.length === 0 );
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  var _hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
+  let _hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
   {
     debugger; /* xxx */
-    var wasBarred = suite.consoleBar( 0 );
+    let wasBarred = suite.consoleBar( 0 );
 
-    // var barOptions = _.Tester._barOptions;
-    // var exclusiveOutputPrinter = barOptions.exclusiveOutputPrinter;
+    // let barOptions = _.Tester._barOptions;
+    // let exclusiveOutputPrinter = barOptions.exclusiveOutputPrinter;
     //
     // barOptions.exclusiveOutputPrinter = 0;
     // suite.logger.consoleBar( barOptions );
@@ -163,7 +163,7 @@ function _testRoutineEnd()
     //   suite.logger.consoleBar( barOptions );
     // }
 
-    var err = _.err( 'Console is missing in logger`s outputs, probably logger was modified' + '\n at' + trd.nameFull );
+    let err = _.err( 'Console is missing in logger`s outputs, probably logger was modified' + '\n at' + trd.nameFull );
     suite.exceptionReport
     ({
       err : err,
@@ -180,7 +180,7 @@ function _testRoutineEnd()
   if( trd._testsGroupsStack.length && !trd._testsGroupError )
   {
     debugger;
-    var err = trd.exceptionReport
+    let err = trd.exceptionReport
     ({
       err : _.err( 'Tests group', _.strQuote( trd.testsGroup ), 'was not closed' ),
       usingSourceCode : 0,
@@ -213,14 +213,14 @@ function _testRoutineEnd()
 
   suite.logger.begin({ verbosity : -3 });
 
-  var timingStr = '';
+  let timingStr = '';
   if( _.Tester )
   {
     trd.report.timeSpent = _.timeNow() - trd._testRoutineBeginTime;
     timingStr = ' in ' + _.timeSpentFormat( trd.report.timeSpent );
   }
 
-  var str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
+  let str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
 
   str = _.Tester.textColor( str, ok );
 
@@ -245,8 +245,8 @@ function _testRoutineEnd()
 
 function _testRoutineHandleReturn( err,msg )
 {
-  var trd = this;
-  var suite = trd.suite;
+  let trd = this;
+  let suite = trd.suite;
 
   if( err )
   if( err.timeOut )
@@ -289,7 +289,7 @@ function _testRoutineHandleReturn( err,msg )
 
 function _interruptMaybe( throwing )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
@@ -304,16 +304,16 @@ function _interruptMaybe( throwing )
     debugger; /* xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
-    var result = _.Tester.cancel();
+    let result = _.Tester.cancel({ global : 0 });
     if( throwing )
     throw result;
     return result;
   }
 
-  var elapsed = _.timeNow() - trd._testRoutineBeginTime;
+  let elapsed = _.timeNow() - trd._testRoutineBeginTime;
   if( elapsed > trd.timeOut )
   {
-    var result = _.Tester.cancel( trd._timeOutError() );
+    let result = _.Tester.cancel({ err : trd._timeOutError(), global : 0 });
     if( throwing )
     throw result;
     return result;
@@ -326,8 +326,8 @@ function _interruptMaybe( throwing )
 
 function _ableGet()
 {
-  var trd = this;
-  var suite = trd.suite;
+  let trd = this;
+  let suite = trd.suite;
 
   _.assert( _.numberIs( _.Tester.settings.rapidity ) );
 
@@ -352,9 +352,11 @@ function _ableGet()
 
 function _timeOutError()
 {
-  var trd = this;
+  let trd = this;
 
-  var err = _._err
+  debugger;
+
+  let err = _._err
   ({
     args : [ 'Test routine ' + _.strQuote( trd.nameFull ) + ' timed out. TimeOut : ' + trd.timeOut + 'ms' ],
     usingSourceCode : 0,
@@ -377,7 +379,7 @@ function _timeOutError()
 
 function _willGet()
 {
-  var trd = this;
+  let trd = this;
   return trd[ willSymbol ];
 }
 
@@ -385,7 +387,7 @@ function _willGet()
 
 function _willSet( src )
 {
-  var trd = this;
+  let trd = this;
   trd._interruptMaybe( 1 );
   trd[ willSymbol ] = src
 }
@@ -394,10 +396,10 @@ function _willSet( src )
 
 function _descriptionFullGet()
 {
-  var trd = this;
-  var result = '';
-  var right = ' > ';
-  var left = ' < ';
+  let trd = this;
+  let result = '';
+  let right = ' > ';
+  let left = ' < ';
 
   // if( trd._testsGroupOpenedExplicitly )
   // {
@@ -426,10 +428,10 @@ function _descriptionFullGet()
 
 function _descriptionWithNameGet()
 {
-  var trd = this;
-  var description = trd.descriptionFull;
-  var name = trd.nameFull;
-  var slash = ' / ';
+  let trd = this;
+  let description = trd.descriptionFull;
+  let name = trd.nameFull;
+  let slash = ' / ';
   return name + slash + description
 }
 
@@ -437,7 +439,7 @@ function _descriptionWithNameGet()
 
 function _caseGet()
 {
-  var trd = this;
+  let trd = this;
   return trd.testsGroup;
   // if( trd._testsGroupOpenedExplicitly )
   // return trd.testsGroup;
@@ -449,7 +451,7 @@ function _caseGet()
 
 function _caseSet( src )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 1 );
   // _.assert( !trd._testsGroupOpenedExplicitly || trd.testsGroup );
@@ -470,7 +472,7 @@ function _caseSet( src )
 
 function _testsGroupGet()
 {
-  var trd = this;
+  let trd = this;
   _.assert( arguments.length === 0, 'expects no arguments' );
   return trd._testsGroupsStack[ trd._testsGroupsStack.length-1 ] || '';
 }
@@ -479,7 +481,7 @@ function _testsGroupGet()
 
 function testsGroupOpen( groupName )
 {
-  var trd = this;
+  let trd = this;
   _.assert( arguments.length === 1, 'expects single argument' );
 
   trd._testsGroupChange();
@@ -496,7 +498,7 @@ function testsGroupOpen( groupName )
 
 function testsGroupClose( groupName )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -505,7 +507,7 @@ function testsGroupClose( groupName )
 
   if( trd.testsGroup !== groupName )
   {
-    var err = _._err
+    let err = _._err
     ({
       args : [ 'Attempt to close not the topmost tests group', _.strQuote( groupName ), 'current tests group is', _.strQuote( trd.testsGroup ) ],
       level : 2,
@@ -537,7 +539,7 @@ function testsGroupClose( groupName )
 
 function _testsGroupChange()
 {
-  var trd = this;
+  let trd = this;
   _.assert( arguments.length === 0, 'expects no arguments' );
 
   trd.will = '';
@@ -550,8 +552,8 @@ function _testsGroupChange()
 
 function testCaseCloseIfExplicitly()
 {
-  var trd = this;
-  var report = trd.report;
+  let trd = this;
+  let report = trd.report;
 
   // trd.will = '';
 
@@ -569,7 +571,7 @@ function testCaseCloseIfExplicitly()
 
 function hasTestGroupExceptOfCase()
 {
-  var trd = this;
+  let trd = this;
   if( trd._testsGroupsStack.length === 0 )
   return false;
   if( trd._testsGroupOpenedExplicitly && trd._testsGroupsStack.length === 1 )
@@ -581,16 +583,16 @@ function hasTestGroupExceptOfCase()
 
 function _nameFullGet()
 {
-  var trd = this;
-  var slash = ' / ';
+  let trd = this;
+  let slash = ' / ';
   return trd.suite.name + slash + trd.name;
 }
 
 //
 // function testCaseCloseIfExplicitly()
 // {
-//   var trd = this;
-//   var report = trd.report;
+//   let trd = this;
+//   let report = trd.report;
 //
 //   trd._testCaseConsider( !report.testCheckFailsOfTestCase );
 //
@@ -604,8 +606,8 @@ function _nameFullGet()
 
 function checkCurrent()
 {
-  var trd = this;
-  var result = Object.create( null );
+  let trd = this;
+  let result = Object.create( null );
 
   _.assert( arguments.length === 0 );
 
@@ -620,7 +622,7 @@ function checkCurrent()
 
 function checkNext( will )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( trd instanceof Self );
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -640,8 +642,8 @@ function checkNext( will )
 
 function checkStore()
 {
-  var trd = this;
-  var result = trd.checkCurrent();
+  let trd = this;
+  let result = trd.checkCurrent();
 
   _.assert( arguments.length === 0 );
   // _.assert( !trd.hasTestGroupExceptOfCase(), trd._testsGroupsStack.length, trd._testsGroupOpenedExplicitly );
@@ -655,7 +657,7 @@ function checkStore()
 
 function checkRestore( acheck )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
@@ -688,7 +690,7 @@ function checkRestore( acheck )
 
 function is( outcome )
 {
-  var trd = this;
+  let trd = this;
 
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
@@ -719,7 +721,7 @@ function is( outcome )
 
 function isNot( outcome )
 {
-  var trd = this;
+  let trd = this;
 
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
@@ -750,8 +752,8 @@ function isNot( outcome )
 
 function isNotError( maybeError )
 {
-  var trd = this;
-  var outcome = !_.errIs( maybeError );
+  let trd = this;
+  let outcome = !_.errIs( maybeError );
 
   if( arguments.length !== 1 )
   {
@@ -793,13 +795,13 @@ function isNotError( maybeError )
  * function someTest( test )
  * {
  *  test.case = 'single zero';
- *  var got = 0;
- *  var expected = 0;
+ *  let got = 0;
+ *  let expected = 0;
  *  test.identical( got, expected );//returns true
  *
  *  test.case = 'single number';
- *  var got = 2;
- *  var expected = 1;
+ *  let got = 2;
+ *  let expected = 1;
  *  test.identical( got, expected );//returns false
  * }
  *
@@ -812,14 +814,15 @@ function isNotError( maybeError )
 
 function identical( got,expected )
 {
-  var trd = this;
+  let trd = this;
+  let iterator, outcome;
 
   /* */
 
   try
   {
-    var iterator = Object.create( null );
-    var outcome = _.entityIdentical( got,expected,iterator );
+    iterator = Object.create( null );
+    outcome = _.entityIdentical( got,expected,iterator );
   }
   catch( err )
   {
@@ -878,14 +881,15 @@ function identical( got,expected )
 
 function notIdentical( got,expected )
 {
-  var trd = this;
+  let trd = this;
+  let iterator, outcome;
 
   /* */
 
   try
   {
-    var iterator = Object.create( null );
-    var outcome = !_.entityIdentical( got,expected,iterator );
+    iterator = Object.create( null );
+    outcome = !_.entityIdentical( got,expected,iterator );
   }
   catch( err )
   {
@@ -958,15 +962,15 @@ function notIdentical( got,expected )
  * function sometest( test )
  * {
  *  test.case = 'single number';
- *  var got = 0.5;
- *  var expected = 1;
- *  var accuracy = 0.5;
+ *  let got = 0.5;
+ *  let expected = 1;
+ *  let accuracy = 0.5;
  *  test.equivalent( got, expected, accuracy );//returns true
  *
  *  test.case = 'single number';
- *  var got = 0.5;
- *  var expected = 2;
- *  var accuracy = 0.5;
+ *  let got = 0.5;
+ *  let expected = 2;
+ *  let accuracy = 0.5;
  *  test.equivalent( got, expected, accuracy );//returns false
  * }
  * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
@@ -978,14 +982,15 @@ function notIdentical( got,expected )
 
 function equivalent( got, expected, options )
 {
-  var trd = this;
-  var accuracy = trd.accuracyEffective;
+  let trd = this;
+  let accuracy = trd.accuracyEffective;
+  let iterator, outcome;
 
   /* */
 
   try
   {
-    var iterator = Object.create( null );
+    iterator = Object.create( null );
     iterator.accuracy = accuracy;
     if( _.mapIs( options ) )
     _.mapExtend( iterator, options )
@@ -993,7 +998,7 @@ function equivalent( got, expected, options )
     iterator.accuracy = options;
     else _.assert( options === undefined );
     accuracy = iterator.accuracy;
-    var outcome = _.entityEquivalent( got, expected, iterator );
+    outcome = _.entityEquivalent( got, expected, iterator );
   }
   catch( err )
   {
@@ -1051,14 +1056,15 @@ function equivalent( got, expected, options )
 
 function notEquivalent( got, expected, options )
 {
-  var trd = this;
-  var accuracy = trd.accuracyEffective;
+  let trd = this;
+  let accuracy = trd.accuracyEffective;
+  let iterator, outcome;
 
   /* */
 
   try
   {
-    var iterator = Object.create( null );
+    iterator = Object.create( null );
     iterator.accuracy = accuracy;
     if( _.mapIs( options ) )
     _.mapExtend( iterator, options )
@@ -1066,7 +1072,7 @@ function notEquivalent( got, expected, options )
     iterator.accuracy = options;
     else _.assert( options === undefined );
     accuracy = iterator.accuracy;
-    var outcome = !_.entityEquivalent( got, expected, iterator );
+    outcome = !_.entityEquivalent( got, expected, iterator );
   }
   catch( err )
   {
@@ -1139,13 +1145,13 @@ function notEquivalent( got, expected, options )
  * function sometest( test )
  * {
  *  test.case = 'array';
- *  var got = [ 0, 1, 2 ];
- *  var expected = [ 0 ];
+ *  let got = [ 0, 1, 2 ];
+ *  let expected = [ 0 ];
  *  test.contains( got, expected );//returns true
  *
  *  test.case = 'array';
- *  var got = [ 0, 1, 2 ];
- *  var expected = [ 4 ];
+ *  let got = [ 0, 1, 2 ];
+ *  let expected = [ 4 ];
  *  test.contains( got, expected );//returns false
  * }
  * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
@@ -1157,14 +1163,15 @@ function notEquivalent( got, expected, options )
 
 function contains( got,expected )
 {
-  var trd = this;
+  let trd = this;
+  let iterator, outcome;
 
   /* */
 
   try
   {
-    var iterator = Object.create( null );
-    var outcome = _.entityContains( got, expected, iterator );
+    iterator = Object.create( null );
+    outcome = _.entityContains( got, expected, iterator );
   }
   catch( err )
   {
@@ -1225,9 +1232,9 @@ function contains( got,expected )
 
 function gt( got, than )
 {
-  var trd = this;
-  var outcome = got > than;
-  var diff = got - than;
+  let trd = this;
+  let outcome = got > than;
+  let diff = got - than;
 
   /* */
 
@@ -1264,10 +1271,10 @@ function gt( got, than )
 
 function ge( got, than )
 {
-  var trd = this;
-  var greater = got > than;
-  var outcome = got >= than;
-  var diff = got - than;
+  let trd = this;
+  let greater = got > than;
+  let outcome = got >= than;
+  let diff = got - than;
 
   /* */
 
@@ -1306,9 +1313,9 @@ function ge( got, than )
 
 function lt( got, than )
 {
-  var trd = this;
-  var outcome = got < than;
-  var diff = got - than;
+  let trd = this;
+  let outcome = got < than;
+  let diff = got - than;
 
   /* */
 
@@ -1347,10 +1354,10 @@ function lt( got, than )
 
 function le( got, than )
 {
-  var trd = this;
-  var less = got < than;
-  var outcome = got <= than;
-  var diff = got - than;
+  let trd = this;
+  let less = got < than;
+  let outcome = got <= than;
+  let diff = got - than;
 
   /* */
 
@@ -1389,15 +1396,15 @@ function le( got, than )
 
 function _shouldDo( o )
 {
-  var trd = this;
-  var second = 0;
-  var reported = 0;
-  var good = 1;
-  var async = 0;
-  var stack = _.diagnosticStack( 2,-1 );
-  var logger = trd.logger;
-  var err, arg;
-  var con = new _.Consequence();
+  let trd = this;
+  let second = 0;
+  let reported = 0;
+  let good = 1;
+  let async = 0;
+  let stack = _.diagnosticStack( 2,-1 );
+  let logger = trd.logger;
+  let err, arg;
+  let con = new _.Consequence();
 
   if( !trd.shoulding )
   return con.give();
@@ -1429,12 +1436,12 @@ function _shouldDo( o )
   }
 
   o.routine = o.args[ 0 ];
-  var acheck = trd.checkCurrent();
+  let acheck = trd.checkCurrent();
   trd._inroutineCon.choke();
 
   /* */
 
-  var result;
+  let result;
   if( _.consequenceIs( o.routine ) )
   {
     result = o.routine;
@@ -1536,7 +1543,7 @@ function _shouldDo( o )
   {
     begin( 0 );
 
-    var msg = 'error not thrown synchronously, but expected';
+    let msg = 'error not thrown synchronously, but expected';
 
     trd._outcomeReportBoolean
     ({
@@ -1618,7 +1625,7 @@ function _shouldDo( o )
       begin( 0 );
 
       second = 1;
-      var msg = 'got more than one message';
+      let msg = 'got more than one message';
 
       trd._outcomeReportBoolean
       ({
@@ -1641,7 +1648,7 @@ function _shouldDo( o )
     {
       begin( 0 );
 
-      var msg = 'error not thrown asynchronously, but expected';
+      let msg = 'error not thrown asynchronously, but expected';
       if( o.expectingAsyncError )
       msg = 'error not thrown, but expected either synchronosuly or asynchronously';
 
@@ -1769,7 +1776,7 @@ function _shouldDo( o )
     {
       begin( !o.expectingAsyncError );
 
-      var msg = 'error was not thrown asynchronously, but expected';
+      let msg = 'error was not thrown asynchronously, but expected';
       if( o.expectingAsyncError )
       debugger;
       if( o.expectingAsyncError )
@@ -1808,7 +1815,7 @@ _shouldDo.defaults =
 
 function shouldThrowErrorAsync( routine )
 {
-  var trd = this;
+  let trd = this;
 
   return trd._shouldDo
   ({
@@ -1823,7 +1830,7 @@ function shouldThrowErrorAsync( routine )
 
 function shouldThrowErrorSync( routine )
 {
-  var trd = this;
+  let trd = this;
 
   return trd._shouldDo
   ({
@@ -1858,19 +1865,19 @@ function shouldThrowErrorSync( routine )
  * @example
  * function sometest( test )
  * {
- *  var consequence = new _.Consequence().give();
+ *  let consequence = new _.Consequence().give();
  *  consequence
  *  .ifNoErrorThen( function()
  *  {
  *    test.case = 'shouldThrowErrorSync';
- *    var con = new wConsequence( )
+ *    let con = new wConsequence( )
  *    .error( _.err() ); //wConsequence instance with error message
  *    return test.shouldThrowErrorSync( con );//test passes
  *  })
  *  .ifNoErrorThen( function()
  *  {
  *    test.case = 'shouldThrowError2';
- *    var con = new wConsequence( )
+ *    let con = new wConsequence( )
  *    .error( _.err() )
  *    .error( _.err() ); //wConsequence instance with two error messages
  *    return test.shouldThrowErrorSync( con ); //test fails
@@ -1888,7 +1895,7 @@ function shouldThrowErrorSync( routine )
 
 function shouldThrowError( routine )
 {
-  var trd = this;
+  let trd = this;
 
   return trd._shouldDo
   ({
@@ -1903,7 +1910,7 @@ function shouldThrowError( routine )
 
 function mustNotThrowError( routine )
 {
-  var trd = this;
+  let trd = this;
 
   return trd._shouldDo
   ({
@@ -1919,7 +1926,7 @@ function mustNotThrowError( routine )
 
 function shouldMessageOnlyOnce( routine )
 {
-  var trd = this;
+  let trd = this;
 
   return trd._shouldDo
   ({
@@ -1937,7 +1944,7 @@ function shouldMessageOnlyOnce( routine )
 
 function _testCheckConsider( outcome )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( trd.constructor === Self );
@@ -1963,8 +1970,8 @@ function _testCheckConsider( outcome )
 
 function _testCaseConsider( outcome )
 {
-  var trd = this;
-  var report = trd.report;
+  let trd = this;
+  let report = trd.report;
 
   if( outcome )
   report.testCasePasses += 1;
@@ -1978,7 +1985,7 @@ function _testCaseConsider( outcome )
 
 function _exceptionConsider( err )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( trd.constructor === Self );
@@ -1994,9 +2001,9 @@ function _exceptionConsider( err )
 
 function _outcomeReport( o )
 {
-  var trd = this;
-  var logger = trd.logger;
-  var sourceCode = '';
+  let trd = this;
+  let logger = trd.logger;
+  let sourceCode = '';
 
   _.routineOptions( _outcomeReport,o );
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -2006,7 +2013,7 @@ function _outcomeReport( o )
 
   /* */
 
-  var verbosity = o.outcome ? 0 : trd.importanceOfNegative;
+  let verbosity = o.outcome ? 0 : trd.importanceOfNegative;
   sourceCode = sourceCodeGet();
 
   /* */
@@ -2054,11 +2061,11 @@ function _outcomeReport( o )
 
   function sourceCodeGet()
   {
-    var code;
+    let code;
     if( trd.usingSourceCode && o.usingSourceCode )
     {
-      var _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 4 });
-      var _code = _.diagnosticCode
+      let _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 4 });
+      let _code = _.diagnosticCode
       ({
         location : _location,
         selectMode : 'end',
@@ -2093,7 +2100,7 @@ _outcomeReport.defaults =
 
 function _outcomeReportBoolean( o )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( _outcomeReportBoolean,o );
@@ -2129,14 +2136,14 @@ _outcomeReportBoolean.defaults =
 
 function _outcomeReportCompare( o )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( trd instanceof Self );
   _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
 
-  var nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
-  var details = '';
+  let nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
+  let details = '';
 
   /**/
 
@@ -2153,7 +2160,7 @@ function _outcomeReportCompare( o )
     });
   }
 
-  var msg = trd._reportTextForTestCheck({ outcome : o.outcome });
+  let msg = trd._reportTextForTestCheck({ outcome : o.outcome });
 
   trd._outcomeReport
   ({
@@ -2195,7 +2202,7 @@ _outcomeReportCompare.defaults =
 
 function exceptionReport( o )
 {
-  var trd = this;
+  let trd = this;
 
   _.routineOptions( exceptionReport,o );
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -2212,7 +2219,7 @@ function exceptionReport( o )
     logger.log( err2 );
   }
 
-  var msg = null;
+  let msg = null;
   if( o.considering )
   {
     msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
@@ -2225,9 +2232,9 @@ function exceptionReport( o )
   if( o.sync !== null )
   msg += ( o.sync ? ' synchronously' : ' asynchronously' );
 
-  var err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
+  let err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
   _.errAttend( err );
-  var details = err.toString();
+  let details = err.toString();
 
   o.stack = o.stack === null ? o.err.stack : o.stack;
 
@@ -2262,11 +2269,11 @@ exceptionReport.defaults =
 
 function _reportForm()
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( !trd.report, 'test routine already has report' );
 
-  var report = trd.report = Object.create( null );
+  let report = trd.report = Object.create( null );
 
   report.timeSpent = null;
   report.errorsArray = [];
@@ -2288,7 +2295,7 @@ function _reportForm()
 
 function _reportIsPositive()
 {
-  var trd = this;
+  let trd = this;
 
   if( trd.report.testCheckFails !== 0 )
   return false;
@@ -2306,7 +2313,7 @@ function _reportIsPositive()
 
 function _reportTextForTestCheck( o )
 {
-  var trd = this;
+  let trd = this;
 
   o = _.routineOptions( _reportTextForTestCheck,o );
 
@@ -2317,7 +2324,7 @@ function _reportTextForTestCheck( o )
   _.assert( trd._checkIndex >= 0 );
   _.assert( _.strIsNotEmpty( trd.routine.name ), 'test routine should have name' );
 
-  var result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
+  let result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
 
   if( o.msg )
   result += ' : ' + o.msg;
@@ -2349,7 +2356,7 @@ _reportTextForTestCheck.defaults =
 
 function _accuracyGet()
 {
-  var trd = this;
+  let trd = this;
   return trd[ accuracyEffectiveSymbol ];
 }
 
@@ -2357,7 +2364,7 @@ function _accuracyGet()
 
 function _accuracySet( accuracy )
 {
-  var trd = this;
+  let trd = this;
 
   _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'expects number or range {-accuracy-}' );
 
@@ -2370,7 +2377,7 @@ function _accuracySet( accuracy )
 
 function _accuracyEffectiveGet()
 {
-  var trd = this;
+  let trd = this;
   return trd[ accuracyEffectiveSymbol ];
 }
 
@@ -2378,8 +2385,8 @@ function _accuracyEffectiveGet()
 
 function _accuracyChange()
 {
-  var trd = this;
-  var result;
+  let trd = this;
+  let result;
 
   if( !trd.suite )
   return null;
@@ -2405,7 +2412,7 @@ function _accuracyChange()
 
 function _timeOutGet()
 {
-  var trd = this;
+  let trd = this;
   if( trd[ timeOutSymbol ] !== null )
   return trd[ timeOutSymbol ];
   if( trd.suite.routineTimeOut !== null )
@@ -2417,7 +2424,7 @@ function _timeOutGet()
 
 function _timeOutSet( timeOut )
 {
-  var trd = this;
+  let trd = this;
   _.assert( timeOut === null || _.numberIs( timeOut ) );
   trd[ timeOutSymbol ] = timeOut;
   return timeOut;
@@ -2427,7 +2434,7 @@ function _timeOutSet( timeOut )
 
 function _rapidityGet()
 {
-  var trd = this;
+  let trd = this;
   if( trd[ rapiditySymbol ] !== null )
   return trd[ rapiditySymbol ];
   _.assert( 0 );
@@ -2437,7 +2444,7 @@ function _rapidityGet()
 
 function _rapiditySet( rapidity )
 {
-  var trd = this;
+  let trd = this;
   _.assert( _.numberIs( rapidity ) );
   trd[ rapiditySymbol ] = rapidity;
   return rapidity;
@@ -2447,7 +2454,7 @@ function _rapiditySet( rapidity )
 
 function _usingSourceCodeGet()
 {
-  var trd = this;
+  let trd = this;
   if( trd[ usingSourceCodeSymbol ] !== null )
   return trd[ usingSourceCodeSymbol ];
   if( trd.suite.usingSourceCode !== null )
@@ -2459,7 +2466,7 @@ function _usingSourceCodeGet()
 
 function _usingSourceCodeSet( usingSourceCode )
 {
-  var trd = this;
+  let trd = this;
   _.assert( usingSourceCode === null || _.boolLike( usingSourceCode ) );
   trd[ usingSourceCodeSymbol ] = usingSourceCode;
   return usingSourceCode;
@@ -2469,24 +2476,24 @@ function _usingSourceCodeSet( usingSourceCode )
 
 function _adoptRoutineFields()
 {
-  var trd = this;
+  let trd = this;
 
   _.mapExtendByDefined( trd, _.mapOnly( trd.routine, trd.KnownFields ) );
 
 }
 
 // --
-// var
+// let
 // --
 
-var willSymbol = Symbol.for( 'will' );
-var accuracySymbol = Symbol.for( 'accuracy' );
-var accuracyEffectiveSymbol = Symbol.for( 'accuracyEffective' );
-var timeOutSymbol = Symbol.for( 'timeOut' );
-var rapiditySymbol = Symbol.for( 'rapidity' );
-var usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
+let willSymbol = Symbol.for( 'will' );
+let accuracySymbol = Symbol.for( 'accuracy' );
+let accuracyEffectiveSymbol = Symbol.for( 'accuracyEffective' );
+let timeOutSymbol = Symbol.for( 'timeOut' );
+let rapiditySymbol = Symbol.for( 'rapidity' );
+let usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
 
-var KnownFields =
+let KnownFields =
 {
   experimental : null,
   routineTimeOut : null,
@@ -2500,7 +2507,7 @@ var KnownFields =
 // relationships
 // --
 
-var Composes =
+let Composes =
 {
   name : null,
   will : '',
@@ -2511,17 +2518,17 @@ var Composes =
   usingSourceCode : null,
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
   suite : null,
   routine : null,
 }
 
-var Restricts =
+let Restricts =
 {
 
   _checkIndex : 1,
@@ -2538,17 +2545,17 @@ var Restricts =
 
 }
 
-var Statics =
+let Statics =
 {
   KnownFields : KnownFields,
   strictEventHandling : 0,
 }
 
-var Events =
+let Events =
 {
 }
 
-var Forbids =
+let Forbids =
 {
   _cancelCon : '_cancelCon',
   _storedStates : '_storedStates',
@@ -2556,7 +2563,7 @@ var Forbids =
   _currentRoutinePasses : '_currentRoutinePasses',
 }
 
-var AccessorsReadOnly =
+let AccessorsReadOnly =
 {
   testsGroup : 'testsGroup',
   nameFull : 'nameFull',
@@ -2566,7 +2573,7 @@ var AccessorsReadOnly =
   able : 'able',
 }
 
-var Accessors =
+let Accessors =
 {
   description : 'description',
   will : 'will',
@@ -2581,7 +2588,7 @@ var Accessors =
 // define class
 // --
 
-var Proto =
+let Proto =
 {
 
   // inter

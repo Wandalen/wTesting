@@ -2,14 +2,14 @@
 
 'use strict';
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 //
 
-var logger = null;
-var Parent = null;
-var Self = function wTestSuite( o )
+let logger = null;
+let Parent = null;
+let Self = function wTestSuite( o )
 {
 
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -40,7 +40,7 @@ Self.nameShort = 'TestSuite';
 
 function init( o )
 {
-  var suite = this;
+  let suite = this;
 
   _.instanceInit( suite );
 
@@ -48,7 +48,7 @@ function init( o )
 
   if( _.routineIs( o.inherit ) )
   delete o.inherit;
-  var inherit = o.inherit;
+  let inherit = o.inherit;
   delete o.inherit;
 
   if( o && o.tests !== undefined )
@@ -98,7 +98,7 @@ function init( o )
 
 function copy( o )
 {
-  var suite = this;
+  let suite = this;
 
   // if( !( o instanceof Self ) )
   // suite.name = o.name;
@@ -113,13 +113,13 @@ function copy( o )
 //
 // function extendBy()
 // {
-//   var suite = this;
+//   let suite = this;
 //
 //   throw _.err( 'extendBy is deprecated, please, use inherit' );
 //
-//   // for( var a = 0 ; a < arguments.length ; a++ )
+//   // for( let a = 0 ; a < arguments.length ; a++ )
 //   // {
-//   //   var src = arguments[ 0 ];
+//   //   let src = arguments[ 0 ];
 //   //
 //   //   _.assert( _.mapIs( src ) );
 //   //
@@ -140,11 +140,11 @@ function copy( o )
 
 function inherit()
 {
-  var suite = this;
+  let suite = this;
 
-  for( var a = 0 ; a < arguments.length ; a++ )
+  for( let a = 0 ; a < arguments.length ; a++ )
   {
-    var src = arguments[ a ];
+    let src = arguments[ a ];
 
     _.assert( src instanceof Self );
 
@@ -154,7 +154,7 @@ function inherit()
     if( src.context )
     _.mapSupplement( suite.context, src.context );
 
-    var extend = _.mapBut( src._initialOptions, suite._initialOptions );
+    let extend = _.mapBut( src._initialOptions, suite._initialOptions );
     _.mapExtend( suite,extend );
     _.mapExtend( suite._initialOptions, extend );
 
@@ -169,12 +169,12 @@ function inherit()
 
 function _testSuitesRegister( suites )
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( suites ) );
 
-  for( var s in suites ) try
+  for( let s in suites ) try
   {
     Self( suites[ s ] );
   }
@@ -190,7 +190,7 @@ function _testSuitesRegister( suites )
 
 function _accuracySet( accuracy )
 {
-  var suite = this;
+  let suite = this;
 
   if( accuracy === null )
   accuracy = _.accuracy;
@@ -208,7 +208,7 @@ function _accuracySet( accuracy )
 
 function _routineSet( src )
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( src === null || _.routineIs( src ) || _.strIs( src ) );
@@ -224,9 +224,9 @@ function _routineSet( src )
 
 function consoleBar( value )
 {
-  var suite = this;
-  var logger = suite.logger;
-  var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.on : false;
+  let suite = this;
+  let logger = suite.logger;
+  let wasBarred = _.Tester._barOptions ? _.Tester._barOptions.on : false;
 
   try
   {
@@ -270,7 +270,7 @@ function consoleBar( value )
 
 function run()
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 0 );
 
@@ -283,7 +283,7 @@ function run()
 
 function _testSuiteRefine()
 {
-  var suite = this;
+  let suite = this;
 
   /* verify */
 
@@ -296,7 +296,7 @@ function _testSuiteRefine()
 
   /* extend */
 
-  var extend = Object.create( null );
+  let extend = Object.create( null );
 
   if( suite.override )
   _.mapExtend( extend, suite.override );
@@ -311,7 +311,7 @@ function _testSuiteRefine()
     if( extend.verbosity === undefined )
     extend.verbosity = _.Tester.settings.verbosity-1;
 
-    for( var f in _.Tester.SettingsOfSuite )
+    for( let f in _.Tester.SettingsOfSuite )
     if( _.Tester.settings[ f ] !== null )
     if( extend[ f ] === undefined )
     extend[ f ] = _.Tester.settings[ f ];
@@ -322,13 +322,13 @@ function _testSuiteRefine()
 
   /* refine test routines */
 
-  for( var testRoutineName in suite.tests )
+  for( let testRoutineName in suite.tests )
   {
-    var testRoutine = suite.tests[ testRoutineName ];
+    let testRoutine = suite.tests[ testRoutineName ];
 
     _.assert( _.routineIs( testRoutine ) );
 
-    var trd = _.Tester.TestRoutineDescriptor
+    let trd = _.Tester.TestRoutineDescriptor
     ({
       name : testRoutineName,
       routine : testRoutine,
@@ -357,7 +357,7 @@ function _testSuiteRefine()
 
 function _testSuiteRunSoon()
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -367,7 +367,7 @@ function _testSuiteRunSoon()
   // suite._testSuiteRefine();
   // debugger;
 
-  var con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
+  let con = suite.concurrent ? new _.Consequence().give() : _.Tester.TestSuite._suiteCon;
 
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
@@ -385,9 +385,9 @@ function _testSuiteRunSoon()
 
 function _testSuiteRunAct()
 {
-  var suite = this;
-  var testRoutines = suite.tests;
-  var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
+  let suite = this;
+  let testRoutines = suite.tests;
+  let logger = suite.logger || _.Tester.settings.logger || _global_.logger;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -432,7 +432,7 @@ function _testSuiteRunAct()
 
 function _testSuiteBegin()
 {
-  var suite = this;
+  let suite = this;
 
   if( suite.debug )
   debugger;
@@ -456,17 +456,9 @@ function _testSuiteBegin()
 
   _.arrayAppendOnceStrictly( _.Tester.activeSuites, suite );
 
-  /* */
-
-  if( !_.Tester._canContinue() )
-  {
-    debugger; /* xxx */
-    return;
-  }
-
   /* logger */
 
-  var logger = suite.logger;
+  let logger = suite.logger;
 
   /* silencing */
 
@@ -480,7 +472,7 @@ function _testSuiteBegin()
   logger.verbosityPush( suite.verbosity );
   logger.begin({ verbosity : -2 });
 
-  var msg =
+  let msg =
   [
     'Running test suite ( ' + suite.name + ' ) ..',
   ];
@@ -527,6 +519,14 @@ function _testSuiteBegin()
 
   /* */
 
+  if( !_.Tester._canContinue() )
+  {
+    debugger; /* xxx */
+    return false;
+  }
+
+  /* */
+
   return true;
 }
 
@@ -534,8 +534,8 @@ function _testSuiteBegin()
 
 function _testSuiteEnd( err )
 {
-  var suite = this;
-  var logger = suite.logger;
+  let suite = this;
+  let logger = suite.logger;
 
   _.assert( arguments.length === 1 )
 
@@ -593,25 +593,25 @@ function _testSuiteEnd( err )
 
   /**/
 
-  var ok = suite._reportIsPositive();
+  let ok = suite._reportIsPositive();
 
   if( logger )
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   if( logger )
   logger.begin( 'suite','end' );
 
-  var msg = suite._reportToStr();
+  let msg = suite._reportToStr();
 
   logger.log( msg );
 
-  var timingStr = '';
+  let timingStr = '';
   if( _.Tester.settings.timing )
   {
     suite.report.timeSpent = _.timeNow() - suite._testSuiteBeginTime;
     timingStr = ' ... in ' + _.timeSpentFormat( suite.report.timeSpent );
   }
 
-  var msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
+  msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
 
   msg = _.Tester.textColor( msg, ok );
 
@@ -656,10 +656,10 @@ function _testSuiteEnd( err )
 
 function _testSuiteTerminated()
 {
-  var suite = this;
+  let suite = this;
   debugger;
-  var err = _.err( 'Terminated by user' );
-  _.Tester.cancel( err, 1 );
+  let err = _.err( 'Terminated by user' );
+  _.Tester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }
 
 //
@@ -692,9 +692,9 @@ function onSuiteEnd( t )
 
 function _testRoutineRun( trd )
 {
-  var suite = this;
-  var result = null;
-  var report = suite.report;
+  let suite = this;
+  let result = null;
+  let report = suite.report;
 
   /* */
 
@@ -747,15 +747,15 @@ function _testRoutineRun( trd )
 
 function routineEach( onEach )
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( onEach ) );
   _.assert( suite._refined );
 
-  for( var testRoutineName in suite.tests )
+  for( let testRoutineName in suite.tests )
   {
-    var testRoutine = suite.tests[ testRoutineName ];
+    let testRoutine = suite.tests[ testRoutineName ];
     onEach( testRoutine );
   }
 
@@ -768,11 +768,11 @@ function routineEach( onEach )
 
 function _reportForm()
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( !suite.report, 'test suite already has report' );
 
-  var report = suite.report = Object.create( null );
+  let report = suite.report = Object.create( null );
 
   report.timeSpent = null;
   report.errorsArray = [];
@@ -795,9 +795,9 @@ function _reportForm()
 
 function _reportToStr()
 {
-  var suite = this;
-  var msg = '';
-  var appExitCode = _.appExitCode();
+  let suite = this;
+  let msg = '';
+  let appExitCode = _.appExitCode();
 
   if( appExitCode !== undefined && appExitCode !== 0 )
   msg = 'ExitCode : ' + appExitCode + '\n';
@@ -816,9 +816,9 @@ function _reportToStr()
 
 function _reportIsPositive()
 {
-  var testing = this;
+  let testing = this;
 
-  var appExitCode = _.appExitCode();
+  let appExitCode = _.appExitCode();
   if( appExitCode !== undefined && appExitCode !== 0 )
   return false;
 
@@ -843,7 +843,7 @@ function _reportIsPositive()
 
 function _testCheckConsider( outcome )
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( this.constructor === Self );
@@ -869,8 +869,8 @@ function _testCheckConsider( outcome )
 
 function _testCaseConsider( outcome )
 {
-  var suite = this;
-  var report = suite.report;
+  let suite = this;
+  let report = suite.report;
 
   if( outcome )
   report.testCasePasses += 1;
@@ -885,7 +885,7 @@ function _testCaseConsider( outcome )
 
 function _testRoutineConsider( outcome )
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( this.constructor === Self );
@@ -911,7 +911,7 @@ function _testRoutineConsider( outcome )
 
 function _exceptionConsider( err )
 {
-  var suite = this;
+  let suite = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( suite.constructor === Self );
@@ -927,13 +927,13 @@ function _exceptionConsider( err )
 
 function exceptionReport( o )
 {
-  var suite = this;
-  var logger = suite.logger || _.Tester.settings.logger || _global_.logger;
+  let suite = this;
+  let logger = suite.logger || _.Tester.settings.logger || _global_.logger;
 
   _.routineOptions( exceptionReport,o );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var err = _.err( o.err );
+  let err = _.err( o.err );
 
   if( o.considering )
   suite._exceptionConsider( err );
@@ -952,17 +952,17 @@ exceptionReport.defaults =
 }
 
 // --
-// var
+// let
 // --
 
-var accuracySymbol = Symbol.for( 'accuracy' );
-var routineSymbol = Symbol.for( 'routine' );
+let accuracySymbol = Symbol.for( 'accuracy' );
+let routineSymbol = Symbol.for( 'routine' );
 
 // --
 // relationships
 // --
 
-var Composes =
+let Composes =
 {
 
   name : null,
@@ -1009,17 +1009,17 @@ var Composes =
 
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
   logger : null,
   context : null,
 }
 
-var Restricts =
+let Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
@@ -1029,19 +1029,19 @@ var Restricts =
   _refined : 0,
 }
 
-var Statics =
+let Statics =
 {
   usingUniqueNames : 1,
   _suiteCon : new _.Consequence().give(),
 }
 
-var Events =
+let Events =
 {
   routineBegin : 'routineBegin',
   routineEnd : 'routineEnd',
 }
 
-var Forbids =
+let Forbids =
 {
   safe : 'safe',
   options : 'options',
@@ -1052,7 +1052,7 @@ var Forbids =
   timing : 'timing',
 }
 
-var Accessors =
+let Accessors =
 {
   accuracy : 'accuracy',
   routine : 'routine',
@@ -1062,7 +1062,7 @@ var Accessors =
 // define class
 // --
 
-var Proto =
+let Proto =
 {
 
   // inter

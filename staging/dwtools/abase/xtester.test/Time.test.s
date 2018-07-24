@@ -334,7 +334,7 @@ function timeOut( test )
     t.doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 );
+      test.ge( elapsedTime, c.delay / 2 ); xxx
       test.identical( got, undefined );
       test.identical( err, stop );
       test.identical( called, false );

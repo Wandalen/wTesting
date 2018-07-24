@@ -226,7 +226,7 @@ function consoleBar( value )
 {
   var suite = this;
   var logger = suite.logger;
-  var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.exclusiveOutputPrinter : false;
+  var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.on : false;
 
   try
   {
@@ -240,13 +240,13 @@ function consoleBar( value )
       logger.log( 'Silencing console' );
       logger.end({ verbosity : -8 });
       if( !_.Logger.consoleIsBarred( console ) )
-      _.Tester._barOptions = _.Logger.consoleBar({ outputPrinter : logger, exclusiveOutputPrinter : 1 });
+      _.Tester._barOptions = _.Logger.consoleBar({ outputPrinter : logger, on : 1 });
     }
     else
     {
       if( _.Logger.consoleIsBarred( console ) )
       {
-        _.Tester._barOptions.exclusiveOutputPrinter = 0;
+        _.Tester._barOptions.on = 0;
         _.Logger.consoleBar( _.Tester._barOptions );
       }
     }

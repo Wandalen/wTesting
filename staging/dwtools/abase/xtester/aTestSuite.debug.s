@@ -394,7 +394,6 @@ function _testSuiteRunAct()
 
   /* */
 
-  debugger;
   return _.execStages( testRoutines,
   {
     manual : 1,

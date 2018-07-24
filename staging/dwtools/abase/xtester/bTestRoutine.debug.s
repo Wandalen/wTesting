@@ -99,7 +99,7 @@ function _testRoutineBegin()
 
   _.arrayAppendOnceStrictly( _.Tester.activeRoutines, trd );
 
-  suite._hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
+  suite._hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
 
   _.assert( arguments.length === 0 );
   _.assert( trd._returned === null );
@@ -145,21 +145,21 @@ function _testRoutineEnd()
   _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  var _hasConsoleInOutputs = suite.logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } );
+  var _hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
   {
     debugger; /* xxx */
     var wasBarred = suite.consoleBar( 0 );
 
     // var barOptions = _.Tester._barOptions;
-    // var bar = barOptions.bar;
+    // var exclusiveOutputPrinter = barOptions.exclusiveOutputPrinter;
     //
-    // barOptions.bar = 0;
+    // barOptions.exclusiveOutputPrinter = 0;
     // suite.logger.consoleBar( barOptions );
     //
-    // if( bar )
+    // if( exclusiveOutputPrinter )
     // {
-    //   barOptions.bar = bar;
+    //   barOptions.exclusiveOutputPrinter = exclusiveOutputPrinter;
     //   suite.logger.consoleBar( barOptions );
     // }
 
@@ -2071,7 +2071,7 @@ function _outcomeReport( o )
     }
 
     if( code )
-    code = ' #ignoreDirectives : 1# ' + code + ' #ignoreDirectives : 0# ';
+    code = ' #inputRaw : 1# ' + code + ' #inputRaw : 0# ';
 
     return code;
   }

@@ -26,7 +26,7 @@ _.assert( _.toStr, 'wTesting needs wTools/staging/dwtools/abase/layer1/StringToo
 _.assert( _.execStages, 'wTesting needs wTools/staging/dwtools/abase/layer1/ExecTools.s' );
 _.assert( _.Consequence, 'wTesting needs wConsequence/staging/dwtools/abase/oclass/Consequence.s' );
 _.assert( _.accuracy, 'wTesting needs wTools.accuracy' );
-_.assert( _.loggerIs( _global.logger ), 'wTesting needs wTools.Logger' );
+_.assert( _.printerIs( _global.logger ), 'wTesting needs wTools.Logger' );
 
 // --
 // tester
@@ -351,7 +351,7 @@ function _testingBegin( allSuites, runSuites )
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( allSuites ) );
   _.assert( _.mapIs( runSuites ) );
-  _.assert( logger._hasOutput( _global.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( logger.hasOutput( _global.logger,{ deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   tester._reportForm();
 
@@ -437,8 +437,7 @@ function _testingEnd()
 
   logger.verbosityPop();
 
-  // _.assert( logger._hasOutput( console,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have console in outputs.' );
-  _.assert( logger._hasOutput( _global.logger,{ deep : 0, ignoringUnbar : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( logger.hasOutput( _global.logger,{ deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   debugger;
   if( !ok )

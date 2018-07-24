@@ -226,7 +226,7 @@ function consoleBar( value )
 {
   var suite = this;
   var logger = suite.logger;
-  var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.bar : false;
+  var wasBarred = _.Tester._barOptions ? _.Tester._barOptions.exclusiveOutputPrinter : false;
 
   try
   {
@@ -240,13 +240,13 @@ function consoleBar( value )
       logger.log( 'Silencing console' );
       logger.end({ verbosity : -8 });
       if( !_.Logger.consoleIsBarred( console ) )
-      _.Tester._barOptions = _.Logger.consoleBar({ outputLogger : logger, bar : 1 });
+      _.Tester._barOptions = _.Logger.consoleBar({ outputLogger : logger, exclusiveOutputPrinter : 1 });
     }
     else
     {
       if( _.Logger.consoleIsBarred( console ) )
       {
-        _.Tester._barOptions.bar = 0;
+        _.Tester._barOptions.exclusiveOutputPrinter = 0;
         _.Logger.consoleBar( _.Tester._barOptions );
       }
     }
@@ -493,7 +493,7 @@ function _testSuiteBegin()
 
   logger.end( 'suite' );
 
-  logger.mine( 'suite.content' ).log( '' );
+  logger.later( 'suite.content' ).log( '' );
 
   logger.end({ verbosity : -2 });
 
@@ -586,7 +586,7 @@ function _testSuiteEnd( err )
   logger.begin({ verbosity : -2 });
 
   if( logger._mines[ 'suite.content' ] )
-  logger.mineFinit( 'suite.content' );
+  logger.laterFinit( 'suite.content' );
   else
   logger.log();
 

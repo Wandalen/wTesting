@@ -240,7 +240,7 @@ function consoleBar( value )
       logger.log( 'Silencing console' );
       logger.end({ verbosity : -8 });
       if( !_.Logger.consoleIsBarred( console ) )
-      _.Tester._barOptions = _.Logger.consoleBar({ outputLogger : logger, exclusiveOutputPrinter : 1 });
+      _.Tester._barOptions = _.Logger.consoleBar({ outputPrinter : logger, exclusiveOutputPrinter : 1 });
     }
     else
     {
@@ -254,8 +254,9 @@ function consoleBar( value )
   }
   catch( err )
   {
+    debugger;
     if( err && err.toString )
-    console.error( err.toString() );
+    console.error( err.toString() + '\n' + err.stack );
     else
     console.error( err );
   }
@@ -393,6 +394,7 @@ function _testSuiteRunAct()
 
   /* */
 
+  debugger;
   return _.execStages( testRoutines,
   {
     manual : 1,
@@ -405,7 +407,6 @@ function _testSuiteRunAct()
 
   /* */
 
-  debugger;
   function handleStage( trd, iteration, iterator )
   {
     // return suite._testRoutineRun( iteration.key, testRoutine );
@@ -557,8 +558,9 @@ function _testSuiteEnd( err )
     }
     catch( err2 )
     {
+      debugger;
       console.error( err2 );
-      console.error( err.toString() );
+      console.error( err.toString() + '\n' + err.stack );
     }
   }
 

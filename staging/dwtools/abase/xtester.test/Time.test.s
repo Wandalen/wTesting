@@ -237,11 +237,9 @@ function timeOut( test )
     t.doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 );
-      debugger;
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( err, 'stop' );
       test.identical( got, undefined );
-      debugger;
     })
     _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
 
@@ -260,7 +258,7 @@ function timeOut( test )
     t.doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 );
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( got, undefined );
       test.identical( err, 'stop' );
       test.identical( called, false );
@@ -334,7 +332,7 @@ function timeOut( test )
     t.doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 ); xxx
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( got, undefined );
       test.identical( err, stop );
       test.identical( called, false );
@@ -502,7 +500,7 @@ function timeOutError( test )
     t.doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 );
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( got, undefined );
       test.is( !!err );
       test.identical( t.messagesGet().length, 0 );
@@ -524,7 +522,7 @@ function timeOutError( test )
     t.doThen( function( err, arg )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 );
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( arg, undefined );
       test.identical( err, 'stop' );
       test.identical( called, false );

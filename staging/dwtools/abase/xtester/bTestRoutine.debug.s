@@ -17,7 +17,7 @@ let Self = function wTestRoutineDescriptor( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'TestRoutineDescriptor';
+Self.shortName = 'TestRoutineDescriptor';
 
 //
 
@@ -2504,7 +2504,7 @@ let KnownFields =
 }
 
 // --
-// relationships
+// relations
 // --
 
 let Composes =
@@ -2701,7 +2701,7 @@ let Proto =
 
   _adoptRoutineFields : _adoptRoutineFields,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,
@@ -2731,6 +2731,6 @@ _.Copyable.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_.Tester[ Self.nameShort ] = Self;
+_.Tester[ Self.shortName ] = Self;
 
 })();

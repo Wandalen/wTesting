@@ -5,6 +5,12 @@
 let _global = _global_;
 let _ = _global_.wTools;
 
+// debugger;
+// let d = _.propertyDescriptorGet( _global.logger, 'write' );
+// var fs1 = _.mapFields( _global.logger );
+// var fs2 = _.mapFields( d.object );
+// debugger;
+
 //
 
 let logger = null;
@@ -32,7 +38,7 @@ let Self = function wTestSuite( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'TestSuite';
+Self.shortName = 'TestSuite';
 
 // --
 // inter
@@ -59,7 +65,7 @@ function init( o )
 
   suite._initialOptions = o;
 
-  _.assert( o === undefined || _.objectIs( o ),'expects object ( options ), but got',_.strTypeOf( o ) );
+  _.assert( o === undefined || _.objectIs( o ),'expects object {-options-}, but got',_.strTypeOf( o ) );
 
   /* source path */
 
@@ -959,7 +965,7 @@ let accuracySymbol = Symbol.for( 'accuracy' );
 let routineSymbol = Symbol.for( 'routine' );
 
 // --
-// relationships
+// relations
 // --
 
 let Composes =
@@ -1031,7 +1037,8 @@ let Restricts =
 
 let Statics =
 {
-  usingUniqueNames : 1,
+  // usingUniqueNames : 1,
+  usingUniqueNames : _.define.withOptions({ value : 1, readOnly : 1 }),
   _suiteCon : new _.Consequence().give(),
 }
 
@@ -1110,7 +1117,7 @@ let Proto =
   _exceptionConsider : _exceptionConsider,
   exceptionReport : exceptionReport,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,
@@ -1142,7 +1149,7 @@ _.EventHandler.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_.Tester[ Self.nameShort ] = Self;
-_realGlobal_[ Self.name ] = _global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_.Tester[ Self.shortName ] = Self;
+_realGlobal_[ Self.name ] = _global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 })();

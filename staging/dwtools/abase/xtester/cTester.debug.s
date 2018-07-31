@@ -22,10 +22,10 @@ if( _.Tester._isFullImplementation )
   return;
 }
 
-_.assert( _.toStr, 'wTesting needs wTools/staging/dwtools/abase/layer1/StringTools.s' );
-_.assert( _.execStages, 'wTesting needs wTools/staging/dwtools/abase/layer1/ExecTools.s' );
-_.assert( _.Consequence, 'wTesting needs wConsequence/staging/dwtools/abase/oclass/Consequence.s' );
-_.assert( _.accuracy, 'wTesting needs wTools.accuracy' );
+_.assert( _.routineIs( _.toStr ), 'wTesting needs wTools/staging/dwtools/abase/layer1/StringTools.s' );
+_.assert( _.routineIs( _.execStages ), 'wTesting needs wTools/staging/dwtools/abase/layer1/ExecTools.s' );
+_.assert( _.routineIs( _.Consequence ), 'wTesting needs wConsequence/staging/dwtools/abase/oclass/Consequence.s' );
+_.assert( _.numberIs( _.accuracy ), 'wTesting needs wTools.accuracy' );
 _.assert( _.printerIs( _global.logger ), 'wTesting needs wTools.Logger' );
 
 // --
@@ -207,7 +207,7 @@ function appArgsRead()
   if( appArgs.err )
   throw _.errBriefly( appArgs.err );
 
-  _.assert( appArgs.map );
+  _.assert( _.mapIs( appArgs.map ) );
 
   if( !appArgs.map )
   appArgs.map = Object.create( null );

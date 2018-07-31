@@ -17,10 +17,10 @@ if( _global_.WTOOLS_PRIVATE )
 }
 
 _.assert( _global_.wTools === _ );
-_.assert( _realGlobal_.wTestSuite );
+_.assert( _.routineIs( _realGlobal_.wTestSuite ) );
 _.assert( !_realGlobal_.wTestRoutineDescriptor );
-_.assert( _realGlobal_.wTests );
-_.assert( _realGlobal_.wTester );
+_.assert( _.objectIs( _realGlobal_.wTests ) );
+_.assert( _.objectIs( _realGlobal_.wTester ) );
 
 if( _global_.WTOOLS_PRIVATE )
 _realGlobal_._global_ = _global_._globalWas_;

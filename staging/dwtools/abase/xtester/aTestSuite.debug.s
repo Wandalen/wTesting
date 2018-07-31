@@ -19,7 +19,7 @@ let Self = function wTestSuite( o )
 {
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( o );
+  _.assert( !!o );
 
   if( !( this instanceof Self ) )
   if( _.strIs( o ) )
@@ -1038,7 +1038,7 @@ let Restricts =
 let Statics =
 {
   // usingUniqueNames : 1,
-  usingUniqueNames : _.define.withOptions({ value : 1, readOnly : 1 }),
+  usingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
   _suiteCon : new _.Consequence().give(),
 }
 
@@ -1119,7 +1119,7 @@ let Proto =
 
   // relations
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

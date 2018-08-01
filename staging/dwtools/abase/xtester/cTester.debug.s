@@ -120,10 +120,16 @@ function _includeTestsFrom( path )
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :',path,'\n' );
 
+  let ends = [ '.test.s' ];
+  if( Config.platform === 'browser' )
+  ends.push( '.test.js' );
+  else
+  ends.push( '.test.ss' );
+
   let files = _.fileProvider.filesFind
   ({
     filePath : path,
-    ends : [ '.test.s','.test.ss','.test.js' ],
+    ends : ends,
     recursive : 1,
     maskAll : _.regexpMakeSafe(),
   });

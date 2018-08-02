@@ -110,6 +110,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
   _.includeAny( 'wEventHandler','' );
+  _.include( 'wLogger' );
   _.include( 'wConsequence' );
   _.include( 'wFiles' );
   _.include( 'wLogger' );

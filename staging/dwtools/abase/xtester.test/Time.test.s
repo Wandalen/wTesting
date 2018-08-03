@@ -503,7 +503,7 @@ function timeOutError( test )
       test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( got, undefined );
       test.is( !!err );
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
     })
     _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
 
@@ -526,7 +526,7 @@ function timeOutError( test )
       test.identical( arg, undefined );
       test.identical( err, 'stop' );
       test.identical( called, false );
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
     })
     _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
 
@@ -569,12 +569,12 @@ function timeOutMode01( test )
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ) );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -596,12 +596,12 @@ function timeOutMode01( test )
         test.identical( got , undefined );
         test.is( err === undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -624,12 +624,12 @@ function timeOutMode01( test )
         test.is( got === value );
         test.is( err === undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -651,12 +651,12 @@ function timeOutMode01( test )
         test.is( _.routineIs( got ));
         test.is( err === undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -678,12 +678,12 @@ function timeOutMode01( test )
         test.identical( got, _.timeOut );
         test.identical( err, undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -709,12 +709,12 @@ function timeOutMode01( test )
         test.identical( got, c.delay * 13 );
         test.identical( err, undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -737,12 +737,12 @@ function timeOutMode01( test )
         test.identical( got , undefined );
         test.identical( err , 'stop' );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -769,12 +769,12 @@ function timeOutMode01( test )
         test.identical( err, 'stop' );
         test.identical( called, false );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -798,12 +798,12 @@ function timeOutMode01( test )
         test.identical( got, undefined );
         test.identical( err, undefined );
       })
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen(function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
 
@@ -811,12 +811,12 @@ function timeOutMode01( test )
     {
       t.error( 'stop' );
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .doThen( function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
 
       _.Consequence.asyncModeSet( mode );
@@ -854,12 +854,12 @@ function timeOutMode10( test )
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ) );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1, function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -881,12 +881,12 @@ function timeOutMode10( test )
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1, function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -909,12 +909,12 @@ function timeOutMode10( test )
         test.is( got === value );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -936,12 +936,12 @@ function timeOutMode10( test )
         test.is( _.routineIs( got ));
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -963,12 +963,12 @@ function timeOutMode10( test )
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -994,12 +994,12 @@ function timeOutMode10( test )
         test.is( got === c.delay / 2 );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1021,11 +1021,11 @@ function timeOutMode10( test )
         test.ge( elapsedTime , c.delay / 2 );
         test.identical( got , undefined );
         test.identical( err , 'stop' );
-        test.identical( t.messagesGet().length, 0 );
+        test.identical( t.resourcesGet().length, 0 );
         test.identical( t.correspondentsEarlyGet().length, 0 );
       });
 
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
   })
@@ -1051,10 +1051,10 @@ function timeOutMode10( test )
         test.identical( got, undefined );
         test.identical( err, 'stop' );
         test.identical( called, false );
-        test.identical( t.messagesGet().length, 0 );
+        test.identical( t.resourcesGet().length, 0 );
         test.identical( t.correspondentsEarlyGet().length, 0 );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
   })
@@ -1078,24 +1078,24 @@ function timeOutMode10( test )
         test.identical( got, undefined );
         test.identical( err, undefined );
       })
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
     .doThen( function()
     {
       t.error( 'stop' );
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
 
       _.Consequence.asyncModeSet( mode );
@@ -1135,12 +1135,12 @@ function timeOutMode11( test )
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.is( _.routineIs( got ) );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1, function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1162,12 +1162,12 @@ function timeOutMode11( test )
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1, function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1190,12 +1190,12 @@ function timeOutMode11( test )
         test.is( got === value );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1217,12 +1217,12 @@ function timeOutMode11( test )
         test.is( _.routineIs( got ));
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1244,12 +1244,12 @@ function timeOutMode11( test )
         test.identical( got , undefined );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1275,12 +1275,12 @@ function timeOutMode11( test )
         test.is( got === c.delay / 2 );
         test.identical( err , undefined );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1303,12 +1303,12 @@ function timeOutMode11( test )
         test.identical( got , undefined );
         test.identical( err , 'stop' );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1335,12 +1335,12 @@ function timeOutMode11( test )
         test.identical( err, 'stop' )
         test.identical( called, false );
       });
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
   })
@@ -1364,24 +1364,24 @@ function timeOutMode11( test )
         test.identical( got, undefined );
         test.identical( err, undefined );
       })
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
     })
     .doThen( function()
     {
       t.error( 'stop' );
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
-      test.identical( t.messagesGet().length, 1 );
+      test.identical( t.resourcesGet().length, 1 );
       test.identical( t.correspondentsEarlyGet().length, 1 );
     })
     .timeOutThen( 1,function()
     {
-      test.identical( t.messagesGet().length, 0 );
+      test.identical( t.resourcesGet().length, 0 );
       test.identical( t.correspondentsEarlyGet().length, 0 );
 
       _.Consequence.asyncModeSet( mode );

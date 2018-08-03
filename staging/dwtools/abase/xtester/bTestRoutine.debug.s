@@ -1584,7 +1584,7 @@ function _shouldDo( o )
       _.timeOut( 10,function()
       {
 
-        if( result.messagesGet().length )
+        if( result.resourcesGet().length )
         if( reported )
         {
           _.assert( !good );

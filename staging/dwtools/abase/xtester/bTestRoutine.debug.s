@@ -2532,11 +2532,11 @@ let Restricts =
 {
 
   _checkIndex : 1,
-  _checksStack : [],
+  _checksStack : _.define.own( [] ),
   _testsGroupOpenedExplicitly : 0,
   _testsGroupIsCase : 0,
   _testsGroupError : 0,
-  _testsGroupsStack : [],
+  _testsGroupsStack : _.define.own( [] ),
 
   _testRoutineBeginTime : null,
   _returned : null,
@@ -2703,7 +2703,7 @@ let Proto =
 
   // relations
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

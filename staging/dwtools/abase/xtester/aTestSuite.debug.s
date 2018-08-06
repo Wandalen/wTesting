@@ -1002,10 +1002,10 @@ let Composes =
 
   debug : 0,
 
-  override : Object.create( null ),
+  override : _.define.own( {} ),
 
-  _routineCon : new _.Consequence().give(),
-  _inroutineCon : new _.Consequence().give(),
+  _routineCon : _.define.own( new _.Consequence().give() ),
+  _inroutineCon : _.define.own( new _.Consequence().give() ),
 
   onRoutineBegin : onRoutineBegin,
   onRoutineEnd : onRoutineEnd,
@@ -1119,7 +1119,7 @@ let Proto =
 
   // relations
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

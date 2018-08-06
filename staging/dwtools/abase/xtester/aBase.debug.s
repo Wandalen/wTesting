@@ -62,6 +62,8 @@
 
 - if timeout then print not "failed throwing error", but "failed with timeout"
 
+- implement onError field for test routine?
+
 */
 
 let _global = undefined;
@@ -106,7 +108,7 @@ if( typeof module !== 'undefined' )
   let _global = _global_;
   let _ = _global_.wTools;
 
-  _.include( 'wExecTools' );
+  _.include( 'wExternalFundamentals' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
   _.includeAny( 'wEventHandler','' );

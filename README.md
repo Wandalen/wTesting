@@ -1,7 +1,7 @@
 
 # wTesting [![Build Status](https://travis-ci.org/Wandalen/wTesting.svg?branch=master)](https://travis-ci.org/Wandalen/wTesting)
 
-Tool for unit testing in Java Script. Package provides intuitive interface, simple tests structure, async code handling using [wConsequnce](https://github.com/Wandalen/wConsequence), colorful report output with multiple levels of details, running all suits from directory, supports running in browser and much more.
+Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
 
 ### Installation
 
@@ -89,66 +89,3 @@ testSuite = wTestSuit( testSuite );
 wTools.Testing.test( testSuite );
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

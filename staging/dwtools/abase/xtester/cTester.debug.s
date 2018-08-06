@@ -108,11 +108,129 @@ function _registerExitHandler()
 
 //
 
+function appArgsRead()
+{
+  let tester = this;
+  let logger = tester.logger;
+  let settings = tester.settings;
+
+  if( tester._appArgs )
+  return tester._appArgs;
+
+  _.assert( arguments.length === 0 );
+  _.mapExtend( settings, tester.Settings );
+
+  let readOptions =
+  {
+    dst : settings,
+    namesMap : tester.SettingsNameMap,
+    removing : 0,
+    only : 1,
+    throwing : 0,
+  }
+
+  let appArgs = _.appArgsReadTo( readOptions );
+  if( appArgs.err )
+  throw _.errBriefly( appArgs.err );
+
+  _.assert( _.mapIs( appArgs.map ) );
+
+  if( !appArgs.map )
+  appArgs.map = Object.create( null );
+
+  _.mapExtend( settings,_.mapOnly( appArgs.map, tester.Settings ) );
+
+  let v = settings.verbosity;
+  _.assert( v === null || v === undefined || _.boolLike( v ) )
+  if( !_.boolLike( v ) )
+  v = 1;
+
+  if( settings.beeping === null )
+  settings.beeping = !!v;
+
+  tester._appArgs = appArgs;
+
+  tester.path = appArgs.subject || _.path.pathCurrent();
+  tester.path = _.path.pathJoin( _.path.pathCurrent(), tester.path );
+
+  if( _.numberIs( v ) )
+  tester.verbosity = v;
+
+  return appArgs;
+}
+
+//
+
+function scenarioHelp()
+{
+  let tester = this;
+
+  tester.scenarioScenariosList();
+  tester.scenarioOptionsList();
+
+}
+
+//
+
+function scenarioScenariosList()
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  let strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
+
+  logger.log( 'Scenarios :\n',_.toStr( tester.ScenariosHelpMap,strOptions ),'\n' );
+
+}
+
+//
+
+function scenarioOptionsList()
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  let strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
+
+  logger.log( 'Tester options' );
+  logger.log( _.toStr( tester.ApplicationArgumentsMap, strOptions ),'\n' );
+}
+
+//
+
+function scenarioSuitesList()
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  _.assert( tester.settings.scenario === 'suites.list' );
+
+  tester.includeTestsFrom( tester.path );
+  tester.suitesListPrint( tester.suitesFilterOut() );
+
+}
+
+// --
+// include
+// --
+
 function _includeTestsFrom( path )
 {
   let tester = this;
   let logger = tester.logger;
-  path = _.pathJoin( _.pathCurrent(),path );
+  path = _.path.pathJoin( _.path.pathCurrent(),path );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
@@ -183,122 +301,6 @@ function includeTestsFrom( path )
   logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
   tester._includeTestsFrom( path );
   logger.verbosityPop();
-
-}
-
-//
-
-function appArgsRead()
-{
-  let tester = this;
-  let logger = tester.logger;
-  let settings = tester.settings;
-
-  if( tester._appArgs )
-  return tester._appArgs;
-
-  _.assert( arguments.length === 0 );
-  _.mapExtend( settings, tester.Settings );
-
-  let readOptions =
-  {
-    dst : settings,
-    namesMap : tester.SettingsNameMap,
-    removing : 0,
-    only : 1,
-    throwing : 0,
-  }
-
-  let appArgs = _.appArgsReadTo( readOptions );
-  if( appArgs.err )
-  throw _.errBriefly( appArgs.err );
-
-  _.assert( _.mapIs( appArgs.map ) );
-
-  if( !appArgs.map )
-  appArgs.map = Object.create( null );
-
-  _.mapExtend( settings,_.mapOnly( appArgs.map, tester.Settings ) );
-
-  let v = settings.verbosity;
-  _.assert( v === null || v === undefined || _.boolLike( v ) )
-  if( !_.boolLike( v ) )
-  v = 1;
-
-  if( settings.beeping === null )
-  settings.beeping = !!v;
-
-  tester._appArgs = appArgs;
-
-  tester.path = appArgs.subject || _.pathCurrent();
-  tester.path = _.pathJoin( _.pathCurrent(), tester.path );
-
-  if( _.numberIs( v ) )
-  tester.verbosity = v;
-
-  return appArgs;
-}
-
-//
-
-function scenarioHelp()
-{
-  let tester = this;
-
-  tester.scenarioScenariosList();
-  tester.scenarioOptionsList();
-
-}
-
-//
-
-function scenarioScenariosList()
-{
-  let tester = this;
-  let logger = tester.logger;
-
-  let strOptions =
-  {
-    levels : 3,
-    wrap : 0,
-    stringWrapper : '',
-    multiline : 1
-  };
-
-  logger.log( 'Scenarios :\n',_.toStr( tester.ScenariosHelpMap,strOptions ),'\n' );
-
-}
-
-//
-
-function scenarioOptionsList()
-{
-  let tester = this;
-  let logger = tester.logger;
-
-  let strOptions =
-  {
-    levels : 3,
-    wrap : 0,
-    stringWrapper : '',
-    multiline : 1
-  };
-
-  logger.log( 'Tester options' );
-  logger.log( _.toStr( tester.ApplicationArgumentsMap, strOptions ),'\n' );
-}
-
-//
-
-function scenarioSuitesList()
-{
-  let tester = this;
-  let logger = tester.logger;
-
-  _.assert( tester.settings.scenario === 'suites.list' );
-
-  tester.includeTestsFrom( tester.path );
-  tester.suitesListPrint( tester.suitesFilterOut() );
 
 }
 
@@ -981,8 +983,8 @@ function _exceptionConsider( err )
 //   let routineHead;
 //   routines = _.entityFilter( routines, function( routine,k )
 //   {
-//     routine.folderPath = _.pathDir( k );
-//     routine.itemsPath = _.pathDir( routine.folderPath );
+//     routine.folderPath = _.path.pathDir( k );
+//     routine.itemsPath = _.path.pathDir( routine.folderPath );
 //     routine.itemsData = _.entitySelect( data,routine.itemsPath );
 //
 //     if( routine.tail )
@@ -1015,7 +1017,7 @@ function _exceptionConsider( err )
 //         return;
 //       }
 //
-//       acheck.checkPath = _.pathDir( k );
+//       acheck.checkPath = _.path.pathDir( k );
 //       let result = Object.create( null );
 //       result.data = acheck;
 //       debugger;
@@ -1263,14 +1265,17 @@ let Self =
 
   exec : exec,
   _registerExitHandler : _registerExitHandler,
-  _includeTestsFrom : _includeTestsFrom,
-  includeTestsFrom : includeTestsFrom,
   appArgsRead : appArgsRead,
 
   scenarioHelp : scenarioHelp,
   scenarioScenariosList : scenarioScenariosList,
   scenarioOptionsList : scenarioOptionsList,
   scenarioSuitesList : scenarioSuitesList,
+
+  // include
+
+  _includeTestsFrom : _includeTestsFrom,
+  includeTestsFrom : includeTestsFrom,
 
   // run
 

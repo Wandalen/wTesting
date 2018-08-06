@@ -2,12 +2,12 @@
   "name": "wTesting",
   "version": "0.4.143",
   "engine": "node >= 6.0.0",
-  "description": "Tool for convenient unit testing in Java Script.",
+  "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
-      "email": "wanalen@willbe.so>"
+      "email": "wanalen@willbe.so"
     },
     {
       "name": "Volodymyr M.",

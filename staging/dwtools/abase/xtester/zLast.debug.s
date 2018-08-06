@@ -1,5 +1,13 @@
 (function _zLast_debyg_s_() {
 
+/**
+  @module Tools/Tester - Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated..
+*/
+
+/**
+ * @file zLast.debug.s
+ */
+
 'use strict';
 
 var _global = _global_;

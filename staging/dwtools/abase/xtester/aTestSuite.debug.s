@@ -1119,7 +1119,7 @@ let Proto =
 
   // relations
 
-  /* constructor * : * Self, */
+  
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

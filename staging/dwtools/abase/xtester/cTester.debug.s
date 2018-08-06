@@ -150,8 +150,8 @@ function appArgsRead()
 
   tester._appArgs = appArgs;
 
-  tester.path = appArgs.subject || _.path.pathCurrent();
-  tester.path = _.path.pathJoin( _.path.pathCurrent(), tester.path );
+  tester.path = appArgs.subject || _.path.current();
+  tester.path = _.path.join( _.path.current(), tester.path );
 
   if( _.numberIs( v ) )
   tester.verbosity = v;
@@ -230,7 +230,7 @@ function _includeTestsFrom( path )
 {
   let tester = this;
   let logger = tester.logger;
-  path = _.path.pathJoin( _.path.pathCurrent(),path );
+  path = _.path.join( _.path.current(),path );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
@@ -267,7 +267,7 @@ function _includeTestsFrom( path )
 
     try
     {
-      require( _.fileProvider.pathNativize( absolutePath ) );
+      require( _.fileProvider.nativize( absolutePath ) );
     }
     catch( err )
     {
@@ -983,8 +983,8 @@ function _exceptionConsider( err )
 //   let routineHead;
 //   routines = _.entityFilter( routines, function( routine,k )
 //   {
-//     routine.folderPath = _.path.pathDir( k );
-//     routine.itemsPath = _.path.pathDir( routine.folderPath );
+//     routine.folderPath = _.path.dir( k );
+//     routine.itemsPath = _.path.dir( routine.folderPath );
 //     routine.itemsData = _.entitySelect( data,routine.itemsPath );
 //
 //     if( routine.tail )
@@ -1017,7 +1017,7 @@ function _exceptionConsider( err )
 //         return;
 //       }
 //
-//       acheck.checkPath = _.path.pathDir( k );
+//       acheck.checkPath = _.path.dir( k );
 //       let result = Object.create( null );
 //       result.data = acheck;
 //       debugger;

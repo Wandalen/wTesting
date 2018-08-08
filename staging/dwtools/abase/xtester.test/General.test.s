@@ -33,8 +33,8 @@ if( typeof module !== 'undefined' )
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isFullImplementation )
   require( '../xtester/aBase.debug.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );

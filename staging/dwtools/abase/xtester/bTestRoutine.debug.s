@@ -2580,7 +2580,7 @@ let Accessors =
 }
 
 // --
-// define class
+// declare
 // --
 
 let Proto =

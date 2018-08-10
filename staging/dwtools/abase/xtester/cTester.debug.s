@@ -1255,7 +1255,7 @@ let Accessors =
 }
 
 // --
-// define class
+// declare
 // --
 
 let Self =

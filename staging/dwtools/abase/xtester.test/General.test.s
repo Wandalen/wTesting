@@ -5393,7 +5393,7 @@ function mustNotThrowErrorExperiment( test )
 mustNotThrowErrorExperiment.experimental = 1;
 
 // --
-// define class
+// declare
 // --
 
 var Self =

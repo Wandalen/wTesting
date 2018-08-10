@@ -14,10 +14,6 @@ let Self = function wTestRoutineDescriptor( o )
 
 Self.shortName = 'TestRoutineDescriptor';
 
-/*
-experiment(x);
-*/
-
 //
 
 function init( o )

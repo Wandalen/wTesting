@@ -249,7 +249,7 @@ function _includeTestsFrom( path )
     filePath : path,
     ends : ends,
     recursive : 1,
-    maskAll : _.regexpMakeSafe(),
+    maskAll : _.files.regexpMakeSafe(),
   });
 
   if( !files.length )

@@ -153,6 +153,9 @@ function appArgsRead()
   tester.path = appArgs.subject || _.path.current();
   tester.path = _.path.join( _.path.current(), tester.path );
 
+  settings.importanceOfNegative = Number( settings.importanceOfNegative );
+  settings.importanceOfNegative = settings.importanceOfNegative || 0;
+
   if( _.numberIs( v ) )
   tester.verbosity = v;
 
@@ -232,6 +235,7 @@ function _includeTestsFrom( path )
   let logger = tester.logger;
   path = _.path.join( _.path.current(),path );
 
+  _.assert( _.numberIs( tester.settings.importanceOfNegative ) );
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
 
@@ -267,7 +271,7 @@ function _includeTestsFrom( path )
 
     try
     {
-      require( _.fileProvider.nativize( absolutePath ) );
+      require( _.fileProvider.pathNativize( absolutePath ) );
     }
     catch( err )
     {
@@ -280,7 +284,7 @@ function _includeTestsFrom( path )
       else
       logger.error( 'Cant include ' + absolutePath );
 
-      if( logger.verbosity > 3 )
+      if( logger.verbosity + tester.settings.importanceOfNegative >= 4 )
       logger.error( _.err( err ) );
     }
 
@@ -1193,6 +1197,7 @@ let SettingsOfTester =
   timing : 1,
   rapidity : 3,
   routine : null,
+  importanceOfNegative : null,
 
 }
 

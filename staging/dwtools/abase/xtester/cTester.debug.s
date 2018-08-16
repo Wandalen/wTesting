@@ -153,8 +153,8 @@ function appArgsRead()
   tester.path = appArgs.subject || _.path.current();
   tester.path = _.path.join( _.path.current(), tester.path );
 
-  settings.importanceOfNegative = Number( settings.importanceOfNegative );
-  settings.importanceOfNegative = settings.importanceOfNegative || 0;
+  if( settings.importanceOfNegative !== undefined && settings.importanceOfNegative !== null )
+  tester.importanceOfNegative = Number( settings.importanceOfNegative ) || 0;
 
   if( _.numberIs( v ) )
   tester.verbosity = v;
@@ -235,7 +235,7 @@ function _includeTestsFrom( path )
   let logger = tester.logger;
   path = _.path.join( _.path.current(),path );
 
-  _.assert( _.numberIs( tester.settings.importanceOfNegative ) );
+  _.assert( _.numberIs( tester.importanceOfNegative ) );
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( path ) );
 
@@ -284,7 +284,7 @@ function _includeTestsFrom( path )
       else
       logger.error( 'Cant include ' + absolutePath );
 
-      if( logger.verbosity + tester.settings.importanceOfNegative >= 4 )
+      if( logger.verbosity + tester.importanceOfNegative >= 4 )
       logger.error( _.err( err ) );
     }
 
@@ -1247,7 +1247,7 @@ let Forbids =
 
   routineTimeOut : 'routineTimeOut',
   concurrent : 'concurrent',
-  importanceOfNegative : 'importanceOfNegative',
+  // importanceOfNegative : 'importanceOfNegative',
   silencing : 'silencing',
   shoulding : 'shoulding',
   accuracy : 'accuracy',
@@ -1357,6 +1357,7 @@ let Self =
 
   _defaultVerbosity : 2,
   verbosity : 2,
+  importanceOfNegative : 9,
 
   _barOptions : null,
   _appArgs : null,

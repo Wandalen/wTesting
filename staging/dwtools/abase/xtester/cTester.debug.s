@@ -836,7 +836,7 @@ function textColor( srcStr, format )
 
   let light = [ ' ok', ' failed' ];
   let gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' in ', ' ... ', ' .. ', ':' ];
-  let splits = _.strSplit/**2**/
+  let splits = _.strSplit
   ({
     src : srcStr,
     delimeter : _.arrayAppendArrays( [],[ light, gray ] ),

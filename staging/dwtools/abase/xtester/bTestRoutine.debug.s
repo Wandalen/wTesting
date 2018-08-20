@@ -1652,6 +1652,7 @@ function _shouldDo( o )
         outcome : 0,
         msg : msg,
         stack : stack,
+        selectMode : 'begin'
       });
 
       end( 0,_.err( msg ) );
@@ -1665,6 +1666,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'no error thrown, as expected',
         stack : stack,
+        selectMode : 'begin'
       });
 
       end( 1,result );
@@ -1734,6 +1736,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'got single message',
         stack : stack,
+        selectMode : 'begin'
       });
 
       end( 1, err ? err : arg );
@@ -1756,6 +1759,7 @@ function _shouldDo( o )
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously as expected',
         stack : stack,
+        selectMode : 'begin'
       });
       else
       trd._outcomeReportBoolean
@@ -1763,6 +1767,7 @@ function _shouldDo( o )
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously, not expected',
         stack : stack,
+        selectMode : 'begin'
       });
 
       end( o.expectingAsyncError, err );
@@ -1784,6 +1789,7 @@ function _shouldDo( o )
         outcome : !o.expectingAsyncError,
         msg : msg,
         stack : stack,
+        selectMode : 'begin'
       });
 
       if( o.expectingAsyncError )
@@ -2063,7 +2069,7 @@ function _outcomeReport( o )
       let _code = _.diagnosticCode
       ({
         location : _location,
-        selectMode : 'end',
+        selectMode : o.selectMode,
         numberOfLines : 5,
       });
       if( _code )
@@ -2087,6 +2093,7 @@ _outcomeReport.defaults =
   details : null,
   stack : null,
   usingSourceCode : 1,
+  selectMode : 'end',
   considering : 1,
   verbosity : -4,
 }
@@ -2114,6 +2121,7 @@ function _outcomeReportBoolean( o )
     details : '',
     stack : o.stack,
     usingSourceCode : o.usingSourceCode,
+    selectMode : o.selectMode
   });
 
 }
@@ -2125,6 +2133,7 @@ _outcomeReportBoolean.defaults =
   stack : null,
   usingSourceCode : 1,
   usingDescription : 1,
+  selectMode : 'end'
 }
 
 //

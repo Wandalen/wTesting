@@ -64,6 +64,8 @@
 
 - implement onError field for test routine?
 
+- options to show path to test suite even if verbosity is low
+
 */
 
 let _global = undefined;

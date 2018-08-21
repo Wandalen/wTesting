@@ -836,7 +836,7 @@ function identical( got,expected )
 
     trd.exceptionReport
     ({
-      err : '"identical" expects two argument',
+      err : '"identical" expects two arguments',
       level : 2,
     });
 
@@ -903,7 +903,7 @@ function notIdentical( got,expected )
 
     trd.exceptionReport
     ({
-      err : '"notIdentical" expects two argument',
+      err : '"notIdentical" expects two arguments',
       level : 2,
     });
 
@@ -1012,7 +1012,7 @@ function equivalent( got, expected, options )
 
     trd.exceptionReport
     ({
-      err : '"equivalent" expects two argument',
+      err : '"equivalent" expects two arguments',
       level : 2,
     });
 
@@ -1086,7 +1086,7 @@ function notEquivalent( got, expected, options )
 
     trd.exceptionReport
     ({
-      err : '"notEquivalent" expects two argument',
+      err : '"notEquivalent" expects two arguments',
       level : 2,
     });
 
@@ -1185,7 +1185,7 @@ function contains( got,expected )
 
     trd.exceptionReport
     ({
-      err : '"contains" expects two argument',
+      err : '"contains" expects two arguments',
       level : 2,
     });
 
@@ -1239,7 +1239,7 @@ function gt( got, than )
 
     trd.exceptionReport
     ({
-      err : '"gt" expects two argument',
+      err : '"gt" expects two arguments',
       level : 2,
     });
 
@@ -1279,7 +1279,7 @@ function ge( got, than )
 
     trd.exceptionReport
     ({
-      err : '"ge" expects two argument',
+      err : '"ge" expects two arguments',
       level : 2,
     });
 
@@ -1320,7 +1320,7 @@ function lt( got, than )
 
     trd.exceptionReport
     ({
-      err : '"lt" expects two argument',
+      err : '"lt" expects two arguments',
       level : 2,
     });
 
@@ -1362,7 +1362,7 @@ function le( got, than )
 
     trd.exceptionReport
     ({
-      err : '"le" expects two argument',
+      err : '"le" expects two arguments',
       level : 2,
     });
 

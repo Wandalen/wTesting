@@ -1481,6 +1481,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'error throwen synchronously, ignored',
         stack : stack,
+        selectMode : 'begin'
       });
       end( 1, err );
       return con;
@@ -1507,6 +1508,7 @@ function _shouldDo( o )
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously as expected',
           stack : stack,
+          selectMode : 'begin'
         });
 
       }
@@ -1518,6 +1520,7 @@ function _shouldDo( o )
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously, what was not expected',
           stack : stack,
+          selectMode : 'begin'
         });
 
       }
@@ -1545,6 +1548,7 @@ function _shouldDo( o )
       outcome : 0,
       msg : msg,
       stack : stack,
+      selectMode : 'begin'
     });
 
     end( 0,_.err( msg ) );

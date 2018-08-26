@@ -6,6 +6,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
+let debugged = _.processIsDebugged();
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
 {
@@ -306,7 +307,7 @@ function _interruptMaybe( throwing )
   }
 
   let elapsed = _.timeNow() - trd._testRoutineBeginTime;
-  if( elapsed > trd.timeOut )
+  if( elapsed > trd.timeOut && !debugged )
   {
     let result = _.Tester.cancel({ err : trd._timeOutError(), global : 0 });
     if( throwing )

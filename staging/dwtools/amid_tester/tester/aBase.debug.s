@@ -124,7 +124,7 @@ if( typeof module !== 'undefined' )
 
   // _.includeAny( 'wScriptLauncher' );
 
-  _.assert( !_realGlobal_.wTester || !_realGlobal_.wTester._isFullImplementation,'wTester is already included' );
+  _.assert( !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_,'wTester is already included' );
 
   require( './aTestSuite.debug.s' );
   require( './bTestRoutine.debug.s' );

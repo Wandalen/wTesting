@@ -7,7 +7,7 @@ let _ = _global_.wTools;
 let sourceFileLocation = _.diagnosticLocation().full;
 let sourceFileStack = _.diagnosticStack();
 
-if( _.Tester._isFullImplementation )
+if( _.Tester._isReal_ )
 {
   console.log( 'WARING : wTesting included several times!' );
   console.log( '' );
@@ -1352,7 +1352,7 @@ let Self =
   sourceFileStack : sourceFileStack,
 
   _testingBeginTime : null,
-  _isFullImplementation : 1,
+  _isReal_ : 1,
   _registerExitHandlerDone : 0,
 
   _defaultVerbosity : 2,

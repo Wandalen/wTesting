@@ -31,7 +31,7 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isFullImplementation )
+  if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../xtester/aBase.debug.s' );
   var _global = _global_;
   var _ = _global_.wTools;

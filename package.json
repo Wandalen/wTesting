@@ -16,11 +16,11 @@
   ],
   "license": "MIT",
   "bin": {
-    "wtest": "staging/dwtools/amid_tester/tester/zTest.ss"
+    "wtest": "staging/dwtools/atop/tester/zTest.ss"
   },
-  "main": "staging/dwtools/amid_tester/tester/aBase.debug.s",
+  "main": "staging/dwtools/atop/tester/aBase.debug.s",
   "files": [
-    "staging/dwtools/amid_tester/tester",
+    "staging/dwtools/atop/tester",
     "production"
   ],
   "scripts": {

@@ -2596,7 +2596,7 @@ function identicalReturn( test )
   function onSuiteEnd( t )
   {
     test.identical( suite.report.testCheckPasses, 8 );
-    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( suite.report.testCheckFails, 8 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -2728,7 +2728,7 @@ function notIdenticalReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 5 );
+    test.identical( suite.report.testCheckPasses, 6 );
     test.identical( suite.report.testCheckFails, 9 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -2802,10 +2802,9 @@ function notIdenticalReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // var got = t.notIdentical( test, t );
-    // test.identical( got, true );
-    // test.identical( _.boolIs( got ), true );
+    var got = t.notIdentical( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 
@@ -2852,7 +2851,7 @@ function equivalentReturn( test )
   function onSuiteEnd( t )
   {
     test.identical( suite.report.testCheckPasses, 16 );
-    test.identical( suite.report.testCheckFails, 13 );
+    test.identical( suite.report.testCheckFails, 14 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -2938,10 +2937,9 @@ function equivalentReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // var got = t.equivalent( test, t );
-    // test.identical( got, false );
-    // test.identical( _.boolIs( got ), true );
+    var got = t.equivalent( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 
@@ -3086,7 +3084,7 @@ function notEquivalentReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckPasses, 9 );
     test.identical( suite.report.testCheckFails, 20 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
@@ -3172,10 +3170,9 @@ function notEquivalentReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // var got = t.notEquivalent( test, t );
-    // test.identical( got, true );
-    // test.identical( _.boolIs( got ), true );
+    var got = t.notEquivalent( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 
@@ -4096,7 +4093,7 @@ function ilReturn( test )
   function onSuiteEnd( t )
   {
     test.identical( suite.report.testCheckPasses, 8 );
-    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( suite.report.testCheckFails, 8 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -4176,12 +4173,11 @@ function ilReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // debugger;
-    // var got = t.il( test, t );
-    // debugger;
-    // test.identical( got, false );
-    // test.identical( _.boolIs( got ), true );
+    debugger;
+    var got = t.il( test, t );
+    debugger;
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 
@@ -4227,7 +4223,7 @@ function niReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 5 );
+    test.identical( suite.report.testCheckPasses, 6 );
     test.identical( suite.report.testCheckFails, 9 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -4301,10 +4297,9 @@ function niReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // var got = t.ni( test, t );
-    // test.identical( got, true );
-    // test.identical( _.boolIs( got ), true );
+    var got = t.ni( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 
@@ -4351,7 +4346,7 @@ function etReturn( test )
   function onSuiteEnd( t )
   {
     test.identical( suite.report.testCheckPasses, 16 );
-    test.identical( suite.report.testCheckFails, 13 );
+    test.identical( suite.report.testCheckFails, 14 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -4437,10 +4432,9 @@ function etReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // var got = t.et( test, t );
-    // test.identical( got, false );
-    // test.identical( _.boolIs( got ), true );
+    var got = t.et( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 
@@ -4581,7 +4575,7 @@ function neReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckPasses, 9 );
     test.identical( suite.report.testCheckFails, 20 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
@@ -4667,10 +4661,9 @@ function neReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // var got = t.ne( test, t );
-    // test.identical( got, true );
-    // test.identical( _.boolIs( got ), true );
+    var got = t.ne( test, t );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 

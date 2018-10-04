@@ -23,7 +23,7 @@ if( typeof module !== 'undefined' )
   }
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../xtester/aBase.debug.s' );
+  require( '../tester/aBase.debug.s' );
 
   var _ = _global_.wTools;
 

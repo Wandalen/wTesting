@@ -32,7 +32,7 @@ if( typeof module !== 'undefined' )
   }
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../xtester/aBase.debug.s' );
+  require( '../tester/aBase.debug.s' );
   var _global = _global_;
   var _ = _global_.wTools;
 
@@ -45,7 +45,9 @@ var _global = _global_;
 var _ = _global_.wTools;
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0, routine : null };
 
+// --
 //
+// --
 
 function CheckCounter()
 {
@@ -2605,6 +2607,8 @@ function identicalReturn( test )
   function returnTest( t )
   {
 
+    debugger;
+
     var got = t.identical( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
@@ -2674,12 +2678,10 @@ function identicalReturn( test )
 
     /* */
 
-    /* qqq : fix this case */
-    // debugger;
-    // var got = t.identical( test, t );
-    // debugger;
-    // test.identical( got, false );
-    // test.identical( _.boolIs( got ), true );
+    debugger;
+    var got = t.identical( test, t );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
 
     /* */
 

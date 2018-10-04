@@ -2607,6 +2607,8 @@ function identicalReturn( test )
   function returnTest( t )
   {
 
+    debugger;
+
     var got = t.identical( 1,1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
@@ -2678,7 +2680,6 @@ function identicalReturn( test )
 
     debugger;
     var got = t.identical( test, t );
-    debugger;
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 

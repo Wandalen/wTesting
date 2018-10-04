@@ -5395,34 +5395,6 @@ function mustNotThrowErrorExperiment( test )
 
 mustNotThrowErrorExperiment.experimental = 1;
 
-function experimentIdentical( test )
-{
-  var suite = wTestSuite
-  ({
-    tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
-    ignoringTesterOptions : 1,
-    name : test.name,
-  });
-
-  return suite.run();
-
-  /* */
-
-  /* */
-
-  function returnTest( t )
-  {
-    debugger;
-    var got = t.identical( test, t );
-    debugger;
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-  }
-}
-
-experimentIdentical.experimental = 1;
-
 // --
 // declare
 // --

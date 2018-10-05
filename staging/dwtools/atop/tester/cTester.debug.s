@@ -126,10 +126,11 @@ function appArgsRead()
     namesMap : tester.SettingsNameMap,
     removing : 0,
     only : 1,
-    throwing : 0,
+    // throwing : 0,
   }
 
-  let appArgs = _.appArgsReadTo( readOptions );
+  let appArgs = _.appArgs();
+  _.appArgsReadTo( readOptions );
   if( appArgs.err )
   throw _.errBriefly( appArgs.err );
 

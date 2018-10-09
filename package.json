@@ -47,7 +47,8 @@
     "wEventHandler": ""
   },
   "devDependencies": {
-    "wTesting": "."
+    "wTesting": ".",
+    "wait-sync": ""
   },
   "keywords": [
     "testing",

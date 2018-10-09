@@ -38,6 +38,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
+  var waitSync = require( 'wait-sync' );
 
 }
 
@@ -5395,6 +5396,44 @@ function mustNotThrowErrorExperiment( test )
 
 mustNotThrowErrorExperiment.experimental = 1;
 
+//
+
+function experimentTimeOutSyncNoChecks( test )
+{
+  /* No test check after waitSync - timeOut error is not thrown, but expected*/
+
+  test.identical( 1,1 );
+  waitSync( 6 );//6000ms
+}
+
+experimentTimeOutSync.experimental = 1;
+
+//
+
+function experimentTimeOutSync( test )
+{
+  /*
+    Test check after waitSync - timeOut error is thrown, but not expected
+    because timeOut is set to 8000
+  */
+  waitSync( 6 ); //6000ms
+  test.identical( 1,1 );
+}
+
+experimentTimeOutSync.experimental = 1;
+experimentTimeOutSync.timeOut = 8000;
+
+//
+
+function experimentTimeOutAsync( test )
+{
+  /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
+  return _.timeOut( 6000 );
+}
+
+experimentTimeOutAsync.experimental = 1;
+experimentTimeOutAsync.timeOut = 8000;
+
 // --
 // declare
 // --
@@ -5470,7 +5509,9 @@ var Self =
     asyncExperiment : asyncExperiment,
     failExperiment : failExperiment,
     mustNotThrowErrorExperiment : mustNotThrowErrorExperiment,
-    experimentIdentical : experimentIdentical,
+    experimentTimeOutSyncNoChecks : experimentTimeOutSyncNoChecks,
+    experimentTimeOutSync : experimentTimeOutSync,
+    experimentTimeOutAsync : experimentTimeOutAsync,
 
   },
 

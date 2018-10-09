@@ -5402,7 +5402,7 @@ function experimentTimeOutSyncNoChecks( test )
 {
   /* No test check after waitSync - timeOut error is not thrown, but expected*/
 
-  test.identical( 1,1 );
+  test.identical( test.timeOut, 8000 );
   waitSync( 6 );//6000ms
 }
 
@@ -5417,7 +5417,7 @@ function experimentTimeOutSync( test )
     because timeOut is set to 8000
   */
   waitSync( 6 ); //6000ms
-  test.identical( 1,1 );
+  test.identical( test.timeOut, 8000 );
 }
 
 experimentTimeOutSync.experimental = 1;
@@ -5428,6 +5428,7 @@ experimentTimeOutSync.timeOut = 8000;
 function experimentTimeOutAsync( test )
 {
   /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
+  test.identical( test.timeOut, 8000 );
   return _.timeOut( 6000 );
 }
 

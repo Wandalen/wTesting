@@ -2434,6 +2434,7 @@ function _timeOutGet()
 function _timeOutSet( timeOut )
 {
   let trd = this;
+  // debugger;
   _.assert( timeOut === null || _.numberIs( timeOut ) );
   trd[ timeOutSymbol ] = timeOut;
   return timeOut;
@@ -2487,6 +2488,8 @@ function _adoptRoutineFields()
 {
   let trd = this;
 
+  // if( trd.routine.name === 'filesReflect' )
+  // debugger;
   _.mapExtendByDefined( trd, _.mapOnly( trd.routine, trd.KnownFields ) );
 
 }

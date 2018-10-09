@@ -5402,11 +5402,12 @@ function experimentTimeOutSyncNoChecks( test )
 {
   /* No test check after waitSync - timeOut error is not thrown, but expected*/
 
-  test.identical( test.timeOut, 8000 );
-  waitSync( 6 );//6000ms
+  test.identical( test.timeOut, 3000 );
+  waitSync( 4 );//4000ms
 }
 
-experimentTimeOutSync.experimental = 1;
+experimentTimeOutSyncNoChecks.experimental = 1;
+experimentTimeOutSyncNoChecks.timeOut = 3000;
 
 //
 

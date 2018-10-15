@@ -1376,9 +1376,9 @@ let Self =
 
 //
 
-_.accessorForbid( Self,Forbids )
+_.accessor.forbid( Self,Forbids )
 
-_.accessor
+_.accessor.declare
 ({
   object : Self,
   prime : 0,

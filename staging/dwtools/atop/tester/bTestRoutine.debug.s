@@ -37,7 +37,7 @@ function init( o )
   trd._reportForm();
 
   _.assert( _.routineIs( trd.routine ) );
-  _.assert( _.strIsNotEmpty( trd.routine.name ),'Test routine should have name, ' + trd.name + ' test routine of test suite',trd.suite.name,'does not have name' );
+  _.assert( _.strDefined( trd.routine.name ),'Test routine should have name, ' + trd.name + ' test routine of test suite',trd.suite.name,'does not have name' );
   _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,trd.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype,trd ) );
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -138,7 +138,7 @@ function _testRoutineEnd()
   let ok = trd._reportIsPositive();
 
   _.assert( arguments.length === 0 );
-  _.assert( _.strIsNotEmpty( trd.routine.name ),'test routine should have name' );
+  _.assert( _.strDefined( trd.routine.name ),'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
@@ -2331,7 +2331,7 @@ function _reportTextForTestCheck( o )
   _.assert( o.msg === null || _.strIs( o.msg ) );
   _.assert( trd instanceof Self );
   _.assert( trd._checkIndex >= 0 );
-  _.assert( _.strIsNotEmpty( trd.routine.name ), 'test routine should have name' );
+  _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
 
   let result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
 

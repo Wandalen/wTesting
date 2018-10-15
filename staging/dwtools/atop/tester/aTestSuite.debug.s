@@ -82,11 +82,11 @@ function init( o )
   /* name */
 
   if( !( o instanceof Self ) )
-  if( !_.strIsNotEmpty( suite.name ) )
+  if( !_.strDefined( suite.name ) )
   suite.name = _.diagnosticLocation( suite.suiteFileLocation ).nameLong;
 
   if( !( o instanceof Self ) )
-  if( !_.strIsNotEmpty( suite.name ) )
+  if( !_.strDefined( suite.name ) )
   {
     debugger;
     throw _.err( 'Test suite should have name, but', suite.name );
@@ -320,7 +320,7 @@ function _testSuiteRefine()
   _.assert( _.objectIs( suite.tests ) );
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
-  _.assert( _.strIsNotEmpty( suite.name ), 'Test suite should has {-name-}"' );
+  _.assert( _.strDefined( suite.name ), 'Test suite should has {-name-}"' );
   _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
   _.assert( !suite._refined );
 

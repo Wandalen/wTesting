@@ -38,6 +38,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
+  var waitSync = require( 'wait-sync' );
 
 }
 
@@ -5395,33 +5396,45 @@ function mustNotThrowErrorExperiment( test )
 
 mustNotThrowErrorExperiment.experimental = 1;
 
-function experimentIdentical( test )
+//
+
+function experimentTimeOutSyncNoChecks( test )
 {
-  var suite = wTestSuite
-  ({
-    tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
-    ignoringTesterOptions : 1,
-    name : test.name,
-  });
+  /* No test check after waitSync - timeOut error is not thrown, but expected*/
 
-  return suite.run();
-
-  /* */
-
-  /* */
-
-  function returnTest( t )
-  {
-    debugger;
-    var got = t.identical( test, t );
-    debugger;
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-  }
+  test.identical( test.timeOut, 3000 );
+  waitSync( 4 );//4000ms
 }
 
-experimentIdentical.experimental = 1;
+experimentTimeOutSyncNoChecks.experimental = 1;
+experimentTimeOutSyncNoChecks.timeOut = 3000;
+
+//
+
+function experimentTimeOutSync( test )
+{
+  /*
+    Test check after waitSync - timeOut error is thrown, but not expected
+    because timeOut is set to 8000
+  */
+  waitSync( 6 ); //6000ms
+  test.identical( test.timeOut, 8000 );
+}
+
+experimentTimeOutSync.experimental = 1;
+experimentTimeOutSync.timeOut = 8000;
+
+//
+
+function experimentTimeOutAsync( test )
+{
+  /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
+  test.identical( test.timeOut, 8000 );
+  return _.timeOut( 6000 );
+}
+
+experimentTimeOutAsync.experimental = 1;
+experimentTimeOutAsync.timeOut = 8000;
 
 // --
 // declare
@@ -5498,7 +5511,9 @@ var Self =
     asyncExperiment : asyncExperiment,
     failExperiment : failExperiment,
     mustNotThrowErrorExperiment : mustNotThrowErrorExperiment,
-    experimentIdentical : experimentIdentical,
+    experimentTimeOutSyncNoChecks : experimentTimeOutSyncNoChecks,
+    experimentTimeOutSync : experimentTimeOutSync,
+    experimentTimeOutAsync : experimentTimeOutAsync,
 
   },
 

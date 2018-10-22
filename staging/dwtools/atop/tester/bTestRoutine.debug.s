@@ -1876,14 +1876,14 @@ function shouldThrowErrorSync( routine )
  *  .ifNoErrorThen( function()
  *  {
  *    test.case = 'shouldThrowErrorSync';
- *    let con = new wConsequence( )
+ *    let con = new _.Consequence( )
  *    .error( _.err() ); //wConsequence instance with error message
  *    return test.shouldThrowErrorSync( con );//test passes
  *  })
  *  .ifNoErrorThen( function()
  *  {
  *    test.case = 'shouldThrowError2';
- *    let con = new wConsequence( )
+ *    let con = new _.Consequence( )
  *    .error( _.err() )
  *    .error( _.err() ); //wConsequence instance with two error messages
  *    return test.shouldThrowErrorSync( con ); //test fails

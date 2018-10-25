@@ -758,7 +758,7 @@ function _testRoutineRun( trd )
 
     /* */
 
-    result = trd._returnCon = _.Consequence.from( result );
+    result = trd._returnCon = _.Consequence.From( result );
 
     result.andThen( suite._inroutineCon );
 

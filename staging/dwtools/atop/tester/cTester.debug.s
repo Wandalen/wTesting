@@ -237,7 +237,7 @@ function _includeTestsFrom( path )
   path = _.path.join( _.path.current(),path );
 
   _.assert( _.numberIs( tester.importanceOfNegative ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ) );
 
   if( tester.verbosity > 1 )
@@ -303,7 +303,7 @@ function includeTestsFrom( path )
   let tester = this;
   let logger = tester.logger;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ) );
 
   logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
@@ -557,7 +557,7 @@ function suitesFilterOut( suites )
     suites = _suites;
   }
 
-  _.assert( arguments.length === 0 || arguments.length === 1, 'expects none or single argument, but got', arguments.length );
+  _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
   _.assert( _.objectIs( suites ) );
 
   suites = _.entityFilter( suites,function( suite )
@@ -616,7 +616,7 @@ function _verbositySet( src )
 {
   let tester = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.numberIsNotNan( src ) )
   src = 0;
@@ -877,7 +877,7 @@ function _testCheckConsider( outcome )
 {
   let tester = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( tester === Self );
 
   if( outcome )
@@ -916,7 +916,7 @@ function _testRoutineConsider( outcome )
   let tester = this;
   let report = tester.report;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( tester === Self );
 
   if( outcome )
@@ -937,7 +937,7 @@ function _testSuiteConsider( outcome )
   let tester = this;
   let report = tester.report;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( tester === Self );
 
   if( outcome )
@@ -957,7 +957,7 @@ function _exceptionConsider( err )
 {
   let tester = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( tester === Self );
 
   // err = _.errLogOnce( err );

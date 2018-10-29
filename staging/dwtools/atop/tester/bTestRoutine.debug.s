@@ -40,7 +40,7 @@ function init( o )
   _.assert( _.strDefined( trd.routine.name ),'Test routine should have name, ' + trd.name + ' test routine of test suite',trd.suite.name,'does not have name' );
   _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,trd.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype,trd ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let proxy =
   {
@@ -73,11 +73,11 @@ function refine()
     [ preStr, 'has unknown fields :' ]
   );
 
-  _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), preStr, 'expects bool like in field {-experimental-} if defined' );
-  _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), preStr, 'expects number in field {-timeOut-} if defined' );
-  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), preStr, 'expects number in field {-routineTimeOut-} if defined' );
-  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), preStr, 'expects number or range in field {-accuracy-} if defined' );
-  _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), preStr, 'expects number in field {-rapidity-} if defined' );
+  _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), preStr, 'Expects bool like in field {-experimental-} if defined' );
+  _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), preStr, 'Expects number in field {-timeOut-} if defined' );
+  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), preStr, 'Expects number in field {-routineTimeOut-} if defined' );
+  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), preStr, 'Expects number or range in field {-accuracy-} if defined' );
+  _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), preStr, 'Expects number in field {-rapidity-} if defined' );
 
 }
 
@@ -451,7 +451,7 @@ function _caseSet( src )
 
   _.assert( arguments.length === 1 );
   // _.assert( !trd._testsGroupOpenedExplicitly || trd.testsGroup );
-  _.assert( src === null || _.strIs( src ), 'expects string or null {-src-}, but got', _.strTypeOf( src ) );
+  _.assert( src === null || _.strIs( src ), 'Expects string or null {-src-}, but got', _.strTypeOf( src ) );
 
   // trd.testCaseCloseIfExplicitly();
   trd._testsGroupChange();
@@ -469,7 +469,7 @@ function _caseSet( src )
 function _testsGroupGet()
 {
   let trd = this;
-  _.assert( arguments.length === 0, 'expects no arguments' );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   return trd._testsGroupsStack[ trd._testsGroupsStack.length-1 ] || '';
 }
 
@@ -478,7 +478,7 @@ function _testsGroupGet()
 function testsGroupOpen( groupName )
 {
   let trd = this;
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   trd._testsGroupChange();
 
@@ -496,7 +496,7 @@ function testsGroupClose( groupName )
 {
   let trd = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( trd.testsGroup !== groupName )
   trd.testCaseCloseIfExplicitly();
@@ -536,7 +536,7 @@ function testsGroupClose( groupName )
 function _testsGroupChange()
 {
   let trd = this;
-  _.assert( arguments.length === 0, 'expects no arguments' );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   trd.will = '';
   trd.testCaseCloseIfExplicitly();
@@ -1408,7 +1408,7 @@ function _shouldDo( o )
   try
   {
     _.routineOptions( _shouldDo,o );
-    _.assert( arguments.length === 1, 'expects single argument' );
+    _.assert( arguments.length === 1, 'Expects single argument' );
     _.assert( o.args.length === 1 );
     _.assert( _.routineIs( o.args[ 0 ] ) );
   }
@@ -1952,7 +1952,7 @@ function _testCheckConsider( outcome )
 {
   let trd = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( trd.constructor === Self );
 
   if( outcome )
@@ -1993,7 +1993,7 @@ function _exceptionConsider( err )
 {
   let trd = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( trd.constructor === Self );
 
   trd.report.errorsArray.push( err );
@@ -2012,7 +2012,7 @@ function _outcomeReport( o )
   let sourceCode = '';
 
   _.routineOptions( _outcomeReport,o );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( o.considering )
   trd._testCheckConsider( o.outcome );
@@ -2109,7 +2109,7 @@ function _outcomeReportBoolean( o )
 {
   let trd = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( _outcomeReportBoolean,o );
 
   o.msg = trd._reportTextForTestCheck
@@ -2148,7 +2148,7 @@ function _outcomeReportCompare( o )
   let trd = this;
 
   _.assert( trd instanceof Self );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
 
   let nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
@@ -2214,7 +2214,7 @@ function exceptionReport( o )
   let trd = this;
 
   _.routineOptions( exceptionReport,o );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( trd.onError )
   debugger;
@@ -2326,7 +2326,7 @@ function _reportTextForTestCheck( o )
 
   o = _.routineOptions( _reportTextForTestCheck,o );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.outcome === null || _.boolLike( o.outcome ) );
   _.assert( o.msg === null || _.strIs( o.msg ) );
   _.assert( trd instanceof Self );
@@ -2375,7 +2375,7 @@ function _accuracySet( accuracy )
 {
   let trd = this;
 
-  _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'expects number or range {-accuracy-}' );
+  _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'Expects number or range {-accuracy-}' );
 
   trd[ accuracySymbol ] = accuracy;
 

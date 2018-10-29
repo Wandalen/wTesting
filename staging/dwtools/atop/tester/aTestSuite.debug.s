@@ -18,7 +18,7 @@ let Parent = null;
 let Self = function wTestSuite( o )
 {
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( !!o );
 
   let location;
@@ -76,14 +76,14 @@ function init( o )
 
   suite._initialOptions = o;
 
-  _.assert( o === undefined || _.objectIs( o ), 'expects object {-options-}, but got', _.strTypeOf( o ) );
+  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.strTypeOf( o ) );
 
   /* source path */
 
   if( !_.strIs( suite.suiteFileLocation ) )
   {
     debugger;
-    throw _.err( 'Test suite',suite.name,'expects a mandatory option ( suiteFileLocation )' );
+    throw _.err( 'Test suite',suite.name,'Expects a mandatory option ( suiteFileLocation )' );
   }
 
   // console.log( 'suite.suiteFileLocation',suite.suiteFileLocation );
@@ -209,7 +209,7 @@ function _testSuitesRegister( suites )
 {
   let suite = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( suites ) );
 
   for( let s in suites ) try
@@ -234,7 +234,7 @@ function _accuracySet( accuracy )
   if( accuracy === null )
   accuracy = _.accuracy;
 
-  _.assert( _.numberIs( accuracy ), 'expects number {-accuracy-}' );
+  _.assert( _.numberIs( accuracy ), 'Expects number {-accuracy-}' );
   suite[ accuracySymbol ] = accuracy;
 
   if( suite._refined )
@@ -249,7 +249,7 @@ function _routineSet( src )
 {
   let suite = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( src === null || _.routineIs( src ) || _.strIs( src ) );
 
   if( _.routineIs( src ) )
@@ -746,7 +746,7 @@ function _testRoutineRun( trd )
   /* */
 
   _.assert( _.routineIs( trd._testRoutineHandleReturn ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return suite._routineCon
   .doThen( function _testRoutineRun()
@@ -884,7 +884,7 @@ function _testCheckConsider( outcome )
 {
   let suite = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( this.constructor === Self );
   _.assert( suite.takingIntoAccount !== undefined );
 
@@ -926,7 +926,7 @@ function _testRoutineConsider( outcome )
 {
   let suite = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( this.constructor === Self );
   _.assert( suite.takingIntoAccount !== undefined );
 
@@ -952,7 +952,7 @@ function _exceptionConsider( err )
 {
   let suite = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( suite.constructor === Self );
 
   suite.report.errorsArray.push( err );
@@ -970,7 +970,7 @@ function exceptionReport( o )
   let logger = suite.logger || _.Tester.settings.logger || _global_.logger;
 
   _.routineOptions( exceptionReport,o );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let err = _.err( o.err );
 

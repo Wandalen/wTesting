@@ -21,20 +21,29 @@ let Self = function wTestSuite( o )
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( !!o );
 
+  let location;
+
+  if( !o.suiteFilePath )
+  {
+    location = location || _.diagnosticLocation( 1 );
+    o.suiteFilePath = location.path;
+  }
+
+  if( !o.suiteFileLocation )
+  {
+    location = location || _.diagnosticLocation( 1 );
+    o.suiteFileLocation = location.full;
+  }
+
   if( !( this instanceof Self ) )
   if( _.strIs( o ) )
   return Self.instanceByName( o );
 
-  _.assert( !( o instanceof Self ) );
-
-  if( !o.suiteFilePath )
-  o.suiteFilePath = _.diagnosticLocation( 1 ).path
-
-  if( !o.suiteFileLocation )
-  o.suiteFileLocation = _.diagnosticLocation( 1 ).full
-
   if( !( this instanceof Self ) )
   return new( _.routineJoin( Self, Self, arguments ) );
+
+  _.assert( !( o instanceof Self ) );
+
   return Self.prototype.init.apply( this,arguments );
 }
 

@@ -357,7 +357,7 @@ function _testingBegin( allSuites, runSuites )
   let tester = this;
   let logger = tester.logger;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( allSuites ) );
   _.assert( _.mapIs( runSuites ) );
@@ -823,7 +823,7 @@ function _reportIsPositive()
 function textColor( srcStr, format )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.boolLike( _.Tester.settings.coloring ) );
   _.assert( _.mapIs( format ) || _.strIs( format ) || _.boolLike( format ) );
 

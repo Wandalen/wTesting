@@ -1704,7 +1704,7 @@ function _shouldDo( o )
 
   function end( positive, arg )
   {
-    _.assert( arguments.length === 2, 'expects exactly two arguments' );
+    _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
     logger.end({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
     logger.end({ connotation : positive ? 'positive' : 'negative' });

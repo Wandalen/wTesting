@@ -367,6 +367,7 @@ function _testSuiteRefine()
 
     _.assert( _.routineIs( testRoutine ) );
 
+    debugger;
     let trd = _.Tester.TestRoutineDescriptor
     ({
       name : testRoutineName,
@@ -676,7 +677,7 @@ function _testSuiteEnd( err )
 
   /* tracking */
 
-  _.arrayRemoveOnceStrictly( _.Tester.activeSuites, suite );
+  _.arrayRemoveElementOnceStrictly( _.Tester.activeSuites, suite );
 
   /* silencing */
 

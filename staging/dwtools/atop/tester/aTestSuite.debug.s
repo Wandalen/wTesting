@@ -367,7 +367,6 @@ function _testSuiteRefine()
 
     _.assert( _.routineIs( testRoutine ) );
 
-    debugger;
     let trd = _.Tester.TestRoutineDescriptor
     ({
       name : testRoutineName,

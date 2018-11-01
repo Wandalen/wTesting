@@ -40,7 +40,7 @@ let Self = function wTestSuite( o )
   return Self.instanceByName( o );
 
   if( !( this instanceof Self ) )
-  return new( _.routineJoin( Self, Self, arguments ) );
+  return new( _.constructorJoin( Self, arguments ) );
 
   _.assert( !( o instanceof Self ) );
 

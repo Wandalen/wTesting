@@ -1,0 +1,125 @@
+
+submodule :
+
+path :
+
+  proto : './proto'
+  out.debug : './out.debug'
+  out.release : './out.release'
+
+reflector :
+
+  .default.common :
+    srcFilter :
+      basePath : '.'
+      prefixPath : './proto'
+      maskAll :
+        excludeAny :
+        - !!js/regexp '/(^|/)-/'
+
+  .default.debug :
+    inherit : .default.common
+    srcFilter :
+      maskAll :
+        excludeAny :
+        - !!js/regexp '/.release($|.|/)/i'
+        - !!js/regexp '/(^|/)-/'
+
+  .default.release :
+    inherit : .default.common
+    srcFilter :
+      maskAll :
+        excludeAny :
+        - !!js/regexp '/.debug($|.|/)/i'
+        - !!js/regexp '/.test($|.|/)/i'
+        - !!js/regexp '/.experiment($|.|/)/i'
+        - !!js/regexp '/(^|/)-/'
+
+  .current :
+    reflectMap :
+    - .
+
+  .debug :
+    inherit :
+      - .default.debug
+      - .current
+
+  .release :
+    inherit :
+      - .default.release
+      - .current
+
+  grab.release :
+    reflectMap :
+      reflector::.release : path::out.release
+
+  grab.debug :
+    reflectMap :
+      reflector::.debug : path::out.debug
+
+  out.debug :
+    srcFilter :
+      basePath : .
+    reflectMap :
+      - path:out.debug
+
+  out.release :
+    srcFilter :
+      basePath : .
+    reflectMap :
+      - path:out.release
+
+step :
+
+  grab.debug :
+    inherit : grab
+    reflector : reflector::grab.debug
+  grab.release :
+    inherit : grab
+    reflector : reflector::grab.release
+
+build :
+
+  .debug :
+    default : 1
+    setting :
+      debug : 1
+      raw : 1
+      release : 0
+      compiled : 0
+    steps :
+      - step::grab.debug
+
+  .debug.compiled :
+    setting :
+      debug : 1
+      raw : 0
+      release : 0
+      compiled : 1
+    steps :
+      - step::grab.debug
+
+  .release.raw :
+    setting :
+      debug : 0
+      raw : 1
+      release : 1
+      compiled : 0
+    steps :
+      - step::grab.release
+
+  .release.compiled :
+    setting :
+      debug : 0
+      raw : 0
+      release : 1
+      compiled : 1
+    steps :
+      - step::grab.release
+
+  all :
+    steps :
+      - concurrent :
+        - build::.debug
+        - build::.release.compiled
+

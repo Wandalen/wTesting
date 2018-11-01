@@ -1,0 +1,52 @@
+
+about :
+
+  name : wTesting
+  description : Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
+  version : 0.4.180
+  enabled : 1
+  interpreters :
+  - nodejs >= 6.0.0
+  - chrome >= 60.0.0
+  - firefox >= 60.0.0
+  keywords :
+  - wTools
+
+execution :
+
+  scripts :
+    test : wtest staging
+    docgen : wdocgen staging
+
+path :
+
+  repository : git+https://github.com/Wandalen/wTesting.git
+  bugs : https://github.com/Wandalen/wTesting/issues
+  entry.debug : {path::out.debug}/dwtools/abase/____
+  entry.release : {path::out.release}/dwtools/abase/____
+
+build :
+
+  .debug.raw.export :
+    default : 1
+    setting :
+      debug : 1
+      raw : 1
+      export : 1
+      filesPath : path::out.debug
+      entryPath : path::entry.debug
+    steps :
+      - build::.debug
+      - step::export
+
+  .release.compiled.export :
+    setting :
+      debug : 0
+      raw : 0
+      export : 1
+      filesPath : path::out.release
+      entryPath : path::entry.release
+    steps :
+      - build::.release.compiled
+      - step::export
+

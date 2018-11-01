@@ -1,15 +1,26 @@
 
-image:
-  - Visual Studio 2017
-  - Ubuntu
+
+# image:
+#   - Visual Studio 2017
+#   - Ubuntu1804
 
 platform: x64
 
 environment:
   matrix:
-        - nodejs_version: "8"
-        - nodejs_version: "9"
-        - nodejs_version: "Current"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+      nodejs_version: 8
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+      nodejs_version: 9
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+      nodejs_version: node
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      nodejs_version: 8
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      nodejs_version: 9
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      nodejs_version: Current
 
 build: off
 
@@ -19,7 +30,6 @@ install:
  - cmd: powershell -command "Install-Product node $env:nodejs_version"
  - sh: nvm install $nodejs_version
  - npm install
-
 
 test_script:
   - node --version

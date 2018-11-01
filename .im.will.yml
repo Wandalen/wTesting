@@ -94,9 +94,13 @@ step :
   reflect.debug :
     inherit : reflect
     reflector : reflector::reflect.debug
+    criterion :
+      debug : 1
   reflect.release :
     inherit : reflect
     reflector : reflector::reflect.release
+    criterion :
+      debug : 0
 
   reflect.dependencies.debug :
     inherit : reflect

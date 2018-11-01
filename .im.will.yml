@@ -61,19 +61,19 @@ reflector :
       - .default.release
       - .current
 
-  grab.release :
+  reflect.release :
     reflectMap :
       reflector::.release : path::out.release
 
-  grab.debug :
+  reflect.debug :
     reflectMap :
       reflector::.debug : path::out.debug
 
-  grab.dependencies.release :
+  reflect.dependencies.release :
     reflectMap :
       reflector::.dependencies.release : path::out.release
 
-  grab.dependencies.debug :
+  reflect.dependencies.debug :
     reflectMap :
       reflector::.dependencies.debug : path::out.debug
 
@@ -91,59 +91,59 @@ reflector :
 
 step :
 
-  grab.debug :
-    inherit : grab
-    reflector : reflector::grab.debug
-  grab.release :
-    inherit : grab
-    reflector : reflector::grab.release
+  reflect.debug :
+    inherit : reflect
+    reflector : reflector::reflect.debug
+  reflect.release :
+    inherit : reflect
+    reflector : reflector::reflect.release
 
-  grab.dependencies.debug :
-    inherit : grab
-    reflector : reflector::grab.dependencies.debug
-  grab.dependencies.release :
-    inherit : grab
-    reflector : reflector::grab.dependencies.release
+  reflect.dependencies.debug :
+    inherit : reflect
+    reflector : reflector::reflect.dependencies.debug
+  reflect.dependencies.release :
+    inherit : reflect
+    reflector : reflector::reflect.dependencies.release
 
 build :
 
   .debug :
     default : 1
-    setting :
+    criterion :
       debug : 1
       raw : 1
       release : 0
       compiled : 0
     steps :
-      - step::grab.debug
-      - step::grab.dependencies.debug
+      - step::reflect.debug
+      - step::reflect.dependencies.debug
 
   .debug.compiled :
-    setting :
+    criterion :
       debug : 1
       raw : 0
       release : 0
       compiled : 1
     steps :
-      - step::grab.debug
+      - step::reflect.debug
 
   .release.raw :
-    setting :
+    criterion :
       debug : 0
       raw : 1
       release : 1
       compiled : 0
     steps :
-      - step::grab.release
+      - step::reflect.release
 
   .release.compiled :
-    setting :
+    criterion :
       debug : 0
       raw : 0
       release : 1
       compiled : 1
     steps :
-      - step::grab.release
+      - step::reflect.release
 
   all :
     steps :

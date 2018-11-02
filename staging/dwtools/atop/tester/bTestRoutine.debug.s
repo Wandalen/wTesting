@@ -811,14 +811,14 @@ function isNotError( maybeError )
 function identical( got,expected )
 {
   let trd = this;
-  let iterator, outcome;
+  let o2, outcome;
 
   /* */
 
   try
   {
-    iterator = Object.create( null );
-    outcome = _.entityIdentical( got,expected,iterator );
+    o2 = Object.create( null );
+    outcome = _.entityIdentical( got, expected, o2 );
   }
   catch( err )
   {
@@ -846,8 +846,9 @@ function identical( got,expected )
 
   /* */
 
-  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
+  if( !o2.iteration || o2.iteration.lastPath === undefined )
   {
+    debugger;
     outcome = false;
     trd.exceptionReport
     ({
@@ -864,7 +865,7 @@ function identical( got,expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.iterator.lastPath,
+    path : o2.iteration.lastPath,
     usingExtraDetails : 1,
   });
 
@@ -878,14 +879,14 @@ function identical( got,expected )
 function notIdentical( got,expected )
 {
   let trd = this;
-  let iterator, outcome;
+  let o2, outcome;
 
   /* */
 
   try
   {
-    iterator = Object.create( null );
-    outcome = !_.entityIdentical( got,expected,iterator );
+    o2 = Object.create( null );
+    outcome = !_.entityIdentical( got, expected, o2 );
   }
   catch( err )
   {
@@ -913,7 +914,7 @@ function notIdentical( got,expected )
 
   /* */
 
-  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
+  if( !o2.iteration || o2.iteration.lastPath === undefined )
   {
     outcome = false;
 
@@ -933,7 +934,7 @@ function notIdentical( got,expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.iterator.lastPath,
+    path : o2.iteration.lastPath,
     usingExtraDetails : 0,
   });
 
@@ -980,21 +981,21 @@ function equivalent( got, expected, options )
 {
   let trd = this;
   let accuracy = trd.accuracyEffective;
-  let iterator, outcome;
+  let o2, outcome;
 
   /* */
 
   try
   {
-    iterator = Object.create( null );
-    iterator.accuracy = accuracy;
+    o2 = Object.create( null );
+    o2.accuracy = accuracy;
     if( _.mapIs( options ) )
-    _.mapExtend( iterator, options )
+    _.mapExtend( o2, options )
     else if( _.numberIs( options ) )
-    iterator.accuracy = options;
+    o2.accuracy = options;
     else _.assert( options === undefined );
-    accuracy = iterator.accuracy;
-    outcome = _.entityEquivalent( got, expected, iterator );
+    accuracy = o2.accuracy;
+    outcome = _.entityEquivalent( got, expected, o2 );
   }
   catch( err )
   {
@@ -1022,7 +1023,7 @@ function equivalent( got, expected, options )
 
   /* */
 
-  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
+  if( !o2.iteration || o2.iteration.lastPath === undefined )
   {
     outcome = false;
     trd.exceptionReport
@@ -1040,7 +1041,7 @@ function equivalent( got, expected, options )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.iterator.lastPath,
+    path : o2.iteration.lastPath,
     usingExtraDetails : 1,
     accuracy : accuracy,
   });
@@ -1054,21 +1055,21 @@ function notEquivalent( got, expected, options )
 {
   let trd = this;
   let accuracy = trd.accuracyEffective;
-  let iterator, outcome;
+  let o2, outcome;
 
   /* */
 
   try
   {
-    iterator = Object.create( null );
-    iterator.accuracy = accuracy;
+    o2 = Object.create( null );
+    o2.accuracy = accuracy;
     if( _.mapIs( options ) )
-    _.mapExtend( iterator, options )
+    _.mapExtend( o2, options )
     else if( _.numberIs( options ) )
-    iterator.accuracy = options;
+    o2.accuracy = options;
     else _.assert( options === undefined );
-    accuracy = iterator.accuracy;
-    outcome = !_.entityEquivalent( got, expected, iterator );
+    accuracy = o2.accuracy;
+    outcome = !_.entityEquivalent( got, expected, o2 );
   }
   catch( err )
   {
@@ -1096,7 +1097,7 @@ function notEquivalent( got, expected, options )
 
   /* */
 
-  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
+  if( !o2.iteration || o2.iteration.lastPath === undefined )
   {
     outcome = false;
 
@@ -1116,7 +1117,7 @@ function notEquivalent( got, expected, options )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.iterator.lastPath,
+    path : o2.iteration.lastPath,
     usingExtraDetails : 1,
     accuracy : accuracy,
   });
@@ -1160,14 +1161,14 @@ function notEquivalent( got, expected, options )
 function contains( got,expected )
 {
   let trd = this;
-  let iterator, outcome;
+  let o2, outcome;
 
   /* */
 
   try
   {
-    iterator = Object.create( null );
-    outcome = _.entityContains( got, expected, iterator );
+    o2 = Object.create( null );
+    outcome = _.entityContains( got, expected, o2 );
   }
   catch( err )
   {
@@ -1195,7 +1196,7 @@ function contains( got,expected )
 
   /* */
 
-  if( !iterator.iterator || iterator.iterator.lastPath === undefined )
+  if( !o2.iteration || o2.iteration.lastPath === undefined )
   {
     outcome = false;
 
@@ -1215,7 +1216,7 @@ function contains( got,expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : iterator.iterator.lastPath,
+    path : o2.iteration.lastPath,
     usingExtraDetails : 1,
   });
 

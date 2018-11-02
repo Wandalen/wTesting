@@ -112,6 +112,11 @@ if( typeof module !== 'undefined' )
   let _global = _global_;
   let _ = _global_.wTools;
 
+  debugger;
+  _.include( 'wLooker' );
+  _.include( 'wSelector' );
+  _.include( 'wComparator' );
+  _.include( 'wLookerExtra' );
   _.include( 'wExternalFundamentals' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );

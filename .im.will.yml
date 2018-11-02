@@ -9,30 +9,6 @@ path :
 
 reflector :
 
-  .default.common :
-    srcFilter :
-      basePath : '.'
-      prefixPath : './proto'
-      maskAll :
-        excludeAny :
-        - !!js/regexp '/(^|/)-/'
-
-  .default.debug :
-    inherit : .default.common
-    srcFilter :
-      maskAll :
-        excludeAny :
-        - !!js/regexp '/.release($|.|/)/i'
-
-  .default.release :
-    inherit : .default.common
-    srcFilter :
-      maskAll :
-        excludeAny :
-        - !!js/regexp '/.debug($|.|/)/i'
-        - !!js/regexp '/.test($|.|/)/i'
-        - !!js/regexp '/.experiment($|.|/)/i'
-
   .current :
     reflectMap :
     - .

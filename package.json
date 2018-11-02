@@ -41,7 +41,10 @@
     "winstancing": "",
     "wConsequence": "",
     "wLogger": "",
-    "wFiles": ""
+    "wFiles": "",
+    "wlooker": "",
+    "wlookerextra": "",
+    "wcomparator": ""
   },
   "optionalDependencies": {
     "wEventHandler": ""

@@ -1,4 +1,4 @@
-(function _bTestRoutine_debug_s_() {
+(function _Routine_s_() {
 
 'use strict';
 
@@ -69,7 +69,7 @@ function refine()
   _.sureMapHasOnly
   (
     routine,
-    _.Tester.TestRoutineDescriptor.KnownFields,
+    /*_.*/wTester.TestRoutineDescriptor.KnownFields,
     [ preStr, 'has unknown fields :' ]
   );
 
@@ -90,10 +90,10 @@ function _testRoutineBegin()
   let trd = this;
   let suite = trd.suite;
 
-  if( _.Tester )
+  if( /*_.*/wTester )
   trd._testRoutineBeginTime = _.timeNow();
 
-  _.arrayAppendOnceStrictly( _.Tester.activeRoutines, trd );
+  _.arrayAppendOnceStrictly( /*_.*/wTester.activeRoutines, trd );
 
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
 
@@ -147,7 +147,7 @@ function _testRoutineEnd()
     debugger; /* xxx */
     let wasBarred = suite.consoleBar( 0 );
 
-    // let barOptions = _.Tester._barOptions;
+    // let barOptions = /*_.*/wTester._barOptions;
     // let exclusiveOutputPrinter = barOptions.exclusiveOutputPrinter;
     //
     // barOptions.exclusiveOutputPrinter = 0;
@@ -210,7 +210,7 @@ function _testRoutineEnd()
   suite.logger.begin({ verbosity : -3 });
 
   let timingStr = '';
-  if( _.Tester )
+  if( /*_.*/wTester )
   {
     trd.report.timeSpent = _.timeNow() - trd._testRoutineBeginTime;
     timingStr = ' in ' + _.timeSpentFormat( trd.report.timeSpent );
@@ -218,7 +218,7 @@ function _testRoutineEnd()
 
   let str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
 
-  str = _.Tester.textColor( str, ok );
+  str = /*_.*/wTester.textColor( str, ok );
 
   if( !ok )
   suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
@@ -233,7 +233,7 @@ function _testRoutineEnd()
 
   suite.logger.end({ verbosity : -3 });
 
-  _.arrayRemoveElementOnceStrictly( _.Tester.activeRoutines, trd ); /* xxx */
+  _.arrayRemoveElementOnceStrictly( /*_.*/wTester.activeRoutines, trd ); /* xxx */
 
 }
 
@@ -292,15 +292,15 @@ function _interruptMaybe( throwing )
   if( trd._returned )
   return false;
 
-  if( _.Tester._canceled )
+  if( /*_.*/wTester._canceled )
   return true;
 
-  if( !_.Tester._canContinue() )
+  if( !/*_.*/wTester._canContinue() )
   {
     debugger; /* xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
-    let result = _.Tester.cancel({ global : 0 });
+    let result = /*_.*/wTester.cancel({ global : 0 });
     if( throwing )
     throw result;
     return result;
@@ -309,7 +309,7 @@ function _interruptMaybe( throwing )
   let elapsed = _.timeNow() - trd._testRoutineBeginTime;
   if( elapsed > trd.timeOut && !debugged )
   {
-    let result = _.Tester.cancel({ err : trd._timeOutError(), global : 0 });
+    let result = /*_.*/wTester.cancel({ err : trd._timeOutError(), global : 0 });
     if( throwing )
     throw result;
     return result;
@@ -325,7 +325,7 @@ function _ableGet()
   let trd = this;
   let suite = trd.suite;
 
-  _.assert( _.numberIs( _.Tester.settings.rapidity ) );
+  _.assert( _.numberIs( /*_.*/wTester.settings.rapidity ) );
 
   if( suite.routine )
   return suite.routine === trd.name;
@@ -338,7 +338,7 @@ function _ableGet()
   // if( suite.routine && suite.routine !== trd.name )
   // return false;
 
-  if( trd.rapidity < _.Tester.settings.rapidity )
+  if( trd.rapidity < /*_.*/wTester.settings.rapidity )
   return false;
 
   return true;
@@ -801,7 +801,7 @@ function isNotError( maybeError )
  *  test.identical( got, expected );//returns false
  * }
  *
- * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
@@ -970,7 +970,7 @@ function notIdentical( got,expected )
  *  let accuracy = 0.5;
  *  test.equivalent( got, expected, accuracy );//returns false
  * }
- * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
@@ -1151,7 +1151,7 @@ function notEquivalent( got, expected, options )
  *  let expected = [ 4 ];
  *  test.contains( got, expected );//returns false
  * }
- * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @throws {Exception} If no arguments provided.
  * @method contains
@@ -1867,7 +1867,7 @@ function shouldThrowErrorSync( routine )
  *    throw _.err( 'Error' );
  *  });
  * }
- * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @example
  * function sometest( test )
@@ -1892,7 +1892,7 @@ function shouldThrowErrorSync( routine )
  *
  *  return consequence;
  * }
- * _.Tester.test( { name : 'test', tests : { sometest : sometest } } );
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @throws {Exception} If no arguments provided.
  * @throws {Exception} If passed argument is not a Routine.
@@ -2348,7 +2348,7 @@ function _reportTextForTestCheck( o )
   }
 
   if( o.outcome !== null )
-  result = _.Tester.textColor( result, o.outcome );
+  result = /*_.*/wTester.textColor( result, o.outcome );
 
   return result;
 }
@@ -2743,6 +2743,6 @@ _.Copyable.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_.Tester[ Self.shortName ] = Self;
+/*_.*/wTester[ Self.shortName ] = Self;
 
 })();

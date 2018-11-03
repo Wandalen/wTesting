@@ -1,4 +1,4 @@
-(function _Tester_debug_s_() {
+(function _Tester_s_() {
 
 'use strict';
 
@@ -7,12 +7,12 @@ let _ = _global_.wTools;
 let sourceFileLocation = _.diagnosticLocation().full;
 let sourceFileStack = _.diagnosticStack();
 
-if( _.Tester._isReal_ )
+if( /*_.*/wTester._isReal_ )
 {
   console.log( 'WARING : wTesting included several times!' );
   console.log( '' );
   console.log( 'First time' );
-  console.log( _.Tester.sourceFileStack );
+  console.log( wTester.sourceFileStack );
   console.log( '' );
   console.log( 'Second time' );
   console.log( sourceFileStack );
@@ -433,7 +433,7 @@ function _testingEnd()
   }
 
   msg = 'Testing' + timingStr + ' ... '  + ( ok ? 'ok' : 'failed' );
-  msg = _.Tester.textColor( msg, ok );
+  msg = /*_.*/wTester.textColor( msg, ok );
 
   logger.logDown( msg );
 
@@ -477,7 +477,7 @@ function _suitesRun( suites )
   let allSuites = _.mapExtend( null, suites );
   for( let s in suites )
   {
-    let suite = _.Tester.TestSuite.instanceByName( suites[ s ] );
+    let suite = /*_.*/wTester.TestSuite.instanceByName( suites[ s ] );
     suites[ s ] = suite;
     allSuites[ s ] = suite;
 
@@ -489,7 +489,7 @@ function _suitesRun( suites )
 
     try
     {
-      _.assert( suite instanceof _.Tester.TestSuite, 'Test suite', s, 'was not found' );
+      _.assert( suite instanceof /*_.*/wTester.TestSuite, 'Test suite', s, 'was not found' );
       suite._testSuiteRefine();
     }
     catch( err )
@@ -520,7 +520,7 @@ function _suitesRun( suites )
 
   /* */
 
-  _.Tester.TestSuite._suiteCon
+  /*_.*/wTester.TestSuite._suiteCon
   .doThen( function()
   {
     if( tester._reportIsPositive() )
@@ -531,7 +531,7 @@ function _suitesRun( suites )
     return tester._testingEnd();
   });
 
-  return _.Tester.TestSuite._suiteCon.split();
+  return /*_.*/wTester.TestSuite._suiteCon.split();
 }
 
 //
@@ -550,7 +550,7 @@ function suitesFilterOut( suites )
       let suite = suites[ s ];
       if( _.strIs( suite ) )
       _suites[ suite ] = suite;
-      else if( suite instanceof _.Tester.TestSuite )
+      else if( suite instanceof /*_.*/wTester.TestSuite )
       _suites[ suite.name ] = suite;
       else _.assert( 0,'not tested' );
     }
@@ -657,7 +657,7 @@ function _canContinue()
   if( tester.settings.fails <= tester.report.testCheckFails )
   {
     debugger;
-    let err = _.err( 'Too many fails', _.Tester.settings.fails, '<=', trd.report.testCheckFails );
+    let err = _.err( 'Too many fails', /*_.*/wTester.settings.fails, '<=', trd.report.testCheckFails );
     tester.report.errorsArray.push( err );
     return false;
   }
@@ -824,10 +824,10 @@ function textColor( srcStr, format )
 {
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.boolLike( _.Tester.settings.coloring ) );
+  _.assert( _.boolLike( /*_.*/wTester.settings.coloring ) );
   _.assert( _.mapIs( format ) || _.strIs( format ) || _.boolLike( format ) );
 
-  if( !_.Tester.settings.coloring )
+  if( !/*_.*/wTester.settings.coloring )
   return srcStr;
 
   if( !_.color || !_.color.strFormat )
@@ -975,7 +975,7 @@ function _exceptionConsider( err )
 //   if( !o )
 //   o = {};
 //
-//   o.logger = o.logger || _.Tester.logger;
+//   o.logger = o.logger || /*_.*/wTester.logger;
 //
 //   _.routineOptions( loggerToBook,o );
 //
@@ -1100,9 +1100,9 @@ function _exceptionConsider( err )
 //     Self.verbosity = 0;
 //     //Self.logger = wPrinterToJs({ coloring : 0 });
 //
-//     // _.Tester.test( 'Logger other test','Consequence','FileProvider.Extract' )
+//     // /*_.*/wTester.test( 'Logger other test','Consequence','FileProvider.Extract' )
 //
-//     _.Tester.test( 'FileProvider.Extract' )
+//     /*_.*/wTester.test( 'FileProvider.Extract' )
 //     .doThen( function()
 //     {
 //       debugger;
@@ -1389,10 +1389,10 @@ _.accessor.declare
 
 Object.preventExtensions( Self );
 
-_.mapSupplementNulls( Self, _.Tester );
+_.mapSupplementNulls( Self, /*_.*/wTester );
 
-_.assert( !_realGlobal_.wTester );
-_realGlobal_.wTester = _.Tester = Self;
+// _.assert( !_realGlobal_.wTester );
+_realGlobal_.wTester = _global.wTester = Self;
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

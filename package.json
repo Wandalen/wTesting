@@ -15,16 +15,19 @@
     }
   ],
   "license": "MIT",
-  "bin": {
-    "wtest": "staging/dwtools/atop/tester/zTest.ss"
-  },
-  "main": "staging/dwtools/atop/tester/aBase.debug.s",
+  "main": "proto/dwtools/atop/tester/Main.mid.s",
   "files": [
-    "staging/dwtools/atop/tester",
+    "proto/dwtools/atop/tester",
     "production"
   ],
   "scripts": {
-    "test": "wtest staging"
+    "test": "wtest proto"
+    "wtest": "node proto/dwtools/atop/tester/Exec"
+    "tst": "node proto/dwtools/atop/tester/Exec"
+  },
+  "bin": {
+    "wtest": "proto/dwtools/atop/tester/Exec",
+    "tst": "proto/dwtools/atop/tester/Exec"
   },
   "repository": {
     "type": "git",

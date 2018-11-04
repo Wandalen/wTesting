@@ -24,7 +24,7 @@ if( /*_.*/wTester._isReal_ )
 
 _.assert( _.routineIs( _.toStr ), 'wTesting needs wTools/staging/dwtools/abase/layer1/StringTools.s' );
 _.assert( _.routineIs( _.execStages ), 'wTesting needs wTools/staging/dwtools/abase/layer1/External.s' );
-_.assert( _.routineIs( _.Consequence ), 'wTesting needs wConsequence/staging/dwtools/abase/oclass/Consequence.s' );
+_.assert( _.routineIs( _.Consequence ), 'wTesting needs wConsequence/staging/dwtools/abase/l9/consequence/Consequence.s' );
 _.assert( _.numberIs( _.accuracy ), 'wTesting needs wTools.accuracy' );
 _.assert( _.printerIs( _global.logger ), 'wTesting needs wTools.Logger' );
 

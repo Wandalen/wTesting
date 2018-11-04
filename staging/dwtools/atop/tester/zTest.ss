@@ -75,6 +75,11 @@ if( typeof module !== 'undefined' )
 
 - options to show path to test suite even if verbosity is low
 
+- better test case text for "test routine has not thrown an error"
+        Test check ( Tools/Math/Vector / comparator / trivial # 1 ) ... ok
+        Test check ( Tools/Math/Vector / comparator / trivial # 2 ) ... ok
+        Test check ( Tools/Math/Vector / comparator / trivial # 3 ) : test routine has not thrown an error ... ok
+
 */
 
 /*

@@ -21,8 +21,8 @@
     "production"
   ],
   "scripts": {
-    "test": "wtest proto"
-    "wtest": "node proto/dwtools/atop/tester/Exec"
+    "test": "wtest proto",
+    "wtest": "node proto/dwtools/atop/tester/Exec",
     "tst": "node proto/dwtools/atop/tester/Exec"
   },
   "bin": {

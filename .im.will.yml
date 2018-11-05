@@ -13,30 +13,6 @@ reflector :
     reflectMap :
     - .
 
-  .debug :
-    inherit :
-      - .default.debug
-      - .current
-
-  .release :
-    inherit :
-      - .default.release
-      - .current
-
-  .dependencies.current :
-    reflectMap :
-    - .
-
-  .dependencies.debug :
-    inherit :
-      - .default.debug
-      - .current
-
-  .dependencies.release :
-    inherit :
-      - .default.release
-      - .current
-
   reflect.release :
     reflectMap :
       reflector::.release : path::out.release
@@ -44,26 +20,6 @@ reflector :
   reflect.debug :
     reflectMap :
       reflector::.debug : path::out.debug
-
-  reflect.dependencies.release :
-    reflectMap :
-      reflector::.dependencies.release : path::out.release
-
-  reflect.dependencies.debug :
-    reflectMap :
-      reflector::.dependencies.debug : path::out.debug
-
-  out.debug :
-    srcFilter :
-      basePath : .
-    reflectMap :
-      - path:out.debug
-
-  out.release :
-    srcFilter :
-      basePath : .
-    reflectMap :
-      - path:out.release
 
 step :
 

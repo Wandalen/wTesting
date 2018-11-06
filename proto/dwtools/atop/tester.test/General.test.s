@@ -14,27 +14,10 @@ echo $?
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || typeof _global_.wBase === 'undefined' )
-  {
-    let toolsPath = '../../../dwtools/Base.s';
-    let _externalTools = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      _externalTools = 1;
-      require( 'wTools' );
-    }
-    if( !_externalTools )
-    require( toolsPath );
-  }
+  let _ = require( '../../Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../tester/aBase.debug.s' );
-  var _global = _global_;
-  var _ = _global_.wTools;
+  require( '../tester/Main.mid.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );

@@ -18,6 +18,6 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  module[ 'exports' ] = wTools;
+  module[ 'exports' ] = _global_.wTools;
 
 }

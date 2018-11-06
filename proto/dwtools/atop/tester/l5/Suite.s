@@ -265,7 +265,7 @@ function consoleBar( value )
 {
   let suite = this;
   let logger = suite.logger;
-  let wasBarred = /*_.*/wTester._barOptions ? /*_.*/wTester._barOptions.on : false;
+  let wasBarred = wTester._barOptions ? wTester._barOptions.on : false;
 
   try
   {
@@ -279,14 +279,14 @@ function consoleBar( value )
       logger.log( 'Silencing console' );
       logger.end({ verbosity : -8 });
       if( !_.Logger.consoleIsBarred( console ) )
-      /*_.*/wTester._barOptions = _.Logger.consoleBar({ outputPrinter : logger, on : 1 });
+      wTester._barOptions = _.Logger.consoleBar({ outputPrinter : logger, on : 1 });
     }
     else
     {
       if( _.Logger.consoleIsBarred( console ) )
       {
-        /*_.*/wTester._barOptions.on = 0;
-        _.Logger.consoleBar( /*_.*/wTester._barOptions );
+        wTester._barOptions.on = 0;
+        _.Logger.consoleBar( wTester._barOptions );
       }
     }
 
@@ -341,19 +341,19 @@ function _testSuiteRefine()
   _.mapExtend( extend, suite.override );
 
   if( !suite.logger )
-  suite.logger = /*_.*/wTester.logger || _global_.logger;
+  suite.logger = wTester.logger || _global_.logger;
 
   if( !suite.ignoringTesterOptions )
   {
 
-    if( /*_.*/wTester.settings.verbosity !== null )
+    if( wTester.settings.verbosity !== null )
     if( extend.verbosity === undefined )
-    extend.verbosity = /*_.*/wTester.settings.verbosity-1;
+    extend.verbosity = wTester.settings.verbosity-1;
 
-    for( let f in /*_.*/wTester.SettingsOfSuite )
-    if( /*_.*/wTester.settings[ f ] !== null )
+    for( let f in wTester.SettingsOfSuite )
+    if( wTester.settings[ f ] !== null )
     if( extend[ f ] === undefined )
-    extend[ f ] = /*_.*/wTester.settings[ f ];
+    extend[ f ] = wTester.settings[ f ];
 
   }
 
@@ -367,7 +367,7 @@ function _testSuiteRefine()
 
     _.assert( _.routineIs( testRoutine ) );
 
-    let trd = /*_.*/wTester.TestRoutineDescriptor
+    let trd = wTester.TestRoutineDescriptor
     ({
       name : testRoutineName,
       routine : testRoutine,
@@ -387,7 +387,7 @@ function _testSuiteRefine()
   /* validate */
 
   _.assert( suite.concurrent !== null && suite.concurrent !== undefined );
-  _.assert( /*_.*/wTester.settings.sanitareTime >= 0 );
+  _.assert( wTester.settings.sanitareTime >= 0 );
   _.assert( _.numberIs( suite.verbosity ) );
 
 }
@@ -406,7 +406,7 @@ function _testSuiteRunSoon()
   // suite._testSuiteRefine();
   // debugger;
 
-  let con = suite.concurrent ? new _.Consequence().give() : /*_.*/wTester.TestSuite._suiteCon;
+  let con = suite.concurrent ? new _.Consequence().give() : wTester.TestSuite._suiteCon;
 
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
@@ -426,7 +426,7 @@ function _testSuiteRunAct()
 {
   let suite = this;
   let testRoutines = suite.tests;
-  let logger = suite.logger || /*_.*/wTester.settings.logger || _global_.logger;
+  let logger = suite.logger || wTester.settings.logger || _global_.logger;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -456,11 +456,11 @@ function _testSuiteRunAct()
   function handleEnd( err,data )
   {
 
-    if( !( /*_.*/wTester.settings.sanitareTime >= 0 ) )
-    err = _.err( '{-sanitareTime-} should be greater than zero, but it is', /*_.*/wTester.settings.sanitareTime );
+    if( !( wTester.settings.sanitareTime >= 0 ) )
+    err = _.err( '{-sanitareTime-} should be greater than zero, but it is', wTester.settings.sanitareTime );
 
     if( suite._reportIsPositive() )
-    return _.timeOut( /*_.*/wTester.settings.sanitareTime, () => suite._testSuiteEnd( err ) );
+    return _.timeOut( wTester.settings.sanitareTime, () => suite._testSuiteEnd( err ) );
     else
     return suite._testSuiteEnd( err );
   }
@@ -476,7 +476,7 @@ function _testSuiteBegin()
   if( suite.debug )
   debugger;
 
-  if( /*_.*/wTester.settings.timing )
+  if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.timeNow();
 
   /* test routine */
@@ -493,7 +493,7 @@ function _testSuiteBegin()
 
   /* tracking */
 
-  _.arrayAppendOnceStrictly( /*_.*/wTester.activeSuites, suite );
+  _.arrayAppendOnceStrictly( wTester.activeSuites, suite );
 
   /* logger */
 
@@ -520,7 +520,7 @@ function _testSuiteBegin()
 
   logger.logUp( msg.join( '\n' ) );
 
-  logger.log( /*_.*/wTester.textColor( 'at  ' + suite.suiteFileLocation, 'selected' ) );
+  logger.log( wTester.textColor( 'at  ' + suite.suiteFileLocation, 'selected' ) );
 
   logger.end( 'suite' );
 
@@ -558,7 +558,7 @@ function _testSuiteBegin()
 
   /* */
 
-  if( !/*_.*/wTester._canContinue() )
+  if( !wTester._canContinue() )
   {
     debugger; /* xxx */
     return false;
@@ -644,7 +644,7 @@ function _testSuiteEnd( err )
   logger.log( msg );
 
   let timingStr = '';
-  if( /*_.*/wTester.settings.timing )
+  if( wTester.settings.timing )
   {
     suite.report.timeSpent = _.timeNow() - suite._testSuiteBeginTime;
     timingStr = ' ... in ' + _.timeSpentFormat( suite.report.timeSpent );
@@ -652,7 +652,7 @@ function _testSuiteEnd( err )
 
   msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
 
-  msg = /*_.*/wTester.textColor( msg, ok );
+  msg = wTester.textColor( msg, ok );
 
   logger.begin({ verbosity : -1 });
   logger.logDown( msg );
@@ -672,11 +672,11 @@ function _testSuiteEnd( err )
   /* */
 
   if( suite.takingIntoAccount )
-  /*_.*/wTester._testSuiteConsider( ok );
+  wTester._testSuiteConsider( ok );
 
   /* tracking */
 
-  _.arrayRemoveElementOnceStrictly( /*_.*/wTester.activeSuites, suite );
+  _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
 
   /* silencing */
 
@@ -698,7 +698,7 @@ function _testSuiteTerminated()
   let suite = this;
   debugger;
   let err = _.err( 'Terminated by user' );
-  /*_.*/wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
+  wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }
 
 //
@@ -737,7 +737,7 @@ function _testRoutineRun( trd )
 
   /* */
 
-  if( !/*_.*/wTester._canContinue() )
+  if( !wTester._canContinue() )
   return;
 
   if( !trd.able )
@@ -771,7 +771,7 @@ function _testRoutineRun( trd )
 
     result.andThen( suite._inroutineCon );
 
-    result = result.eitherThenSplit([ _.timeOutError( trd.timeOut ), /*_.*/wTester._cancelCon ]);
+    result = result.eitherThenSplit([ _.timeOutError( trd.timeOut ), wTester._cancelCon ]);
 
     result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
     result.doThen( () => trd._testRoutineEnd() );
@@ -900,7 +900,7 @@ function _testCheckConsider( outcome )
   }
 
   if( suite.takingIntoAccount )
-  /*_.*/wTester._testCheckConsider( outcome );
+  wTester._testCheckConsider( outcome );
 
 }
 
@@ -917,7 +917,7 @@ function _testCaseConsider( outcome )
   report.testCaseFails += 1;
 
   if( suite.takingIntoAccount )
-  /*_.*/wTester._testCaseConsider( outcome );
+  wTester._testCaseConsider( outcome );
 }
 
 //
@@ -942,7 +942,7 @@ function _testRoutineConsider( outcome )
   }
 
   if( suite.takingIntoAccount )
-  /*_.*/wTester._testRoutineConsider( outcome );
+  wTester._testRoutineConsider( outcome );
 
 }
 
@@ -958,7 +958,7 @@ function _exceptionConsider( err )
   suite.report.errorsArray.push( err );
 
   if( suite.takingIntoAccount )
-  /*_.*/wTester._exceptionConsider( err );
+  wTester._exceptionConsider( err );
 
 }
 
@@ -967,7 +967,7 @@ function _exceptionConsider( err )
 function exceptionReport( o )
 {
   let suite = this;
-  let logger = suite.logger || /*_.*/wTester.settings.logger || _global_.logger;
+  let logger = suite.logger || wTester.settings.logger || _global_.logger;
 
   _.routineOptions( exceptionReport,o );
   _.assert( arguments.length === 1, 'Expects single argument' );
@@ -1182,7 +1182,7 @@ _.EventHandler.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-/*_.*/wTester[ Self.shortName ] = Self;
+wTester[ Self.shortName ] = Self;
 _realGlobal_[ Self.name ] = _global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 })();

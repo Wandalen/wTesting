@@ -42,7 +42,7 @@ function inherit( test )
     routines.push( test.name );
 
     test.case = 'check if child suit runs this test';
-    test.identical( /*_.*/wTester.activeSuits[ 1 ].name, childSuitName );
+    test.identical( wTester.activeSuits[ 1 ].name, childSuitName );
     checksCount += test.checkCurrent()._checkIndex;
   }
 
@@ -173,6 +173,6 @@ var Proto =
 
 var Self = new wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
-/*_.*/wTester.test( Self );
+wTester.test( Self );
 
 })();

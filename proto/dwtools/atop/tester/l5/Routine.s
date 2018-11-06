@@ -69,7 +69,7 @@ function refine()
   _.sureMapHasOnly
   (
     routine,
-    /*_.*/wTester.TestRoutineDescriptor.KnownFields,
+    wTester.TestRoutineDescriptor.KnownFields,
     [ preStr, 'has unknown fields :' ]
   );
 
@@ -90,10 +90,10 @@ function _testRoutineBegin()
   let trd = this;
   let suite = trd.suite;
 
-  if( /*_.*/wTester )
+  if( wTester )
   trd._testRoutineBeginTime = _.timeNow();
 
-  _.arrayAppendOnceStrictly( /*_.*/wTester.activeRoutines, trd );
+  _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
 
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
 
@@ -147,7 +147,7 @@ function _testRoutineEnd()
     debugger; /* xxx */
     let wasBarred = suite.consoleBar( 0 );
 
-    // let barOptions = /*_.*/wTester._barOptions;
+    // let barOptions = wTester._barOptions;
     // let exclusiveOutputPrinter = barOptions.exclusiveOutputPrinter;
     //
     // barOptions.exclusiveOutputPrinter = 0;
@@ -210,7 +210,7 @@ function _testRoutineEnd()
   suite.logger.begin({ verbosity : -3 });
 
   let timingStr = '';
-  if( /*_.*/wTester )
+  if( wTester )
   {
     trd.report.timeSpent = _.timeNow() - trd._testRoutineBeginTime;
     timingStr = ' in ' + _.timeSpentFormat( trd.report.timeSpent );
@@ -218,7 +218,7 @@ function _testRoutineEnd()
 
   let str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
 
-  str = /*_.*/wTester.textColor( str, ok );
+  str = wTester.textColor( str, ok );
 
   if( !ok )
   suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
@@ -233,7 +233,7 @@ function _testRoutineEnd()
 
   suite.logger.end({ verbosity : -3 });
 
-  _.arrayRemoveElementOnceStrictly( /*_.*/wTester.activeRoutines, trd ); /* xxx */
+  _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, trd ); /* xxx */
 
 }
 
@@ -292,15 +292,15 @@ function _interruptMaybe( throwing )
   if( trd._returned )
   return false;
 
-  if( /*_.*/wTester._canceled )
+  if( wTester._canceled )
   return true;
 
-  if( !/*_.*/wTester._canContinue() )
+  if( !wTester._canContinue() )
   {
     debugger; /* xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
-    let result = /*_.*/wTester.cancel({ global : 0 });
+    let result = wTester.cancel({ global : 0 });
     if( throwing )
     throw result;
     return result;
@@ -309,7 +309,7 @@ function _interruptMaybe( throwing )
   let elapsed = _.timeNow() - trd._testRoutineBeginTime;
   if( elapsed > trd.timeOut && !debugged )
   {
-    let result = /*_.*/wTester.cancel({ err : trd._timeOutError(), global : 0 });
+    let result = wTester.cancel({ err : trd._timeOutError(), global : 0 });
     if( throwing )
     throw result;
     return result;
@@ -325,7 +325,7 @@ function _ableGet()
   let trd = this;
   let suite = trd.suite;
 
-  _.assert( _.numberIs( /*_.*/wTester.settings.rapidity ) );
+  _.assert( _.numberIs( wTester.settings.rapidity ) );
 
   if( suite.routine )
   return suite.routine === trd.name;
@@ -338,7 +338,7 @@ function _ableGet()
   // if( suite.routine && suite.routine !== trd.name )
   // return false;
 
-  if( trd.rapidity < /*_.*/wTester.settings.rapidity )
+  if( trd.rapidity < wTester.settings.rapidity )
   return false;
 
   return true;
@@ -2348,7 +2348,7 @@ function _reportTextForTestCheck( o )
   }
 
   if( o.outcome !== null )
-  result = /*_.*/wTester.textColor( result, o.outcome );
+  result = wTester.textColor( result, o.outcome );
 
   return result;
 }
@@ -2743,6 +2743,6 @@ _.Copyable.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-/*_.*/wTester[ Self.shortName ] = Self;
+wTester[ Self.shortName ] = Self;
 
 })();

@@ -600,7 +600,7 @@ function suitesListPrint( suites )
     logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  // logger.log( _.entitySelect( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
+  // logger.log( _.select( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
 
   let l = _.entityLength( suites );
 
@@ -993,7 +993,7 @@ function _exceptionConsider( err )
 //   {
 //     routine.folderPath = _.path.dir( k );
 //     routine.itemsPath = _.path.dir( routine.folderPath );
-//     routine.itemsData = _.entitySelect( data,routine.itemsPath );
+//     routine.itemsData = _.select( data,routine.itemsPath );
 //
 //     if( routine.tail )
 //     {
@@ -1064,12 +1064,12 @@ function _exceptionConsider( err )
 //   {
 //     if( !node.data )
 //     return '-';
-//     let result = _.entitySelect( node.data.report,'*.text' );
+//     let result = _.select( node.data.report,'*.text' );
 //
 //     if( node.data.check )
 //     result = result.join( '\n' ) + '\n' + node.data.text;
 //     else if( node.data.routine )
-//     result = node.data.text + '\n' + _.entitySelect( node.elements,'*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
+//     result = node.data.text + '\n' + _.select( node.elements,'*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
 //
 //     return result;
 //   }

@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 + move test routine methods out of test suite
 + implement routine only as option of test suite
 + adjust verbosity levels
-+ make possible switch off parents test routines : fileStat : null
++ make possible switch off parents test routines : statResolvedRead : null
 + make "should/must not error" pass original messages through
   test.case = 'mustNotThrowError must return con with message';
 

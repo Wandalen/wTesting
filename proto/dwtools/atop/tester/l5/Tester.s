@@ -262,7 +262,7 @@ function _includeTestsFrom( path )
 
   if( !files.length )
   {
-    let record = _.fileProvider.fileRecordContext().fileRecord( path );
+    let record = _.fileProvider.recordFactory().record( path );
     if( record.stat && !record.stat.isDirectory() && record.isActual )
     files = [ record ];
   }

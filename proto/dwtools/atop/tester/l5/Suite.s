@@ -760,6 +760,8 @@ function _testRoutineRun( trd )
     try
     {
       result = trd.routine.call( suite.context, trd );
+      if( result === undefined )
+      result = null;
     }
     catch( err )
     {

@@ -235,11 +235,12 @@ function _testRoutineEnd()
 
   _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, trd ); /* xxx */
 
+  return ok
 }
 
 //
 
-function _testRoutineHandleReturn( err,msg )
+function _testRoutineHandleReturn( err, msg )
 {
   let trd = this;
   let suite = trd.suite;
@@ -279,6 +280,7 @@ function _testRoutineHandleReturn( err,msg )
     });
   }
 
+  return msg;
 }
 
 //
@@ -1404,7 +1406,7 @@ function _shouldDo( o )
   let con = new _.Consequence();
 
   if( !trd.shoulding )
-  return con.give();
+  return con.give( null );
 
   try
   {
@@ -1720,7 +1722,7 @@ function _shouldDo( o )
     else
     con.give( arg,undefined );
 
-    trd._inroutineCon.give();
+    trd._inroutineCon.give( null );
 
     reported = 1;
   }
@@ -1872,16 +1874,16 @@ function shouldThrowErrorSync( routine )
  * @example
  * function sometest( test )
  * {
- *  let consequence = new _.Consequence().give();
+ *  let consequence = new _.Consequence().give( null );
  *  consequence
- *  .ifNoErrorThen( function()
+ *  .ifNoErrorThen( function( arg )
  *  {
  *    test.case = 'shouldThrowErrorSync';
  *    let con = new _.Consequence( )
  *    .error( _.err() ); //wConsequence instance with error message
  *    return test.shouldThrowErrorSync( con );//test passes
  *  })
- *  .ifNoErrorThen( function()
+ *  .ifNoErrorThen( function( arg )
  *  {
  *    test.case = 'shouldThrowError2';
  *    let con = new _.Consequence( )

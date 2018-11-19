@@ -866,8 +866,8 @@ function shouldThrowErrorSync( test )
 
       _.timeOut( 250, function()
       {
-        con.give();
-        con.give();
+        con.give( null );
+        con.give( null );
       });
 
       return con;
@@ -1170,8 +1170,8 @@ function shouldThrowErrorAsync( test )
 
       _.timeOut( 250, function()
       {
-        con.give();
-        con.give();
+        con.give( null );
+        con.give( null );
       });
 
       return con;
@@ -1634,12 +1634,12 @@ function _throwingExperiment( test )
 
   t.mustNotThrowError( function()
   {
-    var con = _.Consequence().give();
+    var con = _.Consequence().give( null );
 
     _.timeOut( 250, function()
     {
-      con.give();
-      con.give();
+      con.give( null );
+      con.give( null );
     });
 
     return con;
@@ -1649,12 +1649,12 @@ function _throwingExperiment( test )
 
   t.shouldThrowError( function()
   {
-    var con = _.Consequence().give();
+    var con = _.Consequence().give( null );
 
     _.timeOut( 2000, function()
     {
-      con.give();
-      con.give();
+      con.give( null );
+      con.give( null );
     });
 
     return con;
@@ -1704,12 +1704,12 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    var con = _.Consequence().give();
+    var con = _.Consequence().give( null );
 
     _.timeOut( 250, function()
     {
-      con.give();
-      con.give();
+      con.give( null );
+      con.give( null );
     });
 
     return con;
@@ -1746,12 +1746,12 @@ function _throwingExperiment( test )
 
   test.shouldThrowErrorSync( function()
   {
-    var con = _.Consequence().give();
+    var con = _.Consequence().give( null );
 
     _.timeOut( 250, function()
     {
-      con.give();
-      con.give();
+      con.give( null );
+      con.give( null );
     });
 
     return con;
@@ -1803,12 +1803,12 @@ function _throwingExperiment( test )
   test.case = 'not expected second message';
   test.mustNotThrowError( function()
   {
-    var con = _.Consequence().give();
+    var con = _.Consequence().give( null );
 
     _.timeOut( 1000, function()
     {
-      con.give();
-      con.give();
+      con.give( null );
+      con.give( null );
     });
 
     return con;
@@ -1827,16 +1827,16 @@ function shouldThrowErrorSyncSimple( test )
 
   test.identical( test._inroutineCon.resourcesGet().length,1 );
 
-  var consequence = new _.Consequence().give();
+  var consequence = new _.Consequence().give( null );
   consequence
-  .ifNoErrorThen( function()
+  .ifNoErrorThen( function( arg/*aaa*/ )
   {
     return test.shouldThrowErrorSync( function()
     {
       throw _.err( 'shouldThrowErrorSync a' );
     });
   })
-  .ifNoErrorThen( function()
+  .ifNoErrorThen( function( arg/*aaa*/ )
   {
     return test.shouldThrowErrorSync( function()
     {
@@ -1851,7 +1851,7 @@ function shouldThrowErrorSyncSimple( test )
 
 function shouldThrowErrorAsyncSimple( test )
 {
-  var consequence = new _.Consequence().give();
+  var consequence = new _.Consequence().give( null );
   var counter = new CheckCounter();
 
   counter.testRoutine = test;
@@ -1923,7 +1923,7 @@ shouldThrowErrorAsyncSimple.timeOut = 3000;
 
 function shouldThrowErrorAsyncConcurrent( test )
 {
-  var consequence = new _.Consequence().give();
+  var consequence = new _.Consequence().give( null );
   var counter = new CheckCounter();
 
   counter.testRoutine = test;
@@ -2002,7 +2002,7 @@ function _chainedShould( test,o )
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.testCheckFails, 0 );
 
-    return new _.Consequence().give()
+    return new _.Consequence().give( null )
     .doThen( function()
     {
 
@@ -2192,7 +2192,7 @@ _chainedShould.experimental = 1;
 
 function chainedShould( test )
 {
-  var con = _.Consequence().give();
+  var con = _.Consequence().give( null );
 
   /* qqq : double check _hasConsoleInOutputs */
 
@@ -3515,9 +3515,9 @@ function shouldThrowErrorAsyncReturn( test )
 
   function returnTest( t )
   {
-    var con = _.Consequence().give()
+    var con = _.Consequence().give( null )
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowErrorAsync( () => true )
       .doThen( ( err, got ) =>
@@ -3527,7 +3527,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowErrorAsync( () => { throw _.err( 1 ) } )
       .doThen( ( err, got ) =>
@@ -3537,7 +3537,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
@@ -3547,7 +3547,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().error( _.err( 'error!' ) ) )
       .doThen( ( err, got ) =>
@@ -3557,7 +3557,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().error( 1 ) )
       .doThen( ( err, got ) =>
@@ -3567,7 +3567,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowErrorAsync( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
@@ -3577,7 +3577,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'no arguments';
       return t.shouldThrowErrorAsync()
@@ -3588,7 +3588,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'not routines';
       return t.shouldThrowErrorAsync( 'x' )
@@ -3599,7 +3599,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'several functions';
       return t.shouldThrowErrorAsync( function(){}, function(){} )
@@ -3647,9 +3647,9 @@ function shouldThrowErrorReturn( test )
 
   function returnTest( t )
   {
-    var con = _.Consequence().give()
+    var con = _.Consequence().give( null )
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowError( () => true )
       .doThen( ( err, got ) =>
@@ -3659,7 +3659,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowError( () => { throw _.err( 1 ) } )
       .doThen( ( err, got ) =>
@@ -3669,7 +3669,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowError( _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
@@ -3679,7 +3679,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowError( _.Consequence().error( 1 ) )
       .doThen( ( err, got ) =>
@@ -3689,7 +3689,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowError( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
@@ -3699,7 +3699,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'no arguments';
       return t.shouldThrowError()
@@ -3710,7 +3710,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'not routines';
       return t.shouldThrowError( 'x' )
@@ -3721,7 +3721,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldThrowError( function(){}, function(){} )
       .doThen( ( err, got ) =>
@@ -3769,9 +3769,9 @@ function mustNotThrowErrorReturn( test )
 
   function returnTest( t )
   {
-    var con = _.Consequence().give()
+    var con = _.Consequence().give( null )
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.mustNotThrowError( () => true )
       .doThen( ( err, got ) =>
@@ -3781,7 +3781,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.mustNotThrowError( () => { throw _.err( 1 ) } )
       .doThen( ( err, got ) =>
@@ -3791,7 +3791,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.mustNotThrowError( _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
@@ -3801,7 +3801,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.mustNotThrowError( _.Consequence().error( 1 ) )
       .doThen( ( err, got ) =>
@@ -3811,7 +3811,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.mustNotThrowError( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
@@ -3821,7 +3821,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'no arguments';
       return t.mustNotThrowError()
@@ -3832,7 +3832,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'not routines';
       return t.mustNotThrowError( 'x' )
@@ -3843,7 +3843,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.mustNotThrowError( function(){}, function(){} )
       .doThen( ( err, got ) =>
@@ -3891,9 +3891,9 @@ function shouldMessageOnlyOnceReturn( test )
 
   function returnTest( t )
   {
-    var con = _.Consequence().give()
+    var con = _.Consequence().give( null )
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( () => 1 )
       .doThen( ( err, got ) =>
@@ -3903,7 +3903,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( () => { throw _.err( 1 ) } )
       .doThen( ( err, got ) =>
@@ -3913,7 +3913,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
@@ -3923,7 +3923,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( () => _.Consequence().give( 1 ) )
       .doThen( ( err, got ) =>
@@ -3933,7 +3933,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( _.Consequence().error( _.err( 1 ) ) )
       .doThen( ( err, got ) =>
@@ -3943,7 +3943,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( () => _.Consequence().error( _.err( 1 ) ) )
       .doThen( ( err, got ) =>
@@ -3953,7 +3953,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
       return t.shouldMessageOnlyOnce( con )
@@ -3964,7 +3964,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
       return t.shouldMessageOnlyOnce( () => con )
@@ -3975,7 +3975,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
@@ -3985,7 +3985,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( () => _.timeOutError( 1 ) )
       .doThen( ( err, got ) =>
@@ -3995,7 +3995,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.Consequence().give( 1 ).give( 2 );
       return t.shouldMessageOnlyOnce( con )
@@ -4006,7 +4006,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.Consequence().give( 1 ).give( 2 );
       return t.shouldMessageOnlyOnce( () => con )
@@ -4017,7 +4017,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'no arguments';
       return t.shouldMessageOnlyOnce()
@@ -4028,7 +4028,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'not routines';
       return t.shouldMessageOnlyOnce( 'x' )
@@ -4039,7 +4039,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( () =>
+    .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       return t.shouldMessageOnlyOnce( function(){}, function(){} )
       .doThen( ( err, got ) =>

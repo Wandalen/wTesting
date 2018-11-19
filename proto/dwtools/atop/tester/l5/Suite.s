@@ -406,7 +406,7 @@ function _testSuiteRunSoon()
   // suite._testSuiteRefine();
   // debugger;
 
-  let con = suite.concurrent ? new _.Consequence().give() : wTester.TestSuite._suiteCon;
+  let con = suite.concurrent ? new _.Consequence().give( null ) : wTester.TestSuite._suiteCon;
 
   return con
   .doThen( _.routineSeal( _,_.timeReady,[] ) )
@@ -447,8 +447,9 @@ function _testSuiteRunAct()
 
   function handleStage( trd, iteration, iterator )
   {
-    // return suite._testRoutineRun( iteration.key, testRoutine );
-    return suite._testRoutineRun( trd );
+    let result = suite._testRoutineRun( trd ) || null;
+    _.assert( result !== undefined );
+    return result;
   }
 
   /* */
@@ -758,7 +759,7 @@ function _testRoutineRun( trd )
 
     try
     {
-      result = trd.routine.call( suite.context,trd );
+      result = trd.routine.call( suite.context, trd );
     }
     catch( err )
     {
@@ -773,7 +774,7 @@ function _testRoutineRun( trd )
 
     result = result.eitherThenSplit([ _.timeOutError( trd.timeOut ), wTester._cancelCon ]);
 
-    result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err,msg ) );
+    result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err, msg ) );
     result.doThen( () => trd._testRoutineEnd() );
 
     return result;
@@ -1037,8 +1038,8 @@ let Composes =
 
   override : _.define.own( {} ),
 
-  _routineCon : _.define.own( new _.Consequence().give() ),
-  _inroutineCon : _.define.own( new _.Consequence().give() ),
+  _routineCon : _.define.own( new _.Consequence().give( null ) ),
+  _inroutineCon : _.define.own( new _.Consequence().give( null ) ),
 
   onRoutineBegin : onRoutineBegin,
   onRoutineEnd : onRoutineEnd,
@@ -1072,7 +1073,7 @@ let Statics =
 {
   // usingUniqueNames : 1,
   usingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
-  _suiteCon : new _.Consequence().give(),
+  _suiteCon : new _.Consequence().give( null ),
 }
 
 let Events =

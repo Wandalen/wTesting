@@ -67,8 +67,8 @@ function exec()
   {
     err = _.errLogOnce( err );
     process.exitCode = -1;
-    _.beep();
-    _.beep();
+    _.diagnosticBeep();
+    _.diagnosticBeep();
     return;
     throw err;
   }
@@ -404,12 +404,12 @@ function _testingEnd()
   let ok = tester._reportIsPositive();
 
   if( tester.settings.beeping )
-  _.beep();
+  _.diagnosticBeep();
 
   if( !ok && !_.appExitCode() )
   {
     if( tester.settings.beeping )
-    _.beep();
+    _.diagnosticBeep();
     _.appExitCode( -1 );
   }
 
@@ -445,7 +445,7 @@ function _testingEnd()
 
   /* */
 
-  logger.verbosityPop();
+  // logger.verbosityPop();
 
   _.assert( logger.hasOutput( _global.logger,{ deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
@@ -456,6 +456,7 @@ function _testingEnd()
     _.appExit();
   });
 
+  return ok;
 }
 
 //
@@ -521,12 +522,15 @@ function _suitesRun( suites )
   /* */
 
   wTester.TestSuite._suiteCon
-  .doThen( function()
+  .doThen( function( err, arg )
   {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
+    if( err )
+    throw err;
+    return arg;
   })
-  .doThen( function()
+  .doThen( function( err, arg )
   {
     return tester._testingEnd();
   });
@@ -1145,7 +1149,7 @@ let ApplicationArgumentsMap =
   scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list"',
   sanitareTime : 'Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later.',
   fails : 'Maximum number of fails allowed before shutting down testing.',
-  beeping : 'Make beep sound after testing to let developer know it\'s done.',
+  beeping : 'Make diagnosticBeep sound after testing to let developer know it\'s done.',
   coloring : 'Switch on/off coloring.',
   timing : 'Switch on/off measuing of time.',
   rapidity : 'How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3.',
@@ -1341,7 +1345,7 @@ let Self =
 
   settings : Object.create( null ),
 
-  logger : new _.Logger({ name : 'LoggerForTesting', output : _global.logger }),
+  logger : new _.Logger({ name : 'LoggerForTester', output : _global.logger }),
   _cancelCon : new _.Consequence(),
   _canceled : 0,
 

@@ -29,7 +29,7 @@ var _ = _global_.wTools;
 function timeOut( test )
 {
   var c = this;
-  var testCon = new _.Consequence().give()
+  var testCon = new _.Consequence().give( null )
 
   /* */
 
@@ -361,7 +361,7 @@ timeOut.timeOut = 30000;
 function timeOutError( test )
 {
   var c = this;
-  var testCon = new _.Consequence().give()
+  var testCon = new _.Consequence().give( null )
 
   /* */
 
@@ -541,7 +541,7 @@ function timeOutMode01( test )
 {
   var c = this;
   var mode = _.Consequence.asyncModeGet();
-  var testCon = new _.Consequence().give()
+  var testCon = new _.Consequence().give( null )
 
   /* asyncTaking : 0, asyncGiving : 1 */
 
@@ -828,7 +828,7 @@ function timeOutMode10( test )
 {
   var c = this;
   var mode = _.Consequence.asyncModeGet();
-  var testCon = new _.Consequence().give()
+  var testCon = new _.Consequence().give( null )
   /* asyncTaking : 1, asyncGiving : 0, */
 
   .doThen( () => _.Consequence.asyncModeSet([ 1, 0 ]) )
@@ -1108,7 +1108,7 @@ function timeOutMode11( test )
 {
   var c = this;
   var mode = _.Consequence.asyncModeGet();
-  var testCon = new _.Consequence().give()
+  var testCon = new _.Consequence().give( null )
 
   /* asyncGiving : 1, asyncTaking : 1 */
 

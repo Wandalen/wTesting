@@ -149,6 +149,7 @@ function inherit( test )
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
     test.identical( _.mapOwnKeys( suit.tests ).length, 2 );
+    return null;
   })
 }
 

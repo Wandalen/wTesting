@@ -259,6 +259,7 @@ function _testRoutineHandleReturn( err, msg )
     ({
       err : err,
     });
+    return err;
   }
   else
   {
@@ -278,9 +279,11 @@ function _testRoutineHandleReturn( err, msg )
       usingSourceCode : 0,
       usingDescription : 0,
     });
+
+    return msg;
   }
 
-  return msg;
+  // return msg;
 }
 
 //
@@ -1613,6 +1616,8 @@ function _shouldDo( o )
         if( !reported )
         reportAsync();
 
+        return null;
+
       });
 
     });
@@ -1716,6 +1721,9 @@ function _shouldDo( o )
     debugger;
     if( reported || async )
     trd.checkRestore();
+
+    if( arg === undefined && !async )
+    arg = null;
 
     if( positive )
     con.give( undefined,arg );

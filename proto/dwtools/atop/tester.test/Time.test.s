@@ -43,6 +43,7 @@ function timeOut( test )
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.is( _.routineIs( got ) );
+      return null;
     });
   })
 
@@ -52,13 +53,14 @@ function timeOut( test )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
-    return _.timeOut( c.delay, () => {} )
+    return _.timeOut( c.delay, () => null )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
+      test.identical( got, null );
       test.identical( err, undefined );
+      return null;
     });
   })
 
@@ -76,6 +78,7 @@ function timeOut( test )
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, value );
       test.identical( err, undefined );
+      return null;
     });
   })
 
@@ -92,6 +95,7 @@ function timeOut( test )
       test.is( elapsedTime >= c.delay * 2 );
       test.is( _.routineIs( got ) );
       test.identical( err, undefined );
+      return null;
     });
   })
 
@@ -101,13 +105,14 @@ function timeOut( test )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
-    return _.timeOut( c.delay, () => { _.timeOut( c.delay ) } )
+    return _.timeOut( c.delay, () => { _.timeOut( c.delay ); return null } )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( err, undefined );
-      test.identical( got, undefined );
+      test.identical( got, null );
+      return null;
     });
   })
 
@@ -128,6 +133,7 @@ function timeOut( test )
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, c.delay / 2 );
       test.identical( err, undefined );
+      return null;
     });
   })
 
@@ -145,6 +151,7 @@ function timeOut( test )
       test.is( elapsedTime >= c.delay * 2 );
       test.is( _.routineIs( got ) );
       test.identical( err, undefined );
+      return null;
     });
   })
 
@@ -163,6 +170,7 @@ function timeOut( test )
       test.ge( elapsedTime, c.delay * 3-timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, val );
+      return null;
     })
   })
 
@@ -181,6 +189,7 @@ function timeOut( test )
       test.ge( elapsedTime, c.delay * 2-timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, val );
+      return null;
     })
   })
 
@@ -198,6 +207,7 @@ function timeOut( test )
       test.ge( elapsedTime, c.delay * 4-timeAccuracy );
       test.identical( err, undefined );
       test.identical( got, _.timeOut );
+      return null;
     })
   })
 
@@ -215,6 +225,7 @@ function timeOut( test )
       test.is( elapsedTime >= c.delay * 2 );
       test.is( _.errIs( err ) );
       test.identical( got, undefined );
+      return null;
     });
   })
 
@@ -232,8 +243,9 @@ function timeOut( test )
       test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
       test.identical( err, 'stop' );
       test.identical( got, undefined );
+      return null;
     })
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 
     return t;
   })
@@ -254,8 +266,9 @@ function timeOut( test )
       test.identical( got, undefined );
       test.identical( err, 'stop' );
       test.identical( called, false );
+      return null;
     })
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 
     return t;
   })
@@ -267,12 +280,12 @@ function timeOut( test )
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
 
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
     t.got( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
+      test.identical( got, null );
       test.identical( err, undefined );
     });
 
@@ -280,6 +293,7 @@ function timeOut( test )
     {
       t.error( 'stop' );
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
+      return null;
     });
 
     return t;
@@ -305,7 +319,9 @@ function timeOut( test )
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
         test.identical( got, returnValue );
+
       })
+      return null;
     })
 
     return t;
@@ -328,8 +344,9 @@ function timeOut( test )
       test.identical( got, undefined );
       test.identical( err, stop );
       test.identical( called, false );
+      return null;
     })
-    _.timeOut( c.delay / 2, () => t.give( stop, undefined ) );
+    _.timeOut( c.delay / 2, () => { t.give( stop, undefined ); return null; } );
 
     return t;
   })
@@ -339,7 +356,7 @@ function timeOut( test )
   .doThen( function()
   {
     if( !Config.debug )
-    return;
+    return null;
 
     test.case = 'delay must be number';
     test.shouldThrowError( () => _.timeOut( 'x' ) )
@@ -349,6 +366,7 @@ function timeOut( test )
 
     test.case = 'if four arguments provided, third must routine';
     test.shouldThrowError( () => _.timeOut( 0, {}, 'x', [] ) )
+    return null;
   })
 
   return testCon;
@@ -375,6 +393,7 @@ function timeOutError( test )
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.is( _.errIs( err ) );
+      return null;
     });
   })
 
@@ -384,13 +403,14 @@ function timeOutError( test )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
-    return _.timeOutError( c.delay, () => {} )
+    return _.timeOutError( c.delay, () => null )
     .doThen( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
+      return null;
     });
   })
 
@@ -408,6 +428,7 @@ function timeOutError( test )
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
+      return null;
     });
   })
 
@@ -424,6 +445,7 @@ function timeOutError( test )
       test.is( elapsedTime >= c.delay * 2 );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
+      return null;
     });
   })
 
@@ -440,6 +462,7 @@ function timeOutError( test )
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
+      return null;
     });
   })
 
@@ -460,6 +483,7 @@ function timeOutError( test )
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
+      return null;
     });
   })
 
@@ -477,6 +501,7 @@ function timeOutError( test )
       test.ge( elapsedTime, c.delay * 2-timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
+      return null;
     });
 
   })
@@ -496,8 +521,9 @@ function timeOutError( test )
       test.identical( got, undefined );
       test.is( !!err );
       test.identical( t.resourcesGet().length, 0 );
+      return null;
     })
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
 
     return t;
   })
@@ -519,15 +545,16 @@ function timeOutError( test )
       test.identical( err, 'stop' );
       test.identical( called, false );
       test.identical( t.resourcesGet().length, 0 );
+      return null;
     })
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
 
     return t;
   })
 
   .doThen( function( err,arg )
   {
-    return;
+    return null;
   });
 
   return testCon;
@@ -545,7 +572,11 @@ function timeOutMode01( test )
 
   /* asyncTaking : 0, asyncGiving : 1 */
 
-  .doThen( () => _.Consequence.asyncModeSet([ 0, 1 ]) )
+  .doThen( () =>
+  {
+    _.Consequence.asyncModeSet([ 0, 1 ]);
+    return null;
+  })
   .doThen( function()
   {
     debugger;
@@ -563,11 +594,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -577,7 +610,7 @@ function timeOutMode01( test )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -585,16 +618,18 @@ function timeOutMode01( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got , undefined );
+        test.identical( got , null );
         test.is( err === undefined );
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -618,11 +653,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -645,11 +682,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -672,11 +711,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -703,11 +744,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -718,7 +761,7 @@ function timeOutMode01( test )
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -731,11 +774,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -748,7 +793,7 @@ function timeOutMode01( test )
     var called = false;
 
     var t = _.timeOut( c.delay, () => { called = true } );
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 
     return new _.Consequence().first( t )
     .doThen( function()
@@ -763,11 +808,13 @@ function timeOutMode01( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -777,7 +824,7 @@ function timeOutMode01( test )
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
 
     var con = new _.Consequence();
     con.first( t );
@@ -787,16 +834,18 @@ function timeOutMode01( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got, undefined );
+        test.identical( got, null );
         test.identical( err, undefined );
       })
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen(function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
 
     return _.timeOut( c.delay + 50, function()
@@ -805,6 +854,7 @@ function timeOutMode01( test )
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .doThen( function()
     {
@@ -812,7 +862,7 @@ function timeOutMode01( test )
       test.identical( t.competitorsEarlyGet().length, 0 );
 
       _.Consequence.asyncModeSet( mode );
-
+      return null;
     });
 
   })
@@ -831,7 +881,11 @@ function timeOutMode10( test )
   var testCon = new _.Consequence().give( null )
   /* asyncTaking : 1, asyncGiving : 0, */
 
-  .doThen( () => _.Consequence.asyncModeSet([ 1, 0 ]) )
+  .doThen( () =>
+  {
+    _.Consequence.asyncModeSet([ 1, 0 ])
+    return null;
+  })
   .doThen( function()
   {
     test.case = 'delay only';
@@ -848,11 +902,13 @@ function timeOutMode10( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1, function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -862,7 +918,7 @@ function timeOutMode10( test )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -870,16 +926,18 @@ function timeOutMode10( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got , undefined );
+        test.identical( got , null );
         test.identical( err , undefined );
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1, function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -903,11 +961,13 @@ function timeOutMode10( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -930,11 +990,13 @@ function timeOutMode10( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -944,7 +1006,7 @@ function timeOutMode10( test )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ) } );
+    var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ); return null; } );
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -952,16 +1014,18 @@ function timeOutMode10( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got , undefined );
+        test.identical( got , null );
         test.identical( err , undefined );
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -988,11 +1052,13 @@ function timeOutMode10( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1003,7 +1069,7 @@ function timeOutMode10( test )
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -1015,10 +1081,12 @@ function timeOutMode10( test )
         test.identical( err , 'stop' );
         test.identical( t.resourcesGet().length, 0 );
         test.identical( t.competitorsEarlyGet().length, 0 );
+
       });
 
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
   })
 
@@ -1031,7 +1099,7 @@ function timeOutMode10( test )
     var called = false;
 
     var t = _.timeOut( c.delay, () => { called = true } );
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 
     return new _.Consequence().first( t )
     .doThen( function()
@@ -1048,6 +1116,7 @@ function timeOutMode10( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
   })
 
@@ -1057,7 +1126,7 @@ function timeOutMode10( test )
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
 
     var con = new _.Consequence();
     con.first( t );
@@ -1067,16 +1136,18 @@ function timeOutMode10( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got, undefined );
+        test.identical( got, null );
         test.identical( err, undefined );
       })
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
     .doThen( function()
     {
@@ -1084,6 +1155,7 @@ function timeOutMode10( test )
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
@@ -1092,6 +1164,7 @@ function timeOutMode10( test )
 
       _.Consequence.asyncModeSet( mode );
 
+      return null;
     });
 
     return con;
@@ -1112,7 +1185,11 @@ function timeOutMode11( test )
 
   /* asyncGiving : 1, asyncTaking : 1 */
 
-  .doThen( () => _.Consequence.asyncModeSet([ 1, 1 ]) )
+  .doThen( () =>
+  {
+    _.Consequence.asyncModeSet([ 1, 1 ])
+    return null;
+  })
   .doThen( function()
   {
     test.case = 'delay only';
@@ -1129,11 +1206,13 @@ function timeOutMode11( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1, function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1143,7 +1222,7 @@ function timeOutMode11( test )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -1151,16 +1230,18 @@ function timeOutMode11( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got , undefined );
+        test.identical( got , null );
         test.identical( err , undefined );
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1, function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1184,11 +1265,13 @@ function timeOutMode11( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1211,11 +1294,13 @@ function timeOutMode11( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1225,7 +1310,7 @@ function timeOutMode11( test )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ) } );
+    var t = _.timeOut( c.delay, () => { _.timeOut( c.delay );return null; } );
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -1233,16 +1318,18 @@ function timeOutMode11( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got , undefined );
+        test.identical( got , null );
         test.identical( err , undefined );
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1269,11 +1356,13 @@ function timeOutMode11( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1284,7 +1373,7 @@ function timeOutMode11( test )
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
     return new _.Consequence().first( t )
     .doThen( function()
     {
@@ -1297,11 +1386,13 @@ function timeOutMode11( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1313,8 +1404,8 @@ function timeOutMode11( test )
     var timeBefore = _.timeNow();
     var called = false;
 
-    var t = _.timeOut( c.delay, () => { called = true } );
-    _.timeOut( c.delay / 2, () => t.error( 'stop' ) );
+    var t = _.timeOut( c.delay, () => { called = true; return null; } );
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 
     return new _.Consequence().first( t )
     .doThen( function()
@@ -1329,11 +1420,13 @@ function timeOutMode11( test )
       });
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
   })
 
@@ -1343,7 +1436,7 @@ function timeOutMode11( test )
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
-    var t = _.timeOut( c.delay, () => {} );
+    var t = _.timeOut( c.delay, () => null );
 
     var con = new _.Consequence();
     con.first( t );
@@ -1353,16 +1446,18 @@ function timeOutMode11( test )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
-        test.identical( got, undefined );
+        test.identical( got, null );
         test.identical( err, undefined );
       })
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
+      return null;
     })
     .doThen( function()
     {
@@ -1370,6 +1465,7 @@ function timeOutMode11( test )
       t.got( ( err, got ) => test.identical( err, 'stop' ) );
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
+      return null;
     })
     .timeOutThen( 1,function()
     {
@@ -1377,7 +1473,7 @@ function timeOutMode11( test )
       test.identical( t.competitorsEarlyGet().length, 0 );
 
       _.Consequence.asyncModeSet( mode );
-
+      return null;
     });
 
     return con;

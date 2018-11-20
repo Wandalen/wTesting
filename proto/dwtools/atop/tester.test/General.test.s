@@ -117,6 +117,8 @@ function identical( test )
 
     if( err )
     throw err;
+
+    return null;
   });
 
   test.identical( undefined,undefined );
@@ -159,8 +161,9 @@ function shouldMessageOnlyOnce( test )
       c1.got( function( err,arg )
       {
         test.is( err === undefined );
-        test.is( arg === undefined );
+        test.is( arg === null );
       });
+      return null;
     });
 
     /* */
@@ -187,6 +190,7 @@ function shouldMessageOnlyOnce( test )
         test.is( err === undefined );
         test.is( arg === 'msg' );
       });
+      return null;
     });
 
     /* */
@@ -215,6 +219,7 @@ function shouldMessageOnlyOnce( test )
         test.is( _.errIs( arg ) );
         test.is( _.strHas( arg.message,'error1' ) );
       });
+      return null;
     });
 
     /* */
@@ -246,6 +251,7 @@ function shouldMessageOnlyOnce( test )
         test.is( _.errIs( arg ) );
         test.is( _.strHas( arg.message,'error1' ) );
       });
+      return null;
     });
 
     /* */
@@ -273,6 +279,7 @@ function shouldMessageOnlyOnce( test )
         test.is( err === undefined );
         test.is( arg === _.timeOut );
       });
+      return null;
     });
 
     /* */
@@ -288,6 +295,7 @@ function shouldMessageOnlyOnce( test )
       {
         con.give( 'msg1' );
         con.give( 'msg2' );
+        return null;
       });
 
       return con;
@@ -309,6 +317,7 @@ function shouldMessageOnlyOnce( test )
         test.is( _.strHas( err.message,'got more than one message' ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -324,6 +333,7 @@ function shouldMessageOnlyOnce( test )
       {
         con.error( 'error1' );
         con.error( 'error2' );
+        return null;
       });
 
       return con;
@@ -345,6 +355,7 @@ function shouldMessageOnlyOnce( test )
         test.is( _.strHas( err.message,'got more than one message' ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -369,6 +380,7 @@ function shouldMessageOnlyOnce( test )
         test.is( err === undefined );
         test.is( arg === 'arg' );
       });
+      return null;
     });
 
     /* */
@@ -393,6 +405,7 @@ function shouldMessageOnlyOnce( test )
         test.is( err === undefined );
         test.is( arg === 'error' );
       });
+      return null;
     });
 
     /* */
@@ -422,6 +435,7 @@ function shouldMessageOnlyOnce( test )
 
     if( err )
     throw err;
+    return null;
   });
 
   return result;
@@ -461,8 +475,9 @@ function mustNotThrowError( test )
       c1.got( function( err,arg )
       {
         test.is( err === undefined );
-        test.is( arg === undefined );
+        test.is( arg === null );
       });
+      return null;
     });
 
     /* */
@@ -489,6 +504,7 @@ function mustNotThrowError( test )
         test.is( err === undefined );
         test.is( arg === 'msg' );
       });
+      return null;
     });
 
     /* */
@@ -516,6 +532,7 @@ function mustNotThrowError( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -529,6 +546,7 @@ function mustNotThrowError( test )
       {
         throw _.err( 'test' );
       });
+      return null;
     });
 
     counter.acheck = t.checkCurrent();
@@ -546,6 +564,7 @@ function mustNotThrowError( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -573,6 +592,7 @@ function mustNotThrowError( test )
         test.is( err === undefined );
         test.is( arg === _.timeOut );
       });
+      return null;
     });
 
     /* */
@@ -588,6 +608,7 @@ function mustNotThrowError( test )
       {
         con.give( 'msg1' );
         con.give( 'msg2' );
+        return null;
       });
 
       return con;
@@ -609,6 +630,7 @@ function mustNotThrowError( test )
         test.is( _.strHas( err.message,'got more than one message' ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -624,6 +646,7 @@ function mustNotThrowError( test )
       {
         con.error( 'error1' );
         con.error( 'error2' );
+        return null;
       });
 
       return con;
@@ -644,6 +667,7 @@ function mustNotThrowError( test )
         test.is( err === 'error1' );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -668,6 +692,7 @@ function mustNotThrowError( test )
         test.is( err === undefined );
         test.is( arg === 'arg' );
       });
+      return null;
     });
 
     /* */
@@ -699,6 +724,7 @@ function mustNotThrowError( test )
         test.is( err === 'error' );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -728,6 +754,8 @@ function mustNotThrowError( test )
 
     if( err )
     throw err;
+
+    return null;
   });
 
   return result;
@@ -769,6 +797,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -796,6 +825,7 @@ function shouldThrowErrorSync( test )
         test.is( err === null );
         test.is( _.errIs( arg ) );
       });
+      return null;
     });
 
     /* */
@@ -826,6 +856,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -853,6 +884,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -868,6 +900,7 @@ function shouldThrowErrorSync( test )
       {
         con.give( null );
         con.give( null );
+        return null;
       });
 
       return con;
@@ -888,6 +921,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -902,6 +936,7 @@ function shouldThrowErrorSync( test )
       _.timeOut( 250, function()
       {
         con.error( 'error' );
+        return null;
       });
 
       return con;
@@ -922,6 +957,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -946,6 +982,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -970,6 +1007,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -998,6 +1036,8 @@ function shouldThrowErrorSync( test )
 
     if( err )
     throw err;
+
+    return null;
   });
 
   return result;
@@ -1039,6 +1079,7 @@ function shouldThrowErrorAsync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1066,6 +1107,7 @@ function shouldThrowErrorAsync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1096,6 +1138,7 @@ function shouldThrowErrorAsync( test )
         test.is( err === undefined );
         test.is( _.errIs( arg ) );
       });
+      return null;
     });
 
     /* */
@@ -1123,6 +1166,7 @@ function shouldThrowErrorAsync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1137,6 +1181,7 @@ function shouldThrowErrorAsync( test )
       _.timeOut( 250, function()
       {
         con.error( 'error' );
+        return null;
       });
 
       return con;
@@ -1157,6 +1202,7 @@ function shouldThrowErrorAsync( test )
         test.is( err === undefined );
         test.is( arg === 'error' );
       });
+      return null;
     });
 
     /* */
@@ -1172,6 +1218,7 @@ function shouldThrowErrorAsync( test )
       {
         con.give( null );
         con.give( null );
+        return null;
       });
 
       return con;
@@ -1192,6 +1239,7 @@ function shouldThrowErrorAsync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1207,6 +1255,7 @@ function shouldThrowErrorAsync( test )
       {
         con.error( 'error' );
         con.error( 'error' );
+        return null;
       });
 
       return con;
@@ -1228,6 +1277,7 @@ function shouldThrowErrorAsync( test )
         test.is( _.strHas( err.message,'got more than one message' ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1252,6 +1302,7 @@ function shouldThrowErrorAsync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1276,6 +1327,7 @@ function shouldThrowErrorAsync( test )
         test.is( err === undefined );
         test.is( arg === 'error' );
       });
+      return null;
     });
 
     /* */
@@ -1306,6 +1358,8 @@ function shouldThrowErrorAsync( test )
 
     if( err )
     throw err;
+
+    return null;
 
   });
 
@@ -1346,6 +1400,7 @@ function shouldThrowError( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1374,6 +1429,7 @@ function shouldThrowError( test )
         test.is( _.errIs( arg ) );
         test.is( _.strHas( arg.messge,'err1' ) );
       });
+      return null;
     });
 
     /* */
@@ -1405,6 +1461,7 @@ function shouldThrowError( test )
         test.is( _.errIs( arg ) );
         test.is( _.strHas( arg.messge,'err1' ) );
       });
+      return null;
     });
 
     /* */
@@ -1432,6 +1489,7 @@ function shouldThrowError( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1447,6 +1505,7 @@ function shouldThrowError( test )
       {
         con.give( 'arg1' );
         con.give( 'arg2' );
+        return null;
       });
 
       return con;
@@ -1467,6 +1526,7 @@ function shouldThrowError( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1482,6 +1542,7 @@ function shouldThrowError( test )
       {
         con.error( 'error1' );
         con.error( 'error1' );
+        return null;
       });
 
       return con;
@@ -1503,6 +1564,7 @@ function shouldThrowError( test )
         test.is( _.strHas( err.message,'got more than one message' ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1527,6 +1589,7 @@ function shouldThrowError( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
       });
+      return null;
     });
 
     /* */
@@ -1551,6 +1614,7 @@ function shouldThrowError( test )
         test.is( err === undefined );
         test.is( arg === 'error' );
       });
+      return null;
     });
 
     /* */
@@ -1578,6 +1642,8 @@ function shouldThrowError( test )
 
     if( err )
     throw err;
+
+    return null;
   });
 
   return result;
@@ -1911,6 +1977,8 @@ function shouldThrowErrorAsyncSimple( test )
 
     test.identical( test._inroutineCon.resourcesGet().length,0 );
 
+    return null
+
   })
   ;
 
@@ -1973,6 +2041,8 @@ function shouldThrowErrorAsyncConcurrent( test )
 
     test.identical( test._inroutineCon.resourcesGet().length, 1 );
 
+    return null;
+
   })
   ;
 
@@ -2020,6 +2090,7 @@ function _chainedShould( test,o )
         throw _.err( 'async error' );
         else if( o.throwingError === 'sync' )
         t[ method ]( function(){ throw _.err( 'sync error' ) } );
+        return null;
       });
 
       if( o.throwingError === 'sync' )
@@ -2044,6 +2115,7 @@ function _chainedShould( test,o )
         throw _.err( 'async error' );
         else if( o.throwingError === 'sync' )
         t[ method ]( function(){ throw _.err( 'sync error' ) } );
+        return null;
       });
 
       if( o.throwingError === 'sync' )
@@ -2059,6 +2131,8 @@ function _chainedShould( test,o )
       test.identical( counter.acheck.checkIndex, 3 );
       test.identical( t.suite.report.testCheckPasses, 2 );
       test.identical( t.suite.report.testCheckFails, 0 );
+
+      return null;
 
     });
 
@@ -2105,6 +2179,8 @@ function _chainedShould( test,o )
 
         if( o.throwingError === 'async' )
         throw _.err( 'async error' );
+
+        return null;
       });
 
       return result;
@@ -2135,6 +2211,8 @@ function _chainedShould( test,o )
 
         if( o.throwingError === 'async' )
         throw _.err( 'async error' );
+
+        return null;
       });
     }
 
@@ -2182,6 +2260,8 @@ function _chainedShould( test,o )
 
     if( err )
     throw err;
+
+    return null;
   });
 
 }
@@ -3524,6 +3604,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3534,6 +3615,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3544,6 +3626,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3554,6 +3637,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3564,6 +3648,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, 1 );
+        return null;
       })
     })
 
@@ -3574,6 +3659,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3585,6 +3671,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3596,6 +3683,7 @@ function shouldThrowErrorAsyncReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3608,6 +3696,7 @@ function shouldThrowErrorAsyncReturn( test )
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
+        return null;
       })
     })
 
@@ -3656,6 +3745,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3666,6 +3756,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3676,6 +3767,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3686,6 +3778,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, 1 );
+        return null;
       })
     })
 
@@ -3696,6 +3789,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3707,6 +3801,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3718,6 +3813,7 @@ function shouldThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3730,6 +3826,7 @@ function shouldThrowErrorReturn( test )
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
+        return null;
       })
     })
 
@@ -3778,6 +3875,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, true );
+        return null;
       })
     })
 
@@ -3788,6 +3886,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3798,6 +3897,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, 1 );
+        return null;
       })
     })
 
@@ -3808,6 +3908,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( err, 1 );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3818,6 +3919,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3829,6 +3931,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3840,6 +3943,7 @@ function mustNotThrowErrorReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -3852,6 +3956,7 @@ function mustNotThrowErrorReturn( test )
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
+        return null;
       })
     })
 
@@ -3900,6 +4005,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, 1 );
+        return null;
       })
     })
 
@@ -3910,6 +4016,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3920,6 +4027,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, 1 );
+        return null;
       })
     })
 
@@ -3930,6 +4038,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( got, 1 );
+        return null;
       })
     })
 
@@ -3940,6 +4049,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3950,6 +4060,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3961,6 +4072,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.routineIs( got ), true );
+        return null;
       })
     })
 
@@ -3972,6 +4084,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.routineIs( got ), true );
+        return null;
       })
     })
 
@@ -3982,6 +4095,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -3992,6 +4106,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( err, undefined );
         test.identical( _.errIs( got ), true );
+        return null;
       })
     })
 
@@ -4003,6 +4118,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -4014,6 +4130,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -4025,6 +4142,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -4036,6 +4154,7 @@ function shouldMessageOnlyOnceReturn( test )
       {
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
+        return null;
       })
     })
 
@@ -4048,6 +4167,7 @@ function shouldMessageOnlyOnceReturn( test )
         test.identical( _.errIs( err ), true );
         test.identical( got, undefined );
         done = 1;
+        return null;
       })
     })
 

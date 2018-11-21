@@ -6,7 +6,7 @@ about:
     interface, simple tests structure, asynchronous code handling mechanism,
     colorful report, verbosity control and more. Use the module to get free of
     routines which can be automated.
-  version: 0.4.204
+  version: 0.4.205
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -300,7 +300,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.4.204
+    version: 0.4.205
     criterion:
       default: 1
       debug: 1

@@ -21,14 +21,14 @@ reflector :
     inherit : predefined.*
     criterion :
       debug : [ 0,1 ]
-    reflectMap :
+    filePath :
       path::proto : path::out.*=1
 
   reflect.submodules :
     inherit : predefined.*
     criterion :
       debug : 1
-    reflectMap :
+    filePath :
       submodule::*/exported::*=1/path::exportedDir*=1 : path::out.*=1
 
 step :

@@ -76,7 +76,7 @@ function init( o )
 
   suite._initialOptions = o;
 
-  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.strTypeOf( o ) );
+  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.strType( o ) );
 
   /* source path */
 
@@ -759,7 +759,7 @@ function _testRoutineRun( trd )
 
     try
     {
-      result = trd.routine.call( suite.context, trd );
+      result = trd.routine.call( suite.context, trd ); 
       if( result === undefined )
       result = null;
     }

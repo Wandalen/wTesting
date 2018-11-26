@@ -456,7 +456,7 @@ function _caseSet( src )
 
   _.assert( arguments.length === 1 );
   // _.assert( !trd._testsGroupOpenedExplicitly || trd.testsGroup );
-  _.assert( src === null || _.strIs( src ), 'expects string or null {-src-}, but got', _.strTypeOf( src ) );
+  _.assert( src === null || _.strIs( src ), 'expects string or null {-src-}, but got', _.strType( src ) );
 
   // trd.testCaseCloseIfExplicitly();
   trd._testsGroupChange();

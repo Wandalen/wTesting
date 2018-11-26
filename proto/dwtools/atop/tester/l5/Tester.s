@@ -238,7 +238,7 @@ function _includeTestsFrom( path )
 
   _.assert( _.numberIs( tester.importanceOfNegative ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.strIs( path ) );
+  _.assert( _.strIs( path ), 'Expects string' );
 
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :',path,'\n' );
@@ -304,7 +304,7 @@ function includeTestsFrom( path )
   let logger = tester.logger;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.strIs( path ) );
+  _.assert( _.strIs( path ), 'Expects string' );
 
   logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
   tester._includeTestsFrom( path );

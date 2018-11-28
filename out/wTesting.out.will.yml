@@ -193,8 +193,8 @@ reflector:
       ./dwtools/atop/tester.test/Inheritance.test.s: true
       ./dwtools/atop/tester.test/Time.test.s: true
     srcFilter:
-      basePath: ./proto
-      prefixPath: .
+      basePath: .
+      prefixPath: proto
     dstFilter:
       basePath: .
       prefixPath: .

@@ -12,13 +12,6 @@ let _wasGlobal = _global._global_ || _global;
 _global = _wasGlobal;
 _global._global_ = _wasGlobal;
 
-// if( _realGlobal_._SeparatingTester_ )
-// {
-//   _global = _global._global_ = Object.create( _global._global_ );
-//   _global.WTOOLS_PRIVATE = true;
-//   _global._wasGlobal_ = _wasGlobal;
-// }
-
 //
 
 if( typeof module !== 'undefined' )
@@ -32,11 +25,9 @@ if( typeof module !== 'undefined' )
   _global.WTOOLS_PRIVATE = true;
   _global.__which__ = 'wTesting';
   _realGlobal._SeparatingTester_ = _global._SeparatingTester_ = 1;
-  // debugger;
 
   require( './Main.base.s' );
 
-  // debugger;
   _realGlobal._SeparatingTester_ = _global._SeparatingTester_ = 2;
   Module._cache = cache;
   _global_ = _wasGlobal;

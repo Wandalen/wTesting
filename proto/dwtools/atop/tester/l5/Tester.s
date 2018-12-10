@@ -263,13 +263,13 @@ function _includeTestsFrom( path )
   if( !files.length )
   {
     let record = _.fileProvider.recordFactory().record( path );
-    if( record.stat && !record.stat.isDirectory() && record.isActual )
+    if( record.stat && !record.stat.isDir() && record.isActual )
     files = [ record ];
   }
 
   for( let f = 0 ; f < files.length ; f++ )
   {
-    if( !files[ f ].stat.isFile() )
+    if( !files[ f ].stat.isTerminal() )
     continue;
     let absolutePath = files[ f ].absolute;
 

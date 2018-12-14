@@ -21,6 +21,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
+
   var waitSync = require( 'wait-sync' );
 
 }

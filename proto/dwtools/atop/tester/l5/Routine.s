@@ -37,9 +37,9 @@ function init( o )
   trd._reportForm();
 
   _.assert( _.routineIs( trd.routine ) );
-  _.assert( _.strDefined( trd.routine.name ),'Test routine should have name, ' + trd.name + ' test routine of test suite',trd.suite.name,'does not have name' );
-  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype,trd.suite ) );
-  _.assert( Object.isPrototypeOf.call( Self.prototype,trd ) );
+  _.assert( _.strDefined( trd.routine.name ), 'Test routine should have name, ' + trd.name + ' test routine of test suite', trd.suite.name, 'does not have name' );
+  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype, trd.suite ) );
+  _.assert( Object.isPrototypeOf.call( Self.prototype, trd ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
   let proxy =
@@ -95,7 +95,7 @@ function _testRoutineBegin()
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
 
-  suite._hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
+  suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
   _.assert( arguments.length === 0 );
   _.assert( trd._returned === null );
@@ -118,7 +118,7 @@ function _testRoutineBegin()
 
   try
   {
-    suite.onRoutineBegin.call( trd.context,trd );
+    suite.onRoutineBegin.call( trd.context, trd );
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
   }
@@ -138,10 +138,10 @@ function _testRoutineEnd()
   let ok = trd._reportIsPositive();
 
   _.assert( arguments.length === 0 );
-  _.assert( _.strDefined( trd.routine.name ),'test routine should have name' );
+  _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  let _hasConsoleInOutputs = suite.logger.hasOutput( console,{ deep : 0, withoutOutputToOriginal : 0 } );
+  let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
   {
     debugger; /* xxx */
@@ -204,7 +204,7 @@ function _testRoutineEnd()
 
   /* */
 
-  suite.logger.begin( 'routine','end' );
+  suite.logger.begin( 'routine', 'end' );
   suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
 
   suite.logger.begin({ verbosity : -3 });
@@ -229,7 +229,7 @@ function _testRoutineEnd()
   suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
 
   suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
-  suite.logger.end( 'routine','end' );
+  suite.logger.end( 'routine', 'end' );
 
   suite.logger.end({ verbosity : -3 });
 
@@ -784,7 +784,7 @@ function isNotError( maybeError )
 
 /**
  * Checks if test passes a specified condition by deep strict comparsing result of code execution( got )
- * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
+ * with target( expected ). Uses recursive comparsion for objects, arrays and array-like objects.
  * If entity( got ) is equal to entity( expected ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -813,7 +813,7 @@ function isNotError( maybeError )
  * @memberof wTestRoutineDescriptor
  */
 
-function identical( got,expected )
+function identical( got, expected )
 {
   let trd = this;
   let o2, outcome;
@@ -881,7 +881,7 @@ function identical( got,expected )
 
 //
 
-function notIdentical( got,expected )
+function notIdentical( got, expected )
 {
   let trd = this;
   let o2, outcome;
@@ -950,7 +950,7 @@ function notIdentical( got,expected )
 
 /**
  * Checks if test passes a specified condition by deep soft comparsing result of code execution( got )
- * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects. Two entities are equivalent if
+ * with target( expected ). Uses recursive comparsion for objects, arrays and array-like objects. Two entities are equivalent if
  * difference between their values are less or equal to( accuracy ). Example: ( got - expected ) <= ( accuracy ).
  * If entity( got ) is equivalent to entity( expected ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
@@ -1135,7 +1135,7 @@ function notEquivalent( got, expected, options )
 
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
- * with target( expected ). Uses recursive comparsion for objects,arrays and array-like objects.
+ * with target( expected ). Uses recursive comparsion for objects, arrays and array-like objects.
  * If entity( got ) contains keys/values from entity( expected ) or they are indentical test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -1163,7 +1163,7 @@ function notEquivalent( got, expected, options )
  * @memberof wTestRoutineDescriptor
  */
 
-function contains( got,expected )
+function contains( got, expected )
 {
   let trd = this;
   let o2, outcome;
@@ -1403,17 +1403,17 @@ function _shouldDo( o )
   let reported = 0;
   let good = 1;
   let async = 0;
-  let stack = _.diagnosticStack( 2,-1 );
+  let stack = _.diagnosticStack( 2, -1 );
   let logger = trd.logger;
   let err, arg;
   let con = new _.Consequence();
 
   if( !trd.shoulding )
-  return con.give( null );
+  return con.take( null );
 
   try
   {
-    _.routineOptions( _shouldDo,o );
+    _.routineOptions( _shouldDo, o );
     _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( o.args.length === 1 );
     _.assert( _.routineIs( o.args[ 0 ] ) );
@@ -1439,7 +1439,7 @@ function _shouldDo( o )
 
   o.routine = o.args[ 0 ];
   let acheck = trd.checkCurrent();
-  trd._inroutineCon.choke();
+  trd._inroutineCon.done( 1 );
 
   /* */
 
@@ -1532,7 +1532,7 @@ function _shouldDo( o )
 
       }
 
-      end( o.expectingSyncError,err );
+      end( o.expectingSyncError, err );
 
       if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
       return err;
@@ -1558,7 +1558,7 @@ function _shouldDo( o )
       selectMode : 'begin'
     });
 
-    end( 0,_.err( msg ) );
+    end( 0, _.err( msg ) );
 
     return false;
   }
@@ -1571,7 +1571,7 @@ function _shouldDo( o )
     trd.checkNext();
     async = 1;
 
-    result.got( function( _err,_arg )
+    result.got( function( _err, _arg )
     {
 
       err = _err;
@@ -1587,7 +1587,7 @@ function _shouldDo( o )
 
       if( !reported )
       if( !o.allowingMultipleMessages )
-      _.timeOut( 10,function()
+      _.timeOut( 10, function()
       {
 
         if( result.resourcesGet().length )
@@ -1610,7 +1610,7 @@ function _shouldDo( o )
             stack : stack,
           });
 
-          end( 0,_.err( msg ) );
+          end( 0, _.err( msg ) );
         }
 
         if( !reported )
@@ -1625,7 +1625,7 @@ function _shouldDo( o )
     /* */
 
     if( !o.allowingMultipleMessages )
-    result.doThen( function( err,data )
+    result.finally( function( err, data )
     {
       if( reported && !good )
       return;
@@ -1642,7 +1642,7 @@ function _shouldDo( o )
         stack : stack,
       });
 
-      end( 0,_.err( msg ) );
+      end( 0, _.err( msg ) );
     });
 
   }
@@ -1668,7 +1668,7 @@ function _shouldDo( o )
         selectMode : 'begin'
       });
 
-      end( 0,_.err( msg ) );
+      end( 0, _.err( msg ) );
     }
     else if( !o.expectingSyncError && !err )
     {
@@ -1682,12 +1682,12 @@ function _shouldDo( o )
         selectMode : 'begin'
       });
 
-      end( 1,result );
+      end( 1, result );
     }
     else
     {
       debugger;
-      _.assert( 0,'unexpected' );
+      _.assert( 0, 'unexpected' );
       trd.checkNext();
     }
 
@@ -1726,11 +1726,11 @@ function _shouldDo( o )
     arg = null;
 
     if( positive )
-    con.give( undefined,arg );
+    con.take( undefined, arg );
     else
-    con.give( arg,undefined );
+    con.take( arg, undefined );
 
-    trd._inroutineCon.give( null );
+    trd._inroutineCon.take( null );
 
     reported = 1;
   }
@@ -1757,7 +1757,7 @@ function _shouldDo( o )
 
       end( 1, err ? err : arg );
     }
-    else if( err )
+    else if( err !== undefined )
     {
       begin( o.expectingAsyncError );
 
@@ -1793,11 +1793,11 @@ function _shouldDo( o )
       begin( !o.expectingAsyncError );
 
       let msg = 'error was not thrown asynchronously, but expected';
-      if( o.expectingAsyncError )
-      debugger;
-      if( o.expectingAsyncError )
-      msg = 'error was thrown asynchronously as expected';
-      else if( !o.expectingAsyncError && !o.expectingSyncError && good )
+      // if( o.expectingAsyncError )
+      // debugger;
+      // if( o.expectingAsyncError && err !== undefined )
+      // msg = 'error was thrown asynchronously as expected';
+      if( !o.expectingAsyncError && !o.expectingSyncError && good )
       msg = 'error was not thrown as expected';
 
       trd._outcomeReportBoolean
@@ -1809,9 +1809,9 @@ function _shouldDo( o )
       });
 
       if( o.expectingAsyncError )
-      end( !o.expectingAsyncError,_.err( msg ) );
+      end( !o.expectingAsyncError, _.err( msg ) );
       else
-      end( !o.expectingAsyncError,arg );
+      end( !o.expectingAsyncError, arg );
 
     }
 
@@ -1882,7 +1882,7 @@ function shouldThrowErrorSync( routine )
  * @example
  * function sometest( test )
  * {
- *  let consequence = new _.Consequence().give( null );
+ *  let consequence = new _.Consequence().take( null );
  *  consequence
  *  .ifNoErrorThen( function( arg )
  *  {
@@ -2022,7 +2022,7 @@ function _outcomeReport( o )
   let logger = trd.logger;
   let sourceCode = '';
 
-  _.routineOptions( _outcomeReport,o );
+  _.routineOptions( _outcomeReport, o );
   _.assert( arguments.length === 1, 'expects single argument' );
 
   if( o.considering )
@@ -2069,7 +2069,7 @@ function _outcomeReport( o )
   logger.end({ verbosity : o.verbosity+verbosity });
 
   if( o.considering )
-  logger.end( 'check','checkIndex' );
+  logger.end( 'check', 'checkIndex' );
   logger.end({ verbosity : o.verbosity });
 
   trd._interruptMaybe( 1 );
@@ -2121,7 +2121,7 @@ function _outcomeReportBoolean( o )
   let trd = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.routineOptions( _outcomeReportBoolean,o );
+  _.routineOptions( _outcomeReportBoolean, o );
 
   o.msg = trd._reportTextForTestCheck
   ({
@@ -2198,8 +2198,8 @@ function _outcomeReportCompare( o )
   function msgExpectedGot()
   {
     return '' +
-    'got :\n' + _.toStr( o.got,{ stringWrapper : '\'' } ) + '\n' +
-    nameOfExpected + ' :\n' + _.toStr( o.expected,{ stringWrapper : '\'' } ) +
+    'got :\n' + _.toStr( o.got, { stringWrapper : '\'' } ) + '\n' +
+    nameOfExpected + ' :\n' + _.toStr( o.expected, { stringWrapper : '\'' } ) +
     '';
   }
 
@@ -2224,7 +2224,7 @@ function exceptionReport( o )
 {
   let trd = this;
 
-  _.routineOptions( exceptionReport,o );
+  _.routineOptions( exceptionReport, o );
   _.assert( arguments.length === 1, 'expects single argument' );
 
   if( trd.onError )
@@ -2232,7 +2232,7 @@ function exceptionReport( o )
   try
   {
     if( trd.onError )
-    trd.onError.call( trd,o );
+    trd.onError.call( trd, o );
   }
   catch( err2 )
   {
@@ -2335,7 +2335,7 @@ function _reportTextForTestCheck( o )
 {
   let trd = this;
 
-  o = _.routineOptions( _reportTextForTestCheck,o );
+  o = _.routineOptions( _reportTextForTestCheck, o );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( o.outcome === null || _.boolLike( o.outcome ) );
@@ -2616,60 +2616,60 @@ let Proto =
 
   // inter
 
-  init : init,
-  refine : refine,
+  init,
+  refine,
 
   // run
 
-  _testRoutineBegin : _testRoutineBegin,
-  _testRoutineEnd : _testRoutineEnd,
-  _testRoutineHandleReturn : _testRoutineHandleReturn,
+  _testRoutineBegin,
+  _testRoutineEnd,
+  _testRoutineHandleReturn,
 
-  _interruptMaybe : _interruptMaybe,
-  _ableGet : _ableGet,
-  _timeOutError : _timeOutError,
+  _interruptMaybe,
+  _ableGet,
+  _timeOutError,
 
   // tests groups
 
-  _willGet : _willGet,
-  _willSet : _willSet,
+  _willGet,
+  _willSet,
   _descriptionGet : _willGet,
   _descriptionSet : _willSet,
-  _descriptionFullGet : _descriptionFullGet,
-  _descriptionWithNameGet : _descriptionWithNameGet,
+  _descriptionFullGet,
+  _descriptionWithNameGet,
 
-  _caseGet : _caseGet,
-  _caseSet : _caseSet,
+  _caseGet,
+  _caseSet,
 
-  _testsGroupGet : _testsGroupGet,
-  testsGroupOpen : testsGroupOpen,
-  testsGroupClose : testsGroupClose,
+  _testsGroupGet,
+  testsGroupOpen,
+  testsGroupClose,
   open : testsGroupOpen,
   close : testsGroupClose,
 
-  _testsGroupChange : _testsGroupChange,
-  testCaseCloseIfExplicitly : testCaseCloseIfExplicitly,
-  hasTestGroupExceptOfCase : hasTestGroupExceptOfCase,
-  _nameFullGet : _nameFullGet,
+  _testsGroupChange,
+  testCaseCloseIfExplicitly,
+  hasTestGroupExceptOfCase,
+  _nameFullGet,
 
   // check
 
-  checkCurrent : checkCurrent,
-  checkNext : checkNext,
-  checkStore : checkStore,
-  checkRestore : checkRestore,
+  checkCurrent,
+  checkNext,
+  checkStore,
+  checkRestore,
 
   // equalizer
 
-  is : is,
-  isNot : isNot,
-  isNotError : isNotError,
+  is,
+  isNot,
+  isNotError,
 
-  identical : identical,
-  notIdentical : notIdentical,
-  equivalent : equivalent,
-  notEquivalent : notEquivalent,
-  contains : contains,
+  identical,
+  notIdentical,
+  equivalent,
+  notEquivalent,
+  contains,
 
   il : identical,
   ni : notIdentical,
@@ -2681,60 +2681,60 @@ let Proto =
   lt : lt,
   le : le,
 
-  _shouldDo : _shouldDo,
+  _shouldDo,
 
-  shouldThrowErrorSync : shouldThrowErrorSync,
-  shouldThrowErrorAsync : shouldThrowErrorAsync,
-  shouldThrowError : shouldThrowError,
-  mustNotThrowError : mustNotThrowError,
-  shouldMessageOnlyOnce : shouldMessageOnlyOnce,
+  shouldThrowErrorSync,
+  shouldThrowErrorAsync,
+  shouldThrowError,
+  mustNotThrowError,
+  shouldMessageOnlyOnce,
 
   // consider
 
-  _testCheckConsider : _testCheckConsider,
-  _testCaseConsider : _testCaseConsider,
-  _exceptionConsider : _exceptionConsider,
+  _testCheckConsider,
+  _testCaseConsider,
+  _exceptionConsider,
 
   // report
 
-  _outcomeReport : _outcomeReport,
-  _outcomeReportBoolean : _outcomeReportBoolean,
-  _outcomeReportCompare : _outcomeReportCompare,
-  exceptionReport : exceptionReport,
+  _outcomeReport,
+  _outcomeReportBoolean,
+  _outcomeReportCompare,
+  exceptionReport,
 
-  _reportForm : _reportForm,
-  _reportIsPositive : _reportIsPositive,
-  _reportTextForTestCheck : _reportTextForTestCheck,
+  _reportForm,
+  _reportIsPositive,
+  _reportTextForTestCheck,
 
   // fields
 
-  _accuracySet : _accuracySet,
-  _accuracyGet : _accuracyGet,
-  _accuracyEffectiveGet : _accuracyEffectiveGet,
-  _accuracyChange : _accuracyChange,
+  _accuracySet,
+  _accuracyGet,
+  _accuracyEffectiveGet,
+  _accuracyChange,
 
-  _timeOutGet : _timeOutGet,
-  _timeOutSet : _timeOutSet,
+  _timeOutGet,
+  _timeOutSet,
 
-  _rapidityGet : _rapidityGet,
-  _rapiditySet : _rapiditySet,
+  _rapidityGet,
+  _rapiditySet,
 
-  _usingSourceCodeGet : _usingSourceCodeGet,
-  _usingSourceCodeSet : _usingSourceCodeSet,
+  _usingSourceCodeGet,
+  _usingSourceCodeSet,
 
-  _adoptRoutineFields : _adoptRoutineFields,
+  _adoptRoutineFields,
 
   // relations
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
-  Events : Events,
-  Forbids : Forbids,
-  AccessorsReadOnly : AccessorsReadOnly,
-  Accessors : Accessors,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
+  Events,
+  Forbids,
+  AccessorsReadOnly,
+  Accessors,
 
 }
 
@@ -2749,7 +2749,9 @@ _.classDeclare
 
 _.Copyable.mixin( Self );
 
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;

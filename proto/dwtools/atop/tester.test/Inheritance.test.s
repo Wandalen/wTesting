@@ -143,7 +143,7 @@ function inherit( test )
   .inherit( wTests[ secondParentName] );
 
   return suit.run()
-  .doThen( function()
+  .finally( function()
   {
     test.is( test.report.testCheckPasses > 9  );
     test.identical( test.report.testCheckFails, 0 );

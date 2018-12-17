@@ -44,7 +44,7 @@ let Self = function wTestSuite( o )
 
   _.assert( !( o instanceof Self ) );
 
-  return Self.prototype.init.apply( this,arguments );
+  return Self.prototype.init.apply( this, arguments );
 }
 
 Self.shortName = 'TestSuite';
@@ -83,10 +83,10 @@ function init( o )
   if( !_.strIs( suite.suiteFileLocation ) )
   {
     debugger;
-    throw _.err( 'Test suite',suite.name,'Expects a mandatory option ( suiteFileLocation )' );
+    throw _.err( 'Test suite', suite.name, 'Expects a mandatory option ( suiteFileLocation )' );
   }
 
-  // console.log( 'suite.suiteFileLocation',suite.suiteFileLocation );
+  // console.log( 'suite.suiteFileLocation', suite.suiteFileLocation );
 
   /* name */
 
@@ -144,7 +144,7 @@ function copy( o )
   if( ( o instanceof Self ) )
   debugger;
 
-  return _.Copyable.prototype.copy.call( suite,o );
+  return _.Copyable.prototype.copy.call( suite, o );
 }
 
 //
@@ -162,12 +162,12 @@ function copy( o )
 //   //   _.assert( _.mapIs( src ) );
 //   //
 //   //   if( src.tests )
-//   //   _.mapSupplement( src.tests,suite.tests );
+//   //   _.mapSupplement( src.tests, suite.tests );
 //   //
 //   //   if( src.context )
-//   //   _.mapSupplement( src.context,suite.context );
+//   //   _.mapSupplement( src.context, suite.context );
 //   //
-//   //   _.mapExtend( suite,src );
+//   //   _.mapExtend( suite, src );
 //   //
 //   // }
 //
@@ -193,7 +193,7 @@ function inherit()
     _.mapSupplement( suite.context, src.context );
 
     let extend = _.mapBut( src._initialOptions, suite._initialOptions );
-    _.mapExtend( suite,extend );
+    _.mapExtend( suite, extend );
     _.mapExtend( suite._initialOptions, extend );
 
   }
@@ -219,7 +219,7 @@ function _testSuitesRegister( suites )
   }
   catch( err )
   {
-    throw _.errLog( 'Cant make test suite',s,'\n',err );
+    throw _.errLog( 'Cant make test suite', s, '\n', err );
   }
 
   return suite;
@@ -406,11 +406,11 @@ function _testSuiteRunSoon()
   // suite._testSuiteRefine();
   // debugger;
 
-  let con = suite.concurrent ? new _.Consequence().give( null ) : wTester.TestSuite._suiteCon;
+  let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._suiteCon;
 
   return con
-  .doThen( _.routineSeal( _,_.timeReady,[] ) )
-  .doThen( function()
+  .finally( _.routineSeal( _, _.timeReady, [] ) )
+  .finally( function()
   {
 
     return suite._testSuiteRunAct();
@@ -437,10 +437,10 @@ function _testSuiteRunAct()
   {
     manual : 1,
     onEachRoutine : handleStage,
-    onBegin : _.routineJoin( suite,suite._testSuiteBegin ),
+    onBegin : _.routineJoin( suite, suite._testSuiteBegin ),
     onEnd : handleEnd,
     onRoutine : ( trd ) => trd.routine,
-    delay : 10,
+    delay : 1,
   });
 
   /* */
@@ -454,7 +454,7 @@ function _testSuiteRunAct()
 
   /* */
 
-  function handleEnd( err,data )
+  function handleEnd( err, data )
   {
 
     if( !( wTester.settings.sanitareTime >= 0 ) )
@@ -541,7 +541,7 @@ function _testSuiteBegin()
   {
     try
     {
-      suite.onSuiteBegin.call( suite.context,suite );
+      suite.onSuiteBegin.call( suite.context, suite );
     }
     catch( err )
     {
@@ -583,7 +583,7 @@ function _testSuiteEnd( err )
 
   if( !err )
   if( suite.routine !== null && !suite.tests[ suite.routine ] )
-  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ),'\n' );
+  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
 
   if( err )
   {
@@ -614,7 +614,7 @@ function _testSuiteEnd( err )
   {
     try
     {
-      suite.onSuiteEnd.call( suite.context,suite );
+      suite.onSuiteEnd.call( suite.context, suite );
     }
     catch( err )
     {
@@ -638,7 +638,7 @@ function _testSuiteEnd( err )
   if( logger )
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   if( logger )
-  logger.begin( 'suite','end' );
+  logger.begin( 'suite', 'end' );
 
   let msg = suite._reportToStr();
 
@@ -663,7 +663,7 @@ function _testSuiteEnd( err )
   logger.log();
   logger.end({ verbosity : -2 });
 
-  logger.end( 'suite','end' );
+  logger.end( 'suite', 'end' );
   logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
 
   logger.end({ verbosity : -2 });
@@ -738,6 +738,8 @@ function _testRoutineRun( trd )
 
   /* */
 
+  // console.log( '_testRoutineRun a', trd.name ); debugger;
+
   if( !wTester._canContinue() )
   return;
 
@@ -750,8 +752,10 @@ function _testRoutineRun( trd )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   return suite._routineCon
-  .doThen( function _testRoutineRun()
+  .finally( function _testRoutineRun()
   {
+
+    // console.log( '_testRoutineRun b', trd.name ); debugger;
 
     trd._testRoutineBegin();
 
@@ -759,7 +763,7 @@ function _testRoutineRun( trd )
 
     try
     {
-      result = trd.routine.call( suite.context, trd ); 
+      result = trd.routine.call( suite.context, trd );
       if( result === undefined )
       result = null;
     }
@@ -772,12 +776,11 @@ function _testRoutineRun( trd )
 
     result = trd._returnCon = _.Consequence.From( result );
 
-    result.andThen( suite._inroutineCon );
+    result.andKeep( suite._inroutineCon );
+    result = result.eitherKeepSplit([ _.timeOutError( trd.timeOut ), wTester._cancelCon ]);
 
-    result = result.eitherThenSplit([ _.timeOutError( trd.timeOut ), wTester._cancelCon ]);
-
-    result.doThen( ( err,msg ) => trd._testRoutineHandleReturn( err, msg ) );
-    result.doThen( () => trd._testRoutineEnd() );
+    result.finally( ( err, msg ) => trd._testRoutineHandleReturn( err, msg ) );
+    result.finally( () => trd._testRoutineEnd() );
 
     return result;
   })
@@ -972,7 +975,7 @@ function exceptionReport( o )
   let suite = this;
   let logger = suite.logger || wTester.settings.logger || _global_.logger;
 
-  _.routineOptions( exceptionReport,o );
+  _.routineOptions( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   let err = _.err( o.err );
@@ -1040,8 +1043,8 @@ let Composes =
 
   override : _.define.own( {} ),
 
-  _routineCon : _.define.own( new _.Consequence().give( null ) ),
-  _inroutineCon : _.define.own( new _.Consequence().give( null ) ),
+  _routineCon : _.define.own( new _.Consequence().take( null ) ),
+  _inroutineCon : _.define.own( new _.Consequence().take( null ) ),
 
   onRoutineBegin : onRoutineBegin,
   onRoutineEnd : onRoutineEnd,
@@ -1075,7 +1078,7 @@ let Statics =
 {
   // usingUniqueNames : 1,
   usingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
-  _suiteCon : new _.Consequence().give( null ),
+  _suiteCon : new _.Consequence().take( null ),
 }
 
 let Events =
@@ -1110,60 +1113,59 @@ let Proto =
 
   // inter
 
-  init : init,
-  copy : copy,
-  inherit : inherit,
+  init,
+  copy,
+  inherit,
 
   // etc
 
-  _testSuitesRegister : _testSuitesRegister,
-  _accuracySet : _accuracySet,
-  _routineSet : _routineSet,
-  consoleBar : consoleBar,
+  _testSuitesRegister,
+  _accuracySet,
+  _routineSet,
+  consoleBar,
 
   // test suite run
 
-  run : run,
-  _testSuiteRefine : _testSuiteRefine,
-  _testSuiteRunSoon : _testSuiteRunSoon,
-  _testSuiteRunAct : _testSuiteRunAct,
-  _testSuiteBegin : _testSuiteBegin,
-  _testSuiteEnd : _testSuiteEnd,
-  _testSuiteTerminated : _testSuiteTerminated,
+  run,
+  _testSuiteRefine,
+  _testSuiteRunSoon,
+  _testSuiteRunAct,
+  _testSuiteBegin,
+  _testSuiteEnd,
+  _testSuiteTerminated,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
 
   // test routines
 
-  _testRoutineRun : _testRoutineRun,
-  routineEach : routineEach,
+  _testRoutineRun,
+  routineEach,
 
   // report
 
-  _reportForm : _reportForm,
-  _reportToStr : _reportToStr,
-  _reportIsPositive : _reportIsPositive,
+  _reportForm,
+  _reportToStr,
+  _reportIsPositive,
 
   // consider
 
-  _testCheckConsider : _testCheckConsider,
-  _testCaseConsider : _testCaseConsider,
-  _testRoutineConsider : _testRoutineConsider,
-  _exceptionConsider : _exceptionConsider,
-  exceptionReport : exceptionReport,
+  _testCheckConsider,
+  _testCaseConsider,
+  _testRoutineConsider,
+  _exceptionConsider,
+  exceptionReport,
 
   // relations
 
-
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
-  Events : Events,
-  Forbids : Forbids,
-  Accessors : Accessors,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
+  Events,
+  Forbids,
+  Accessors,
 
 }
 
@@ -1181,7 +1183,9 @@ _.Instancing.mixin( Self );
 if( _.EventHandler )
 _.EventHandler.mixin( Self );
 
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;

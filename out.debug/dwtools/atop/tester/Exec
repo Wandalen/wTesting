@@ -21,7 +21,7 @@ if( typeof module !== 'undefined' )
 + make "should/must not error" pass original messages through
   test.case = 'mustNotThrowError must return con with message';
 
-  let con = new _.Consequence().give( '123' );
+  let con = new _.Consequence().take( '123' );
   test.mustNotThrowError( con )
   .ifNoErrorThen( function( got )
   {

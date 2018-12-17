@@ -46,11 +46,11 @@ function exec()
     let path = tester.path;
 
     if( !tester.ScenariosHelpMap[ tester.settings.scenario ] )
-    throw _.errBriefly( 'Unknown scenario',tester.settings.scenario );
+    throw _.errBriefly( 'Unknown scenario', tester.settings.scenario );
 
     if( tester.settings.scenario !== 'test' )
     if( !tester[ tester.ScenariosActionMap[ tester.settings.scenario ] ] )
-    throw _.errBriefly( 'Scenario',tester.settings.scenario,'is not implemented' );
+    throw _.errBriefly( 'Scenario', tester.settings.scenario, 'is not implemented' );
 
     if( tester.settings.scenario === 'test' )
     {
@@ -97,7 +97,7 @@ function _registerExitHandler()
   //     let logger = tester.logger;
   //     debugger;
   //     if( tester.settings.coloring )
-  //     logger.error( _.color.strFormat( 'Errors!','negative' ) );
+  //     logger.error( _.color.strFormat( 'Errors!', 'negative' ) );
   //     else
   //     logger.error( 'Errors!' );
   //     process.exitCode = -1;
@@ -139,7 +139,7 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  _.mapExtend( settings,_.mapOnly( appArgs.map, tester.Settings ) );
+  _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 
   let v = settings.verbosity;
   _.assert( v === null || v === undefined || _.boolLike( v ) )
@@ -189,7 +189,7 @@ function scenarioScenariosList()
     multiline : 1
   };
 
-  logger.log( 'Scenarios :\n',_.toStr( tester.ScenariosHelpMap,strOptions ),'\n' );
+  logger.log( 'Scenarios :\n', _.toStr( tester.ScenariosHelpMap, strOptions ), '\n' );
 
 }
 
@@ -209,7 +209,7 @@ function scenarioOptionsList()
   };
 
   logger.log( 'Tester options' );
-  logger.log( _.toStr( tester.ApplicationArgumentsMap, strOptions ),'\n' );
+  logger.log( _.toStr( tester.ApplicationArgumentsMap, strOptions ), '\n' );
 }
 
 //
@@ -234,14 +234,14 @@ function _includeTestsFrom( path )
 {
   let tester = this;
   let logger = tester.logger;
-  path = _.path.join( _.path.current(),path );
+  path = _.path.join( _.path.current(), path );
 
   _.assert( _.numberIs( tester.importanceOfNegative ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
 
   if( tester.verbosity > 1 )
-  logger.log( 'Includes tests from :',path,'\n' );
+  logger.log( 'Includes tests from :', path, '\n' );
 
   let ends = [ '.test.s' ];
   if( Config.platform === 'browser' )
@@ -280,7 +280,7 @@ function _includeTestsFrom( path )
     catch( err )
     {
       debugger;
-      err = _.errAttend( 'Cant include',absolutePath + '\n',err );
+      err = _.errAttend( 'Cant include', absolutePath + '\n', err );
       tester.includeFails.push( err );
 
       if( tester.settings.coloring )
@@ -348,7 +348,7 @@ function _test()
 
 //
 
-let test = _.timeReadyJoin( undefined,_test );
+let test = _.timeReadyJoin( undefined, _test );
 
 //
 
@@ -361,7 +361,7 @@ function _testingBegin( allSuites, runSuites )
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( allSuites ) );
   _.assert( _.mapIs( runSuites ) );
-  _.assert( logger.hasOutput( _global.logger,{ deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   tester._reportForm();
 
@@ -447,11 +447,11 @@ function _testingEnd()
 
   // logger.verbosityPop();
 
-  _.assert( logger.hasOutput( _global.logger,{ deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   debugger;
   if( !ok )
-  _.timeOut( 100,function()
+  _.timeOut( 100, function()
   {
     _.appExit();
   });
@@ -522,7 +522,7 @@ function _suitesRun( suites )
   /* */
 
   wTester.TestSuite._suiteCon
-  .doThen( function( err, arg )
+  .finally( function( err, arg )
   {
     if( tester._reportIsPositive() )
     return _.timeOut( tester.settings.sanitareTime );
@@ -530,7 +530,7 @@ function _suitesRun( suites )
     throw err;
     return arg;
   })
-  .doThen( function( err, arg )
+  .finally( function( err, arg )
   {
     return tester._testingEnd();
   });
@@ -556,7 +556,7 @@ function suitesFilterOut( suites )
       _suites[ suite ] = suite;
       else if( suite instanceof wTester.TestSuite )
       _suites[ suite.name ] = suite;
-      else _.assert( 0,'not tested' );
+      else _.assert( 0, 'not tested' );
     }
     suites = _suites;
   }
@@ -564,12 +564,12 @@ function suitesFilterOut( suites )
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
   _.assert( _.objectIs( suites ) );
 
-  suites = _.entityFilter( suites,function( suite )
+  suites = _.entityFilter( suites, function( suite )
   {
     if( _.strIs( suite ) )
     {
       if( !wTests[ suite ] )
-      throw _.err( 'Tester : test suite',suite,'not found' );
+      throw _.err( 'Tester : test suite', suite, 'not found' );
       suite = wTests[ suite ];
     }
     if( suite.abstract )
@@ -592,19 +592,19 @@ function suitesListPrint( suites )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  _.each( suites,function( suite,k )
+  _.each( suites, function( suite, k )
   {
     if( suite.enabled )
     logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  _.each( suites,function( suite,k )
+  _.each( suites, function( suite, k )
   {
     if( !suite.enabled )
     logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  // logger.log( _.select( _.entityVals( suites ),'*.suiteFileLocation' ).join( '\n' ) );
+  // logger.log( _.select( _.entityVals( suites ), '*.suiteFileLocation' ).join( '\n' ) );
 
   let l = _.entityLength( suites );
 
@@ -847,7 +847,7 @@ function textColor( srcStr, format )
   let splits = _.strSplit
   ({
     src : srcStr,
-    delimeter : _.arrayAppendArrays( [],[ light, gray ] ),
+    delimeter : _.arrayAppendArrays( [], [ light, gray ] ),
     stripping : 0,
     preservingDelimeters : 1,
   });
@@ -981,28 +981,28 @@ function _exceptionConsider( err )
 //
 //   o.logger = o.logger || wTester.logger;
 //
-//   _.routineOptions( loggerToBook,o );
+//   _.routineOptions( loggerToBook, o );
 //
 //   _.assert( arguments.length === 0 || arguments.length === 1 );
 //   _.assert( o.logger instanceof wPrinterToJs );
 //
 //   let data = o.logger.outputData;
 //   let routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
-//   logger.log( _.toStr( routines,{ levels : 1 } ) );
+//   logger.log( _.toStr( routines, { levels : 1 } ) );
 //
 //   /* */
 //
 //   let routineHead;
-//   routines = _.entityFilter( routines, function( routine,k )
+//   routines = _.entityFilter( routines, function( routine, k )
 //   {
 //     routine.folderPath = _.path.dir( k );
 //     routine.itemsPath = _.path.dir( routine.folderPath );
-//     routine.itemsData = _.select( data,routine.itemsPath );
+//     routine.itemsData = _.select( data, routine.itemsPath );
 //
 //     if( routine.tail )
 //     {
 //       routineHead.data.report = [ routine ];
-//       _.mapSupplement( routineHead.attributes,_.mapBut( routine,{ text : 0 } ) );
+//       _.mapSupplement( routineHead.attributes, _.mapBut( routine, { text : 0 } ) );
 //       return;
 //     }
 //
@@ -1019,7 +1019,7 @@ function _exceptionConsider( err )
 //     });
 //
 //     let routineMore = [];
-//     checks = _.entityFilter( checks, function( acheck,k )
+//     checks = _.entityFilter( checks, function( acheck, k )
 //     {
 //       if( !acheck.text )
 //       return;
@@ -1034,7 +1034,7 @@ function _exceptionConsider( err )
 //       result.data = acheck;
 //       debugger;
 //       result.text = acheck.check + ' # '+ acheck.checkIndex;
-//       result.attributes = _.mapBut( acheck,{ text : 0 } );
+//       result.attributes = _.mapBut( acheck, { text : 0 } );
 //
 //       result.kind = 'terminal';
 //       result.data.report = routineMore;
@@ -1051,7 +1051,7 @@ function _exceptionConsider( err )
 //     result.data = routine;
 //     result.text = routine.routine;
 //     result.elements = checks;
-//     result.attributes = _.mapBut( routine,{ text : 0 } );
+//     result.attributes = _.mapBut( routine, { text : 0 } );
 //
 //     routineHead = result;
 //     return result;
@@ -1059,7 +1059,7 @@ function _exceptionConsider( err )
 //
 //   /* */
 //
-//   logger.log( _.toStr( routines,{ levels : 1 } ) );
+//   logger.log( _.toStr( routines, { levels : 1 } ) );
 //   routines = _.entityVals( routines );
 //
 //   /* */
@@ -1068,12 +1068,12 @@ function _exceptionConsider( err )
 //   {
 //     if( !node.data )
 //     return '-';
-//     let result = _.select( node.data.report,'*.text' );
+//     let result = _.select( node.data.report, '*.text' );
 //
 //     if( node.data.check )
 //     result = result.join( '\n' ) + '\n' + node.data.text;
 //     else if( node.data.routine )
-//     result = node.data.text + '\n' + _.select( node.elements,'*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
+//     result = node.data.text + '\n' + _.select( node.elements, '*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
 //
 //     return result;
 //   }
@@ -1104,14 +1104,14 @@ function _exceptionConsider( err )
 //     Self.verbosity = 0;
 //     //Self.logger = wPrinterToJs({ coloring : 0 });
 //
-//     // wTester.test( 'Logger other test','Consequence','FileProvider.Extract' )
+//     // wTester.test( 'Logger other test', 'Consequence', 'FileProvider.Extract' )
 //
 //     wTester.test( 'FileProvider.Extract' )
-//     .doThen( function()
+//     .finally( function()
 //     {
 //       debugger;
 //       if( Self.logger )
-//       logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+//       logger.log( _.toStr( Self.logger.outputData, { levels : 5 } ) );
 //       debugger;
 //     });
 //
@@ -1224,7 +1224,7 @@ let SettingsOfSuite =
 
 }
 
-let Settings = _.mapExtend( null,SettingsOfTester,SettingsOfSuite );
+let Settings = _.mapExtend( null, SettingsOfTester, SettingsOfSuite );
 
 let Rapidities =
 [
@@ -1276,61 +1276,56 @@ let Self =
 
   // exec
 
-  exec : exec,
-  _registerExitHandler : _registerExitHandler,
-  appArgsRead : appArgsRead,
+  exec,
+  _registerExitHandler,
+  appArgsRead,
 
-  scenarioHelp : scenarioHelp,
-  scenarioScenariosList : scenarioScenariosList,
-  scenarioOptionsList : scenarioOptionsList,
-  scenarioSuitesList : scenarioSuitesList,
+  scenarioHelp,
+  scenarioScenariosList,
+  scenarioOptionsList,
+  scenarioSuitesList,
 
   // include
 
-  _includeTestsFrom : _includeTestsFrom,
-  includeTestsFrom : includeTestsFrom,
+  _includeTestsFrom,
+  includeTestsFrom,
 
   // run
 
-  _testAllAct : _testAllAct,
-  testAll : testAll,
+  _testAllAct,
+  testAll,
 
-  _test : _test,
-  test : test,
+  _test,
+  test,
 
-  _testingBegin : _testingBegin,
-  _testingEnd : _testingEnd,
+  _testingBegin,
+  _testingEnd,
 
-  _suitesRun : _suitesRun,
+  _suitesRun,
 
-  suitesFilterOut : suitesFilterOut,
-  suitesListPrint : suitesListPrint,
+  suitesFilterOut,
+  suitesListPrint,
 
   // report
 
-  _reportForm : _reportForm,
-  _reportToStr : _reportToStr,
-  _reportIsPositive : _reportIsPositive,
-  textColor : textColor,
+  _reportForm,
+  _reportToStr,
+  _reportIsPositive,
+  textColor,
 
   // etc
 
-  _verbositySet : _verbositySet,
-  _canContinue : _canContinue,
-  cancel : cancel,
+  _verbositySet,
+  _canContinue,
+  cancel,
 
   // consider
 
-  _testCheckConsider : _testCheckConsider,
-  _testCaseConsider : _testCaseConsider,
-  _testRoutineConsider : _testRoutineConsider,
-  _testSuiteConsider : _testSuiteConsider,
-  _exceptionConsider : _exceptionConsider,
-
-  // report formatter
-  //
-  // loggerToBook : loggerToBook,
-  // bookExperiment : bookExperiment,
+  _testCheckConsider,
+  _testCaseConsider,
+  _testRoutineConsider,
+  _testSuiteConsider,
+  _exceptionConsider,
 
   // let
 
@@ -1380,7 +1375,7 @@ let Self =
 
 //
 
-_.accessor.forbid( Self,Forbids )
+_.accessor.forbid( Self, Forbids )
 
 _.accessor.declare
 ({

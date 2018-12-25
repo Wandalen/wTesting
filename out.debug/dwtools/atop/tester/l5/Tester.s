@@ -362,10 +362,12 @@ function _testingBegin( allSuites, runSuites )
   _.assert( _.mapIs( allSuites ) );
   _.assert( _.mapIs( runSuites ) );
   _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( tester.state === null );
 
   tester._reportForm();
-
   tester._canceled = 0;
+  tester.state = 'begin';
+  // debugger;
 
   if( tester.settings.timing )
   tester._testingBeginTime = _.timeNow();
@@ -397,16 +399,45 @@ function _testingBegin( allSuites, runSuites )
 
 //
 
-function _testingEnd()
+// function _testingEndSoon( err, arg )
+function _testingEndSoon()
+{
+  let tester = this;
+
+  _.assert( arguments.length === 0 );
+
+  if( tester._reportIsPositive() )
+  return _.timeOut( tester.settings.sanitareTime, () => tester._testingEndNow() );
+  else
+  tester._testingEndNow();
+
+  // if( err )
+  // throw err;
+  // return arg;
+
+  return null;
+}
+
+//
+
+function _testingEndNow()
 {
   let tester = this;
   let logger = tester.logger;
   let ok = tester._reportIsPositive();
 
+  // debugger;
+
+  _.assert( arguments.length === 0 );
+  _.assert( tester.state === 'begin' );
+
+  tester.state = 'end';
+
   if( tester.settings.beeping )
   _.diagnosticBeep();
 
-  if( !ok && !_.appExitCode() )
+  // if( !ok && !_.appExitCode() )
+  if( !ok )
   {
     if( tester.settings.beeping )
     _.diagnosticBeep();
@@ -448,6 +479,8 @@ function _testingEnd()
   // logger.verbosityPop();
 
   _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+
+  _.procedure.terminationBegin();
 
   debugger;
   if( !ok )
@@ -519,23 +552,7 @@ function _suitesRun( suites )
     suite._testSuiteRunSoon();
   }
 
-  /* */
-
-  wTester.TestSuite._suiteCon
-  .finally( function( err, arg )
-  {
-    if( tester._reportIsPositive() )
-    return _.timeOut( tester.settings.sanitareTime );
-    if( err )
-    throw err;
-    return arg;
-  })
-  .finally( function( err, arg )
-  {
-    return tester._testingEnd();
-  });
-
-  return wTester.TestSuite._suiteCon.split();
+  return wTester.TestSuite._SuitesReady.split();
 }
 
 //
@@ -671,10 +688,11 @@ function _canContinue()
 
 //
 
-// function cancel( err, terminatedByUser )
 function cancel()
 {
   let tester = this;
+
+  // logger.log( '----------- cancel' );
 
   if( tester.settings.fails > 0 )
   if( tester.settings.fails <= tester.report.testCheckFails )
@@ -689,7 +707,7 @@ function cancel()
   return tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
 
   if( o.err === undefined )
-  tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
+  o.err = tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
   o.err = _.err( o.err );
 
   if( o.global )
@@ -705,7 +723,6 @@ function cancel()
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnCon )
     {
-      debugger; /* xxx */
       tester.activeRoutines[ t ]._returnCon.cancel();
     }
   }
@@ -719,7 +736,6 @@ function cancel()
 
   if( o.terminatedByUser ) try
   {
-    debugger; /* xxx */
     for( let t = 0 ; t < tester.activeSuites.length ; t++ )
     tester.activeSuites[ t ]._testSuiteEnd( o.err );
   }
@@ -1198,7 +1214,7 @@ let SettingsOfTester =
 {
 
   scenario : 'test',
-  sanitareTime : 1000,
+  sanitareTime : 500,
   fails : null,
   beeping : null,
   coloring : 1,
@@ -1299,7 +1315,8 @@ let Self =
   test,
 
   _testingBegin,
-  _testingEnd,
+  _testingEndSoon,
+  _testingEndNow,
 
   _suitesRun,
 
@@ -1337,19 +1354,22 @@ let Self =
   SettingsOfTester : SettingsOfTester,
   SettingsOfSuite : SettingsOfSuite,
   Settings : Settings,
+  Rapidities : Rapidities,
+
+  TestSuite : null,
+  TestRoutineDescriptor : null,
 
   settings : Object.create( null ),
+  state : null,
 
   logger : new _.Logger({ name : 'LoggerForTester', output : _global.logger }),
-  _cancelCon : new _.Consequence(),
+  _cancelCon : new _.Consequence({ tag : 'TesterCancel' }),
   _canceled : 0,
 
   activeSuites : [],
   activeRoutines : [],
   includeFails : [],
   report : null,
-
-  Rapidities : Rapidities,
 
   sourceFileLocation : sourceFileLocation,
   sourceFileStack : sourceFileStack,
@@ -1365,9 +1385,6 @@ let Self =
   _barOptions : null,
   _appArgs : null,
   path : null,
-
-  TestSuite : null,
-  TestRoutineDescriptor : null,
 
   constructor : function wTester(){},
 

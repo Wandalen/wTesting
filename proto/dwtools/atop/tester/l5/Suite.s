@@ -5,12 +5,6 @@
 let _global = _global_;
 let _ = _global_.wTools;
 
-// debugger;
-// let d = _.propertyDescriptorGet( _global.logger, 'write' );
-// var fs1 = _.mapFields( _global.logger );
-// var fs2 = _.mapFields( d.object );
-// debugger;
-
 //
 
 let logger = null;
@@ -310,11 +304,8 @@ function consoleBar( value )
 function run()
 {
   let suite = this;
-
   _.assert( arguments.length === 0 );
-
   suite._testSuiteRefine();
-
   return suite._testSuiteRunSoon();
 }
 
@@ -402,27 +393,19 @@ function _testSuiteRunSoon()
   _.assert( arguments.length === 0 );
   _.assert( suite._refined );
 
-  // debugger;
-  // suite._testSuiteRefine();
-  // debugger;
-
-  let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._suiteCon;
+  let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
   return con
   .finally( _.routineSeal( _, _.timeReady, [] ) )
-  .finally( function()
-  {
-
-    return suite._testSuiteRunAct();
-
-  })
-  .split();
+  .finally( () => suite._testSuiteRunNow() )
+  .split()
+  ;
 
 }
 
 //
 
-function _testSuiteRunAct()
+function _testSuiteRunNow()
 {
   let suite = this;
   let testRoutines = suite.tests;
@@ -436,8 +419,8 @@ function _testSuiteRunAct()
   return _.execStages( testRoutines,
   {
     manual : 1,
-    onEachRoutine : handleStage,
-    onBegin : _.routineJoin( suite, suite._testSuiteBegin ),
+    onEachRoutine : handleRoutine,
+    onBegin : handleBegin,
     onEnd : handleEnd,
     onRoutine : ( trd ) => trd.routine,
     delay : 1,
@@ -445,7 +428,7 @@ function _testSuiteRunAct()
 
   /* */
 
-  function handleStage( trd, iteration, iterator )
+  function handleRoutine( trd, iteration, iterator )
   {
     let result = suite._testRoutineRun( trd ) || null;
     _.assert( result !== undefined );
@@ -454,16 +437,18 @@ function _testSuiteRunAct()
 
   /* */
 
-  function handleEnd( err, data )
+  function handleBegin()
   {
+    // debugger;
+    return suite._testSuiteBegin();
+  }
 
-    if( !( wTester.settings.sanitareTime >= 0 ) )
-    err = _.err( '{-sanitareTime-} should be greater than zero, but it is', wTester.settings.sanitareTime );
+  /* */
 
-    if( suite._reportIsPositive() )
-    return _.timeOut( wTester.settings.sanitareTime, () => suite._testSuiteEnd( err ) );
-    else
-    return suite._testSuiteEnd( err );
+  function handleEnd( err, arg )
+  {
+    // debugger;
+    return suite._testSuiteEndSoon( err, arg );
   }
 
 }
@@ -553,15 +538,19 @@ function _testSuiteBegin()
 
   /* */
 
-  suite._testSuiteTerminated_joined = _.routineJoin( suite, _testSuiteTerminated );
-  if( _global_.process )
-  _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
+  // debugger;
+  if( _global_.process && suite.takingIntoAccount )
+  {
+    // console.log( '_testSuiteTerminated_joined on' );
+    suite._testSuiteTerminated_joined = _.routineJoin( suite, _testSuiteTerminated );
+    _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
+  }
 
   /* */
 
   if( !wTester._canContinue() )
   {
-    debugger; /* xxx */
+    debugger;
     return false;
   }
 
@@ -572,12 +561,37 @@ function _testSuiteBegin()
 
 //
 
-function _testSuiteEnd( err )
+function _testSuiteEndSoon( err, arg )
 {
   let suite = this;
   let logger = suite.logger;
 
-  _.assert( arguments.length === 1 )
+  _.assert( arguments.length === 2 );
+
+  if( !( wTester.settings.sanitareTime >= 0 ) )
+  err = _.err( '{-sanitareTime-} should be greater than zero, but it is', wTester.settings.sanitareTime );
+
+  if( suite._reportIsPositive() )
+  return _.timeOut( wTester.settings.sanitareTime, () => suite._testSuiteEndNow( err ) );
+  else
+  return suite._testSuiteEndNow( err );
+
+  // if( err )
+  // throw err;
+  // return arg;
+}
+
+//
+
+function _testSuiteEndNow( err )
+{
+  let suite = this;
+  let logger = suite.logger;
+
+  _.assert( arguments.length === 1 );
+
+  // logger.log( '----------- _testSuiteEndNow', suite.name );
+  // debugger;
 
   /* error */
 
@@ -605,8 +619,13 @@ function _testSuiteEnd( err )
 
   /* process exit handler */
 
-  if( _global_.process && suite._testSuiteTerminated_joined )
-  _global_.process.removeListener( 'exit', suite._testSuiteTerminated_joined );
+  // debugger;
+  if( _global_.process && suite._testSuiteTerminated_joined && suite.takingIntoAccount )
+  {
+    // console.log( '_testSuiteTerminated_joined off' );
+    _global_.process.removeListener( 'exit', suite._testSuiteTerminated_joined );
+    suite._testSuiteTerminated_joined = null;
+  }
 
   /* on suite end */
 
@@ -631,7 +650,7 @@ function _testSuiteEnd( err )
   else
   logger.log();
 
-  /**/
+  /* */
 
   let ok = suite._reportIsPositive();
 
@@ -670,6 +689,11 @@ function _testSuiteEnd( err )
   logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
 
+  /* silencing */
+
+  if( suite.silencing )
+  suite.consoleBar( 0 );
+
   /* */
 
   if( suite.takingIntoAccount )
@@ -679,15 +703,15 @@ function _testSuiteEnd( err )
 
   _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
 
-  /* silencing */
-
-  if( suite.silencing )
-  suite.consoleBar( 0 );
-
   /* */
 
   if( suite.debug )
   debugger;
+
+  // debugger;
+  // if( suite.takingIntoAccount )
+  if( !wTester.activeSuites.length )
+  wTester._testingEndSoon();
 
   return suite;
 }
@@ -748,7 +772,7 @@ function _testRoutineRun( trd )
 
   /* */
 
-  _.assert( _.routineIs( trd._testRoutineHandleReturn ) );
+  _.assert( _.routineIs( trd._testRoutineEndHandle ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   return suite._routineCon
@@ -758,6 +782,9 @@ function _testRoutineRun( trd )
     // console.log( '_testRoutineRun b', trd.name ); debugger;
 
     trd._testRoutineBegin();
+
+    trd._timeOutCon = _.timeOut( trd.timeOut );
+    trd._timeOutErrorCon = _.timeOutError( trd.timeOut + wTester.settings.sanitareTime );
 
     /* */
 
@@ -776,11 +803,15 @@ function _testRoutineRun( trd )
 
     result = trd._returnCon = _.Consequence.From( result );
 
-    result.andKeep( suite._inroutineCon );
-    result = result.eitherKeepSplit([ _.timeOutError( trd.timeOut ), wTester._cancelCon ]);
+    if( Config.debug && !result.tag )
+    result.tag = trd.name;
 
-    result.finally( ( err, msg ) => trd._testRoutineHandleReturn( err, msg ) );
-    result.finally( () => trd._testRoutineEnd() );
+    result.andKeep( suite._inroutineCon );
+
+    result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
+    result.associated = [ trd._timeOutErrorCon, wTester._cancelCon ];
+
+    result.finally( ( err, msg ) => trd._testRoutineEndHandle( err, msg ) );
 
     return result;
   })
@@ -1076,9 +1107,8 @@ let Restricts =
 
 let Statics =
 {
-  // usingUniqueNames : 1,
   usingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
-  _suiteCon : new _.Consequence().take( null ),
+  _SuitesReady : new _.Consequence().take( null ),
 }
 
 let Events =
@@ -1129,9 +1159,10 @@ let Proto =
   run,
   _testSuiteRefine,
   _testSuiteRunSoon,
-  _testSuiteRunAct,
+  _testSuiteRunNow,
   _testSuiteBegin,
-  _testSuiteEnd,
+  _testSuiteEndSoon,
+  _testSuiteEndNow,
   _testSuiteTerminated,
 
   onSuiteBegin,

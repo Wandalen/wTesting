@@ -112,8 +112,8 @@ function identical( test )
   {
 
     var acheck = testRoutine.checkCurrent();
-    test.identical( acheck.checkIndex, 5 );
-    test.identical( suite.report.testCheckPasses, 2 );
+    test.identical( acheck.checkIndex, 4 );
+    test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 2 );
 
     if( err )
@@ -332,8 +332,8 @@ function shouldMessageOnlyOnce( test )
 
       _.timeOut( 250, function()
       {
-        con.error( 'error1' );
-        con.error( 'error2' );
+        con.error( _.errAttend( 'error1' ) );
+        con.error( _.errAttend( 'error2' ) );
         return null;
       });
 
@@ -418,21 +418,24 @@ function shouldMessageOnlyOnce( test )
 
   var suite = wTestSuite
   ({
+    name : 'Suite::ShouldMessageOnlyOnce',
     tests : { r1 : r1 },
     override : notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
-  var result = suite.run()
-  .finally( function( err,data )
+
+  var result = suite
+  .run()
+  .finally( function( err, arg )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.identical( counter.acheck.will, '' );
-    test.identical( counter.acheck.checkIndex, 20 );
-    test.identical( suite.report.testCheckPasses, 17 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 16 );
     test.identical( suite.report.testCheckFails, 2 );
-    test.identical( counter.acheck.checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
+    test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses + suite.report.testCheckFails + 1 );
 
     if( err )
     throw err;
@@ -705,9 +708,7 @@ function mustNotThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with error';
-    debugger;
     var c9 = t.mustNotThrowError( _.Consequence({ tag : 'strange' }).error( 'error' ) );
-    debugger;
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -742,14 +743,12 @@ function mustNotThrowError( test )
     ignoringTesterOptions : 1,
   });
   var result = suite.run()
-  .finally( function( err,data )
+  .finally( function( err, data )
   {
-
     counter.acheck = counter.testRoutine.checkCurrent();
-
     test.identical( counter.acheck.will, '' );
-    test.identical( counter.acheck.checkIndex, 20 );
-    test.identical( suite.report.testCheckPasses, 14 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 13 );
     test.identical( suite.report.testCheckFails, 5 );
     test.identical( counter.acheck.checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
@@ -1030,8 +1029,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.identical( counter.acheck.will, '' );
-    test.identical( counter.acheck.checkIndex, 18 );
-    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( counter.acheck.checkIndex, 17 );
+    test.identical( suite.report.testCheckPasses, 9 );
     test.identical( suite.report.testCheckFails, 7 );
     test.identical( counter.acheck.checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
@@ -1043,6 +1042,8 @@ function shouldThrowErrorSync( test )
 
   return result;
 }
+
+shouldThrowErrorSync.timeOut = 30000;
 
 //
 
@@ -1352,8 +1353,8 @@ function shouldThrowErrorAsync( test )
 
     test.is( test.logger.outputs.length > 0 );
     test.identical( counter.acheck.will, '' );
-    test.identical( counter.acheck.checkIndex, 20 );
-    test.identical( suite.report.testCheckPasses, 13 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 12 );
     test.identical( suite.report.testCheckFails, 6 );
     test.identical( counter.acheck.checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
@@ -1366,6 +1367,8 @@ function shouldThrowErrorAsync( test )
 
   return result;
 }
+
+shouldThrowErrorSync.timeOut = 30000;
 
 //
 
@@ -1636,8 +1639,8 @@ function shouldThrowError( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
     test.identical( counter.acheck.will, '' );
-    test.identical( counter.acheck.checkIndex, 18 );
-    test.identical( suite.report.testCheckPasses, 12 );
+    test.identical( counter.acheck.checkIndex, 17 );
+    test.identical( suite.report.testCheckPasses, 11 );
     test.identical( suite.report.testCheckFails, 5 );
     test.identical( counter.acheck.checkIndex,suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
@@ -1649,6 +1652,8 @@ function shouldThrowError( test )
 
   return result;
 }
+
+shouldThrowError.timeOut = 30000;
 
 //
 
@@ -2162,7 +2167,7 @@ function _chainedShould( test,o )
 
         test.case = prefix + 'first timeout of the included test routine ';
 
-        test.identical( t.suite.report.testCheckPasses, 3 );
+        test.identical( t.suite.report.testCheckPasses, 2 );
         test.identical( t.suite.report.testCheckFails, 0 );
 
         if( o.throwingError === 'sync' )
@@ -2194,7 +2199,7 @@ function _chainedShould( test,o )
 
         test.case = prefix + 'first ' + method + ' done';
 
-        test.identical( t.suite.report.testCheckPasses, 4 );
+        test.identical( t.suite.report.testCheckPasses, 3 );
         test.identical( t.suite.report.testCheckFails, 0 );
 
         if( o.throwingError === 'sync' )
@@ -2239,8 +2244,8 @@ function _chainedShould( test,o )
     {
       test.case = 'checking outcomes';
       counter.acheck = counter.testRoutine.checkCurrent();
-      test.identical( counter.acheck.checkIndex, 4 );
-      test.identical( suite.report.testCheckPasses, 3 );
+      test.identical( counter.acheck.checkIndex, 3 );
+      test.identical( suite.report.testCheckPasses, 2 );
       test.identical( suite.report.testCheckFails, 0 );
     }
 
@@ -2255,8 +2260,8 @@ function _chainedShould( test,o )
     test.case = 'checking outcomes';
 
     counter.acheck = counter.testRoutine.checkCurrent();
-    test.identical( counter.acheck.checkIndex, 5 ); /* 4 */
-    test.identical( suite.report.testCheckPasses, 7 ); /* 6 */
+    test.identical( counter.acheck.checkIndex, 4 ); /* 4 */
+    test.identical( suite.report.testCheckPasses, 5 ); /* 6 */
     test.identical( suite.report.testCheckFails, 0 );
 
     if( err )
@@ -2340,7 +2345,7 @@ function isReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckPasses, 2 );
     test.identical( suite.report.testCheckFails, 9 );
     test.identical( suite.report.errorsArray.length, 7 );
     if( suite.report.errorsArray.length )
@@ -2442,7 +2447,7 @@ function isNotReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckPasses, 2 );
     test.identical( suite.report.testCheckFails, 9 );
     test.identical( suite.report.errorsArray.length, 7 );
     if( suite.report.errorsArray.length )
@@ -2454,11 +2459,9 @@ function isNotReturn( test )
   function returnTest( t )
   {
 
-    debugger;
     var got = t.isNot( 1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
-    debugger;
 
     /* */
 
@@ -2546,7 +2549,7 @@ function isNotErrorReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( suite.report.testCheckPasses, 8 );
     test.identical( suite.report.testCheckFails, 5 );
     test.identical( suite.report.errorsArray.length, 3 );
     if( suite.report.errorsArray.length )
@@ -2660,7 +2663,7 @@ function identicalReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckPasses, 7 );
     test.identical( suite.report.testCheckFails, 8 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -2793,7 +2796,7 @@ function notIdenticalReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 6 );
+    test.identical( suite.report.testCheckPasses, 5 );
     test.identical( suite.report.testCheckFails, 9 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -2915,7 +2918,7 @@ function equivalentReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 16 );
+    test.identical( suite.report.testCheckPasses, 15 );
     test.identical( suite.report.testCheckFails, 14 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
@@ -3149,7 +3152,7 @@ function notEquivalentReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( suite.report.testCheckPasses, 8 );
     test.identical( suite.report.testCheckFails, 20 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
@@ -3375,7 +3378,7 @@ function containReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 7 );
+    test.identical( suite.report.testCheckPasses, 6 );
     test.identical( suite.report.testCheckFails, 12 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -3518,7 +3521,7 @@ function shouldThrowErrorSyncReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 2 );
+    test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 5 );
     test.identical( suite.report.errorsArray.length, 3 );
   }
@@ -3586,7 +3589,7 @@ function shouldThrowErrorAsyncReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
     test.identical( suite.report.testCheckFails, 6 );
     test.identical( suite.report.errorsArray.length, 3 );
     test.identical( done, 1 );
@@ -3727,7 +3730,7 @@ function shouldThrowErrorReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
     test.identical( suite.report.testCheckFails, 5 );
     test.identical( suite.report.errorsArray.length, 3 );
     test.identical( done, 1 );
@@ -3857,7 +3860,7 @@ function mustNotThrowErrorReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckPasses, 2 );
     test.identical( suite.report.testCheckFails, 6 );
     test.identical( suite.report.errorsArray.length, 3 );
     test.identical( done, 1 );
@@ -3971,6 +3974,7 @@ function mustNotThrowErrorReturn( test )
 function shouldMessageOnlyOnceReturn( test )
 {
 
+  var done1 = 0;
   var done = 0;
   var suite = wTestSuite
   ({
@@ -3987,10 +3991,12 @@ function shouldMessageOnlyOnceReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 11 );
+    test.identical( suite.report.testCheckPasses, 10 );
     test.identical( suite.report.testCheckFails, 5 );
     test.identical( suite.report.errorsArray.length, 3 );
     test.identical( done, 1 );
+    test.identical( done1, 1 );
+    test.identical( 1, 1 );
   }
 
   /* */
@@ -4004,6 +4010,7 @@ function shouldMessageOnlyOnceReturn( test )
       return t.shouldMessageOnlyOnce( () => 1 )
       .finally( ( err, got ) =>
       {
+        done1 = 1;
         test.identical( err, undefined );
         test.identical( got, 1 );
         return null;
@@ -4177,6 +4184,8 @@ function shouldMessageOnlyOnceReturn( test )
 
 }
 
+shouldMessageOnlyOnceReturn.timeOut = 30000;
+
 //
 
 function ilReturn( test )
@@ -4197,7 +4206,7 @@ function ilReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckPasses, 7 );
     test.identical( suite.report.testCheckFails, 8 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -4328,7 +4337,7 @@ function niReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 6 );
+    test.identical( suite.report.testCheckPasses, 5 );
     test.identical( suite.report.testCheckFails, 9 );
     test.identical( suite.report.errorsArray.length, 2 );
     if( suite.report.errorsArray.length )
@@ -4450,7 +4459,7 @@ function etReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 16 );
+    test.identical( suite.report.testCheckPasses, 15 );
     test.identical( suite.report.testCheckFails, 14 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
@@ -4680,7 +4689,7 @@ function neReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( suite.report.testCheckPasses, 8 );
     test.identical( suite.report.testCheckFails, 20 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
@@ -4913,7 +4922,7 @@ function gtReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
     test.identical( suite.report.testCheckFails, 10 );
     test.identical( suite.report.errorsArray.length, 3 );
     if( suite.report.errorsArray.length )
@@ -5049,7 +5058,7 @@ function geReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckPasses, 7 );
     test.identical( suite.report.testCheckFails, 6 );
     test.identical( suite.report.errorsArray.length, 3 );
     if( suite.report.errorsArray.length )
@@ -5186,7 +5195,7 @@ function ltReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
     test.identical( suite.report.testCheckFails, 10 );
     test.identical( suite.report.errorsArray.length, 3 );
     if( suite.report.errorsArray.length )
@@ -5321,7 +5330,7 @@ function leReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
+    test.identical( suite.report.testCheckPasses, 7 );
     test.identical( suite.report.testCheckFails, 6 );
     test.identical( suite.report.errorsArray.length, 3 );
     if( suite.report.errorsArray.length )
@@ -5580,7 +5589,7 @@ var Self =
     _chainedShould : _chainedShould,
     chainedShould : chainedShould,
 
-    //return
+    // return
 
     isReturn : isReturn,
     isNotReturn : isNotReturn,

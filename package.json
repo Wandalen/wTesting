@@ -54,7 +54,7 @@
     "wEventHandler": ""
   },
   "devDependencies": {
-    "wtest": ".",
+    
     "wait-sync": ""
   },
   "keywords": [

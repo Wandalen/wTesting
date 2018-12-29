@@ -6,7 +6,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
-let debugged = _.processIsDebugged() && 0;
+let debugged = _.processIsDebugged();
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
 {

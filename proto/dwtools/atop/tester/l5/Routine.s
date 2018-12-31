@@ -1368,7 +1368,7 @@ function _shouldDo( o )
   let reported = 0;
   let good = 1;
   let async = 0;
-  let stack = _.diagnosticStack([ 2, -1 ]);
+  let stack = _.diagnosticStack([ 3, -1 ]);
   let logger = trd.logger;
   let err, arg;
   let con = new _.Consequence();
@@ -1603,18 +1603,10 @@ function _shouldDo( o )
 
     result.finally( gotSecondResource );
 
-    // debugger;
-    // trd._timeOutCon.tap( ( arg, err ) =>
-    // {
-    //   debugger;
-    // });
-
     let r = result.orKeepingSplit([ trd._timeOutCon, wTester._cancelCon ]);
     r.finally( ( err, arg ) =>
     {
-      // debugger;
       result.competitorsCancel( gotSecondResource );
-      // debugger;
       if( err )
       throw err;
       return arg;
@@ -1624,7 +1616,6 @@ function _shouldDo( o )
 
   function gotSecondResource( err, arg )
   {
-    // debugger;
     if( reported && !good )
     return;
 

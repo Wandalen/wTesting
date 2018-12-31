@@ -252,7 +252,7 @@ function _includeTestsFrom( path )
   let files = _.fileProvider.filesFind
   ({
     filePath : path,
-    recursive : '2',
+    recursive : 2,
     filter :
     {
       ends : ends,

@@ -108,6 +108,8 @@ reflector:
     filePath:
       ./proto: ./out.release
     srcFilter:
+      filePath:
+        ./proto: ./out.release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -131,6 +133,8 @@ reflector:
     filePath:
       ./proto: ./out.debug
     srcFilter:
+      filePath:
+        ./proto: ./out.debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -170,6 +174,7 @@ reflector:
   exported.0:
     filePath: ./proto
     srcFilter:
+      filePath: ./proto
       prefixPath: .
     dstFilter:
       prefixPath: .
@@ -189,6 +194,19 @@ reflector:
       ./dwtools/atop/tester.test/Inheritance.test.s: true
       ./dwtools/atop/tester.test/Time.test.s: true
     srcFilter:
+      filePath:
+        ./dwtools/Tools.s: true
+        ./dwtools/atop/tester/Exec: true
+        ./dwtools/atop/tester/Include.base.s: true
+        ./dwtools/atop/tester/Include.mid.s: true
+        ./dwtools/atop/tester/Main.base.s: true
+        ./dwtools/atop/tester/Main.mid.s: true
+        ./dwtools/atop/tester/l5/Routine.s: true
+        ./dwtools/atop/tester/l5/Suite.s: true
+        ./dwtools/atop/tester/l5/Tester.s: true
+        ./dwtools/atop/tester.test/General.test.s: true
+        ./dwtools/atop/tester.test/Inheritance.test.s: true
+        ./dwtools/atop/tester.test/Time.test.s: true
       basePath: .
       prefixPath: proto
     dstFilter:

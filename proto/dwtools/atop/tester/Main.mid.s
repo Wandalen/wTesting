@@ -26,7 +26,19 @@ if( typeof module !== 'undefined' )
   _global.__which__ = 'wTesting';
   _realGlobal._SeparatingTester_ = _global._SeparatingTester_ = 1;
 
+  // if( _global_ === _realGlobal_ || _global_.wTools === _realGlobal_.wTools )
+  // {
+  //   debugger;
+  //   throw 'Something wrong!';
+  // }
+
   require( './Main.base.s' );
+
+  if( _global_ === _realGlobal_ || _global_.wTools === _realGlobal_.wTools )
+  {
+    debugger;
+    throw 'Something wrong!';
+  }
 
   _realGlobal._SeparatingTester_ = _global._SeparatingTester_ = 2;
   Module._cache = cache;

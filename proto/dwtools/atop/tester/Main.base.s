@@ -10,6 +10,12 @@
 
 'use strict';
 
+// if( _global_.WTOOLS_PRIVATE )
+// {
+//   wTools.assert( _global_ !== _realGlobal_ );
+//   wTools.assert( _global_.wTools !== _realGlobal_.wTools );
+// }
+
 if( typeof module !== 'undefined' )
 {
 
@@ -28,8 +34,8 @@ wTestSuite.prototype._testSuitesRegister( testsWas );
 
 if( _global_.WTOOLS_PRIVATE )
 {
-  _.assert( _global_.wTools !== _realGlobal_.wTools );
   _.assert( _global_ !== _realGlobal_ );
+  _.assert( _global_.wTools !== _realGlobal_.wTools );
 }
 
 _.assert( _global_.wTools === _ );
@@ -40,7 +46,7 @@ _.assert( _.objectIs( _realGlobal_.wTester ) );
 
 // if( _global_.WTOOLS_PRIVATE )
 // _realGlobal_._global_ = _global_._wasGlobal_;
-// 
+//
 // if( typeof module !== 'undefined' && !module.parent && !module.isBrowser )
 // _global_.wTester.exec();
 

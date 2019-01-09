@@ -29,19 +29,15 @@ if( typeof module !== 'undefined' )
   let _global = _global_;
   // let _ = _global_.wTools;
 
-  debugger;
   _.include( 'wLooker' );
   _.include( 'wSelector' );
-  debugger;
   _.include( 'wComparator' );
   _.include( 'wExternalFundamentals' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
   _.includeAny( 'wEventHandler','' );
   _.include( 'wLogger' );
-  debugger;
   _.include( 'wConsequence' );
-  debugger;
   _.include( 'wFiles' );
   _.include( 'wLogger' );
   _.include( 'wStringsExtra' );

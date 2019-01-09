@@ -478,11 +478,11 @@ function _testingEndNow()
 
   // logger.verbosityPop();
 
+  debugger;
   _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   _.procedure.terminationBegin();
 
-  debugger;
   if( !ok )
   _.timeOut( 100, function()
   {

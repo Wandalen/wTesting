@@ -7,25 +7,27 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
-  {
-    let toolsPath = '../../../dwtools/Base.s';
-    let _externalTools = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      _externalTools = 1;
-      require( 'wTools' );
-    }
-    if( !_externalTools )
-    require( toolsPath );
-  }
+  let _ = require( '../../Tools.s' );
+
+  // if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
+  // {
+  //   let toolsPath = '../../../dwtools/Base.s';
+  //   let _externalTools = 0;
+  //   try
+  //   {
+  //     toolsPath = require.resolve( toolsPath );
+  //   }
+  //   catch( err )
+  //   {
+  //     _externalTools = 1;
+  //     require( 'wTools' );
+  //   }
+  //   if( !_externalTools )
+  //   require( toolsPath );
+  // }
 
   let _global = _global_;
-  let _ = _global_.wTools;
+  // let _ = _global_.wTools;
 
   _.include( 'wLooker' );
   _.include( 'wSelector' );

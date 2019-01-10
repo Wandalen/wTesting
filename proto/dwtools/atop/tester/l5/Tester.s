@@ -478,7 +478,6 @@ function _testingEndNow()
 
   // logger.verbosityPop();
 
-  debugger;
   _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
 
   _.procedure.terminationBegin();
@@ -1366,6 +1365,7 @@ let Self =
   _cancelCon : new _.Consequence({ tag : 'TesterCancel' }),
   _canceled : 0,
 
+  quedSuites : [],
   activeSuites : [],
   activeRoutines : [],
   includeFails : [],

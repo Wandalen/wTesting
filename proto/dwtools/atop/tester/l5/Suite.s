@@ -294,6 +294,7 @@ function consoleBar( value )
     console.error( err );
   }
 
+  // debugger;
   return wasBarred;
 }
 
@@ -392,6 +393,8 @@ function _testSuiteRunSoon()
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
   _.assert( suite._refined );
+
+  _.arrayAppendOnceStrictly( wTester.quedSuites, suite );
 
   let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
@@ -538,10 +541,8 @@ function _testSuiteBegin()
 
   /* */
 
-  // debugger;
   if( _global_.process && suite.takingIntoAccount )
   {
-    // console.log( '_testSuiteTerminated_joined on' );
     suite._testSuiteTerminated_joined = _.routineJoin( suite, _testSuiteTerminated );
     _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
   }
@@ -566,19 +567,14 @@ function _testSuiteEndSoon( err, arg )
   let suite = this;
   let logger = suite.logger;
 
-  _.assert( arguments.length === 2 );
-
-  if( !( wTester.settings.sanitareTime >= 0 ) )
-  err = _.err( '{-sanitareTime-} should be greater than zero, but it is', wTester.settings.sanitareTime );
+  // _.assert( arguments.length === 2 );
+  // if( !( wTester.settings.sanitareTime >= 0 ) )
+  // err = _.err( '{-sanitareTime-} should be greater than zero, but it is', wTester.settings.sanitareTime );
 
   if( suite._reportIsPositive() )
   return _.timeOut( wTester.settings.sanitareTime, () => suite._testSuiteEndNow( err ) );
   else
   return suite._testSuiteEndNow( err );
-
-  // if( err )
-  // throw err;
-  // return arg;
 }
 
 //
@@ -589,9 +585,6 @@ function _testSuiteEndNow( err )
   let logger = suite.logger;
 
   _.assert( arguments.length === 1 );
-
-  // logger.log( '----------- _testSuiteEndNow', suite.name );
-  // debugger;
 
   /* error */
 
@@ -691,8 +684,10 @@ function _testSuiteEndNow( err )
 
   /* silencing */
 
+  // debugger;
   if( suite.silencing )
   suite.consoleBar( 0 );
+  // debugger;
 
   /* */
 
@@ -702,15 +697,14 @@ function _testSuiteEndNow( err )
   /* tracking */
 
   _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
+  _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
 
   /* */
 
   if( suite.debug )
   debugger;
 
-  // debugger;
-  // if( suite.takingIntoAccount )
-  if( !wTester.activeSuites.length )
+  if( !wTester.activeSuites.length && !wTester.quedSuites.length )
   wTester._testingEndSoon();
 
   return suite;

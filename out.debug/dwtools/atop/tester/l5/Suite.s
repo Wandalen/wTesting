@@ -426,7 +426,7 @@ function _testSuiteRunNow()
     onBegin : handleBegin,
     onEnd : handleEnd,
     onRoutine : ( trd ) => trd.routine,
-    delay : 1,
+    delay : 10,
   });
 
   /* */
@@ -596,7 +596,7 @@ function _testSuiteEndNow( err )
   {
     debugger;
     suite.consoleBar( 0 );
-    console.error( '\nSomething wrong!' );
+    // console.error( '\nException' );
     try
     {
       suite.exceptionReport({ err : err });

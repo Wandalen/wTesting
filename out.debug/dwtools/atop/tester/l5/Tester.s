@@ -691,8 +691,6 @@ function cancel()
 {
   let tester = this;
 
-  // logger.log( '----------- cancel' );
-
   if( tester.settings.fails > 0 )
   if( tester.settings.fails <= tester.report.testCheckFails )
   o.global = 1;
@@ -736,7 +734,7 @@ function cancel()
   if( o.terminatedByUser ) try
   {
     for( let t = 0 ; t < tester.activeSuites.length ; t++ )
-    tester.activeSuites[ t ]._testSuiteEnd( o.err );
+    tester.activeSuites[ t ]._testSuiteEndNow( o.err );
   }
   catch( err2 )
   {
@@ -748,7 +746,6 @@ function cancel()
 }
 
 let defaults = cancel.defaults = Object.create( null );
-
 defaults.err = null;
 defaults.terminatedByUser = 0;
 defaults.global = 0;

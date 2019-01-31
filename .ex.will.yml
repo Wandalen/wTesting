@@ -3,7 +3,7 @@ about :
 
   name : "wTesting"
   description : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated."
-  version : "1.0.68"
+  version : "1.0.71"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0

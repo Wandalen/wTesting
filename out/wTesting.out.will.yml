@@ -6,7 +6,7 @@ about:
     interface, simple tests structure, asynchronous code handling mechanism,
     colorful report, verbosity control and more. Use the module to get free of
     routines which can be automated.
-  version: 1.0.71
+  version: 1.0.74
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -80,7 +80,7 @@ path:
       public: 1
 submodule: {}
 reflector:
-  reflect.proto:
+  reflect.proto.:
     filePath:
       ./proto: ./out.release
     srcFilter:
@@ -196,7 +196,7 @@ reflector:
       basePath: .
       prefixPath: proto
 step:
-  clean.out:
+  clean.out.:
     criterion:
       debug: 0
     opts:
@@ -210,7 +210,7 @@ step:
       filePath: 'path::out.debug'
     inherit:
       - predefined.delete
-  reflect.proto:
+  reflect.proto.:
     criterion:
       debug: 0
       raw: 0
@@ -242,7 +242,7 @@ step:
       reflector: 'reflector::reflect.proto.*=1'
     inherit:
       - predefined.reflect
-  reflect.submodules.debug:
+  reflect.submodules.:
     criterion:
       debug: 1
       raw: 0
@@ -250,7 +250,7 @@ step:
       reflector: 'reflector::reflect.submodules*=1'
     inherit:
       - predefined.reflect
-  reflect.submodules.debug.raw:
+  reflect.submodules.raw:
     criterion:
       debug: 1
       raw: 1
@@ -315,7 +315,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 1.0.71
+    version: 1.0.74
     criterion:
       default: 1
       debug: 1
@@ -324,115 +324,7 @@ exported:
       export: 1
       tar: 1
       public: 1
-    exportedReflector:
-      filePath: ./proto
-      srcFilter:
-        filePath: ./proto
-        prefixPath: /C/pro/web/Port/package/wTesting
-    exportedReflectorData:
-      filePath: ./proto
-      srcFilter:
-        filePath: /C/pro/web/Port/package/wTesting/proto
-        maskAll:
-          excludeAny:
-            - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
-            - !<tag:yaml.org,2002:js/regexp> /\.unique$/
-            - !<tag:yaml.org,2002:js/regexp> /\.git$/
-            - !<tag:yaml.org,2002:js/regexp> /\.svn$/
-            - !<tag:yaml.org,2002:js/regexp> /\.hg$/
-            - !<tag:yaml.org,2002:js/regexp> /\.tmp($|\/)/
-            - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
-            - !<tag:yaml.org,2002:js/regexp> /(^|\/)\.(?!$|\/|\.)/
-            - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
-        basePath:
-          /C/pro/web/Port/package/wTesting/proto: /C/pro/web/Port/package/wTesting/proto
-    exportedFilesReflector:
-      recursive: 0
-      filePath:
-        .: true
-        ./dwtools: true
-        ./dwtools/Tools.s: true
-        ./dwtools/abase: true
-        ./dwtools/amid: true
-        ./dwtools/atop: true
-        ./dwtools/atop/tester: true
-        ./dwtools/atop/tester/Exec: true
-        ./dwtools/atop/tester/Include.base.s: true
-        ./dwtools/atop/tester/Include.mid.s: true
-        ./dwtools/atop/tester/Main.base.s: true
-        ./dwtools/atop/tester/Main.mid.s: true
-        ./dwtools/atop/tester/l3: true
-        ./dwtools/atop/tester/l5: true
-        ./dwtools/atop/tester/l5/Routine.s: true
-        ./dwtools/atop/tester/l5/Suite.s: true
-        ./dwtools/atop/tester/l5/Tester.s: true
-        ./dwtools/atop/tester.test: true
-        ./dwtools/atop/tester.test/General.test.s: true
-        ./dwtools/atop/tester.test/Inheritance.test.s: true
-        ./dwtools/atop/tester.test/Time.test.s: true
-      srcFilter:
-        filePath:
-          .: true
-          ./dwtools: true
-          ./dwtools/Tools.s: true
-          ./dwtools/abase: true
-          ./dwtools/amid: true
-          ./dwtools/atop: true
-          ./dwtools/atop/tester: true
-          ./dwtools/atop/tester/Exec: true
-          ./dwtools/atop/tester/Include.base.s: true
-          ./dwtools/atop/tester/Include.mid.s: true
-          ./dwtools/atop/tester/Main.base.s: true
-          ./dwtools/atop/tester/Main.mid.s: true
-          ./dwtools/atop/tester/l3: true
-          ./dwtools/atop/tester/l5: true
-          ./dwtools/atop/tester/l5/Routine.s: true
-          ./dwtools/atop/tester/l5/Suite.s: true
-          ./dwtools/atop/tester/l5/Tester.s: true
-          ./dwtools/atop/tester.test: true
-          ./dwtools/atop/tester.test/General.test.s: true
-          ./dwtools/atop/tester.test/Inheritance.test.s: true
-          ./dwtools/atop/tester.test/Time.test.s: true
-        basePath: .
-        prefixPath: /C/pro/web/Port/package/wTesting/proto
-    exportedDirPath:
-      path: ./proto
-      criterion:
-        default: 1
-        debug: 1
-        raw: 1
-        proto: 1
-        export: 1
-        tar: 1
-        public: 1
-    exportedFilesPath:
-      path:
-        - .
-        - ./dwtools
-        - ./dwtools/Tools.s
-        - ./dwtools/abase
-        - ./dwtools/amid
-        - ./dwtools/atop
-        - ./dwtools/atop/tester
-        - ./dwtools/atop/tester/Exec
-        - ./dwtools/atop/tester/Include.base.s
-        - ./dwtools/atop/tester/Include.mid.s
-        - ./dwtools/atop/tester/Main.base.s
-        - ./dwtools/atop/tester/Main.mid.s
-        - ./dwtools/atop/tester/l3
-        - ./dwtools/atop/tester/l5
-        - ./dwtools/atop/tester/l5/Routine.s
-        - ./dwtools/atop/tester/l5/Suite.s
-        - ./dwtools/atop/tester/l5/Tester.s
-        - ./dwtools/atop/tester.test
-        - ./dwtools/atop/tester.test/General.test.s
-        - ./dwtools/atop/tester.test/Inheritance.test.s
-        - ./dwtools/atop/tester.test/Time.test.s
-      criterion:
-        default: 1
-        debug: 1
-        raw: 1
-        proto: 1
-        export: 1
-        tar: 1
-        public: 1
+    exportedReflector: 'reflector::exported.0'
+    exportedFilesReflector: 'reflector::exportedFiles.0'
+    exportedDirPath: 'path::exportedDir.0'
+    exportedFilesPath: 'path::exportedFiles.0'

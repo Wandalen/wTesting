@@ -51,6 +51,8 @@ if( typeof module !== 'undefined' )
 + checkers ( identical, contains, equivalent ... ) should return boolean
 + routine : 'some', routine : some - should work both variants
 
+- implement custom handler of test routine fail
+
 - print information about case with color directive avoiding change of color state of logger
 
 - implement support of glob path

@@ -4,8 +4,8 @@ submodule :
 
 path :
 
-  proto : './proto'
   in : '.'
+  temp : 'out'
   out : 'out'
   out.debug :
     path : './out/debug'
@@ -15,6 +15,7 @@ path :
     path : './out/release'
     criterion :
       debug : 0
+  proto : './proto'
 
 reflector :
 

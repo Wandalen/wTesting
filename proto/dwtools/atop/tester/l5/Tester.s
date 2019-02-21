@@ -1377,8 +1377,8 @@ let Self =
   _registerExitHandlerDone : 0,
 
   _defaultVerbosity : 2,
-  verbosity : 2,
-  importanceOfNegative : 9,
+  verbosity : 4,
+  importanceOfNegative : 1,
 
   _barOptions : null,
   _appArgs : null,

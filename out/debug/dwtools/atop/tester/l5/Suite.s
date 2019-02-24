@@ -1037,9 +1037,9 @@ let Composes =
 
   name : null,
 
-  verbosity : 2,
+  verbosity : 3,
   importanceOfDetails : 0,
-  importanceOfNegative : 9,
+  importanceOfNegative : 1,
 
   silencing : null,
   shoulding : 1,

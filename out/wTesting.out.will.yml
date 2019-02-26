@@ -20,7 +20,7 @@ execution:
     docgen: wdocgen staging
 path:
   in:
-    path: .
+    path: ..
   temp:
     path: out
   out:

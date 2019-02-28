@@ -6,16 +6,10 @@
 */
 
 /**
- * @file zLast.debug.s
+ * @file Main.bse.s
  */
 
 'use strict';
-
-// if( _global_.WTOOLS_PRIVATE )
-// {
-//   wTools.assert( _global_ !== _realGlobal_ );
-//   wTools.assert( _global_.wTools !== _realGlobal_.wTools );
-// }
 
 if( typeof module !== 'undefined' )
 {

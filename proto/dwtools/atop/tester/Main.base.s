@@ -39,10 +39,4 @@ _.assert( !_realGlobal_.wTestRoutineDescriptor );
 _.assert( _.objectIs( _realGlobal_.wTests ) );
 _.assert( _.objectIs( _realGlobal_.wTester ) );
 
-// if( _global_.WTOOLS_PRIVATE )
-// _realGlobal_._global_ = _global_._wasGlobal_;
-//
-// if( typeof module !== 'undefined' && !module.parent && !module.isBrowser )
-// _global_.wTester.exec();
-
 })();

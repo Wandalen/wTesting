@@ -145,7 +145,7 @@ reflector:
   exported.proto.export:
     src:
       filePath:
-        .: null
+        .: true
       prefixPath: proto
     criterion:
       default: 1
@@ -159,27 +159,27 @@ reflector:
     recursive: 0
     src:
       filePath:
-        .: null
-        dwtools: null
-        dwtools/Tools.s: null
-        dwtools/abase: null
-        dwtools/amid: null
-        dwtools/atop: null
-        dwtools/atop/tester: null
-        dwtools/atop/tester/Exec: null
-        dwtools/atop/tester/Include.base.s: null
-        dwtools/atop/tester/Include.mid.s: null
-        dwtools/atop/tester/Main.base.s: null
-        dwtools/atop/tester/Main.mid.s: null
-        dwtools/atop/tester/l3: null
-        dwtools/atop/tester/l5: null
-        dwtools/atop/tester/l5/Routine.s: null
-        dwtools/atop/tester/l5/Suite.s: null
-        dwtools/atop/tester/l5/Tester.s: null
-        dwtools/atop/tester.test: null
-        dwtools/atop/tester.test/General.test.s: null
-        dwtools/atop/tester.test/Inheritance.test.s: null
-        dwtools/atop/tester.test/Time.test.s: null
+        .: true
+        dwtools: true
+        dwtools/Tools.s: true
+        dwtools/abase: true
+        dwtools/amid: true
+        dwtools/atop: true
+        dwtools/atop/tester: true
+        dwtools/atop/tester/Exec: true
+        dwtools/atop/tester/Include.base.s: true
+        dwtools/atop/tester/Include.mid.s: true
+        dwtools/atop/tester/Main.base.s: true
+        dwtools/atop/tester/Main.mid.s: true
+        dwtools/atop/tester/l3: true
+        dwtools/atop/tester/l5: true
+        dwtools/atop/tester/l5/Routine.s: true
+        dwtools/atop/tester/l5/Suite.s: true
+        dwtools/atop/tester/l5/Tester.s: true
+        dwtools/atop/tester.test: true
+        dwtools/atop/tester.test/General.test.s: true
+        dwtools/atop/tester.test/Inheritance.test.s: true
+        dwtools/atop/tester.test/Time.test.s: true
       basePath: .
       prefixPath: proto
     criterion:

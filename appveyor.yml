@@ -1,5 +1,6 @@
 
 
+
 # image:
 #   - Visual Studio 2017
 #   - Ubuntu1804
@@ -13,14 +14,14 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
       nodejs_version: 9
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
-      nodejs_version: node
+      nodejs_version: lts/*
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       nodejs_version: 8
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       nodejs_version: 9
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      nodejs_version: Current
+      nodejs_version: LTS
 
 build: off
 

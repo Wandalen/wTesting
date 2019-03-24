@@ -84,6 +84,8 @@ if( typeof module !== 'undefined' )
 
 - highlght call in call stack from *.test files
 
+- Expose entityDiffExplanation's option levels via CLI. 
+
 */
 
 /*

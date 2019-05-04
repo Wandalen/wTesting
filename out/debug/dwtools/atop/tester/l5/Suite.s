@@ -4,6 +4,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
+let debugged = _.processIsDebugged();
 
 //
 
@@ -778,7 +779,8 @@ function _testRoutineRun( trd )
     trd._testRoutineBegin();
 
     trd._timeOutCon = _.timeOut( trd.timeOut );
-    trd._timeOutErrorCon = _.timeOutError( trd.timeOut + wTester.settings.sanitareTime );
+    trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
+    // trd._timeOutErrorCon = _.timeOutError( 1 ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
 
     /* */
 
@@ -803,7 +805,7 @@ function _testRoutineRun( trd )
     result.andKeep( suite._inroutineCon );
 
     result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
-    result.associated = [ trd._timeOutErrorCon, wTester._cancelCon ];
+    // result.associated = [ trd._timeOutErrorCon, wTester._cancelCon ];
 
     result.finally( ( err, msg ) => trd._testRoutineEndHandle( err, msg ) );
 

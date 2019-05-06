@@ -69,7 +69,7 @@
   Процедура встановлення утиліти <code>wTesting</code>.
 </details>
 <details><summary><a href="./concept/CommandHelp.md">
-      Як отримати довідка про тести
+      Як отримати довідку про тести
   </a></summary>
   Як дізнатись інформацію про параметри тест-скрипта.
 </details>

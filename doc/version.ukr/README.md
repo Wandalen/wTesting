@@ -25,7 +25,7 @@
   </a></summary>
     <code>Тест кейс</code> - це одна або декілька перевірок поєднаних із супровідним кодом для виявлення несправності лише одного аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/TestCondition.md">
+<details><summary><a href="./concept/TestFeature.md">
       <code>Тест перевірка</code> (<code>test condition</code>)
   </a></summary>
   <code>Тест перевірка</code> - це найменша структурна одиниця тестування. 
@@ -43,13 +43,34 @@
   </a></summary>
   Процедура встановлення утиліти <code>wTesting</code>.
 </details>
+<details><summary><a href="./concept/CommandHelp.md">
+      Довідка про тести
+  </a></summary>
+  Як дізнатись про інформацію про параметри скрипта.
+</details>
+<details><summary><a href="./concept/TestRoutinePath.md">
+      Роутинг в <code>тест рутинах</code>
+  </a></summary>
+    Як використовувати шляхи в початкових даних <code>тест рутини</code>.
+</details>
+<details><summary><a href="./concept/TestCondition.md">
+      Умови проходження тестування
+  </a></summary>
+  Як задати умови проходження тестових перевірок певної функціональності.
+</details>
 <details><summary><a href="./tutorial/TestExecution.md">
       Запуск тестів
   </a></summary>
   Як запускати <code>тест кейси</code>, <code>тест рутини</code>, <code>тест сюіти</code>.  
+</details>
+<details><summary><a href="./concept/TestCondition.md">
+      Створення модульного тесту 
+  </a></summary>
+  Створення модульного тесту з урахуванням необхідних і достатніх умов тестування.
 </details>
 <details><summary><a href="./tutorial/ControlVerbosity.md">
       Контроль рівня вербальності
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією <code>verbosity</code>.
 </details>
+

@@ -21,8 +21,8 @@ execution :
 
 path :
 
-  repository : git+https://github.com/Wandalen/wTesting.git
-  bugs : https://github.com/Wandalen/wTesting/issues
+  repository : git+https:///github.com/Wandalen/wTesting.git
+  bugs : https:///github.com/Wandalen/wTesting/issues
 
 step :
 

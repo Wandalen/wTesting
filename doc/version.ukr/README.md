@@ -11,24 +11,49 @@
 ## Концепції
 
 <details><summary><a href="./concept/TestSuite.md">
-      <code>Тест сюіт</code> (<code>test suite</code>)
+      <code>Тест сюіт</code>
   </a></summary>
   <code>Тест сюіт</code> (тест комлект,тестовий набір) - це набір тест рутин, та тестових данних, необхідних для максимально повного тестування окремих частин задачі.
 </details>
 <details><summary><a href="./concept/TestRoutine.md">
-      <code>Тест рутина</code> (<code>test routine</code>)
+      <code>Тест рутина</code>
   </a></summary>
     <code>Тест рутина</code> ( функція, метод ) - це набір тест кейсів, що виконуються послідовно одна за одною та поєднанні тим, що відносяться до одного модуля, що тестується або функціональності.
 </details>
 <details><summary><a href="./concept/TestCase.md">
-      <code>Тест кейс</code> (<code>test case</code>)
+      <code>Тест кейс</code>
   </a></summary>
     <code>Тест кейс</code> - це одна або декілька перевірок поєднаних із супровідним кодом для виявлення несправності лише одного аспекту об'єкту, що тестується.
 </details>
 <details><summary><a href="./concept/TestFeature.md">
-      <code>Тест перевірка</code> (<code>test condition</code>)
+      <code>Тест перевірка</code>
   </a></summary>
   <code>Тест перевірка</code> - це найменша структурна одиниця тестування. 
+</details>
+<details><summary><a href="./concept/TestingUnit.md">
+      Модульне тестування
+  </a></summary>
+  Модульне тестування (юніт-тестування) - процес в програмуванні, що дозволяє перевірити на коректність окремі модулі вихідного коду програми. 
+</details>
+<details><summary><a href="./concept/ConditionSufficientAndNecessaru.md">
+      Необхідна умова проходження тесту
+  </a></summary>
+  Необхідними умовами істинності твердження А називаються умови, без дотримання яких А не може бути істинним.
+</details>
+<details><summary><a href="./concept/ConditionSufficientAndNecessaru.md">
+      Достатня умова проходження тесту
+  </a></summary>
+  Достатніми називаються такі умови, за наявності (виконанні, дотриманні) яких твердження А є істинним.
+</details>
+<details><summary><a href="./concept/TestPositiveAndNegative.md">
+      Позитивне тестування
+  </a></summary>
+  Позитивне тестування - це тестування з застосуванням сценаріїв, які відповідають нормальному (штатним, очікуваному) поведінки системи. 
+</details>
+<details><summary><a href="./concept/TestPositiveAndNegative.md">
+      Негативне тестування
+  </a></summary>
+  Негативним називають тестування, в рамках якого застосовуються сценарії, які відповідають позаштатному поведінки тестованої системи. 
 </details>
 
 ## Туторіали
@@ -44,9 +69,9 @@
   Процедура встановлення утиліти <code>wTesting</code>.
 </details>
 <details><summary><a href="./concept/CommandHelp.md">
-      Довідка про тести
+      Як отримати довідка про тести
   </a></summary>
-  Як дізнатись про інформацію про параметри скрипта.
+  Як дізнатись інформацію про параметри тест-скрипта.
 </details>
 <details><summary><a href="./concept/TestRoutinePath.md">
       Роутинг в <code>тест рутинах</code>
@@ -73,4 +98,3 @@
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією <code>verbosity</code>.
 </details>
-

@@ -10,6 +10,11 @@
 
 ## Концепції
 
+<details><summary><a href="./concept/TestingUnit.md">
+      Модульне тестування
+  </a></summary>
+  Модульне тестування (юніт-тестування) - процес в програмуванні, що дозволяє перевірити на коректність окремі модулі вихідного коду програми. 
+</details>
 <details><summary><a href="./concept/TestSuite.md">
       <code>Тест сюіт</code>
   </a></summary>
@@ -25,15 +30,10 @@
   </a></summary>
     <code>Тест кейс</code> - це одна або декілька перевірок поєднаних із супровідним кодом для виявлення несправності лише одного аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/TestFeature.md">
+<details><summary><a href="./concept/TestCheck.md">
       <code>Тест перевірка</code>
   </a></summary>
   <code>Тест перевірка</code> - це найменша структурна одиниця тестування, призначена для перевірки лише одного очікуваного результату виконання тесту. 
-</details>
-<details><summary><a href="./concept/TestingUnit.md">
-      Модульне тестування
-  </a></summary>
-  Модульне тестування (юніт-тестування) - процес в програмуванні, що дозволяє перевірити на коректність окремі модулі вихідного коду програми. 
 </details>
 <details><summary><a href="./concept/TestCoverage.md">
       Покриття теста

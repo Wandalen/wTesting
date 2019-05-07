@@ -35,15 +35,10 @@
   </a></summary>
   Модульне тестування (юніт-тестування) - процес в програмуванні, що дозволяє перевірити на коректність окремі модулі вихідного коду програми. 
 </details>
-<details><summary><a href="./concept/ConditionSufficientAndNecessaru.md">
-      Необхідна умова проходження тесту
+<details><summary><a href="./concept/TestCoverage.md">
+      Покриття теста
   </a></summary>
-  Необхідними умовами істинності твердження А називаються умови, без дотримання яких А не може бути істинним.
-</details>
-<details><summary><a href="./concept/ConditionSufficientAndNecessaru.md">
-      Достатня умова проходження тесту
-  </a></summary>
-  Достатніми називаються такі умови, за наявності (виконанні, дотриманні) яких твердження А є істинним.
+  Покриття теста (англ. code coverage, tests coverage) — міра, яка використовується при тестуванні програмного забезпечення. Вона визначається відсотком тестованого вихідного коду програми.
 </details>
 <details><summary><a href="./concept/TestPositiveAndNegative.md">
       Позитивне тестування

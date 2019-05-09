@@ -86,10 +86,15 @@
 <details><summary><a href="./concept/TestCondition.md">
       Створення модульного тесту 
   </a></summary>
-  Створення модульного тесту з урахуванням необхідних і достатніх умов тестування.
+  Створення модульного тесту димового тестування та санітарного тестування.
 </details>
 <details><summary><a href="./tutorial/ControlVerbosity.md">
       Контроль рівня вербальності
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією <code>verbosity</code>.
+</details>
+<details><summary><a href="./tutorial/TestOptions.md">
+      Додаткові опції тестування
+  </a></summary>
+  Застосування опцій для налаштування проходження тестів.
 </details>

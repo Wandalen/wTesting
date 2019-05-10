@@ -1,121 +1,6 @@
 # Запуск тестів
 
-Як запускати <code>тест кейси</code>, <code>тест рутини</code>, <code>тест сюіти</code>. 
-
-Для початку тестування потрібно мати три складові: 
-- людину, що буде тестувати;
-- код (програму, модуль, тощо), що треба тестувати;
-- чим тестувати - спеціальне програмне забезпечення, тест рутини, фізичні пристрої, тощо. 
-
-З першим пунктом все гаразд. Виконаємо наступні дві частини перед запуском. 
-
-### Довільна рутина для тестування. Конфігурація
-
-<details>
-  <summary><u>Структура модуля</u></summary>
-
-```
-testModule
-   └── proto
-        ├── math.js
-        └── test.math.js    
-
-```
-
-</details>
-
-Для проведення простого тесту достатньо одного файлу в якому буде поміщатись тестована рутина і її тест. Для чистоти коду в прикладі використовується два файла. Перший, з назвою `math.js` має рутину для тестування, а другий, з назвою `test.math.js` включає `тест сюіт` для тестування першого файла. 
-
-<details>
-    <summary><a href="./tutorial/Criterions.md">Код файла <code>math.js</code></a></summary>
-    
-```js    
-module.exports.sum = function(a,b){
-  return a + b;
-}
-
-```
-  
-</details>
-
-Внесіть приведений вище код для тестування. Це операція додавання двох чисел з назвою `sum`. Для того, щоб рутину можна було протестувати вона повинна бути експортованою.  
-
-<details>
-    <summary><a href="./tutorial/Criterions.md">Код файла <code>test.math.js</code></a></summary>
-    
-```js    
-if( typeof module !== 'undefined' )
-{
-  let _ = require( 'wTools' );
-
-  if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-
-  _.include( 'wLogger' );
-  _.include( 'wTesting' );
-}
-
-let math = require('./math.js');
-var _global = _global_;
-var _ = _global_.wTools;
-
-function sum(test)
-{
-  test.case = 'sum integers';
-  test.will = 'sum1';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.identical( got,expected );
- 
-  test.will = 'sum2';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.notIdentical( got,expected );
-}
-
-var Self =
-{
-  name : 'Sample',
-
-  tests :
-  {
-    sum : sum,
-  }
-}
-
-Self = wTestSuite( Self );
-if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
-
-```
-  
-</details>
-
-Внесіть приведений код в файл `test.math.js`.
-
-Приведений тест має один тест сюіт з назвою `Sample`. При виконанні тест сюіту виконується одна тест рутина `sum` з двома перевірками. Тест перевірка `sum1` перевіряє на співпадіння отриманого результату при сумуванні двох чисел і передбачуваного результату. Тест перевірка `sum2` перевіряє чи не співпадає отриманий при сумуванні результат і передбачуваний. В перевірці навмисне допущена помилка для отримання повідомлення про провал тесту.
-
-### Запуск тесту
-
-Приведений код вказує, що для виконання тестування необхідно встановити залежності. Потрібно встановити локально утиліти `wTools` i `wLogger` при умові, що утиліта `wTesting` у вас уже [встановлена](Installation.md).
-
-<details>
-    <summary><a href="./tutorial/Criterions.md">Код файла <code>math.js</code></a></summary>
-    
-```js    
-npm install wTools
-+ wTools@0.8.454
-added 14 packages from 3 contributors in 11.159s
-dmytry@dmytry:~/Documents/UpWork/IntellectualServiceMysnyk/willbe_src/sample$ npm install wLogger
-+ wLogger@0.5.172
-added 13 packages from 3 contributors, updated 1 package and audited 53 packages in 5.044s
-found 0 vulnerabilities
-
-```
-  
-</details>
-
-
-
+Як запускати <code>тест кейси</code>, <code>тест рутини</code>, <code>тест сюіти</code>.
 
 
 Існують три способа запуска тестів з наступними командами
@@ -126,3 +11,37 @@ found 0 vulnerabilities
 |[2.1](#2.1)| Альтернативний спосіб запуску                               | `wtest proto`                                      |
 |[2.2](#2.2)| Альтернативний спосіб запуску використовуючи файл тест сюіта| `wtest proto/dwtools/abase/layer1.test/Map.test.s` |
 |[3](#3)    | Використовуючи файл тест сюіта                              | `node proto/dwtools/abase/layer1.test/Map.test.s`  | 
+
+Экран терміналу вищовказаних команд в операційній системі Linux буде виглядати наступним образом:
+
+Запуск теста безпосередньо через npm. Команда `npm test`.
+
+![Результат команди 1](../../imagesimages/1.png)
+
+Як можно побачити на скріншоті - було зроблено 13 помилок. Проскролив вікно консолі можно побачити - директорію з якої були виконані тест сюіти, та ті з них які не було включено до тестування, а також кількість пройдених тестів та помилок для кожного тест сюіта - окремо.
+
+![Окремий тест](../../images/5.png)
+
+<a name="2.1"/>
+
+Результат команди `wtest proto`
+
+![Результат команди 2.1](../../images/2.1.png) Це - альтернативний спосіб запуску тестування. Команда для запуска `wtest proto`. Спосіб [1](#1) та [2.1](#2.1) виконує усі наявні тест сюіти
+
+<a name="2.2"/>
+
+Результат команди 2.2 див.визначення [Тест сюіт](#test-suit). В же час можно виконувати окремі тест сюіти за допомогою [2.2](#2.2) та [3](#3)
+
+![Результат команди 2.2](../../images/2.2.png)  
+
+<a name="3"/>
+
+Результат команди `node proto/dwtools/abase/layer1.test/Map.test.s`, яка дозволяє виконати тестування, використовуючи файл тест сюіта див.визначення [Тест сюіт](#test-suit)
+
+![Результат команди 3](../../images/3.png)
+
+На цьому скріншоті зображені вихідні параметри тест сюіта включаючи ім'я та статистику.
+
+![node staging](../../images/6.png)
+
+<a name="verbosity"/>

@@ -71,22 +71,27 @@
   </a></summary>
     Як використовувати шляхи в початкових даних <code>тест рутини</code>.
 </details>
-<details><summary><a href="./concept/TestCondition.md">
+<details><summary><a href="./concept/TestCheck.md">
       Умови проходження тестування
   </a></summary>
   Як задати умови проходження тестових перевірок певної функціональності.
+</details>
+<details><summary><a href="./tutorial/TestAnyFile.md">
+      Запуск тестування довільного JS-файла
+  </a></summary>
+  Як запустити тестування в будь-якому JS-файлі користувача. 
 </details>
 <details><summary><a href="./tutorial/TestExecution.md">
       Запуск тестів
   </a></summary>
   Як запускати <code>тест кейси</code>, <code>тест рутини</code>, <code>тест сюіти</code>.  
 </details>
-<details><summary><a href="./concept/TestCondition.md">
+<details><summary><a href="./concept/TestCreation.md">
       Створення модульного тесту 
   </a></summary>
   Створення модульного тесту димового тестування та санітарного тестування.
 </details>
-<details><summary><a href="./tutorial/ControlVerbosity.md">
+<details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією <code>verbosity</code>.

@@ -1,7 +1,5 @@
 # wTesting [![Build Status](https://travis-ci.org/Wandalen/wTesting.svg?branch=master)](https://travis-ci.org/Wandalen/wTesting)
 
-Фреймворк для юніт-тестування. Фреймворк надає розробнику інтуітивний інтерфейс, просту структуру тестів, асинхронне виконання тестів, кольоровий вивід звіту про виконання, контроль за кількістю виведеної інформації та інше. Використовуючи `wTesting`, ви позбавитесь від рутинної роботи по юніт-тестуванню автоматизувавши її.
-
 ## Швидкий старт
 
 Для швидкого старту [встановіть](<./tutorial/Installation.md>) утиліту `wTesting`, [ознайомтеся](<./tutorial/CLI.md>) із інтрфейсом командного рядка та створіть ваш перший [модуль "Hello World"](<./tutorial/HelloWorld.md>). [Прочитатйе](<./tutorial/Abstract.md>) загальну інформацію якщо вам цікаво дізнатися більше про призначення та філософію утиліти `wTesting`.
@@ -73,23 +71,33 @@
   </a></summary>
     Як використовувати шляхи в початкових даних <code>тест рутини</code>.
 </details>
-<details><summary><a href="./concept/TestCondition.md">
+<details><summary><a href="./concept/TestCheck.md">
       Умови проходження тестування
   </a></summary>
   Як задати умови проходження тестових перевірок певної функціональності.
+</details>
+<details><summary><a href="./tutorial/TestAnyFile.md">
+      Запуск тестування довільного JS-файла
+  </a></summary>
+  Як запустити тестування в будь-якому JS-файлі користувача. 
 </details>
 <details><summary><a href="./tutorial/TestExecution.md">
       Запуск тестів
   </a></summary>
   Як запускати <code>тест кейси</code>, <code>тест рутини</code>, <code>тест сюіти</code>.  
 </details>
-<details><summary><a href="./concept/TestCondition.md">
+<details><summary><a href="./concept/TestCreation.md">
       Створення модульного тесту 
   </a></summary>
-  Створення модульного тесту з урахуванням необхідних і достатніх умов тестування.
+  Створення модульного тесту димового тестування та санітарного тестування.
 </details>
-<details><summary><a href="./tutorial/ControlVerbosity.md">
+<details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією <code>verbosity</code>.
+</details>
+<details><summary><a href="./tutorial/TestOptions.md">
+      Додаткові опції тестування
+  </a></summary>
+  Застосування опцій для налаштування проходження тестів.
 </details>

@@ -6,7 +6,7 @@
 
 ## Концепції
 
-<details><summary><a href="./concept/TestSuite.md">
+<details><summary><a href="./concept/TestObject.md">
       Тестосвий об'єкт
   </a></summary>
   Тестовий об'єкт - система, коректна робота, якої тестується.

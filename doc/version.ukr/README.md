@@ -1,5 +1,3 @@
-# wTesting [![Build Status](https://travis-ci.org/Wandalen/wTesting.svg?branch=master)](https://travis-ci.org/Wandalen/wTesting)
-
 ## Швидкий старт
 
 Для швидкого старту [встановіть](<./tutorial/Installation.md>) утиліту `wTesting`, [ознайомтеся](<./tutorial/CLI.md>) із інтрфейсом командного рядка та створіть ваш перший [модуль "Hello World"](<./tutorial/HelloWorld.md>). [Прочитатйе](<./tutorial/Abstract.md>) загальну інформацію якщо вам цікаво дізнатися більше про призначення та філософію утиліти `wTesting`.
@@ -8,15 +6,10 @@
 
 ## Концепції
 
-<details><summary><a href="./concept/TestingUnit.md">
-      Модульне тестування
-  </a></summary>
-  Модульне тестування (юніт-тестування) - процес в програмуванні, що дозволяє перевірити на коректність окремі модулі вихідного коду програми.
-</details>
 <details><summary><a href="./concept/TestSuite.md">
       <code>Тест сюіт</code>
   </a></summary>
-  <code>Тест сюіт</code> (тест комлект,тестовий набір) - це набір тест рутин, та тестових данних, необхідних для максимально повного тестування окремих частин задачі.
+  <code>Тест сюіт</code> ( тестовий комлект, тестовий набір ) - це набір тест рутин, та тестових данних для тестування об'єкту тестування.
 </details>
 <details><summary><a href="./concept/TestRoutine.md">
       <code>Тест рутина</code>
@@ -61,33 +54,13 @@
   </a></summary>
   Процедура встановлення утиліти <code>wTesting</code>.
 </details>
-<details><summary><a href="./concept/CommandHelp.md">
-      Як отримати довідку про тести
-  </a></summary>
-  Як дізнатись інформацію про параметри тест-скрипта.
-</details>
-<details><summary><a href="./concept/TestRoutinePath.md">
-      Роутинг в <code>тест рутинах</code>
-  </a></summary>
-    Як використовувати шляхи в початкових даних <code>тест рутини</code>.
-</details>
-<details><summary><a href="./concept/TestCheck.md">
-      Умови проходження тестування
-  </a></summary>
-  Як задати умови проходження тестових перевірок певної функціональності.
-</details>
-<details><summary><a href="./tutorial/TestAnyFile.md">
-      Запуск тестування довільного JS-файла
-  </a></summary>
-  Як запустити тестування в будь-якому JS-файлі користувача.
-</details>
 <details><summary><a href="./tutorial/TestExecution.md">
       Запуск тестів
   </a></summary>
   Як запускати <code>тест кейси</code>, <code>тест рутини</code>, <code>тест сюіти</code>.  
 </details>
 <details><summary><a href="./concept/TestCreation.md">
-      Створення модульного тесту
+      Створення тесту "Hello World!"
   </a></summary>
   Створення модульного тесту димового тестування та санітарного тестування.
 </details>

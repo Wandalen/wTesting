@@ -6,47 +6,47 @@
 
 ## Концепції
 
-<details><summary><a href="./concept/testObject.md">
+<details><summary><a href="./concept/TestObject.md">
       Об'єкт тестування
   </a></summary>
   Об'єкт тестування - система, коректна робота, якої тестується.
 </details>
-<details><summary><a href="./concept/testSuite.md">
+<details><summary><a href="./concept/TestSuite.md">
       Тест сюіт
   </a></summary>
   Тест сюіт ( тестовий комлект, тестовий набір ) - це набір тест рутин, та тестових данних для тестування об'єкту тестування.
 </details>
-<details><summary><a href="./concept/testRoutine.md">
+<details><summary><a href="./concept/TestRoutine.md">
       Тест рутина
   </a></summary>
     Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест рутина виконується послідовно та містить тест перевірки та тест кейси.
 </details>
-<details><summary><a href="./concept/testCheck.md">
+<details><summary><a href="./concept/TestCheck.md">
       Тест перевірка
   </a></summary>
   Тест перевірка - це найменша структурна одиниця тестування, призначена для перевірки лише одного очікуваного результату виконання тесту.
 </details>
-<details><summary><a href="./concept/testCase.md">
+<details><summary><a href="./concept/TestCase.md">
       Тест кейс
   </a></summary>
     Тест кейс або група тест перевірок -- це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/testCase.md">
+<details><summary><a href="./concept/TestCase.md">
       Група тест перевірок
   </a></summary>
     Тест кейс або група тест перевірок -- це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/testCoverage.md">
+<details><summary><a href="./concept/TestCoverage.md">
       Тестове покриття
   </a></summary>
   Тестове покриття — метрика тестування програмного забезпечення, що визначає відсотком тестованого вихідного коду програми.
 </details>
-<details><summary><a href="./concept/testPositiveAndNegative.md">
+<details><summary><a href="./concept/TestPositiveAndNegative.md">
       Позитивне тестування
   </a></summary>
   Тестування коректності роботи об'єкта тестування за нормальних умов, при відсутності помилок в вхідних даних та нормальному стані.
 </details>
-<details><summary><a href="./concept/testPositiveAndNegative.md">
+<details><summary><a href="./concept/TestPositiveAndNegative.md">
       Негативне тестування
   </a></summary>
   Тестування коректності обробки об'єктом тестування помилкових даних чи помилкового стану.
@@ -54,32 +54,32 @@
 
 ## Туторіали
 
-<details><summary><a href="./tutorial/abstract.md">
+<details><summary><a href="./tutorial/Abstract.md">
       Загальна інформація
   </a></summary>
   Загальна інформація про утиліту wTesting.
 </details>
-<details><summary><a href="./tutorial/installation.md">
+<details><summary><a href="./tutorial/Installation.md">
       Встановлення
   </a></summary>
   Процедура встановлення утиліти wTesting.
 </details>
-<details><summary><a href="./tutorial/running.md">
+<details><summary><a href="./tutorial/Running.md">
       Запуск тестів
   </a></summary>
   Як запускати тестування.
 </details>
-<details><summary><a href="./tutorial/testCreation.md">
+<details><summary><a href="./tutorial/TestCreation.md">
       Створення тесту "Hello World!"
   </a></summary>
   Створення модульного тесту для тестування функції конкатенації.
 </details>
-<details><summary><a href="./tutorial/verbosity.md">
+<details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією verbosity.
 </details>
-<details><summary><a href="./tutorial/testOptions.md">
+<details><summary><a href="./tutorial/TestOptions.md">
       Додаткові опції тестування
   </a></summary>
   Застосування опцій для налаштування проходження тестів.

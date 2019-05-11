@@ -26,8 +26,8 @@ if( typeof module !== 'undefined' )
   _global.__which__ = 'wTesting';
   _realGlobal._SeparatingTester_ = _global._SeparatingTester_ = 1;
 
-  if( _realGlobal_.wTester )
-  return;
+  // if( _realGlobal_.wTester )
+  // return;
 
   require( './Main.base.s' );
 

@@ -38,17 +38,17 @@
     "url": "https://github.com/Wandalen/wTesting/issues"
   },
   "dependencies": {
-    "wTools": "",
-    "wexternalfundamentals": "",
-    "wProto": "",
-    "wCopyable": "",
-    "winstancing": "",
     "wConsequence": "",
-    "wLogger": "",
+    "wCopyable": "",
     "wFiles": "",
+    "wLogger": "",
+    "wProto": "",
+    "wTools": "",
+    "wcomparator": "",
+    "wexternalfundamentals": "",
+    "winstancing": "",
     "wlooker": "",
-    "wselector": "",
-    "wcomparator": ""
+    "wselector": ""
   },
   "optionalDependencies": {
     "wEventHandler": ""

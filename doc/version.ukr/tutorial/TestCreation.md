@@ -1,4 +1,4 @@
-# Створення модульного тесту 
+# Створення модульного тесту
 
 Створення модульного тесту димового тестування та санітарного тестування.
 
@@ -176,7 +176,7 @@ function mapIdentical( src1,src2 )
 ```javascript
   var a = [ 1, 2, 3, 4, 15 ];
   var b = [ 1, 2, 3, 4, 5 ];
-``` 
+```
 
 Виклик тестуємого метода :
 
@@ -184,7 +184,7 @@ function mapIdentical( src1,src2 )
   var got = _.arraySetBut( a, b );
 ```
 
-Твердження : 
+Твердження :
 
 ```javascript
   test.identical( got, expected );

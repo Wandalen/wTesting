@@ -4,14 +4,14 @@ let Hello = require( './Hello.js' );
 
 //
 
-function singleCase( test )
+function routine1( test )
 {
   test.identical( Hello.join( 'Hello ', 'world!' ), 'Hello world!' );
 }
 
 //
 
-function twoCases( test )
+function routine2( test )
 {
 
   test.case = 'pass';
@@ -29,8 +29,8 @@ var Self =
   name : 'Hello',
   tests :
   {
-    singleCase,
-    twoCases,
+    routine1,
+    routine2,
   }
 }
 

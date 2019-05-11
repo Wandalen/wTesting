@@ -26,7 +26,7 @@ function twoCases( test )
 
 var Self =
 {
-  name : 'Some',
+  name : 'Hello',
   tests :
   {
     singleCase,

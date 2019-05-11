@@ -10,22 +10,20 @@
 ```
 testModule
    └── proto
-        ├── math.js
-        └── test.math.js    
+        ├── hello.js
+        └── test.hello.js    
 
 ```
 
 </details>
 
-Для проведення простого тесту достатньо одного файлу в якому буде поміщатись тестована рутина і її тест. Для чистоти коду в прикладі використовується два файла. Перший, з назвою `math.js` має рутину для тестування, а другий, з назвою `test.math.js` включає `тест сюіт` для тестування першого файла. 
+Для проведення простого тесту достатньо одного файлу в якому буде поміщатись тестована рутина і її тест. Для чистоти коду в прикладі використовується два файла. Перший, з назвою `hello.js` має рутину для тестування, а другий, з назвою `test.hello.js` включає тест сюіт для тестування функції першого файла. 
 
 <details>
-    <summary><a href="./tutorial/Criterions.md">Код файла <code>math.js</code></a></summary>
+    <summary><a href="./tutorial/Criterions.md">Код файла math.js</a></summary>
     
 ```js    
-module.exports.sum = function(a,b){
-  return a + b;
-}
+module.exports.hello = console.log("Hello, World!")
 
 ```
   
@@ -34,7 +32,7 @@ module.exports.sum = function(a,b){
 Внесіть приведений вище код для тестування. Це операція додавання двох чисел з назвою `sum`. Для того, щоб рутину можна було протестувати вона повинна бути експортованою.  
 
 <details>
-    <summary><a href="./tutorial/Criterions.md">Код файла <code>test.math.js</code></a></summary>
+    <summary><a href="./tutorial/Criterions.md">Код файла test.math.js</a></summary>
     
 ```js    
 if( typeof module !== 'undefined' )
@@ -108,7 +106,7 @@ _.Tester.test( Self.name );
 Приведений код вказує, що для виконання тестування необхідно встановити залежності. Потрібно встановити локально утиліту `wTools` i утиліту `wLogger` при умові, що утиліта `wTesting` у вас уже [встановлена](Installation.md).
 
 <details>
-  <summary><u>Вивід команди <code>npm install wTools wLogger</code></u></summary>
+  <summary><u>Вивід команди npm install wTools wLogger</u></summary>
 
 ```
 [user@user ~]$ npm install wTools wLogger
@@ -152,7 +150,7 @@ testModule
 Для запуску тесту з довільного тест-файла використовуйте команду `wtest`. Для цього аргументом команди має бути шлях до тест файла.
 
 <details>
-  <summary><u>Вивід команди <code>wtest proto/test.math.js</code></u></summary>
+  <summary><u>Вивід команди wtest proto/test.math.js</u></summary>
 
 ```
 [user@user ~]$ wtest proto/test.math.js

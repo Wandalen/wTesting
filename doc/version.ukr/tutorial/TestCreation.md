@@ -20,7 +20,7 @@ testModule
 Для проведення простого тесту достатньо одного файлу в якому буде поміщатись тестована рутина і її тест. Для чистоти коду в прикладі використовується два файла. Перший, з назвою `hello.js` має рутину для тестування, а другий, з назвою `test.hello.js` включає тест сюіт для тестування функції першого файла. 
 
 <details>
-    <summary><a href="./tutorial/Criterions.md">Код файла math.js</a></summary>
+    <summary><a href="./tutorial/Criterions.md">Код файла hello.js</a></summary>
     
 ```js    
 module.exports.hello = function(a,b)
@@ -35,7 +35,7 @@ module.exports.hello = function(a,b)
 Внесіть приведений вище код для тестування. За призначенням ця функція має конкатенувати два значення, що подані на вхід. Для того, щоб рутину можна було протестувати вона повинна бути експортованою.  
 
 <details>
-    <summary><a href="./tutorial/Criterions.md">Код файла test.math.js</a></summary>
+    <summary><a href="./tutorial/Criterions.md">Код файла test.hello.js</a></summary>
     
 ```js    
 if( typeof module !== 'undefined' )
@@ -69,7 +69,7 @@ function integers(test)
   test.case = 'test output2';
   test.will = 'integers';
   var got = a.hello( 1, 2 );
-  var expected = 12;
+  var expected = "12";
   test.identical( got, expected );
 }
 
@@ -77,7 +77,7 @@ function integers(test)
 
 var Self =
 {
-  name : 'Sample/Trivial',
+  name : 'Sample',
   silencing : 0,
 
   tests :
@@ -97,16 +97,16 @@ _.Tester.test( Self.name );
   
 </details>
 
-Внесіть приведений код в файл `test.math.js`.
+Внесіть приведений код в файл `test.hello.js`.
 
-Приведений тест має один `тест сюіт` з назвою `Sample`. При виконанні `тест сюіту` виконується дві `тест рутини` - `sum1` і `sum2`. Кожна із `тест рутин` має по одному `тест кейсу`, який об'єднує дві `тест перевірки`. `Тест перевірки` `sum1` і `sum3` перевіряють на співпадіння отриманого результату при сумуванні двох чисел і передбачуваного результату. `Тест перевірки` `sum2` і `sum4` перевіряють чи не співпадає отриманий при сумуванні результат і передбачуваний. В перевірці `sum2` навмисне допущена помилка для отримання повідомлення про провал тесту.
+Приведений тест має один тест сюіт з назвою `Sample`. При виконанні тест сюіту виконується дві тест рутини - `hello` і `integers`. Кожна із `тест рутин` має по одному тест кейсу з однією тест перевіркою. Тест перевірки `hello` і `integers` перевіряють на співпадіння отриманого результату при конкатенуванні двох змінних і передбачуваного результату. В перевірці `integers` визначається поведінка рутини при поданні на вхід числових значень.
 
 ### Запуск тесту
 
 Приведений код вказує, що для виконання тестування необхідно встановити залежності. Потрібно встановити локально утиліту `wTools` i утиліту `wLogger` при умові, що утиліта `wTesting` у вас уже [встановлена](Installation.md).
 
 <details>
-  <summary><u>Вивід команди npm install wTools wLogger</u></summary>
+  <summary><u>Вивід команди <code>npm install wTools wLogger</code></u></summary>
 
 ```
 [user@user ~]$ npm install wTools wLogger
@@ -131,8 +131,8 @@ testModule
    │        ├──...
    │        ├──
    ├── proto
-   │    ├── math.js
-   │    └── test.math.js
+   │    ├── hello.js
+   │    └── test.hello.js
    │
    └── package-lock.json     
 
@@ -150,42 +150,84 @@ testModule
 Для запуску тесту з довільного тест-файла використовуйте команду `wtest`. Для цього аргументом команди має бути шлях до тест файла.
 
 <details>
-  <summary><u>Вивід команди wtest proto/test.math.js</u></summary>
+  <summary><u>Вивід команди <code>wtest proto/test.hello.js</code></u></summary>
 
 ```
-[user@user ~]$ wtest proto/test.math.js
-at  /path_to_test/testModule/proto/test.math.js:40
+[user@user ~]$ wtest proto/test.hello.js
+at  /path_to_test/testModule/proto/test.hello.js:40
         
-        Test check ( Sample / sum1 / sum integers < sum2 # 2 ) ... failed
-      Failed test routine ( Sample / sum1 ) in 0.076s
-      Passed test routine ( Sample / sum2 ) in 0.056s
+        Passed test routine ( Sample / hello ) in 0.079s
+        Test check ( Sample / integers / test output2 < integers # 1 ) ... failed
+      Failed test routine ( Sample / integers ) in 0.069s
 
-    Passed test checks 3 / 4
+    Passed test checks 1 / 2
     Passed test cases 1 / 2
     Passed test routines 1 / 2
-    Test suite ( Sample ) ... in 0.266s ... failed
+    Test suite ( Sample ) ... in 0.290s ... failed
 
 
 
-  Testing ... in 0.333s ... failed
+  Testing ... in 0.365s ... failed
 
 ```
 
 </details>
 
-Запустіть команду `wtest proto/test.math.js` знаходячись в директорії `testModule`.
+Запустіть команду `wtest proto/test.hello.js` знаходячись в директорії `testModule`.
 
-Після проходження тесту утиліта вивела повну інформацію про результати тестування. Згідно виводу отримана помилка в `тест перевірці` `sum2`. Загальний підсумок: пройдено 3 `тест перевірки` з 4, один з двох `тест кейсів`, одна з двох `тест рутин`. Загальний висновок по `тест сюіту` - провалений.
+Після проходження тесту утиліта вивела повну інформацію про результати тестування. Згідно виводу отримана помилка в тест перевірці `integers`. Загальний підсумок: пройдено одну тест перевірку з двох, один з двох тест кейсів, одна з двох тест рутин. Загальний висновок по тест сюіту - провалений.
+
+Цей приклад іллюструє, що проведення модульного тесту відразу вказує на помилки в написанні програми. Після локалізації під час тестування її можна відразу виправити.
 
 ### Запуск окремої тест рутини
 
+<details>
+    <summary><a href="./tutorial/Criterions.md">Код файла hello.js</a></summary>
+    
+```js    
+module.exports.hello = function(a,b)
+{
+    return '' + a + b;
+}
 
-### Підсумок
+```
+  
+</details>
+
+Помилка пов'язана з тим, що програма сприймає числа, а не рядкові значення. Для виправлення внесіть приведений вище код.
+
+Утиліта може запускати окремі тест рутини. Тому, якщо після виправлення помилки ви хочете протестувати виправлення, то використовуйте опцію вибору рутини. 
+
+<details>
+  <summary><u>Вивід команди <code>wtest proto/test.hello.js routine:integers</code></u></summary>
+
+```
+[user@user ~]$ wtest proto/test.hello.js routine:integers
+at  /path_to_test/testModule/proto/test.hello.js:40
+        
+        Passed test routine ( Sample / integers ) in 0.059s
+
+    Passed test checks 1 / 1
+    Passed test cases 1 / 1
+    Passed test routines 1 / 1
+    Test suite ( Sample ) ... in 0.689s ... ok
 
 
-### Розташуванння окремих тест рутин та їх реалізацій
+  Testing ... in 1.290s ... ok
 
-Окремі тест рутини розташовані в директорії `wTools/proto/dwtools/abase`
+```
+
+</details>
+
+Протестуйте рутину `integers` виконавши команду `wtest proto/test.hello.js routine:integers`. Порівняйте з приведеним виводом.
+
+Після виправлення скрипт конкатенував числові значення. Перевірка окремої рутини пройшла успішно.
+
+
+
+### Розташуванння окремих тест рутин та їх реалізацій для w-утиліт
+
+Окремі тест рутини розташовані в директорії `wSomeUtility/proto/dwtools/abase`
 
 Вони мають вигляд (на прикладі Тест рутини mapIdentical):
 

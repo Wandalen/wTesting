@@ -1,6 +1,6 @@
 #  Створення тесту "Hello World!"
 
-Створення модульного тесту для тестування функції виводу в консоль.
+Створення модульного тесту для тестування функції конкатенації.
 
 ### Тестування . Конфігурація
 
@@ -23,13 +23,16 @@ testModule
     <summary><a href="./tutorial/Criterions.md">Код файла math.js</a></summary>
     
 ```js    
-module.exports.hello = console.log("Hello, World!")
+module.exports.hello = function(a,b)
+{
+    return a + b;
+}
 
 ```
   
 </details>
 
-Внесіть приведений вище код для тестування. Це операція додавання двох чисел з назвою `sum`. Для того, щоб рутину можна було протестувати вона повинна бути експортованою.  
+Внесіть приведений вище код для тестування. За призначенням ця функція має конкатенувати два значення, що подані на вхід. Для того, щоб рутину можна було протестувати вона повинна бути експортованою.  
 
 <details>
     <summary><a href="./tutorial/Criterions.md">Код файла test.math.js</a></summary>
@@ -37,61 +40,58 @@ module.exports.hello = console.log("Hello, World!")
 ```js    
 if( typeof module !== 'undefined' )
 {
-  let _ = require( 'wTools' );
+  let _ = require( '../Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
 
   _.include( 'wLogger' );
   _.include( 'wTesting' );
+
 }
 
-let math = require('./math.js');
+let a = require('./hello.js');
 var _global = _global_;
 var _ = _global_.wTools;
 
-function sum1(test)
-{
-  test.case = 'sum integers';
-  test.will = 'sum1';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.identical( got,expected );
+//
 
-  test.will = 'sum2';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.notIdentical( got,expected );
+function hello(test)
+{
+  test.case = 'test output';
+  test.will = 'hello';
+  var got = a.hello("Hello, ", "World!" );
+  var expected = "Hello, World!";
+  test.identical( got, expected );
 }
 
-function sum2(test)
+function integers(test)
 {
-  test.case = 'sum integers2';
-  test.will = 'sum3';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.identical( got,expected );
-
-  test.will = 'sum4';
-  var got = math.sum( 1, 2);
-  var expected =  2 ;
-  test.notIdentical( got,expected );
+  test.case = 'test output2';
+  test.will = 'integers';
+  var got = a.hello( 1, 2 );
+  var expected = 12;
+  test.identical( got, expected );
 }
+
+//
 
 var Self =
 {
-  name : 'Sample',
-  silencing : 1,
+  name : 'Sample/Trivial',
+  silencing : 0,
 
   tests :
   {
-    sum1 : sum1,
-    sum2 : sum2,
+    hello : hello,
+    integers : integers,
   }
 }
 
+//
+
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
+_.Tester.test( Self.name ); 
 
 ```
   

@@ -17,6 +17,15 @@ _global._global_ = _wasGlobal;
 if( typeof module !== 'undefined' )
 {
 
+  debugger;
+  if( _realGlobal.wTester && _realGlobal.wTester._isReal_ )
+  {
+    debugger;
+    // if( typeof module !== 'undefined' && !module.parent )
+    // _global.wTester.exec();
+    return;
+  }
+
   let Module = require( 'module' );
   let cache = Module._cache;
   Module._cache = Object.create( null );

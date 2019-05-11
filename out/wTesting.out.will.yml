@@ -59,6 +59,7 @@ path:
       - proto/dwtools/atop/tester/Exec
       - proto/dwtools/atop/tester/Include.base.s
       - proto/dwtools/atop/tester/Include.mid.s
+      - proto/dwtools/atop/tester/Include.top.s
       - proto/dwtools/atop/tester/Main.base.s
       - proto/dwtools/atop/tester/Main.mid.s
       - proto/dwtools/atop/tester/l3

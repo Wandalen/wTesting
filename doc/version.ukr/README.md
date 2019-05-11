@@ -1,52 +1,52 @@
 ## Швидкий старт
 
-Для швидкого старту [встановіть](<./tutorial/Installation.md>) утиліту `wTesting`, [ознайомтеся](<./tutorial/CLI.md>) із інтрфейсом командного рядка та створіть ваш перший [модуль "Hello World"](<./tutorial/HelloWorld.md>). [Прочитатйе](<./tutorial/Abstract.md>) загальну інформацію якщо вам цікаво дізнатися більше про призначення та філософію утиліти `wTesting`.
+Для швидкого старту [встановіть](<./tutorial/installation.md>) утиліту `wTesting`, [ознайомтеся](<./tutorial/CLI.md>) із інтрфейсом командного рядка та створіть ваш перший [модуль "Hello World"](<./tutorial/HelloWorld.md>). [Прочитатйе](<./tutorial/abstract.md>) загальну інформацію якщо вам цікаво дізнатися більше про призначення та філософію утиліти `wTesting`.
 
 Для плавного заглиблення в предмет використовуйте туторіали. Для отримання вичерпного розуміння якогось із аспектів використайте перелік концепцій щоб знайти потрібну і ознайомтеся із нею.
 
 ## Концепції
 
-<details><summary><a href="./concept/TestObject.md">
+<details><summary><a href="./concept/testObject.md">
       Об'єкт тестування
   </a></summary>
   Об'єкт тестування - система, коректна робота, якої тестується.
 </details>
-<details><summary><a href="./concept/TestSuite.md">
+<details><summary><a href="./concept/testSuite.md">
       Тест сюіт
   </a></summary>
   Тест сюіт ( тестовий комлект, тестовий набір ) - це набір тест рутин, та тестових данних для тестування об'єкту тестування.
 </details>
-<details><summary><a href="./concept/TestRoutine.md">
+<details><summary><a href="./concept/testRoutine.md">
       Тест рутина
   </a></summary>
     Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест рутина виконується послідовно та містить тест перевірки та тест кейси.
 </details>
-<details><summary><a href="./concept/TestCheck.md">
+<details><summary><a href="./concept/testCheck.md">
       Тест перевірка
   </a></summary>
   Тест перевірка - це найменша структурна одиниця тестування, призначена для перевірки лише одного очікуваного результату виконання тесту.
 </details>
-<details><summary><a href="./concept/TestCase.md">
+<details><summary><a href="./concept/testCase.md">
       Тест кейс
   </a></summary>
     Тест кейс або група тест перевірок -- це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/TestCase.md">
+<details><summary><a href="./concept/testCase.md">
       Група тест перевірок
   </a></summary>
     Тест кейс або група тест перевірок -- це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/TestCoverage.md">
+<details><summary><a href="./concept/testCoverage.md">
       Тестове покриття
   </a></summary>
   Тестове покриття — метрика тестування програмного забезпечення, що визначає відсотком тестованого вихідного коду програми.
 </details>
-<details><summary><a href="./concept/TestPositiveAndNegative.md">
+<details><summary><a href="./concept/testPositiveAndNegative.md">
       Позитивне тестування
   </a></summary>
   Тестування коректності роботи об'єкта тестування за нормальних умов, при відсутності помилок в вхідних даних та нормальному стані.
 </details>
-<details><summary><a href="./concept/TestPositiveAndNegative.md">
+<details><summary><a href="./concept/testPositiveAndNegative.md">
       Негативне тестування
   </a></summary>
   Тестування коректності обробки об'єктом тестування помилкових даних чи помилкового стану.
@@ -54,32 +54,32 @@
 
 ## Туторіали
 
-<details><summary><a href="./tutorial/Abstract.md">
+<details><summary><a href="./tutorial/abstract.md">
       Загальна інформація
   </a></summary>
   Загальна інформація про утиліту wTesting.
 </details>
-<details><summary><a href="./tutorial/Installation.md">
+<details><summary><a href="./tutorial/installation.md">
       Встановлення
   </a></summary>
   Процедура встановлення утиліти wTesting.
 </details>
-<details><summary><a href="./tutorial/Running.md">
+<details><summary><a href="./tutorial/running.md">
       Запуск тестів
   </a></summary>
   Як запускати тестування.
 </details>
-<details><summary><a href="./tutorial/TestCreation.md">
+<details><summary><a href="./tutorial/testCreation.md">
       Створення тесту "Hello World!"
   </a></summary>
   Створення модульного тесту для тестування функції конкатенації.
 </details>
-<details><summary><a href="./tutorial/Verbosity.md">
+<details><summary><a href="./tutorial/verbosity.md">
       Контроль рівня вербальності
   </a></summary>
   Зміна кількості виведеної інформації виконання тесту з опцією verbosity.
 </details>
-<details><summary><a href="./tutorial/TestOptions.md">
+<details><summary><a href="./tutorial/testOptions.md">
       Додаткові опції тестування
   </a></summary>
   Застосування опцій для налаштування проходження тестів.

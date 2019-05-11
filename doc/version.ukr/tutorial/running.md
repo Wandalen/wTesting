@@ -112,7 +112,7 @@ _.Tester.test( Self.name );
 Приведений код вказує, що для виконання тестування необхідно встановити залежності. Потрібно встановити локально утиліту `wTools` i утиліту `wLogger` при умові, що утиліта `wTesting` у вас уже [встановлена](Installation.md).
 
 <details>
-  <summary><u>Вивід команди npm install wTools wLogger</u></summary>
+  <summary><u>Вивід команди <code>npm install wTools wLogger</code></u></summary>
 
 ```
 [user@user ~]$ npm install wTools wLogger
@@ -156,7 +156,7 @@ testModule
 Для запуску тесту з довільного тест-файла використовуйте команду `wtest`. Для цього аргументом команди має бути шлях до тест файла.
 
 <details>
-  <summary><u>Вивід команди wtest proto/test.math.js</u></summary>
+  <summary><u>Вивід команди <code>wtest proto/test.math.js</code></u></summary>
 
 ```
 [user@user ~]$ wtest proto/test.math.js

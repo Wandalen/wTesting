@@ -2,7 +2,7 @@
 
 'use strict';
 
-/** 
+/**
  * @summary Provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more.
  * @namespace wTester
  * @memberof module:Tools/Tester
@@ -41,8 +41,8 @@ _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
 
 /**
  * @summary Runs the tester.
- * @description Tester will find test suites at provided path and execute them one by one. 
- * If path is not provided explicitly tester will use path to current working directory. 
+ * @description Tester will find test suites at provided path and execute them one by one.
+ * If path is not provided explicitly tester will use path to current working directory.
  * During execution tester prints useful information about current state of execution. Level of output can be controled by options.
  * Path and options are be provided through command line arguments:
  * `wtest [ path ] [ options...]`
@@ -299,11 +299,12 @@ function _includeTestsFrom( path )
   logger.log( 'Includes tests from :', path, '\n' );
 
   let ends = [ '.test.s' ];
-  if( Config.platform === 'browser' )
+  // if( Config.platform === 'browser' )
   ends.push( '.test.js' );
-  else
+  // else
   ends.push( '.test.ss' );
 
+  // debugger;
   let files = _.fileProvider.filesFind
   ({
     filePath : path,
@@ -314,6 +315,7 @@ function _includeTestsFrom( path )
       maskAll : _.files.regexpMakeSafe(),
     }
   });
+  // debugger;
 
   if( !files.length )
   {
@@ -419,7 +421,7 @@ function _test()
 
 /**
  * @summary Executes single or several tests suites.
- * @description Names of desirable test suites can be provided through argument `suites`. 
+ * @description Names of desirable test suites can be provided through argument `suites`.
  * Runs all found test suite if no arguent provided.
  * @param {Array} suites Names of test suites to run.
  * @function test
@@ -687,7 +689,7 @@ function suitesFilterOut( suites )
 //
 
 /**
- * @summary Prints information about provided test `suites`. 
+ * @summary Prints information about provided test `suites`.
  * @description Prints info about all test suites if they are not provided explicitly.
  * @param {Array|Object} suites Entity with instances of {@link module:Tools/Tester.wTestSuite}
  * @function suitesListPrint
@@ -782,7 +784,7 @@ function _canContinue()
 //
 
 /**
- * @summary Stops execution of the tester. 
+ * @summary Stops execution of the tester.
  * @description There are several reasons to stop the execution:
  * 1. Exectuion can be terminated by a used, for example, by CTRL+C combination.
  * 2. Execution of test suite throws unhandled error.
@@ -940,7 +942,7 @@ function _reportIsPositive()
 //
 
 /**
- * @summary Styles string with colors of some specific format. 
+ * @summary Styles string with colors of some specific format.
  * @description One of possible formats are: `green` and `red`. As the result string will have green or red foreground color.
  * List of possible formats can be found {@link @module:Tools/mid/Color.Style}
  * @param {String} srcStr Text string
@@ -1566,7 +1568,6 @@ _.mapSupplementNulls( Self, wTester );
 
 // _.assert( !_realGlobal_.wTester );
 _realGlobal_.wTester = _global.wTester = Self;
-
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
 

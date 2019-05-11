@@ -2,6 +2,12 @@
 
 'use strict';
 
+/** 
+ * @summary Provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more.
+ * @namespace wTester
+ * @memberof module:Tools/Tester
+ */
+
 let _global = _global_;
 let _ = _global_.wTools;
 let sourceFileLocation = _.diagnosticLocation().full;
@@ -32,6 +38,22 @@ _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
 // --
 // tester
 // --
+
+/**
+ * @summary Runs the tester.
+ * @description Tester will find test suites at provided path and execute them one by one. 
+ * If path is not provided explicitly tester will use path to current working directory. 
+ * During execution tester prints useful information about current state of execution. Level of output can be controled by options.
+ * Path and options are be provided through command line arguments:
+ * `wtest [ path ] [ options...]`
+ * Path can be relative or absolute. Path can lead to single test suite or to directory with test suites.
+ * Option is a combination of `key` and `value` splitted by delimeter `:`. Options should have at least one space between each other.
+ * Spaces between `key` and `value` are supported: `v:5` and `v  :  5` are treated in same way.
+ * @function exec
+ * @example
+ *  wtest proto v : 5
+ * @memberof module:Tools/Tester.wTester
+ */
 
 function exec()
 {
@@ -109,6 +131,13 @@ function _registerExitHandler()
 
 //
 
+/**
+ * @summary Parses arguments provided to tester. Resolves path provided to the tester.
+ * @description List of possible arguments( options ) can be found {@link module:Tools/Tester.wTester.SettingsNameMap here}.
+ * @function appArgsRead
+ * @memberof module:Tools/Tester.wTester
+ */
+
 function appArgsRead()
 {
   let tester = this;
@@ -166,6 +195,13 @@ function appArgsRead()
 
 //
 
+/**
+ * @summary Prints help information.
+ * @description Prints list of available options and scenarios.
+ * @function scenarioHelp
+ * @memberof module:Tools/Tester.wTester
+ */
+
 function scenarioHelp()
 {
   let tester = this;
@@ -176,6 +212,12 @@ function scenarioHelp()
 }
 
 //
+
+/**
+ * @summary Prints list of available scenarios.
+ * @function scenarioScenariosList
+ * @memberof module:Tools/Tester.wTester
+ */
 
 function scenarioScenariosList()
 {
@@ -196,6 +238,12 @@ function scenarioScenariosList()
 
 //
 
+/**
+ * @summary Prints list of available options.
+ * @function scenarioOptionsList
+ * @memberof module:Tools/Tester.wTester
+ */
+
 function scenarioOptionsList()
 {
   let tester = this;
@@ -214,6 +262,12 @@ function scenarioOptionsList()
 }
 
 //
+
+/**
+ * @summary Prints list of found tests suites.
+ * @function scenarioSuitesList
+ * @memberof module:Tools/Tester.wTester
+ */
 
 function scenarioSuitesList()
 {
@@ -299,6 +353,13 @@ function _includeTestsFrom( path )
 
 //
 
+/**
+ * @summary Includes test suite from provided `path`.
+ * @param {String} path Path can be relative or absolute. Path can lead to single suite or to directory with several test suites.
+ * @function includeTestsFrom
+ * @memberof module:Tools/Tester.wTester
+ */
+
 function includeTestsFrom( path )
 {
   let tester = this;
@@ -330,6 +391,13 @@ function _testAllAct()
 
 //
 
+/**
+ * @summary Executes all found test suites.
+ * @description Tests suites are executed one by one. After execution tester prints summary info.
+ * @function testAll
+ * @memberof module:Tools/Tester.wTester
+ */
+
 let testAll = _.timeReadyJoin( undefined, _testAllAct );
 
 //
@@ -348,6 +416,15 @@ function _test()
 }
 
 //
+
+/**
+ * @summary Executes single or several tests suites.
+ * @description Names of desirable test suites can be provided through argument `suites`. 
+ * Runs all found test suite if no arguent provided.
+ * @param {Array} suites Names of test suites to run.
+ * @function test
+ * @memberof module:Tools/Tester.wTester
+ */
 
 let test = _.timeReadyJoin( undefined, _test );
 
@@ -557,6 +634,14 @@ function _suitesRun( suites )
 
 //
 
+/**
+ * @summary Selects desirable test suites using list from argument `suites`. Returns map with instances of {@link module:Tools/Tester.wTestSuite}
+ * @param {Array} suites Names of test suites to run.
+ * @throws {Error} If test suite doesn't exist.
+ * @function suitesFilterOut
+ * @memberof module:Tools/Tester.wTester
+ */
+
 function suitesFilterOut( suites )
 {
   let tester = this;
@@ -600,6 +685,14 @@ function suitesFilterOut( suites )
 }
 
 //
+
+/**
+ * @summary Prints information about provided test `suites`. 
+ * @description Prints info about all test suites if they are not provided explicitly.
+ * @param {Array|Object} suites Entity with instances of {@link module:Tools/Tester.wTestSuite}
+ * @function suitesListPrint
+ * @memberof module:Tools/Tester.wTester
+ */
 
 function suitesListPrint( suites )
 {
@@ -687,6 +780,15 @@ function _canContinue()
 }
 
 //
+
+/**
+ * @summary Stops execution of the tester. 
+ * @description There are several reasons to stop the execution:
+ * 1. Exectuion can be terminated by a used, for example, by CTRL+C combination.
+ * 2. Execution of test suite throws unhandled error.
+ * @function cancel
+ * @memberof module:Tools/Tester.wTester
+ */
 
 function cancel()
 {
@@ -836,6 +938,16 @@ function _reportIsPositive()
 }
 
 //
+
+/**
+ * @summary Styles string with colors of some specific format. 
+ * @description One of possible formats are: `green` and `red`. As the result string will have green or red foreground color.
+ * List of possible formats can be found {@link @module:Tools/mid/Color.Style}
+ * @param {String} srcStr Text string
+ * @param {String} format Desirable format.
+ * @function textColor
+ * @memberof module:Tools/Tester.wTester
+ */
 
 function textColor( srcStr, format )
 {
@@ -1138,6 +1250,11 @@ function _exceptionConsider( err )
 
 let symbolForVerbosity = Symbol.for( 'verbosity' );
 
+/**
+ * @enum {String} ScenariosHelpMap
+ * @memberof module:Tools/Tester.wTester
+*/
+
 let ScenariosHelpMap =
 {
   'test' : 'run tests, default scenario',
@@ -1147,6 +1264,11 @@ let ScenariosHelpMap =
   'suites.list' : 'list available suites',
 }
 
+/**
+ * @enum {String} ScenariosActionMap
+ * @memberof module:Tools/Tester.wTester
+*/
+
 let ScenariosActionMap =
 {
   'test' : '',
@@ -1155,6 +1277,11 @@ let ScenariosActionMap =
   'options.list' : 'scenarioOptionsList',
   'suites.list' : 'scenarioSuitesList',
 }
+
+/**
+ * @enum {String} ApplicationArgumentsMap
+ * @memberof module:Tools/Tester.wTester
+*/
 
 let ApplicationArgumentsMap =
 {
@@ -1177,6 +1304,11 @@ let ApplicationArgumentsMap =
   accuracy : 'Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.',
 
 }
+
+/**
+ * @enum {String} SettingsNameMap
+ * @memberof module:Tools/Tester.wTester
+*/
 
 let SettingsNameMap =
 {
@@ -1207,6 +1339,20 @@ let SettingsNameMap =
 
 }
 
+/**
+ * @typedef {Object} SettingsOfTester
+ * @property {String} [scenario='test']
+ * @property {Number} [sanitareTime=500]
+ * @property {Number} [fails=null]
+ * @property {Boolean} [beeping=null]
+ * @property {Boolean} [coloring=1]
+ * @property {Boolean} [timing=1]
+ * @property {Number} [rapidity=3]
+ * @property {String} [routine=null]
+ * @property {Number} [importanceOfNegative=null]
+ * @memberof module:Tools/Tester.wTester
+*/
+
 let SettingsOfTester =
 {
 
@@ -1221,6 +1367,19 @@ let SettingsOfTester =
   importanceOfNegative : null,
 
 }
+
+/**
+ * @typedef {Object} SettingsOfSuite
+ * @property {String} routine
+ * @property {Number} routineTimeOut
+ * @property {Boolean} concurrent
+ * @property {Number} verbosity
+ * @property {Number} importanceOfNegative
+ * @property {Boolean} silencing
+ * @property {Boolean} shoulding
+ * @property {Number} accuracy
+ * @memberof module:Tools/Tester.wTester
+*/
 
 let SettingsOfSuite =
 {

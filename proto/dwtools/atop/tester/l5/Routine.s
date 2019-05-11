@@ -4,6 +4,13 @@
 
 //
 
+/** 
+ * @classdesc Provides interface for creating of test routines. Interface is a collection of routines to create cases, groups of cases, perform different type of checks.
+ * @class wTestRoutineDescriptor
+ * @param {Object} o Test suite option map. {@link module:Tools/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
+ * @memberof module:Tools/Tester
+ */
+
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
@@ -60,6 +67,12 @@ function init( o )
 }
 
 //
+
+/**
+ * @summary Ensures that instance has all required properties defined.
+ * @function refine
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function refine()
 {
@@ -461,6 +474,12 @@ function _testsGroupGet()
 
 //
 
+/**
+ * @summary Creates tests group with name `groupName`.
+ * @function open
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function testsGroupOpen( groupName )
 {
   let trd = this;
@@ -477,6 +496,12 @@ function testsGroupOpen( groupName )
 }
 
 //
+
+/**
+ * @summary Closes tests group with name `groupName`.
+ * @function close
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function testsGroupClose( groupName )
 {
@@ -571,6 +596,12 @@ function _nameFullGet()
 // store
 // --
 
+/**
+ * @summary Returns information about current test check.
+ * @function checkCurrent
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function checkCurrent()
 {
   let trd = this;
@@ -586,6 +617,12 @@ function checkCurrent()
 }
 
 //
+
+/**
+ * @summary Returns information about next test check.
+ * @function checkCurrent
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function checkNext( will )
 {
@@ -607,6 +644,12 @@ function checkNext( will )
 
 //
 
+/**
+ * @summary Saves information current test check into a inner container.
+ * @function checkCurrent
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function checkStore()
 {
   let trd = this;
@@ -620,6 +663,13 @@ function checkStore()
 }
 
 //
+
+/**
+ * @descriptionNeeded
+ * @param {Object} acheck
+ * @function checkRestore
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function checkRestore( acheck )
 {
@@ -653,6 +703,15 @@ function checkRestore( acheck )
 // --
 // equalizer
 // --
+
+/**
+ * @summary Checks if result `outcome` of provided condition is positive.
+ * @description Check passes if result if positive, otherwise fails. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * @param {Boolean} outcome Result of some condition.
+ * @function is
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function is( outcome )
 {
@@ -716,6 +775,15 @@ function isNot( outcome )
 
 //
 
+/**
+ * @summary Checks if provided argument is not an Error object.
+ * @description Check passes if result if positive, otherwise fails. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * @param {} maybeError Entity to check.
+ * @function isNotError
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function isNotError( maybeError )
 {
   let trd = this;
@@ -775,7 +843,7 @@ function isNotError( maybeError )
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
- * @memberof wTestRoutineDescriptor
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
 function identical( got, expected )
@@ -845,6 +913,37 @@ function identical( got, expected )
 }
 
 //
+
+/**
+ * Checks if test doesn't pass a specified condition by deep strict comparsing result of code execution( got )
+ * with target( expected ). Uses recursive comparsion for objects, arrays and array-like objects.
+ * If entity( got ) is not equal to entity( expected ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - Source entity.
+ * @param {*} expected - Target entity.
+ *
+ * @example
+ * function someTest( test )
+ * {
+ *  test.case = 'single zero';
+ *  let got = 0;
+ *  let expected = 0;
+ *  test.notIdentical( got, expected );//returns false
+ *
+ *  test.case = 'single number';
+ *  let got = 2;
+ *  let expected = 1;
+ *  test.notIdentical( got, expected );//returns true
+ * }
+ *
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method notIdentical
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function notIdentical( got, expected )
 {
@@ -944,7 +1043,7 @@ function notIdentical( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
- * @memberof wTestRoutineDescriptor
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
 function equivalent( got, expected, options )
@@ -1020,6 +1119,40 @@ function equivalent( got, expected, options )
 }
 
 //
+
+/**
+ * Checks if test doesn't pass a specified condition by deep soft comparsing result of code execution( got )
+ * with target( expected ). Uses recursive comparsion for objects, arrays and array-like objects. Two entities are not equivalent if
+ * difference between their values are bigger than ( accuracy ). Example: ( got - expected ) > ( accuracy ).
+ * If entity( got ) is not equivalent to entity( expected ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - Source entity.
+ * @param {*} expected - Target entity.
+ * @param {*} [ accuracy=1e-7 ] - Maximal distance between two values.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.case = 'single number';
+ *  let got = 0.5;
+ *  let expected = 1;
+ *  let accuracy = 0.5;
+ *  test.equivalent( got, expected, accuracy );//returns true
+ *
+ *  test.case = 'single number';
+ *  let got = 0.5;
+ *  let expected = 2;
+ *  let accuracy = 0.5;
+ *  test.equivalent( got, expected, accuracy );//returns false
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method notEquivalent
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function notEquivalent( got, expected, options )
 {
@@ -1125,7 +1258,7 @@ function notEquivalent( got, expected, options )
  *
  * @throws {Exception} If no arguments provided.
  * @method contains
- * @memberof wTestRoutineDescriptor
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
 function contains( got, expected )
@@ -1197,6 +1330,29 @@ function contains( got, expected )
 
 //
 
+/**
+ * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
+ * with target( expected ). 
+ * If value of( got ) is greater than value of( than ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - First entity.
+ * @param {*} than - Second entity.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.gt( 1, 2 );//returns false
+ *  test.gt( 2, 1 );//returns true
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method gt
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function gt( got, than )
 {
   let trd = this;
@@ -1235,6 +1391,29 @@ function gt( got, than )
 }
 
 //
+
+/**
+ * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
+ * with target( expected ). 
+ * If value of( got ) is greater than or equal to value of( than ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - First entity.
+ * @param {*} than - Second entity.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.ge( 1, 2 );//returns false
+ *  test.ge( 2, 2 );//returns true
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method ge
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function ge( got, than )
 {
@@ -1278,6 +1457,29 @@ function ge( got, than )
 
 //
 
+/**
+ * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
+ * with target( expected ). 
+ * If value of( got ) is less than value of( than ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - First entity.
+ * @param {*} than - Second entity.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.lt( 1, 2 );//returns true
+ *  test.lt( 2, 2 );//returns false
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method lt
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function lt( got, than )
 {
   let trd = this;
@@ -1318,6 +1520,30 @@ function lt( got, than )
 }
 
 //
+
+/**
+ * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
+ * with target( expected ). 
+ * If value of( got ) is less or equal to value of( than ) test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {*} got - First entity.
+ * @param {*} than - Second entity.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.le( 1, 2 );//returns true
+ *  test.le( 2, 2 );//returns true
+ *  test.le( 3, 2 );//returns false
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method le
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function le( got, than )
 {
@@ -1817,6 +2043,29 @@ _shouldDo.defaults =
 
 //
 
+/**
+ * @summary Error throwing test. Executes provided `routine` and checks if it throws an Error asynchrounously.
+ * @description 
+ * Provided routines should return instance of `wConsequence`. Also routine can accepts `wConsequence` instance as argument.
+ * If check is positive then test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {Function|wConsequence} routine `wConsequence` instance or routine that returns it.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.shouldThrowErrorAsync( () => _.timeOutError( 1000 ) );//returns true
+ *  test.shouldThrowErrorAsync( () => _.timeOut( 1000 ) );//returns false
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method shouldThrowErrorAsync
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function shouldThrowErrorAsync( routine )
 {
   let trd = this;
@@ -1831,6 +2080,28 @@ function shouldThrowErrorAsync( routine )
 }
 
 //
+
+/**
+ * @summary Error throwing test. Executes provided `routine` and checks if it throws an Error synchrounously.
+ * @description 
+ * If check is positive then test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {Function} routine Routine to execute.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.shouldThrowErrorSync( () => { throw 1 } );//returns true
+ *  test.shouldThrowErrorSync( () => { console.log( 1 ) } );//returns false
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method shouldThrowErrorSync
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function shouldThrowErrorSync( routine )
 {
@@ -1894,7 +2165,7 @@ function shouldThrowErrorSync( routine )
  * @throws {Exception} If no arguments provided.
  * @throws {Exception} If passed argument is not a Routine.
  * @method shouldThrowErrorSync
- * @memberof wTestRoutineDescriptor
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
 function shouldThrowError( routine )
@@ -1912,6 +2183,30 @@ function shouldThrowError( routine )
 
 //
 
+/**
+ * @summary Error throwing test. Executes provided `routine` and checks if doesn't throw an Error synchrounously or asynchrounously.
+ * @description 
+ * If check is positive then test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {Function} routine Routine to execute.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.mustNotThrowError( () => { throw 1 } );//returns false
+ *  test.mustNotThrowError( () => _.timeOut( 1000 ) );//returns true
+ *  test.mustNotThrowError( () => _.timeOutError( 1000 ) );//returns false
+ *  test.mustNotThrowError( () => { console.log( 1 ) } );//returns true
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method mustNotThrowError
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
+
 function mustNotThrowError( routine )
 {
   let trd = this;
@@ -1927,6 +2222,28 @@ function mustNotThrowError( routine )
 }
 
 //
+
+/**
+ * @summary `wConsequence` messaging test. Executes provided `routine` and checks if returned `wConsequence` gives only one message.
+ * @description 
+ * If check is positive then test is passed successfully. After check function reports result of test
+ * to the testing system. If test is failed function also outputs additional information.
+ * Returns true if test is done successfully, otherwise false.
+ *
+ * @param {Function} routine Routine to execute.
+ *
+ * @example
+ * function sometest( test )
+ * {
+ *  test.shouldMessageOnlyOnce( () => _.Consequence().take( null ) );//returns true
+ *  test.shouldMessageOnlyOnce( () => _.Consequence().take( null ).take( null ) );//returns false
+ * }
+ * wTester.test( { name : 'test', tests : { sometest : sometest } } );
+ *
+ * @throws {Exception} If no arguments provided.
+ * @method shouldMessageOnlyOnce
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ */
 
 function shouldMessageOnlyOnce( routine )
 {
@@ -2506,6 +2823,17 @@ let timeOutSymbol = Symbol.for( 'timeOut' );
 let rapiditySymbol = Symbol.for( 'rapidity' );
 let usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
 
+/**
+ * @typedef {Object} KnownFields
+ * @property {Boolean} experimental
+ * @property {Number} routineTimeOut
+ * @property {Number} timeOut
+ * @property {Number} accuracy
+ * @property {Number} rapidity
+ * @property {Boolean} usingSourceCode
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor
+ */
+
 let KnownFields =
 {
   experimental : null,
@@ -2515,6 +2843,18 @@ let KnownFields =
   rapidity : null,
   usingSourceCode : null,
 }
+
+/**
+ * @typedef {Object} TestRoutineFields
+ * @property {String} name
+ * @property {String} will
+ * @property {Number} accuracy
+ * @property {Number} rapidity=3
+ * @property {Number} timeOut
+ * @property {Boolean} experimental
+ * @property {Boolean} usingSourceCode
+ * @memberof module:Tools/Tester.wTestRoutineDescriptor
+ */
 
 // --
 // relations

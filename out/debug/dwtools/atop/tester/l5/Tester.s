@@ -393,7 +393,7 @@ function _testAllAct()
 
 /**
  * @summary Executes all found test suites.
- * @description Tests suites are executed one by one. After executions tester prints summary info.
+ * @description Tests suites are executed one by one. After execution tester prints summary info.
  * @function testAll
  * @memberof module:Tools/Tester.wTester
  */

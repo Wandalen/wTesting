@@ -8,6 +8,14 @@ let debugged = _.processIsDebugged();
 
 //
 
+/** 
+ * @classdesc Class to define test suite. 
+ * Test suite is a set of test routines and test data that are used for complete testing of individual parts of the task.
+ * @class wTestSuite
+ * @param {Object} o Test suite option map. {@link module:Tools/Tester.wTestSuite.TestSuiteFields More about options}
+ * @memberof module:Tools/Tester
+ */
+
 let logger = null;
 let Parent = null;
 let Self = function wTestSuite( o )
@@ -171,6 +179,13 @@ function copy( o )
 
 //
 
+/**
+ * @summary Inherits tests, context and options of provides test suite(s).
+ * @param {...Object} arguments Accepts one or several test suites.
+ * @function inherit
+ * @memberof module:Tools/Tester.wTestSuite#
+ */
+
 function inherit()
 {
   let suite = this;
@@ -256,6 +271,16 @@ function _routineSet( src )
 
 //
 
+/**
+ * @descripton 
+ * Redirects all console output to logger of the tester. That makes other loggers connected after it unable to 
+ * receive messages from console, logger of the tester prints messages through original console methods. All this allows to hide/show/style
+ * console output if necessary. 
+ * @param {Boolean} value Controls barring/unbarring of the console.
+ * @function consoleBar
+ * @memberof module:Tools/Tester.wTestSuite#
+ */
+
 function consoleBar( value )
 {
   let suite = this;
@@ -302,6 +327,16 @@ function consoleBar( value )
 // --
 // test suite run
 // --
+
+/**
+ * @summary Executes tests of current suite.
+ * @description During execution tester prints useful information about current state of execution: 
+ * name of test case, description of test case, result of test checks with got and expected values, erors, etc.
+ * Level of output can be controled by options.
+ * Prints summary at the end of execution.
+ * @function run
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
 
 function run()
 {
@@ -723,11 +758,25 @@ function _testSuiteTerminated()
 
 //
 
+/**
+ * @summary Handler called before execution of each test routine
+ * @param {Object} t Instance of {@link module:Tools/Tester.wTestRoutineDescriptor}
+ * @function onRoutineBegin
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
+
 function onRoutineBegin( t )
 {
 }
 
 //
+
+/**
+ * @summary Handler called after execution of each test routine
+ * @param {Object} t Instance of {@link module:Tools/Tester.wTestRoutineDescriptor}
+ * @function onRoutineBegin
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
 
 function onRoutineEnd( t )
 {
@@ -735,11 +784,25 @@ function onRoutineEnd( t )
 
 //
 
+/**
+ * @summary Handler called before execution of current test suite
+ * @param {Object} t Current test suite instance.
+ * @function onSuiteBegin
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
+
 function onSuiteBegin( t )
 {
 }
 
 //
+
+/**
+ * @summary Handler called after execution of current test suite
+ * @param {Object} t Current test suite instance.
+ * @function onSuiteEnd
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
 
 function onSuiteEnd( t )
 {
@@ -816,6 +879,14 @@ function _testRoutineRun( trd )
 }
 
 //
+
+/**
+ * @summary Calls `onEach` handler for each test routine defined in current suite.
+ * @description Function onEach should accept single argument - descriptor of test routine.
+ * @param {Function} onEach Function to call for each routine.
+ * @function routineEach
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
 
 function routineEach( onEach )
 {
@@ -997,6 +1068,15 @@ function _exceptionConsider( err )
 
 //
 
+/**
+ * @summary Says test suite to report the exception and print error message to output. 
+ * @param {Object} o Options map.
+ * @param {String|Error} o.err Exception message or error object.
+ * @param {Boolean} [o.considering=true] If true test suite will take care about this error, otherwise it will by only printed by logger .
+ * @function exceptionReport
+ * @memberof module:Tools/Tester.wTestSuite#
+*/
+
 function exceptionReport( o )
 {
   let suite = this;
@@ -1029,6 +1109,36 @@ exceptionReport.defaults =
 
 let accuracySymbol = Symbol.for( 'accuracy' );
 let routineSymbol = Symbol.for( 'routine' );
+
+/**
+ * @typedef {Object} TestSuiteFields
+ * @property {String} name
+ * @property {Number} verbosity=3
+ * @property {Number} importanceOfDetails=0
+ * @property {Number} importanceOfNegative=1
+ * @property {Boolean} silencing
+ * @property {Boolean} shoulding=1
+ * @property {Number} routineTimeOut=5000
+ * @property {Boolean} concurrent=0
+ * @property {String} routine 
+ * @property {Array} platforms
+ * @property {String} suiteFilePath
+ * @property {String} suiteFileLocation
+ * @property {Object} tests 
+ * @property {Boolean} abstract=0
+ * @property {Boolean} enabled=1
+ * @property {Boolean} takingIntoAccount=1
+ * @property {Boolean} usingSourceCode=1
+ * @property {Boolean} ignoringTesterOptions=0
+ * @property {Number} accuracy=1e-7,
+ * @property {String} report
+ * @property {Boolean} debug=0
+ * @property {Function} onRoutineBegin
+ * @property {Function} onRoutineEnd
+ * @property {Function} onSuiteBegin
+ * @property {Function} onSuiteEnd
+ * @memberof module:Tools/Tester.wTestSuite
+ */
 
 // --
 // relations

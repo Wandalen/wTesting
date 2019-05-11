@@ -58,7 +58,7 @@ module.exports.join = function( a, b )
 В тест сюіт можуть включатись інші залежності, які потрібні для проведення тестування.
 
 <details>
-    <summary><u>Код файла <code>Join.js</code></u></summary>
+    <summary><u>Код файла <code>package.json</code></u></summary>
     
 ```json    
 {

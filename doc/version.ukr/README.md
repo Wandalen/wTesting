@@ -64,10 +64,10 @@
   </a></summary>
   Процедура встановлення утиліти wTesting.
 </details>
-<details><summary><a href="./tutorial/TestExecution.md">
+<details><summary><a href="./tutorial/Running.md">
       Запуск тестів
   </a></summary>
-  Як запускати тест кейси, тест рутини, тест сюіти.  
+  Як запускати тестування.
 </details>
 <details><summary><a href="./concept/TestCreation.md">
       Створення тесту "Hello World!"

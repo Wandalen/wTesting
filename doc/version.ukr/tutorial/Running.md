@@ -1,189 +1,96 @@
-# Запуск тестування довільного JS-файла
+# Запуск тестів
 
-Як запустити тестування в будь-якому JS-файлі користувача.
+Як запускати тестування.
 
-### Довільна рутина для тестування. Конфігурація
+### Конфігурація
 
-Для початку тестування потрібно мати наступні складові:
-- код (програму, модуль, тощо), що треба тестувати;
-- чим тестувати - утиліту `wTesting`, `тест рутини`, тощо.
+Ви вже [встановили](Installing.md) утиліту `wTesting` і тому можете приступити до дослідження її функцій. 
 
-<details>
-  <summary><u>Структура модуля</u></summary>
-
-```
-testModule
-   └── proto
-        ├── math.js
-        └── test.math.js    
-
-```
-
-</details>
-
-Для проведення простого тесту достатньо одного файлу в якому буде поміщатись тестована рутина і її тест. Для чистоти коду в прикладі використовується два файла. Перший, з назвою `math.js` має рутину для тестування, а другий, з назвою `test.math.js` включає `тест сюіт` для тестування першого файла.
+Першим кроком дослідіть як утиліта виконує тестування на готовому прикладі. Для цього використайте репозиторій утиліти [`wTools`](<https://github.com/Wandalen/wTools>).
 
 <details>
-    <summary><a href="./tutorial/Criterions.md">Код файла math.js</a></summary>
-
-```js    
-module.exports.sum = function(a,b){
-  return a + b;
-}
+  <summary><u>Структура файлів утиліти <code>wTools</code></u></summary>
 
 ```
-
-</details>
-
-Внесіть приведений вище код для тестування. Це операція додавання двох чисел з назвою `sum`. Для того, щоб рутину можна було протестувати вона повинна бути експортованою.  
-
-<details>
-    <summary><a href="./tutorial/Criterions.md">Код файла test.math.js</a></summary>
-
-```js    
-if( typeof module !== 'undefined' )
-{
-  let _ = require( 'wTools' );
-
-  if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-
-  _.include( 'wLogger' );
-  _.include( 'wTesting' );
-}
-
-let math = require('./math.js');
-var _global = _global_;
-var _ = _global_.wTools;
-
-function sum1(test)
-{
-  test.case = 'sum integers';
-  test.will = 'sum1';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.identical( got,expected );
-
-  test.will = 'sum2';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.notIdentical( got,expected );
-}
-
-function sum2(test)
-{
-  test.case = 'sum integers2';
-  test.will = 'sum3';
-  var got = math.sum( 1, 2);
-  var expected =  3 ;
-  test.identical( got,expected );
-
-  test.will = 'sum4';
-  var got = math.sum( 1, 2);
-  var expected =  2 ;
-  test.notIdentical( got,expected );
-}
-
-var Self =
-{
-  name : 'Sample',
-  silencing : 1,
-
-  tests :
-  {
-    sum1 : sum1,
-    sum2 : sum2,
-  }
-}
-
-Self = wTestSuite( Self );
-if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
-
-```
-
-</details>
-
-Внесіть приведений код в файл `test.math.js`.
-
-Приведений тест має один `тест сюіт` з назвою `Sample`. При виконанні `тест сюіту` виконується дві `тест рутини` - `sum1` і `sum2`. Кожна із `тест рутин` має по одному `тест кейсу`, який об'єднує дві `тест перевірки`. `Тест перевірки` `sum1` і `sum3` перевіряють на співпадіння отриманого результату при сумуванні двох чисел і передбачуваного результату. `Тест перевірки` `sum2` і `sum4` перевіряють чи не співпадає отриманий при сумуванні результат і передбачуваний. В перевірці `sum2` навмисне допущена помилка для отримання повідомлення про провал тесту.
-
-### Запуск тесту
-
-Приведений код вказує, що для виконання тестування необхідно встановити залежності. Потрібно встановити локально утиліту `wTools` i утиліту `wLogger` при умові, що утиліта `wTesting` у вас уже [встановлена](Installation.md).
-
-<details>
-  <summary><u>Вивід команди <code>npm install wTools wLogger</code></u></summary>
-
-```
-[user@user ~]$ npm install wTools wLogger
-+ wLogger@0.5.172
-+ wTools@0.8.454
-added 27 packages from 3 contributors and audited 53 packages in 2.19s
-
-```
-
-</details>
-
-Встановіть указані залежності виконавши команду `npm install wTools wLogger` в директорії `testModule`.
-
-<details>
-  <summary><u>Структура файлів після завантаження залежностей</u></summary>
-
-```
-testModule
-   ├── node_modules
-   │        ├── wLogger
-   │        ├── wTools
-   │        ├──...
-   │        ├──
+wTools
+   ├── .git
+   ├── doc
+   ├── out
    ├── proto
-   │    ├── math.js
-   │    └── test.math.js
-   │
-   └── package-lock.json     
+   ├── sample
+   ├── ...
+   └── package.json
 
 ```
 
 </details>
 
-Після завантаження залежностей структура файлів має виглядати як приведено вище.
+Склонуйте репозиторій виконавши команду `git clone https://github.com/Wandalen/wTools.git`. Після клонування перейдіть в директорію утиліти (`cd wTools/`). 
 
-Існують три способа запуска тестів з наступними командами:  
-- використовуючи утиліту `wTesting` з допомогою команди `wtest`;
-- використовуючи пакетний менеджер NPM, командою `npm test`;
-- використовучи NodeJS, указавши шлях до файла.
+Утиліта має залежності необхідні для її функціонування. Встановіть їх виконавши команду `npm install`.
 
-Для запуску тесту з довільного тест-файла використовуйте команду `wtest`. Для цього аргументом команди має бути шлях до тест файла.
 
 <details>
-  <summary><u>Вивід команди <code>wtest proto/test.math.js</code></u></summary>
+  <summary><u>Вивід команди <code>wtest scenario:help</code></u></summary>
 
 ```
-[user@user ~]$ wtest proto/test.math.js
-at  /path_to_test/testModule/proto/test.math.js:40
+[user@user ~]$ wtest scenario:help
+Scenarios :
+  test : run tests, default scenario 
+  help : get help 
+  options.list : list available options 
+  scenarios.list : list available scenarios 
+  suites.list : list available suites 
 
-        Test check ( Sample / sum1 / sum integers < sum2 # 2 ) ... failed
-      Failed test routine ( Sample / sum1 ) in 0.076s
-      Passed test routine ( Sample / sum2 ) in 0.056s
-
-    Passed test checks 3 / 4
-    Passed test cases 1 / 2
-    Passed test routines 1 / 2
-    Test suite ( Sample ) ... in 0.266s ... failed
-
-
-
-  Testing ... in 0.333s ... failed
+Tester options
+  scenario : Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list" 
+  sanitareTime : Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later. 
+  fails : Maximum number of fails allowed before shutting down testing. 
+  beeping : Make diagnosticBeep sound after testing to let developer know it's done. 
+  coloring : Switch on/off coloring. 
+  timing : Switch on/off measuing of time. 
+  rapidity : How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3. 
+  routineTimeOut : Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms. 
+  concurrent : Runs test suite in parallel with other test suites. 
+  verbosity : Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2" 
+  importanceOfNegative : Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n". 
+  silencing : Hooking and silencing of object's of testing console output to make clean report of testing. 
+  shoulding : Switch on/off all should* tests checks. 
+  accuracy : Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.
 
 ```
 
 </details>
 
-Запустіть команду `wtest proto/test.math.js` знаходячись в директорії `testModule`.
+Загальну довідку по використанню утиліти можна отримати виконавши команду `wtest scenario:help`. Введіть її та порівняйте вивід з приведеним вище.
 
-Після проходження тесту утиліта вивела повну інформацію про результати тестування. Згідно виводу отримана помилка в `тест перевірці` `sum2`. Загальний підсумок: пройдено 3 `тест перевірки` з 4, один з двох `тест кейсів`, одна з двох `тест рутин`. Загальний висновок по `тест сюіту` - провалений.
+На даний момент необхідно дізнатись про доступні файли для виконання. 
 
-### Запуск окремої тест рутини
+<details>
+  <summary><u>Вивід команди <code>wtest scenario:suites.list</code></u></summary>
 
+```
+[user@user ~]$ wtest scenario:suites.list
 
-### Підсумок
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/String.test.s:3887 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
+/path_to_utility/wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
+/path_to_utility/wTools/sample/Sample.test.s:92 - enabled
+10 test suites
+
+```
+
+</details>
+
+Виконайте команду `wtest scenario:suites.list` щоб отримати інформацію про доступні тести. Порівняйте з приведеним виводом.
+
+Згідно виводу утиліта має 10 тест сюітів. Іншими словами, 10 тест файлів так як в кожному файлі знаходиться один тест сюіт. Девять із них знаходяться в директорії `proto` i один в `sample`.
+
+### Проведення тестування
+

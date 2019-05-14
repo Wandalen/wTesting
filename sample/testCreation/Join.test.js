@@ -1,12 +1,12 @@
 
 let _ = require( 'wTesting' );
-let Hello = require( './Hello.js' );
+let Join = require( './Join.js' );
 
 //
 
 function routine1( test )
 {
-  test.identical( Hello.join( 'Hello ', 'world!' ), 'Hello world!' );
+  test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
 }
 
 //
@@ -15,10 +15,10 @@ function routine2( test )
 {
 
   test.case = 'pass';
-  test.identical( Hello.join( 1, 3 ), '13' );
+  test.identical( Join.join( 1, 3 ), '13' );
 
   test.case = 'fail';
-  test.identical( Hello.join( 1, 3 ), 13 );
+  test.identical( Join.join( 1, 3 ), 13 );
 
 }
 
@@ -26,7 +26,7 @@ function routine2( test )
 
 var Self =
 {
-  name : 'Hello',
+  name : 'Join',
   tests :
   {
     routine1,

@@ -36,12 +36,12 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
   Test coverage is a measure of software testing which is determined by the percentage of the program source code being tested.
 </details>
-<details><summary><a href="./concept/TestPositiveAndNegative.md">
+<details><summary><a href="./concept/TestCheck.md#Positive-testing">
       Positive testing
   </a></summary>
   It is a test to show the correct operation of the test object under normal conditions without errors in the input data and in the normal state.
 </details>
-<details><summary><a href="./concept/TestPositiveAndNegative.md">
+<details><summary><a href="./concept/TestCheck.md#Negative-testing">
       Negative testing
   </a></summary>
   It is a test to show the correct operation of a test object in a false input or an erroneous state.

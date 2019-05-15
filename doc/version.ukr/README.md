@@ -36,12 +36,12 @@
   </a></summary>
   Тестове покриття — метрика тестування програмного забезпечення, що визначається відсотком тестованого вихідного коду програми.
 </details>
-<details><summary><a href="./concept/TestPositiveAndNegative.md">
+<details><summary><a href="./concept/TestCheck.md#Позитивне-тестування">
       Позитивне тестування
   </a></summary>
   Тестування коректності роботи об'єкта тестування за нормальних умов, при відсутності помилок в вхідних даних та нормальному стані.
 </details>
-<details><summary><a href="./concept/TestPositiveAndNegative.md">
+<details><summary><a href="./concept/TestCheck.md#Негативне тестування">
       Негативне тестування
   </a></summary>
   Тестування коректності обробки об'єктом тестування помилкових даних чи помилкового стану.

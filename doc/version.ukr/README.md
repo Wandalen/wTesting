@@ -69,6 +69,11 @@
   </a></summary>
   Створення тесту рутини для конкатенації.
 </details>
+<details><summary><a href="./tutorial/Report.md">
+      Як читати звіт тестування та групувати тест перевірки
+  </a></summary>
+  Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
+</details>
 <details><summary><a href="./tutorial/TestCreation.md">
       Наслідування тест сюіта
   </a></summary>

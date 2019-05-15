@@ -160,8 +160,7 @@ var Proto =
 
   name : 'Tools/tester/Inheritance',
   silencing : 1,
-  // enabled : 1,
-  // verbosity : 5,
+  enabled : 1,
 
   tests :
   {

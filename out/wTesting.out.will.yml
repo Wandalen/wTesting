@@ -68,9 +68,15 @@ path:
       - proto/dwtools/atop/tester/l5/Suite.s
       - proto/dwtools/atop/tester/l5/Tester.s
       - proto/dwtools/atop/tester.test
+      - proto/dwtools/atop/tester.test/Externals.test.s
       - proto/dwtools/atop/tester.test/General.test.s
       - proto/dwtools/atop/tester.test/Inheritance.test.s
       - proto/dwtools/atop/tester.test/Time.test.s
+      - proto/dwtools/atop/tester.test/asset
+      - proto/dwtools/atop/tester.test/asset/hello
+      - proto/dwtools/atop/tester.test/asset/hello/Hello.atest.js
+      - proto/dwtools/atop/tester.test/asset/hello/Hello.js
+      - proto/dwtools/atop/tester.test/asset/hello/package.json
     criterion:
       default: 1
       debug: 1

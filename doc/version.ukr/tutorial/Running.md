@@ -2,14 +2,14 @@
 
 Як запускати тестування.
 
-### Конфігурація
+### Завантаження
 
 Ви вже [встановили](Installing.md) утиліту `Testing` і тому можете приступити до дослідження її функцій. 
 
-Першим кроком дослідіть як утиліта виконує тестування на готовому прикладі. Для цього використайте репозиторій утиліти [`wTools`](<https://github.com/Wandalen/wTools>).
+Для запуску тестування потрібні готові тест сюіти. Для цього використайте модуль [`wTools`](<https://github.com/Wandalen/wTools>).
 
 <details>
-  <summary><u>Структура файлів утиліти <code>wTools</code></u></summary>
+  <summary><u>Структура файлів модуля <code>wTools</code></u></summary>
 
 ```
 wTools
@@ -25,86 +25,45 @@ wTools
 
 </details>
 
-Склонуйте репозиторій виконавши команду `git clone https://github.com/Wandalen/wTools.git`. Після клонування перейдіть в директорію утиліти (`cd wTools/`). 
+Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
 
-Утиліта має залежності необхідні для її функціонування. Встановіть їх виконавши команду `npm install`.
-
-
-<details>
-  <summary><u>Вивід команди <code>wtest scenario:help</code></u></summary>
+Після клонування перейдіть в директорію із модулем та виконайте.
 
 ```
-[user@user ~]$ wtest scenario:help
-Scenarios :
-  test : run tests, default scenario 
-  help : get help 
-  options.list : list available options 
-  scenarios.list : list available scenarios 
-  suites.list : list available suites 
-
-Tester options
-  scenario : Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list" 
-  sanitareTime : Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later. 
-  fails : Maximum number of fails allowed before shutting down testing. 
-  beeping : Make diagnosticBeep sound after testing to let developer know it's done. 
-  coloring : Switch on/off coloring. 
-  timing : Switch on/off measuing of time. 
-  rapidity : How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3. 
-  routineTimeOut : Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms. 
-  concurrent : Runs test suite in parallel with other test suites. 
-  verbosity : Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2" 
-  importanceOfNegative : Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n". 
-  silencing : Hooking and silencing of object's of testing console output to make clean report of testing. 
-  shoulding : Switch on/off all should* tests checks. 
-  accuracy : Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.
-
+npm install
 ```
 
-</details>
+Це встановило залежності модуля.
 
-Загальну довідку по використанню утиліти можна отримати виконавши команду `wtest scenario:help`. Введіть її та порівняйте вивід з приведеним вище.
-
-Довідка має дві секції. В секції `Scenarios` виводиться інформація щодо тест сценаріїв. В секції `Tester options` виводится список доступних [опцій тестування](TestOptions.md) для управління процесом тестування. 
-
-На даний момент необхідно дізнатись про доступні файли для виконання. 
+Виконайте команду `wtest scenario:suites.list` щоб отримати інформацію про доступні тест сюіти.
 
 <details>
   <summary><u>Вивід команди <code>wtest scenario:suites.list</code></u></summary>
 
 ```
-[user@user ~]$ wtest scenario:suites.list
+[user@user ~]$ wtest . scenario:suites.list
 
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/String.test.s:3887 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
-/path_to_utility/wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
-/path_to_utility/wTools/sample/Sample.test.s:92 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/String.test.s:3887 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
+/.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
+/.../wTools/sample/Sample.test.s:92 - enabled
 10 test suites
 
 ```
 
 </details>
 
-Виконайте команду `wtest scenario:suites.list` щоб отримати інформацію про доступні тести. Порівняйте з приведеним виводом.
-
 Згідно виводу утиліта має 10 тест сюітів. Іншими словами, 10 тест файлів так як в кожному файлі знаходиться один тест сюіт. Девять із них знаходяться в директорії `proto` i один в `sample`.
 
-Вивід показує повний шлях до файлу, його назву та кількість рядків. Наприклад, починаючи від директорії `wTools`, відносний шлях до файла `Array.test.s` виглядає `./proto/dwtools/abase/l1.test/`. Вказаний тест файл містить 19500 рядків.
+### Групове тестування
 
-### Проведення тестування
-
-Запуск тестів можливий з використанням утиліти `Testing`, котра встановлена глобально в системі, а також, напряму - використовуючи NodeJS. 
-
-Перевагою глобального встановлення утиліти є можливість використання довідки тестування, додаткових опцій, а також, групового тестування.
-
-##### Групове тестування
-
-Для проведення групового тестування використовується команда `wtest` в аргумент якої передається назва директорії з тестами.
+Запуск групи тестів можливий з використанням утиліти `wTesting`, котра встановлена глобально в системі. Для проведення групового тестування використовується команда `wtest` в аргумент якої передається назва директорії з тестами.
 
 <details>
   <summary><u>Вивід команди <code>wtest proto</code></u></summary>
@@ -113,8 +72,8 @@ Tester options
 [user@user ~]$ wtest proto
 
 Running test suite ( Tools/base/l1/Array ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
+
       Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.145s
       Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.073s
       Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.071s
@@ -126,8 +85,8 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/Array ) ... in 44.598s ... ok
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
       Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.174s
       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.061s
       Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.054s
@@ -140,8 +99,8 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/Diagnostics ) ... in 1.030s ... ok
 
     Running test suite ( Tools/base/l1/Entity ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Entity.test.s:808
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Entity.test.s:808
+
       Passed test routine ( Tools/base/l1/Entity / eachSample ) in 0.070s
       Passed test routine ( Tools/base/l1/Entity / entityMap ) in 0.094s
       Passed test routine ( Tools/base/l1/Entity / entityFilter ) in 0.073s
@@ -158,21 +117,21 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/Entity ) ... in 1.089s ... failed
 
     Running test suite ( Tools/base/l1/Map ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
+
       Passed test routine ( Tools/base/l1/Map / mapIs ) in 0.062s
       Passed test routine ( Tools/base/l1/Map / mapCloneAssigning ) in 0.081s
       Passed test routine ( Tools/base/l1/Map / mapExtendConditional ) in 0.072s
       ...
-      
+
     Passed test checks 686 / 686
     Passed test cases 355 / 355
     Passed test routines 45 / 45
     Test suite ( Tools/base/l1/Map ) ... in 6.329s ... ok
 
     Running test suite ( Tools/base/l1/Regexp ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749
+
       Passed test routine ( Tools/base/l1/Regexp / regexpIdentical ) in 0.069s
       Passed test routine ( Tools/base/l1/Regexp / regexpsSources ) in 0.143s
       Passed test routine ( Tools/base/l1/Regexp / regexpsJoin ) in 0.103s
@@ -184,8 +143,8 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/Regexp ) ... in 2.755s ... ok
 
     Running test suite ( Tools/base/l1/Routine ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558
+
       Passed test routine ( Tools/base/l1/Routine / _routineJoin ) in 0.084s
       Passed test routine ( Tools/base/l1/Routine / constructorJoin ) in 0.165s
       Passed test routine ( Tools/base/l1/Routine / routineJoin ) in 0.075s
@@ -197,8 +156,8 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/Routine ) ... in 2.290s ... ok
 
     Running test suite ( Tools/base/l1/String ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/String.test.s:3887
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/String.test.s:3887
+
       Passed test routine ( Tools/base/l1/String / strLeft ) in 0.500s
       Passed test routine ( Tools/base/l1/String / strRight ) in 0.552s
       Passed test routine ( Tools/base/l1/String / strEquivalent ) in 0.075s
@@ -210,8 +169,8 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/String ) ... in 4.814s ... ok
 
     Running test suite ( Tools/base/l1/Typing ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Typing.test.s:97
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Typing.test.s:97
+
       Passed test routine ( Tools/base/l1/Typing / objectLike ) in 0.074s
       Passed test routine ( Tools/base/l1/Typing / promiseIs ) in 0.042s
       Passed test routine ( Tools/base/l1/Typing / consequenceLike ) in 0.041s
@@ -222,8 +181,8 @@ Running test suite ( Tools/base/l1/Array ) ..
     Test suite ( Tools/base/l1/Typing ) ... in 0.756s ... ok
 
     Running test suite ( Tools/base/l2/String ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462
+
       Passed test routine ( Tools/base/l2/String / strRemoveBegin ) in 0.216s
       Passed test routine ( Tools/base/l2/String / strRemoveEnd ) in 0.226s
       Passed test routine ( Tools/base/l2/String / strRemove ) in 0.204s
@@ -242,15 +201,15 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 </details>
 
-Запустіть тестування в директорії `proto` виконавши команду `wtest proto`. В виводі консолі, приведеному вище, частина рядків замінена на `...` для зменшення об'єму. 
+Запустіть тестування в директорії `proto` виконавши команду `wtest proto`. В виводі консолі, приведеному вище, частина рядків замінена на `...` для зменшення об'єму.
 
 Утиліта по черзі виконала тестування в файлах згідно списку виданого командою `wtest scenario:suites.list`. На тестування було використано 75.676s, результат тестування - провалене. Чотири тест кейса в файлі `Entyty.test.s`, що пройшли тестування з помилкою, сформували загальний результат тестування. Навіть при одній проваленій тест перевірці тестування вважалось би проваленим. Інформативний вивід дає розробнику інформацію про ті функціональності які потрібно виправити.
 
 На момент проведення вашого тестування даних помилок може не виникнути.
 
-##### Тестування окремого тест сюіта
+### Тестування окремого тест сюіта
 
-Для проведення тестування окремого файла використовуються команди `wtest` i `node`. Аргументом команди передається повний відносний шлях до тест файла.
+Для проведення тестування окремого файла використовуються команди `wtest` i `node`. Аргументом команди передається повний відносний ( абсолютний ) шлях до тест файла.
 
 <details>
   <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
@@ -259,8 +218,8 @@ Running test suite ( Tools/base/l1/Array ) ..
 [user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s
 
 Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
       Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.133s
       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.075s
       Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.071s
@@ -279,7 +238,7 @@ Running test suite ( Tools/base/l1/Diagnostics ) ..
 
 </details>
 
-Використайте тест файл `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s`. 
+Використайте тест файл `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s`.
 
 <details>
   <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
@@ -288,8 +247,8 @@ Running test suite ( Tools/base/l1/Diagnostics ) ..
 [user@user ~]$ node proto/dwtools/abase/l1.test/Diagnostics.test.s
 
 Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
       Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.121s
       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.079s
       Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.080s
@@ -310,9 +269,9 @@ Running test suite ( Tools/base/l1/Diagnostics ) ..
 
 Виконайте тестування файла `Diagnostics.test.s` ввівши команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s`. Порівняйте виводи команд `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s` i `node proto/dwtools/abase/l1.test/Diagnostics.test.s`
 
-Виводи ідентичні. Незначна похибка в часі проведення тесту визначається потужністю і завантаженістю машини. Тим не менше, використання інтерпретатора NodeJS має недолік - він запускає лише окремі файли.
+Звіт тестування при виконанні тесту повністю співпадає. Незначна похибка в часі проведення тесту визначається потужністю і завантаженістю машини.
 
-### Проведення тестування окремої рутини тест сюіту
+### Тестування окремої рутини
 
 Тестування цілого тест сюіту не завжди доцільне - воно займає більше часу і виконує зайву роботу. Якщо розробник грамотно оформив код, то зміни в окремому модулі не повинні впливати на інші частини коду. Тому, розробник може протестувати лише внесені зміни використавши окрему рутину тест сюіта.
 
@@ -325,8 +284,8 @@ Running test suite ( Tools/base/l1/Diagnostics ) ..
 [user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err
 
 Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
        Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.121s
 
     Passed test checks 9 / 9
@@ -341,7 +300,7 @@ Running test suite ( Tools/base/l1/Diagnostics ) ..
 
 </details>
 
-Проведіть тестування рутини `err` в файлі `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err`. 
+Проведіть тестування рутини `err` в файлі `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err`.
 
 Було проведено тестування лише одніє вказаної рутини. Тест пройшов успішно.
 
@@ -352,8 +311,8 @@ Running test suite ( Tools/base/l1/Diagnostics ) ..
 [user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:assert
 
 Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /path_to_utility/sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-      
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
        Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.068s
 
     Passed test checks 3 / 3

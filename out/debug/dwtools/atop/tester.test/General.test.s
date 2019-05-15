@@ -5558,8 +5558,7 @@ var Self =
 
   name : 'Tools/tester/General',
   silencing : 1,
-  // enabled : 1,
-  // routine : 'mustNotThrowError',
+  enabled : 1,
 
   context :
   {
@@ -5568,65 +5567,65 @@ var Self =
   tests :
   {
 
-    simplest : simplest,
-    identical : identical,
+    simplest,
+    identical,
 
     // should
 
-    shouldMessageOnlyOnce : shouldMessageOnlyOnce,
-    mustNotThrowError : mustNotThrowError,
-    shouldThrowErrorSync : shouldThrowErrorSync,
-    shouldThrowErrorAsync : shouldThrowErrorAsync,
-    shouldThrowError : shouldThrowError,
+    shouldMessageOnlyOnce,
+    mustNotThrowError,
+    shouldThrowErrorSync,
+    shouldThrowErrorAsync,
+    shouldThrowError,
 
-    shouldPassMessage : shouldPassMessage,
-    _throwingExperiment : _throwingExperiment,
+    shouldPassMessage,
+    _throwingExperiment,
 
-    shouldThrowErrorSyncSimple : shouldThrowErrorSyncSimple,
-    shouldThrowErrorAsyncSimple : shouldThrowErrorAsyncSimple,
-    shouldThrowErrorAsyncConcurrent : shouldThrowErrorAsyncConcurrent,
+    shouldThrowErrorSyncSimple,
+    shouldThrowErrorAsyncSimple,
+    shouldThrowErrorAsyncConcurrent,
 
-    _chainedShould : _chainedShould,
-    chainedShould : chainedShould,
+    _chainedShould,
+    chainedShould,
 
     // return
 
-    isReturn : isReturn,
-    isNotReturn : isNotReturn,
-    isNotErrorReturn : isNotErrorReturn,
+    isReturn,
+    isNotReturn,
+    isNotErrorReturn,
 
-    identicalReturn : identicalReturn,
-    notIdenticalReturn : notIdenticalReturn,
-    equivalentReturn : equivalentReturn,
-    notEquivalentReturn : notEquivalentReturn,
-    containReturn : containReturn,
+    identicalReturn,
+    notIdenticalReturn,
+    equivalentReturn,
+    notEquivalentReturn,
+    containReturn,
 
-    shouldThrowErrorSyncReturn : shouldThrowErrorSyncReturn,
-    shouldThrowErrorAsyncReturn : shouldThrowErrorAsyncReturn,
-    shouldThrowErrorReturn : shouldThrowErrorReturn,
-    mustNotThrowErrorReturn : mustNotThrowErrorReturn,
-    shouldMessageOnlyOnceReturn : shouldMessageOnlyOnceReturn,
+    shouldThrowErrorSyncReturn,
+    shouldThrowErrorAsyncReturn,
+    shouldThrowErrorReturn,
+    mustNotThrowErrorReturn,
+    shouldMessageOnlyOnceReturn,
 
-    ilReturn : ilReturn,
-    niReturn : niReturn,
-    etReturn : etReturn,
-    neReturn : neReturn,
+    ilReturn,
+    niReturn,
+    etReturn,
+    neReturn,
 
     /* */
 
-    gtReturn : gtReturn,
-    geReturn : geReturn,
-    ltReturn : ltReturn,
-    leReturn : leReturn,
+    gtReturn,
+    geReturn,
+    ltReturn,
+    leReturn,
 
     // etc
 
-    asyncExperiment : asyncExperiment,
-    failExperiment : failExperiment,
-    mustNotThrowErrorExperiment : mustNotThrowErrorExperiment,
-    experimentTimeOutSyncNoChecks : experimentTimeOutSyncNoChecks,
-    experimentTimeOutSync : experimentTimeOutSync,
-    experimentTimeOutAsync : experimentTimeOutAsync,
+    asyncExperiment,
+    failExperiment,
+    mustNotThrowErrorExperiment,
+    experimentTimeOutSyncNoChecks,
+    experimentTimeOutSync,
+    experimentTimeOutAsync,
 
   },
 

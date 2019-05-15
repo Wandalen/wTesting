@@ -106,26 +106,10 @@ function _registerExitHandler()
 
   _.appRepairExitHandler();
 
-  if( tester._registerExitHandlerDone )
-  return;
-
-  tester._registerExitHandlerDone = 1;
-
-  // if( 0 )
-  // if( _global.process )
-  // process.on( 'exit', function()
-  // {
-  //   if( tester.report && tester.report.testSuiteFailes && !process.exitCode )
-  //   {
-  //     let logger = tester.logger;
-  //     debugger;
-  //     if( tester.settings.coloring )
-  //     logger.error( _.color.strFormat( 'Errors!', 'negative' ) );
-  //     else
-  //     logger.error( 'Errors!' );
-  //     process.exitCode = -1;
-  //   }
-  // });
+  // if( tester._registerExitHandlerDone )
+  // return;
+  //
+  // tester._registerExitHandlerDone = 1;
 
 }
 
@@ -299,12 +283,9 @@ function _includeTestsFrom( path )
   logger.log( 'Includes tests from :', path, '\n' );
 
   let ends = [ '.test.s' ];
-  // if( Config.platform === 'browser' )
   ends.push( '.test.js' );
-  // else
   ends.push( '.test.ss' );
 
-  // debugger;
   let files = _.fileProvider.filesFind
   ({
     filePath : path,
@@ -315,7 +296,6 @@ function _includeTestsFrom( path )
       maskAll : _.files.regexpMakeSafe(),
     }
   });
-  // debugger;
 
   if( !files.length )
   {
@@ -371,7 +351,14 @@ function includeTestsFrom( path )
   _.assert( _.strIs( path ), 'Expects string' );
 
   logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
-  tester._includeTestsFrom( path );
+  try
+  {
+    tester._includeTestsFrom( path );
+  }
+  catch( err )
+  {
+    throw _.errLogOnce( _.errBriefly( err ) );
+  }
   logger.verbosityPop();
 
 }
@@ -479,7 +466,6 @@ function _testingBegin( allSuites, runSuites )
 
 //
 
-// function _testingEndSoon( err, arg )
 function _testingEndSoon()
 {
   let tester = this;
@@ -491,10 +477,6 @@ function _testingEndSoon()
   else
   tester._testingEndNow();
 
-  // if( err )
-  // throw err;
-  // return arg;
-
   return null;
 }
 
@@ -505,8 +487,6 @@ function _testingEndNow()
   let tester = this;
   let logger = tester.logger;
   let ok = tester._reportIsPositive();
-
-  // debugger;
 
   _.assert( arguments.length === 0 );
   _.assert( tester.state === 'begin' );
@@ -1359,6 +1339,7 @@ let SettingsOfTester =
 {
 
   scenario : 'test',
+  // scenario : null,
   sanitareTime : 500,
   fails : null,
   beeping : null,
@@ -1429,7 +1410,6 @@ let Forbids =
 
   routineTimeOut : 'routineTimeOut',
   concurrent : 'concurrent',
-  // importanceOfNegative : 'importanceOfNegative',
   silencing : 'silencing',
   shoulding : 'shoulding',
   accuracy : 'accuracy',
@@ -1535,7 +1515,7 @@ let Self =
 
   _testingBeginTime : null,
   _isReal_ : 1,
-  _registerExitHandlerDone : 0,
+  // _registerExitHandlerDone : 0,
 
   _defaultVerbosity : 2,
   verbosity : 4,
@@ -1566,7 +1546,6 @@ Object.preventExtensions( Self );
 
 _.mapSupplementNulls( Self, wTester );
 
-// _.assert( !_realGlobal_.wTester );
 _realGlobal_.wTester = _global.wTester = Self;
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

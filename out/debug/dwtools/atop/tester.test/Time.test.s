@@ -2165,7 +2165,7 @@ var Self =
 
   name : 'Tools/Time/' + Math.floor( Math.random()*100000 ),
   silencing : 1,
-  // enabled : 0, // !!!
+  enabled : 1,
 
   context :
   {
@@ -2176,12 +2176,12 @@ var Self =
   tests :
   {
 
-    timeOut : timeOut,
+    timeOut,
 
-    timeOutError : timeOutError,
-    timeOutMode01 : timeOutMode01,
-    timeOutMode10 : timeOutMode10,
-    timeOutMode11 : timeOutMode11,
+    timeOutError,
+    timeOutMode01,
+    timeOutMode10,
+    timeOutMode11,
 
   }
 

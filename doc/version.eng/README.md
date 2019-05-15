@@ -52,30 +52,30 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./tutorial/Abstract.md">
       Abstract
   </a></summary>
-  Загальна інформація про утиліту wTesting.
+  General information about utility wTesting.
 </details>
 <details><summary><a href="./tutorial/Installation.md">
       Installation
   </a></summary>
-  Процедура встановлення утиліти wTesting.
+  Procedure of installation of a utility wTesting
 </details>
 <details><summary><a href="./tutorial/Running.md">
-      Запуск тестів
+      Running tests
   </a></summary>
-  Як запускати тестування.
+  How to run testing.
 </details>
 <details><summary><a href="./tutorial/TestCreation.md">
-      Створення тесту "Hello World!"
+      Creation of test "Hello World!"
   </a></summary>
-  Створення модульного тесту для тестування функції конкатенації.
+  Creating a test for concatenation routine.
 </details>
 <details><summary><a href="./tutorial/Verbosity.md">
-      Контроль рівня вербальності
+      Verbosity control
   </a></summary>
-  Зміна кількості виведеної інформації виконання тесту з опцією verbosity.
+  Changing the amount of output test information using the verbosity option.
 </details>
 <details><summary><a href="./tutorial/TestOptions.md">
-      Додаткові опції тестування
+      Advanced test options
   </a></summary>
-  Застосування опцій для налаштування проходження тестів.
+  How to use advanced options to set up tests.
 </details>

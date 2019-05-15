@@ -67,7 +67,7 @@
 <details><summary><a href="./tutorial/TestCreation.md">
       Створення тесту "Hello World!"
   </a></summary>
-  Створення модульного тесту для тестування.
+  Створення тесту рутини для конкатенації.
 </details>
 <details><summary><a href="./tutorial/TestCreation.md">
       Наслідування тест сюіта

@@ -30,13 +30,57 @@ testOptions
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
-}
+};
 
 ```
 
 </details>
 
+З допомогою функції в файлі `Join.js` проводиться конкатенація двох чисел.
 
+<details>
+    <summary><u>Код файла <code>Join.test.js</code></u></summary>
+
+```js    
+
+let _ = require( 'wTesting' );
+let Join = require( './Join.js' );
+
+//
+
+function routine1( test )
+{
+  test.case = 'pass';
+  test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
+  test.identical( Join.join( 1, 3 ), '13' );
+
+  test.case = 'fail';
+  test.identical( Join.join( 1, 3 ), 13 );
+
+}
+
+//
+
+var Self =
+{
+  name : 'Join',
+  tests :
+  {
+    routine1,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );
+
+```
+
+</details>
+
+В приведеному тесті виконується тестування однієї тест рутини з двома кейсами. Один має дві перевірки що пройдуть, а другий - `fail` містить перевірку з помилкою. 
 
 <details>
     <summary><u>Код файла <code>Multiply.js</code></u></summary>
@@ -44,46 +88,332 @@ module.exports.join = function( a, b )
 ```js    
 module.exports.multiply = function( a, b )
 {
-  return a * b;
-}
+  return Number( a ) * Number( b );
+};
 
 ```
 
 </details>
+
+Функція `mul` файла `Multiply.js`, виконує множення двох значень.
 
 <details>
-    <summary><u>Код файла <code>Join.js</code></u></summary>
+    <summary><u>Код файла <code>Multiply.test.js</code></u></summary>
 
 ```js    
-module.exports.join = function( a, b )
+let _ = require( 'wTesting' );
+let Mul = require( './Multiply.js' );
+
+//
+
+function routine1( test )
 {
-  return String( a ) + String( b );
+  test.equivalent( Mul.mul( 1, 2 ), 2 );
+  test.equivalent( Mul.mul( 1, -2 ), -2 );
+  test.shouldThrowError( () => Mul.mul( a, 1 ) );
 }
+
+//
+
+var Self =
+{
+  name : 'Multiply',
+  tests :
+  {
+    routine1,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );                            
 
 ```
 
 </details>
 
+Тест має одну тест рутину з трьома перевірками. Виконується операція множення з додатніми числами, від'ємними і один тест з рядковим значенням. Тест з рядковим значенням повинен видати помилку.
+
+<details>
+    <summary><u>Код файла <code>Sum.js</code></u></summary>
+
+```js    
+module.exports.sum = function( a, b )
+{
+  return Number( a ) + Number( b );
+}; 
+
+```
+
+</details>
+
+В файлі `Sum.js` поміщена функція додавання двох чисел.
+
+<details>
+    <summary><u>Код файла <code>Sum.test.js</code></u></summary>
+
+```js    
+let _ = require( 'wTesting' );
+let Sum = require( './Sum.js' );
+
+//
+
+function routine1( test )
+{
+  test.equivalent( Sum.sum( 1, 1 ), 2 );
+  test.equivalent( Sum.sum( 2, -1 ), 1 );
+  test.shouldThrowError( () => Sum.sum( a, 1 ) );
+}
+
+//
+
+var Self =
+{
+  name : 'Sum',
+  tests :
+  {
+    routine1,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );  
+
+```
+
+</details>
+
+Тест має одну тест рутину `routine1` з трьома перевірками. Виконується операція додавання з додатніми числами, від'ємними числами і один тест з рядковим значенням. Тест з рядковим значенням повинен видати помилку.
 
 ### Опція `sanitareTime`
 
 Визначає час затримки між завершенням тесту однієї тест рутини та запуском наступної. Цей час призначений для завершення виконання асинхронних функцій рутини. 
 
+<details>
+  <summary><u>Вивід команди <code>wtest . sanitareTime:1000</code></u></summary>
+
+```
+[user@user ~]$ wtest . sanitareTime:1000
+Running test suite ( Join ) ..
+    at  /path_to_module/testCreation/Join.test.js:40
+      
+      Passed test routine ( Join / routine1 ) in 0.066s
+        Test check ( Join / routine2 / fail # 2 ) ... failed
+      Failed test routine ( Join / routine2 ) in 0.078s
+
+    Passed test checks 2 / 3
+    Passed test cases 1 / 2
+    Passed test routines 1 / 2
+    Test suite ( Join ) ... in 0.280s ... failed
+
+    Running test suite ( Multiply ) ..
+    at  /path_to_module/testCreation/Multiply.test.js:27
+      
+      Passed test routine ( Multiply / routine1 ) in 0.059s
+
+    Passed test checks 3 / 3
+    Passed test cases 0 / 0
+    Passed test routines 1 / 1
+    Test suite ( Multiply ) ... in 1.116s ... ok
+
+    Running test suite ( Sum ) ..
+    at  /path_to_module/testCreation/Sum.test.js:27
+      
+      Passed test routine ( Sum / routine1 ) in 0.060s
+
+    Passed test checks 3 / 3
+    Passed test cases 0 / 0
+    Passed test routines 1 / 1
+    Test suite ( Sum ) ... in 1.120s ... ok
+
+
+
+  Testing ... in 2.695s ... failed
+
+```
+
+</details>
+
+Виконайте тестування всіх рутин в директорії `testOptions` командою `wtest . sanitareTime:1000`. Порівняйте результат з приведеним.
+
+Всі тести були виконані за 2.695s з урахуванням затримки в одну секунду між окремими тест сюітами. Збільшіть час до трьох секунд і порівняйте з попереднім результатом.
+
 ### Опція `timing`
 
-Призначена для включення підрахунку часу виконання тестів утилітою. При вводі `timing:0` вивід не буде містити дані про час виконання. За замовчуванням значення опції "1" - виводити час виконання.
+Призначена для включення підрахунку часу виконання тестів. При вводі `timing:0` вивід не буде містити дані про час виконання. За замовчуванням значення опції "1" - виводити час виконання.
+
+<details>
+  <summary><u>Вивід команди <code>wtest . sanitareTime:1000 timing:0</code></u></summary>
+
+```
+[user@user ~]$ wtest . sanitareTime:1000 timing:0
+Running test suite ( Join ) ..
+    at  /path_to_module/testCreation/Join.test.js:40
+      
+      Passed test routine ( Join / routine1 ) in 0.059s
+        Test check ( Join / routine2 / fail # 2 ) ... failed
+      Failed test routine ( Join / routine2 ) in 0.076s
+
+    Passed test checks 2 / 3
+    Passed test cases 1 / 2
+    Passed test routines 1 / 2
+    Test suite ( Join ) ... failed
+
+    Running test suite ( Multiply ) ..
+    at  /path_to_module/testCreation/Multiply.test.js:27
+      
+      Passed test routine ( Multiply / routine1 ) in 0.060s
+
+    Passed test checks 3 / 3
+    Passed test cases 0 / 0
+    Passed test routines 1 / 1
+    Test suite ( Multiply ) ... ok
+
+    Running test suite ( Sum ) ..
+    at  /path_to_module/testCreation/Sum.test.js:27
+      
+      Passed test routine ( Sum / routine1 ) in 0.058s
+
+    Passed test checks 3 / 3
+    Passed test cases 0 / 0
+    Passed test routines 1 / 1
+    Test suite ( Sum ) ... ok
+
+
+
+  Testing ... failed
+
+```
+
+</details>
+
+Для наочності результату використайте комбінацію параметрів `sanitareTime` i `timing`. Виконайте тестування командою `wtest . sanitareTime:1000 timing:0`. 
+
+В порівнянні з виводом без `timing:0` утиліліта не вивела сумарний час проходження тесту який був штучно збільшений з допомогою опції `sanitareTime`.
 
 ### Опція `routineTimeOut`
 
 Обмежує час на виконання тест рутини, вказується в мілісекундах. Якщо тест рутина не була повністю протестована за встановлений час, то вона повертає помилку тестування. Вказаний параметр застосовується до кожної тест рутини і переписує попереднє значення, якщо таке було встановлено. За замовчуванням встановлено 5000мс.
 
-### Опція `silencing`
+<details>
+  <summary><u>Вивід команди <code>wtest . routineTimeOut:5</code></u></summary>
 
-Призначена для вимкнення з виводу додаткових повідомлень внесених розробником. Опція призначена для генерування чистого звіту тестування без додаткових включень. 
+```
+[user@user ~]$ wtest . routineTimeOut:5
+Running test suite ( Join ) ..
+    at  /path_to_module/testCreation/Join.test.js:40
+        
+        Test check ( Join / routine1 /  # 2 ) ... failed throwing error
+      Failed test routine ( Join / routine1 ) in 0.072s
+        Test check ( Join / routine2 /  # 1 ) ... failed throwing error
+      Failed test routine ( Join / routine2 ) in 0.061s
+
+    Thrown 2 error(s)
+    Passed test checks 1 / 3
+    Passed test cases 0 / 0
+    Passed test routines 0 / 2
+    Test suite ( Join ) ... in 0.292s ... failed
+
+    Running test suite ( Multiply ) ..
+    at  /path_to_module/testCreation/Multiply.test.js:27
+        
+        Test check ( Multiply / routine1 /  # 2 ) ... failed throwing error
+      Failed test routine ( Multiply / routine1 ) in 0.057s
+
+    Thrown 1 error(s)
+    Passed test checks 1 / 2
+    Passed test cases 0 / 0
+    Passed test routines 0 / 1
+    Test suite ( Multiply ) ... in 0.121s ... failed
+
+    Running test suite ( Sum ) ..
+    at  /path_to_module/testCreation/Sum.test.js:27
+        
+        Test check ( Sum / routine1 /  # 2 ) ... failed throwing error
+      Failed test routine ( Sum / routine1 ) in 0.054s
+
+    Thrown 1 error(s)
+    Passed test checks 1 / 2
+    Passed test cases 0 / 0
+    Passed test routines 0 / 1
+    Test suite ( Sum ) ... in 0.121s ... failed
+
+
+
+  Testing ... in 0.703s ... failed
+
+```
+
+</details>
+
+Щоб дослідити поведінку тестера при зміні часу проходження рутини встановіть час набагато менший від середнього часу проходження. Наприклад, п'ять мілісекунд, для цього введіть команду `wtest . routineTimeOut:5`. Порівняйте з приведеними результатами.
+
+Через те, що рутини не могли пройти тестування за встановлений час отримано провал тесту в кожній із них. 
+
+Використовуючи даний параметр слідкуйте за об'ємом тест рутин. Помилки можуть виникнути через недостатній час на тестування.
 
 ### Опція `shoulding`
 
-Призначена для ввімкнення тест перевірок, що починаються з `should*`. При значенні "0" вимикає перевірки з `should`, при "1" - вмикає. Значення за замовчуванням - "1".
+Призначена для ввімкнення тест перевірок, що починаються з `should*`. При значенні "0" опція вимикає перевірки з `should`, при "1" - вмикає. Значення за замовчуванням - "1".
+
+<details>
+  <summary><u>Вивід команди <code>wtest . shoulding:0</code></u></summary>
+
+```
+[user@user ~]$ wtest . shoulding:0
+Running test suite ( Join ) ..
+    at  /path_to_module/testCreation/Join.test.js:40
+      
+      Passed test routine ( Join / routine1 ) in 0.059s
+hello, world!
+        Test check ( Join / routine2 / fail # 2 ) ... failed
+      Failed test routine ( Join / routine2 ) in 0.074s
+
+    Passed test checks 2 / 3
+    Passed test cases 1 / 2
+    Passed test routines 1 / 2
+    Test suite ( Join ) ... in 0.263s ... failed
+
+    Running test suite ( Multiply ) ..
+    at  /path_to_module/testCreation/Multiply.test.js:27
+      
+      Passed test routine ( Multiply / routine1 ) in 0.046s
+
+    Passed test checks 2 / 2
+    Passed test cases 0 / 0
+    Passed test routines 1 / 1
+    Test suite ( Multiply ) ... in 0.605s ... ok
+
+    Running test suite ( Sum ) ..
+    at  /path_to_module/testCreation/Sum.test.js:27
+      
+      Passed test routine ( Sum / routine1 ) in 0.045s
+
+    Passed test checks 2 / 2
+    Passed test cases 0 / 0
+    Passed test routines 1 / 1
+    Test suite ( Sum ) ... in 0.608s ... ok
+
+
+
+  Testing ... in 1.638s ... failed
+
+```
+
+</details>
+
+Протестуйте роботу опції виконавши команду `wtest . shoulding:0`. Порівняйте результати виводу.
+
+Згідно отриманого виводу в тест сюіті `Join` виконано всі перевірки, адже тест не мав перевірок з `should*`. А в сюітах `Multiply` i `Sum` було проведено на одну перевірку менше.  
+
+### Опція `silencing`
+
+Призначена для вимкнення з виводу додаткових повідомлень внесених розробником. Опція призначена для генерування чистого звіту тестування без додаткових включень. 
 
 ### Опція `accuracy`
 

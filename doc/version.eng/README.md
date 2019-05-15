@@ -14,7 +14,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./concept/TestSuite.md">
       Test suite
   </a></summary>
-  A test suite (test suite) is a set of test procedures and test data for testing a test object.
+  A test suite is a set of test procedures and test data for testing a test object.
 </details>
 <details><summary><a href="./concept/TestRoutine.md">
       Test routine

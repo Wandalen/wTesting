@@ -1,23 +1,23 @@
-# Тест сюіт
+# Test suite
 
-Тест сюіт ( тестовий комлект, тестовий набір ) - це набір тест рутин, та тестових данних для тестування об'єкту тестування.
+A test suite is a set of test procedures and test data for testing a test object.
 
-Тест сюіт міститься в окремо відведеному під нього файлі. Тест сюіт складається із:
+The test suite is contained in a separate file attached to it. The test suite consists of:
 
-- тест рутин;
-- опцій тестування;
-- даних до нього
+- test routins;
+- test options;
+- test data.
 
-### Наслідування
+### Inheritance
 
-`Тест сюіт` може [наслідуватися](<../tutorial/SuiteInheritance.md>) і бути наслідуваним.
+Test suite can [inherit](<../tutorial/SuiteInheritance.md>) some test suite and be inherited.
 
-### Порядок запуску
+### Running procedure
 
-По замовчуванню кожна із тест рутин тест сюіта запускається по черзі від першої до останньої. Виконання послідовне.
+By default, each test routine of test suite runs in turn from first to last. The execution is consistent.
 
-### Визначення тест сюіта в файлі
+### Test suite definition in a file
 
 ![test.suite.definition](../../images/test.suite.definition.png)
 
-На рисунку приведена секція коду з визначенням тест сюіта. Тест сюіт має назву `Join` і має [опцію](../tutorial/TestOptions.md) `silencing`. При виконанні тест сюіта спочатку буде проведено тестування в рутині `routine1`, а потім в `routine2`.
+The figure shows a section of the code with a test suite definition. The test suite is called `Join` and has `silencing` [option](./tutorial/TestOptions.md). In this test suite, routine `routine1` is first tested and then` routine2`.

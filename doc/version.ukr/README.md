@@ -72,16 +72,16 @@
   Як запускати тестування.
 </details>
 <details><summary><a href="./tutorial/TestCreation.md">
-      Створення тесту "Hello World!"
+      Тест сюіт "Hello World!"
   </a></summary>
-  Створення тесту рутини для конкатенації.
+  Створення простого тест сюіта.
 </details>
 <details><summary><a href="./tutorial/Report.md">
       Як читати звіт та групувати перевірки
   </a></summary>
   Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
 </details>
-<details><summary><a href="./tutorial/TestCreation.md">
+<details><summary><a href="./tutorial/SuiteInheritance.md">
       Наслідування тест сюіта
   </a></summary>
   Приклад наслідування одного тест сюіта іншим.

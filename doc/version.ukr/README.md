@@ -67,7 +67,12 @@
 <details><summary><a href="./tutorial/TestCreation.md">
       Створення тесту "Hello World!"
   </a></summary>
-  Створення модульного тесту для тестування функції конкатенації.
+  Створення модульного тесту для тестування.
+</details>
+<details><summary><a href="./tutorial/TestCreation.md">
+      Наслідування тест сюіта
+  </a></summary>
+  Приклад наслідування одного тест сюіта іншим.
 </details>
 <details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності

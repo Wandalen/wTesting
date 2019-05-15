@@ -2,7 +2,7 @@
 
 Застосування опцій для налаштування проходження тестів.
 
-### Конфігурація 
+### Конфігурація
 
 <details>
   <summary><u>Структура файлів</u></summary>
@@ -80,7 +80,7 @@ wTester.test( Self.name );
 
 </details>
 
-В приведеному тесті виконується тестування однієї тест рутини з двома кейсами - `pass` i `fail`. Перший має дві перевірки що пройдуть, а другий містить перевірку з помилкою. 
+В приведеному тесті виконується тестування однієї тест рутини з двома кейсами - `pass` i `fail`. Перший має дві перевірки що пройдуть, а другий містить перевірку з помилкою.
 
 <details>
     <summary><u>Код файла <code>Multiply.js</code></u></summary>
@@ -143,7 +143,7 @@ wTester.test( Self.name );
 module.exports.sum = function( a, b )
 {
   return Number( a ) + Number( b );
-}; 
+};
 
 ```
 
@@ -192,7 +192,7 @@ wTester.test( Self.name );
 
 ### Опція `sanitareTime`
 
-Визначає час затримки між завершенням тесту однієї тест рутини та запуском наступної. Цей час призначений для завершення виконання асинхронних функцій в попередній рутині перед запуском наступної. 
+Визначає час затримки між завершенням тесту однієї тест рутини та запуском наступної. Цей час призначений для завершення виконання асинхронних функцій в попередній рутині перед запуском наступної.
 
 <details>
   <summary><u>Вивід команди <code>wtest . sanitareTime:1000</code></u></summary>
@@ -201,7 +201,7 @@ wTester.test( Self.name );
 [user@user ~]$ wtest . sanitareTime:1000
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
-      
+
       Test check ( Join / routine1 / fail # 3 ) ... failed
       Failed test routine ( Join / routine1 ) in 0.088s
 
@@ -217,7 +217,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
-      
+
       Passed test routine ( Multiply / routine1 ) in 0.059s
 
     Passed test checks 3 / 3
@@ -227,7 +227,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:27
-      
+
       Passed test routine ( Sum / routine1 ) in 0.060s
 
     Passed test checks 3 / 3
@@ -258,7 +258,7 @@ Running test suite ( Join ) ..
 [user@user ~]$ wtest . sanitareTime:1000 timing:0
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
-      
+
       Test check ( Join / routine1 / fail # 3 ) ... failed
       Failed test routine ( Join / routine1 ) in 0.088s
 
@@ -269,7 +269,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
-      
+
       Passed test routine ( Multiply / routine1 ) in 0.060s
 
     Passed test checks 3 / 3
@@ -279,7 +279,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:27
-      
+
       Passed test routine ( Sum / routine1 ) in 0.058s
 
     Passed test checks 3 / 3
@@ -295,7 +295,7 @@ Running test suite ( Join ) ..
 
 </details>
 
-Для наочності результату використайте комбінацію параметрів `sanitareTime` i `timing`. Виконайте тестування командою `wtest . sanitareTime:1000 timing:0`. 
+Для наочності результату використайте комбінацію параметрів `sanitareTime` i `timing`. Виконайте тестування командою `wtest . sanitareTime:1000 timing:0`.
 
 В порівнянні з виводом без `timing:0` утиліліта не вивела сумарний час проходження тесту, який був штучно збільшений з допомогою опції `sanitareTime`.
 
@@ -310,7 +310,7 @@ Running test suite ( Join ) ..
 [user@user ~]$ wtest . routineTimeOut:5
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
-        
+
         Test check ( Join / routine1 /  # 1 ) ... failed throwing error
       Failed test routine ( Join / routine1 ) in 0.067s
 
@@ -322,7 +322,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
-        
+
         Test check ( Multiply / routine1 /  # 2 ) ... failed throwing error
       Failed test routine ( Multiply / routine1 ) in 0.057s
 
@@ -334,7 +334,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:27
-        
+
         Test check ( Sum / routine1 /  # 2 ) ... failed throwing error
       Failed test routine ( Sum / routine1 ) in 0.054s
 
@@ -354,7 +354,7 @@ Running test suite ( Join ) ..
 
 Щоб дослідити поведінку тестера при зміні часу проходження рутини встановіть час набагато менший від середнього часу проходження. Наприклад, п'ять мілісекунд, для цього введіть команду `wtest . routineTimeOut:5`. Порівняйте з приведеними результатами.
 
-Через те, що рутини не могли пройти тестування за встановлений час отримано провал тесту в кожній із них. 
+Через те, що рутини не могли пройти тестування за встановлений час отримано провал тесту в кожній із них.
 
 Використовуючи даний параметр слідкуйте за об'ємом тест рутин. Помилки можуть виникнути через недостатній час на тестування.
 
@@ -369,7 +369,7 @@ Running test suite ( Join ) ..
 [user@user ~]$ wtest . shoulding:0
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
-      
+
       Test check ( Join / routine1 / fail # 3 ) ... failed
       Failed test routine ( Join / routine1 ) in 0.087s
 
@@ -380,7 +380,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
-      
+
       Passed test routine ( Multiply / routine1 ) in 0.046s
 
     Passed test checks 2 / 2
@@ -390,7 +390,7 @@ Running test suite ( Join ) ..
 
     Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:27
-      
+
       Passed test routine ( Sum / routine1 ) in 0.045s
 
     Passed test checks 2 / 2
@@ -467,7 +467,7 @@ wTester.test( Self.name );
 [user@user ~]$ wtest Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
-        
+
         Test check ( Join / routine1 / fail # 3 ) ... failed
       Failed test routine ( Join / routine1 ) in 0.091s
 
@@ -496,7 +496,7 @@ Running test suite ( Join ) ..
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
 12
-        
+
         Test check ( Join / routine1 / fail # 3 ) ... failed
       Failed test routine ( Join / routine1 ) in 0.097s
 
@@ -513,9 +513,9 @@ Running test suite ( Join ) ..
 
 </details>
 
-Указання опції `silencing:0` змінить поведінку проходження тестування без зміни файла. Введіть команду `wtest Join.test.js silencing:0` і порівняйте вивід. 
+Указання опції `silencing:0` змінить поведінку проходження тестування без зміни файла. Введіть команду `wtest Join.test.js silencing:0` і порівняйте вивід.
 
-Отриманий звіт містить рядок, що включений розробником для відладки. 
+Отриманий звіт містить рядок, що включений розробником для відладки.
 
 Якщо при проведенні тестування використовується [опція `verbosity`](Verbosity.md) зі значенням "7" і більше, то повідомлення виводятся. В звіті вони маркуються іншим кольором.
 
@@ -580,7 +580,7 @@ wTester.test( Self.name );
 [user@user ~]$ wtest Sum.test.js accuracy:0.2
 Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:35
-        
+
         Test check ( Sum / routine1 /  # 1 ) ... failed
         Test check ( Sum / routine1 /  # 2 ) ... failed
       Failed test routine ( Sum / routine1 ) in 0.146s
@@ -605,8 +605,8 @@ Running test suite ( Sum ) ..
 
 ### Підсумок
 
-- Опції тестування допомагають налаштувати проходження тестів. 
+- Опції тестування допомагають налаштувати проходження тестів.
 - Опції тестування вказуються після назви тесту або директорії з тестами.
 - Опції тестування можна комбінувати.
 - Опції тестування переписують значення за замовчуванням та ті, що встановлені в тест сюіті.
-- Указані налаштування тест рутин не змінюються опціями тестування. 
+- Указані налаштування тест рутин не змінюються опціями тестування.

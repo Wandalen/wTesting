@@ -87,7 +87,7 @@
 <details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>
-  Зміна кількості виведеної інформації виконання тесту з опцією verbosity.
+  Зміна кількості виведеної інформації опцією <code>verbosity</code>.
 </details>
 <details><summary><a href="./tutorial/TestOptions.md">
       Додаткові опції тестування

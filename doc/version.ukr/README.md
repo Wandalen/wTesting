@@ -59,6 +59,13 @@
   </a></summary>
   Процедура встановлення утиліти wTesting.
 </details>
+
+<details><summary><a href="./tutorial/Help.md">
+      Як отримати довідку
+  </a></summary>
+  Я отримати загальну довідку чи дізнатись інформацію про тест-сюіти.
+</details>
+
 <details><summary><a href="./tutorial/Running.md">
       Запуск тестів
   </a></summary>

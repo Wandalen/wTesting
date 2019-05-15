@@ -1,22 +1,22 @@
-# Тест рутина
+# Test routine
 
-Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест рутина виконується послідовно та містить тест перевірки та тест кейси.
+A test routine is a routine (function, method) designed to test some aspect of a test object. The test routine is performed sequentially and contains test checks and a test case.
 
-Розбиття тест сюіта на тест рутини потрібно проводити з урахуванням того, що рутина припиняє своє виконання при першій же викинутій помилці.
+The division of a test suite on the test routines should be made taking into account that the routine stops its performance at the first thrown mistake.
 
-## Результат виконання тест рутини
+### Result of test routine running
 
-Тест рутина позначається, як провалена ( червоним ), якщо
+The test routine is indicated as failed (red) if:
 
-- в ній виникла помилка;
-- в ній не було здійснено жодної тест перевірки;
-- принаймні одна тест перевірка дала негативний результат;
-- час відведений на виконання тест рутини сплив.
+- there was an error in it;
+- there was no any performed test check in it;
+- at least one test check has given a negative result;
+- time out of routine testing was over.
 
-Інкаше тест рутина позначається як пройдена ( зеленим ).
+In another way, a test routine is indicated as passed (green).
 
-### Приклад тест рутин
+### Example of test routine
 
 ![test.routine](../../images/test.routine.png)
 
-На рисунку приведено секцію коду з двома визначеними тест рутинами. Перша рутина з назвою `routine1` виконує одну тест перевірку на ідентичність двох значень. Друга тест рутина з назвою `routine2` має два тест кейси, в кожному з яких є по одній тест перевірці. Для виконання  тест рутин вони повинні позначатись в визначенні тест сюіта.
+The firure shows a section of code that contains two test routines. The first routine named `routine1` performs one test of the identity of two values. The second test routine named `routine2` has two test cases, each of which has one test check. To perform test routines they should be specified in the test suite definition.

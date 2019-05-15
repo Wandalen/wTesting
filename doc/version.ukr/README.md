@@ -59,15 +59,13 @@
   </a></summary>
   Процедура встановлення утиліти Testing.
 </details>
-
 <details><summary><a href="./tutorial/Help.md">
       Як отримати довідку
   </a></summary>
   Я отримати загальну довідку чи дізнатись інформацію про тест-сюіти.
 </details>
-
 <details><summary><a href="./tutorial/Running.md">
-      Запуск тестів
+      Як запускати окремі тесутвання окремих тест сюітів та скопом
   </a></summary>
   Як запускати тестування.
 </details>

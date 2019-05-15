@@ -427,195 +427,6 @@ timeOut.timeOut = 20000;
 
 //
 
-function timeOutError( test )
-{
-  var c = this;
-  var que = new _.Consequence().take( null )
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay only';
-    var timeBefore = _.timeNow();
-    return _.timeOutError( c.delay )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay + routine';
-    var timeBefore = _.timeNow();
-    return _.timeOutError( c.delay, () => null )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay + routine that returns a value';
-    var timeBefore = _.timeNow();
-    var value = 'value';
-    return _.timeOutError( c.delay, () => value )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-  })
-
-  // /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay + routine that returns a consequence';
-    var timeBefore = _.timeNow();
-    return _.timeOutError( c.delay, () => _.timeOut( c.delay ) )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      // test.is( elapsedTime >= c.delay * 2 );
-      test.ge( elapsedTime, 2 * c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay + routine that calls another timeOut';
-    var timeBefore = _.timeNow();
-    return _.timeOutError( c.delay, () => { _.timeOut( c.delay ) } )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay + context + routine + arguments';
-    var timeBefore = _.timeNow();
-    function r( delay )
-    {
-      return delay / 2;
-    }
-    return _.timeOutError( c.delay, undefined, r, [ c.delay ] )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay-c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'delay + consequence';
-    var timeBefore = _.timeNow();
-
-    return _.timeOutError( c.delay, _.timeOut( c.delay * 2 ) )
-    .finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay * 2-c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( _.errIs( err ) );
-      return null;
-    });
-
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'stop timer with error';
-    var timeBefore = _.timeNow();
-
-    var t = _.timeOutError( c.delay );
-    t.finally( function( err, got )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
-      test.identical( got, undefined );
-      test.is( !!err );
-      test.identical( t.resourcesGet().length, 0 );
-      return null;
-    })
-    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
-
-    return t;
-  })
-
-  /* */
-
-  .keep/*finally*/( function( arg )
-  {
-    test.case = 'stop timer with error, routine passed';
-    var timeBefore = _.timeNow();
-    var called = false;
-
-    var t = _.timeOutError( c.delay, () => { called = true } );
-    t.finally( function( err, arg )
-    {
-      var elapsedTime = _.timeNow() - timeBefore;
-      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
-      test.identical( arg, undefined );
-      test.identical( err, 'stop' );
-      test.identical( called, false );
-      test.identical( t.resourcesGet().length, 0 );
-      return null;
-    })
-    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
-
-    return t;
-  })
-
-  .finally( function( err,arg )
-  {
-    return null;
-  });
-
-  return que;
-}
-
-timeOutError.timeOut = 30000;
-
-//
-
 function timeOutMode01( test )
 {
   var c = this;
@@ -2160,6 +1971,195 @@ timeOutMode11.timeOut = 30000;
 
 //
 
+function timeOutError( test )
+{
+  var c = this;
+  var que = new _.Consequence().take( null )
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay only';
+    var timeBefore = _.timeNow();
+    return _.timeOutError( c.delay )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay + routine';
+    var timeBefore = _.timeNow();
+    return _.timeOutError( c.delay, () => null )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay + routine that returns a value';
+    var timeBefore = _.timeNow();
+    var value = 'value';
+    return _.timeOutError( c.delay, () => value )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+  })
+
+  // /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay + routine that returns a consequence';
+    var timeBefore = _.timeNow();
+    return _.timeOutError( c.delay, () => _.timeOut( c.delay ) )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      // test.is( elapsedTime >= c.delay * 2 );
+      test.ge( elapsedTime, 2 * c.delay-c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay + routine that calls another timeOut';
+    var timeBefore = _.timeNow();
+    return _.timeOutError( c.delay, () => { _.timeOut( c.delay ) } )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay + context + routine + arguments';
+    var timeBefore = _.timeNow();
+    function r( delay )
+    {
+      return delay / 2;
+    }
+    return _.timeOutError( c.delay, undefined, r, [ c.delay ] )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay-c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'delay + consequence';
+    var timeBefore = _.timeNow();
+
+    return _.timeOutError( c.delay, _.timeOut( c.delay * 2 ) )
+    .finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay * 2-c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( _.errIs( err ) );
+      return null;
+    });
+
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'stop timer with error';
+    var timeBefore = _.timeNow();
+
+    var t = _.timeOutError( c.delay );
+    t.finally( function( err, got )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
+      test.identical( got, undefined );
+      test.is( !!err );
+      test.identical( t.resourcesGet().length, 0 );
+      return null;
+    })
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
+
+    return t;
+  })
+
+  /* */
+
+  .keep/*finally*/( function( arg )
+  {
+    test.case = 'stop timer with error, routine passed';
+    var timeBefore = _.timeNow();
+    var called = false;
+
+    var t = _.timeOutError( c.delay, () => { called = true } );
+    t.finally( function( err, arg )
+    {
+      var elapsedTime = _.timeNow() - timeBefore;
+      test.ge( elapsedTime, c.delay / 2 - c.timeAccuracy );
+      test.identical( arg, undefined );
+      test.identical( err, 'stop' );
+      test.identical( called, false );
+      test.identical( t.resourcesGet().length, 0 );
+      return null;
+    })
+    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
+
+    return t;
+  })
+
+  .finally( function( err,arg )
+  {
+    return null;
+  });
+
+  return que;
+}
+
+timeOutError.timeOut = 30000;
+
+//
+
 var Self =
 {
 
@@ -2177,11 +2177,11 @@ var Self =
   {
 
     timeOut,
-
-    timeOutError,
     timeOutMode01,
     timeOutMode10,
     timeOutMode11,
+
+    timeOutError,
 
   }
 
@@ -2191,4 +2191,4 @@ Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 
-} )( );
+})();

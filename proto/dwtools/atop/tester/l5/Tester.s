@@ -66,6 +66,7 @@ function exec()
     _.assert( arguments.length === 0 );
 
     tester.appArgsRead();
+
     let path = tester.path;
 
     if( !tester.ScenariosHelpMap[ tester.settings.scenario ] )
@@ -167,6 +168,10 @@ function appArgsRead()
 
   tester.path = appArgs.subject || _.path.current();
   tester.path = _.path.join( _.path.current(), tester.path );
+
+  debugger;
+  if( appArgs.subject && !appArgs.map.scenario )
+  settings.scenario = 'test';
 
   if( settings.importanceOfNegative !== undefined && settings.importanceOfNegative !== null )
   tester.importanceOfNegative = Number( settings.importanceOfNegative ) || 0;
@@ -1338,8 +1343,8 @@ let SettingsNameMap =
 let SettingsOfTester =
 {
 
-  scenario : 'test',
-  // scenario : null,
+  // scenario : 'test',
+  scenario : 'help',
   sanitareTime : 500,
   fails : null,
   beeping : null,

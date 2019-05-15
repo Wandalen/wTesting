@@ -52,7 +52,7 @@ function routine1( test )
 {
   test.case = 'pass';
   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
-  test.identical( Join.join( 1, 3 ), '13' );
+  test.identical( Join.join( 1, 2 ), '12' );
 
   test.case = 'fail';
   test.identical( Join.join( 1, 3 ), 13 );
@@ -202,9 +202,13 @@ wTester.test( Self.name );
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
       
-      Passed test routine ( Join / routine1 ) in 0.066s
-        Test check ( Join / routine2 / fail # 2 ) ... failed
-      Failed test routine ( Join / routine2 ) in 0.078s
+      Test check ( Join / routine1 / fail # 3 ) ... failed
+      Failed test routine ( Join / routine1 ) in 0.088s
+
+    Passed test checks 2 / 3
+    Passed test cases 1 / 2
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.170s ... failed
 
     Passed test checks 2 / 3
     Passed test cases 1 / 2
@@ -255,14 +259,13 @@ Running test suite ( Join ) ..
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
       
-      Passed test routine ( Join / routine1 ) in 0.059s
-        Test check ( Join / routine2 / fail # 2 ) ... failed
-      Failed test routine ( Join / routine2 ) in 0.076s
+      Test check ( Join / routine1 / fail # 3 ) ... failed
+      Failed test routine ( Join / routine1 ) in 0.088s
 
     Passed test checks 2 / 3
     Passed test cases 1 / 2
-    Passed test routines 1 / 2
-    Test suite ( Join ) ... failed
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.170s ... failed
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
@@ -308,16 +311,14 @@ Running test suite ( Join ) ..
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
         
-        Test check ( Join / routine1 /  # 2 ) ... failed throwing error
-      Failed test routine ( Join / routine1 ) in 0.072s
-        Test check ( Join / routine2 /  # 1 ) ... failed throwing error
-      Failed test routine ( Join / routine2 ) in 0.061s
+        Test check ( Join / routine1 /  # 1 ) ... failed throwing error
+      Failed test routine ( Join / routine1 ) in 0.067s
 
-    Thrown 2 error(s)
-    Passed test checks 1 / 3
+    Thrown 1 error(s)
+    Passed test checks 0 / 1
     Passed test cases 0 / 0
-    Passed test routines 0 / 2
-    Test suite ( Join ) ... in 0.292s ... failed
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.160s ... failed
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
@@ -369,15 +370,13 @@ Running test suite ( Join ) ..
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
       
-      Passed test routine ( Join / routine1 ) in 0.059s
-hello, world!
-        Test check ( Join / routine2 / fail # 2 ) ... failed
-      Failed test routine ( Join / routine2 ) in 0.074s
+      Test check ( Join / routine1 / fail # 3 ) ... failed
+      Failed test routine ( Join / routine1 ) in 0.087s
 
     Passed test checks 2 / 3
     Passed test cases 1 / 2
-    Passed test routines 1 / 2
-    Test suite ( Join ) ... in 0.263s ... failed
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.175s ... failed
 
     Running test suite ( Multiply ) ..
     at  /path_to_module/testCreation/Multiply.test.js:27
@@ -413,8 +412,201 @@ hello, world!
 
 ### Опція `silencing`
 
-Призначена для вимкнення з виводу додаткових повідомлень внесених розробником. Опція призначена для генерування чистого звіту тестування без додаткових включень. 
+Призначена для вимкнення з виводу додаткових повідомлень внесених розробником. Опція призначена для генерування чистого звіту тестування без додаткових включень. Приймає два значення: "0" - включити вивід в консоль, "1" - виключити вивід. Значення за замовчуванням "0".
+
+<details>
+    <summary><u>Код файла <code>Join.test.js</code></u></summary>
+
+```js    
+
+let _ = require( 'wTesting' );
+let Join = require( './Join.js' );
+
+//
+
+function routine1( test )
+{
+  test.case = 'pass';
+  test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
+  console.log( Join.join(1, 2));  
+  test.identical( Join.join( 1, 2 ), '12' );
+
+  test.case = 'fail';
+  test.identical( Join.join( 1, 3 ), 13 );
+
+}
+
+//
+
+var Self =
+{
+  name : 'Join',
+  silencing : 1,
+  tests :
+  {
+    routine1,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );
+
+```
+
+</details>
+
+Для перевірки опції `silencing` потрібно внести вивід в консоль. Змініть файл `Join.test.js` згідно представленого вище коду. В тесті додано рядок для виводу результату об'єднання двох чисел, а в налаштування тест сюіта внесено опцію `silencing : 1`, котра вимикає вивід.
+
+<details>
+  <summary><u>Вивід команди <code>wtest Join.test.js</code></u></summary>
+
+```
+[user@user ~]$ wtest Join.test.js
+Running test suite ( Join ) ..
+    at  /path_to_module/testCreation/Join.test.js:40
+        
+        Test check ( Join / routine1 / fail # 3 ) ... failed
+      Failed test routine ( Join / routine1 ) in 0.091s
+
+    Passed test checks 2 / 3
+    Passed test cases 1 / 2
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.197s ... failed
+
+
+
+  Testing ... in 0.272s ... failed
+
+```
+
+</details>
+
+Виконайте тестування в файлі `Join.test.js` без застосування опції `silencing`. Для цього введіть команду `wtest Join.test.js`. Порівняйте вивід.
+
+Отримано звичайний вивід без повідомлення в консоль.
+
+<details>
+  <summary><u>Вивід команди <code>wtest Join.test.js silencing:0</code></u></summary>
+
+```
+[user@user ~]$ wtest Join.test.js silencing:0
+Running test suite ( Join ) ..
+    at  /path_to_module/testCreation/Join.test.js:40
+12
+        
+        Test check ( Join / routine1 / fail # 3 ) ... failed
+      Failed test routine ( Join / routine1 ) in 0.097s
+
+    Passed test checks 2 / 3
+    Passed test cases 1 / 2
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.194s ... failed
+
+
+
+  Testing ... in 0.261s ... failed
+
+```
+
+</details>
+
+Використайте опцію `silencing:0` для зміни його значення при виконанні тест сюіта. Введіть команду `wtest Join.test.js silencing:0` і порівняйте вивід. 
+
+Отриманий звіт містить рядок зі згенерованим значенням. Таким чином, ввід опцій тестування в команду змінює поведінку проходження тесту, при цьому, тест сюіт не змінюється. 
+
+Якщо при проведенні тестування використовується [опція `verbosity`](Verbosity.md) зі значенням "7" і більше, то повідомлення виводятся. В звіті вони маркуються іншим кольором.
 
 ### Опція `accuracy`
 
 Встановлює точність (похибку) з якою виконуються перевірки в математичних функціях. Опція переписує похибку, що встановлена за замовчуванням - 1е-7. Кожна тест рутина може встановити власну похибку, яку ця опція не змінює.
+
+<details>
+    <summary><u>Код файла <code>Sum.test.js</code></u></summary>
+
+```js    
+let _ = require( 'wTesting' );
+let Sum = require( './Sum.js' );
+
+//
+
+function routine1( test )
+{
+  test.equivalent( Sum.sum( 1, 1 ), 2.03 );
+  test.equivalent( Sum.sum( 2, -1 ), 1.04 );
+}
+routine1.accuracy = 1e-2
+
+//
+
+function routine2( test )
+{
+  test.equivalent( Sum.sum( 1, 1 ), 2.1 );
+  test.equivalent( Sum.sum( 2, -1 ), 0.9 );
+}
+
+//
+
+var Self =
+{
+  name : 'Sum',
+  tests :
+  {
+    routine1,
+    routine2,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );  
+
+```
+
+</details>
+
+Змініть файл `Sum.test.js` згідно приведеного вище коду. Тест сюіт `Sum` включає дві рутини. В рутині `routine1` встановлена похибка 0.01, а очікуваний результат виходить за рамки похибки. В рутині `routine2` не встановлюється точність обчислення.
+
+Зверніть увагу, що перевірка `identical` перевіряє на абсолютну ідентичність значень і не враховує похибку. Для перевірки значень з похибкою використовується `equivalent`.
+
+<details>
+  <summary><u>Вивід команди <code>wtest Sum.test.js accuracy:0.2</code></u></summary>
+
+```
+[user@user ~]$ wtest Sum.test.js accuracy:0.2
+Running test suite ( Sum ) ..
+    at  /path_to_module/testCreation/Sum.test.js:35
+        
+        Test check ( Sum / routine1 /  # 1 ) ... failed
+        Test check ( Sum / routine1 /  # 2 ) ... failed
+      Failed test routine ( Sum / routine1 ) in 0.146s
+      Passed test routine ( Sum / routine2 ) in 0.045s
+
+    Passed test checks 2 / 4
+    Passed test cases 0 / 0
+    Passed test routines 1 / 2
+    Test suite ( Sum ) ... in 0.333s ... failed
+
+
+
+  Testing ... in 0.414s ... failed
+
+```
+
+</details>
+
+Виконайте тестування в файлі `Sum.test.js` встановивши похибку значенням "0.2". Для цього введіть команду `wtest Sum.test.js accuracy:0.2`. Порівняйте результати виводу.
+
+Вивід консолі свідчить про те, що тести в `routine1` провалені. А тести в рутині `routine2` успішно виконані через врахування нового значення похибки.
+
+### Підсумок
+
+- Опції тестування допомагають налаштувати проходження тестів. 
+- Опції тестування вказуються після назви тесту або директорії з тестами.
+- Опції тестування можна комбінувати.
+- Опції тестування переписують значення за замовчуванням та ті, що встановлені в тест сюіті.
+- Указані налаштування тест рутин не змінюються при вводі тест опції. 

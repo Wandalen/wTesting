@@ -1,6 +1,6 @@
 ## Quick start
 
-For quick start [install](<./tutorial/Installation.md>) utility `wTesting`, [get acquainted with](<./tutorial/Running.md>) command line interface and create the first [test "Hello World"](<./tutorial/TestCreation.md>). [Read](<./tutorial/Abstract.md>) abstract if you are wondering what is it for and what philosophy is behind utility `wTesting`.
+For quick start [install](<./tutorial/Installation.md>) utility `Testing`, [get acquainted with](<./tutorial/Running.md>) command line interface and create the first [test "Hello World"](<./tutorial/TestCreation.md>). [Read](<./tutorial/Abstract.md>) abstract if you are wondering what is it for and what philosophy is behind utility `Testing`.
 
 For gentle introduction use tutorials. For getting exhaustive information on one or another aspect use list of concepts to find a concept of interest and get familiar with it.
 
@@ -52,12 +52,12 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./tutorial/Abstract.md">
       Abstract
   </a></summary>
-  General information about utility wTesting.
+  General information about utility Testing.
 </details>
 <details><summary><a href="./tutorial/Installation.md">
       Installation
   </a></summary>
-  Procedure of installation of a utility wTesting
+  Procedure of installation of a utility Testing
 </details>
 <details><summary><a href="./tutorial/Running.md">
       Running tests

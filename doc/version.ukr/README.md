@@ -1,6 +1,6 @@
 ## Швидкий старт
 
-Для швидкого старту [встановіть](<./tutorial/Installation.md>) утиліту `wTesting`, [ознайомтеся](<./tutorial/Running.md>) із інтрфейсом командного рядка та створіть ваш перший [тест "Hello World"](<./tutorial/TestCreation.md>). [Прочитатйе](<./tutorial/Abstract.md>) загальну інформацію якщо вам цікаво дізнатися більше про призначення та філософію утиліти `wTesting`.
+Для швидкого старту [встановіть](<./tutorial/Installation.md>) утиліту `Testing`, [ознайомтеся](<./tutorial/Running.md>) із інтрфейсом командного рядка та створіть ваш перший [тест "Hello World"](<./tutorial/TestCreation.md>). [Прочитатйе](<./tutorial/Abstract.md>) загальну інформацію якщо вам цікаво дізнатися більше про призначення та філософію утиліти `Testing`.
 
 Для плавного заглиблення в предмет використовуйте туторіали. Для отримання вичерпного розуміння якогось із аспектів використайте перелік концепцій щоб знайти потрібну і ознайомтеся із нею.
 
@@ -52,12 +52,12 @@
 <details><summary><a href="./tutorial/Abstract.md">
       Загальна інформація
   </a></summary>
-  Загальна інформація про утиліту wTesting.
+  Загальна інформація про утиліту Testing.
 </details>
 <details><summary><a href="./tutorial/Installation.md">
       Встановлення
   </a></summary>
-  Процедура встановлення утиліти wTesting.
+  Процедура встановлення утиліти Testing.
 </details>
 
 <details><summary><a href="./tutorial/Help.md">

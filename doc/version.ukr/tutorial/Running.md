@@ -4,7 +4,7 @@
 
 ### Завантаження
 
-Для запуску тестування потрібні готові тест сюіти. Котрі можна знайти в утиліті [`wTools`](<https://github.com/Wandalen/wTools>).
+Для запуску тестування потрібні готові тест сюіти, котрі можна знайти в модулі [`wTools`](<https://github.com/Wandalen/wTools>).
 
 <details>
   <summary><u>Структура файлів модуля <code>wTools</code></u></summary>

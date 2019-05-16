@@ -1,10 +1,10 @@
 # Запуск тестів
 
-Як запускати окремі тесутвання окремих тест сюітів та скопом.
+Як запускати окремі тестування окремих тест сюітів та скопом.
 
 ### Завантаження
 
-Для запуску тестування потрібні готові тест сюіти. Для цього використайте модуль [`wTools`](<https://github.com/Wandalen/wTools>).
+Для запуску тестування потрібні готові тест сюіти. Котрі можна знайти в утиліті [`wTools`](<https://github.com/Wandalen/wTools>).
 
 <details>
   <summary><u>Структура файлів модуля <code>wTools</code></u></summary>
@@ -25,7 +25,7 @@ wTools
 
 Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
 
-Після клонування перейдіть в директорію із модулем та виконайте.
+Після клонування перейдіть в директорію із модулем та виконайте команду
 
 ```
 npm install
@@ -57,7 +57,131 @@ npm install
 
 </details>
 
-Згідно виводу утиліта має 10 тест сюітів. Іншими словами, 10 тест файлів так як в кожному файлі знаходиться один тест сюіт. Девять із них знаходяться в директорії `proto` i один в `sample`.
+Згідно виводу утиліта має 10 тест сюітів. Іншими словами, 10 тест файлів так як в кожному файлі знаходиться один тест сюіт. Дев'ять із них знаходяться в директорії `proto` i один в `sample`.
+
+### Тестування окремого тест сюіта
+
+Для проведення тестування окремого файла використовуються команди `wtest` i `node`. Аргументом команди передається повний відносний ( абсолютний ) шлях до тест файла.
+
+<details>
+  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
+
+```
+[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s
+
+Running test suite ( Tools/base/l1/Diagnostics ) ..
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
+      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.133s
+      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.075s
+      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.071s
+      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.060s
+      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.053s
+
+    Passed test checks 34 / 34
+    Passed test cases 30 / 30
+    Passed test routines 5 / 5
+    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.088s ... ok
+
+
+  Testing ... in 1.679s ... ok
+
+```
+
+</details>
+
+Використайте тест файл `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s`.
+
+<details>
+  <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
+
+```
+[user@user ~]$ node proto/dwtools/abase/l1.test/Diagnostics.test.s
+
+Running test suite ( Tools/base/l1/Diagnostics ) ..
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
+      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.121s
+      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.079s
+      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.080s
+      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.061s
+      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.048s
+
+    Passed test checks 34 / 34
+    Passed test cases 30 / 30
+    Passed test routines 5 / 5
+    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.122s ... ok
+
+
+  Testing ... in 1.725s ... ok
+
+```
+
+</details>
+
+Виконайте тестування файла `Diagnostics.test.s` ввівши команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s`. Порівняйте виводи команд `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s` i `node proto/dwtools/abase/l1.test/Diagnostics.test.s`
+
+Звіт тестування при виконанні тесту повністю співпадає. Незначна похибка в часі проведення тесту визначається потужністю і завантаженістю машини.
+
+### Тестування окремої рутини
+
+Тестування цілого тест сюіту не завжди доцільне - воно займає більше часу і виконує зайву роботу. Якщо розробник грамотно оформив код, то зміни в окремому модулі не повинні впливати на інші частини коду. Тому, розробник може протестувати лише внесені зміни використавши окрему рутину тест сюіта.
+
+Для запуску окремої тест рутини виконуються команди `wtest path/to/testSuite.js routine:someRoutine` або `node path/to/testSuite.js routine:someRoutine`. Тобто, опцією `routine` можна указати рутину для тестування. Опція `routine` має скорочену форму запису - `r`.
+
+<details>
+  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err</code></u></summary>
+
+```
+[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err
+
+Running test suite ( Tools/base/l1/Diagnostics ) ..
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
+       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.121s
+
+    Passed test checks 9 / 9
+    Passed test cases 9 / 9
+    Passed test routines 1 / 1
+    Test suite ( Tools/base/l1/Diagnostics ) ... in 0.765s ... ok
+
+
+  Testing ... in 1.346s ... ok
+
+```
+
+</details>
+
+Проведіть тестування рутини `err` в файлі `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err`.
+
+Було проведено тестування лише одніє рутини. В тест рутині `err` успішно пройдено дев'ять тест перевірок в дев'яти кейсах. Загальний підсумок тестування рутини - пройдено.
+
+<details>
+  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s r:assert</code></u></summary>
+
+```
+[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:assert
+
+Running test suite ( Tools/base/l1/Diagnostics ) ..
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+
+       Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.068s
+
+    Passed test checks 3 / 3
+    Passed test cases 3 / 3
+    Passed test routines 1 / 1
+    Test suite ( Tools/base/l1/Diagnostics ) ... in 0.714s ... ok
+
+
+  Testing ... in 1.290s ... ok
+
+```
+
+</details>
+
+Проведіть тестування рутини `assert` в файлі `Diagnostics.test.s`. Для запуску тестування використайте `NodeJS` і скорочену форму запису опції `routine`. Введіть команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s r:assert`. Порівняйте результати виводу.
+
+Тестування пройдено, тестер виконав одну тест рутину `assert` з трьома тест кейсами і трьома перевірками. Прямий запуск через `NodeJS` також вміє обирати одну тест рутину.
 
 ### Тестування скопом
 
@@ -205,135 +329,11 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 На момент проведення вашого тестування даних помилок може не виникнути.
 
-### Тестування окремого тест сюіта
-
-Для проведення тестування окремого файла використовуються команди `wtest` i `node`. Аргументом команди передається повний відносний ( абсолютний ) шлях до тест файла.
-
-<details>
-  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
-
-```
-[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s
-
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-
-      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.133s
-      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.075s
-      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.071s
-      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.060s
-      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.053s
-
-    Passed test checks 34 / 34
-    Passed test cases 30 / 30
-    Passed test routines 5 / 5
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.088s ... ok
-
-
-  Testing ... in 1.679s ... ok
-
-```
-
-</details>
-
-Використайте тест файл `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s`.
-
-<details>
-  <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
-
-```
-[user@user ~]$ node proto/dwtools/abase/l1.test/Diagnostics.test.s
-
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-
-      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.121s
-      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.079s
-      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.080s
-      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.061s
-      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.048s
-
-    Passed test checks 34 / 34
-    Passed test cases 30 / 30
-    Passed test routines 5 / 5
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.122s ... ok
-
-
-  Testing ... in 1.725s ... ok
-
-```
-
-</details>
-
-Виконайте тестування файла `Diagnostics.test.s` ввівши команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s`. Порівняйте виводи команд `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s` i `node proto/dwtools/abase/l1.test/Diagnostics.test.s`
-
-Звіт тестування при виконанні тесту повністю співпадає. Незначна похибка в часі проведення тесту визначається потужністю і завантаженістю машини.
-
-### Тестування окремої рутини
-
-Тестування цілого тест сюіту не завжди доцільне - воно займає більше часу і виконує зайву роботу. Якщо розробник грамотно оформив код, то зміни в окремому модулі не повинні впливати на інші частини коду. Тому, розробник може протестувати лише внесені зміни використавши окрему рутину тест сюіта.
-
-Для запуску окремої тест рутини виконуються команди `wtest path/to/testSuite.js routine:someRoutine` або `node path/to/testSuite.js routine:someRoutine`. Тобто, опцією `routine` можна указати рутину для тестування. Опція `routine` має скорочену форму запису - `r`.
-
-<details>
-  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err</code></u></summary>
-
-```
-[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err
-
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-
-       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.121s
-
-    Passed test checks 9 / 9
-    Passed test cases 9 / 9
-    Passed test routines 1 / 1
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 0.765s ... ok
-
-
-  Testing ... in 1.346s ... ok
-
-```
-
-</details>
-
-Проведіть тестування рутини `err` в файлі `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err`.
-
-Було проведено тестування лише одніє вказаної рутини. Тест пройшов успішно.
-
-<details>
-  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s r:assert</code></u></summary>
-
-```
-[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:assert
-
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-
-       Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.068s
-
-    Passed test checks 3 / 3
-    Passed test cases 3 / 3
-    Passed test routines 1 / 1
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 0.714s ... ok
-
-
-  Testing ... in 1.290s ... ok
-
-```
-
-</details>
-
-Проведіть тестування рутини `assert` в файлі `Diagnostics.test.s`. Для запуску тестування використайте NodeJS і скорочену форму запису опції `routine`. Введіть команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s r:assert`. Порівняйте результати виводу.
-
-Тестування в обраній рутині пройшло успішно. Прямий запуск через NodeJS також вміє обирати одну тест рутину.
-
 ### Підсумок
 
-- Запуск тестів можливий через утиліту `Testing` i через інтерпретатор NodeJS.
-- Перевагою встановлення утиліти `Testing` в використанні довідки і виконанні тестів над групою тест сюітів.
+- Запуск тестів можливий через утиліту `Testing` i через інтерпретатор `NodeJS`.
 - Утиліта здатна запускати окремі тест сюіти.
 - Утиліта здатна запускати окремі рутини тест сюіта.
+- Перевагою встановлення утиліти `Testing` в використанні довідки і виконанні тестів над групою тест сюітів.
 
 [Повернутись до змісту](../README.md#Туторіали)

@@ -169,7 +169,6 @@ function appArgsRead()
   tester.path = appArgs.subject || _.path.current();
   tester.path = _.path.join( _.path.current(), tester.path );
 
-  debugger;
   if( appArgs.subject && !appArgs.map.scenario )
   settings.scenario = 'test';
 

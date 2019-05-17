@@ -31,6 +31,11 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
  Test case or group of test checks is one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
 </details>
+<details><summary><a href="./concept/TestCase.md">
+      Group of test checks
+  </a></summary>
+ Test case or group of test checks is one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
+</details>
 <details><summary><a href="./concept/TestCoverage.md">
       Test coverage
   </a></summary>

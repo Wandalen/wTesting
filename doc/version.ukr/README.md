@@ -62,12 +62,12 @@
 <details><summary><a href="./tutorial/Help.md">
       Як отримати довідку
   </a></summary>
-  Я отримати загальну довідку чи дізнатись інформацію про тест-сюіти.
+  Як отримати загальну довідку чи дізнатись інформацію про тест-сюіти.
 </details>
 <details><summary><a href="./tutorial/Running.md">
       Запуск тестів
   </a></summary>
-  Як запускати окремі тестування окремих тест сюітів та скопом..
+  Як запускати тестування окремих тест сюітів та тестування скопом.
 </details>
 <details><summary><a href="./tutorial/TestCreation.md">
       Тест сюіт "Hello World!"

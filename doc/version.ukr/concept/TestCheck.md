@@ -56,7 +56,7 @@
 
 Повертає `true`, якщо перевірку пройдено та `false`, якщо перевірка провалилася.
 
-```
+```js
 var got = true;
 test.is( got );
 ```
@@ -71,7 +71,7 @@ test.is( got );
 
 Перевірка провалюється, якщо аргумент `true-like`, тобто, `true` або числове значення відмінне від нуля.
 
-```
+```js
 var got = false;
 test.isNot( got );
 ```
@@ -86,7 +86,7 @@ test.isNot( got );
 
 Перевірка провалюється, якщо аргумент є помилкою.
 
-```
+```js
 var got = 1;
 test.isNotError( got );
 ```
@@ -103,7 +103,7 @@ test.isNotError( got );
 
 Перевірка провалюється, якщо значення аргументів відрізняються. Числова похибка не допускається.
 
-```
+```js
 var got = { a : 'ok' };
 var expected = { a : 'ok' };
 test.identical( got, expected );
@@ -121,7 +121,7 @@ test.identical( got, expected );
 
 Перевірка провалюється, якщо аргументи повністю ідентичні. Числова похибка не допускається.
 
-```
+```js
 var got = { a : 'ok' };
 var expected = { a : 'ok' };
 test.notIdentical( got, expected );
@@ -129,7 +129,7 @@ test.notIdentical( got, expected );
 
 Перевірку `test.notIdentical` буде провалено так, як в момент перевірки значення обох аргументів ідентичні.
 
-```
+```js
 var got = 1;
 var expected = 1 + 1e-10;
 test.notIdentical( got, expected );
@@ -145,19 +145,9 @@ test.notIdentical( got, expected );
 
 Перевірка проходиться, якщо значення переданих аргументів схожі.
 
-<!-- В тому числі, відбувається співставлення булевих і числових значень: `0` - `false` i `1` - `true`. При перевірці числових значень враховується похибка. -->
-
 Перевірка провалюється, якщо значення аргументів не схожі достатньо. Допускається числова похибка `eps`, яка задається через опції тестування. Допустима числова похибка за замовчуванням `1e-7`.
 
-```
-kos : add table of what pass eq, but does not pass il
-false, 0
-true, 1
-. . .
-```
-...
-
-```
+```js
 var got = 1;
 var expected = 1.00001;
 test.equivalent( got, expected );
@@ -165,7 +155,7 @@ test.equivalent( got, expected );
 
 Перевірку `test.equivalent` буде провалено так, як значення похибки за замовчуванням `1е-7`, а значення відрізняється на `1е-5`.
 
-```
+```js
 function somer( test )
 {
   var got = 1;
@@ -176,13 +166,23 @@ somer.accuracy = 1e-4
 ```
 Перевірку `test.equivalent` буде пройдено так, як значення похибки в тест рутині `somer` встановлено в `1е-4`.
 
-```
+```js
 var got = true;
 var expected = 1;
 test.et( got, expected );
 ```
 
 Перевірку `test.et` буде пройдено так, як значення `got` і значення `expected` схожі.
+
+На основі указаної інформації можна скласти таблицю, яка покаже різницю в перевірках `equivalent` i `identical`.
+
+| Значення аргументів got і expected| Результат в equivalent | Результат в identical |
+|:----------------------------------|:-----------------------|:----------------------|
+|  true, 1                          | pass                   | failed                |
+|  false, 0                         | pass                   | failed                |
+|  1, 1 + 1e-7                      | pass                   | failed                |
+|  1, 1 - 1e-7                      | pass                   | failed                |
+
 
 ##### Тест перевірка `notEquivalent`
 
@@ -192,26 +192,24 @@ test.et( got, expected );
 
 Перевірка проходиться, якщо значення переданих аргументів відрізняються достатньо.
 
-<!-- Перевірка проходиться, якщо передані аргументи не співпадають. В тому числі, відбувається співставлення булевих і числових значень: `0` - `false` i `1` - `true`. При перевірці числових значень враховується похибка. -->
-
 Перевірка провалюється, якщо значення аргументів занадто схожі. Допускається числова похибка `eps`, яка задається через опції тестування. Допустима числова похибка за замовчуванням `1e-7`.
 
-```
-kos : add table of what pass eq, but does not pass il
-false, 0
-true, 1
-. . .
-```
-
-...
-
-```
+```js
 var got = 1;
 var expected = 1.00001;
 test.ne( got, expected );
 ```
 
 Перевірку `test.ne` буде пройдено так, як значення похибки за замовчуванням `1е-7` і очікуване значення відрізняється від отриманого на `1е-5`.
+
+На основі указаної інформації можна скласти таблицю, яка покаже різницю в перевірках `notEquivalent` i `notIdentical`.
+
+| Значення аргументів `got` і `expected`| Результат в `notEquivalent` | Результат в `notIdentical` |
+|:--------------------------------------|:----------------------------|:---------------------------|
+|  true, 1                              | failed                      | pass                       |
+|  false, 0                             | failed                      | pass                       |
+|  1, 1 + 1e-7                          | failed                      | pass                       |
+|  1, 1 - 1e-7                          | failed                      | pass                       |
 
 ##### Тест перевірка `contains`
 
@@ -221,7 +219,7 @@ test.ne( got, expected );
 
 Перевірка провалюється, якщо другий аргумент не повністю міститься в другому.
 
-```
+```js
 var got = 13;
 var expected = 13;
 test.contains( got, expected );
@@ -229,15 +227,15 @@ test.contains( got, expected );
 
 Перевірку `test.contains` буде пройдено так, як значення `got` і значення `expected` співпадають.
 
-```
+```js
 var got = { a : 1, b : 2, c : 3 };
 var expected = { a : 1 };
 test.contains( got, expected );
 ```
 
-Перевірку `test.contains` буде пройдено так, як в асоціативному масиві `got` не має елемента `a:4`.
+Перевірку `test.contains` буде пройдено так, як в асоціативному масиві `got` є елемент `a:1`.
 
-```
+```js
 var got = { a : 1, b : 2, c : 3 };
 var expected = { d : 4 };
 test.contains( got, expected );
@@ -245,7 +243,7 @@ test.contains( got, expected );
 
 Перевірку `test.contains` буде провалено так, як в асоціативному масиві `got` не має елемента `d : 4`.
 
-```
+```js
 var got = { a : 1, b : 2, c : 3 };
 var expected = { a : 4 };
 test.contains( got, expected );
@@ -261,7 +259,7 @@ test.contains( got, expected );
 
 Перевірка провалюється, якщо значення першого аргумента менше або рівне значенню другому.
 
-```
+```js
 var a = true;
 var b = 0;
 test.gt( a, b )
@@ -277,7 +275,7 @@ test.gt( a, b )
 
 Перевірка провалюється, якщо значення першого аргумента менше значення другому.
 
-```
+```js
 var a = true;
 var b = 1;
 test.ge( a, b )
@@ -293,7 +291,7 @@ test.ge( a, b )
 
 Перевірка провалюється, якщо значення першого аргумента більше або рівне другому.
 
-```
+```js
 var a = false;
 var b = 1;
 test.lt( a, b )
@@ -309,7 +307,7 @@ test.lt( a, b )
 
 Перевірка провалюється, якщо значення першого аргумента більше значення другого.
 
-```
+```js
 var a = false;
 var b = 0;
 test.le( a, b )
@@ -325,7 +323,7 @@ test.le( a, b )
 
 Перевірка провалюється, якщо рутина не викидує помилку.
 
-```
+```js
 test.shouldThrowError( function()
 {
   throw 'err1';
@@ -342,7 +340,7 @@ test.shouldThrowError( function()
 
 Перевірка провалюється, якщо рутина не викидує помилку за час відведений на її тестуання.
 
-```
+```js
 test.shouldThrowErrorAsync( function()
 {
   return _.timeOut( 250, function()
@@ -362,7 +360,7 @@ test.shouldThrowErrorAsync( function()
 
 Перевірка провалюється, якщо рутина не викидує ані синхронну, ані асинхронну помилку за час відведений на її тестуання.
 
-```
+```js
 test.shouldThrowError( function r1()
 {
   throw 'err1';
@@ -371,7 +369,7 @@ test.shouldThrowError( function r1()
 
 Перевірку `test.shouldThrowError` буде пройдено так, як рутина `r1` викидає помилку `throw 'err1'` синхронно.
 
-```
+```js
 test.shouldThrowError( function r2()
 {
   return _.timeOut( 250, function()
@@ -391,16 +389,16 @@ test.shouldThrowError( function r2()
 
 Перевірка провалюється, якщо рутина викидує помилку синхронно або асинхронно. Тестова рутина може продовжити своє виконання після такої помилки так, як її буде ізольовано ві підрутині.
 
-```JavaScript
+```js
 test.shouldThrowError( function r1()
 {
   return 'value';
 });
 ```
 
-Перевірки `test.mustNotThrowError` буде пройдено так, як синхронна рутина `r1` не викидає помилку.
+Перевірку `test.mustNotThrowError` буде пройдено так, як синхронна рутина `r1` не викидає помилку.
 
-```
+```js
 test.shouldThrowError( function r1()
 {
   return _.timeOut( 250, function()
@@ -410,7 +408,7 @@ test.shouldThrowError( function r1()
 });
 ```
 
-Перевірки `test.mustNotThrowError` буде пройдено так, як асинхронна рутина `r2` не викидає помилку.
+Перевірку `test.mustNotThrowError` буде пройдено так, як асинхронна рутина `r2` не викидає помилку.
 
 ##### Тест перевірка `shouldMessageOnlyOnce`
 
@@ -420,7 +418,7 @@ test.shouldThrowError( function r1()
 
 Перевірка провалюється, якщо її наслідок отримує декілька повідомлень.
 
-```
+```js
 test.shouldMessageOnlyOnce( function r()
 {
   var con = new _.Consequence();

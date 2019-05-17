@@ -93,7 +93,7 @@ wTester.test( Self.name );
 Enter the code above into the `Join.test.js` file.
 
 <details>
-    <summary><u>Структура тест файла на прикладі <code>Join.test.js</code></u></summary>
+    <summary><u>File <code>Join.test.js</code> as an example of test file structure</u></summary>
 
 ![join.test.png](../../images/join.test.png)
 

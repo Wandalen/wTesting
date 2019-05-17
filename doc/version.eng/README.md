@@ -75,9 +75,9 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   How to run testing.
 </details>
 <details><summary><a href="./tutorial/TestCreation.md">
-      Creation of test "Hello World!"
+      Test suite "Hello World!"
   </a></summary>
-  Creating a test for concatenation routine.
+  Creating a simple test suite.
 </details>
 <details><summary><a href="./tutorial/Report.md">
       How to read a report and group test checks

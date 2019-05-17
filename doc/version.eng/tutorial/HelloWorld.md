@@ -1,9 +1,9 @@
-# Тест сюіт "Hello World!"
+# Test suite "Hello World!"
 
-Створення простого тест сюіта.
+Creating a simple test suite.
 
 <details>
-  <summary><u>Структура модуля</u></summary>
+  <summary><u>Module structure</u></summary>
 
 ```
 testHello
@@ -15,12 +15,12 @@ testHello
 
 </details>
 
-Створіть приведену вище структуру файлів для проведення тестування рутини.
+Create the file structure above for routine testing.
 
-### Об'єкт тестування
+### Test object
 
 <details>
-    <summary><u>Код файла <code>Join.js</code></u></summary>
+    <summary><u>Code of file <code>Join.js</code></u></summary>
 
 ```js    
 module.exports.join = function( a, b )
@@ -32,16 +32,16 @@ module.exports.join = function( a, b )
 
 </details>
 
-Внесіть приведений вище код в файл `Join.js`.
+Enter the code above into the `Join.js` file.
 
-Функція `join` виконує конкатенацію двох рядочків. Вона експортується для використання.
+The `join` function performs the concatenation of two strings. It is exported for use.
 
-### Тестовий файл
+### Test file
 
-Тест сюіт `Join.test.js` має суфікс `.test` для того, щоб утиліта для тестування могла знайти його.
+The test suite `Join.test.js` has the suffix` .test` so that the testing utility could find it.
 
 <details>
-    <summary><u>Код файла <code>Join.test.js</code></u></summary>
+    <summary><u>Code of file <code>Join.test.js</code></u></summary>
 
 ```JavaScript    
 
@@ -90,7 +90,7 @@ wTester.test( Self.name );
 
 </details>
 
-Внесіть приведений вище код в файл `Join.test.js`.
+Enter the code above into the `Join.test.js` file.
 
 <details>
     <summary><u>Структура тест файла на прикладі <code>Join.test.js</code></u></summary>
@@ -104,7 +104,6 @@ wTester.test( Self.name );
 - визначення тест рутин;
 - визначення тест сюіта;
 - секція запуску тест сюіта.
-
 
 ### Секція підключення залежностей
 

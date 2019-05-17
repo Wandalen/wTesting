@@ -23,7 +23,7 @@ wTools
 
 </details>
 
-Код включно із тестами знаходиться в директорії `proto`.
+Код цього модуля включно із тестами знаходиться в директорії `proto`.
 
 Після клонування перейдіть в директорію із модулем та виконайте команду
 
@@ -33,7 +33,13 @@ npm install
 
 Це встановило залежності модуля.
 
-Виконайте команду `tst scenario:suites.list` щоб отримати інформацію про доступні тест сюіти.
+Виконайте команду
+
+```
+tst scenario:suites.list
+```
+
+щоб отримати інформацію про доступні тест сюіти.
 
 <details>
   <summary><u>Вивід команди <code>tst scenario:suites.list</code></u></summary>
@@ -61,7 +67,15 @@ npm install
 
 ### Тестування окремого тест сюіта
 
-Здійснити запуск тестування в окремому файлі можна використавши команду `node`, а також, якщо утиліта `Testing` встановлена глобально, командою `tst`. Для запуску тестування після команди вказується абсолютний або відносний шлях до тест сюіта.
+Запустити тестування можливо запустивши `JavaScript` файл із тест сюітом.
+
+Введіть команду:
+
+```
+node proto/dwtools/abase/l1.test/Array.test.s
+```
+
+В результаті виконання буде виконано тестування і виведено звіт.
 
 <details>
   <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
@@ -71,7 +85,7 @@ npm install
 
 Running test suite ( Tools/base/l1/Array ) ..
     at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
-      
+
       Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
       Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
       Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
@@ -81,17 +95,9 @@ Running test suite ( Tools/base/l1/Array ) ..
       Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
       Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
       Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
-      Passed test routine ( Tools/base/l1/Array / constructorLikeArray ) in 0.132s
-      Passed test routine ( Tools/base/l1/Array / hasLength ) in 0.092s
-      Passed test routine ( Tools/base/l1/Array / argumentsArrayMake ) in 0.246s
-      Passed test routine ( Tools/base/l1/Array / argumentsArrayFrom ) in 0.339s
-      Passed test routine ( Tools/base/l1/Array / unrollMake ) in 0.411s
-      Passed test routine ( Tools/base/l1/Array / unrollFrom ) in 0.417s
-      Passed test routine ( Tools/base/l1/Array / longMake ) in 0.739s
-      Passed test routine ( Tools/base/l1/Array / longMakeZeroed ) in 0.619s
-      Passed test routine ( Tools/base/l1/Array / arrayMake ) in 0.387s
-      Passed test routine ( Tools/base/l1/Array / arrayFrom ) in 0.437s
+
       ...
+
       Passed test routine ( Tools/base/l1/Array / arraySetContainAny ) in 0.608s
       Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.422s
 
@@ -99,20 +105,23 @@ Running test suite ( Tools/base/l1/Array ) ..
     Passed test cases 1891 / 1891
     Passed test routines 173 / 173
     Test suite ( Tools/base/l1/Array ) ... in 41.251s ... ok
-    
-    
-    
+
 Testing ... in 41.851s ... ok
 
 ```
 
 </details>
 
-Виконайте тестування файла `Array.test.s` ввівши команду `node proto/dwtools/abase/l1.test/Array.test.s`. Порівняйте результат тестування з приведеним вище.
+Об'єктом тестування тест сюіта `Array.test.s` є рутини `_.array*` та `_.buffer*` для роботи із масивами та буферами.
 
-Після того, як утиліта запустила тестування у файлі `Array.test.s`, вивід інформував про статус проходження кожної тест рутини. Першою протестовано рутину `bufferFrom` і завершено тестування на рутині `arraySetIdentical`. Для зручності, частина виводу тесту замінена на `...`.
+Звіт говорить про те, що всі перевірки було пройдено успішно `Test suite ( Tools/base/l1/Array ) ... in 41.251s ... ok`. Тестування тривало 42-ві секунди та було запущено 173-ри тест рутини. Під час тестування було здійснено 4293-ри перевірки, котрі були згруповані розробником в 1891-ин тест кейс. Деталізація звіту залежить від [встановленого рівня вербальності](Verbosity.md).
 
-Після прохождення тест сюіту виведено загальний звіт тестування: кількість пройдених тест перевірок, тест кейсів, тест рутин і загальний підсумок. Оскільки всі тест перевірки були пройдені тест сюіт вважається пройденим. На виконання тестування використано 41.251s.
+Тривалість першої тест рутина `bufferFrom` 0.358 секунди і згідно звіту вона пройшла тестування, як і решта. Пройдені етапи тестування у звіті позначаються зеленим кольором. Провалені етапи тестування позначаються червоним кольором. Якщо хоча б одна перевірка тест сюіта провалюється то увесь тест сюіт провалюється.
+
+Другим способом є використання команди `tst`. Введіть команду
+```
+tst proto/dwtools/abase/l1.test/Array.test.s
+```
 
 <details>
   <summary><u>Вивід команди <code>tst proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
@@ -122,7 +131,7 @@ Testing ... in 41.851s ... ok
 
 Running test suite ( Tools/base/l1/Array ) ..
     at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
-      
+
      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
       Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
       Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
@@ -132,17 +141,9 @@ Running test suite ( Tools/base/l1/Array ) ..
       Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
       Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
       Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
-      Passed test routine ( Tools/base/l1/Array / constructorLikeArray ) in 0.132s
-      Passed test routine ( Tools/base/l1/Array / hasLength ) in 0.092s
-      Passed test routine ( Tools/base/l1/Array / argumentsArrayMake ) in 0.246s
-      Passed test routine ( Tools/base/l1/Array / argumentsArrayFrom ) in 0.339s
-      Passed test routine ( Tools/base/l1/Array / unrollMake ) in 0.411s
-      Passed test routine ( Tools/base/l1/Array / unrollFrom ) in 0.417s
-      Passed test routine ( Tools/base/l1/Array / longMake ) in 0.739s
-      Passed test routine ( Tools/base/l1/Array / longMakeZeroed ) in 0.619s
-      Passed test routine ( Tools/base/l1/Array / arrayMake ) in 0.387s
-      Passed test routine ( Tools/base/l1/Array / arrayFrom ) in 0.437s
+
       ...
+
       Passed test routine ( Tools/base/l1/Array / arraySetContainAny ) in 0.608s
       Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.422s
 
@@ -150,34 +151,61 @@ Running test suite ( Tools/base/l1/Array ) ..
     Passed test cases 1891 / 1891
     Passed test routines 173 / 173
     Test suite ( Tools/base/l1/Array ) ... in 40.622s ... ok
-    
-    
-    
+
+
+
 Testing ... in 41.124s ... ok
 
 ```
 
 </details>
 
-Другим способом є використання команди `tst`. Введіть команду `tst proto/dwtools/abase/l1.test/Array.test.s` та порівняйте отриманий вивід з попереднім.
+Порівняйте отриманий вивід з попереднім. Звіт тестування при виконанні тесту схожі. Відмінніст в часі, який може варіюватися від запуску до запуску.
 
-Звіт тестування при виконанні тесту повністю співпадає. Незначна похибка в часі проведення тесту визначається потужністю і завантаженістю машини.
+### Порівняння викликів
+
+Отже прогнати тес сюіт можливо запустивши `JavaScript` на виконання інтерпретатором передавши шлях до нього в якості аргумента
+```
+node File.test.js
+```
+або передавши цей шлях в якості аргумента утиліті
+```
+tst File.test.js
+```
 
 ### Тестування окремої рутини
 
-Тестування цілого тест сюіту не завжди доцільне - воно займає більше часу і виконує зайву роботу. Якщо код грамотно оформлений, то зміни в окремому модулі не повинні впливати на інші частини коду. Тому, розробник може протестувати внесені зміни використавши окрему рутину тест сюіта.
+Тест сюіт розбивається на тест рутини, котрі виконуються послідовно або паралельно й незалежно одна від одної. Тестування цілого тест сюіту не завжди доцільне - це займає більше часу ніж тестування окремої тест рутини.
 
-Для запуску окремої тест рутини виконуються команди `node path/to/testSuite.js routine:someRoutine` або `tst path/to/testSuite.js routine:someRoutine`. Тобто, опцією `routine` можна указати рутину для тестування. Опція `routine` має скорочену форму запису - `r`.
+Для запуску окремої тест рутини використовуйте опцію `routine`.
+
+```
+node path/to/TestSuite.js routine:someRoutine
+```
+або
+```
+tst path/to/TestSuite.js routine:someRoutine
+```
+
+Такий вклик запустить на виконання тест рутину `someRoutine` сюіта `TestSuite.js`.
+
+Запуск на виконання із опціюєю `routine` із вказанням через двокрапку назви цікавої тест рутини обмежує тестування до вказаної тест рутини. Решта тест рутин при такому запуску виконуваться не буде. Опція `routine` має скорочену форму запису - `r`.
+
+Запустіть тест рутину `bufferFrom` сюіта `Array.test.s`. Для запуску тестування введіть команду
+
+```
+tst proto/dwtools/abase/l1.test/Array.test.s routine:err
+```
 
 <details>
-  <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom</code></u></summary>
+  <summary><u>Вивід команди <code>tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom</code></u></summary>
 
 ```
 [user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom
 
 Running test suite ( Tools/base/l1/Array ) ..
     at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
-      
+
       Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.220s
 
     Passed test checks 18 / 18
@@ -192,42 +220,17 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 </details>
 
-Проведіть тестування рутини `bufferFrom` в файлі `Array.test.s`. Для запуску тестування введіть команду `node proto/dwtools/abase/l1.test/Array.test.s routine:err`.
-
-Звіт містить результати тестування лише одніє рутини. В тест рутині `bufferFrom` успішно пройдено 18 тест перевірок в 18 кейсах. Загальний підсумок тестування рутини - пройдено.
-
-<details>
-  <summary><u>Вивід команди <code>tst proto/dwtools/abase/l1.test/Array.test.s r:arraySetIdentical</code></u></summary>
-
-```
-[user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s r:arraySetIdentical
-
-Running test suite ( Tools/base/l1/Array ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
-      
-      Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.532s
-
-    Passed test checks 36 / 36
-    Passed test cases 17 / 17
-    Passed test routines 1 / 1
-    Test suite ( Tools/base/l1/Array ) ... in 3.942s ... ok
-
-
-  Testing ... in 5.514s ... ok
-
-```
-
-</details>
-
-Проведіть тестування рутини `arraySetIdentical` в файлі `Array.test.s`. Для запуску тестування використайте команду `tst` і скорочену форму запису опції `routine`. Введіть команду `tst proto/dwtools/abase/l1.test/Array.test.s r:assert`. Порівняйте результати виводу.
-
-Тестування пройдено, тестер виконав одну тест рутину `arraySetIdentical` з 17 тест кейсами і 36 перевірками.
-
-
+Із звіту очевидно, що тестувалася лише одна тест рутина `bufferFrom`. В рамкає цієї тест рутини було успішно пройдено 18-ть тест перевірок в 18-ти кейсах.
 
 ### Тестування скопом
 
-Для виконання тестів в групі тестів сюітів потрібно, щоб утиліта `Testing` була встановлена глобально. Щоб запустити тестування скопом після вводу команди `tst` укажіть директорію з тест файлами.
+Для тестування тест сюітів скопом потрібно, щоб утиліта `Testing` була [встановлена глобально](Installation.md). Щоб запустити тестування скопом після вводу команди `tst` укажіть директорію з тест файлами.
+
+Виконайте тестування в директорії `proto` ввівши команду
+
+```
+tst proto
+```
 
 <details>
   <summary><u>Вивід команди <code>tst proto</code></u></summary>
@@ -359,24 +362,28 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 
 
-  Testing ... in 75.676s ... failed
+  Testing ... in 75.676s ... ok
 
 ```
 
 </details>
 
-Виконайте тестування в директорії `proto` ввівши команду `tst proto`. В приведеному виводі консолі  частина рядків замінена на `...` для зручності використання.
+Утиліта послідовно виконала тестування кожного із тест сюітів і вивела звіт по кожному.
 
-Утиліта по черзі виконала тестування в файлах згідно списку виданого командою `tst scenario:suites.list`. 
+<!-- Kos : підредактуйте вивід так ніби помилок нема перепишіть повністю опис плз -->
 
-На тестування було використано 75.676s, а остаточний результат тестування - провалене. Чотири тест кейса в файлі `Entyty.test.s` провалили тестування та сформували загальний результат тестування. Навіть при одній проваленій тест перевірці тестування вважалось би проваленим. 
+<!-- На тестування було використано 75.676s, а остаточний результат тестування - провалене. Чотири тест кейса в файлі `Entyty.test.s` провалили тестування та сформували загальний результат тестування. Навіть при одній проваленій тест перевірці тестування вважалось би проваленим. -->
 
-На момент проведення вашого тестування даних помилок може не виникнути.
+Для того щоб [отримати перелік](Help.md) тест сюітів в директорії використайте комадну
+
+```
+tst scenario:suites.list
+```
 
 ### Підсумок
 
-- Запуск тестів можливий через команду `tst` або через команду `node`.
-- Можливо запускати окремі тест сюіти, окремі тест рутини або всі тест сюіти в директорії.
+- Запуск тестів можливий через команду `tst Suite.test.js` або через команду `node Suite.test.js`.
+- Можливо запускати окремі тест сюіти, окремі тест рутини або всі тест сюіти в директорії скопом.
 - Для тестування скопом потрібно щоб утиліту `Testing` було встановлено глобально.
 - Інформація щодо провалених тестів допомагає знайти помилки в коді об'єкту тестування.
 

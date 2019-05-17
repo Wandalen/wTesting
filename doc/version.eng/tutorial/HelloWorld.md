@@ -99,20 +99,20 @@ Enter the code above into the `Join.test.js` file.
 
 </details>
 
-На приведеному рисунку показана структура тестового файла. Вона складається з чотирьох основних елементів:
-- підключення залежностей;
-- визначення тест рутин;
-- визначення тест сюіта;
-- секція запуску тест сюіта.
+The figure shows test file structure. It consists of four elements:
+- dependency injection;
+- test routines definition;
+- test suite definition;
+- test suite launching.
 
-### Секція підключення залежностей
+### Dependency injection section
 
-Секція призначена для підключення в тест файл залежностей потрібних для тестування.
+The section is intended to inject dependencies required for testing.
 
-В приведеному коді підключено дві залежності. Перша - утиліта `Testing` для здійснення тесту. Друга - файл `Join.js` з рутиною для тестування.
+In the given code two dependencies are injected. The first is the `Testing` utility to perform the test. The second is a `Join.js` file with a routine for testing.
 
 <details>
-    <summary><u>Код файла <code>package.json</code></u></summary>
+    <summary><u>Code of file <code>package.json</code></u></summary>
 
 ```json    
 {
@@ -125,11 +125,11 @@ Enter the code above into the `Join.test.js` file.
 
 </details>
 
-Внесіть приведений код з залежностями для тестування. Їх завантаження здійснюється командою `npm install` в директорії модуля.
+Enter the code below with the dependencies for testing. They are loaded by the `npm install` command in the module directory.
 
-### Секція визначення тест рутин
+### Section of test routines definition
 
-Друга секція призначена для опису тестових рутин. Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест рутина може включати:
+The second section is intended for determination of the test routines. Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест рутина може включати:
 - початкові дані, об'явлення змінних (за необхідності);
 - тест кейси;
 - тест [перевірки](../TestCheck.md).

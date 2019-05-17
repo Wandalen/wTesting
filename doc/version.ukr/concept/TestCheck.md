@@ -428,3 +428,5 @@ test.shouldMessageOnlyOnce( function r()
 ```
 
 Перевірка `test.shouldMessageOnlyOnce` буде провалено так як рутина `r` повертає наслідок із двома повідомленнями `1` та `2`.
+
+[Повернутись до змісту](../README.md#Концепції)

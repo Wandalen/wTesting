@@ -1,9 +1,9 @@
-# Задачі та цілі модульного тестування
+# Abstract
 
-Загальна інформація про утиліту Testing.
+General information about utility Testing.
 
-Фреймворк для юніт-тестування. Фреймворк надає розробнику інтуітивний інтерфейс, просту структуру тестів, асинхронне виконання тестів, кольоровий вивід звіту про виконання, контроль за кількістю виведеної інформації та інше. Використовуючи `Testing`, ви позбавитесь від рутинної роботи по юніт-тестуванню автоматизувавши її.
+Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the utility to get free of routines which can be automated.
 
-Модульні тести (юніт тести), пишуться для того, щоб протестувати чи працює данний модуль(юніт). Сам юніт тест - це код - який тестує юніти (частини) кода: функції, модулі або класси.
+Unit tests are written in order to test whether this unit (module) is working. The unit test itself is a code that tests units (parts) of code: functions, modules, or classes.
 
-Юніт тести - найбільш прості для написання та найбільш прості для розуміння. Суть юніт тестування полягає в тому, щоб подати щось на вход юніта і перевірити результат на виході. Наприклад, на вхід подаємо параметри функції, а на виході отримаемо значення. Юніт тести дають впевненність, що программа працює як задумано. Такі тести можно запускати багатократно. Успішне виконання тестів покаже розробнику, що його зміни нічого не зламали. Тест, що провалився дозволить виявити, що зроблені в коді зміни зламали його поведінку. Дослідження помилки, яку видає тест, що провалився та порівняння очікуваного результата з отриманим, дасть можливисть зрозуміти, де виникла помилка. Код є сенс структуризвуати таким чином, щоб їх було легко тестувати.
+Unit tests are the easiest to write and are the easiest to understand. The essence of the test unit is to input something to the unit input and check the result on the output. For example, function parameters are provided at the input, and a value is taken at the output. Unit tests provide confidence that the program works as intended. Such tests can be run many times. Succefully passed tests indicates that the changes did not break anything in the code. A failed tests allow you to find out that the changes made to the code have broken its behavior. Investigation of the failed test and a comparison of the expected value with the result of the test gives an opportunity to understand where the error occurred. It makes sense to structure the code so that it is easy to test.

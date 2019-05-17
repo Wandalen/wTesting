@@ -174,15 +174,14 @@ test.et( got, expected );
 
 Перевірку `test.et` буде пройдено так, як значення `got` і значення `expected` схожі.
 
-На основі указаної інформації можна скласти таблицю, яка покаже різницю в перевірках `equivalent` i `identical`.
-
-| Значення аргументів got і expected| Результат в equivalent | Результат в identical |
+| got і expected| equivalent | identical |
 |:----------------------------------|:-----------------------|:----------------------|
 |  true, 1                          | pass                   | failed                |
 |  false, 0                         | pass                   | failed                |
 |  1, 1 + 1e-7                      | pass                   | failed                |
 |  1, 1 - 1e-7                      | pass                   | failed                |
 
+Таблиця демонструє відмінності між перевірками `equivalent` та `identical`.
 
 ##### Тест перевірка `notEquivalent`
 
@@ -202,14 +201,14 @@ test.ne( got, expected );
 
 Перевірку `test.ne` буде пройдено так, як значення похибки за замовчуванням `1е-7` і очікуване значення відрізняється від отриманого на `1е-5`.
 
-На основі указаної інформації можна скласти таблицю, яка покаже різницю в перевірках `notEquivalent` i `notIdentical`.
-
-| Значення аргументів `got` і `expected`| Результат в `notEquivalent` | Результат в `notIdentical` |
+| `got` і `expected`| `notEquivalent` | `notIdentical` |
 |:--------------------------------------|:----------------------------|:---------------------------|
 |  true, 1                              | failed                      | pass                       |
 |  false, 0                             | failed                      | pass                       |
 |  1, 1 + 1e-7                          | failed                      | pass                       |
 |  1, 1 - 1e-7                          | failed                      | pass                       |
+
+Таблиця демонструє відмінності між перевірками `notEquivalent` та `notIdentical`.
 
 ##### Тест перевірка `contains`
 

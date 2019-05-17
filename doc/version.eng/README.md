@@ -59,6 +59,11 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
   Procedure of installation of a utility Testing
 </details>
+<details><summary><a href="./tutorial/Help.md">
+      How to get help
+  </a></summary>
+  How to get help or get information about the test suite.
+</details>
 <details><summary><a href="./tutorial/Running.md">
       Running tests
   </a></summary>
@@ -68,6 +73,16 @@ For gentle introduction use tutorials. For getting exhaustive information on one
       Creation of test "Hello World!"
   </a></summary>
   Creating a test for concatenation routine.
+</details>
+<details><summary><a href="./tutorial/Report.md">
+      How to read a report and group test checks
+  </a></summary>
+  How to read a test report and group the test checks in groups and test case. How the test suite content is displayed in the report.
+</details>
+<details><summary><a href="./tutorial/SuiteInheritance.md">
+      Test suite inheritance
+  </a></summary>
+  An example of how one test suites inherits another.
 </details>
 <details><summary><a href="./tutorial/Verbosity.md">
       Verbosity control

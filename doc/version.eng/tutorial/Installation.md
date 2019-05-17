@@ -1,34 +1,35 @@
-# Встановлення
+# Installation
 
-Процедура встановлення модуля для тестування Testing.
+Installation of the Testing module to test code.
 
-### Встановлення `NodeJS`
+### Installation of `NodeJS`
 
-Для використання `Testing` необхідно мати інстальований Node.js®. Якщо у вас його немає, то завантажте версію для вашої операційної системи із [офіційного сайту](<https://nodejs.org/en/>) або виконуйте інструкції [по встановленню](https://nodejs.org/en/download/package-manager/).
+To install `Testing` you need an installed Node.js®. If you do not have it then download the version for your operating system from [official site](<https://nodejs.org/en/>) and follow the [installation instructions](https://nodejs.org/en/download/package-manager/).
 
-### Встановлення `Testing`
+### Installation of `Testing`
 
-Після встановлення Nodejs, відкрийте консоль операційної системи та виконайте команду:
+After you have installed Nodejs, open a operating system console and run the following command:
 
 ```
 npm install -g wTesting
 ```
 
-Прапорець `-g` означає ґлобальне встановлення утиліти. Після такого встановлення можливо запустити наявні тест сюіти через команду.
+The `-g` attribute indicates a global installation of the utility.
+Once installed, it's possible to run the existing test suites by the command:
 
 ```
-wtest dir
+tst dir
 ```
 
-`Testing` знайде всі тести сюіти в директорії `dir` та виконає їх по черзі.
+`Testing` will find all test suites in the `dir` directory and execute them in turn.
 
-### Локальне встановлення
+### Local installation
 
-`Testing` може бути встановлено і локально.
+`Testing` can be installed locally.
 
 `npm install wTesting`
 
-Але при цьому виклик команд утиліти буде неможливий і кожен тест сюіт має запускатися окремо напряму, а не скопом.
+But at the same time, executing commands of the utility will become impossible. Therefore, a group run is not possible and each test suite should be run separately.
 
 ```
 node dir/TestSuite1.test.js
@@ -36,10 +37,10 @@ node dir/TestSuite2.test.js
 ...
 ```
 
-### Підсумок
+### Summary
 
-- `wTesting` можливо встановити через NPM.
-- `wTesting` можливо встановити локально або глобально.
-- Для роботи `wTesting` потрібен Nodejs.
+- `wTesting` can be installed by NPM.
+- `wTesting` can be installed locally and globally.
+- Nodejs is required for `wTesting`.
 
-[Повернутись до змісту](../README.md#tutorials)
+[Return to content](../README.md#Tutorials)

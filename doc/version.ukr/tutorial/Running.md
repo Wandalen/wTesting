@@ -69,22 +69,34 @@ npm install
 ```
 [user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s
 
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+Running test suite ( Tools/base/l1/Array ) ..
+    at  /home/dmytry/Documents/UpWork/IntellectualServiceMysnyk/sources/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
+      
+      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
+      Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
+      Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
+      Passed test routine ( Tools/base/l1/Array / bufferRawFrom ) in 0.118s
+      Passed test routine ( Tools/base/l1/Array / bufferBytesFrom ) in 0.104s
+      Passed test routine ( Tools/base/l1/Array / bufferNodeFrom ) in 0.180s
+      Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
+      Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
+      Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
+      Passed test routine ( Tools/base/l1/Array / constructorLikeArray ) in 0.132s
+      Passed test routine ( Tools/base/l1/Array / hasLength ) in 0.092s
+      Passed test routine ( Tools/base/l1/Array / argumentsArrayMake ) in 0.246s
+      Passed test routine ( Tools/base/l1/Array / argumentsArrayFrom ) in 0.339s
+      Passed test routine ( Tools/base/l1/Array / unrollMake ) in 0.411s
+      Passed test routine ( Tools/base/l1/Array / unrollFrom ) in 0.417s
+      Passed test routine ( Tools/base/l1/Array / longMake ) in 0.739s
+      Passed test routine ( Tools/base/l1/Array / longMakeZeroed ) in 0.619s
+      Passed test routine ( Tools/base/l1/Array / arrayMake ) in 0.387s
+      Passed test routine ( Tools/base/l1/Array / arrayFrom ) in 0.437s
+      ...
 
-      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.133s
-      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.075s
-      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.071s
-      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.060s
-      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.053s
-
-    Passed test checks 34 / 34
-    Passed test cases 30 / 30
-    Passed test routines 5 / 5
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.088s ... ok
-
-
-  Testing ... in 1.679s ... ok
+    Passed test checks 4293 / 4293
+    Passed test cases 1891 / 1891
+    Passed test routines 173 / 173
+    Test suite ( Tools/base/l1/Array ) ... in 55.622s ... ok
 
 ```
 

@@ -67,7 +67,7 @@
 <details><summary><a href="./tutorial/Running.md">
       Запуск тестів
   </a></summary>
-  Як запускати окремі тестування окремих тест сюітів та скопом..
+  Як запускати тестування окремих тест сюітів та тестування скопом.
 </details>
 <details><summary><a href="./tutorial/TestCreation.md">
       Тест сюіт "Hello World!"

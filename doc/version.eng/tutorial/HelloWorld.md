@@ -99,20 +99,20 @@ Enter the code above into the `Join.test.js` file.
 
 </details>
 
-На приведеному рисунку показана структура тестового файла. Вона складається з чотирьох основних елементів:
-- підключення залежностей;
-- визначення тест рутин;
-- визначення тест сюіта;
-- секція запуску тест сюіта.
+The figure shows test file structure. It consists of four main elements:
+- dependency injection;
+- test routines definition;
+- test suite definition;
+- test suite launching.
 
-### Секція підключення залежностей
+### Dependency injection section
 
-Секція призначена для підключення в тест файл залежностей потрібних для тестування.
+The section is intended to inject dependencies required for testing.
 
-В приведеному коді підключено дві залежності. Перша - утиліта `Testing` для здійснення тесту. Друга - файл `Join.js` з рутиною для тестування.
+In the given code two dependencies are injected. The first is the `Testing` utility to perform the test. The second is a `Join.js` file with a routine for testing.
 
 <details>
-    <summary><u>Код файла <code>package.json</code></u></summary>
+    <summary><u>Code of file <code>package.json</code></u></summary>
 
 ```json    
 {
@@ -125,38 +125,38 @@ Enter the code above into the `Join.test.js` file.
 
 </details>
 
-Внесіть приведений код з залежностями для тестування. Їх завантаження здійснюється командою `npm install` в директорії модуля.
+Enter the code below with the dependencies for testing. They are loaded by the `npm install` command in the module directory.
 
-### Секція визначення тест рутин
+### Section of test routines definition
 
-Друга секція призначена для опису тестових рутин. Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест рутина може включати:
-- початкові дані, об'явлення змінних (за необхідності);
-- тест кейси;
-- тест [перевірки](../TestCheck.md).
+The second section is intended for determination of the test routines. A test routine is a routine (function, method) designed to test some aspect of a test object. Test routine can include:
+- initial data, definition of variables (if necessary);
+- [test cases](../concept/TestCase.md);
+- [test check](../concept/TestCheck.md).
 
-В приведеному коді в рядках 7-23 приведено дві тест рутини. Перша, з назвою `routine1`, виконує одну тест перевірку на співпадіння отриманого і очікуваного значення. Друга тест рутина має назву `routine2` і включає два тест кейси - `pass` i `fail`. Перевірка в тест кейсі `pass` має пройти, так як порівнюються рядкові значення, а в тест кейсі `fail` - провалитись, бо рутина `Join.join` повертає рядок "13", а очікується число `13`.
+The code in rows 7-23 lists two test routines. The first, called "routine1", performs one test check for matching the received and expected values. The second test routine is called `routine2` and includes two test cases -` pass` and `fail`. The test check of test case `pass` should pass as string values are compared. At the same time, the test check of test case `fail` should not, because of the `Join.join` routine returns the string '13', while it is expected the number  "13 ". 
 
-Розробник може помістити в секцію необхідну кількість тест рутин для тестування обраного об'єкту. Кожна з тест рутин може містити довільну кількість тест кейсів і тест перевірок.
+The developer can place in the section the required amount of test routines to test the selected object. Each test routine can contain any number of test cases and test checks.
 
-### Секція визначення тест сюіта
+### Section of test suite definition
 
-Секція призначенна для об'явлення тест сюіта - найвищої структурної одиниці тестування. Тест файл має містити лише один тест сюіт.
+The section is intended for definition of test suite - the highest structural unit of testing. The test file should contain only one test suite.
 
-Для визначення тест сюіту він має містити назву і набір тест рутин. Посилання на тест рутини поміщаються в секції `tests`. Додатково, в об'явленні тест сюіта можуть міститись [додаткові опції](TestOptions.md), котрі керують процесом тестування.
+A test suite determination should contain the test suite name and set of the test routines. References to test routines are placed in the `test` section. Additionally, the test suite declaration may include [advanced options] (TestOptions.md) that control the testing process.
 
-Згідно приведеного коду, файл `Join.test.js` містить тест сюіт `Join`. Тест сюіт має дві тест рутини. Тест сюіт не містить додаткових опцій.
+According to the code, the `Join.test.js` file contains the` Join` test suite. The test suite has two test routines. The test suite does not include any additional options.
 
-### Cекція запуску тест сюіта
+### Section of test suite launching
 
-Рядки 39-41 містять функції для запуску тестування.
-В 39-ому рядку відбувається створення тест сюіта. А в рядках 40-41 відбувається його запуска. Без рядків 40-41 тест файл не можливо буде запустити напряму `node Join.test.js`.
+Rows 39-41 contain functions for running the test suite.
+In the 39th row, the test suite is being created. And in rows 40-41 there is its launch. Without strings 40-41, the `node Join.test.js` command won't be able to run the test file directly.
 
-### Підсумок
+### Summary
 
-- Файл тест сюіта має суфікс `.test` для того, щоб утиліта для тестування могла знайти його.
-- Для зручності управління процесом тестування кожен тест сюіт має знаходитися у окремому файлі.
-- Тест файл складається з чотирьох основних частин: підключення залежностей, визначення тест рутин, визначення тест сюіта, запуск тест сюіта.
-- Розробник визначає потрібну кількість тест рутин, тест кейсів і тест перевірок.
-- Об'явлення тест сюіту має містити назву і набір тест рутин. Додатково можуть бути об'явлені опції тестування.
+- The utility searches for test suite files with the suffix `.test`
+- For the convenience of testing, each test suite should be contained in a separate file.
+- Test file consists of four main elements: dependency injection; test routines definition; test suite definition; test suite launching.
+- The developer determines the required amount of test routines, test cases and test checks.
+- A test suite determination should contain the test suite name and set of the test routines.  Additionally, the test suite declaration may include advanced options.
 
-[Повернутись до змісту](../README.md#Туторіали)
+[Return to content](../README.md#Tutorials)

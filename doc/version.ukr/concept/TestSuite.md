@@ -21,3 +21,5 @@
 ![test.suite.definition](../../images/test.suite.definition.png)
 
 На рисунку приведена секція коду з визначенням тест сюіта. Тест сюіт має назву `Join` і має [опцію](../tutorial/TestOptions.md) `silencing`. При виконанні тест сюіта спочатку буде проведено тестування в рутині `routine1`, а потім в `routine2`.
+
+[Повернутись до змісту](../README.md#Концепції)

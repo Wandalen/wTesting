@@ -108,9 +108,9 @@ wTester.test( Self.name );
 
 
 <details>
-    <summary><u>Структура тест файла на прикладі <code>Join.test.js</code></u></summary>
+    <summary><u>Відповідність між звітом в консолі і вмістом файла <code>Join.test.js</code></u></summary>
 
-![join.test.png](../../images/join.test.png)
+![report.png](../../images/report.png)
 
 </details>
 

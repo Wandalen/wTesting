@@ -1,13 +1,13 @@
-# Запуск тестів
+# Running tests
 
-Як запускати тестування окремих тест сюітів та тестування скопом.
+How to run stand-alone file testing and group testing.
 
-### Завантаження
+### Downloading
 
-Для запуску тестування потрібні готові тест сюіти, котрі можна знайти в модулі [`wTools`](<https://github.com/Wandalen/wTools>).
+The [`Tools`](<https://github.com/Wandalen/wTools>) module has a ready test suites. Use them to test the tester. Clone the repository of the module by executing the `git clone https://github.com/Wandalen/wTools.git` command.
 
 <details>
-  <summary><u>Структура файлів модуля <code>wTools</code></u></summary>
+  <summary><u>The file structure of <code>Tools</code> module</u></summary>
 
 ```
 wTools
@@ -23,23 +23,27 @@ wTools
 
 </details>
 
-Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
+The module code, along with its tests, is located in the `proto` directory.
 
-Після клонування перейдіть в директорію із модулем та виконайте команду
+After cloning, go to the module directory and enter the command
 
 ```
 npm install
 ```
 
-Це встановило залежності модуля.
+It installs module dependencies.
 
-Виконайте команду `wtest scenario:suites.list` щоб отримати інформацію про доступні тест сюіти.
-
-<details>
-  <summary><u>Вивід команди <code>wtest scenario:suites.list</code></u></summary>
+To get information about available test suites, enter the command
 
 ```
-[user@user ~]$ wtest . scenario:suites.list
+tst ./proto scenario:suites.list
+```
+
+<details>
+  <summary><u>Command output <code>tst ./proto scenario:suites.list</code></u></summary>
+
+```
+[user@user ~]$ tst ./proto scenario:suites.list
 
 /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
@@ -57,141 +61,181 @@ npm install
 
 </details>
 
-Згідно виводу утиліта має 10 тест сюітів. Іншими словами, 10 тест файлів так як в кожному файлі знаходиться один тест сюіт. Дев'ять із них знаходяться в директорії `proto` i один в `sample`.
+According to the output, the `Tools` module has 10 test suites. In other words, it is 10 files as every single test file is assigned to the test suite. Eight of them are in `proto/dwtools/abase/l1.test`, one in `proto/dwtools/abase/l2.test` and one in `sample` directory.
 
-### Тестування окремого тест сюіта
+### Testing one test suite
 
-Для проведення тестування окремого файла використовуються команди `wtest` i `node`. Аргументом команди передається повний відносний ( абсолютний ) шлях до тест файла.
+The testing is performed by executing the `JavaScript` file with the test suite.
 
-<details>
-  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
+Enter the command:
 
 ```
-[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s
+node proto/dwtools/abase/l1.test/Array.test.s
+```
 
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+As a result, the test will be performed, and a report will be displayed.
 
-      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.133s
-      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.075s
-      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.071s
-      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.060s
-      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.053s
+<details>
+  <summary><u>Command output <code>node proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
 
-    Passed test checks 34 / 34
-    Passed test cases 30 / 30
-    Passed test routines 5 / 5
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.088s ... ok
+```
+[user@user ~]$ node proto/dwtools/abase/l1.test/Array.test.s
 
+Running test suite ( Tools/base/l1/Array ) ..
+    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
 
-  Testing ... in 1.679s ... ok
+      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
+      Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
+      Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
+      Passed test routine ( Tools/base/l1/Array / bufferRawFrom ) in 0.118s
+      Passed test routine ( Tools/base/l1/Array / bufferBytesFrom ) in 0.104s
+      Passed test routine ( Tools/base/l1/Array / bufferNodeFrom ) in 0.180s
+      Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
+      Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
+      Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
+
+      ...
+
+      Passed test routine ( Tools/base/l1/Array / arraySetContainAny ) in 0.608s
+      Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.422s
+
+    Passed test checks 4293 / 4293
+    Passed test cases 1891 / 1891
+    Passed test routines 173 / 173
+    Test suite ( Tools/base/l1/Array ) ... in 41.251s ... ok
+
+Testing ... in 41.851s ... ok
 
 ```
 
 </details>
 
-Використайте тест файл `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s`.
+The test object of the suite `Array.test.s` is the` _.array * `and` _.buffer * `routines for handling arrays and buffers.
+
+The report shows that all tests were successful: `Test suite (Tools/base/l1/Array) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891 test cases. The detail of the report depends on [the verbose level] (Verbosity.md).
+
+Duration of the first test routine `bufferFrom` is 0.358 seconds, and according to the report, it, like the rest, was passed. The passed tests in the report indicate green. Failed tests indicate red. It's enough one failed test check to consider the entire test suite has failed.
+
+The second way is to use the `tst` command. Enter the command
+```
+tst proto/dwtools/abase/l1.test/Array.test.s
+```
 
 <details>
-  <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Diagnostics.test.s</code></u></summary>
+  <summary><u>Command output <code>tst proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
 
 ```
-[user@user ~]$ node proto/dwtools/abase/l1.test/Diagnostics.test.s
+[user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s
 
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+Running test suite ( Tools/base/l1/Array ) ..
+    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
 
-      Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.121s
-      Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.079s
-      Passed test routine ( Tools/base/l1/Diagnostics / errLog ) in 0.080s
-      Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.061s
-      Passed test routine ( Tools/base/l1/Diagnostics / diagnosticStack ) in 0.048s
+     Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
+      Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
+      Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
+      Passed test routine ( Tools/base/l1/Array / bufferRawFrom ) in 0.118s
+      Passed test routine ( Tools/base/l1/Array / bufferBytesFrom ) in 0.104s
+      Passed test routine ( Tools/base/l1/Array / bufferNodeFrom ) in 0.180s
+      Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
+      Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
+      Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
 
-    Passed test checks 34 / 34
-    Passed test cases 30 / 30
-    Passed test routines 5 / 5
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 1.122s ... ok
+      ...
+
+      Passed test routine ( Tools/base/l1/Array / arraySetContainAny ) in 0.608s
+      Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.422s
+
+    Passed test checks 4293 / 4293
+    Passed test cases 1891 / 1891
+    Passed test routines 173 / 173
+    Test suite ( Tools/base/l1/Array ) ... in 40.622s ... ok
 
 
-  Testing ... in 1.725s ... ok
+
+Testing ... in 41.124s ... ok
 
 ```
 
 </details>
 
-Виконайте тестування файла `Diagnostics.test.s` ввівши команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s`. Порівняйте виводи команд `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s` i `node proto/dwtools/abase/l1.test/Diagnostics.test.s`
+Read the command as: find and run all tests in the `proto/dwtools/abase/l1.test/Array.test.s` directory. Compare the resulting output with the previous one. The last test report is similar to the previous. The difference in time, which can range from run to run
 
-Звіт тестування при виконанні тесту повністю співпадає. Незначна похибка в часі проведення тесту визначається потужністю і завантаженістю машини.
+### Comparison of command input
 
-### Тестування окремої рутини
+So, you can run the test suite by launching the 'JavaScript' file by the interpreter. To do this, after the interpreter command, type a path to the file as an argument
+```
+node File.test.js
+```
+or enter this path as an utility argument
+```
+tst File.test.js
+```
 
-Тестування цілого тест сюіту не завжди доцільне - воно займає більше часу і виконує зайву роботу. Якщо розробник грамотно оформив код, то зміни в окремому модулі не повинні впливати на інші частини коду. Тому, розробник може протестувати лише внесені зміни використавши окрему рутину тест сюіта.
+### Testing one test routine
 
-Для запуску окремої тест рутини виконуються команди `wtest path/to/testSuite.js routine:someRoutine` або `node path/to/testSuite.js routine:someRoutine`. Тобто, опцією `routine` можна указати рутину для тестування. Опція `routine` має скорочену форму запису - `r`.
+The test suite is divided into test routines that run sequentially or concurrently and independently of each other. Testing a whole test suite is not always appropriate - it takes more time than testing one test routine.
 
-<details>
-  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err</code></u></summary>
+To run a separate test routine, use the `routine` option.
 
 ```
-[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err
+node path/to/TestSuite.js routine:someRoutine
+```
+or
 
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+```
+tst path/to/TestSuite.js routine:someRoutine
+```
 
-       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.121s
+This command will run the test routine `someRoutine`  of the test suite `TestSuite.js`.
 
-    Passed test checks 9 / 9
-    Passed test cases 9 / 9
+Running the test with the name of the desired test routine in the `routine` option restricts the testing to the specified test routine. The rest of the test routines do not run. The `routine` option has a shortened entry form -` r`.
+
+Run the `bufferFrom`  routine of ` Array.test.s` test suite. To run the test, enter the command
+
+```
+tst proto/dwtools/abase/l1.test/Array.test.s routine:err
+```
+
+<details>
+  <summary><u>Command output <code>tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom</code></u></summary>
+
+```
+[user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom
+
+Running test suite ( Tools/base/l1/Array ) ..
+    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
+
+      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.220s
+
+    Passed test checks 18 / 18
+    Passed test cases 18 / 18
     Passed test routines 1 / 1
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 0.765s ... ok
+    Test suite ( Tools/base/l1/Array ) ... in 3.645s ... ok
 
 
-  Testing ... in 1.346s ... ok
-
-```
-
-</details>
-
-Проведіть тестування рутини `err` в файлі `Diagnostics.test.s`. Для запуску тестування введіть команду `wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:err`.
-
-Було проведено тестування лише одніє рутини. В тест рутині `err` успішно пройдено дев'ять тест перевірок в дев'яти кейсах. Загальний підсумок тестування рутини - пройдено.
-
-<details>
-  <summary><u>Вивід команди <code>wtest proto/dwtools/abase/l1.test/Diagnostics.test.s r:assert</code></u></summary>
-
-```
-[user@user ~]$ wtest proto/dwtools/abase/l1.test/Diagnostics.test.s routine:assert
-
-Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
-
-       Passed test routine ( Tools/base/l1/Diagnostics / assert ) in 0.068s
-
-    Passed test checks 3 / 3
-    Passed test cases 3 / 3
-    Passed test routines 1 / 1
-    Test suite ( Tools/base/l1/Diagnostics ) ... in 0.714s ... ok
-
-
-  Testing ... in 1.290s ... ok
+  Testing ... in 5.164s ... ok
 
 ```
 
 </details>
 
-Проведіть тестування рутини `assert` в файлі `Diagnostics.test.s`. Для запуску тестування використайте `NodeJS` і скорочену форму запису опції `routine`. Введіть команду `node proto/dwtools/abase/l1.test/Diagnostics.test.s r:assert`. Порівняйте результати виводу.
+The report shows that only one `bufferFrom`  test routine was tested. As part of this routine test, 18th test checks were successfully passed in 18 test cases.
 
-Тестування пройдено, тестер виконав одну тест рутину `assert` з трьома тест кейсами і трьома перевірками. Прямий запуск через `NodeJS` також вміє обирати одну тест рутину.
+### Group testing
 
-### Тестування скопом
+Testing a set of test suites requires [globally installed](Installation.md) utility `Testing`. To run the tests specify the directory with the test files after entering `tst`.
 
-Запуск групи тестів можливий з використанням утиліти `wTesting`, котра встановлена глобально в системі. Для проведення групового тестування використовується команда `wtest` в аргумент якої передається назва директорії з тестами.
-
-<details>
-  <summary><u>Вивід команди <code>wtest proto</code></u></summary>
+Run the test in the `proto` directory by entering the command
 
 ```
-[user@user ~]$ wtest proto
+tst proto
+```
+
+<details>
+  <summary><u>Command output <code>tst proto</code></u></summary>
+
+```
+[user@user ~]$ tst proto
 
 Running test suite ( Tools/base/l1/Array ) ..
     at  /.../sources/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
@@ -227,16 +271,11 @@ Running test suite ( Tools/base/l1/Array ) ..
       Passed test routine ( Tools/base/l1/Entity / entityMap ) in 0.094s
       Passed test routine ( Tools/base/l1/Entity / entityFilter ) in 0.073s
       ...
-        Test check ( Tools/base/l1/Entity / entitySize / atomic type # 2 ) ... failed
-        Test check ( Tools/base/l1/Entity / entitySize / arraylike # 4 ) ... failed
-        Test check ( Tools/base/l1/Entity / entitySize / object # 5 ) ... failed
-        Test check ( Tools/base/l1/Entity / entitySize / empty call # 6 ) ... failed
-      Failed test routine ( Tools/base/l1/Entity / entitySize ) in 0.120s
 
-    Passed test checks 80 / 84
-    Passed test cases 76 / 80
-    Passed test routines 9 / 10
-    Test suite ( Tools/base/l1/Entity ) ... in 1.089s ... failed
+    Passed test checks 84 / 84
+    Passed test cases 80 / 80
+    Passed test routines 10 / 10
+    Test suite ( Tools/base/l1/Entity ) ... in 1.089s ... ok
 
     Running test suite ( Tools/base/l1/Map ) ..
     at  /.../sources/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
@@ -317,23 +356,27 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 
 
-  Testing ... in 75.676s ... failed
+  Testing ... in 75.676s ... ok
 
 ```
 
 </details>
 
-Запустіть тестування в директорії `proto` виконавши команду `wtest proto`. В виводі консолі, приведеному вище, частина рядків замінена на `...` для зменшення об'єму.
+Each test suite in the `./proto` directory, the utility has tested in turn. The report is displayed as it is ready.
 
-Утиліта по черзі виконала тестування в файлах згідно списку виданого командою `wtest scenario:suites.list`. На тестування було використано 75.676s, результат тестування - провалене. Чотири тест кейса в файлі `Entyty.test.s`, що пройшли тестування з помилкою, сформували загальний результат тестування. Навіть при одній проваленій тест перевірці тестування вважалось би проваленим. Інформативний вивід дає розробнику інформацію про ті функціональності які потрібно виправити.
+A general summary of the tests is given in the last line: `Testing ... in 75.676s ... ok`. It indicates that all test suites were successful and the test was completed in 76 seconds.
 
-На момент проведення вашого тестування даних помилок може не виникнути.
+To [get a list](Help.md) of test suites in the directory, use the command
 
-### Підсумок
+```
+tst scenario:suites.list
+```
 
-- Запуск тестів можливий через утиліту `Testing` i через інтерпретатор `NodeJS`.
-- Утиліта здатна запускати окремі тест сюіти.
-- Утиліта здатна запускати окремі рутини тест сюіта.
-- Перевагою встановлення утиліти `Testing` в використанні довідки і виконанні тестів над групою тест сюітів.
+### Summary
 
-[Повернутись до змісту](../README.md#Туторіали)
+- To run the tests, use the `tst ./Suite.test.js` command or the `node ./Suite.test.js` command.
+- It is possible to run a separate test suite, a separate test routine, or a set of test suites in the directory.
+- To test a set of files, you need to install the `Testing` utility globally.
+- Information about failed tests helps to find errors in the code of test object.
+
+[Back to content](../README.md#Tutorials)

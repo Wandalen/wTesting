@@ -1,86 +1,432 @@
-# Тест перевірка
+## Test check
 
-Тест перевірка - очікування розробника стосовно поведінки об'єкту, що тестується виражене якоюсь умовою. Це найменша структурна одиниця тестування.
+Test check is a developer's expectation regarding the behavior of the test object. Test check is expressed by some condition. It is the smallest structural unit of testing.
 
-Більшість перевірок приймаю два аргументи і порівнюючи їх видають позитивний або негативний результат тестування:
+Most test checks accept two arguments and compare them to give a positive or negative test result:
 
-- отримані дані
-- очікувані дані
+- received data;
+- expected data.
 
-[Тест кейс](TestCase.md) складається із одної або декількох перевірок. Достатньо лише однієї перевірки із результатом "failed" щоб увесь об'єкт, що тестується вважався таким, що не пройшов його.
+[Test case](TestCase.md) contains one or more test checks. Only one test check with the result of "failed" and it is considered that the entire test object did not pass it.
 
-### Приклад тест кейса з перевірками 
+### An example of test case with test checks 
 
 ![test.check](../../images/test.check.png)
 
-На рисунку зображено тест кейс `join strings` з трьома тест перевірками. Кожна з перевірок порівнює два значення. Перше отримане з допомогою методу `join`, а друге, очікуване значення, задане розробником.
+The figure shows a test case `join strings` with three test checks. Each of the test checks compares two values. The first one is received using the `join` method, and the second is the expected value specified by the developer.
 
-### Список перевірок
+## Positive testing
 
-##### Тест перевірка `is`
+It is a test to show the correct operation of the test object under normal conditions without errors in the input data and in the normal state.
 
-Перевірка повертає "true", якщо передане значення повертає "true" або число зі значенням більше або менше від нуля. Якщо результат "false", "0" або інше значення відмінне від указаних, перевірка повертає "false".
+The next test checks can be applied for positive testing:
+- `is`;
+- `isNot`;
+- `isNotError`;
+- `identical`;
+- `notIdentical`;
+- `equivalent`;
+- `notEquivalent`;
+- `contains`;
+- `gt`;
+- `ge`;
+- `lt`;
+- `le`;
+- `mustNotThrowError`;
+- `shouldMessageOnlyOnce`.
 
-##### Тест перевірка `isNot`
+## Negative testing
 
-Перевірка повертає "true", якщо передане значення повертає "false" або число "0". Якщо результат "true", більше нуля, менше нуля або інше значення відмінне від указаних, перевірка повертає "false".
+It is a test to show the correct operation of a test object in a false input or an erroneous state.
 
-##### Тест перевірка `isNotError`
+The next test checks can be applied for negative testing:
+- `shouldThrowErrorSync`;
+- `shouldThrowErrorAsync`;
+- `shouldThrowError`.
 
-Перевірка повертає "true", якщо переданий вираз повертає булеві або числові значення. Повертає "false" якщо передане значення повертає строкові значення.
+### The list of test checks
 
-##### Тест перевірка `identical`
+##### Test check `is`
 
-Перевірка на абсолютне співпадіння двох значень. Повертає "true", якщо значення повністю співпадають. Скорочена форма запису - `il`.
+Expects a single `bool-like` argument.
+
+The check passes if the argument `true-like`, that is,` true` or the numeric value is nonzero.
+
+The check fails if the argument is `false-like`, that is,` false` or the numeric value `0`.
+
+It returns `true` if the test check is passed and` false` if the test check fails.
+
+```js
+var got = true;
+test.is( got );
+```
+
+The `test.is` check will be passed as the `got` variable is `true` during the test.
+
+##### Test check `isNot`
+
+Expects a single `bool-like` argument.
+
+The check passes if the argument `false-like`, that is,` false` or the numeric value is zero.
+
+The check fails if the argument is `true-like`, that is,` true` or the numeric value is nonzero.
+
+```js
+var got = false;
+test.isNot( got );
+```
+
+The `test.isNot` check will be passed as the `got` variable is `false` during the test.
+
+##### Test check `isNotError`
+
+Expects a single `error-like` argument.
+
+The check passes if the argument is not an error.
+
+The check fails if the argument is an error.
+
+```js
+var got = 1;
+test.isNotError( got );
+```
+The `test.isNotError` check will be passed as the `got` variable has a numeric value during the test.
+
+##### Test check `identical`
+
+In addition to the full form, it has a shortened - `il`.
+
+Two arguments of any type are expected.
+
+The check passes if the passed arguments are completely identical.
+
+The check fails if the values of the arguments are different. The numerical deviation is not allowed.
+
+```js
+var got = { a : 'ok' };
+var expected = { a : 'ok' };
+test.identical( got, expected );
+```
+
+The `test.identical` check will be passed as the values of arguments are identical.
 
 ##### Тест перевірка `notIdentical`
 
-Перевірка на абсолютне неспівпадання двох значень. Повертає "true", якщо значення відрізняються. Скорочена форма запису - `ni`.
+In addition to the full form, it has a shortened - `ni`.
 
-##### Тест перевірка `equivalent`
+Two arguments of any type are expected.
 
-Перевірка на співпадіння двох значень. Повертає "true", якщо значення співпадають. В перевірках математичних функцій може використовувати відхилення для перевірки входження в діапазон допустимих значень. Скорочена форма запису - `et`.
+The check passes if the passed arguments are different.
 
-##### Тест перевірка `notEquivalent`
+The check fails if the values of the arguments are completely identical. The numerical deviation is not allowed.
 
-Перевірка на неспівпадіння двох значень. Повертає "true", якщо значення не співпадають. В перевірках математичних функцій може використовувати відхилення для перевірки входження в діапазон допустимих значень. Скорочена форма запису - `ne`.
+```js
+var got = { a : 'ok' };
+var expected = { a : 'ok' };
+test.notIdentical( got, expected );
+```
 
-##### Тест перевірка `contains`
+The `test.notIdentical` check will fail as the values of both arguments are identical during the test.
 
-Перевірка повертає "true", якщо перший елемент співпадає з другим. Якщо порівнюються пари ключ-значення об'єктів, то повертає "true" якщо перший елемент містить пари ключ-значення ідентичні другому.
+```js
+var got = 1;
+var expected = 1 + 1e-10;
+test.notIdentical( got, expected );
+```
 
-##### Тест перевірка `gt`
+The `test.notIdentical` check will be passed as the first value differs from the second to` 1e-10`.
 
-Умова "більше ніж". В перевірку передається два аргумента, якщо значення першого більше від другого, повертається "true".
+##### Test check `equivalent`
 
-##### Тест перевірка `ge`
+In addition to the full form, it has a shortened - `et`.
 
-Умова "більше або дорівнює". Передається два аргумента, якщо значення першого більше або рівне другому, повертається "true".
+Two arguments of any type are expected.
 
-##### Тест перевірка `lt`
+The check passes if the arguments are similar.
 
-Умова "менше ніж". Передається два аргумента, якщо значення першого менше від другого, повертається "true".
+The test fails if the values of the arguments are not similar enough. A numeric deviation `eps` is allowed, it is specified in the testing options. Default numeric deviation is `1e-7`.
 
-##### Тест перевірка `le`
+```js
+var got = 1;
+var expected = 1.00001;
+test.equivalent( got, expected );
+```
 
-Умова "менше або дорівнює". Передається два аргумента, якщо значення першого менше або рівне другому, повертається "true".
+The `test.equivalent` check will fail as the default deviation is `1е-7`, and the values are different for `1е-5`.
 
-##### Тест перевірка `shouldThrowErrorSync`
+```js
+function somer( test )
+{
+  var got = 1;
+  var expected = 1.00001;
+  test.equivalent( got, expected );
+}
+somer.accuracy = 1e-4
+```
 
-Повертає "true", якщо виконання переданої функції генерує помилку в синхронному виконанні. Аргументом перевірки має бути функція.
+The `test.equivalent` check will be passed as the numerical deviation in the test routine `somer` is set to `1е-4`.
 
-##### Тест перевірка `shouldThrowErrorAsync`
+```js
+var got = true;
+var expected = 1;
+test.et( got, expected );
+```
 
-Повертає "true", якщо виконання переданої функції генерує помилку в асинхронному режимі. Аргументом перевірки має бути функція.
+The `test.et` check will be passed as `got` and `expect` values are similar.
+
+| got and expected values           | equivalent             | identical             |
+|:----------------------------------|:-----------------------|:----------------------|
+|  true, 1                          | pass                   | failed                |
+|  false, 0                         | pass                   | failed                |
+|  1, 1 + 1e-7                      | pass                   | failed                |
+|  1, 1 - 1e-7                      | pass                   | failed                |
+
+The table shows the differences between `equivalent` and `identical` checks.
+
+##### Test check `notEquivalent`
+
+In addition to the full form, it has a shortened - `ne`.
+
+Two arguments of any type are expected.
+
+The check passes if the arguments are not similar enough.
+
+The test fails if the values of the arguments are similar. A numeric deviation `eps` is allowed, it is specified in the testing options. Default numeric deviation is `1e-7`.
+
+```js
+var got = 1;
+var expected = 1.00001;
+test.ne( got, expected );
+```
+
+The `test.ne` check will be passed as the default deviation is `1е-7` and the expected value from that obtained in “1е-5”.
+
+| `got` and `expected` values           | `notEquivalent`             | `notIdentical`             |
+|:--------------------------------------|:----------------------------|:---------------------------|
+|  true, 1                              | failed                      | pass                       |
+|  false, 0                             | failed                      | pass                       |
+|  1, 1 + 1e-7                          | failed                      | pass                       |
+|  1, 1 - 1e-7                          | failed                      | pass                       |
+
+The table shows the differences between `equivalent` and `identical` checks.
+
+##### Test check `contains`
+
+Two arguments of any type are expected.
+
+The check passes if the arguments are identical or the first argument contains the second argument. In the case when associative arrays are compared, then the first one must contain the key-value pair of the second. The numerical deviation is not allowed.
+
+The test fails if the second argument is not completely contained in the second.
+
+```js
+var got = 13;
+var expected = 13;
+test.contains( got, expected );
+```
+
+The `test.contains` check will be passed as `got` and `expect` values are the same.
+
+```js
+var got = { a : 1, b : 2, c : 3 };
+var expected = { a : 1 };
+test.contains( got, expected );
+```
+
+The `test.contains` check will be passed as the associative array `got` contains `a : 1` element.
+
+```js
+var got = { a : 1, b : 2, c : 3 };
+var expected = { d : 4 };
+test.contains( got, expected );
+```
+
+The `test.contains` will fail as the associative array `got` contains not the element `d : 4`.
+
+```js
+var got = { a : 1, b : 2, c : 3 };
+var expected = { a : 4 };
+test.contains( got, expected );
+```
+
+The `test.contains` check will fail the associative array `got` contains not the element `a : 4`.
+
+##### Test check `gt`
+
+Expects two arguments of a numeric type or type that can coerce to such. If necessary, the coercing is carried out to the numerical type.
+
+The check passes if the value of the first argument is greater than the value of the second.
+
+The test fails if the value of the first argument is less than or equal to the value of the second.
+
+```js
+var a = true;
+var b = 0;
+test.gt( a, b )
+```
+
+The `test.gt` check will be passed as the value of `a` variable will be coerced to `1`, which is greater than `0`.
+
+##### Test check `ge`
+
+Expects two arguments of a numeric type or type that can coerce to such. If necessary, the coercing is carried out to the numerical type.
+
+The check passes if the value of the first argument is greater than or equal to the value of the second.
+
+The check fails if the value of the first argument is less than the value of the second.
+
+```js
+var a = true;
+var b = 1;
+test.ge( a, b )
+```
+
+The `test.ge` will be passed as the value of `a` variable will be coerced to `1`, and the values of both arguments will be equal.
+
+##### Test check `lt`
+
+Expects two arguments of a numeric type or type that can coerce to such. If necessary, the coercing is carried out to the numerical type.
+
+The check passes if the value of the first argument is less than the second.
+
+The check fails if the value of the first argument is greater than or equal to the second.
+
+```js
+var a = false;
+var b = 1;
+test.lt( a, b )
+```
+
+The `test.lt` check will be passed the value of `a` variable will be coerced to `0`, which is less than `1`.
+
+##### Test check `le`
+
+Expects two arguments of a numeric type or type that can coerce to such. If necessary, the coercing is carried out to the numerical type.
+
+The check passes if the value of the first argument is less than or equal to the value of the second.
+
+The check fails if the value of the first argument is greater than the value of the second.
+
+```js
+var a = false;
+var b = 0;
+test.le( a, b )
+```
+
+The `test.le` check will be passed as the value of `a` variable will be coerced to `0`, which is equal to value of `b`.
+
+##### Test check `shouldThrowErrorSync`
+
+Expects one argument in the form of a routine, which runs without arguments to test its work.
+
+The check passes if the routine throws an error. The  `shouldThrowErrorSync` check does not notice asynchronous errors.
+
+The check fails if the routine does not throw an error.
+
+```js
+test.shouldThrowError( function()
+{
+  throw 'err1';
+});
+```
+
+The `test.shouldThrowErrorSync` check will be passed as the specified routine throws an error during the test.
+
+##### Test check `shouldThrowErrorAsync`
+
+Expects one argument in the form of a routine, which runs without arguments to test its work.
+
+The check passes if the routine throws an error in asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
+
+The check fails if the routine does not throw an error during the time it was tested.
+
+```js
+test.shouldThrowErrorAsync( function()
+{
+  return _.timeOut( 250, function()
+  {
+    throw _.err( 'test' );
+  });
+});
+```
+
+The `test.shouldThrowErrorAsync` check will be passed as the specified routine throws asynchronous error. The routine `timeOut` returns consequence with `_.err( 'test' )` error.
 
 ##### Тест перевірка `shouldThrowError`
 
-Повертає "true", якщо виконання переданої функції генерує помилку. Аргументом перевірки має бути функція.
+Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-##### Тест перевірка `mustNotThrowError`
+The check passes if the routine throws an error in synchronous or asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
 
-Повертає "true", якщо виконання переданої функції не генерує помилку. Аргументом перевірки має бути функція.
+The test fails if the routine does not throws neither a synchronous nor an asynchronous error during the time it is tested.
 
-##### Тест перевірка `shouldMessageOnlyOnce`
+```js
+test.shouldThrowError( function r1()
+{
+  throw 'err1';
+});
+```
 
-Повертає "true" якщо при виконанні переданої рутини, вона повертає лише одне повідомлення. Аргументом перевірки має бути функція.
+The `test.shouldThrowError` check will be passed as the routine `r1` throws the error `throw 'err1'` synchronously.
+
+```js
+test.shouldThrowError( function r2()
+{
+  return _.timeOut( 250, function()
+  {
+    throw _.err( 'test' );
+  });
+});
+```
+
+The `test.shouldThrowError` will be passed as the routine `r2` throws the error `throw _.err( 'test' )` asynchronously, it throws the error through `250ms` after run.
+
+##### Test check `mustNotThrowError`
+
+Expects one argument in the form of a routine, which runs without arguments to test its work.
+
+The check passes if the routine does not throw an error either in synchronous or in asynchronous mode.
+
+The check fails if the routine throws the error synchronously or asynchronously. After such an error, the routine can continue execution because it will be isolated in the subroutine.
+
+```js
+test.shouldThrowError( function r1()
+{
+  return 'value';
+});
+```
+
+The `test.mustNotThrowError` check will be passed as the synchronous routine `r1` does not throw an error.
+
+```js
+test.shouldThrowError( function r1()
+{
+  return _.timeOut( 250, function()
+  {
+    return 'value`;
+  });
+});
+```
+
+The `test.mustNotThrowError` check will be passed as the asynchronous routine `r2` does not throw an error.
+
+##### Test check `shouldMessageOnlyOnce`
+
+Expects one argument in the form of a routine, which runs without arguments to test its work.
+
+The check passes if the routine ends synchronously or the result returns only one message.
+
+The check fails if its consequence receives several messages.
+
+```js
+test.shouldMessageOnlyOnce( function r()
+{
+  var con = new _.Consequence();
+  con.take( 1 );
+  con.take( 2 );
+  return con;
+});
+```
+
+The `test.shouldMessageOnlyOnce` check will fail as the routine `r` returns consequence with two messages - `1` and `2`.
+
+[Back to content](../README.md#Concepts)

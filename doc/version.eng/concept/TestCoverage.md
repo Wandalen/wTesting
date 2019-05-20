@@ -1,5 +1,7 @@
-## Тестове покриття
+## Test coverage
 
-Тестове покриття — метрика тестування програмного забезпечення, що визначається відсотком тестованого вихідного коду програми.
+Test coverage is a measure of software testing which is determined by the percentage of the program source code being tested.
 
-"Об'єкт тестування має 100% покриття" - означає що для всіх аспектів його робти є тестова рутина, котра перевіряє справність цього аспекту за всіх можливих сценаріїв виконання.
+"Testing object has 100% coverage" means that for all aspects of its work a test routine is provided. Test routines check the serviceability of the aspects in all possible scenarios.
+
+[Back to content](../README.md#Concepts)

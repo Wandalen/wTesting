@@ -112,17 +112,17 @@ Testing ... in 41.851s ... ok
 
 The test object of the suite `Array.test.s` is the` _.array * `and` _.buffer * `routines for handling arrays and buffers.
 
-Звіт говорить про те, що всі перевірки було пройдено успішно `Test suite ( Tools/base/l1/Array ) ... in 41.251s ... ok`. Тестування тривало 42-ві секунди та було запущено 173-ри тест рутини. Під час тестування було здійснено 4293-и перевірки, котрі були згруповані розробником в 1891-ин тест кейс. Деталізація звіту залежить від [встановленого рівня вербальності](Verbosity.md).
+The report shows that all tests were successful: `Test suite (Tools/base/l1/Array) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891-in test cases. The detail of the report depends on [the verbose level] (Verbosity.md).
 
-Тривалість першої тест рутина `bufferFrom` 0.358 секунди і згідно звіту вона, як і решта, пройшла тестування. Пройдені етапи тестування у звіті позначаються зеленим кольором. Провалені етапи тестування позначаються червоним кольором. Достатньо однієї проваленої перевірки щоб увесь тест сюіт вважався проваленим.
+Duration of the first test routine `bufferFrom` is 0.358 seconds, and according to the report, it, like the rest, was passed. The passed tests in the report indicate green. Failed tests indicate red. It's enough one failed test check to consider the entire test suite has failed.
 
-Другим способом є використання команди `tst`. Введіть команду
+The second way is to use the `tst` command. Enter the command
 ```
 tst proto/dwtools/abase/l1.test/Array.test.s
 ```
 
 <details>
-  <summary><u>Вивід команди <code>tst proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
+  <summary><u>Command output <code>tst proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
 
 ```
 [user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s
@@ -158,34 +158,35 @@ Testing ... in 41.124s ... ok
 
 </details>
 
-Читайти команду як: Знайти і запустити всі тести в директорій `proto/dwtools/abase/l1.test/Array.test.s`. Порівняйте отриманий вивід з попереднім. Звіт тестування при виконанні тесту схожий. Відмінність в часі, який може варіюватися від запуску до запуску.
+Read the command as: find and run all tests in the `proto/dwtools/abase/l1.test/Array.test.s` directory. Compare the resulting output with the previous one. The last test report is similar to the previous. The difference in time, which can range from run to run
 
-### Порівняння викликів
+### Comparison of command input
 
-Отже, прогнати тест сюіт можливо запустивши `JavaScript` файл на виконання інтерпретатором. Для цього інтерпретатору передається шлях до файла в якості аргумента
+So, you can run the test suite by launching the 'JavaScript' file by the interpreter. To do this, after the interpreter command, type a path to the file as an argument
 ```
 node File.test.js
 ```
-або передавши цей шлях в якості аргумента утиліті
+or pass this path as an utility argument
 ```
 tst File.test.js
 ```
 
-### Тестування окремої рутини
+### Testing one test routine
 
-Тест сюіт розбивається на тест рутини, котрі виконуються послідовно або паралельно й незалежно одна від одної. Тестування цілого тест сюіту не завжди доцільне - це займає більше часу ніж тестування окремої тест рутини.
+The test suite is divided into test routines that run sequentially or concurrently and independently of each other. Testing a whole test suite is not always appropriate - it takes more time than testing one test routine.
 
-Для запуску окремої тест рутини використовуйте опцію `routine`.
+To run a separate test routine, use the `routine` option.
 
 ```
 node path/to/TestSuite.js routine:someRoutine
 ```
-або
+or
+
 ```
 tst path/to/TestSuite.js routine:someRoutine
 ```
 
-Такий вклик запустить на виконання тест рутину `someRoutine` сюіта `TestSuite.js`.
+This command will run the test routine `someRoutine`  of the test suite `TestSuite.js`.
 
 Запуск тестування із вказанням назви бажаної тест рутини в опції `routine`, обмежує тестування до вказаної тест рутини. Решта тест рутин при такому запуску виконуваться не буде. Опція `routine` має скорочену форму запису - `r`.
 

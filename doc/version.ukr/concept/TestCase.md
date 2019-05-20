@@ -12,7 +12,7 @@
 
 ### Визначення через `test.open()`, `test.close()`
 
-Застосовуйте рутини `test.open()`, `test.close()` групування перевірок.
+Застосовуйте рутини `test.open()`, `test.close()` для групування перевірок.
 
 ![test.case.open1](../../images/test.case.open1.png)
 

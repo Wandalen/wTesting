@@ -166,7 +166,7 @@ So, you can run the test suite by launching the 'JavaScript' file by the interpr
 ```
 node File.test.js
 ```
-or pass this path as an utility argument
+or enter this path as an utility argument
 ```
 tst File.test.js
 ```
@@ -188,16 +188,16 @@ tst path/to/TestSuite.js routine:someRoutine
 
 This command will run the test routine `someRoutine`  of the test suite `TestSuite.js`.
 
-Запуск тестування із вказанням назви бажаної тест рутини в опції `routine`, обмежує тестування до вказаної тест рутини. Решта тест рутин при такому запуску виконуваться не буде. Опція `routine` має скорочену форму запису - `r`.
+Running the test with the name of the desired test routine in the `routine` option restricts the testing to the specified test routine. The rest of the test routines do not run. The `routine` option has a shortened entry form -` r`.
 
-Запустіть тест рутину `bufferFrom` сюіта `Array.test.s`. Для запуску тестування введіть команду
+Run the `bufferFrom`  routine of ` Array.test.s` test suite. To run the test, enter the command
 
 ```
 tst proto/dwtools/abase/l1.test/Array.test.s routine:err
 ```
 
 <details>
-  <summary><u>Вивід команди <code>tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom</code></u></summary>
+  <summary><u>Command output <code>tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom</code></u></summary>
 
 ```
 [user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom
@@ -219,20 +219,20 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 </details>
 
-Із звіту очевидно, що тестувалася лише одна тест рутина `bufferFrom`. В рамках цієї тест рутини було успішно пройдено 18-ть тест перевірок в 18-ти кейсах.
+The report shows that only one `bufferFrom`  test routine was tested. As part of this routine test, 18th test checks were successfully passed in 18 test cases.
 
-### Тестування скопом
+### Group testing
 
-Для тестування тест сюітів скопом потрібно, щоб утиліта `Testing` була [встановлена глобально](Installation.md). Щоб запустити тестування скопом після вводу команди `tst` укажіть директорію з тест файлами.
+Testing a set of test suites requires [globally installed](Installation.md) utility `Testing`. To run the tests specify the directory with the test files after entering `tst`.
 
-Виконайте тестування в директорії `proto` ввівши команду
+Run the test in the `proto` directory by entering the command
 
 ```
 tst proto
 ```
 
 <details>
-  <summary><u>Вивід команди <code>tst proto</code></u></summary>
+  <summary><u>Command output <code>tst proto</code></u></summary>
 
 ```
 [user@user ~]$ tst proto

@@ -65,7 +65,7 @@ According to the output, the `Tools` module has 10 test suites. In other words, 
 
 ### Testing one test suite
 
-The testing is performed by executing the `JavaScript` file with the suite test.
+The testing is performed by executing the `JavaScript` file with the test suite.
 
 Enter the command:
 

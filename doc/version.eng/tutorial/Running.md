@@ -112,7 +112,7 @@ Testing ... in 41.851s ... ok
 
 The test object of the suite `Array.test.s` is the` _.array * `and` _.buffer * `routines for handling arrays and buffers.
 
-The report shows that all tests were successful: `Test suite (Tools/base/l1/Array) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891-in test cases. The detail of the report depends on [the verbose level] (Verbosity.md).
+The report shows that all tests were successful: `Test suite (Tools/base/l1/Array) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891 test cases. The detail of the report depends on [the verbose level] (Verbosity.md).
 
 Duration of the first test routine `bufferFrom` is 0.358 seconds, and according to the report, it, like the rest, was passed. The passed tests in the report indicate green. Failed tests indicate red. It's enough one failed test check to consider the entire test suite has failed.
 

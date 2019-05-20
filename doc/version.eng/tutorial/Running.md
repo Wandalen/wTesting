@@ -362,21 +362,21 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 </details>
 
-Утиліта послідовно виконала тестування кожного тест сюіта, що знайшла в директорії `./proto`. Звіт виводить по мірі готовності.
+Each test suite in the `./proto` directory, the utility has tested in turn. The report is displayed as it is ready.
 
-Загальний підсумок тестування приведений в останньому рядку `Testing ... in 75.676s ... ok` говорить про те, що всі тест сюіти було пройдено успішно і тестування тривало 76 секунд.
+A general summary of the tests is given in the last line: `Testing ... in 75.676s ... ok`. It indicates that all test suites were successful and the test was completed in 76 seconds.
 
-Для того щоб [отримати перелік](Help.md) тест сюітів в директорії використайте команду
+To [get a list](Help.md) of test suites in the directory, use the command
 
 ```
 tst scenario:suites.list
 ```
 
-### Підсумок
+### Summary
 
-- Запуск тестів можливий через команду `tst ./Suite.test.js` або через команду `node ./Suite.test.js`.
-- Можливо запускати окремі тест сюіти, окремі тест рутини або всі тест сюіти в директорії скопом.
-- Для тестування скопом потрібно встановити утиліту `Testing` глобально.
-- Інформація щодо провалених тестів допомагає знайти помилки в коді об'єкту тестування.
+- To run the tests, use the `tst ./Suite.test.js` command or the `node ./Suite.test.js` command.
+- It is possible to run a separate test suite, a separate test routine, or a set of test suites in the directory.
+- To test a set of files, you need to install the `Testing` utility globally.
+- Information about failed tests helps to find errors in the code of test object.
 
-[Повернутись до змісту](../README.md#Туторіали)
+[Back to content](../README.md#Tutorials)

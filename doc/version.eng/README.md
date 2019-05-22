@@ -1,6 +1,6 @@
 ## Quick start
 
-For quick start [install](<./tutorial/Installation.md>) utility `Testing`, [get acquainted with](<./tutorial/Running.md>) command line interface and create the first [test "Hello World"](<./tutorial/TestCreation.md>). [Read](<./tutorial/Abstract.md>) abstract if you are wondering what is it for and what philosophy is behind utility `Testing`.
+For quick start [install](<./tutorial/Installation.md>) utility `Testing`, get acquainted [how to run](<./tutorial/Running.md>) tests and create the first test suite ["Hello World"](<./tutorial/HelloWorld.md>). Read [abstract](<./tutorial/Abstract.md>) if you are wondering what is it for and what philosophy is behind utility `Testing`.
 
 For gentle introduction use tutorials. For getting exhaustive information on one or another aspect use list of concepts to find a concept of interest and get familiar with it.
 
@@ -74,7 +74,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
   How to run testing.
 </details>
-<details><summary><a href="./tutorial/TestCreation.md">
+<details><summary><a href="./tutorial/HelloWorld.md">
       Test suite "Hello World!"
   </a></summary>
   Creating a simple test suite.

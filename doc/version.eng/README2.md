@@ -1,6 +1,6 @@
 ## Quick start
 
-For quick start [install](<./tutorial/Installation.md>) utility `Testing`, [get acquainted with](<./tutorial/Running.md>) command line interface and create the first [test "Hello World"](<./tutorial/TestCreation.md>). [Read](<./tutorial/Abstract.md>) abstract if you are wondering what is it for and what philosophy is behind utility `Testing`.
+For quick start [install](<./tutorial/Installation.md>) utility `Testing`, get acquainted [how to run](<./tutorial/Running.md>) tests and create the first test suite ["Hello World"](<./tutorial/HelloWorld.md>). Read [abstract](<./tutorial/Abstract.md>) if you are wondering what is it for and what philosophy is behind utility `Testing`.
 
 For gentle introduction use tutorials. For getting exhaustive information on one or another aspect use list of concepts to find a concept of interest and get familiar with it.
 
@@ -22,7 +22,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 - [Installation](./tutorial/Installation.md)
 - [How to get help](./tutorial/Help.md)
 - [Running tests](./tutorial/Running.md)
-- [Test suite "Hello World!"](./tutorial/TestCreation.md)
+- [Test suite "Hello World!"](./tutorial/HelloWorld.md)
 - [How to read a report and group test checks](./tutorial/Report.md)
 - [Test suite inheritance](./tutorial/SuiteInheritance.md)
 - [Verbosity control](./tutorial/Verbosity.md)

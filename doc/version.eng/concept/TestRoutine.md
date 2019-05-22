@@ -1,24 +1,24 @@
 # Test routine
 
-A test routine is a routine (function, method) designed to test some aspect of a test object. The test suite includes test routines, each of which runs independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
+Test routine is a routine ( function, method ) designed to test some aspect of a test object. A test suite includes test routines, each of which is executed independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
 
-The division of a test suite on the test routines should be made taking into account that the routine stops its performance at the first thrown mistake.
+Partitioning of a test suite on the test routines should be designed, taking into account that the routine stops its performance at the first thrown mistake.
 
 ### Result of test routine running
 
-The test routine is indicated as failed (red) if:
+A test routine is marked as failed ( red ) if:
 
-- there was an error in it;
-- there was no any performed test check in it;
-- at least one test check has given a negative result;
-- time out of routine testing was over.
+- an error was thrown from it;
+- there was none test check in it;
+- at least one test check fails;
+- time out of test routine is over.
 
-In another way, a test routine is indicated as passed (green).
+Otherwise, a test routine is marked as passed (green).
 
-### Example of test routine
+### Example of a test routine
 
 ![test.routine](../../images/test.routine.png)
 
-The firure shows a section of code that contains two test routines. The first routine named `routine1` performs one test of the identity of two values. The second test routine named `routine2` has two test cases, each of which has one test check. To perform test routines they should be specified in the test suite definition.
+The figure shows a section of code that contains two test routines. The first routine named `routine1` performs one test of the identity of two values. The second test routine named `routine2` has two test cases, each of which has one test check. Test routines should be mentioned in the definition of the test suite to be executed.
 
 [Return to content](../README.md#Concepts)

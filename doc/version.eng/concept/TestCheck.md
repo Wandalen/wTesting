@@ -7,9 +7,9 @@ Most test checks accept two arguments and compare them to give a positive or neg
 - received data;
 - expected data.
 
-[Test case](TestCase.md) contains one or more test checks. Only one test check with the result of "failed" and it is considered that the entire test object did not pass it.
+[Test case](TestCase.md) contains one or more test checks. One test check with the result of `failed` is enough for the utility to consider that the entire test object did not pass it.
 
-### An example of test case with test checks 
+### An example of test case with test checks
 
 ![test.check](../../images/test.check.png)
 
@@ -357,7 +357,7 @@ Expects one argument in the form of a routine, which runs without arguments to t
 
 The check passes if the routine throws an error in synchronous or asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
 
-The test fails if the routine does not throws neither a synchronous nor an asynchronous error during the time it is tested.
+The test fails if the routine does not throws neither synchronous nor an asynchronous error during the time it is tested.
 
 ```js
 test.shouldThrowError( function r1()

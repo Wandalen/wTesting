@@ -1,5 +1,5 @@
 # Test object
 
-A test object is a system in which proper operation is checked.
+Test object is a system proper functioning of which is tested.
 
 [Return to content](../README.md#Concepts)

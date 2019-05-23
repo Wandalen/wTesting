@@ -9,17 +9,17 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./concept/TestObject.md">
       Test object
   </a></summary>
-  A test object is a system in which proper operation is checked.
+  Test object is a system proper functioning of which is tested.
 </details>
 <details><summary><a href="./concept/TestSuite.md">
       Test suite
   </a></summary>
-  A test suite is a set of test procedures and test data for testing a test object.
+  Test suite is a set of test routines and test data for testing a test object.
 </details>
 <details><summary><a href="./concept/TestRoutine.md">
       Test routine
   </a></summary>
-  A test routine is a routine (function, method) designed to test some aspect of a test object. The test suite includes test routines, each of which runs independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
+  Test routine is a routine ( function, method ) designed to test some aspect of a test object. A test suite includes test routines, each of which is executed independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
 </details>
 <details><summary><a href="./concept/TestCheck.md">
       Test check
@@ -29,7 +29,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./concept/TestCase.md">
       Test case
   </a></summary>
- Test case or group of test checks is one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
+ Test case or group of test checks are one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
 </details>
 <details><summary><a href="./concept/TestCase.md">
       Group of test checks
@@ -39,7 +39,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./concept/TestCoverage.md">
       Test coverage
   </a></summary>
-  Test coverage is a measure of software testing which is determined by the percentage of the program source code being tested.
+  Test coverage is a measure of software testing which is determined by the percentage of source code being tested.
 </details>
 <details><summary><a href="./concept/TestCheck.md#Positive-testing">
       Positive testing

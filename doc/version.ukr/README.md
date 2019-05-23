@@ -94,8 +94,34 @@
   </a></summary>
   Зміна кількості виведеної інформації опцією <code>verbosity</code>.
 </details>
-<details><summary><a href="./tutorial/TestOptions.md">
-      Додаткові опції тестування
+<details><summary><a href="./tutorial/OptionSanitareTime.md">
+      Опція sanitareTime
   </a></summary>
-  Застосування опцій для налаштування проходження тестів.
+  Регулювання часу на завершення виконання асинхронних перевірок.
 </details>
+<details><summary><a href="./tutorial/OptionTiming.md">
+      Опція timing
+  </a></summary>
+  Ввімкнення підрахунку часу тестування.
+</details>
+<details><summary><a href="./tutorial/OptionRoutineTimeOut.md">
+      Опція routineTimeOut
+  </a></summary>
+  Як задати час на виконання тест рутини.
+</details>
+<details><summary><a href="./tutorial/OptionRapidity.md">
+      Опція rapidity
+  </a></summary>
+  Як встановити пріоритет виконання тест рутини та керувати проходженням тестування.
+</details>
+<details><summary><a href="./tutorial/OptionShoulding.md">
+      Опція shoulding
+  </a></summary>
+  Як вимкнути перевірки з should*.
+</details>
+<details><summary><a href="./tutorial/OptionSilencing.md">
+      Опція silencing
+  </a></summary>
+  Фільтрування звіту тестування від сторонніх включень.
+</details>
+

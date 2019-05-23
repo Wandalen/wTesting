@@ -65,9 +65,9 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   Installation of the Testing module to test code.
 </details>
 <details><summary><a href="./tutorial/Help.md">
-      How to get help
+      Help
   </a></summary>
-  How to get help or get information about the test suite.
+  How to get help.
 </details>
 <details><summary><a href="./tutorial/Running.md">
       Running tests

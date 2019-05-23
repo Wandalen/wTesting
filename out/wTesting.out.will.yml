@@ -73,6 +73,11 @@ path:
       - proto/dwtools/atop/tester.test/Inheritance.test.s
       - proto/dwtools/atop/tester.test/Time.test.s
       - proto/dwtools/atop/tester.test/asset
+      - proto/dwtools/atop/tester.test/asset/grouping
+      - proto/dwtools/atop/tester.test/asset/grouping/Grouping.atest.js
+      - proto/dwtools/atop/tester.test/asset/grouping/Hello.js
+      - proto/dwtools/atop/tester.test/asset/grouping/package-lock.json
+      - proto/dwtools/atop/tester.test/asset/grouping/package.json
       - proto/dwtools/atop/tester.test/asset/hello
       - proto/dwtools/atop/tester.test/asset/hello/Hello.atest.js
       - proto/dwtools/atop/tester.test/asset/hello/Hello.js

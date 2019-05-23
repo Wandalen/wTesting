@@ -188,6 +188,8 @@ The command `tst path/to/dir concurrent:1` runs parallel execution of test suite
 
 ##### Run option `verbosity`
 
+Sets the verbosity of report, that is, the amount of output information.
+
 Accepts a value from 0 to 9. When the value is set to 0, it does not display a single line. If it is set to 9, the report has a maximum of information. The default value is 4.
 
 The test suite can have a `verbosity` option. In this case, the value set in the test suite has a priority over the run option.

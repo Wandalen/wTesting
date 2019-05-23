@@ -90,7 +90,7 @@ The verbosity or report is set to the level `7`.
 
 At the same time, the test suite options are specified in the test file:
 
-```
+```js
 var Self =
 {
 

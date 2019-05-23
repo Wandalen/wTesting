@@ -124,4 +124,33 @@
   </a></summary>
   Фільтрування звіту тестування від сторонніх включень.
 </details>
-
+<details><summary><a href="./tutorial/OptionAccuracy.md">
+      Опція accuracy
+  </a></summary>
+  Як врахувати точність обчислень при порівнянні числових значень.
+</details>
+<details><summary><a href="./tutorial/OptionFails.md">
+      Опція fails
+  </a></summary>
+  Як завершити тестування при досягненні деякого числа провалених тестів.
+</details>
+<details><summary><a href="./tutorial/OptionBeeping.md">
+      Опція beeping
+  </a></summary>
+  Сигналізація про закінчення тестування.
+</details>
+<details><summary><a href="./tutorial/OptionColoring.md">
+      Опція coloring
+  </a></summary>
+  Використання кольорового звіту.
+</details>
+<details><summary><a href="./tutorial/OptionConcurrent.md">
+      Опція concurrent
+  </a></summary>
+  Як запустити паралельне виконання тест сюітів.
+</details>
+<details><summary><a href="./tutorial/OptionImportanceOfNegative.md">
+      Опція importanceOfNegative
+  </a></summary>
+  Як отримати більше інформації про провалені тести.
+</details>

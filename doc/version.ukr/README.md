@@ -94,8 +94,63 @@
   </a></summary>
   Зміна кількості виведеної інформації опцією <code>verbosity</code>.
 </details>
-<details><summary><a href="./tutorial/TestOptions.md">
-      Додаткові опції тестування
+<details><summary><a href="./tutorial/OptionSanitareTime.md">
+      Опція sanitareTime
   </a></summary>
-  Застосування опцій для налаштування проходження тестів.
+  Регулювання часу на завершення виконання асинхронних перевірок.
+</details>
+<details><summary><a href="./tutorial/OptionTiming.md">
+      Опція timing
+  </a></summary>
+  Ввімкнення підрахунку часу тестування.
+</details>
+<details><summary><a href="./tutorial/OptionRoutineTimeOut.md">
+      Опція routineTimeOut
+  </a></summary>
+  Як задати час на виконання тест рутини.
+</details>
+<details><summary><a href="./tutorial/OptionRapidity.md">
+      Опція rapidity
+  </a></summary>
+  Як встановити пріоритет виконання тест рутини та керувати проходженням тестування.
+</details>
+<details><summary><a href="./tutorial/OptionShoulding.md">
+      Опція shoulding
+  </a></summary>
+  Як вимкнути перевірки з should*.
+</details>
+<details><summary><a href="./tutorial/OptionSilencing.md">
+      Опція silencing
+  </a></summary>
+  Фільтрування звіту тестування від сторонніх включень.
+</details>
+<details><summary><a href="./tutorial/OptionAccuracy.md">
+      Опція accuracy
+  </a></summary>
+  Як врахувати точність обчислень при порівнянні числових значень.
+</details>
+<details><summary><a href="./tutorial/OptionFails.md">
+      Опція fails
+  </a></summary>
+  Як завершити тестування при досягненні деякого числа провалених тестів.
+</details>
+<details><summary><a href="./tutorial/OptionBeeping.md">
+      Опція beeping
+  </a></summary>
+  Сигналізація про закінчення тестування.
+</details>
+<details><summary><a href="./tutorial/OptionColoring.md">
+      Опція coloring
+  </a></summary>
+  Використання кольорового звіту.
+</details>
+<details><summary><a href="./tutorial/OptionConcurrent.md">
+      Опція concurrent
+  </a></summary>
+  Як запустити паралельне виконання тест сюітів.
+</details>
+<details><summary><a href="./tutorial/OptionImportanceOfNegative.md">
+      Опція importanceOfNegative
+  </a></summary>
+  Як отримати більше інформації про провалені тести.
 </details>

@@ -12,7 +12,7 @@ A test suite located in its own file. The test suite consists of:
 
 Test suite can [inherit](<../tutorial/SuiteInheritance.md>) another test suite and can be inherited.
 
-### Running procedure
+### Running order
 
 By default, each test routine of a test suite is executed one-by-one from the first one to the last one. The execution is sequential.
 

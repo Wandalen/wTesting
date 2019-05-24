@@ -108,7 +108,7 @@
 <details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>
-  Зміна кількості виведеної інформації опцією <code>verbosity</code>.
+  Зміна кількості виведеної інформації опцією verbosity.
 </details>
 <details><summary><a href="./tutorial/OptionSanitareTime.md">
       Опція sanitareTime

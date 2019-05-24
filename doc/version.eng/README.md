@@ -59,7 +59,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./concept/TestOption.md#Test-suite-option">
       Test suite option
   </a></summary>
-  The control parameter of the testing that is specified in the test suite definition. These options override the default values, which can be overridden by the run options.
+  The control parameter of the testing that is specified in the test suite definition. These options override the default values, and it can be overridden by the run options.
 </details>
 <details><summary><a href="./concept/TestOption.md#Опція-тест-рутини">
       Test routine option

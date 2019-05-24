@@ -23,7 +23,7 @@ You can learn more about the list of run options by going to [tutorial](../tutor
 
 # Test suite option
 
-The control parameter of the testing that is specified in the test suite definition. These options override the default values, which can be overridden by the run options.
+The control parameter of the testing that is specified in the test suite definition. These options override the default values, and it can be overridden by the run options.
 
 The input format of run options and test suite options is the same. The test suite options have a lower priority than the startup options. Therefore, if the test suite and the entered command have the same option, the utility uses the run option and ignores the test suite options.
 

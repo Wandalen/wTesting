@@ -51,6 +51,21 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
   It is a test to show the correct operation of a test object in a false input or an erroneous state.
 </details>
+<details><summary><a href="./concept/TestOption.md#Run-option">
+      Run option
+  </a></summary>
+  The control parameter of the testing that is passed to the run command. Run options are performed for each test suite.
+</details>
+<details><summary><a href="./concept/TestOption.md#Test-suite-option">
+      Test suite option
+  </a></summary>
+  The control parameter of the testing that is specified in the test suite definition. These options override the default values, and it can be overridden by the run options.
+</details>
+<details><summary><a href="./concept/TestOption.md#Опція-тест-рутини">
+      Test routine option
+  </a></summary>
+  The control parameter of the testing that is specified in a separate test routine.
+</details>
 
 ## Tutorials
 

@@ -15,6 +15,9 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 - [Test coverage](./concept/TestCoverage.md)
 - [Positive testing](./concept/TestCheck.md#Positive-testing)
 - [Negative testing](./concept/TestCheck.md#Negative-testing)
+- [Run option](./concept/TestOption.md#Run-option)
+- [Test suite option](./concept/TestOption.md#Test-suite-option)
+- [Test routine option](./concept/TestOption.md#Test-routine-option)
 
 ## Tutorials
 

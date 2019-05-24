@@ -46,7 +46,7 @@ module.exports.join = function( a, b )
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
 ```js    
-let _ = require( 'tsting' );
+let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
 //
@@ -71,9 +71,9 @@ var Self =
 
 //
 
-Self = tstSuite( Self );
+Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-tster.test( Self.name );
+wTester.test( Self.name );
 
 ```
 
@@ -91,7 +91,7 @@ tster.test( Self.name );
 ```json    
 {
   "dependencies": {
-    "tsting": ""
+    "wTesting": ""
   }
 }
 
@@ -171,7 +171,7 @@ Running test suite ( Join ) ..
     <summary><u>Код файла <code>Join.test.js</code> з опцією <code>timeOut</code></u></summary>
 
 ```js    
-let _ = require( 'tsting' );
+let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
 //
@@ -197,9 +197,9 @@ var Self =
 
 //
 
-Self = tstSuite( Self );
+Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-tster.test( Self.name );
+wTester.test( Self.name );
 
 ```
 

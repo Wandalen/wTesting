@@ -23,20 +23,20 @@ You can learn more about the list of run options by going to [tutorial](../tutor
 
 # Test suite option
 
-The control parameter of the testing that is specified in the test suite definition. These options override the default values, which in turn can be overridden by the run options.
+The control parameter of the testing that is specified in the test suite definition. These options override the default values, which can be overridden by the run options.
 
-Формулювання опцій запуску і опцій тест сюіта однакові. Опції тест сюіта мають нижчий пріоритет ніж опції запуску. Тому, якщо тест сюіт і команда запуску мають однакову опцію, то утиліта використовує опцію запуску й ігнорує опції тест сюіта.
+The input format of run options and test suite options is the same. The test suite options have a lower priority than the startup options. Therefore, if the test suite and the entered command have the same option, the utility uses the run option and ignores the test suite options.
 
 ![test.suite.options.png](../../images/test.suite.options.png)
 
-На рисунку показана частина коду з визначенням тест сюіта. Після указання імені в тест сюіті позначаються опції тестування.
+The figure shows the part of the code with the test suite definition. After the name of the test suite, test options are indicated.
 
-Тест сюіт має три опції: `silencing`, `verbosity` i `enabled`. При виконанні команди тестування без указаних опцій рівень вербальності звіту буде `5` і звіт не міститиме вивід об'єкту тестування. При застосуванні команд з опціями `silencing` i `verbosity` утиліта використає значення, що указане в команді. Наприклад, при використанні команди
+The test suite has three options: `silencing`,` verbosity` and `enabled`. If the same options are not specified in the test command, the test report will have a verbosity value `5`, and the report will not contain the output of the test object. When the `silencing` i` verbosity` option is specified in the command, the utility uses the value specified in the command. For example, when using the command
 
 ```
 tst path/to/dir verbosity:3
 ```
 
-утиліта виведе звіт з рівнем вербальності `3`.
+the utility displays a report with a verbosity level `3`.
 
-Деякі опції, як наприклад опція `enabled` (підкреслена червоним) присутня тільки в тест сюіті, вона призначена для вимкнення тест сюіту з тестування. Опція приймає значення `0` і `1`. При `0` - тестування не виконується, `1` - виконується. За замовчуванням встанолено `1`.
+Some options are only used in the test suites. For example, the option `enabled` (underlined by red) is intended to disable the test suite from the testing. The option has two values: `0` and` 1`. `0` - the test suite is not executed, `1` - the test suite is executed. Default value is `1`.

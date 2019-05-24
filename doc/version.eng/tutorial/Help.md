@@ -90,7 +90,7 @@ The verbosity or report is set to the level `7`.
 
 At the same time, the test suite options are specified in the test file:
 
-```
+```js
 var Self =
 {
 
@@ -187,6 +187,8 @@ The option has two values: 1 is on, 0 is disabled and testing is in turn. By def
 The command `tst path/to/dir concurrent:1` runs parallel execution of test suites in the` path/to/dir` directory.
 
 ##### Run option `verbosity`
+
+Sets the verbosity of report, that is, the amount of output information.
 
 Accepts a value from 0 to 9. When the value is set to 0, it does not display a single line. If it is set to 9, the report has a maximum of information. The default value is 4.
 

@@ -40,3 +40,25 @@ tst path/to/dir verbosity:3
 the utility displays a report with a verbosity level `3`.
 
 Some options are only used in the test suites. For example, the option `enabled` (underlined by red) is intended to disable the test suite from the testing. The option has two values: `0` and` 1`. `0` - the test suite is not executed, `1` - the test suite is executed. Default value is `1`.
+
+# Test routine option
+
+The control parameter of the testing that is specified in a separate test routine.
+
+Test routine options are used to more precisely configuration of the testing process.
+
+If the test routine does not have explicitly specified test options, then it uses the default options. The default routine options can be overridden with the test suite options or run options.
+
+Explicitly specified test routine options have a higher priority than the test suite option and run options. If the test routine options are explicitly specified, it can be changed only by correcting the test suite file.
+
+![test.routine.options.png](../../images/test.routine.options.png)
+
+The figure shows the test routine `routine1`. After the test routine is defined in lines 6-32, the test routine options `timeOut` and` accuracy` are specified in lines 33-34. The test routine option is set by assigning values to the fields of the test routine `routine1`.
+
+In the routine, the `timeOut` option has the value of 60000 ms, that is, the developer allocates one minute of time for it.
+
+The routine time out can be changed for all routines using the `routineTimeOut` run option or a similar test suite option. But in this case, the option changes the time out for all routines for which `timeOut` option is not specified. To configure the routine, set the test routine options.
+
+The possible use of the command with the `accuracy` or `routineTimeOut` option will not affect the performance of the test routine `routine1`, as the routine options have a higher priority.
+
+[Back to content](../README.md#Concepts)

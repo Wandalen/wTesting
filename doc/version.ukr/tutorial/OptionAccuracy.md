@@ -104,7 +104,7 @@ tst Sum.test.js
   <summary><u>Вивід команди <code>tst Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$  Sum.test.js
+[user@user ~]$ tst Sum.test.js
 Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:35
 

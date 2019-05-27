@@ -289,8 +289,34 @@ Failed test routine ( Join / routine2 ) in 0.051s
 ```
 [user@user ~]$ tst Join.test.js v:0 n:3
 
-Failed test routine ( Join / routine2 ) in 0.051s
+        - got :
+          '13'
+        - expected :
+          13 
+        - difference :
+          *
+          
+        /.../importanceOfNegative/Join.test.js:20
+            16 :   test.case = 'pass';
+            17 :   test.identical( Join.join( 1, 3 ), '13' );
+            18 : 
+            19 :   test.case = 'fail';
+            20 :   test.identical( Join.join( 1, 3 ), 13 );  
+        Test check ( Join / routine2 / fail # 2 ) ... failed
+
+      Failed test routine ( Join / routine2 ) in 0.100s
 
 ```
 
 </details>
+
+Підвищіть рівень виводу інформаці про помилки, введіть команду `tst Join.test.js v:0 n:5`.
+
+Даний звіт дає розробнику звіт про помилку і повністю виключає інформацію про пройдені рутини. 
+
+### Підсумок
+
+- Опція `importanceOfNegative` призначена для збільшення об'єму звіту про провалені перевірки.
+- Опцію `importanceOfNegative` краще використовувати в комбінації з опцією `verbosity`.
+- При значенні `0` опція `importanceOfNegative` обмежує вивід інформації про помилки.
+- При відключенні виводу опцією `verbosity:0` можна отримати звіт встановивши опцію `importanceOfNegative` зі значенням від `3` і вище.

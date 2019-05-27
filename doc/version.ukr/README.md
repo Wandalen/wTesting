@@ -114,6 +114,11 @@
   </a></summary>
   Регулювання часу на завершення виконання асинхронних перевірок.
 </details>
+<details><summary><a href="./tutorial/OptionBeeping.md">
+      Опція beeping
+  </a></summary>
+  Сигналізація про закінчення тестування.
+</details>
 <details><summary><a href="./tutorial/OptionTiming.md">
       Опція timing
   </a></summary>
@@ -148,11 +153,6 @@
       Опція fails
   </a></summary>
   Як завершити тестування при досягненні деякого числа провалених тестів.
-</details>
-<details><summary><a href="./tutorial/OptionBeeping.md">
-      Опція beeping
-  </a></summary>
-  Сигналізація про закінчення тестування.
 </details>
 <details><summary><a href="./tutorial/OptionColoring.md">
       Опція coloring

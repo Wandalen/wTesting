@@ -2,9 +2,9 @@
 
 Як задати час на виконання тест рутини.
 
-Опція `routineTimeOut` обмежує час на виконання тест рутини. Якщо тест рутина не була повністю протестована за встановлений час, то вона повертає помилку тестування. 
+Опція обмежує час, за який кожна тест рутина має пройти тестування. Кожна тест рутина може мати власний `timeOut`. Якщо тест рутина має власний `timeOut` то значення опції запуску `routineTimeOut` не впливає на неї. Якщо тест рутина не була повністю протестована за встановлений час, то вона вважається проваленою. 
 
-Вказаний параметр застосовується до кожної тест рутини і переписує значення встановлене в тест сюіті, якщо воно було указано. За замовчуванням встановлено 5000мс.
+Значення опції вказується в мілісекундах. За замовчуванням встановлено 5000мс.
 
 <details>
   <summary><u>Структура файлів</u></summary>
@@ -103,12 +103,7 @@ wTester.test( Self.name );
 
 ### Використання опції 
 
-За замовчуванням, на виконання тестування дається 5000мс. Указана тест рутина має дві Опція має два значення, використайте встановлене за замовчуванням. Для цього введіть команду без опції
-
-```
-tst Join.test.js
-```
-в директорії модуля.
+Для дослідження поведінки тестера проведіть перше тестування без застосування опції. При цьому за замовчуванням на тест рутину відводиться 5000мс.
 
 <details>
   <summary><u>Вивід команди <code>tst Join.test.js</code></u></summary>
@@ -116,51 +111,131 @@ tst Join.test.js
 ```
 [user@user ~]$ tst Join.test.js
 Running test suite ( Join ) ..
-    at  /path_to_module/testCreation/Join.test.js:26
+    at  /.../Join.test.js:40
 
-      Passed test routine ( Join / routine1 ) in 0.087s
+      Passed test routine ( Join / routine1 ) in 0.067s
 
     Passed test checks 2 / 2
     Passed test cases 1 / 1
     Passed test routines 1 / 1
-    Test suite ( Join ) ... in 0.691s ... ok
+    Test suite ( Join ) ... in 0.669s ... ok
 
 
-  Testing ... in 1.270s ... ok
+  Testing ... in 1.250s ... ok
 
 ```
 
 </details>
 
-Після виконання тест сюіту виведено загальний підсумок з часом його проходження.
+Тест успішно пройдений. Загальний час виконання 1.250s, а час виконання рутини - 0.067s.
 
-  <summary><u>Вивід команди <code>tst Join.test.js timing:0</code></u></summary>
+Тепер, встановіть час набагато менший від часу проходження. Наприклад, п'ять мілісекунд, для цього введіть команду 
 
 ```
-[user@user ~]$ tst Join.test.js timing:0
+tst . routineTimeOut:5
+```
+
+При цьому знак `.` позначає поточну директорію модуля. Порівняйте з приведеними результатами.
+
+<details>
+  <summary><u>Вивід команди <code>tst Join.test.js routineTimeOut:5</code></u></summary>
+
+```
+[user@user ~]$ tst Join.test.js routineTimeOut:5
 Running test suite ( Join ) ..
-    at  /path_to_module/testCreation/Join.test.js:26
+    at  /.../Join.test.js:40
 
-      Passed test routine ( Join / routine1 ) in 0.083s
+        Test check ( Join / routine1 /  # 1 ) ... failed throwing error
+      Failed test routine ( Join / routine1 ) in 0.069s
 
-    Passed test checks 2 / 2
-    Passed test cases 1 / 1
-    Passed test routines 1 / 1
-    Test suite ( Join ) ... ok
+    Thrown 1 error(s)
+    Passed test checks 0 / 1
+    Passed test cases 0 / 0
+    Passed test routines 0 / 1
+    Test suite ( Join ) ... in 0.176s ... failed
 
 
-  Testing ... ok
+
+  Testing ... in 0.239s ... failed
 
 ```
 
 </details>
 
-Виконайте тестування вимкнувши вивід часу. Для цього введіть команду `tst Join.test.js timing:0`.
 
-Порівнявши з попереднім виводом видно, що утиліта не виводить час проходження тест сюіту і загальний час тестування.
+Через те, що рутина не могла пройти тестування за встановлений час отримано провал тесту. Це штучне заниження часу виконання, зазвичай, час проходження тест рутин збільшують.
+
+Одним із варіантів, що забезпечить достатній час на проходження тестування, є застосування опції `timeOut` в тест рутині.
+
+<details>
+    <summary><u>Код файла <code>Join.test.js</code> з опцією <code>timeOut</code></u></summary>
+
+```js    
+let _ = require( 'wTesting' );
+let Join = require( './Join.js' );
+
+//
+
+function routine1( test )
+{
+  test.case = 'pass';
+  test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
+  test.identical( Join.join( 1, 2 ), '12' );
+}
+routine1.timeOut = 6000;
+
+//
+
+var Self =
+{
+  name : 'Join',
+  tests :
+  {
+    routine1,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );
+
+```
+
+</details>
+
+Замініть код тест файла на приведений вище. В файл внесена опція `timeOut` зі значенням 6000мс, значення вибрано більшим від встановленого за замовчуванням.
+
+Повторіть останню введену команду (`tst Join.test.js routineTimeOut:5`). Порівняйте результат з приведеним.
+
+<details>
+  <summary><u>Вивід команди <code>tst Join.test.js routineTimeOut:5</code></u></summary>
+
+```
+[user@user ~]$ tst Join.test.js routineTimeOut:5
+Running test suite ( Join ) ..
+    at  /.../Join.test.js:41
+
+      Passed test routine ( Join / routine1 ) in 0.062s
+
+    Passed test checks 2 / 2
+    Passed test cases 1 / 1
+    Passed test routines 1 / 1
+    Test suite ( Join ) ... in 0.659s ... ok
+
+
+  Testing ... in 1.241s ... ok
+
+```
+
+</details>
+
+В опції запуску був встановлений час, недостатній для проходження рутини. Завдяки опції `timeOut`, встановленій в рутині, тест був пройдений.
 
 ### Підсумок
 
-- Опція `timing` призначена для ввімкнення виводу часу тестування в звіті.
-- За замовчуванням утиліта виводить інформацію про час тестування.
-- При значенні `timing:0` звіт не міститиме інформації про час виконання окремих тест сюітів і загальний час тестування.
+- Опція запуску `routineTimeOut` призначена для обмеження часу виконання тест рутини.
+- Опція запуску переписує значення встановлене за замовчуванням, а також опцію тест сюіта.
+- Значення `timeOut` за замовчуванням - 5000мс.
+- Опція тест рутини `timeOut` не переписується опцією запуску або опцією тест сюіта.

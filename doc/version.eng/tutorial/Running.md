@@ -36,14 +36,14 @@ It installs module dependencies.
 To get information about available test suites, enter the command
 
 ```
-tst ./proto scenario:suites.list
+tst . scenario:suites.list
 ```
 
 <details>
-  <summary><u>Command output <code>tst ./proto scenario:suites.list</code></u></summary>
+  <summary><u>Command output <code>tst . scenario:suites.list</code></u></summary>
 
 ```
-[user@user ~]$ tst ./proto scenario:suites.list
+[user@user ~]$ tst . scenario:suites.list
 
 /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled

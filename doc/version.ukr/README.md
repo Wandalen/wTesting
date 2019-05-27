@@ -82,6 +82,11 @@
 <details><summary><a href="./tutorial/Help.md">
       Як отримати довідку
   </a></summary>
+  Як отримати загальну довідку.
+</details>
+<details><summary><a href="./tutorial/HelpSuitesList.md">
+      Як отримати список тест сюітів
+  </a></summary>
   Як отримати загальну довідку чи дізнатись інформацію про тест-сюіти.
 </details>
 <details><summary><a href="./tutorial/Running.md">

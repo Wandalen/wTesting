@@ -36,16 +36,16 @@ npm install
 Виконайте команду
 
 ```
-tst ./proto scenario:suites.list
+tst . scenario:suites.list
 ```
 
 щоб отримати інформацію про доступні тест сюіти.
 
 <details>
-  <summary><u>Вивід команди <code>tst ./proto scenario:suites.list</code></u></summary>
+  <summary><u>Вивід команди <code>tst . scenario:suites.list</code></u></summary>
 
 ```
-[user@user ~]$ tst ./proto scenario:suites.list
+[user@user ~]$ tst . scenario:suites.list
 
 /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled

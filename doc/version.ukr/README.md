@@ -82,7 +82,12 @@
 <details><summary><a href="./tutorial/Help.md">
       Як отримати довідку
   </a></summary>
-  Як отримати загальну довідку чи дізнатись інформацію про тест-сюіти.
+  Як отримати загальну довідку.
+</details>
+<details><summary><a href="./tutorial/HelpSuitesList.md">
+      Як отримати список тест сюітів
+  </a></summary>
+  Як отримати інформацію про тест-сюіти.
 </details>
 <details><summary><a href="./tutorial/Running.md">
       Запуск тестів
@@ -113,6 +118,11 @@
       Опція sanitareTime
   </a></summary>
   Регулювання часу на завершення виконання асинхронних перевірок.
+</details>
+<details><summary><a href="./tutorial/OptionBeeping.md">
+      Опція beeping
+  </a></summary>
+  Сигналізація про закінчення тестування.
 </details>
 <details><summary><a href="./tutorial/OptionTiming.md">
       Опція timing
@@ -148,11 +158,6 @@
       Опція fails
   </a></summary>
   Як завершити тестування при досягненні деякого числа провалених тестів.
-</details>
-<details><summary><a href="./tutorial/OptionBeeping.md">
-      Опція beeping
-  </a></summary>
-  Сигналізація про закінчення тестування.
 </details>
 <details><summary><a href="./tutorial/OptionColoring.md">
       Опція coloring

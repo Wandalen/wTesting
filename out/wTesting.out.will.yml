@@ -33,7 +33,6 @@ path:
     criterion:
       predefined: 1
   local:
-    path: out
     criterion:
       predefined: 1
   remote:

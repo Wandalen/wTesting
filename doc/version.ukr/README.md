@@ -104,16 +104,6 @@
   </a></summary>
   Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
 </details>
-<details><summary><a href="./tutorial/SuiteInheritance.md">
-      Наслідування тест сюіта
-  </a></summary>
-  Наслідування одного тест сюіта іншим.
-</details>
-<details><summary><a href="./tutorial/SuiteInheritance.md">
-      Наслідування тест сюіта
-  </a></summary>
-  Як використовувати наслідування від декількох тест сюітів.
-</details>
 <details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>
@@ -178,4 +168,14 @@
       Опція importanceOfNegative
   </a></summary>
   Як отримати більше інформації про провалені тести.
+</details>
+<details><summary><a href="./tutorial/SuiteInheritance.md">
+      Наслідування тест сюіта
+  </a></summary>
+  Наслідування одного тест сюіта іншим.
+</details>
+<details><summary><a href="./tutorial/SuiteInheritance.md">
+      Наслідування тест сюіта
+  </a></summary>
+  Як використовувати наслідування від декількох тест сюітів.
 </details>

@@ -200,7 +200,7 @@ The `tst path/to/dir verbosity:5` command prints a more detailed test report by 
 
 It is intended to restrict the output of information of routines with the status `ok` / `pass` and to increase the amount of information about the checks with the status `failed`.
 
-Accepts values from 0 to 9. By default - 2.
+Accepts values from 0 to 9. By default - 1.
 
 The `tst path/to/dir importanceOfNegative:0` command displays the report without detailed information about the failed checks.
 

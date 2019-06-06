@@ -1,31 +1,31 @@
-# Контроль рівня вербальності
+# Verbosity control
 
-Зміна кількості виведеної інформації опцією verbosity.
+Changing the amount of output test information using the verbosity option.
 
-При проведенні тестування, надмірна детальність звіту може ускладнити пошук необхідної інформації. І навпаки, при тестуванні окремої тест рутини в звіті може бути недостатньо інформації. Тому, утиліта може регулювати кількість виведеної інформації. Для цього використовується опція `verbosity`.
+Excessive detail of the report of test suites execution may make it difficult to find the necessary information. Conversely, when testing a separate test routine is performed, there may not be enough information in the report. Therefore, the utility can control the amount of output information. To do this the `verbosity` option is used.
 
-Опція `verbosity` приймає значення від `0` до `9`. По замовчуванню опція `verbosity` має значення `4`. Значення `0` відповідає найнижчому рівню вербальності і не виводить інформації про тестування. Значення `9` відповідає найвищому рівню вербальності і виводить максимум інформації про результати тестування. При `verbosity:1` виводиться рівно один рядок.
+The `verbosity` option takes values from` 0` to `9`. By default, `verbosity` is set to `4`. The value `0` is the lowest level and does not display any test information. The value `9` is the highest level of verbosity and displays the maximum information about the test results. If `verbosity:1` is specified, exactly one line is displayed.
 
-### Об'єкт тестування і тестовий файл
+### Test object and test file
 
-Використайте тестовий модуль з [туторіалу про створення тест файлу](HelloWorld.md). Для завершення підготовки виконайте встановлення залежностей. Для цього відкрийте директорію з файлами в терміналі та введіть `npm install`. Після встановлення залежностей модуль готовий до тестування.
+Use the test module from the tutorial about [creating a test file](HelloWorld.md). To complete the preparation, install dependencies. To do this, open a directory with files in the terminal and enter `npm install`. After installing dependencies, the module is ready for testing.
 
-### Тестування з різними рівнями вербальності
+### Testing with different verbosity levels
 
-Для використання параметру `verbosity` його потрібно указати після назви тесту, директорії або рутини. Опція має й скорочену форму запису - `v`.
+The parameter `verbosity` is specified after the title of the test, directory or routine. Also, the option has a shortened entry form - `v`.
 
-При значенні `0` утиліта не виводить жодного рядка. Це може бути корисно, коли має значення лише результат тестування, котрий використовується іншою утилітою чи скриптом. По завершенню додатку в консолі лишається код помилки відмінний від нуля, якщо тестування не пройшло успішно.
+When the value `0` is used, the utility does not display a single line. This can be useful when only the test result is important. This result can be used by another utility or script. For example, if the test fails, the console holds a non-zero error code.
 
-Введіть команду
+Enter the command
 
 ```
 tst Join.test.js verbosity:1
 ```
 
-Порівняйте результат виводу з приведеним.
+Compare the console output with given one.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js verbosity:1</code></u></summary>
+  <summary><u>Command output <code>tst Join.test.js verbosity:1</code></u></summary>
 
 ```
 [user@user ~]$ tst Join.test.js verbosity:1
@@ -36,12 +36,12 @@ tst Join.test.js verbosity:1
 
 </details>
 
-При значенні `verbosity:1` в консоль виведено один рядок з інфрмацією про те, як і за який час тест було пройдено чи провалено. Якщо утиліта тестувала б групу тест сюітів, то вивід містив би один рядок із загальним підсумком.
+When command contains `verbosity:1` option, the console displays one line with an indication of how and for what time the test was passed or failed. If the utility would test the suites test group, the output would contain one line with the total result.
 
-Підвищіть рівень вербальності до `4`. Для цього виконайте команду `tst Join.test.js v:4` зі скороченою формою запису опції. Порівняйте з виводом приведеним далі.
+Increase the verbal level to `4`. To do this, run the command `tst Join.test.js v:4` with the shortened form of the option. Compare the result with the output shown below.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js v:4</code></u></summary>
+  <summary><u>Command output <code>tst Join.test.js v:4</code></u></summary>
 
 ```
 [user@user ~]$ tst Join.test.js v:4
@@ -73,12 +73,12 @@ tst Join.test.js verbosity:1
 
 </details>
 
-В консолі виводиться інформація про проходження тесту рутиною `routine1` та провал тесту в рутині `routine2`. Також, указано, що тест перевірка тест кейсу `fail` другої тест рутини провалена. Вивід містить звіт по тест сюіту і загальний звіт. Так як тестується лише один тест сюіт, то загальний звіт дублює звіт по тест сюіту `Join`.
+The console displays information that the test routine `routine1` successfully passed, and the test routine `routine2` failed. Also, it is indicated that the test check failed in the test case `fail` of the second test routine. The output contains the test suite report and the general report. Since only one test suite has been tested, the general report duplicates the test suite `Join` report.
 
-Введіть команду `tst Join.test.js verbosity:6`. Перегляньте вивід та порівняйте з приведеним.
+Enter `tst Join.test.js verbosity:6` command. Look at the output and compare with the below.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js verbosity:6</code></u></summary>
+  <summary><u>Command output <code>tst Join.test.js verbosity:6</code></u></summary>
 
 ```
 [user@user ~]$ tst Join.test.js verbosity:6
@@ -170,18 +170,18 @@ Tester Settings :
 
 </details>
 
-З рівнем вербальності `6` утиліта виводить секцію з налаштуваннями тестера (опції тестування) і звіт щодо окремих тест перевірок.
+At the verbosity level `6`, the utility displays a section with the settings of the tester (test options) and report on a separate test check.
 
-На початку виводу вказуються всі встановлені [опції тестування](Help.md#Опції-запуску-та-опції-сюіта). Оскільки в тест сюіті не вказано опцій тестування, а в команді лише опція `verbosity`, то всі інші опції мають налаштування за замовчуванням.
+At the beginning of the report, all settled [test options](Help.md#Test-run-options-and-suite-options) are specified. Since the test suite has no specified test options, and the command has only `verbosity` option, all other options have the default settings.
 
-Звіт по тест перевіркам зі статусом `ok` включає:
+The test report for the `ok` test includes:
 
-- шлях до тест файлу;
-- номер рядка з тест перевіркою;
-- код тест сюіта з тест перевіркою;
-- результат проходження.
+- path to the test file;
+- line number with test check;
+- test suite code with test check;
+- result of testing.
 
-Звіт по тест перевіркам зі статусом `failed` додатково містить секцію з указанням помилки. Наприклад, в приведеному звіті це секція
+The test report with the status `failed` additionally contains a section with an error. For example, in this report this section is
 
 ```
         - got :
@@ -191,12 +191,12 @@ Tester Settings :
         - difference :
           *
 ```
-яка вказує на різницю між отриманим і очікуваним значеннями.
+It indicates the difference between the received and the expected values.
 
-Запустіть на тестування рутину `routine2` з найвищим рівнем вербальності. Використайте команду `tst Join.test.js routine:routine2 v:9`.
+Run the test routine `routine2` with the highest level of verbosity Use the `tst Join.test.js routine:routine2 v:9` command.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js routine:routine2 v:9</code></u></summary>
+  <summary><u>Command output <code>tst Join.test.js routine:routine2 v:9</code></u></summary>
 
 ```
 [user@user ~]$ tst Join.test.js routine:routine2 v:9
@@ -318,40 +318,40 @@ Tester Settings :
 
 </details>
 
-Вивід тестування максимльно детальний. Він включає загальну інформацію по опціям тестування та додаткову інформацію по налаштуванням тест сюіту `Join`.
+Test output is as detailed as possible. It includes general information about test options and additional information about the settings of the test suite `Join`.
 
-### Елементи звіту, що виводятся при зміні вербальності
+### Test report elements displayed at different levels of verbosity
 
-В таблиці приведено інформацію про рівень деталізації звіту в залежності від значення опції `verbosity`.
+The table provides information on the details of the test report,  depending on the value of the `verbosity` option.
 
-| Рівень вербальності                       | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+| Verbosity level                           | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |-------------------------------------------|---|---|---|---|---|---|---|---|---|---|
-| Однорядковий результат тестування         | - | + | + | + | + | + | + | + | + | + |
-| Детальний підсумок тестування             | - | - | + | + | + | + | + | + | + | + |
-| Однорядковий підсумок проходження тест сюіта | - | - | + | + | + | + | + | + | + | + |
-| Детальний підсумок проходження тест сюіта | - | - | - | + | + | + | + | + | + | + |
-| Провалені тест рутини                     | - | - | - | + | + | + | + | + | + | + |
-| Успішно пройдені тест рутини              | - | - | - | - | + | + | + | + | + | + |
-| Провалені тест перевірки                  | - | - | - | - | + | + | + | + | + | + |
-| Успішно пройдені тест перевірки           | - | - | - | - | - | + | + | + | + | + |
-| Опції тестування                          | - | - | - | - | - | + | + | + | + | + |
-| Різниця між отриманим і очікуваним значенням                                                                                                   | - | - | - | - | - | + | + | + | + | + |
-| Код проваленої тест перевірки             | - | - | - | - | - | + | + | + | + | + |
-| Код успішно пройденої тест перевірки      | - | - | - | - | - | - | + | + | + | + |
-| Адреса проваленої тест перевірки                                                                                                               | - | - | - | - | - | + | + | + | + | + |
-| Адреса успішно пройденої тест перевірки                                                                                                         | - | - | - | - | - | - | + | + | + | + |
-| Опції і налаштування тест сюіта           | - | - | - | - | - | - | - | + | + | + |
-| Виділення кольором вивід в консоль об'єкта тестування                                                                                           | - | - | - | - | - | - | - | + | + | + |
-| Виділення кольором вивід в консоль тестових рутин                                                                                               | - | - | - | - | - | - | - | + | + | + |
+| Single line test result                   | - | + | + | + | + | + | + | + | + | + |
+| Detailed test summary                     | - | - | + | + | + | + | + | + | + | + |
+| Single line summary of passing the test suite | - | - | + | + | + | + | + | + | + | + |
+| Detailed summary of passing the test suite | - | - | - | + | + | + | + | + | + | + |
+| Failed test routines                      | - | - | - | + | + | + | + | + | + | + |
+| Passed test routines                      | - | - | - | - | + | + | + | + | + | + |
+| Failed test checks                        | - | - | - | - | + | + | + | + | + | + |
+| Passed test checks                        | - | - | - | - | - | + | + | + | + | + |
+| Test options                              | - | - | - | - | - | + | + | + | + | + |
+| Difference between the received and the expected value                                                                                         | - | - | - | - | - | + | + | + | + | + |
+| Code of failed test check                 | - | - | - | - | - | + | + | + | + | + |
+| Code of passed test check                 | - | - | - | - | - | - | + | + | + | + |
+| Address of failed test check                                                                                                                   | - | - | - | - | - | + | + | + | + | + |
+| Address of passed test check                                                                                                                   | - | - | - | - | - | - | + | + | + | + |
+| Options and settings of test suite        | - | - | - | - | - | - | - | + | + | + |
+| Output of a test object that is colored in console                                                                                             | - | - | - | - | - | - | - | + | + | + |
+| Output of a test routines that is colored in console                                                                                           | - | - | - | - | - | - | - | + | + | + |
 
-[Виділення жовтим кольором виводу в консоль](OptionSilencing.md) об'єкта, що тестується або вивовду тестових рутин відбувається при вербальності від 7-го рівня.
+Output of test object or test routines [is highlighted in yellow](OptionSilencing.md) at the verbosity level from `7` to `9`.
 
-### Підсумок
+### Summary
 
-- Для встановлення рівня вербальності звіту тестування використовується опція `verbosity`.
-- Опція `verbosity` приймає значення від `0` до `9`.
-- При значенні `verbosity:0` не виводиться жодного рядка.
-- При значенні `verbosity:1` виводиться рівно один рядок.
-- По замовчуванню опція `verbosity` має значення `4`.
-- При використанні значень від `5` і більше, утиліта виводить детальніший від звичайного звіт.
-- При значеннях від `7` вивід об'єкта, що тестується виділяється жовтим кольором.
+- To set the verbosity level of the test report, the `verbosity` option is used.
+- The `verbosity` option takes values from` 0` to `9`.
+- When `verbosity: 0` is set, not a single line is displayed.
+- When `verbosity: 1` is set, exactly one line is displayed.
+- By default, the `verbosity` option is set to `4`.
+- When values from `5` or more are used, the utility displays a more detailed report than the regular report.
+- When values from `7` are used, the output of the test object is highlighted in yellow.

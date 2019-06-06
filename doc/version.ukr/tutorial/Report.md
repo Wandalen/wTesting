@@ -76,7 +76,6 @@ function routine1( test )
 
   test.close( 'mixed' );
 
-
 }
 
 //

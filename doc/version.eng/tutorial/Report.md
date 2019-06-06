@@ -1,9 +1,9 @@
-## Як читати звіт та групувати перевірки
+## How to read a report and group test checks
 
-Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
+How to read a test report and group the test checks in groups and test case. How the test suite content is displayed in the report.
 
 <details>
-  <summary><u>Структура модуля</u></summary>
+  <summary><u>Module structure</u></summary>
 
 ```
 report
@@ -15,12 +15,12 @@ report
 
 </details>
 
-Створіть приведену вище структуру файлів для проведення тестування рутини.
+Create the file structure above for routine testing.
 
-### Об'єкт тестування
+### Test object
 
 <details>
-    <summary><u>Код файла <code>Join.js</code></u></summary>
+    <summary><u>Code of file <code>Join.js</code></u></summary>
 
 ```js    
 module.exports.join = function( a, b )
@@ -32,16 +32,16 @@ module.exports.join = function( a, b )
 
 </details>
 
-Внесіть приведений вище код в файл `Join.js`.
+Enter the code above into the `Join.js` file.
 
-Функція `join` виконує конкатенацію двох рядків. Вона експортується для використання.
+The `join` function concatenates two strings. It is exported for use.
 
-### Тестовий файл
+### Test file
 
-Тест сюіт `Join.test.js` має суфікс `.test` для того, щоб утиліта для тестування могла знайти його.
+The suite `Join.test.js` has the suffix` .test` so that the testing utility could find it.
 
 <details>
-    <summary><u>Код файла <code>Join.test.js</code></u></summary>
+    <summary><u>Code of file <code>Join.test.js</code></u></summary>
 
 ```js    
 let _ = require( 'wTesting' );
@@ -76,7 +76,6 @@ function routine1( test )
 
   test.close( 'mixed' );
 
-
 }
 
 //
@@ -100,14 +99,14 @@ wTester.test( Self.name );
 
 </details>
 
-Внесіть приведений вище код в файл `Join.test.js`.
+Enter the code above into `Join.test.js` file.
 
-Тестова рутина `routine1` має 2-ві групи перевірок `string` та `number`, а також тест кейс `mixed` з однією перевіркою. Група `string` містить 2-ва тест кейси `trivial` та `empty`, в кожному із яких по одній перевірці. Група `number` має тест кейси `trivial` та `zeroes` із одною перевіркою в кожному.  Групи були сформовані по типу аргументів, що передаються функції `Join.join`, яка тестується. В перевірках групи `string` використовуються рядкові значення, в `number` - числові, в тест кейсі `mixed` - рядкові з числовими.
+The test routine `routine1` has 2 test groups that named `string` and `number`, as well as a test case `mixed` with one test check. The `string` group contains 2 test cases -` trivial` and `empty`, each of which has one check. The `number` group has test cases `trivial` and `zeroes`, each of which has one test check. The groups were formed by the type of arguments passed to the `Join.join` function that is being tested. In the test checks of the `string` group string values are used, the `number` group - numeric values, and in the test case `mixed` string and numeric values are used.
 
-В приведеному коді підключено дві залежності. Перша - утиліта `Testing` для здійснення тесту. Друга - файл `Join.js` з рутиною для тестування.
+In the given code two dependencies are injected. The first one is the `Testing` utility to perform a test. The second is a `Join.js` file in which there is a routine for testing.
 
 <details>
-    <summary><u>Код файла <code>package.json</code></u></summary>
+    <summary><u>Code of file <code>package.json</code></u></summary>
 
 ```json    
 {
@@ -120,57 +119,57 @@ wTester.test( Self.name );
 
 </details>
 
-Внесіть приведений код з залежностями для тестування. Їх завантаження здійснюється командою `npm install` в директорії модуля.
+Enter the given code in the file with dependencies. They download by the `npm install` command in the module directory.
 
-### Як читати звіт про тестування
+### How to read a report of testing
 
-Між структурою тест файла і виводом результатів тестування є пряма залежність.
+There is a correspondence between the structure of the test file and the output of the test results.
 
-Запустіть тестування в файлі `Join.test.js`, виконавши команду
+Run the test in the `Join.test.js` file by entering the command
 
 ```
 tst Join.test.js verbosity:5
 ```
 
-Опцією `verbosity` встановлено кількість виводу інформації. Детальніше про опцію можете дізнатись в туторіалі про [контроль рівня вербальності](Verbosity.md).
+The `verbosity` option sets the amount of output information. Learn more about this option in the tutorial [control of verbosity](Verbosity.md).
 
-##### Відповідність між звітом в консолі і вмістом файла `Join.test.js`
+##### Correspondence between the console report and the contents of `Join.test.js` file
 
 ![report.png](../../images/report.png)
 
-На рисунку зліва приведений вивід консолі отриманий після виконання команди. Він ділиться на чотири основні секції та містить декілька додаткових сервісних повідомлень.
+The figure on the left side shows the console output after the command has been executed. It is divided into four main sections and contains several additional service messages.
 
-Перша секція - опції тестування. Призначена для виводу поточних параметрів тестування. В четвертому рядку знизу секції можете знайти опцію `verbosity` зі значенням `5`, це значення було встановлено в опції введеної команди.
+The first section is the testing options. It is intended to display current testing parameters. In the fourth line from the bottom of the section, you can find the `verbosity` option with the value `5`. This value was set in the option of the entered command.
 
-Друга секція - вивід звіту тестування по окремим тест рутинам. При тестуванні скопом така секція є у кожного тест сюіту.
+The second section is a test report for a separate test routine.  When testing of a test suites group is performed, each test suite has such a section.
 
-Кількість тест рутин, тест кейсів та тест перевірок визначається кодом тест сюіта. На рисунку справа приведений код файла `Join.test.js`. В звіт потрапили результати виконання п'яти тест кейсів в рутині `routine1`. З указаних тест кейсів створено дві групи - `string` i `number`. Для того, щоб об'єднати тест кейси в групу використовуються рутини [`open()` i `close()`](../concept/TestCase.md).
+The number of test routines, test cases, and test checks is determined by the test suite code. The figure on the right shows the code of `Join.test.js` file. The report includes the results of performing five test cases in the test routine `routine1`. Two groups have been created from the given test cases - `string` and` number`. In order to merge the test cases into a group, the routines [`open()` and `close()`](../concept/TestCase.md) are used.
 
-Рядок зі звітом проходження тест кейса при використанні вкладення виглядає:
+If nesting is used, the line of the report of the passed test case looks like:
 
 ```
 Test check ( Join / routine1 / string > trivial # 1) ... ok
 
 ```
 
-Цей запис свідчить, що тест перевірка пройдена, вона має номер 1. В дужках позначено шлях, за яким знаходиться перевірка: тест сюіт `Join` / рутина `routine1` / група тест кейсів `string` > тест кейс `trivial`. Відповідно, для позначення вкладення тест кейсів використовується знак `>`.
+This line indicates that the test has passed, it has the number 1. The string in the parenthesis indicates the path to test check: test suite `Join` / routine `routine1` / group of test cases `string` > test case `trivial`. Accordingly, the `>` symbol is used to denote the nesting of the test case.
 
-На основі проходження тест перевірок, утиліта робить висновок щодо проходження тестування в рутині: `Passed test routine ( Join / routine1 ) in 0,173s`.
+The utility makes a conclusion regarding the passed test checks in the routine: `Passed test routine ( Join / routine1 ) in 0,173s`.
 
-Третя секція - підсумковий звіт по одному тест сюіту. При виконанні тестування скопом виводиться після завершення тестування окремого тест сюіта. В секції приводиться загальний підсумок - кількість пройдених перевірок, тест кейсів, тест рутин на основі чого робиться висновок про проходження тест сюіта.
+The third section is the final report for one test suite. When testing of test suites group is performed, a separate test report is displayed as soon as the test is completed. The section gives a general summary - the number of passed checks, test cases, test routines, and utility makes a conclusion regarding it.
 
-В даному тест сюіті пройдено 5 тест перевірок, покладених в 5 тест кейсів, пройдено одну тест рутину. Висновок по тест сюіту `Join` - пройдений.
+In this test suite, 5 test check passed in the 5 test cases, and one test routine was done. Conclusion on the suite `Join` - passed.
 
-Четверта секція - загальний звіт по тестуванню. Звіт також включає кількість пройдених тест перевірок, тест кейсів, тест рутин та тест сюітів. При тестуванні скопом відповідна інформація сумується.
+The fourth section is the general test report. The report also includes the number of passed test checks, test cases, test routines, and test suites. When testing of test suites group is performed, the relevant information is summarized.
 
-Директорія налічує лише один тест сюіт, тому загальний підсумок включає інформацію лише з попередньої секції.
+The directory has only one test suite, so the total result includes information from the previous section only.
 
-### Звіт з помилкою
+### The report with failed check
 
-Звіт може містити провалені перевірки, які вказують на помилки коду програми, або помилки в коді тест сюіта.
+The report may contain failed test checks that indicate program code errors or errors in the code of test suite.
 
 <details>
-    <summary><u>Код файла <code>Join.test.js</code> з помилкою в тесті</u></summary>
+    <summary><u>Code of file <code>Join.test.js</code> with an error in test check</u></summary>
 
 ```js    
 let _ = require( 'wTesting' );
@@ -230,34 +229,34 @@ wTester.test( Self.name );
 
 </details>
 
-Замініть вміст файла `Join.test.js` на приведений вище.
+Replace the content of the `Join.test.js` file with the code above.
 
-В файлі змінено тест кейс `mixed` - до нього додано рядок `test.will = 'str_num'`, котрий позначає назву перевірки. В перевірку було внесено помилку в очікуваному значенні - рутині `Join.join` передано значення `a` i `1`, а очікується `a2`.
+In the file, the test case `mixed` has been changed, the line `test.will = 'str_num'` is added to it. This line represents the name of the test check. The expected value has the error, because in the `Join.join` routine passes the values `a` and `1`, but the test check expects the value `a2`.
 
-Для отримання звіту тестування введіть команду `tst Join.test.js v:5`.
+To get the test report, enter `tst Join.test.js v:5`.
 
-##### Звіт тестування при помилці в тест перевірці
+##### Test report for error in test check
 
 ![report2.png](../../images/report2.png)
 
-Утиліта вивела розширену інформацію про помилку.
+Utility displays expanded error information.
 
-В звіті про помилку спочатку указано:
-- отримане значення `got`;
-- очікуване значення `expected`;
-- різниця між отриманим і очікуваним значенням - `difference`.
-З указаного виводу видно, що очікуване і отримане значення співпадають в літері `a`, а відрізняються в симолах, що йдуть слідом - `1` та `2`.
+The error report first states:
+- received value `got`;
+- expected value `expected`;
+- the difference between the received and the expected value is `difference`.
+The output shows that the expected and received values coincide in the `a` letter, but differ in the next characters -` 1` and `2`.
 
-В наступній секції приводиться назва файла з помилкою, рядок в якому була провалена перевірка, а також, частина коду з проваленою тест перевіркою.
+The next section shows the name of the file with the error, the number of line with failed test check, as well as the part of the test suite code with failed test check.
 
-Підсумок по тест перевірці `Test check ( Join / routine1 / mixed < str_num # 5 ) ... failed`, містить  назву `str_num`, указану в коді тест файлу. Назва тест перевірки та її номер відділені знаком `<`.
+The result of the test check looks like `Test test ( Join / routine1 / mixed < str_num #5 ) ... failed`, it contains the name `str_num` specified in the code of test file. The name of the test check and its number are separated by a `< ` symbol.
 
-Результат проходження тест сюіту і загальний результат тестування вважаються проваленими через одну провалену перевірку.
+The result of test suite report and the overall test result are considered to be failed due to one failed check.
 
-### Підсумок
+### Summary
 
-- Тест кейси можна групувати, це здійснюється вкладенням в форму `test.open()`, `test.close()` інших тест кейсів.
-- Звіт по проходженню тест перевірок містить розташування перевірки, її назву і порядковий номер.
-- Звіт по проваленим перевіркам може містити інформацію щодо різниці в очікуваному і отриманому значенні, частину коду тест сюіту з проваленою перевіркою.
-- Для того, щоб результат тестування був 'пройдений' потрібно, щоб всі тести були пройдені успішно. Навіть через одну провалену тест перевірку результат тестування буде 'провалений'.
-- Використовуючи інформацію про помилку розробник може відразу знайти частину коду, що була зламана.
+- Test cases can be grouped, it is done by nesting test cases in the form `test.open()`, `test.close()`.
+- The test report about passed test check contains the location of test check, its name and number.
+- The console output of failed test checks can contain information about the difference in the expected and received values, and a part of test suite code with this test check.
+- The test result will be `passed` if all tests were successful. Even after one failed test, the test result will be `failed`.
+- By using the error information, the developer can immediately find the part of the code that was broken.

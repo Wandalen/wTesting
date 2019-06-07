@@ -58,11 +58,11 @@ The utility should scan the `proto` directory and displays a list of test suites
 
 </details>
 
-The output shows that the `Tools` module has 9 suites tests. Each suite test is a separate file. Eight of them are in `proto/dwtools/abase/l1.test` and one in `proto/dwtools/abase/l2.test`.
+The output shows that the `Tools` module has 9 suites tests. Each test suite is a separate file. Eight of them are in `proto/dwtools/abase/l1.test` directory and one in `proto/dwtools/abase/l2.test`.
 
 Information about the test suite includes the path to the test file, its name, and the ability to run it.
 
-In the `Tools` module, all test suites are enabled, so they can be run (`enabled: 1` output). Test files that are disconnected from testing have the status `included: 0`.
+In the `Tools` module, all test suites are enabled, so they can be run (`enabled:1` output). Test files that are disconnected from testing have the status `enabled:0`.
 
 If you run the command `tst ./proto/dwtools/abase/l1.test scenario:suites.list`, the utility should list the test files in this directory `./proto/dwtools/abase/l1.test`. There are eight test files in it.
 

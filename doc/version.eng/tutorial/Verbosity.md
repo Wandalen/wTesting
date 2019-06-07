@@ -2,7 +2,7 @@
 
 Changing the amount of output test information using the verbosity option.
 
-Excessive detail of the report of test suites execution may make it difficult to find the necessary information. Conversely, when testing a separate test routine is performed, there may not be enough information in the report. Therefore, the utility can control the amount of output information. To do this the `verbosity` option is used.
+Excessive detail of the report of test suites execution may make it difficult to find the necessary information. Conversely, when testing of a separate test routine is performed, there may not be enough information in the report. Therefore, the utility can control the amount of output information. To do this the `verbosity` option is used.
 
 The `verbosity` option takes values from` 0` to `9`. By default, `verbosity` is set to `4`. The value `0` is the lowest level and does not display any test information. The value `9` is the highest level of verbosity and displays the maximum information about the test results. If `verbosity:1` is specified, exactly one line is displayed.
 
@@ -12,7 +12,7 @@ Use the test module from the tutorial about [creating a test file](HelloWorld.md
 
 ### Testing with different verbosity levels
 
-The parameter `verbosity` is specified after the title of the test, directory or routine. Also, the option has a shortened entry form - `v`.
+The parameter `verbosity` is specified after the name of the test, directory or routine. Also, the option has a shortened entry form - `v`.
 
 When the value `0` is used, the utility does not display a single line. This can be useful when only the test result is important. This result can be used by another utility or script. For example, if the test fails, the console holds a non-zero error code.
 
@@ -36,9 +36,9 @@ Compare the console output with given one.
 
 </details>
 
-When command contains `verbosity:1` option, the console displays one line with an indication of how and for what time the test was passed or failed. If the utility would test the suites test group, the output would contain one line with the total result.
+When command contains `verbosity:1` option, the console displays one line with an indication of how and for what time the test was passed or failed. If the utility would test the test suites group, the output would contain one line with the total result.
 
-Increase the verbal level to `4`. To do this, run the command `tst Join.test.js v:4` with the shortened form of the option. Compare the result with the output shown below.
+Increase the level of detail to `4`. To do this, run the command `tst Join.test.js v:4` with the shortened form of the option. Compare the result with the output shown below.
 
 <details>
   <summary><u>Command output <code>tst Join.test.js v:4</code></u></summary>
@@ -177,11 +177,11 @@ At the beginning of the report, all settled [test options](Help.md#Test-run-opti
 The test report for the `ok` test includes:
 
 - path to the test file;
-- line number with test check;
+- number of line with test check;
 - test suite code with test check;
 - result of testing.
 
-The test report with the status `failed` additionally contains a section with an error. For example, in this report this section is
+The test report with the status `failed` additionally contains a section with description of an error. For example, in this report this section is
 
 ```
         - got :

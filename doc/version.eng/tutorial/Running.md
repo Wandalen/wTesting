@@ -1,6 +1,6 @@
 # Running tests
 
-How to run stand-alone file testing and group testing.
+How to run single file testing and group testing.
 
 ### Downloading
 

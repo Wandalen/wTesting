@@ -15,7 +15,7 @@ report
 
 </details>
 
-Create the file structure above for routine testing.
+Create the file structure above for testing.
 
 ### Test object
 
@@ -101,7 +101,7 @@ wTester.test( Self.name );
 
 Enter the code above into `Join.test.js` file.
 
-The test routine `routine1` has 2 test groups that named `string` and `number`, as well as a test case `mixed` with one test check. The `string` group contains 2 test cases -` trivial` and `empty`, each of which has one check. The `number` group has test cases `trivial` and `zeroes`, each of which has one test check. The groups were formed by the type of arguments passed to the `Join.join` function that is being tested. In the test checks of the `string` group string values are used, the `number` group - numeric values, and in the test case `mixed` string and numeric values are used.
+The test routine `routine1` has 2 test groups that named `string` and `number`, as well as a test case `mixed` with one test check. The `string` group contains 2 test cases -` trivial` and `empty`, each of which has one test check. The `number` group has test cases `trivial` and `zeroes`, each of which has one test check. The groups were formed by the type of arguments passed to the `Join.join` function that is being tested. In the test checks of the `string` group string values are used, the `number` group - numeric values, and in the test case `mixed` string and numeric values are used.
 
 In the given code two dependencies are injected. The first one is the `Testing` utility to perform a test. The second is a `Join.js` file in which there is a routine for testing.
 
@@ -141,7 +141,7 @@ The figure on the left side shows the console output after the command has been 
 
 The first section is the testing options. It is intended to display current testing parameters. In the fourth line from the bottom of the section, you can find the `verbosity` option with the value `5`. This value was set in the option of the entered command.
 
-The second section is a test report for a separate test routine.  When testing of a test suites group is performed, each test suite has such a section.
+The second section is a test report for a separate test routine. When testing of a test suites group is performed, each test suite has such a section.
 
 The number of test routines, test cases, and test checks is determined by the test suite code. The figure on the right shows the code of `Join.test.js` file. The report includes the results of performing five test cases in the test routine `routine1`. Two groups have been created from the given test cases - `string` and` number`. In order to merge the test cases into a group, the routines [`open()` and `close()`](../concept/TestCase.md) are used.
 
@@ -152,7 +152,7 @@ Test check ( Join / routine1 / string > trivial # 1) ... ok
 
 ```
 
-This line indicates that the test has passed, it has the number 1. The string in the parenthesis indicates the path to test check: test suite `Join` / routine `routine1` / group of test cases `string` > test case `trivial`. Accordingly, the `>` symbol is used to denote the nesting of the test case.
+This line indicates that the test has been passed, it has the number 1. The string in the parenthesis indicates the path to test check: test suite `Join` / routine `routine1` / group of test cases `string` > test case `trivial`. Accordingly, the `>` symbol is used to denote the nesting of the test case.
 
 The utility makes a conclusion regarding the passed test checks in the routine: `Passed test routine ( Join / routine1 ) in 0,173s`.
 

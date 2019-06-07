@@ -44,13 +44,13 @@ The help for test scenarios and test options is displayed. For example, the `sui
 
 ### Scenarios of utility `Testing`
 
-A scenario is an option that defines the behavior of the utility when executing a command on files. The section `Scenarios` contains five scenarios.
+A scenario is an option that defines the behavior of the utility when a command executes on files. The section `Scenarios` contains five scenarios.
 
 ##### Scenario `test`
 
 It is executed by default if the path to the tests is entered into a command. Runs test suites in the specified directory.
 
-The `tst path/to/dir scenario: test` command will find and run all the test suites in the` path/to/dir` directory, which is the same as `tst path/to/dir` command.
+The `tst path/to/dir scenario:test` command will find and run all the test suites in the` path/to/dir` directory, which is the same as `tst path/to/dir` command.
 
 ##### Scenario `help`
 
@@ -86,7 +86,7 @@ Test run options are specified when the command runs in command line interface:
 tst . verbosity:7
 ```
 
-The verbosity or report is set to the level `7`.
+The verbosity of report is set to the level `7`.
 
 At the same time, the test suite options are specified in the test file:
 
@@ -108,7 +108,7 @@ var Self =
 wTestSuite( Self );
 ```
 
-The verbosity of report is set to the level `9`. Most test run options have priority over test suite options. For this reason, in the example, the verbal level will be `7`, not` 9`.
+The verbosity of report is set to the level `9`. Most run options have priority over test suite options. For this reason, in the example, the verbal level will be `7`, not` 9`.
 
 ##### Run option `scenario`
 
@@ -160,7 +160,7 @@ Example: `tst path/to/dir timing:0`. Time data will not be available in the repo
 
 The option controls the amount of time spent on testing. Each test routine can specify its own option `rapidity` with a value from` 1` to `5`. By default, routine option `rapidity`  is` 3`. A routine doesn't run when the value of run option `rapidity` is greater than the value of routine option `rapidity`.
 
-The option accepts values from 1 to 5: 1 is the slowest testing, 5 is the fastest. The default value is 3.
+The option accepts values from `1` to `5`: `1` is the slowest testing, `5` is the fastest. The default value is `3`.
 
 The `tst path/to/dir rapidity:1` command tests each test routine.
 
@@ -174,7 +174,7 @@ The routine is denoted as failed (red) if it has not been tested at the specifie
 
 Option is determined in milliseconds. The default value is 5000ms.
 
-The `tst path/to/dir testRoutineTimeOut:60000` command will give each test a routine without explicitly set` timeOut` minutes to execute it.
+The `tst path/to/dir testRoutineTimeOut:60000` command gives each test routine without explicitly setting `timeOut` one minute to complete it.
 
 ##### Run option `concurrent`
 
@@ -182,7 +182,7 @@ Desined to enable parallel execution of test suites.
 
 The utility can run more than one test suite at the same time if there are several test suites in the specified directory.
 
-The option has two values: 1 is on, 0 is disabled and testing is in turn. By default - 0.
+The option has two values: 1 - parallel testing is on, 0 - is disabled and testing is in turn. By default - 0.
 
 The command `tst path/to/dir concurrent:1` runs parallel execution of test suites in the` path/to/dir` directory.
 

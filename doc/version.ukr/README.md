@@ -51,6 +51,21 @@
   </a></summary>
   Тестування коректності обробки об'єктом тестування помилкових даних чи помилкового стану.
 </details>
+<details><summary><a href="./concept/TestingStatus.md#Помилка-тестування">
+      Помилка тестування
+  </a></summary>
+  Подія чи умова, яка призвела до провалу тестування.
+</details>
+<details><summary><a href="./concept/TestingStatus.md#Пройдене-тестування">
+      Пройдене тестування
+  </a></summary>
+  Результат проходження тестування, котрий не містить помилок тестування.
+</details>
+<details><summary><a href="./concept/TestingStatus.md#Провалене-тестування">
+      Провалене тестування
+  </a></summary>
+  Результат виконання тестування, котрий містить принаймні одну помилку тестування.  
+</details>
 <details><summary><a href="./concept/TestOption.md#Опція-запуска">
       Опція запуска
   </a></summary>

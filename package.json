@@ -28,11 +28,13 @@
   "scripts": {
     "test": "wtest proto",
     "wtest": "node proto/dwtools/atop/tester/Exec",
-    "tst": "node proto/dwtools/atop/tester/Exec"
+    "tst": "node proto/dwtools/atop/tester/Exec",
+    "tst.single.process": "node proto/dwtools/atop/tester/Exec"
   },
   "bin": {
     "wtest": "proto/dwtools/atop/tester/Exec",
-    "tst": "proto/dwtools/atop/tester/Exec"
+    "tst": "proto/dwtools/atop/tester/Exec",
+    "tst.single.process": "proto/dwtools/atop/tester/Exec"
   },
   "repository": {
     "type": "git",

@@ -29,6 +29,10 @@ path:
     path: out
     criterion:
       predefined: 1
+  module.common:
+    path: out/wTesting.out
+    criterion:
+      predefined: 1
   local:
     criterion:
       predefined: 1
@@ -75,6 +79,7 @@ path:
       - proto/dwtools/atop
       - proto/dwtools/atop/tester
       - proto/dwtools/atop/tester/Exec
+      - proto/dwtools/atop/tester/Exec2
       - proto/dwtools/atop/tester/Include.base.s
       - proto/dwtools/atop/tester/Include.mid.s
       - proto/dwtools/atop/tester/Include.top.s

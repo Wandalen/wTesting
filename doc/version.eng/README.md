@@ -84,10 +84,15 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
   How to get help.
 </details>
+<details><summary><a href="./tutorial/HelpSuitesList.md">
+      How to get a list of test suites
+  </a></summary>
+  How to get information about test suites.
+</details>
 <details><summary><a href="./tutorial/Running.md">
       Running tests
   </a></summary>
-  How to run testing.
+  How to run single file testing and group testing.
 </details>
 <details><summary><a href="./tutorial/HelloWorld.md">
       Test suite "Hello World!"

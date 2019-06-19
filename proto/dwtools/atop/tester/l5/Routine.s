@@ -4,7 +4,7 @@
 
 //
 
-/** 
+/**
  * @classdesc Provides interface for creating of test routines. Interface is a collection of routines to create cases, groups of cases, perform different type of checks.
  * @class wTestRoutineDescriptor
  * @param {Object} o Test suite option map. {@link module:Tools/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
@@ -1332,7 +1332,7 @@ function contains( got, expected )
 
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
- * with target( expected ). 
+ * with target( expected ).
  * If value of( got ) is greater than value of( than ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -1394,7 +1394,7 @@ function gt( got, than )
 
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
- * with target( expected ). 
+ * with target( expected ).
  * If value of( got ) is greater than or equal to value of( than ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -1459,7 +1459,7 @@ function ge( got, than )
 
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
- * with target( expected ). 
+ * with target( expected ).
  * If value of( got ) is less than value of( than ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -1523,7 +1523,7 @@ function lt( got, than )
 
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
- * with target( expected ). 
+ * with target( expected ).
  * If value of( got ) is less or equal to value of( than ) test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -1671,6 +1671,8 @@ function _shouldDo( o )
 
     err = _err;
 
+    debugger;
+
     if( o.ignoringError )
     {
       begin( 1 );
@@ -1679,7 +1681,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'error throwen synchronously, ignored',
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
       end( 1, err );
       return con;
@@ -1706,7 +1708,7 @@ function _shouldDo( o )
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously as expected',
           stack : stack,
-          selectMode : 'begin'
+          selectMode : 'end'
         });
 
       }
@@ -1718,7 +1720,7 @@ function _shouldDo( o )
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously, what was not expected',
           stack : stack,
-          selectMode : 'begin'
+          selectMode : 'end'
         });
 
       }
@@ -1746,7 +1748,7 @@ function _shouldDo( o )
       outcome : 0,
       msg : msg,
       stack : stack,
-      selectMode : 'begin'
+      selectMode : 'end'
     });
 
     end( 0, _.err( msg ) );
@@ -1882,7 +1884,7 @@ function _shouldDo( o )
         outcome : 0,
         msg : msg,
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
 
       end( 0, _.err( msg ) );
@@ -1896,7 +1898,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'no error thrown, as expected',
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
 
       end( 1, result );
@@ -1969,7 +1971,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'got single message',
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
 
       end( 1, err ? err : arg );
@@ -1992,7 +1994,7 @@ function _shouldDo( o )
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously as expected',
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
       else
       trd._outcomeReportBoolean
@@ -2000,7 +2002,7 @@ function _shouldDo( o )
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously, not expected',
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
 
       end( o.expectingAsyncError, err );
@@ -2018,7 +2020,7 @@ function _shouldDo( o )
         outcome : !o.expectingAsyncError,
         msg : msg,
         stack : stack,
-        selectMode : 'begin'
+        selectMode : 'end'
       });
 
       if( o.expectingAsyncError )
@@ -2045,7 +2047,7 @@ _shouldDo.defaults =
 
 /**
  * @summary Error throwing test. Executes provided `routine` and checks if it throws an Error asynchrounously.
- * @description 
+ * @description
  * Provided routines should return instance of `wConsequence`. Also routine can accepts `wConsequence` instance as argument.
  * If check is positive then test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
@@ -2083,7 +2085,7 @@ function shouldThrowErrorAsync( routine )
 
 /**
  * @summary Error throwing test. Executes provided `routine` and checks if it throws an Error synchrounously.
- * @description 
+ * @description
  * If check is positive then test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -2185,7 +2187,7 @@ function shouldThrowError( routine )
 
 /**
  * @summary Error throwing test. Executes provided `routine` and checks if doesn't throw an Error synchrounously or asynchrounously.
- * @description 
+ * @description
  * If check is positive then test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.
@@ -2225,7 +2227,7 @@ function mustNotThrowError( routine )
 
 /**
  * @summary `wConsequence` messaging test. Executes provided `routine` and checks if returned `wConsequence` gives only one message.
- * @description 
+ * @description
  * If check is positive then test is passed successfully. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * Returns true if test is done successfully, otherwise false.

@@ -1330,6 +1330,60 @@ function contains( got, expected )
 
 //
 
+function setsIdentical( got, expected )
+{
+  let trd = this;
+  let o2, outcome;
+
+  /* */
+
+  try
+  {
+    debugger;
+    outcome = _.arraySetIdentical( got, expected );
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
+
+  /* */
+
+  if( arguments.length !== 2 )
+  {
+    outcome = false;
+
+    trd.exceptionReport
+    ({
+      err : '"identical" expects two arguments',
+      level : 2,
+    });
+
+    return outcome;
+  }
+
+  /* */
+
+  trd._outcomeReportCompare
+  ({
+    outcome : outcome,
+    got : got,
+    expected : expected,
+    // path : o2.iteration.lastPath, // xxx
+    usingExtraDetails : 1,
+  });
+
+  /* */
+
+  return outcome;
+}
+
+//
+
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
  * with target( expected ).
@@ -3004,6 +3058,7 @@ let Extend =
   equivalent,
   notEquivalent,
   contains,
+  setsIdentical,
 
   il : identical,
   ni : notIdentical,

@@ -19,14 +19,14 @@ path:
     path: wTesting.out.will.yml
     criterion:
       predefined: 1
+  module.common:
+    path: wTesting.out
+    criterion:
+      predefined: 1
   module.original.willfiles:
     path:
       - ../.im.will.yml
       - ../.ex.will.yml
-    criterion:
-      predefined: 1
-  module.common:
-    path: wTesting.out
     criterion:
       predefined: 1
   local:

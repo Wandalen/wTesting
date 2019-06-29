@@ -8,9 +8,10 @@ if( typeof module !== 'undefined' )
 }
 
 let _ = wTools;
-let shell = _.shellNodePassingThrough
+let shell = _.shell
 ({
-  execPath : _.path.join( __dirname, 'Main.mid.s' ),
+  execPath : 'debugnode ' + _.path.join( __dirname, 'MainTop.s' ),
   verbosity : 0,
-  throwingExitCode : 0,
+  passingThrough : 1,
+  applyingExitCode : 1,
 });

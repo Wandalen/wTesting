@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 let _ = wTools;
 let shell = _.shellNodePassingThrough
 ({
-  execPath : _.path.join( __dirname, 'Main.mid.s' ),
+  execPath : _.path.join( __dirname, 'MainTop.s' ),
   verbosity : 0,
   throwingExitCode : 0,
 });

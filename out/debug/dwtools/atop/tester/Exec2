@@ -12,4 +12,5 @@ let shell = _.shellNodePassingThrough
 ({
   execPath : _.path.join( __dirname, 'Main.mid.s' ),
   verbosity : 0,
+  throwingExitCode : 0,
 });

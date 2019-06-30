@@ -79,9 +79,9 @@ path:
       - ../proto/dwtools/atop
       - ../proto/dwtools/atop/tester
       - ../proto/dwtools/atop/tester/Exec
-      - ../proto/dwtools/atop/tester/Exec.debug
-      - ../proto/dwtools/atop/tester/Exec.unrestricted
       - ../proto/dwtools/atop/tester/Exec2
+      - ../proto/dwtools/atop/tester/ExecDebug
+      - ../proto/dwtools/atop/tester/ExecUnrestricted
       - ../proto/dwtools/atop/tester/Include.base.s
       - ../proto/dwtools/atop/tester/Include.mid.s
       - ../proto/dwtools/atop/tester/Include.top.s
@@ -397,9 +397,9 @@ module:
           - proto/dwtools/atop
           - proto/dwtools/atop/tester
           - proto/dwtools/atop/tester/Exec
-          - proto/dwtools/atop/tester/Exec.debug
-          - proto/dwtools/atop/tester/Exec.unrestricted
           - proto/dwtools/atop/tester/Exec2
+          - proto/dwtools/atop/tester/ExecDebug
+          - proto/dwtools/atop/tester/ExecUnrestricted
           - proto/dwtools/atop/tester/Include.base.s
           - proto/dwtools/atop/tester/Include.mid.s
           - proto/dwtools/atop/tester/Include.top.s

@@ -35,7 +35,7 @@ if( typeof module !== 'undefined' )
 
   //
 
-  require( './Include.mid.s' );
+  require( './IncludeMid.s' );
 
   var _ = _global_.wTools;
 

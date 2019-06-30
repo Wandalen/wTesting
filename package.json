@@ -26,21 +26,21 @@
     "production"
   ],
   "scripts": {
-    "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted",
-    "wtest.single.process": "node proto/dwtools/atop/tester/Exec",
-    "wtest.debug": "node proto/dwtools/atop/tester/ExecDebug",
-    "tst": "node proto/dwtools/atop/tester/ExecUnrestricted",
-    "tst.single.process": "node proto/dwtools/atop/tester/Exec",
-    "tst.debug": "node proto/dwtools/atop/tester/ExecDebug",
+    "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted.js",
+    "wtest.single.process": "node proto/dwtools/atop/tester/Exec.js",
+    "wtest.debug": "node proto/dwtools/atop/tester/ExecDebug.js",
+    "tst": "node proto/dwtools/atop/tester/ExecUnrestricted.js",
+    "tst.single.process": "node proto/dwtools/atop/tester/Exec.js",
+    "tst.debug": "node proto/dwtools/atop/tester/ExecDebug.js",
     "test": "wtest proto"
   },
   "bin": {
-    "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted",
-    "wtest.single.process": "node proto/dwtools/atop/tester/Exec",
-    "wtest.debug": "node proto/dwtools/atop/tester/ExecDebug",
-    "tst": "node proto/dwtools/atop/tester/ExecUnrestricted",
-    "tst.single.process": "node proto/dwtools/atop/tester/Exec",
-    "tst.debug": "node proto/dwtools/atop/tester/ExecDebug"
+    "wtest": "proto/dwtools/atop/tester/ExecUnrestricted.js",
+    "wtest.single.process": "proto/dwtools/atop/tester/Exec.js",
+    "wtest.debug": "proto/dwtools/atop/tester/ExecDebug.js",
+    "tst": "proto/dwtools/atop/tester/ExecUnrestricted.js",
+    "tst.single.process": "proto/dwtools/atop/tester/Exec.js",
+    "tst.debug": "proto/dwtools/atop/tester/ExecDebug.js"
   },
   "repository": {
     "type": "git",

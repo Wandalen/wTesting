@@ -110,6 +110,7 @@ path:
       - ../proto/dwtools/atop/tester.test/asset/hello/Hello.atest.js
       - ../proto/dwtools/atop/tester.test/asset/hello/Hello.js
       - ../proto/dwtools/atop/tester.test/asset/hello/package.json
+      - ../proto/dwtools/tmp.tmp
     criterion:
       default: 1
       debug: 1
@@ -427,6 +428,7 @@ module:
           - proto/dwtools/atop/tester.test/asset/hello/Hello.atest.js
           - proto/dwtools/atop/tester.test/asset/hello/Hello.js
           - proto/dwtools/atop/tester.test/asset/hello/package.json
+          - proto/dwtools/tmp.tmp
         criterion:
           default: 1
           debug: 1

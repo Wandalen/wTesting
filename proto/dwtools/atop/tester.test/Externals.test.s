@@ -56,7 +56,6 @@ function run( test )
 
   let shell = _.sheller
   ({
-    // execPath : 'node ' + self.execPath,
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
@@ -75,12 +74,8 @@ function run( test )
 
   }
 
-  debugger;
   let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath }, onUp : onUp });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
-  debugger;
-
-  // debugger; return; xxx
 
   shell( 'npm i' );
   shell( 'npm rm wTesting -g && npm i wTesting -g' );
@@ -173,7 +168,6 @@ function checkFails( test )
 
   let shell = _.sheller
   ({
-    // execPath : 'node ' + self.execPath,
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
@@ -192,15 +186,11 @@ function checkFails( test )
 
   }
 
-  debugger;
   let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath }, onUp : onUp });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
-  debugger;
-
-  // debugger; return; xxx
 
   shell( 'npm i' );
-  shell( 'npm rm wTesting -g && npm i wTesting -g' );
+  // shell( 'npm rm wTesting -g && npm i wTesting -g' );
 
   /* - */
 

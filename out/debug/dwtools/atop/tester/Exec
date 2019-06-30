@@ -3,7 +3,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( './MainMid.s' );
+  require( './MainTop.s' );
 
   if( !module.parent )
   wTester.exec();

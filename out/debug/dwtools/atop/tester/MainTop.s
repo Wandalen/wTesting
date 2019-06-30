@@ -5,6 +5,9 @@ if( typeof module !== 'undefined' )
 
   require( './MainBase.s' );
 
+  if( !module.parent )
+  wTester.exec();
+
 }
 
 })();

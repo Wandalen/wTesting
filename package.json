@@ -28,19 +28,19 @@
   "scripts": {
     "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted",
     "wtest.single.process": "node proto/dwtools/atop/tester/Exec",
-    "wtest.debug": "node proto/dwtools/atop/tester/ExecDegbug",
+    "wtest.debug": "node proto/dwtools/atop/tester/ExecDebug",
     "tst": "node proto/dwtools/atop/tester/ExecUnrestricted",
     "tst.single.process": "node proto/dwtools/atop/tester/Exec",
-    "tst.debug": "node proto/dwtools/atop/tester/ExecDegbug",
+    "tst.debug": "node proto/dwtools/atop/tester/ExecDebug",
     "test": "wtest proto"
   },
   "bin": {
     "wtest": "proto/dwtools/atop/tester/ExecUnrestricted",
     "wtest.single.process": "proto/dwtools/atop/tester/Exec",
-    "wtest.debug": "proto/dwtools/atop/tester/ExecDegbug",
+    "wtest.debug": "proto/dwtools/atop/tester/ExecDebug",
     "tst": "proto/dwtools/atop/tester/ExecUnrestricted",
     "tst.single.process": "proto/dwtools/atop/tester/Exec",
-    "tst.debug": "proto/dwtools/atop/tester/ExecDegbug"
+    "tst.debug": "proto/dwtools/atop/tester/ExecDebug"
   },
   "repository": {
     "type": "git",

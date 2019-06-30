@@ -438,7 +438,6 @@ function _testingBegin( allSuites, runSuites )
   tester._reportForm();
   tester._canceled = 0;
   tester.state = 'begin';
-  // debugger;
 
   if( tester.settings.timing )
   tester._testingBeginTime = _.timeNow();
@@ -865,7 +864,7 @@ function _reportForm()
   report.testRoutineFails = 0;
 
   report.testSuitePasses = 0;
-  report.testSuiteFailes = 0;
+  report.testSuiteFails = 0;
 
   Object.preventExtensions( report );
 
@@ -889,7 +888,7 @@ function _reportToStr()
   msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
   msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
   msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
-  msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFailes ) + '';
+  msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFails ) + '';
 
   return msg;
 }
@@ -1061,7 +1060,7 @@ function _testSuiteConsider( outcome )
   }
   else
   {
-    report.testSuiteFailes += 1;
+    report.testSuiteFails += 1;
   }
 
 }

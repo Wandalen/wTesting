@@ -190,33 +190,9 @@ function checkFails( test )
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
 
   shell( 'npm i' );
-  // shell( 'npm rm wTesting -g && npm i wTesting -g' );
+  shell( 'npm rm wTesting -g && npm i wTesting -g' );
 
   /* - */
-
-  ready
-  .thenKeep( () =>
-  {
-    test.case = 'tst Hello.test.js'
-    return null;
-  })
-
-  shell({ args : [ 'tst', 'Hello.test.js',  'beeping:0' ] })
-  .thenKeep( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 4/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
-
-    return null;
-  })
-
-/* - */
 
   ready
   .thenKeep( () =>
@@ -225,7 +201,7 @@ function checkFails( test )
     return null;
   })
 
-  shell({ args : [ 'tst', 'Hello.test.js',  'beeping:0', 'fails:1'] })
+  shell({ args : [ 'tst', 'Hello.test.js', 'beeping:0', 'fails:1'] })
   .thenKeep( ( got ) =>
   {
     test.ni( got.exitCode, 0 );

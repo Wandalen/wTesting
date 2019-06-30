@@ -302,6 +302,7 @@ function _interruptMaybe( throwing )
   let trd = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( !!wTester.report );
 
   if( trd._returned )
   return false;
@@ -398,7 +399,15 @@ function _willGet()
 function _willSet( src )
 {
   let trd = this;
-  trd._interruptMaybe( 1 );
+
+  debugger;
+  if( wTester.report )
+  {
+    debugger;
+    trd._interruptMaybe( 1 );
+    return;
+  }
+
   trd[ willSymbol ] = src
 }
 

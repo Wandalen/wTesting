@@ -82,11 +82,11 @@ path:
       - ../proto/dwtools/atop/tester/Exec2
       - ../proto/dwtools/atop/tester/ExecDebug
       - ../proto/dwtools/atop/tester/ExecUnrestricted
-      - ../proto/dwtools/atop/tester/Include.base.s
-      - ../proto/dwtools/atop/tester/Include.mid.s
-      - ../proto/dwtools/atop/tester/Include.top.s
-      - ../proto/dwtools/atop/tester/Main.base.s
-      - ../proto/dwtools/atop/tester/Main.mid.s
+      - ../proto/dwtools/atop/tester/IncludeBase.s
+      - ../proto/dwtools/atop/tester/IncludeMid.s
+      - ../proto/dwtools/atop/tester/IncludeTop.s
+      - ../proto/dwtools/atop/tester/MainBase.s
+      - ../proto/dwtools/atop/tester/MainTop.s
       - ../proto/dwtools/atop/tester/l3
       - ../proto/dwtools/atop/tester/l5
       - ../proto/dwtools/atop/tester/l5/Routine.s
@@ -400,11 +400,11 @@ module:
           - proto/dwtools/atop/tester/Exec2
           - proto/dwtools/atop/tester/ExecDebug
           - proto/dwtools/atop/tester/ExecUnrestricted
-          - proto/dwtools/atop/tester/Include.base.s
-          - proto/dwtools/atop/tester/Include.mid.s
-          - proto/dwtools/atop/tester/Include.top.s
-          - proto/dwtools/atop/tester/Main.base.s
-          - proto/dwtools/atop/tester/Main.mid.s
+          - proto/dwtools/atop/tester/IncludeBase.s
+          - proto/dwtools/atop/tester/IncludeMid.s
+          - proto/dwtools/atop/tester/IncludeTop.s
+          - proto/dwtools/atop/tester/MainBase.s
+          - proto/dwtools/atop/tester/MainTop.s
           - proto/dwtools/atop/tester/l3
           - proto/dwtools/atop/tester/l5
           - proto/dwtools/atop/tester/l5/Routine.s

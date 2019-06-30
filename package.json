@@ -19,7 +19,7 @@
     }
   ],
   "license": "MIT",
-  "main": "proto/dwtools/atop/tester/Main.mid.s",
+  "main": "proto/dwtools/atop/tester/MainTop.s",
   "files": [
     "proto/dwtools/atop/tester",
     "proto/dwtools/Tools.s",

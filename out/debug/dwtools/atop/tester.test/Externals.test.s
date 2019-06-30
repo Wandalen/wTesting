@@ -161,9 +161,9 @@ function run( test )
 
   return ready;
 }
-    
+
 //
-    
+
 function checkFails( test )
 {
   let self = this;
@@ -225,7 +225,7 @@ function checkFails( test )
 
     return null;
   })
-    
+
 /* - */
 
   ready

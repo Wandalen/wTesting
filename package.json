@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "1.0.202",
+  "version": "1.0.201",
   "engine": "node >= 6.0.0",
   "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -26,21 +26,21 @@
     "production"
   ],
   "scripts": {
-    "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted.js",
-    "wtest.single.process": "node proto/dwtools/atop/tester/Exec.js",
-    "wtest.debug": "node proto/dwtools/atop/tester/ExecDebug.js",
-    "tst": "node proto/dwtools/atop/tester/ExecUnrestricted.js",
-    "tst.single.process": "node proto/dwtools/atop/tester/Exec.js",
-    "tst.debug": "node proto/dwtools/atop/tester/ExecDebug.js",
+    "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted",
+    "wtest.single.process": "node proto/dwtools/atop/tester/Exec",
+    "wtest.debug": "node proto/dwtools/atop/tester/ExecDebug",
+    "tst": "node proto/dwtools/atop/tester/ExecUnrestricted",
+    "tst.single.process": "node proto/dwtools/atop/tester/Exec",
+    "tst.debug": "node proto/dwtools/atop/tester/ExecDebug",
     "test": "wtest proto"
   },
   "bin": {
-    "wtest": "proto/dwtools/atop/tester/ExecUnrestricted.js",
-    "wtest.single.process": "proto/dwtools/atop/tester/Exec.js",
-    "wtest_debug": "proto/dwtools/atop/tester/ExecDebug.js",
-    "tst": "proto/dwtools/atop/tester/ExecUnrestricted.js",
-    "tst.single.process": "proto/dwtools/atop/tester/Exec.js",
-    "tst.debug": "proto/dwtools/atop/tester/ExecDebug.js"
+    "wtest": "proto/dwtools/atop/tester/ExecUnrestricted",
+    "wtest.single.process": "proto/dwtools/atop/tester/Exec",
+    "wtest_debug": "proto/dwtools/atop/tester/ExecDebug",
+    "tst": "proto/dwtools/atop/tester/ExecUnrestricted",
+    "tst.single.process": "proto/dwtools/atop/tester/Exec",
+    "tst.debug": "proto/dwtools/atop/tester/ExecDebug"
   },
   "repository": {
     "type": "git",

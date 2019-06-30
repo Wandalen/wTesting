@@ -111,6 +111,10 @@ path:
       - ../proto/dwtools/atop/tester.test/asset/hello/Hello.js
       - ../proto/dwtools/atop/tester.test/asset/hello/package.json
       - ../proto/dwtools/tmp.tmp
+      - ../proto/dwtools/tmp.tmp/Will-16825-187-6f67
+      - ../proto/dwtools/tmp.tmp/Will-16825-187-6f67/checkFails
+      - ../proto/dwtools/tmp.tmp/Will-16835-560-8393
+      - ../proto/dwtools/tmp.tmp/Will-16835-560-8393/run
     criterion:
       default: 1
       debug: 1
@@ -429,6 +433,10 @@ module:
           - proto/dwtools/atop/tester.test/asset/hello/Hello.js
           - proto/dwtools/atop/tester.test/asset/hello/package.json
           - proto/dwtools/tmp.tmp
+          - proto/dwtools/tmp.tmp/Will-16825-187-6f67
+          - proto/dwtools/tmp.tmp/Will-16825-187-6f67/checkFails
+          - proto/dwtools/tmp.tmp/Will-16835-560-8393
+          - proto/dwtools/tmp.tmp/Will-16835-560-8393/run
         criterion:
           default: 1
           debug: 1

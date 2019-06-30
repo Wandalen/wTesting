@@ -34,6 +34,7 @@
     "tst.debug": "node proto/dwtools/atop/tester/ExecDebug.js",
     "test": "wtest proto"
   },
+
   "bin": {
     "wtest": "proto/dwtools/atop/tester/ExecUnrestricted.js",
     "wtest.single.process": "proto/dwtools/atop/tester/Exec.js",

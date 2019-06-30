@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 let _ = wTools;
 let shell = _.shell
 ({
-  execPath : 'debugnode ' + _.path.join( __dirname, 'MainTop.s' ),
+  execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'MainTop.s' ) ),
   verbosity : 0,
   passingThrough : 1,
   applyingExitCode : 1,

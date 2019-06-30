@@ -37,7 +37,7 @@
   "bin": {
     "wtest": "proto/dwtools/atop/tester/ExecUnrestricted.js",
     "wtest.single.process": "proto/dwtools/atop/tester/Exec.js",
-    "wtest.debug": "proto/dwtools/atop/tester/ExecDebug.js",
+    "wtest_debug": "proto/dwtools/atop/tester/ExecDebug.js",
     "tst": "proto/dwtools/atop/tester/ExecUnrestricted.js",
     "tst.single.process": "proto/dwtools/atop/tester/Exec.js",
     "tst.debug": "proto/dwtools/atop/tester/ExecDebug.js"

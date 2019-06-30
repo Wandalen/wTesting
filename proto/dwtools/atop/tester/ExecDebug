@@ -8,10 +8,14 @@ if( typeof module !== 'undefined' )
 }
 
 let _ = wTools;
-let shell = _.shell
+debugger;
+let shell = _.shellPassingThrough
 ({
   execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'MainTop.s' ) ),
   verbosity : 0,
   passingThrough : 1,
   applyingExitCode : 1,
+  throwingExitCode : 0,
+  outputPiping : 1,
 });
+debugger;

@@ -400,10 +400,8 @@ function _willSet( src )
 {
   let trd = this;
 
-  debugger;
   if( wTester.report )
   {
-    debugger;
     trd._interruptMaybe( 1 );
     return;
   }

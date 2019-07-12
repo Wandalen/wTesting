@@ -401,10 +401,7 @@ function _willSet( src )
   let trd = this;
 
   if( wTester.report )
-  {
-    trd._interruptMaybe( 1 );
-    return;
-  }
+  trd._interruptMaybe( 1 );
 
   trd[ willSymbol ] = src
 }
@@ -727,13 +724,13 @@ function is( outcome )
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
 
-    outcome = false;
-
     trd.exceptionReport
     ({
-      err : '"is" expects single bool argument',
+      err : 'Test check "is" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcoume ),
       level : 2,
     });
+
+    outcome = false;
 
   }
   else
@@ -758,13 +755,13 @@ function isNot( outcome )
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
 
-    outcome = false;
-
     trd.exceptionReport
     ({
-      err : '"isNot" expects single bool argument',
+      err : 'Test check "isNot" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcoume ),
       level : 2,
     });
+
+    outcome = false;
 
   }
   else
@@ -1346,7 +1343,6 @@ function setsIdentical( got, expected )
 
   try
   {
-    debugger;
     outcome = _.arraySetIdentical( got, expected );
   }
   catch( err )
@@ -1731,8 +1727,6 @@ function _shouldDo( o )
   {
 
     err = _err;
-
-    debugger;
 
     if( o.ignoringError )
     {

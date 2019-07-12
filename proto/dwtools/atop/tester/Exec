@@ -4,8 +4,7 @@ if( typeof module !== 'undefined' )
 {
 
   require( './MainTop.s' );
-
-  if( !module.parent )
+  // if( !module.parent )
   wTester.exec();
 
 }

@@ -1,3 +1,4 @@
+
 if( typeof module !== 'undefined' )
 {
 
@@ -19,9 +20,5 @@ if( typeof module !== 'undefined' )
   }
 
   module[ 'exports' ] = _global_.wTools;
-
-  // debugger;
-  // _global_.wTools.usePathGlobally( __dirname );
-  _global_.wTools.usePath( __dirname );
 
 }

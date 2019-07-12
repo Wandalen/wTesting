@@ -1,0 +1,1557 @@
+(function _Tester_s_() {
+
+'use strict';
+
+/**
+ * @summary Provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more.
+ * @namespace wTester
+ * @memberof module:Tools/Tester
+ */
+
+let _global = _global_;
+let _ = _global_.wTools;
+let sourceFileLocation = _.diagnosticLocation().full;
+let sourceFileStack = _.diagnosticStack();
+
+if( wTester._isReal_ )
+{
+  console.log( 'WARING : wTesting included several times!' );
+  console.log( '' );
+  console.log( 'First time' );
+  console.log( wTester.sourceFileStack );
+  console.log( '' );
+  console.log( 'Second time' );
+  console.log( sourceFileStack );
+  console.log( '' );
+  debugger;
+  _.assert( 0 );
+  return;
+}
+
+_.assert( _.routineIs( _.toStr ), 'wTesting needs Stringer' );
+_.assert( _.routineIs( _.shell ), 'wTesting needs ExternalFundamentals' );
+_.assert( _.routineIs( _.execStages ), 'wTesting needs RoutineFundamentals' );
+_.assert( _.routineIs( _.Consequence ), 'wTesting needs Consequence' );
+_.assert( _.numberIs( _.accuracy ), 'wTesting needs _.accuracy' );
+_.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
+
+// --
+// tester
+// --
+
+/**
+ * @summary Runs the tester.
+ * @description Tester will find test suites at provided path and execute them one by one.
+ * If path is not provided explicitly tester will use path to current working directory.
+ * During execution tester prints useful information about current state of execution. Level of output can be controled by options.
+ * Path and options are be provided through command line arguments:
+ * `wtest [ path ] [ options...]`
+ * Path can be relative or absolute. Path can lead to single test suite or to directory with test suites.
+ * Option is a combination of `key` and `value` splitted by delimeter `:`. Options should have at least one space between each other.
+ * Spaces between `key` and `value` are supported: `v:5` and `v  :  5` are treated in same way.
+ * @function exec
+ * @example
+ *  wtest proto v : 5
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function exec()
+{
+  let tester = this;
+  let result;
+
+  try
+  {
+
+    _.assert( arguments.length === 0 );
+
+    tester.appArgsRead();
+
+    let path = tester.path;
+
+    if( !tester.ScenariosHelpMap[ tester.settings.scenario ] )
+    throw _.errBriefly( 'Unknown scenario', tester.settings.scenario );
+
+    if( tester.settings.scenario !== 'test' )
+    if( !tester[ tester.ScenariosActionMap[ tester.settings.scenario ] ] )
+    throw _.errBriefly( 'Scenario', tester.settings.scenario, 'is not implemented' );
+
+    if( tester.settings.scenario === 'test' )
+    {
+      tester.includeTestsFrom( tester.path );
+      result = tester.testAll();
+    }
+    else
+    {
+      tester[ tester.ScenariosActionMap[ tester.settings.scenario ] ]();
+    }
+
+  }
+  catch( err )
+  {
+    err = _.errLogOnce( err );
+    process.exitCode = -1;
+    _.diagnosticBeep();
+    _.diagnosticBeep();
+    return;
+    throw err;
+  }
+
+}
+
+//
+
+function _registerExitHandler()
+{
+  let tester = this;
+
+  _.appRepairExitHandler();
+
+  // if( tester._registerExitHandlerDone )
+  // return;
+  //
+  // tester._registerExitHandlerDone = 1;
+
+}
+
+//
+
+/**
+ * @summary Parses arguments provided to tester. Resolves path provided to the tester.
+ * @description List of possible arguments( options ) can be found {@link module:Tools/Tester.wTester.SettingsNameMap here}.
+ * @function appArgsRead
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function appArgsRead()
+{
+  let tester = this;
+  let logger = tester.logger;
+  let settings = tester.settings;
+
+  if( tester._appArgs )
+  return tester._appArgs;
+
+  _.assert( arguments.length === 0 );
+  _.mapExtend( settings, tester.Settings );
+
+  let readOptions =
+  {
+    dst : settings,
+    namesMap : tester.SettingsNameMap,
+    removing : 0,
+    only : 1,
+    // throwing : 0,
+  }
+
+  let appArgs = _.appArgs();
+  _.appArgsReadTo( readOptions );
+  if( appArgs.err )
+  throw _.errBriefly( appArgs.err );
+
+  _.assert( _.mapIs( appArgs.map ) );
+
+  if( !appArgs.map )
+  appArgs.map = Object.create( null );
+
+  _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
+
+  let v = settings.verbosity;
+  _.assert( v === null || v === undefined || _.boolLike( v ) )
+  if( !_.boolLike( v ) )
+  v = 1;
+
+  if( settings.beeping === null )
+  settings.beeping = !!v;
+
+  tester._appArgs = appArgs;
+
+  tester.path = appArgs.subject || _.path.current();
+  tester.path = _.path.join( _.path.current(), tester.path );
+
+  if( appArgs.subject && !appArgs.map.scenario )
+  settings.scenario = 'test';
+
+  if( settings.importanceOfNegative !== undefined && settings.importanceOfNegative !== null )
+  tester.importanceOfNegative = Number( settings.importanceOfNegative ) || 0;
+
+  if( _.numberIs( v ) )
+  tester.verbosity = v;
+
+  return appArgs;
+}
+
+//
+
+/**
+ * @summary Prints help information.
+ * @description Prints list of available options and scenarios.
+ * @function scenarioHelp
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function scenarioHelp()
+{
+  let tester = this;
+
+  tester.scenarioScenariosList();
+  tester.scenarioOptionsList();
+
+}
+
+//
+
+/**
+ * @summary Prints list of available scenarios.
+ * @function scenarioScenariosList
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function scenarioScenariosList()
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  let strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
+
+  logger.log( 'Scenarios :\n', _.toStr( tester.ScenariosHelpMap, strOptions ), '\n' );
+
+}
+
+//
+
+/**
+ * @summary Prints list of available options.
+ * @function scenarioOptionsList
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function scenarioOptionsList()
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  let strOptions =
+  {
+    levels : 3,
+    wrap : 0,
+    stringWrapper : '',
+    multiline : 1
+  };
+
+  logger.log( 'Tester options' );
+  logger.log( _.toStr( tester.ApplicationArgumentsMap, strOptions ), '\n' );
+}
+
+//
+
+/**
+ * @summary Prints list of found tests suites.
+ * @function scenarioSuitesList
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function scenarioSuitesList()
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  _.assert( tester.settings.scenario === 'suites.list' );
+
+  tester.includeTestsFrom( tester.path );
+  tester.suitesListPrint( tester.suitesFilterOut() );
+
+}
+
+// --
+// include
+// --
+
+function _includeTestsFrom( path )
+{
+  let tester = this;
+  let logger = tester.logger;
+  path = _.path.join( _.path.current(), path );
+
+  _.assert( _.numberIs( tester.importanceOfNegative ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( _.strIs( path ), 'Expects string' );
+
+  if( tester.verbosity > 1 )
+  logger.log( 'Includes tests from :', path, '\n' );
+  debugger;
+
+  let ends = [ '.test.s' ];
+  ends.push( '.test.js' );
+  ends.push( '.test.ss' );
+
+  let files = _.fileProvider.filesFind
+  ({
+    filePath : path,
+    recursive : 2,
+    filter :
+    {
+      ends : ends,
+      maskAll : _.files.regexpMakeSafe(),
+    }
+  });
+
+  if( !files.length )
+  {
+    let record = _.fileProvider.recordFactory().record( path );
+    if( record.stat && !record.stat.isDir() && record.isActual )
+    files = [ record ];
+  }
+
+  for( let f = 0 ; f < files.length ; f++ )
+  {
+    if( !files[ f ].stat.isTerminal() )
+    continue;
+    let absolutePath = files[ f ].absolute;
+
+    try
+    {
+      require( _.fileProvider.path.nativize( absolutePath ) );
+    }
+    catch( err )
+    {
+      debugger;
+      err = _.errAttend( 'Cant include', absolutePath + '\n', err );
+      tester.includeFails.push( err );
+
+      if( tester.settings.coloring )
+      logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
+      else
+      logger.error( 'Cant include ' + absolutePath );
+
+      if( logger.verbosity + tester.importanceOfNegative >= 4 )
+      logger.error( _.err( err ) );
+    }
+
+  }
+
+}
+
+//
+
+/**
+ * @summary Includes test suite from provided `path`.
+ * @param {String} path Path can be relative or absolute. Path can lead to single suite or to directory with several test suites.
+ * @function includeTestsFrom
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function includeTestsFrom( path )
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( _.strIs( path ), 'Expects string' );
+
+  logger.verbosityPush( tester.verbosity === null ? tester._defaultVerbosity : tester.verbosity );
+  try
+  {
+    tester._includeTestsFrom( path );
+  }
+  catch( err )
+  {
+    throw _.errLogOnce( _.errBriefly( err ) );
+  }
+  logger.verbosityPop();
+
+}
+
+// --
+// run
+// --
+
+function _testAllAct()
+{
+  let tester = this;
+
+  _.assert( arguments.length === 0 );
+
+  let suites = tester.suitesFilterOut( wTests );
+
+  return tester._suitesRun( suites );
+}
+
+//
+
+/**
+ * @summary Executes all found test suites.
+ * @description Tests suites are executed one by one. After execution tester prints summary info.
+ * @function testAll
+ * @memberof module:Tools/Tester.wTester
+ */
+
+let testAll = _.timeReadyJoin( undefined, _testAllAct );
+
+//
+
+function _test()
+{
+  let tester = this;
+
+  _.assert( this === Self );
+
+  if( arguments.length === 0 )
+  return tester._testAllAct();
+
+  let suites = tester.suitesFilterOut( arguments );
+  return tester._suitesRun( suites );
+}
+
+//
+
+/**
+ * @summary Executes single or several tests suites.
+ * @description Names of desirable test suites can be provided through argument `suites`.
+ * Runs all found test suite if no arguent provided.
+ * @param {Array} suites Names of test suites to run.
+ * @function test
+ * @memberof module:Tools/Tester.wTester
+ */
+
+let test = _.timeReadyJoin( undefined, _test );
+
+//
+
+function _testingBegin( allSuites, runSuites )
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  _.assert( _.numberIs( tester.verbosity ) );
+  _.assert( _.mapIs( allSuites ) );
+  _.assert( _.mapIs( runSuites ) );
+  _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+  _.assert( tester.state === null );
+
+  tester._reportForm();
+  tester._canceled = 0;
+  tester.state = 'begin';
+
+  if( tester.settings.timing )
+  tester._testingBeginTime = _.timeNow();
+
+  logger.begin({ verbosity : -5 });
+  logger.log( 'Tester Settings :' );
+  logger.log( tester.settings );
+  logger.log( '' );
+  logger.end({ verbosity : -5 });
+
+  logger.begin({ verbosity : -3 });
+
+  /* */
+
+  let total = _.entityLength( runSuites );
+  logger.logUp( 'Launching several ( ' + total + ' ) test suites ..' );
+  logger.begin({ verbosity : -5 });
+  tester.suitesListPrint( allSuites );
+  logger.end({ verbosity : -5 });
+
+  logger.log();
+  logger.end({ verbosity : -3 });
+
+  /* */
+
+  tester._cancelCon.cancel();
+
+}
+
+//
+
+function _testingEndSoon()
+{
+  let tester = this;
+
+  _.assert( arguments.length === 0 );
+
+  if( tester._reportIsPositive() )
+  return _.timeOut( tester.settings.sanitareTime, () => tester._testingEndNow() );
+  else
+  tester._testingEndNow();
+
+  return null;
+}
+
+//
+
+function _testingEndNow()
+{
+  let tester = this;
+  let logger = tester.logger;
+  let ok = tester._reportIsPositive();
+
+  _.assert( arguments.length === 0 );
+  _.assert( tester.state === 'begin' );
+
+  tester.state = 'end';
+
+  if( tester.settings.beeping )
+  _.diagnosticBeep();
+
+  // if( !ok && !_.appExitCode() )
+  if( !ok )
+  {
+    if( tester.settings.beeping )
+    _.diagnosticBeep();
+    _.appExitCode( -1 );
+  }
+
+  /* */
+
+  let msg = tester._reportToStr();
+  logger.begin({ verbosity : -2 });
+  logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+  logger.log( msg );
+  logger.end({ verbosity : -2 });
+
+  /* */
+
+  logger.begin({ verbosity : -1 });
+
+  let timingStr = '';
+  if( tester.settings.timing )
+  {
+    tester.report.timeSpent = _.timeNow() - tester._testingBeginTime;
+    timingStr = ' ... in ' + _.timeSpentFormat( tester.report.timeSpent );
+  }
+
+  msg = 'Testing' + timingStr + ' ... '  + ( ok ? 'ok' : 'failed' );
+  msg = wTester.textColor( msg, ok );
+
+  logger.logDown( msg );
+
+  logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+
+  /* */
+
+  logger.end({ verbosity : -1 });
+
+  /* */
+
+  // logger.verbosityPop();
+
+  _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
+
+  _.procedure.terminationBegin();
+
+  if( !ok )
+  _.timeOut( 100, function()
+  {
+    _.appExit();
+  });
+
+  return ok;
+}
+
+//
+
+function _suitesRun( suites )
+{
+  let tester = this;
+  let logger = tester.logger;
+
+  _.assert( arguments.length === 1 );
+
+  /* */
+
+  tester.appArgsRead();
+  tester._registerExitHandler();
+
+  /* */
+
+  let allSuites = _.mapExtend( null, suites );
+  for( let s in suites )
+  {
+    let suite = wTester.TestSuite.instanceByName( suites[ s ] );
+    suites[ s ] = suite;
+    allSuites[ s ] = suite;
+
+    if( !suite.enabled )
+    {
+      delete suites[ s ];
+      continue;
+    }
+
+    try
+    {
+      _.assert( suite instanceof wTester.TestSuite, 'Test suite', s, 'was not found' );
+      suite._testSuiteRefine();
+    }
+    catch( err )
+    {
+      // err = _.errBriefly( err );
+      err = _.errLogOnce( err );
+      err = _.errAttend( err );
+      return new _.Consequence().error( err );
+    }
+
+  }
+
+  if( !_.mapKeys( suites ).length )
+  {
+    tester.suitesListPrint( allSuites );
+    logger.log( 'No enabled test suite to run.' );
+  }
+
+  tester._testingBegin( suites, allSuites );
+
+  /* */
+
+  for( let s in suites )
+  {
+    let suite = suites[ s ];
+    suite._testSuiteRunSoon();
+  }
+
+  return wTester.TestSuite._SuitesReady.split();
+}
+
+//
+
+/**
+ * @summary Selects desirable test suites using list from argument `suites`. Returns map with instances of {@link module:Tools/Tester.wTestSuite}
+ * @param {Array} suites Names of test suites to run.
+ * @throws {Error} If test suite doesn't exist.
+ * @function suitesFilterOut
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function suitesFilterOut( suites )
+{
+  let tester = this;
+  let logger = tester.logger;
+  suites = suites || wTests;
+
+  if( _.longIs( suites ) )
+  {
+    let _suites = Object.create( null );
+    for( let s = 0 ; s < suites.length ; s++ )
+    {
+      let suite = suites[ s ];
+      if( _.strIs( suite ) )
+      _suites[ suite ] = suite;
+      else if( suite instanceof wTester.TestSuite )
+      _suites[ suite.name ] = suite;
+      else _.assert( 0, 'not tested' );
+    }
+    suites = _suites;
+  }
+
+  _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
+  _.assert( _.objectIs( suites ) );
+
+  suites = _.entityFilter( suites, function( suite )
+  {
+    if( _.strIs( suite ) )
+    {
+      if( !wTests[ suite ] )
+      throw _.err( 'Tester : test suite', suite, 'not found' );
+      suite = wTests[ suite ];
+    }
+    if( suite.abstract )
+    return;
+    // if( suite.enabled !== undefined && !suite.enabled )
+    // return;
+    return suite;
+  });
+
+  return suites;
+}
+
+//
+
+/**
+ * @summary Prints information about provided test `suites`.
+ * @description Prints info about all test suites if they are not provided explicitly.
+ * @param {Array|Object} suites Entity with instances of {@link module:Tools/Tester.wTestSuite}
+ * @function suitesListPrint
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function suitesListPrint( suites )
+{
+  let tester = this;
+  let logger = tester.logger;
+  suites = suites || wTests;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  _.each( suites, function( suite, k )
+  {
+    if( suite.enabled )
+    logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
+  });
+
+  _.each( suites, function( suite, k )
+  {
+    if( !suite.enabled )
+    logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
+  });
+
+  // logger.log( _.select( _.entityVals( suites ), '*.suiteFileLocation' ).join( '\n' ) );
+
+  let l = _.entityLength( suites );
+
+  logger.log( l, l > 1 ? 'test suites' : 'test suite' );
+
+}
+
+// --
+// etc
+// --
+
+function _verbositySet( src )
+{
+  let tester = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( !_.numberIsNotNan( src ) )
+  src = 0;
+
+  tester[ symbolForVerbosity ] = src;
+
+  if( src !== null )
+  if( tester.logger )
+  tester.logger.verbosity = src;
+
+}
+
+//
+
+function _canContinue()
+{
+  let tester = this;
+
+  // console.log( 'process._eventsCount', process._eventsCount )
+  // console.log( 'process.stdin._eventsCount', process.stdin._eventsCount )
+//
+  // debugger;
+  // if( _global.process )
+  // {
+  //   // setImmediate( function(){} );
+  //   // _global.process._tickCallback()
+  //   // EventEmitter.prototype.emit();
+  // }
+  // debugger;
+
+  if( tester._canceled )
+  {
+    debugger;
+    return false;
+  }
+
+  if( tester.settings.fails > 0 )
+  if( tester.settings.fails <= tester.report.testCheckFails )
+  {
+    debugger;
+    let err = _.err( 'Too many fails', wTester.settings.fails, '<=', trd.report.testCheckFails );
+    tester.report.errorsArray.push( err );
+    return false;
+  }
+
+  return true;
+}
+
+//
+
+/**
+ * @summary Stops execution of the tester.
+ * @description There are several reasons to stop the execution:
+ * 1. Exectuion can be terminated by a used, for example, by CTRL+C combination.
+ * 2. Execution of test suite throws unhandled error.
+ * @function cancel
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function cancel()
+{
+  let tester = this;
+
+  if( tester.settings.fails > 0 )
+  if( tester.settings.fails <= tester.report.testCheckFails )
+  o.global = 1;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  let o = _.routineOptions( cancel, arguments );
+
+  if( o.terminatedByUser )
+  o.global = 1;
+  if( tester._canceled )
+  return tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
+
+  if( o.err === undefined )
+  o.err = tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
+  o.err = _.err( o.err );
+
+  if( o.global )
+  {
+    tester._cancelCon.error( o.err );
+    tester._canceled = 1;
+  }
+
+  /* */
+
+  try
+  {
+    for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
+    if( tester.activeRoutines[ t ]._returnCon )
+    {
+      tester.activeRoutines[ t ]._returnCon.cancel();
+    }
+  }
+  catch( err2 )
+  {
+    debugger;
+    console.log( err2 );
+  }
+
+  /* */
+
+  if( o.terminatedByUser ) try
+  {
+    for( let t = 0 ; t < tester.activeSuites.length ; t++ )
+    tester.activeSuites[ t ]._testSuiteEndNow( o.err );
+  }
+  catch( err2 )
+  {
+    debugger;
+    console.log( err2 );
+  }
+
+  return o.err;
+}
+
+let defaults = cancel.defaults = Object.create( null );
+defaults.err = null;
+defaults.terminatedByUser = 0;
+defaults.global = 0;
+
+// --
+// report
+// --
+
+function _reportForm()
+{
+  let tester = this;
+
+  _.assert( !tester.report, 'tester already has report' );
+
+  let report = tester.report = Object.create( null );
+
+  report.timeSpent = null;
+  report.errorsArray = [];
+
+  report.testCheckPasses = 0;
+  report.testCheckFails = 0;
+
+  report.testCasePasses = 0;
+  report.testCaseFails = 0;
+  report.testCaseNumber = 0;
+
+  report.testRoutinePasses = 0;
+  report.testRoutineFails = 0;
+
+  report.testSuitePasses = 0;
+  report.testSuiteFails = 0;
+
+  Object.preventExtensions( report );
+
+}
+
+//
+
+function _reportToStr()
+{
+  let tester = this;
+  let appExitCode = _.appExitCode();
+  let report = tester.report;
+  let msg = '';
+
+  if( appExitCode !== undefined && appExitCode !== 0 )
+  msg = 'ExitCode : ' + appExitCode + '\n';
+
+  if( report.errorsArray.length )
+  msg += 'Thrown ' + ( report.errorsArray.length ) + ' error(s)\n';
+
+  msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
+  msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
+  msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '\n';
+  msg += 'Passed test suites ' + ( report.testSuitePasses ) + ' / ' + ( report.testSuitePasses + report.testSuiteFails ) + '';
+
+  return msg;
+}
+
+//
+
+function _reportIsPositive()
+{
+  let tester = this;
+  let report = tester.report;
+
+  let appExitCode = _.appExitCode();
+  if( appExitCode !== undefined && appExitCode !== 0 )
+  return false;
+
+  if( report.testCheckFails !== 0 )
+  return false;
+
+  if( !( report.testCheckPasses > 0 ) )
+  return false;
+
+  if( report.testCaseFails !== 0 )
+  return false;
+
+  if( report.errorsArray.length )
+  return false;
+
+  if( tester.includeFails.length )
+  return false;
+
+  return true;
+}
+
+//
+
+/**
+ * @summary Styles string with colors of some specific format.
+ * @description One of possible formats are: `green` and `red`. As the result string will have green or red foreground color.
+ * List of possible formats can be found {@link @module:Tools/mid/Color.Style}
+ * @param {String} srcStr Text string
+ * @param {String} format Desirable format.
+ * @function textColor
+ * @memberof module:Tools/Tester.wTester
+ */
+
+function textColor( srcStr, format )
+{
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  _.assert( _.boolLike( wTester.settings.coloring ) );
+  _.assert( _.mapIs( format ) || _.strIs( format ) || _.boolLike( format ) );
+
+  if( !wTester.settings.coloring )
+  return srcStr;
+
+  if( !_.color || !_.color.strFormat )
+  return srcStr;
+
+  if( _.mapIs( format ) || _.strIs( format ) )
+  {
+    return _.color.strFormat( srcStr, format );
+  }
+
+  let light = [ ' ok', ' failed' ];
+  let gray = [ /test check/i, /test routine/i, /test ceck/i, '/', ' # ', ' < ', ' > ', '(', ')', ' ... in', ' in ', ' ... ', ' .. ', ':' ];
+  let splits = _.strSplit
+  ({
+    src : srcStr,
+    delimeter : _.arrayAppendArrays( [], [ light, gray ] ),
+    stripping : 0,
+    preservingDelimeters : 1,
+  });
+
+  splits = splits.map( function( e, i )
+  {
+
+    if( i % 2 === 0 )
+    return e;
+
+    return _.color.strFormat( e, { fg : ( format ? 'green' : 'red' ) } );
+
+    // if( i % 2 === 0 )
+    // return _.color.strFormat( e, { fg : ( format ? 'green' : 'red' ) } );
+
+    // if( _.arrayHas( light, e ) )
+    // return _.color.strFormat( e, { fg : ( format ? 'light green' : 'light red' ) } );
+    // else
+    // return _.color.strFormat( e, { fg : 'light black' } );
+
+  });
+
+  return splits.join( '' );
+}
+
+// --
+// consider
+// --
+
+function _testCheckConsider( outcome )
+{
+  let tester = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( tester === Self );
+
+  if( outcome )
+  {
+    tester.report.testCheckPasses += 1;
+  }
+  else
+  {
+    tester.report.testCheckFails += 1;
+  }
+
+}
+
+//
+
+function _testCaseConsider( outcome )
+{
+  let tester = this;
+  let report = tester.report;
+
+  if( outcome )
+  {
+    report.testCasePasses += 1;
+  }
+  else
+  {
+    report.testCaseFails += 1;
+  }
+
+}
+
+//
+
+function _testRoutineConsider( outcome )
+{
+  let tester = this;
+  let report = tester.report;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( tester === Self );
+
+  if( outcome )
+  {
+    report.testRoutinePasses += 1;
+  }
+  else
+  {
+    report.testRoutineFails += 1;
+  }
+
+}
+
+//
+
+function _testSuiteConsider( outcome )
+{
+  let tester = this;
+  let report = tester.report;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( tester === Self );
+
+  if( outcome )
+  {
+    report.testSuitePasses += 1;
+  }
+  else
+  {
+    report.testSuiteFails += 1;
+  }
+
+}
+
+//
+
+function _exceptionConsider( err )
+{
+  let tester = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( tester === Self );
+
+  // err = _.errLogOnce( err );
+
+  tester.report.errorsArray.push( err );
+}
+
+// // --
+// // report formatter
+// // --
+//
+// function loggerToBook( o )
+// {
+//
+//   if( !o )
+//   o = {};
+//
+//   o.logger = o.logger || wTester.logger;
+//
+//   _.routineOptions( loggerToBook, o );
+//
+//   _.assert( arguments.length === 0 || arguments.length === 1 );
+//   _.assert( o.logger instanceof wPrinterToJs );
+//
+//   let data = o.logger.outputData;
+//   let routines = _.entitySearch({ src : data, ins : 'routine', searchingValue : 0, returnParent : 1, searchingSubstring : 0 });
+//   logger.log( _.toStr( routines, { levels : 1 } ) );
+//
+//   /* */
+//
+//   let routineHead;
+//   routines = _.entityFilter( routines, function( routine, k )
+//   {
+//     routine.folderPath = _.path.dir( k );
+//     routine.itemsPath = _.path.dir( routine.folderPath );
+//     routine.itemsData = _.select( data, routine.itemsPath );
+//
+//     if( routine.tail )
+//     {
+//       routineHead.data.report = [ routine ];
+//       _.mapSupplement( routineHead.attributes, _.mapBut( routine, { text : 0 } ) );
+//       return;
+//     }
+//
+//     /* checks */
+//
+//     debugger;
+//     let checks = _.entitySearch
+//     ({
+//       src : routine,
+//       ins : 'check',
+//       searchingValue : 0,
+//       searchingSubstring : 0,
+//       returnParent : 1,
+//     });
+//
+//     let routineMore = [];
+//     checks = _.entityFilter( checks, function( acheck, k )
+//     {
+//       if( !acheck.text )
+//       return;
+//       if( !acheck.tail )
+//       {
+//         routineMore.push( acheck );
+//         return;
+//       }
+//
+//       acheck.checkPath = _.path.dir( k );
+//       let result = Object.create( null );
+//       result.data = acheck;
+//       debugger;
+//       result.text = acheck.check + ' # '+ acheck.checkIndex;
+//       result.attributes = _.mapBut( acheck, { text : 0 } );
+//
+//       result.kind = 'terminal';
+//       result.data.report = routineMore;
+//       routineMore = [];
+//       return result;
+//     });
+//
+//     checks = _.entityVals( checks );
+//
+//     /* routine */
+//
+//     let result = Object.create( null );
+//     result.kind = 'branch';
+//     result.data = routine;
+//     result.text = routine.routine;
+//     result.elements = checks;
+//     result.attributes = _.mapBut( routine, { text : 0 } );
+//
+//     routineHead = result;
+//     return result;
+//   });
+//
+//   /* */
+//
+//   logger.log( _.toStr( routines, { levels : 1 } ) );
+//   routines = _.entityVals( routines );
+//
+//   /* */
+//
+//   function handlePageGet( node )
+//   {
+//     if( !node.data )
+//     return '-';
+//     let result = _.select( node.data.report, '*.text' );
+//
+//     if( node.data.check )
+//     result = result.join( '\n' ) + '\n' + node.data.text;
+//     else if( node.data.routine )
+//     result = node.data.text + '\n' + _.select( node.elements, '*.data.text' ).join( '\n' ) + '\n' + result.join( '\n' );
+//
+//     return result;
+//   }
+//
+//   /* */
+//
+//   let book = new wHiBook({ targetDom : _.domTotalPanelMake().targetDom, onPageGet : handlePageGet });
+//   book.form();
+//   book.tree.treeApply({ elements : routines });
+//
+// }
+//
+// loggerToBook.defaults =
+// {
+//   logger : null,
+// }
+//
+// //
+//
+// function bookExperiment()
+// {
+//
+//   if( 0 )
+//   _.timeReady( function()
+//   {
+//
+//     // debugger;
+//     Self.verbosity = 0;
+//     //Self.logger = wPrinterToJs({ coloring : 0 });
+//
+//     // wTester.test( 'Logger other test', 'Consequence', 'FileProvider.Extract' )
+//
+//     wTester.test( 'FileProvider.Extract' )
+//     .finally( function()
+//     {
+//       debugger;
+//       if( Self.logger )
+//       logger.log( _.toStr( Self.logger.outputData, { levels : 5 } ) );
+//       debugger;
+//     });
+//
+//   });
+//
+// }
+
+// --
+// let
+// --
+
+let symbolForVerbosity = Symbol.for( 'verbosity' );
+
+/**
+ * @enum {String} ScenariosHelpMap
+ * @memberof module:Tools/Tester.wTester
+*/
+
+let ScenariosHelpMap =
+{
+  'test' : 'run tests, default scenario',
+  'help' : 'get help',
+  'options.list' : 'list available options',
+  'scenarios.list' : 'list available scenarios',
+  'suites.list' : 'list available suites',
+}
+
+/**
+ * @enum {String} ScenariosActionMap
+ * @memberof module:Tools/Tester.wTester
+*/
+
+let ScenariosActionMap =
+{
+  'test' : '',
+  'help' : 'scenarioHelp',
+  'scenarios.list' : 'scenarioScenariosList',
+  'options.list' : 'scenarioOptionsList',
+  'suites.list' : 'scenarioSuitesList',
+}
+
+/**
+ * @enum {String} ApplicationArgumentsMap
+ * @memberof module:Tools/Tester.wTester
+*/
+
+let ApplicationArgumentsMap =
+{
+
+  scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list"',
+  sanitareTime : 'Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later.',
+  fails : 'Maximum number of fails allowed before shutting down testing.',
+  beeping : 'Make diagnosticBeep sound after testing to let developer know it\'s done.',
+  coloring : 'Switch on/off coloring.',
+  timing : 'Switch on/off measuing of time.',
+  rapidity : 'How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3.',
+
+  routineTimeOut : 'Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.',
+  concurrent : 'Runs test suite in parallel with other test suites.',
+  concurrent : 'Runs test suite in parallel with other test suites.',
+  verbosity : 'Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"',
+  importanceOfNegative : 'Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".',
+  silencing : 'Hooking and silencing of object\'s of testing console output to make clean report of testing.',
+  shoulding : 'Switch on/off all should* tests checks.',
+  accuracy : 'Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.',
+
+}
+
+/**
+ * @enum {String} SettingsNameMap
+ * @memberof module:Tools/Tester.wTester
+*/
+
+let SettingsNameMap =
+{
+
+  'scenario' : 'scenario',
+  'sanitareTime' : 'sanitareTime',
+  'fails' : 'fails',
+  'beeping' : 'beeping',
+  'coloring' : 'coloring',
+  'timing' : 'timing',
+  'rapidity' : 'rapidity',
+  'routine' : 'routine',
+
+  /**/
+
+  'routine' : 'routine',
+  'r' : 'routine',
+  'routineTimeOut' : 'routineTimeOut',
+  'concurrent' : 'concurrent',
+
+  'v' : 'verbosity',
+  'verbosity' : 'verbosity',
+  'importanceOfNegative' : 'importanceOfNegative',
+  'n' : 'importanceOfNegative',
+  'silencing' : 'silencing',
+  'shoulding' : 'shoulding',
+  'accuracy' : 'accuracy',
+
+}
+
+/**
+ * @typedef {Object} SettingsOfTester
+ * @property {String} [scenario='test']
+ * @property {Number} [sanitareTime=500]
+ * @property {Number} [fails=null]
+ * @property {Boolean} [beeping=null]
+ * @property {Boolean} [coloring=1]
+ * @property {Boolean} [timing=1]
+ * @property {Number} [rapidity=3]
+ * @property {String} [routine=null]
+ * @property {Number} [importanceOfNegative=null]
+ * @memberof module:Tools/Tester.wTester
+*/
+
+let SettingsOfTester =
+{
+
+  // scenario : 'test',
+  scenario : 'help',
+  sanitareTime : 500,
+  fails : null,
+  beeping : null,
+  coloring : 1,
+  timing : 1,
+  rapidity : 3,
+  routine : null,
+  importanceOfNegative : null,
+
+}
+
+/**
+ * @typedef {Object} SettingsOfSuite
+ * @property {String} routine
+ * @property {Number} routineTimeOut
+ * @property {Boolean} concurrent
+ * @property {Number} verbosity
+ * @property {Number} importanceOfNegative
+ * @property {Boolean} silencing
+ * @property {Boolean} shoulding
+ * @property {Number} accuracy
+ * @memberof module:Tools/Tester.wTester
+*/
+
+let SettingsOfSuite =
+{
+
+  routine : null,
+  routineTimeOut : null,
+  concurrent : null,
+
+  verbosity : null,
+  importanceOfNegative : null,
+  silencing : null,
+  shoulding : null,
+  accuracy : null,
+
+}
+
+let Settings = _.mapExtend( null, SettingsOfTester, SettingsOfSuite );
+
+let Rapidities =
+[
+  'slowest',
+  'slow',
+  'normal',
+  'fast',
+  'fastest',
+]
+
+let Forbids =
+{
+
+  importanceOfDetails : 'importanceOfDetails',
+  timeOut : 'timeOut',
+  appArgs : 'appArgs',
+
+  /**/
+
+  scenario : 'scenario',
+  sanitareTime : 'sanitareTime',
+  fails : 'fails',
+  beeping : 'beeping',
+  coloring : 'coloring',
+  timing : 'timing',
+  rapidity : 'rapidity',
+  routine : 'routine',
+
+  routineTimeOut : 'routineTimeOut',
+  concurrent : 'concurrent',
+  silencing : 'silencing',
+  shoulding : 'shoulding',
+  accuracy : 'accuracy',
+
+}
+
+let Accessors =
+{
+  verbosity : 'verbosity',
+}
+
+// --
+// declare
+// --
+
+let Self =
+{
+
+  // exec
+
+  exec,
+  _registerExitHandler,
+  appArgsRead,
+
+  scenarioHelp,
+  scenarioScenariosList,
+  scenarioOptionsList,
+  scenarioSuitesList,
+
+  // include
+
+  _includeTestsFrom,
+  includeTestsFrom,
+
+  // run
+
+  _testAllAct,
+  testAll,
+
+  _test,
+  test,
+
+  _testingBegin,
+  _testingEndSoon,
+  _testingEndNow,
+
+  _suitesRun,
+
+  suitesFilterOut,
+  suitesListPrint,
+
+  // report
+
+  _reportForm,
+  _reportToStr,
+  _reportIsPositive,
+  textColor,
+
+  // etc
+
+  _verbositySet,
+  _canContinue,
+  cancel,
+
+  // consider
+
+  _testCheckConsider,
+  _testCaseConsider,
+  _testRoutineConsider,
+  _testSuiteConsider,
+  _exceptionConsider,
+
+  // let
+
+  ScenariosHelpMap : ScenariosHelpMap,
+  ScenariosActionMap : ScenariosActionMap,
+  ApplicationArgumentsMap : ApplicationArgumentsMap,
+
+  SettingsNameMap : SettingsNameMap,
+  SettingsOfTester : SettingsOfTester,
+  SettingsOfSuite : SettingsOfSuite,
+  Settings : Settings,
+  Rapidities : Rapidities,
+
+  TestSuite : null,
+  TestRoutineDescriptor : null,
+
+  settings : Object.create( null ),
+  state : null,
+
+  logger : new _.Logger({ name : 'LoggerForTester', output : _global.logger }),
+  _cancelCon : new _.Consequence({ tag : 'TesterCancel' }),
+  _canceled : 0,
+
+  quedSuites : [],
+  activeSuites : [],
+  activeRoutines : [],
+  includeFails : [],
+  report : null,
+
+  sourceFileLocation : sourceFileLocation,
+  sourceFileStack : sourceFileStack,
+
+  _testingBeginTime : null,
+  _isReal_ : 1,
+  // _registerExitHandlerDone : 0,
+
+  _defaultVerbosity : 2,
+  verbosity : 4,
+  importanceOfNegative : 1,
+
+  _barOptions : null,
+  _appArgs : null,
+  path : null,
+
+  constructor : function wTester(){},
+
+}
+
+//
+
+_.accessor.forbid( Self, Forbids )
+
+_.accessor.declare
+({
+  object : Self,
+  prime : 0,
+  names : Accessors,
+});
+
+//
+
+Object.preventExtensions( Self );
+
+_.mapSupplementNulls( Self, wTester );
+
+_realGlobal_.wTester = _global.wTester = Self;
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
+
+})();

@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+if( typeof module !== 'undefined' )
+{
+  let _ = require( '../../Tools.s' );
+  _.include( 'wFiles' );
+  _.include( 'wExternalFundamentals' );
+}
+
+let _ = wTools;
+let shell = _.shellPassingThrough
+({
+  execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'MainTop.s' ) ),
+  verbosity : 0,
+  passingThrough : 1,
+  applyingExitCode : 1,
+  throwingExitCode : 0,
+  outputPiping : 1,
+});

@@ -291,6 +291,10 @@ function _includeTestsFrom( path )
   ends.push( '.test.js' );
   ends.push( '.test.ss' );
 
+  let maskAll = _.files.regexpMakeSafe
+  ({
+    excludeAny : [ /(?:^|\/)_/ ],
+  });
   let files = _.fileProvider.filesFind
   ({
     filePath : path,
@@ -298,7 +302,7 @@ function _includeTestsFrom( path )
     filter :
     {
       ends : ends,
-      maskAll : _.files.regexpMakeSafe(),
+      maskAll : maskAll,
     }
   });
 
@@ -637,6 +641,7 @@ function suitesFilterOut( suites )
   if( _.longIs( suites ) )
   {
     let _suites = Object.create( null );
+
     for( let s = 0 ; s < suites.length ; s++ )
     {
       let suite = suites[ s ];

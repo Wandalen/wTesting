@@ -33,7 +33,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay only';
     var timeBefore = _.timeNow();
@@ -49,7 +49,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
@@ -66,7 +66,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
@@ -84,7 +84,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
@@ -102,7 +102,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
@@ -119,7 +119,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
@@ -140,7 +140,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + consequence, first delay greater';
     var timeBefore = _.timeNow();
@@ -159,7 +159,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + consequence, second delay greater';
     var timeBefore = _.timeNow();
@@ -178,7 +178,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + consequence that returns delayed value, launched serially';
     var timeBefore = _.timeNow();
@@ -197,7 +197,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + consequence that returns delayed value, launched concurrently';
     var timeBefore = _.timeNow();
@@ -216,7 +216,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + consequence that returns delayed value, launched concurrently';
     var timeBefore = _.timeNow();
@@ -234,7 +234,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'delay + consequence + error';
     var timeBefore = _.timeNow();
@@ -253,7 +253,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
@@ -274,7 +274,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
@@ -297,13 +297,13 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
 
     var t = _.timeOut( c.delay, () => null );
-    t.got( function( err, got )
+    t.give( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
       test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -314,7 +314,7 @@ function timeOut( test )
     return _.timeOut( c.delay + 50, function()
     {
       t.error( 'stop' );
-      t.got( ( err, got ) => test.identical( err, 'stop' ) );
+      t.give( ( err, got ) => test.identical( err, 'stop' ) );
       return null;
     });
 
@@ -323,7 +323,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'give msg before timeOut';
     var timeBefore = _.timeNow();
@@ -335,8 +335,8 @@ function timeOut( test )
     return _.timeOut( c.delay / 2, function()
     {
       t.take( msg );
-      t.got( ( err, got ) => test.identical( got, msg ) );
-      t.got( ( err, got ) =>
+      t.give( ( err, got ) => test.identical( got, msg ) );
+      t.give( ( err, got ) =>
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -351,7 +351,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
     test.case = 'stop timer with error + arg, routine passed';
     var timeBefore = _.timeNow();
@@ -375,7 +375,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
 
     test.case = 'could have the second argument';
@@ -395,7 +395,7 @@ function timeOut( test )
 
   /* */
 
-  .keep( function()
+  .then( function()
   {
 
     if( !Config.debug )
@@ -450,7 +450,7 @@ function timeOutMode01( test )
     {
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 0 );
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay - c.timeAccuracy );
@@ -478,7 +478,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -508,7 +508,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -537,7 +537,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -566,7 +566,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -599,7 +599,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -629,7 +629,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime , c.delay / 2 );
@@ -662,7 +662,7 @@ function timeOutMode01( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime , c.delay / 2 );
@@ -694,7 +694,7 @@ function timeOutMode01( test )
     con.first( t );
     con.keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -715,7 +715,7 @@ function timeOutMode01( test )
     return _.timeOut( c.delay + 50, function()
     {
       t.error( 'stop' );
-      t.got( ( err, got ) => test.identical( err, 'stop' ) );
+      t.give( ( err, got ) => test.identical( err, 'stop' ) );
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
       return null;
@@ -765,7 +765,7 @@ timeOutMode10.timeOut = 30000;
 //       test.identical( t.competitorsEarlyGet().length, 1 );
 //
 //       debugger;
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay - c.timeAccuracy );
@@ -794,7 +794,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -824,7 +824,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -853,7 +853,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -882,7 +882,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -915,7 +915,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -945,7 +945,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime , c.delay / 2 );
@@ -978,7 +978,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime , c.delay / 2 );
@@ -1010,7 +1010,7 @@ timeOutMode10.timeOut = 30000;
 //     con.first( t );
 //     con.keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1031,7 +1031,7 @@ timeOutMode10.timeOut = 30000;
 //     return _.timeOut( c.delay + 50, function()
 //     {
 //       t.error( 'stop' );
-//       t.got( ( err, got ) => test.identical( err, 'stop' ) );
+//       t.give( ( err, got ) => test.identical( err, 'stop' ) );
 //       test.identical( t.resourcesGet().length, 1 );
 //       test.identical( t.competitorsEarlyGet().length, 1 );
 //       return null;
@@ -1074,7 +1074,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1102,7 +1102,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1132,7 +1132,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1161,7 +1161,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1190,7 +1190,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1223,7 +1223,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1253,7 +1253,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime , c.delay / 2 );
@@ -1284,7 +1284,7 @@ timeOutMode10.timeOut = 30000;
 //     return new _.Consequence().first( t )
 //     .keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime , c.delay / 2 );
@@ -1312,7 +1312,7 @@ timeOutMode10.timeOut = 30000;
 //     con.first( t );
 //     con.keep/*finally*/( function( arg )
 //     {
-//       t.got( function( err, got )
+//       t.give( function( err, got )
 //       {
 //         var elapsedTime = _.timeNow() - timeBefore;
 //         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1332,7 +1332,7 @@ timeOutMode10.timeOut = 30000;
 //     .keep/*finally*/( function( arg )
 //     {
 //       t.error( 'stop' );
-//       t.got( ( err, got ) => test.identical( err, 'stop' ) );
+//       t.give( ( err, got ) => test.identical( err, 'stop' ) );
 //       test.identical( t.resourcesGet().length, 1 );
 //       test.identical( t.competitorsEarlyGet().length, 1 );
 //       return null;
@@ -1379,7 +1379,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1407,7 +1407,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1437,7 +1437,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1466,7 +1466,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1495,7 +1495,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1528,7 +1528,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1559,7 +1559,7 @@ function timeOutMode10( test )
     .finally( function()
     {
 
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime , c.delay / 2 );
@@ -1589,7 +1589,7 @@ function timeOutMode10( test )
     return new _.Consequence().first( t )
     .finally( function()
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime , c.delay / 2 );
@@ -1617,7 +1617,7 @@ function timeOutMode10( test )
     con.first( t );
     con.keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1637,7 +1637,7 @@ function timeOutMode10( test )
     .keep/*finally*/( function( arg )
     {
       t.error( 'stop' );
-      t.got( ( err, got ) => test.identical( err, 'stop' ) );
+      t.give( ( err, got ) => test.identical( err, 'stop' ) );
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
       return null;
@@ -1683,7 +1683,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1711,7 +1711,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1741,7 +1741,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1770,7 +1770,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1799,7 +1799,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1832,7 +1832,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1862,7 +1862,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .finally( function()
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime , c.delay / 2 );
@@ -1895,7 +1895,7 @@ function timeOutMode11( test )
     return new _.Consequence().first( t )
     .finally( function()
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime , c.delay / 2 );
@@ -1927,7 +1927,7 @@ function timeOutMode11( test )
     con.first( t );
     con.keep/*finally*/( function( arg )
     {
-      t.got( function( err, got )
+      t.give( function( err, got )
       {
         var elapsedTime = _.timeNow() - timeBefore;
         test.ge( elapsedTime, c.delay-c.timeAccuracy );
@@ -1947,7 +1947,7 @@ function timeOutMode11( test )
     .keep/*finally*/( function( arg )
     {
       t.error( 'stop' );
-      t.got( ( err, got ) => test.identical( err, 'stop' ) );
+      t.give( ( err, got ) => test.identical( err, 'stop' ) );
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 1 );
       return null;

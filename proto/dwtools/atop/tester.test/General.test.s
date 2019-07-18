@@ -159,7 +159,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c1.resourcesGet().length, 1 );
-      c1.got( function( err,arg )
+      c1.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === null );
@@ -186,7 +186,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c2.resourcesGet().length, 1 );
-      c2.got( function( err,arg )
+      c2.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'msg' );
@@ -214,7 +214,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c3.resourcesGet().length, 1 );
-      c3.got( function( err,arg )
+      c3.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( _.errIs( arg ) );
@@ -246,7 +246,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c4.resourcesGet().length, 1 );
-      c4.got( function( err,arg )
+      c4.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( _.errIs( arg ) );
@@ -275,7 +275,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c5.resourcesGet().length, 1 );
-      c5.got( function( err,arg )
+      c5.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === _.timeOut );
@@ -312,7 +312,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c6.resourcesGet().length, 1 );
-      c6.got( function( err,arg )
+      c6.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( _.strHas( err.message,'got more than one message' ) );
@@ -350,7 +350,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c7.resourcesGet().length, 1 );
-      c7.got( function( err,arg )
+      c7.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( _.strHas( err.message,'got more than one message' ) );
@@ -376,7 +376,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c8.resourcesGet().length, 1 );
-      c8.got( function( err,arg )
+      c8.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'arg' );
@@ -401,7 +401,7 @@ function shouldMessageOnlyOnce( test )
     _.timeOut( 500,function()
     {
       test.identical( c9.resourcesGet().length, 1 );
-      c9.got( function( err,arg )
+      c9.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'error' );
@@ -476,7 +476,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c1.resourcesGet().length, 1 );
-      c1.got( function( err,arg )
+      c1.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === null );
@@ -503,7 +503,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c2.resourcesGet().length, 1 );
-      c2.got( function( err,arg )
+      c2.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'msg' );
@@ -531,7 +531,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c3.resourcesGet().length, 1 );
-      c3.got( function( err,arg )
+      c3.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -563,7 +563,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c4.resourcesGet().length, 1 );
-      c4.got( function( err,arg )
+      c4.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -591,7 +591,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c5.resourcesGet().length, 1 );
-      c5.got( function( err,arg )
+      c5.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === _.timeOut );
@@ -628,7 +628,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c6.resourcesGet().length, 1 );
-      c6.got( function( err,arg )
+      c6.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( _.strHas( err.message,'got more than one message' ) );
@@ -666,7 +666,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c7.resourcesGet().length, 1 );
-      c7.got( function( err,arg )
+      c7.give( function( err,arg )
       {
         test.is( err === 'error1' );
         test.is( !arg );
@@ -691,7 +691,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c8.resourcesGet().length, 1 );
-      c8.got( function( err,arg )
+      c8.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'arg' );
@@ -721,7 +721,7 @@ function mustNotThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c9.resourcesGet().length, 1 );
-      c9.got( function( err,arg )
+      c9.give( function( err,arg )
       {
         test.is( err === 'error' );
         test.is( !arg );
@@ -792,7 +792,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c1.resourcesGet().length, 1 );
-      c1.got( function( err,arg )
+      c1.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -820,7 +820,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c2.resourcesGet().length, 1 );
-      c2.got( function( err,arg )
+      c2.give( function( err,arg )
       {
         test.is( err === null );
         test.is( _.errIs( arg ) );
@@ -851,7 +851,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c3.resourcesGet().length, 1 );
-      c3.got( function( err,arg )
+      c3.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -879,7 +879,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c4.resourcesGet().length, 1 );
-      c4.got( function( err,arg )
+      c4.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -916,7 +916,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c5.resourcesGet().length, 1 );
-      c5.got( function( err,arg )
+      c5.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -952,7 +952,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c6.resourcesGet().length, 1 );
-      c6.got( function( err,arg )
+      c6.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -977,7 +977,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c7.resourcesGet().length, 1 );
-      c7.got( function( err,arg )
+      c7.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1002,7 +1002,7 @@ function shouldThrowErrorSync( test )
     _.timeOut( 500,function()
     {
       test.identical( c8.resourcesGet().length, 1 );
-      c8.got( function( err,arg )
+      c8.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1076,7 +1076,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c1.resourcesGet().length,1 );
-      c1.got( function( err,arg )
+      c1.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1104,7 +1104,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c2.resourcesGet().length, 1 );
-      c2.got( function( err,arg )
+      c2.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1135,7 +1135,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c3.resourcesGet().length, 1 );
-      c3.got( function( err,arg )
+      c3.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( _.errIs( arg ) );
@@ -1163,7 +1163,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c4.resourcesGet().length, 1 );
-      c4.got( function( err,arg )
+      c4.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1199,7 +1199,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c5.resourcesGet().length, 1 );
-      c5.got( function( err,arg )
+      c5.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'error' );
@@ -1236,7 +1236,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c6.resourcesGet().length, 1 );
-      c6.got( function( err,arg )
+      c6.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1273,7 +1273,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c7.resourcesGet().length, 1 );
-      c7.got( function( err,arg )
+      c7.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( _.strHas( err.message,'got more than one message' ) );
@@ -1299,7 +1299,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c8.resourcesGet().length, 1 );
-      c8.got( function( err,arg )
+      c8.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1324,7 +1324,7 @@ function shouldThrowErrorAsync( test )
     _.timeOut( 500,function()
     {
       test.identical( c9.resourcesGet().length, 1 );
-      c9.got( function( err,arg )
+      c9.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'error' );
@@ -1399,7 +1399,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c1.resourcesGet().length, 1 );
-      c1.got( function( err,arg )
+      c1.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1427,7 +1427,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c2.resourcesGet().length, 1 );
-      c2.got( function( err,arg )
+      c2.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( _.errIs( arg ) );
@@ -1459,7 +1459,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c3.resourcesGet().length, 1 );
-      c3.got( function( err,arg )
+      c3.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( _.errIs( arg ) );
@@ -1488,7 +1488,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c4.resourcesGet().length, 1 );
-      c4.got( function( err,arg )
+      c4.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1525,7 +1525,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c5.resourcesGet().length, 1 );
-      c5.got( function( err,arg )
+      c5.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1562,7 +1562,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c6.resourcesGet().length, 1 );
-      c6.got( function( err,arg )
+      c6.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( _.strHas( err.message,'got more than one message' ) );
@@ -1588,7 +1588,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c8.resourcesGet().length, 1 );
-      c8.got( function( err,arg )
+      c8.give( function( err,arg )
       {
         test.is( _.errIs( err ) );
         test.is( !arg );
@@ -1613,7 +1613,7 @@ function shouldThrowError( test )
     _.timeOut( 500,function()
     {
       test.identical( c9.resourcesGet().length, 1 );
-      c9.got( function( err,arg )
+      c9.give( function( err,arg )
       {
         test.is( err === undefined );
         test.is( arg === 'error' );

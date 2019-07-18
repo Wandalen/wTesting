@@ -1687,7 +1687,7 @@ function _shouldDo( o )
 
   o.routine = o.args[ 0 ];
   let acheck = trd.checkCurrent();
-  trd._inroutineCon.done( 1 );
+  trd._inroutineCon.give( 1 );
 
   /* */
 
@@ -1819,7 +1819,7 @@ function _shouldDo( o )
     trd.checkNext();
     async = 1;
 
-    result.got( function( _err, _arg )
+    result.give( function( _err, _arg )
     {
 
       err = _err;

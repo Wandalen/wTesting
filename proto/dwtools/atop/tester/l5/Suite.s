@@ -8,8 +8,8 @@ let debugged = _.processIsDebugged();
 
 //
 
-/** 
- * @classdesc Class to define test suite. 
+/**
+ * @classdesc Class to define test suite.
  * Test suite is a set of test routines and test data that are used for complete testing of individual parts of the task.
  * @class wTestSuite
  * @param {Object} o Test suite option map. {@link module:Tools/Tester.wTestSuite.TestSuiteFields More about options}
@@ -64,8 +64,6 @@ function init( o )
 
   Object.preventExtensions( suite );
 
-  // if( _.routineIs( o.inherit ) )
-  // debugger;
   if( _.routineIs( o.inherit ) )
   delete o.inherit;
   let inherits = o.inherit;
@@ -88,8 +86,6 @@ function init( o )
     debugger;
     throw _.err( 'Test suite', suite.name, 'Expects a mandatory option ( suiteFileLocation )' );
   }
-
-  // console.log( 'suite.suiteFileLocation', suite.suiteFileLocation );
 
   /* name */
 
@@ -141,41 +137,11 @@ function copy( o )
 {
   let suite = this;
 
-  // if( !( o instanceof Self ) )
-  // suite.name = o.name;
-
   if( ( o instanceof Self ) )
   debugger;
 
   return _.Copyable.prototype.copy.call( suite, o );
 }
-
-//
-//
-// function extendBy()
-// {
-//   let suite = this;
-//
-//   throw _.err( 'extendBy is deprecated, please, use inherit' );
-//
-//   // for( let a = 0 ; a < arguments.length ; a++ )
-//   // {
-//   //   let src = arguments[ 0 ];
-//   //
-//   //   _.assert( _.mapIs( src ) );
-//   //
-//   //   if( src.tests )
-//   //   _.mapSupplement( src.tests, suite.tests );
-//   //
-//   //   if( src.context )
-//   //   _.mapSupplement( src.context, suite.context );
-//   //
-//   //   _.mapExtend( suite, src );
-//   //
-//   // }
-//
-//   return suite;
-// }
 
 //
 
@@ -211,13 +177,10 @@ function inherit()
   return suite;
 }
 
-// --
-// etc
-// --
+//
 
-function _testSuitesRegister( suites )
+function Froms( suites )
 {
-  let suite = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( suites ) );
@@ -232,10 +195,12 @@ function _testSuitesRegister( suites )
     throw _.errLog( 'Cant make test suite', s, '\n', err );
   }
 
-  return suite;
+  return this;
 }
 
-//
+// --
+// etc
+// --
 
 function _accuracySet( accuracy )
 {
@@ -247,7 +212,9 @@ function _accuracySet( accuracy )
   _.assert( _.numberIs( accuracy ), 'Expects number {-accuracy-}' );
   suite[ accuracySymbol ] = accuracy;
 
-  if( suite._refined )
+  if( suite._formed )
+  debugger;
+  if( suite._formed )
   suite.routineEach( ( trd ) => trd._accuracyChange() );
 
   return accuracy;
@@ -272,10 +239,10 @@ function _routineSet( src )
 //
 
 /**
- * @descripton 
- * Redirects all console output to logger of the tester. That makes other loggers connected after it unable to 
+ * @descripton
+ * Redirects all console output to logger of the tester. That makes other loggers connected after it unable to
  * receive messages from console, logger of the tester prints messages through original console methods. All this allows to hide/show/style
- * console output if necessary. 
+ * console output if necessary.
  * @param {Boolean} value Controls barring/unbarring of the console.
  * @function consoleBar
  * @memberof module:Tools/Tester.wTestSuite#
@@ -330,7 +297,7 @@ function consoleBar( value )
 
 /**
  * @summary Executes tests of current suite.
- * @description During execution tester prints useful information about current state of execution: 
+ * @description During execution tester prints useful information about current state of execution:
  * name of test case, description of test case, result of test checks with got and expected values, erors, etc.
  * Level of output can be controled by options.
  * Prints summary at the end of execution.
@@ -342,15 +309,18 @@ function run()
 {
   let suite = this;
   _.assert( arguments.length === 0 );
-  suite._testSuiteRefine();
-  return suite._testSuiteRunSoon();
+  suite._form();
+  return suite._runSoon();
 }
 
 //
 
-function _testSuiteRefine()
+function _form()
 {
   let suite = this;
+
+  if( suite._formed )
+  return;
 
   /* verify */
 
@@ -359,7 +329,7 @@ function _testSuiteRefine()
   _.assert( arguments.length === 0 );
   _.assert( _.strDefined( suite.name ), 'Test suite should has {-name-}"' );
   _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
-  _.assert( !suite._refined );
+  _.assert( !suite._formed );
 
   /* extend */
 
@@ -410,7 +380,7 @@ function _testSuiteRefine()
 
   /* */
 
-  suite._refined = 1;
+  suite._formed = 1;
 
   /* validate */
 
@@ -422,21 +392,24 @@ function _testSuiteRefine()
 
 //
 
-function _testSuiteRunSoon()
+function _runSoon()
 {
   let suite = this;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
-  _.assert( suite._refined );
+  _.assert( suite._formed );
 
-  _.arrayAppendOnceStrictly( wTester.quedSuites, suite );
+  // debugger;
+  // _.arrayAppendOnceStrictly( wTester.quedSuites, suite );
+  if( _.arrayAppendedOnce( wTester.quedSuites, suite ) === -1 )
+  return null;
 
   let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
   return con
   .finally( _.routineSeal( _, _.timeReady, [] ) )
-  .finally( () => suite._testSuiteRunNow() )
+  .finally( () => suite._runNow() )
   .split()
   ;
 
@@ -444,7 +417,7 @@ function _testSuiteRunSoon()
 
 //
 
-function _testSuiteRunNow()
+function _runNow()
 {
   let suite = this;
   let testRoutines = suite.tests;
@@ -478,23 +451,21 @@ function _testSuiteRunNow()
 
   function handleBegin()
   {
-    // debugger;
-    return suite._testSuiteBegin();
+    return suite._begin();
   }
 
   /* */
 
   function handleEnd( err, arg )
   {
-    // debugger;
-    return suite._testSuiteEndSoon( err, arg );
+    return suite._endSoon( err, arg );
   }
 
 }
 
 //
 
-function _testSuiteBegin()
+function _begin()
 {
   let suite = this;
 
@@ -579,8 +550,8 @@ function _testSuiteBegin()
 
   if( _global_.process && suite.takingIntoAccount )
   {
-    suite._testSuiteTerminated_joined = _.routineJoin( suite, _testSuiteTerminated );
-    _global_.process.on( 'exit', suite._testSuiteTerminated_joined );
+    suite._terminated_joined = _.routineJoin( suite, _terminated );
+    _global_.process.on( 'exit', suite._terminated_joined );
   }
 
   /* */
@@ -598,24 +569,20 @@ function _testSuiteBegin()
 
 //
 
-function _testSuiteEndSoon( err, arg )
+function _endSoon( err, arg )
 {
   let suite = this;
   let logger = suite.logger;
 
-  // _.assert( arguments.length === 2 );
-  // if( !( wTester.settings.sanitareTime >= 0 ) )
-  // err = _.err( '{-sanitareTime-} should be greater than zero, but it is', wTester.settings.sanitareTime );
-
   if( suite._reportIsPositive() )
-  return _.timeOut( wTester.settings.sanitareTime, () => suite._testSuiteEndNow( err ) );
+  return _.timeOut( wTester.settings.sanitareTime, () => suite._end( err ) );
   else
-  return suite._testSuiteEndNow( err );
+  return suite._end( err );
 }
 
 //
 
-function _testSuiteEndNow( err )
+function _end( err )
 {
   let suite = this;
   let logger = suite.logger;
@@ -630,9 +597,7 @@ function _testSuiteEndNow( err )
 
   if( err )
   {
-    debugger;
     suite.consoleBar( 0 );
-    // console.error( '\nException' );
     try
     {
       suite.exceptionReport({ err : err });
@@ -648,12 +613,10 @@ function _testSuiteEndNow( err )
 
   /* process exit handler */
 
-  // debugger;
-  if( _global_.process && suite._testSuiteTerminated_joined && suite.takingIntoAccount )
+  if( _global_.process && suite._terminated_joined && suite.takingIntoAccount )
   {
-    // console.log( '_testSuiteTerminated_joined off' );
-    _global_.process.removeListener( 'exit', suite._testSuiteTerminated_joined );
-    suite._testSuiteTerminated_joined = null;
+    _global_.process.removeListener( 'exit', suite._terminated_joined );
+    suite._terminated_joined = null;
   }
 
   /* on suite end */
@@ -720,10 +683,8 @@ function _testSuiteEndNow( err )
 
   /* silencing */
 
-  // debugger;
   if( suite.silencing )
   suite.consoleBar( 0 );
-  // debugger;
 
   /* */
 
@@ -748,7 +709,7 @@ function _testSuiteEndNow( err )
 
 //
 
-function _testSuiteTerminated()
+function _terminated()
 {
   let suite = this;
   debugger;
@@ -837,13 +798,11 @@ function _testRoutineRun( trd )
   .finally( function _testRoutineRun()
   {
 
-    // console.log( '_testRoutineRun b', trd.name ); debugger;
-
     trd._testRoutineBegin();
 
+    // debugged = 0; // xxx
     trd._timeOutCon = _.timeOut( trd.timeOut );
     trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
-    // trd._timeOutErrorCon = _.timeOutError( 1 ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
 
     /* */
 
@@ -894,7 +853,7 @@ function routineEach( onEach )
 
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( onEach ) );
-  _.assert( suite._refined );
+  _.assert( suite._formed );
 
   for( let testRoutineName in suite.tests )
   {
@@ -1069,7 +1028,7 @@ function _exceptionConsider( err )
 //
 
 /**
- * @summary Says test suite to report the exception and print error message to output. 
+ * @summary Says test suite to report the exception and print error message to output.
  * @param {Object} o Options map.
  * @param {String|Error} o.err Exception message or error object.
  * @param {Boolean} [o.considering=true] If true test suite will take care about this error, otherwise it will by only printed by logger .
@@ -1118,13 +1077,13 @@ let routineSymbol = Symbol.for( 'routine' );
  * @property {Number} importanceOfNegative=1
  * @property {Boolean} silencing
  * @property {Boolean} shoulding=1
- * @property {Number} routineTimeOut=5000
+ * @property {Number} routineTimeOut=10000
  * @property {Boolean} concurrent=0
- * @property {String} routine 
+ * @property {String} routine
  * @property {Array} platforms
  * @property {String} suiteFilePath
  * @property {String} suiteFileLocation
- * @property {Object} tests 
+ * @property {Object} tests
  * @property {Boolean} abstract=0
  * @property {Boolean} enabled=1
  * @property {Boolean} takingIntoAccount=1
@@ -1156,7 +1115,7 @@ let Composes =
   silencing : null,
   shoulding : 1,
 
-  routineTimeOut : 5000,
+  routineTimeOut : 10000,
   concurrent : 0,
   routine : null,
   platforms : null,
@@ -1205,15 +1164,16 @@ let Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
-  _testSuiteTerminated_joined : null,
+  _terminated_joined : null,
   _hasConsoleInOutputs : 0,
   _testSuiteBeginTime : null,
-  _refined : 0,
+  _formed : 0,
 }
 
 let Statics =
 {
-  usingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
+  Froms,
+  UsingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
   _SuitesReady : new _.Consequence().take( null ),
 }
 
@@ -1252,10 +1212,10 @@ let Proto =
   init,
   copy,
   inherit,
+  Froms,
 
   // etc
 
-  _testSuitesRegister,
   _accuracySet,
   _routineSet,
   consoleBar,
@@ -1263,13 +1223,13 @@ let Proto =
   // test suite run
 
   run,
-  _testSuiteRefine,
-  _testSuiteRunSoon,
-  _testSuiteRunNow,
-  _testSuiteBegin,
-  _testSuiteEndSoon,
-  _testSuiteEndNow,
-  _testSuiteTerminated,
+  _form,
+  _runSoon,
+  _runNow,
+  _begin,
+  _endSoon,
+  _end,
+  _terminated,
 
   onSuiteBegin,
   onSuiteEnd,

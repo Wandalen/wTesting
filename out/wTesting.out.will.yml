@@ -77,6 +77,42 @@ path:
       - ../proto/dwtools/abase
       - ../proto/dwtools/amid
       - ../proto/dwtools/atop
+      - ../proto/dwtools/atop/-tester
+      - ../proto/dwtools/atop/-tester/Exec
+      - ../proto/dwtools/atop/-tester/ExecDebug
+      - ../proto/dwtools/atop/-tester/ExecUnrestricted
+      - ../proto/dwtools/atop/-tester/IncludeBase.s
+      - ../proto/dwtools/atop/-tester/IncludeMid.s
+      - ../proto/dwtools/atop/-tester/IncludeTop.s
+      - ../proto/dwtools/atop/-tester/MainBase.s
+      - ../proto/dwtools/atop/-tester/MainTop.s
+      - ../proto/dwtools/atop/-tester/l3
+      - ../proto/dwtools/atop/-tester/l5
+      - ../proto/dwtools/atop/-tester/l5/Routine.s
+      - ../proto/dwtools/atop/-tester/l5/Suite.s
+      - ../proto/dwtools/atop/-tester/l5/Tester.s
+      - ../proto/dwtools/atop/-tester.test
+      - ../proto/dwtools/atop/-tester.test/Externals.test.s
+      - ../proto/dwtools/atop/-tester.test/General.test.s
+      - ../proto/dwtools/atop/-tester.test/Inheritance.test.s
+      - ../proto/dwtools/atop/-tester.test/Time.test.s
+      - ../proto/dwtools/atop/-tester.test/_asset
+      - ../proto/dwtools/atop/-tester.test/_asset/check-fails
+      - ../proto/dwtools/atop/-tester.test/_asset/check-fails/Hello.js
+      - ../proto/dwtools/atop/-tester.test/_asset/check-fails/Hello.test.js
+      - ../proto/dwtools/atop/-tester.test/_asset/check-fails/package.json
+      - ../proto/dwtools/atop/-tester.test/_asset/double
+      - ../proto/dwtools/atop/-tester.test/_asset/double/Hello.js
+      - ../proto/dwtools/atop/-tester.test/_asset/double/Hello.test.js
+      - ../proto/dwtools/atop/-tester.test/_asset/grouping
+      - ../proto/dwtools/atop/-tester.test/_asset/grouping/Grouping.test.js
+      - ../proto/dwtools/atop/-tester.test/_asset/grouping/Hello.js
+      - ../proto/dwtools/atop/-tester.test/_asset/grouping/package-lock.json
+      - ../proto/dwtools/atop/-tester.test/_asset/grouping/package.json
+      - ../proto/dwtools/atop/-tester.test/_asset/hello
+      - ../proto/dwtools/atop/-tester.test/_asset/hello/Hello.js
+      - ../proto/dwtools/atop/-tester.test/_asset/hello/Hello.test.js
+      - ../proto/dwtools/atop/-tester.test/_asset/hello/package.json
       - ../proto/dwtools/atop/tester
       - ../proto/dwtools/atop/tester/Exec
       - ../proto/dwtools/atop/tester/ExecDebug
@@ -86,7 +122,6 @@ path:
       - ../proto/dwtools/atop/tester/IncludeTop.s
       - ../proto/dwtools/atop/tester/MainBase.s
       - ../proto/dwtools/atop/tester/MainTop.s
-      - ../proto/dwtools/atop/tester/l3
       - ../proto/dwtools/atop/tester/l5
       - ../proto/dwtools/atop/tester/l5/Routine.s
       - ../proto/dwtools/atop/tester/l5/Suite.s
@@ -398,6 +433,42 @@ module:
           - proto/dwtools/abase
           - proto/dwtools/amid
           - proto/dwtools/atop
+          - proto/dwtools/atop/-tester
+          - proto/dwtools/atop/-tester/Exec
+          - proto/dwtools/atop/-tester/ExecDebug
+          - proto/dwtools/atop/-tester/ExecUnrestricted
+          - proto/dwtools/atop/-tester/IncludeBase.s
+          - proto/dwtools/atop/-tester/IncludeMid.s
+          - proto/dwtools/atop/-tester/IncludeTop.s
+          - proto/dwtools/atop/-tester/MainBase.s
+          - proto/dwtools/atop/-tester/MainTop.s
+          - proto/dwtools/atop/-tester/l3
+          - proto/dwtools/atop/-tester/l5
+          - proto/dwtools/atop/-tester/l5/Routine.s
+          - proto/dwtools/atop/-tester/l5/Suite.s
+          - proto/dwtools/atop/-tester/l5/Tester.s
+          - proto/dwtools/atop/-tester.test
+          - proto/dwtools/atop/-tester.test/Externals.test.s
+          - proto/dwtools/atop/-tester.test/General.test.s
+          - proto/dwtools/atop/-tester.test/Inheritance.test.s
+          - proto/dwtools/atop/-tester.test/Time.test.s
+          - proto/dwtools/atop/-tester.test/_asset
+          - proto/dwtools/atop/-tester.test/_asset/check-fails
+          - proto/dwtools/atop/-tester.test/_asset/check-fails/Hello.js
+          - proto/dwtools/atop/-tester.test/_asset/check-fails/Hello.test.js
+          - proto/dwtools/atop/-tester.test/_asset/check-fails/package.json
+          - proto/dwtools/atop/-tester.test/_asset/double
+          - proto/dwtools/atop/-tester.test/_asset/double/Hello.js
+          - proto/dwtools/atop/-tester.test/_asset/double/Hello.test.js
+          - proto/dwtools/atop/-tester.test/_asset/grouping
+          - proto/dwtools/atop/-tester.test/_asset/grouping/Grouping.test.js
+          - proto/dwtools/atop/-tester.test/_asset/grouping/Hello.js
+          - proto/dwtools/atop/-tester.test/_asset/grouping/package-lock.json
+          - proto/dwtools/atop/-tester.test/_asset/grouping/package.json
+          - proto/dwtools/atop/-tester.test/_asset/hello
+          - proto/dwtools/atop/-tester.test/_asset/hello/Hello.js
+          - proto/dwtools/atop/-tester.test/_asset/hello/Hello.test.js
+          - proto/dwtools/atop/-tester.test/_asset/hello/package.json
           - proto/dwtools/atop/tester
           - proto/dwtools/atop/tester/Exec
           - proto/dwtools/atop/tester/ExecDebug
@@ -407,7 +478,6 @@ module:
           - proto/dwtools/atop/tester/IncludeTop.s
           - proto/dwtools/atop/tester/MainBase.s
           - proto/dwtools/atop/tester/MainTop.s
-          - proto/dwtools/atop/tester/l3
           - proto/dwtools/atop/tester/l5
           - proto/dwtools/atop/tester/l5/Routine.s
           - proto/dwtools/atop/tester/l5/Suite.s

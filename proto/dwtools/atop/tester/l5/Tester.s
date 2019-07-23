@@ -433,6 +433,9 @@ function _testingBegin( allSuites, runSuites )
   let tester = this;
   let logger = tester.logger;
 
+  if( tester.state === 'begin' )
+  return;
+
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.numberIs( tester.verbosity ) );
   _.assert( _.mapIs( allSuites ) );
@@ -591,13 +594,11 @@ function _suitesRun( suites )
     try
     {
       _.assert( suite instanceof wTester.TestSuite, 'Test suite', s, 'was not found' );
-      suite._testSuiteRefine();
+      suite._form();
     }
     catch( err )
     {
-      // err = _.errBriefly( err );
       err = _.errLogOnce( err );
-      err = _.errAttend( err );
       return new _.Consequence().error( err );
     }
 
@@ -616,7 +617,7 @@ function _suitesRun( suites )
   for( let s in suites )
   {
     let suite = suites[ s ];
-    suite._testSuiteRunSoon();
+    suite._runSoon();
   }
 
   return wTester.TestSuite._SuitesReady.split();
@@ -828,7 +829,7 @@ function cancel()
   if( o.terminatedByUser ) try
   {
     for( let t = 0 ; t < tester.activeSuites.length ; t++ )
-    tester.activeSuites[ t ]._testSuiteEndNow( o.err );
+    tester.activeSuites[ t ]._end( o.err );
   }
   catch( err2 )
   {

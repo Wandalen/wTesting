@@ -20,9 +20,9 @@ var testsWas = _realGlobal_.wTests;
 _realGlobal_.wTests = _global_.wTests = wTestSuite.instancesMap;
 
 if( testsWas )
-wTestSuite.prototype._testSuitesRegister( testsWas );
+wTestSuite.prototype.Froms( testsWas );
 
-if( _global_.WTOOLS_PRIVATE )
+// if( _global_.WTOOLS_PRIVATE )
 {
   _.assert( _global_ !== _realGlobal_ );
   _.assert( _global_.wTools !== _realGlobal_.wTools );

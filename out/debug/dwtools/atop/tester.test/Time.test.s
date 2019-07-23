@@ -440,13 +440,13 @@ function timeOutMode01( test )
     _.Consequence.AsyncModeSet([ 0, 1 ]);
     return null;
   })
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay only';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       test.identical( t.resourcesGet().length, 1 );
       test.identical( t.competitorsEarlyGet().length, 0 );
@@ -470,13 +470,13 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => null );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -499,14 +499,14 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     var t = _.timeOut( c.delay, () => value );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -529,13 +529,13 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -558,13 +558,13 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -587,7 +587,7 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
@@ -597,7 +597,7 @@ function timeOutMode01( test )
     }
     var t = _.timeOut( c.delay, undefined, r, [ c.delay ] );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -620,14 +620,14 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -650,7 +650,7 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
@@ -660,7 +660,7 @@ function timeOutMode01( test )
     _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -684,7 +684,7 @@ function timeOutMode01( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
@@ -692,7 +692,7 @@ function timeOutMode01( test )
 
     var con = new _.Consequence();
     con.first( t );
-    con.keep/*finally*/( function( arg )
+    con.then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -720,7 +720,7 @@ function timeOutMode01( test )
       test.identical( t.competitorsEarlyGet().length, 0 );
       return null;
     })
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       test.identical( t.resourcesGet().length, 0 );
       test.identical( t.competitorsEarlyGet().length, 0 );
@@ -751,7 +751,7 @@ timeOutMode10.timeOut = 30000;
 //     _.Consequence.AsyncModeSet([ 0, 1 ]);
 //     return null;
 //   })
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     debugger;
 //     test.case = 'delay only';
@@ -759,7 +759,7 @@ timeOutMode10.timeOut = 30000;
 //     var t = _.timeOut( c.delay );
 //     debugger;
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       test.identical( t.resourcesGet().length, 1 );
 //       test.identical( t.competitorsEarlyGet().length, 1 );
@@ -786,13 +786,13 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay, () => null );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -815,14 +815,14 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine that returns a value';
 //     var timeBefore = _.timeNow();
 //     var value = 'value';
 //     var t = _.timeOut( c.delay, () => value );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -845,13 +845,13 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine that returns a consequence';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -874,13 +874,13 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine that calls another timeOut';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -903,7 +903,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + context + routine + arguments';
 //     var timeBefore = _.timeNow();
@@ -913,7 +913,7 @@ timeOutMode10.timeOut = 30000;
 //     }
 //     var t = _.timeOut( c.delay, undefined, r, [ c.delay ] );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -936,14 +936,14 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'stop timer with error';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay );
 //     _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -966,7 +966,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'stop timer with error, routine passed';
 //     var timeBefore = _.timeNow();
@@ -976,7 +976,7 @@ timeOutMode10.timeOut = 30000;
 //     _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 //
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1000,7 +1000,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'give err after timeOut';
 //     var timeBefore = _.timeNow();
@@ -1008,7 +1008,7 @@ timeOutMode10.timeOut = 30000;
 //
 //     var con = new _.Consequence();
 //     con.first( t );
-//     con.keep/*finally*/( function( arg )
+//     con.then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1036,7 +1036,7 @@ timeOutMode10.timeOut = 30000;
 //       test.identical( t.competitorsEarlyGet().length, 1 );
 //       return null;
 //     })
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       test.identical( t.resourcesGet().length, 0 );
 //       test.identical( t.competitorsEarlyGet().length, 0 );
@@ -1066,13 +1066,13 @@ timeOutMode10.timeOut = 30000;
 //     _.Consequence.AsyncModeSet([ 1, 0 ])
 //     return null;
 //   })
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay only';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1094,13 +1094,13 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay, () => null );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1123,14 +1123,14 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine that returns a value';
 //     var timeBefore = _.timeNow();
 //     var value = 'value';
 //     var t = _.timeOut( c.delay, () => value );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1153,13 +1153,13 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine that returns a consequence';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1182,13 +1182,13 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + routine that calls another timeOut';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ); return null; } );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1211,7 +1211,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'delay + context + routine + arguments';
 //     var timeBefore = _.timeNow();
@@ -1221,7 +1221,7 @@ timeOutMode10.timeOut = 30000;
 //     }
 //     var t = _.timeOut( c.delay, undefined, r, [ c.delay ] );
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1244,14 +1244,14 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'stop timer with error';
 //     var timeBefore = _.timeNow();
 //     var t = _.timeOut( c.delay );
 //     _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1272,7 +1272,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'stop timer with error, routine passed';
 //     var timeBefore = _.timeNow();
@@ -1282,7 +1282,7 @@ timeOutMode10.timeOut = 30000;
 //     _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; });
 //
 //     return new _.Consequence().first( t )
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1302,7 +1302,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   /**/
 //
-//   .keep/*finally*/( function( arg )
+//   .then/*finally*/( function( arg )
 //   {
 //     test.case = 'give err after timeOut';
 //     var timeBefore = _.timeNow();
@@ -1310,7 +1310,7 @@ timeOutMode10.timeOut = 30000;
 //
 //     var con = new _.Consequence();
 //     con.first( t );
-//     con.keep/*finally*/( function( arg )
+//     con.then/*finally*/( function( arg )
 //     {
 //       t.give( function( err, got )
 //       {
@@ -1329,7 +1329,7 @@ timeOutMode10.timeOut = 30000;
 //       test.identical( t.competitorsEarlyGet().length, 0 );
 //       return null;
 //     })
-//     .keep/*finally*/( function( arg )
+//     .then/*finally*/( function( arg )
 //     {
 //       t.error( 'stop' );
 //       t.give( ( err, got ) => test.identical( err, 'stop' ) );
@@ -1371,13 +1371,13 @@ function timeOutMode10( test )
     _.Consequence.AsyncModeSet([ 1, 0 ])
     return null;
   })
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay only';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1399,13 +1399,13 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => null );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1428,14 +1428,14 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     var t = _.timeOut( c.delay, () => value );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1458,13 +1458,13 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1487,13 +1487,13 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => { _.timeOut( c.delay ); return null; } );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1516,7 +1516,7 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
@@ -1526,7 +1526,7 @@ function timeOutMode10( test )
     }
     var t = _.timeOut( c.delay, undefined, r, [ c.delay ] );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1549,7 +1549,7 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
@@ -1577,7 +1577,7 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
@@ -1607,7 +1607,7 @@ function timeOutMode10( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
@@ -1615,7 +1615,7 @@ function timeOutMode10( test )
 
     var con = new _.Consequence();
     con.first( t );
-    con.keep/*finally*/( function( arg )
+    con.then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1634,7 +1634,7 @@ function timeOutMode10( test )
       test.identical( t.competitorsEarlyGet().length, 0 );
       return null;
     })
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.error( 'stop' );
       t.give( ( err, got ) => test.identical( err, 'stop' ) );
@@ -1675,13 +1675,13 @@ function timeOutMode11( test )
     _.Consequence.AsyncModeSet([ 1, 1 ])
     return null;
   })
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay only';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1703,13 +1703,13 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => null );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1732,14 +1732,14 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
     var value = 'value';
     var t = _.timeOut( c.delay, () => value );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1762,13 +1762,13 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => _.timeOut( c.delay ) );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1791,13 +1791,13 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
     var t = _.timeOut( c.delay, () => { _.timeOut( c.delay );return null; } );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1820,7 +1820,7 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
@@ -1830,7 +1830,7 @@ function timeOutMode11( test )
     }
     var t = _.timeOut( c.delay, undefined, r, [ c.delay ] );
     return new _.Consequence().first( t )
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1853,7 +1853,7 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
@@ -1883,7 +1883,7 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();
@@ -1917,7 +1917,7 @@ function timeOutMode11( test )
 
   /**/
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'give err after timeOut';
     var timeBefore = _.timeNow();
@@ -1925,7 +1925,7 @@ function timeOutMode11( test )
 
     var con = new _.Consequence();
     con.first( t );
-    con.keep/*finally*/( function( arg )
+    con.then/*finally*/( function( arg )
     {
       t.give( function( err, got )
       {
@@ -1944,7 +1944,7 @@ function timeOutMode11( test )
       test.identical( t.competitorsEarlyGet().length, 0 );
       return null;
     })
-    .keep/*finally*/( function( arg )
+    .then/*finally*/( function( arg )
     {
       t.error( 'stop' );
       t.give( ( err, got ) => test.identical( err, 'stop' ) );
@@ -1978,7 +1978,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay only';
     var timeBefore = _.timeNow();
@@ -1994,7 +1994,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine';
     var timeBefore = _.timeNow();
@@ -2011,7 +2011,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a value';
     var timeBefore = _.timeNow();
@@ -2029,7 +2029,7 @@ function timeOutError( test )
 
   // /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that returns a consequence';
     var timeBefore = _.timeNow();
@@ -2047,7 +2047,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + routine that calls another timeOut';
     var timeBefore = _.timeNow();
@@ -2064,7 +2064,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + context + routine + arguments';
     var timeBefore = _.timeNow();
@@ -2085,7 +2085,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'delay + consequence';
     var timeBefore = _.timeNow();
@@ -2104,7 +2104,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error';
     var timeBefore = _.timeNow();
@@ -2126,7 +2126,7 @@ function timeOutError( test )
 
   /* */
 
-  .keep/*finally*/( function( arg )
+  .then/*finally*/( function( arg )
   {
     test.case = 'stop timer with error, routine passed';
     var timeBefore = _.timeNow();

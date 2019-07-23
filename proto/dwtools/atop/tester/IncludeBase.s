@@ -10,7 +10,8 @@ if( typeof module !== 'undefined' )
   // if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
   // require( '../../Tools.s' );
 
-  if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
+  // if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
+  if( !_global_.wBase || _global_.__GLOBAL_WHICH__ !== 'real' )
   {
     let toolsPath = '../../../dwtools/Base.s';
     let _externalTools = 0;

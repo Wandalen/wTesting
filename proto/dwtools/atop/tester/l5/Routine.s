@@ -1334,7 +1334,7 @@ function contains( got, expected )
 
 //
 
-function setsIdentical( got, expected )
+function setsAreIdentical( got, expected )
 {
   let trd = this;
   let o2, outcome;
@@ -3059,7 +3059,7 @@ let Extend =
   equivalent,
   notEquivalent,
   contains,
-  setsIdentical,
+  setsAreIdentical,
 
   il : identical,
   ni : notIdentical,

@@ -96,25 +96,23 @@ path:
       - ../proto/dwtools/atop/tester.test/General.test.s
       - ../proto/dwtools/atop/tester.test/Inheritance.test.s
       - ../proto/dwtools/atop/tester.test/Time.test.s
-      - ../proto/dwtools/atop/tester.test/asset
-      - ../proto/dwtools/atop/tester.test/asset/check-fails
-      - ../proto/dwtools/atop/tester.test/asset/check-fails/Hello.atest.js
-      - ../proto/dwtools/atop/tester.test/asset/check-fails/Hello.js
-      - ../proto/dwtools/atop/tester.test/asset/check-fails/package.json
-      - ../proto/dwtools/atop/tester.test/asset/grouping
-      - ../proto/dwtools/atop/tester.test/asset/grouping/Grouping.atest.js
-      - ../proto/dwtools/atop/tester.test/asset/grouping/Hello.js
-      - ../proto/dwtools/atop/tester.test/asset/grouping/package-lock.json
-      - ../proto/dwtools/atop/tester.test/asset/grouping/package.json
-      - ../proto/dwtools/atop/tester.test/asset/hello
-      - ../proto/dwtools/atop/tester.test/asset/hello/Hello.atest.js
-      - ../proto/dwtools/atop/tester.test/asset/hello/Hello.js
-      - ../proto/dwtools/atop/tester.test/asset/hello/package.json
-      - ../proto/dwtools/tmp.tmp
-      - ../proto/dwtools/tmp.tmp/Will-16825-187-6f67
-      - ../proto/dwtools/tmp.tmp/Will-16825-187-6f67/checkFails
-      - ../proto/dwtools/tmp.tmp/Will-16835-560-8393
-      - ../proto/dwtools/tmp.tmp/Will-16835-560-8393/run
+      - ../proto/dwtools/atop/tester.test/_asset
+      - ../proto/dwtools/atop/tester.test/_asset/check-fails
+      - ../proto/dwtools/atop/tester.test/_asset/check-fails/Hello.js
+      - ../proto/dwtools/atop/tester.test/_asset/check-fails/Hello.test.js
+      - ../proto/dwtools/atop/tester.test/_asset/check-fails/package.json
+      - ../proto/dwtools/atop/tester.test/_asset/double
+      - ../proto/dwtools/atop/tester.test/_asset/double/Hello.js
+      - ../proto/dwtools/atop/tester.test/_asset/double/Hello.test.js
+      - ../proto/dwtools/atop/tester.test/_asset/grouping
+      - ../proto/dwtools/atop/tester.test/_asset/grouping/Grouping.test.js
+      - ../proto/dwtools/atop/tester.test/_asset/grouping/Hello.js
+      - ../proto/dwtools/atop/tester.test/_asset/grouping/package-lock.json
+      - ../proto/dwtools/atop/tester.test/_asset/grouping/package.json
+      - ../proto/dwtools/atop/tester.test/_asset/hello
+      - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.js
+      - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.test.js
+      - ../proto/dwtools/atop/tester.test/_asset/hello/package.json
     criterion:
       default: 1
       debug: 1
@@ -419,25 +417,23 @@ module:
           - proto/dwtools/atop/tester.test/General.test.s
           - proto/dwtools/atop/tester.test/Inheritance.test.s
           - proto/dwtools/atop/tester.test/Time.test.s
-          - proto/dwtools/atop/tester.test/asset
-          - proto/dwtools/atop/tester.test/asset/check-fails
-          - proto/dwtools/atop/tester.test/asset/check-fails/Hello.atest.js
-          - proto/dwtools/atop/tester.test/asset/check-fails/Hello.js
-          - proto/dwtools/atop/tester.test/asset/check-fails/package.json
-          - proto/dwtools/atop/tester.test/asset/grouping
-          - proto/dwtools/atop/tester.test/asset/grouping/Grouping.atest.js
-          - proto/dwtools/atop/tester.test/asset/grouping/Hello.js
-          - proto/dwtools/atop/tester.test/asset/grouping/package-lock.json
-          - proto/dwtools/atop/tester.test/asset/grouping/package.json
-          - proto/dwtools/atop/tester.test/asset/hello
-          - proto/dwtools/atop/tester.test/asset/hello/Hello.atest.js
-          - proto/dwtools/atop/tester.test/asset/hello/Hello.js
-          - proto/dwtools/atop/tester.test/asset/hello/package.json
-          - proto/dwtools/tmp.tmp
-          - proto/dwtools/tmp.tmp/Will-16825-187-6f67
-          - proto/dwtools/tmp.tmp/Will-16825-187-6f67/checkFails
-          - proto/dwtools/tmp.tmp/Will-16835-560-8393
-          - proto/dwtools/tmp.tmp/Will-16835-560-8393/run
+          - proto/dwtools/atop/tester.test/_asset
+          - proto/dwtools/atop/tester.test/_asset/check-fails
+          - proto/dwtools/atop/tester.test/_asset/check-fails/Hello.js
+          - proto/dwtools/atop/tester.test/_asset/check-fails/Hello.test.js
+          - proto/dwtools/atop/tester.test/_asset/check-fails/package.json
+          - proto/dwtools/atop/tester.test/_asset/double
+          - proto/dwtools/atop/tester.test/_asset/double/Hello.js
+          - proto/dwtools/atop/tester.test/_asset/double/Hello.test.js
+          - proto/dwtools/atop/tester.test/_asset/grouping
+          - proto/dwtools/atop/tester.test/_asset/grouping/Grouping.test.js
+          - proto/dwtools/atop/tester.test/_asset/grouping/Hello.js
+          - proto/dwtools/atop/tester.test/_asset/grouping/package-lock.json
+          - proto/dwtools/atop/tester.test/_asset/grouping/package.json
+          - proto/dwtools/atop/tester.test/_asset/hello
+          - proto/dwtools/atop/tester.test/_asset/hello/Hello.js
+          - proto/dwtools/atop/tester.test/_asset/hello/Hello.test.js
+          - proto/dwtools/atop/tester.test/_asset/hello/package.json
         criterion:
           default: 1
           debug: 1

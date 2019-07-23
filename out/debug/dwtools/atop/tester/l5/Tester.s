@@ -285,7 +285,6 @@ function _includeTestsFrom( path )
 
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :', path, '\n' );
-  debugger;
 
   let ends = [ '.test.s' ];
   ends.push( '.test.js' );

@@ -1,3 +1,4 @@
+
 sudo: false
 language: node_js
 os:
@@ -6,7 +7,7 @@ os:
 node_js:
   - '8'
   - '9'
-  - 'node'
+  - 'lts/*'
 script:
   - npm test
 

@@ -2,6 +2,13 @@
 
 'use strict';
 
+/*
+qqq :
+  extend test coverage for _.entityIdentical, take into account BigInt
+  extend test coverage for _.entityEquivalent, take into account BigInt
+  extend test coverage for _.entityContain, take into account BigInt
+*/
+
 //
 
 /**
@@ -17,7 +24,7 @@ let debugged = _.processIsDebugged();
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
 {
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'TestRoutineDescriptor';
@@ -32,7 +39,7 @@ function init( o )
 
   trd[ accuracyEffectiveSymbol ] = null;
 
-  _.instanceInit( trd );
+  _.workpiece.initFields( trd );
 
   Object.preventExtensions( trd );
 
@@ -43,11 +50,11 @@ function init( o )
   trd._accuracyChange();
   trd._returnCon = null;
 
-  trd._reportForm();
+  trd._reportBegin();
 
   _.assert( _.routineIs( trd.routine ) );
   _.assert( _.strDefined( trd.routine.name ), 'Test routine should have name, ' + trd.name + ' test routine of test suite', trd.suite.name, 'does not have name' );
-  _.assert( Object.isPrototypeOf.call( _.TestSuite.prototype, trd.suite ) );
+  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype, trd.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype, trd ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -110,6 +117,7 @@ function _testRoutineBegin()
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
 
+  trd._appExitCode = _.appExitCode( 0 );
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
   _.assert( arguments.length === 0 );
@@ -154,6 +162,9 @@ function _testRoutineEnd()
   _.assert( arguments.length === 0 );
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
+
+  if( trd._appExitCode && !_.appExitCode )
+  trd._appExitCode = _.appExitCode( trd._appExitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
@@ -208,6 +219,7 @@ function _testRoutineEnd()
 
   /* on end */
 
+  trd._reportEnd();
   let ok = trd._reportIsPositive();
   try
   {
@@ -345,13 +357,8 @@ function _ableGet()
   if( suite.routine )
   return suite.routine === trd.name;
 
-  // if( ( !suite.routine || !suite.takingIntoAccount ) && trd.experimental )
   if( trd.experimental )
   return false;
-
-  // if( suite.takingIntoAccount )
-  // if( suite.routine && suite.routine !== trd.name )
-  // return false;
 
   if( trd.rapidity < wTester.settings.rapidity )
   return false;
@@ -726,7 +733,7 @@ function is( outcome )
 
     trd.exceptionReport
     ({
-      err : 'Test check "is" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcoume ),
+      err : 'Test check "is" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
     });
 
@@ -757,7 +764,7 @@ function isNot( outcome )
 
     trd.exceptionReport
     ({
-      err : 'Test check "isNot" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcoume ),
+      err : 'Test check "isNot" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
     });
 
@@ -1414,6 +1421,14 @@ function gt( got, than )
 {
   let trd = this;
   let outcome = got > than;
+  debugger;
+
+  if( _.bigIntIs( got ) || _.bigIntIs( than ) )
+  {
+    got = BigInt( got );
+    than = BigInt( than );
+  }
+
   let diff = got - than;
 
   /* */
@@ -1475,6 +1490,13 @@ function gt( got, than )
 function ge( got, than )
 {
   let trd = this;
+
+  if( _.bigIntIs( got ) || _.bigIntIs( than ) )
+  {
+    got = BigInt( got );
+    than = BigInt( than );
+  }
+
   let greater = got > than;
   let outcome = got >= than;
   let diff = got - than;
@@ -1540,6 +1562,13 @@ function ge( got, than )
 function lt( got, than )
 {
   let trd = this;
+
+  if( _.bigIntIs( got ) || _.bigIntIs( than ) )
+  {
+    got = BigInt( got );
+    than = BigInt( than );
+  }
+
   let outcome = got < than;
   let diff = got - than;
 
@@ -1605,6 +1634,13 @@ function lt( got, than )
 function le( got, than )
 {
   let trd = this;
+
+  if( _.bigIntIs( got ) || _.bigIntIs( than ) )
+  {
+    got = BigInt( got );
+    than = BigInt( than );
+  }
+
   let less = got < than;
   let outcome = got <= than;
   let diff = got - than;
@@ -2651,7 +2687,7 @@ exceptionReport.defaults =
 
 //
 
-function _reportForm()
+function _reportBegin()
 {
   let trd = this;
 
@@ -2659,8 +2695,10 @@ function _reportForm()
 
   let report = trd.report = Object.create( null );
 
+  report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
+  report.appExitCode = null;
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -2672,7 +2710,34 @@ function _reportForm()
   report.testCaseFails = 0;
 
   Object.preventExtensions( report );
+}
 
+//
+
+function _reportEnd()
+{
+  let trd = this;
+  let report = trd.report;
+
+  if( !report.appExitCode )
+  report.appExitCode = _.appExitCode();
+
+  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  report.outcome = false;
+
+  if( trd.report.testCheckFails !== 0 )
+  report.outcome = false;
+
+  if( !( trd.report.testCheckPasses > 0 ) )
+  report.outcome = false;
+
+  if( trd.report.errorsArray.length )
+  report.outcome = false;
+
+  if( report.outcome === null )
+  report.outcome = true;
+
+  return report.outcome;
 }
 
 //
@@ -2680,17 +2745,14 @@ function _reportForm()
 function _reportIsPositive()
 {
   let trd = this;
+  let report = trd.report;
 
-  if( trd.report.testCheckFails !== 0 )
+  if( !report )
   return false;
 
-  if( !( trd.report.testCheckPasses > 0 ) )
-  return false;
+  trd._reportEnd();
 
-  if( trd.report.errorsArray.length )
-  return false;
-
-  return true;
+  return report.outcome;
 }
 
 //
@@ -2922,7 +2984,7 @@ let Composes =
   name : null,
   will : '',
   accuracy : null,
-  rapidity : 3,
+  rapidity : 0,
   timeOut : null,
   experimental : 0,
   usingSourceCode : null,
@@ -2950,6 +3012,7 @@ let Restricts =
 
   _testRoutineBeginTime : null,
   _returned : null,
+  _appExitCode : null,
   _returnCon : null,
   _timeOutCon : null,
   _timeOutErrorCon : null,
@@ -3092,7 +3155,8 @@ let Extend =
   _outcomeReportCompare,
   exceptionReport,
 
-  _reportForm,
+  _reportBegin,
+  _reportEnd,
   _reportIsPositive,
   _reportTextForTestCheck,
 
@@ -3145,6 +3209,6 @@ _.Copyable.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-wTester[ Self.shortName ] = Self;
+wTesterBasic[ Self.shortName ] = Self;
 
 })();

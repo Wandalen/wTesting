@@ -60,7 +60,7 @@ function init( o )
 {
   let suite = this;
 
-  _.instanceInit( suite );
+  _.workpiece.initFields( suite );
 
   Object.preventExtensions( suite );
 
@@ -112,9 +112,9 @@ function init( o )
       let inherit = inherits[ i ];
       if( !( inherits[ i ] instanceof Self ) )
       {
-        if( Self.instancesMap[ inherit.name ] )
+        if( Self.InstancesMap[ inherit.name ] )
         {
-          let inheritInited = Self.instancesMap[ inherit.name ];
+          let inheritInited = Self.InstancesMap[ inherit.name ];
           _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit : inherit } ) ) );
           inherits[ i ] = inheritInited;
         }
@@ -234,6 +234,26 @@ function _routineSet( src )
 
   suite[ routineSymbol ] = src;
 
+}
+
+//
+
+function _enabledSet( src )
+{
+  let suite = this;
+  suite[ enabledSymbol ] = src;
+  return src;
+}
+
+//
+
+function _enabledGet( src )
+{
+  let suite = this;
+  let result = suite[ enabledSymbol ];
+  if( _.routineIs( result ) )
+  return !!result();
+  return !!result;
 }
 
 //
@@ -400,15 +420,13 @@ function _runSoon()
   _.assert( arguments.length === 0 );
   _.assert( suite._formed );
 
-  // debugger;
-  // _.arrayAppendOnceStrictly( wTester.quedSuites, suite );
   if( _.arrayAppendedOnce( wTester.quedSuites, suite ) === -1 )
   return null;
 
   let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
   return con
-  .finally( _.routineSeal( _, _.timeReady, [] ) )
+  .finally( () => _.timeReady() )
   .finally( () => suite._runNow() )
   .split()
   ;
@@ -442,9 +460,7 @@ function _runNow()
 
   function handleRoutine( trd, iteration, iterator )
   {
-    let result = suite._testRoutineRun( trd ) || null;
-    _.assert( result !== undefined );
-    return result;
+    return suite._testRoutineRun( trd );
   }
 
   /* */
@@ -469,8 +485,8 @@ function _begin()
 {
   let suite = this;
 
-  if( suite.debug )
-  debugger;
+  // if( suite.debug )
+  // debugger;
 
   if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.timeNow();
@@ -485,7 +501,8 @@ function _begin()
   /* report */
 
   suite.report = null;
-  suite._reportForm();
+  suite._reportBegin();
+  suite._appExitCode = _.appExitCode( 0 );
 
   /* tracking */
 
@@ -574,6 +591,8 @@ function _endSoon( err, arg )
   let suite = this;
   let logger = suite.logger;
 
+  suite._reportEnd();
+
   if( suite._reportIsPositive() )
   return _.timeOut( wTester.settings.sanitareTime, () => suite._end( err ) );
   else
@@ -635,16 +654,16 @@ function _end( err )
 
   /* report */
 
+  suite._reportEnd();
+
+  let ok = suite._reportIsPositive();
+
   logger.begin({ verbosity : -2 });
 
   if( logger._mines[ 'suite.content' ] )
   logger.laterFinit( 'suite.content' );
   else
   logger.log();
-
-  /* */
-
-  let ok = suite._reportIsPositive();
 
   if( logger )
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
@@ -680,6 +699,10 @@ function _end( err )
   logger.end({ verbosity : -2 });
   logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
+
+  debugger;
+  if( suite._appExitCode && !_.appExitCode() )
+  suite._appExitCode = _.appExitCode( suite._appExitCode );
 
   /* silencing */
 
@@ -781,13 +804,11 @@ function _testRoutineRun( trd )
 
   /* */
 
-  // console.log( '_testRoutineRun a', trd.name ); debugger;
-
   if( !wTester._canContinue() )
-  return;
+  return null;
 
   if( !trd.able )
-  return;
+  return null;
 
   /* */
 
@@ -800,7 +821,6 @@ function _testRoutineRun( trd )
 
     trd._testRoutineBegin();
 
-    // debugged = 0; // xxx
     trd._timeOutCon = _.timeOut( trd.timeOut );
     trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
 
@@ -827,7 +847,6 @@ function _testRoutineRun( trd )
     result.andKeep( suite._inroutineCon );
 
     result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
-    // result.associated = [ trd._timeOutErrorCon, wTester._cancelCon ];
 
     result.finally( ( err, msg ) => trd._testRoutineEndHandle( err, msg ) );
 
@@ -868,7 +887,7 @@ function routineEach( onEach )
 // report
 // --
 
-function _reportForm()
+function _reportBegin()
 {
   let suite = this;
 
@@ -876,8 +895,10 @@ function _reportForm()
 
   let report = suite.report = Object.create( null );
 
+  report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
+  report.appExitCode = null;
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -890,7 +911,35 @@ function _reportForm()
   report.testRoutineFails = 0;
 
   Object.preventExtensions( report );
+}
 
+//
+
+function _reportEnd()
+{
+  let suite = this;
+  let report = suite.report;
+
+  debugger;
+  if( !report.appExitCode )
+  report.appExitCode = _.appExitCode();
+
+  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  report.outcome = false;
+
+  if( suite.report.testCheckFails !== 0 )
+  report.outcome = false;
+
+  if( !( suite.report.testCheckPasses > 0 ) )
+  report.outcome = false;
+
+  if( suite.report.errorsArray.length )
+  report.outcome = false;
+
+  if( report.outcome === null )
+  report.outcome = true;
+
+  return report.outcome;
 }
 
 //
@@ -898,18 +947,19 @@ function _reportForm()
 function _reportToStr()
 {
   let suite = this;
+  let report = suite.report;
   let msg = '';
-  let appExitCode = _.appExitCode();
+  // let appExitCode = _.appExitCode();
 
-  if( appExitCode !== undefined && appExitCode !== 0 )
-  msg = 'ExitCode : ' + appExitCode + '\n';
+  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  msg = 'ExitCode : ' + report.appExitCode + '\n';
 
-  if( suite.report.errorsArray.length )
-  msg += 'Thrown ' + ( suite.report.errorsArray.length ) + ' error(s)\n';
+  if( report.errorsArray.length )
+  msg += 'Thrown ' + ( report.errorsArray.length ) + ' error(s)\n';
 
-  msg += 'Passed test checks ' + ( suite.report.testCheckPasses ) + ' / ' + ( suite.report.testCheckPasses + suite.report.testCheckFails ) + '\n';
-  msg += 'Passed test cases ' + ( suite.report.testCasePasses ) + ' / ' + ( suite.report.testCasePasses + suite.report.testCaseFails ) + '\n';
-  msg += 'Passed test routines ' + ( suite.report.testRoutinePasses ) + ' / ' + ( suite.report.testRoutinePasses + suite.report.testRoutineFails ) + '';
+  msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
+  msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';
+  msg += 'Passed test routines ' + ( report.testRoutinePasses ) + ' / ' + ( report.testRoutinePasses + report.testRoutineFails ) + '';
 
   return msg;
 }
@@ -918,25 +968,30 @@ function _reportToStr()
 
 function _reportIsPositive()
 {
-  let testing = this;
+  let suite = this;
+  let report = suite.report;
 
-  let appExitCode = _.appExitCode();
-  if( appExitCode !== undefined && appExitCode !== 0 )
+  // let appExitCode = _.appExitCode();
+  // if( appExitCode !== undefined && appExitCode !== 0 )
+  // return false;
+
+  if( !report )
   return false;
 
-  if( !testing.report )
-  return false;
+  suite._reportEnd();
 
-  if( testing.report.testCheckFails !== 0 )
-  return false;
+  return !!report.outcome;
 
-  if( !( testing.report.testCheckPasses > 0 ) )
-  return false;
-
-  if( testing.report.errorsArray.length )
-  return false;
-
-  return true;
+  // if( suite.report.testCheckFails !== 0 )
+  // return false;
+  //
+  // if( !( suite.report.testCheckPasses > 0 ) )
+  // return false;
+  //
+  // if( suite.report.errorsArray.length )
+  // return false;
+  //
+  // return true;
 }
 
 // --
@@ -1103,6 +1158,8 @@ let routineSymbol = Symbol.for( 'routine' );
 // relations
 // --
 
+let enabledSymbol = Symbol.for( 'enabled' );
+
 let Composes =
 {
 
@@ -1168,12 +1225,13 @@ let Restricts =
   _hasConsoleInOutputs : 0,
   _testSuiteBeginTime : null,
   _formed : 0,
+  _appExitCode : null,
 }
 
 let Statics =
 {
   Froms,
-  UsingUniqueNames : _.define.contained({ value : 1, readOnly : 1 }),
+  UsingUniqueNames : _.define.contained({ ini : 1, readOnly : 1 }),
   _SuitesReady : new _.Consequence().take( null ),
 }
 
@@ -1198,6 +1256,7 @@ let Accessors =
 {
   accuracy : 'accuracy',
   routine : 'routine',
+  enabled : 'enabled',
 }
 
 // --
@@ -1218,6 +1277,8 @@ let Proto =
 
   _accuracySet,
   _routineSet,
+  _enabledSet,
+  _enabledGet,
   consoleBar,
 
   // test suite run
@@ -1241,7 +1302,8 @@ let Proto =
 
   // report
 
-  _reportForm,
+  _reportBegin,
+  _reportEnd,
   _reportToStr,
   _reportIsPositive,
 
@@ -1286,7 +1348,7 @@ _.EventHandler.mixin( Self );
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-wTester[ Self.shortName ] = Self;
-_realGlobal_[ Self.name ] = _global_[ Self.name ] = _[ Self.shortName ] = Self;
+wTesterBasic[ Self.shortName ] = Self;
+_realGlobal_[ Self.name ] = _global_[ Self.name ] = Self;
 
 })();

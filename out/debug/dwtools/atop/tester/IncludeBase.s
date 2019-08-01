@@ -7,10 +7,6 @@
 if( typeof module !== 'undefined' )
 {
 
-  // if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
-  // require( '../../Tools.s' );
-
-  // if( !_global_.wBase || _global_.WTOOLS_PRIVATE )
   if( !_global_.wBase || _global_.__GLOBAL_WHICH__ !== 'real' )
   {
     let toolsPath = '../../../dwtools/Base.s';
@@ -44,6 +40,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wLogger' );
   _.include( 'wStringsExtra' );
+  _.include( 'wCommandsAggregator' );
 
   // _.includeAny( 'wScriptLauncher' );
 

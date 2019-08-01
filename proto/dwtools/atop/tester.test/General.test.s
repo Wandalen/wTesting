@@ -2,11 +2,9 @@
 
 'use strict';
 
-
 /*
 
 node builder/include/dwtools/atop/tester/zTesting.test.s v:4 n:1
-
 echo $?
 
 */
@@ -17,10 +15,11 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../tester/Main.mid.s' );
+  require( '../tester/MainTop.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
+  _.include( 'wExternalFundamentals' );
 
   var waitSync = require( 'wait-sync' );
 
@@ -76,15 +75,11 @@ function identical( test )
   var testRoutine;
 
   test.identical( 0,0 );
-  // test.identical( 0,1 );
 
   function r1( t )
   {
 
     testRoutine = t;
-
-    // console.log( 'testRoutine',testRoutine );
-    console.log( 'x' );
 
     t.identical( 0,0 );
     test.identical( t.suite.report.testCheckPasses, 1 );
@@ -230,7 +225,7 @@ function shouldMessageOnlyOnce( test )
     test.case = 'throw unexpected error, asynchronously';
     var c4 = t.shouldMessageOnlyOnce( function()
     {
-      return _.timeOut( 250,function()
+      return _.timeOut( 150,function()
       {
         throw _.errAttend( 'error1' );
       });
@@ -262,7 +257,7 @@ function shouldMessageOnlyOnce( test )
     test.case = 'single async message, no error';
     var c5 = t.shouldMessageOnlyOnce( function()
     {
-      return _.timeOut( 250 );
+      return _.timeOut( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -292,7 +287,7 @@ function shouldMessageOnlyOnce( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.take( 'msg1' );
         con.take( 'msg2' );
@@ -330,7 +325,7 @@ function shouldMessageOnlyOnce( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.error( _.errAttend( 'error1' ) );
         con.error( _.errAttend( 'error2' ) );
@@ -546,7 +541,7 @@ function mustNotThrowError( test )
     test.case = 'throw unexpected error, asynchronously';
     var c4 = t.mustNotThrowError( function()
     {
-      return _.timeOut( 250,function()
+      return _.timeOut( 150,function()
       {
         throw _.err( 'test' );
       });
@@ -578,7 +573,7 @@ function mustNotThrowError( test )
     test.case = 'single async message, no error';
     var c5 = t.mustNotThrowError( function()
     {
-      return _.timeOut( 250 );
+      return _.timeOut( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -608,7 +603,7 @@ function mustNotThrowError( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.take( 'msg1' );
         con.take( 'msg2' );
@@ -646,7 +641,7 @@ function mustNotThrowError( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.error( 'error1' );
         con.error( 'error2' );
@@ -835,7 +830,7 @@ function shouldThrowErrorSync( test )
     test.case = 'throw unexpected asynchronous error';
     var c3 = t.shouldThrowErrorSync( function()
     {
-      return _.timeOut( 250,function()
+      return _.timeOut( 150,function()
       {
         throw _.err( 'test' );
       });
@@ -866,7 +861,7 @@ function shouldThrowErrorSync( test )
     test.case = 'single message, while synchronous error expected';
     var c4 = t.shouldThrowErrorSync( function()
     {
-      return _.timeOut( 250 );
+      return _.timeOut( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -896,7 +891,7 @@ function shouldThrowErrorSync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.take( null );
         con.take( null );
@@ -933,7 +928,7 @@ function shouldThrowErrorSync( test )
     {
       var con = _.Consequence().error( 'error' );
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.error( 'error' );
         return null;
@@ -1119,7 +1114,7 @@ function shouldThrowErrorAsync( test )
     test.case = 'throw expected asynchronous error';
     var c3 = t.shouldThrowErrorAsync( function()
     {
-      return _.timeOut( 250,function()
+      return _.timeOut( 150,function()
       {
         throw _.err( 'test' );
       });
@@ -1134,7 +1129,7 @@ function shouldThrowErrorAsync( test )
 
     _.timeOut( 500,function()
     {
-      test.identical( c3.resourcesGet().length, 1 );
+      test.identical( c3.resourcesGet().length, 1 ); /* xxx */
       c3.give( function( err,arg )
       {
         test.is( err === undefined );
@@ -1150,7 +1145,7 @@ function shouldThrowErrorAsync( test )
     test.case = 'single message while asynchronous error expected';
     var c4 = t.shouldThrowErrorAsync( function()
     {
-      return _.timeOut( 250 );
+      return _.timeOut( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -1180,7 +1175,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.error( 'error' );
         return null;
@@ -1216,7 +1211,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.take( null );
         con.take( null );
@@ -1253,7 +1248,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.error( 'error' );
         con.error( 'error' );
@@ -1443,7 +1438,7 @@ function shouldThrowError( test )
     test.case = 'throw expected asynchronous error';
     var c3 = t.shouldThrowError( function()
     {
-      return _.timeOut( 250,function()
+      return _.timeOut( 150,function()
       {
         throw _.err( 'err1' );
       });
@@ -1475,7 +1470,7 @@ function shouldThrowError( test )
     test.case = 'single message, but error expected';
     var c4 = t.shouldThrowError( function()
     {
-      return _.timeOut( 250 );
+      return _.timeOut( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -1505,7 +1500,7 @@ function shouldThrowError( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.take( 'arg1' );
         con.take( 'arg2' );
@@ -1542,7 +1537,7 @@ function shouldThrowError( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 250, function()
+      _.timeOut( 150, function()
       {
         con.error( 'error1' );
         con.error( 'error1' );
@@ -1708,7 +1703,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 250, function()
+    _.timeOut( 150, function()
     {
       con.take( null );
       con.take( null );
@@ -1736,7 +1731,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowError( function()
   {
-    return _.timeOut( 250 );
+    return _.timeOut( 150 );
   });
 
   /* */
@@ -1759,7 +1754,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    return _.timeOut( 250,function()
+    return _.timeOut( 150,function()
     {
       throw _.err( 'test' );
     });
@@ -1769,7 +1764,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    return _.timeOut( 250 );
+    return _.timeOut( 150 );
   });
 
   t.identical( 0,0 );
@@ -1778,7 +1773,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 250, function()
+    _.timeOut( 150, function()
     {
       con.take( null );
       con.take( null );
@@ -1811,7 +1806,7 @@ function _throwingExperiment( test )
   test.case = 'single message';
   test.mustNotThrowError( function()
   {
-    return _.timeOut( 250 );
+    return _.timeOut( 150 );
   });
 
   /* */
@@ -1820,7 +1815,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 250, function()
+    _.timeOut( 150, function()
     {
       con.take( null );
       con.take( null );
@@ -1833,7 +1828,7 @@ function _throwingExperiment( test )
 
   test.shouldThrowErrorSync( function()
   {
-    return _.timeOut( 250 );
+    return _.timeOut( 150 );
   });
 
   /* */
@@ -5447,6 +5442,175 @@ function leReturn( test )
 
 }
 
+// --
+// outcome
+// --
+
+function runMultiple( test )
+{
+  var testRoutine;
+
+  test.identical( 0,0 );
+
+  function good( t )
+  {
+    debugger;
+    testRoutine = t;
+    t.identical( 0, 0 );
+    logger.log( 'good' );
+  }
+
+  function thr( t )
+  {
+    debugger;
+    testRoutine = t;
+    t.identical( 1, 1 );
+    return x;
+  }
+
+  // function bad( t )
+  // {
+  //   debugger;
+  //   testRoutine = t;
+  //   t.identical( 1, 1 );
+  //   _.appExitCode( -1 );
+  //   logger.log( 'bad' );
+  // }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { good },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var suite2 = wTestSuite
+  ({
+    tests : { thr },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var suite3 = wTestSuite
+  ({
+    tests : { good },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  debugger;
+  var result = wTester.test([ suite1, suite2, suite3 ])
+  .finally( function( err, data )
+  {
+    debugger;
+
+    var got = _.select( data, '*/report' );
+    var expected =
+    [
+      {
+        "outcome" : true,
+        "errorsArray" : [],
+        "appExitCode" : 0,
+        "testCheckPasses" : 1,
+        "testCheckFails" : 0,
+        "testCasePasses" : 0,
+        "testCaseFails" : 0,
+        "testCaseNumber" : 0,
+        "testRoutinePasses" : 1,
+        "testRoutineFails" : 0
+      },
+      {
+        "outcome" : false,
+        "appExitCode" : 0,
+        "testCheckPasses" : 1,
+        "testCheckFails" : 1,
+        "testCasePasses" : 0,
+        "testCaseFails" : 0,
+        "testCaseNumber" : 0,
+        "testRoutinePasses" : 0,
+        "testRoutineFails" : 1
+      },
+      {
+        "outcome" : true,
+        "errorsArray" : [],
+        "appExitCode" : 0,
+        "testCheckPasses" : 1,
+        "testCheckFails" : 0,
+        "testCasePasses" : 0,
+        "testCaseFails" : 0,
+        "testCaseNumber" : 0,
+        "testRoutinePasses" : 1,
+        "testRoutineFails" : 0
+      }
+    ]
+    test.contains( got, expected );
+
+    if( err )
+    throw err;
+    return null;
+  });
+
+  debugger;
+  return result;
+}
+
+//
+
+function appExitCode( test )
+{
+  var testRoutine;
+
+  test.identical( 0,0 );
+
+  _.appExitCode( 255 );
+
+  test.identical( _.appExitCode(), 255 );
+
+  function good( t )
+  {
+    debugger;
+    testRoutine = t;
+    t.identical( 0, 0 );
+    logger.log( 'good' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { good },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, data )
+  {
+
+    var got = _.select( data, '*/report' );
+    var expected =
+    [
+      {
+        "outcome" : true,
+        "errorsArray" : [],
+        "appExitCode" : 0,
+        "testCheckPasses" : 1,
+        "testCheckFails" : 0,
+        "testCasePasses" : 0,
+        "testCaseFails" : 0,
+        "testCaseNumber" : 0,
+        "testRoutinePasses" : 1,
+        "testRoutineFails" : 0
+      }
+    ]
+    test.contains( got, expected );
+
+    if( err )
+    throw err;
+    _.appExitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
 
 // --
 // etc
@@ -5611,12 +5775,15 @@ var Self =
     etReturn,
     neReturn,
 
-    /* */
-
     gtReturn,
     geReturn,
     ltReturn,
     leReturn,
+
+    // outcome
+
+    runMultiple,
+    appExitCode,
 
     // etc
 

@@ -3,8 +3,8 @@
 if( typeof module !== 'undefined' )
 {
 
+  // require( './IncludeTop.s' );
   require( './MainTop.s' );
-  // if( !module.parent )
   wTester.exec();
 
 }
@@ -49,8 +49,6 @@ if( typeof module !== 'undefined' )
 + checkers ( identical, contains, equivalent ... ) should return boolean
 + routine : 'some', routine : some - should work both variants
 
-- implement custom handler of test routine fail
-
 - print information about case with color directive avoiding change of color state of logger
 
 - implement support of glob path
@@ -67,11 +65,12 @@ if( typeof module !== 'undefined' )
 - use script launcher
 - use multiple processes
 
-- switch off routine timeout if debugged
++ switch off routine timeout if debugged
 
 - if timeout then print not "failed throwing error", but "failed with timeout"
 
 - implement onError field for test routine?
+- implement custom handler of test routine fail?
 
 - options to show path to test suite even if verbosity is low
 

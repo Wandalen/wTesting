@@ -3,15 +3,25 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( '../../Tools.s' );
-  _.include( 'wFiles' );
   _.include( 'wExternalFundamentals' );
 }
 
 let _ = wTools;
-let shell = _.shellNodePassingThrough
-({
+let o =
+{
   execPath : _.path.join( __dirname, 'MainTop.s' ),
-  verbosity : 0,
-  passingThrough : 1,
-  throwingExitCode : 0,
-});
+  // mode : 'shell',
+}
+_.appExitHandlerRepair();
+let shell = _.shellNodePassingThrough( o );
+
+// let o =
+// {
+//   execPath : _.path.join( __dirname, 'MainTop.s' ),
+//   verbosity : 0,
+//   passingThrough : 1,
+//   throwingExitCode : 0,
+//   mode : 'fork'
+// }
+// process.on( 'SIGINT', () => o.process.kill( 'SIGKILL' ) );
+// let shell = _.shellNodePassingThrough( o );

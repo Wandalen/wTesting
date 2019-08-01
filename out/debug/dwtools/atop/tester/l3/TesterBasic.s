@@ -927,6 +927,7 @@ function _reportBegin()
   report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
+  report.includeErrorsArray = [];
   report.appExitCode = null;
 
   report.testCheckPasses = 0;

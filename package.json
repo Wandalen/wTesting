@@ -32,7 +32,7 @@
     "tst": "node proto/dwtools/atop/tester/ExecUnrestricted",
     "single-process-tst": "node proto/dwtools/atop/tester/Exec",
     "debug-tst": "node proto/dwtools/atop/tester/ExecDebug",
-    "test": "wtest proto"
+    "test": "wtest .run proto/**"
   },
   "bin": {
     "wtest": "proto/dwtools/atop/tester/ExecUnrestricted",

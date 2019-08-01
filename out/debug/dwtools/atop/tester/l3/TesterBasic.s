@@ -254,7 +254,7 @@ appArgsRead.defaults =
  * Spaces between `key` and `value` are supported: `v:5` and `v  :  5` are treated in same way.
  * @function scenarioTest
  * @example
- *  wtest proto v : 5
+ *  wtest .run proto/** v : 5
  * @memberof module:Tools/Tester.wTester
  */
 

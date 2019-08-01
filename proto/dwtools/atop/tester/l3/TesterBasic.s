@@ -401,7 +401,9 @@ function _testingBegin( allSuites, runSuites )
   _.assert( logger.hasOutput( _global.logger, { deep : 0, withoutOutputToOriginal : 0 } ), 'Logger of the tester does not have global logger in outputs.' );
   _.assert( tester.state === null );
 
+  if( !tester.report )
   tester._reportBegin();
+
   tester._canceled = 0;
   tester.state = 'begin';
 
@@ -777,6 +779,9 @@ function _suitesIncludeAt( path )
   _.assert( _.numberIs( tester.importanceOfNegative ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
+
+  if( !tester.report )
+  tester._reportBegin();
 
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :', path, '\n' );

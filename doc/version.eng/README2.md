@@ -27,6 +27,8 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 - [Running tests](./tutorial/Running.md)
 - [Test suite "Hello World!"](./tutorial/HelloWorld.md)
 - [How to read a report and group test checks](./tutorial/Report.md)
-- [Test suite inheritance](./tutorial/SuiteInheritance.md)
 - [Verbosity control](./tutorial/Verbosity.md)
+<!--
+- [Test suite inheritance](./tutorial/SuiteInheritance.md)
 - [Advanced test options](./tutorial/TestOptions.md)
+-->

@@ -104,18 +104,20 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
   How to read a test report and group the test checks in groups and test case. How the test suite content is displayed in the report.
 </details>
-<details><summary><a href="./tutorial/SuiteInheritance.md">
-      Test suite inheritance
-  </a></summary>
-  An example of how one test suites inherits another.
-</details>
 <details><summary><a href="./tutorial/Verbosity.md">
       Verbosity control
   </a></summary>
   Changing the amount of output test information using the verbosity option.
+</details>
+<!--
+<details><summary><a href="./tutorial/SuiteInheritance.md">
+      Test suite inheritance
+  </a></summary>
+  An example of how one test suites inherits another.
 </details>
 <details><summary><a href="./tutorial/TestOptions.md">
       Advanced test options
   </a></summary>
   How to use advanced options to set up tests.
 </details>
+-->

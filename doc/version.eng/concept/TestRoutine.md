@@ -21,4 +21,4 @@ Otherwise, a test routine is marked as passed (green).
 
 The figure shows a section of code that contains two test routines. The first routine named `routine1` performs one test of the identity of two values. The second test routine named `routine2` has two test cases, each of which has one test check. Test routines should be mentioned in the definition of the test suite to be executed.
 
-[Return to content](../README.md#Concepts)
+[Back to content](../README.md#Concepts)

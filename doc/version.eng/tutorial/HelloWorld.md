@@ -10,7 +10,6 @@ testHello
     ├── Join.js
     ├── Join.test.js    
     └── package.json
-
 ```
 
 </details>
@@ -27,7 +26,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 }
-
 ```
 
 </details>
@@ -85,7 +83,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -120,7 +117,6 @@ In the given code two dependencies are injected. The first is the `Testing` util
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
@@ -159,4 +155,4 @@ In the 39th line, the test suite is being created. And in lines 40-41 there is i
 - The developer determines the required amount of test routines, test cases and test checks.
 - A test suite definition should contain the test suite name and set of the test routines.  Additionally, the test suite declaration may include advanced options.
 
-[Return to content](../README.md#Tutorials)
+[Back to content](../README.md#Tutorials)

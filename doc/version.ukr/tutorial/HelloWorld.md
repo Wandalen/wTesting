@@ -10,7 +10,6 @@ testHello
     ├── Join.js
     ├── Join.test.js    
     └── package.json
-
 ```
 
 </details>
@@ -27,7 +26,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 }
-
 ```
 
 </details>
@@ -44,7 +42,6 @@ module.exports.join = function( a, b )
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
 ```JavaScript    
-
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -85,7 +82,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -105,7 +101,6 @@ wTester.test( Self.name );
 - визначення тест сюіта;
 - секція запуску тест сюіта.
 
-
 ### Секція підключення залежностей
 
 Секція призначена для підключення в тест файл залежностей потрібних для тестування.
@@ -121,7 +116,6 @@ wTester.test( Self.name );
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
@@ -131,6 +125,7 @@ wTester.test( Self.name );
 ### Секція визначення тест рутин
 
 Друга секція призначена для опису тестових рутин. Тест рутина - рутина ( функція, метод ) розроблена для тестування якогось із аспектів об'кту тестування. Тест рутина може включати:
+
 - початкові дані, об'явлення змінних (за необхідності);
 - [тест кейси](../concept/TestCase.md);
 - [тест перевірки](../concept/TestCheck.md).

@@ -16,7 +16,6 @@ importanceOfNegative
         ├── Join.js
         ├── Join.test.js    
         └── package.json
-
 ```
 
 </details>
@@ -33,7 +32,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 }
-
 ```
 
 </details>
@@ -49,8 +47,7 @@ module.exports.join = function( a, b )
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
-```JavaScript    
-
+```js
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -91,14 +88,13 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
 
 Внесіть приведений вище код в файл `Join.test.js`.
 
-Тест сюіт `Join` включає дві тест рутини. Тест рутина `routine1` виконує тест перевірку з рядковими значеннями. Тест рутина `routine2` включає два тест кейса, котрі містять по одній перевірці. Тест кейс `pass` пройде тому, що очікуване значення - рядок, а тест кейс `fail` провалиться, бо очікуване значення - число. 
+Тест сюіт `Join` включає дві тест рутини. Тест рутина `routine1` виконує тест перевірку з рядковими значеннями. Тест рутина `routine2` включає два тест кейса, котрі містять по одній перевірці. Тест кейс `pass` пройде тому, що очікуване значення - рядок, а тест кейс `fail` провалиться, бо очікуване значення - число.
 
 ### Встановлення залежностей
 
@@ -113,7 +109,6 @@ wTester.test( Self.name );
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
@@ -125,28 +120,28 @@ wTester.test( Self.name );
 Для того, щоб було помітніше різницю між використанням різних налаштувань опції `importanceOfNegative` використовуйте її в комбінації з опцією `verbosity:5`.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js verbosity:5</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply verbosity:5 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js verbosity:5
-Includes tests from : /.../importanceOfNegative 
+[user@user ~]$
+Includes tests from : /.../importanceOfNegative
 
 Tester Settings :
 {
-  scenario : test, 
-  sanitareTime : 500, 
-  fails : null, 
-  beeping : true, 
-  coloring : 1, 
-  timing : 1, 
-  rapidity : 3, 
-  routine : null, 
-  importanceOfNegative : null, 
-  routineTimeOut : null, 
-  concurrent : null, 
-  verbosity : 5, 
-  silencing : null, 
-  shoulding : null, 
+  scenario : test,
+  sanitareTime : 500,
+  fails : null,
+  beeping : true,
+  coloring : 1,
+  timing : 1,
+  rapidity : 3,
+  routine : null,
+  importanceOfNegative : null,
+  routineTimeOut : null,
+  concurrent : null,
+  verbosity : 5,
+  silencing : null,
+  shoulding : null,
   accuracy : null
 }
 
@@ -156,7 +151,7 @@ Tester Settings :
 
     Running test suite ( Join ) ..
     at  /.../importanceOfNegative/Join.test.js:38
-      
+
       Running test routine ( routine1 ) ..
         Test check ( Join / routine1 /  # 1 ) ... ok
       Passed test routine ( Join / routine1 ) in 0.067s
@@ -166,14 +161,14 @@ Tester Settings :
         - got :
           '13'
         - expected :
-          13 
+          13
         - difference :
           *
-          
+
         /.../importanceOfNegative/Join.test.js:20
             16 :   test.case = 'pass';
             17 :   test.identical( Join.join( 1, 3 ), '13' );
-            18 : 
+            18 :
             19 :   test.case = 'fail';
             20 :   test.identical( Join.join( 1, 3 ), 13 );  
         Test check ( Join / routine2 / fail # 2 ) ... failed
@@ -193,38 +188,37 @@ Tester Settings :
   Passed test routines 1 / 2
   Passed test suites 0 / 1
   Testing ... in 0.335s ... failed
-
 ```
 
 </details>
 
-Введіть команду `tst Join.test.js verbosity:5`, це аналогічно до команди `tst Join.test.js importanceOfNegative:1 verbosity:5`. Порівняйте з привденими вище результатами.
+Введіть команду `tst .imply verbosity:5 .run Join.test.js`, це аналогічно до команди `tst .imply verbosity:5 importanceOfNegative:1 .run Join.test.js`. Порівняйте з привденими вище результатами.
 
 При використанні опції `verbosity:5` і вище, звіт містить детальну [інформацію про помилку](Verbosity.md#елементи-звіту-що-виводятся-при-зміні-вербальності). Тому в звіті присутня секція з отриманим і очікуваним значенням, а також, різницею між ними. Нижче приведена секцію з кодом проваленої перевірки.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js v:5 n:0</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply v:5 n:0 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js v:5 n:0
-Includes tests from : /.../importanceOfNegative 
+[user@user ~]$ tst .imply v:5 n:0 .run Join.test.js
+Includes tests from : /.../importanceOfNegative
 
 Tester Settings :
 {
-  scenario : test, 
-  sanitareTime : 500, 
-  fails : null, 
-  beeping : true, 
-  coloring : 1, 
-  timing : 1, 
-  rapidity : 3, 
-  routine : null, 
-  importanceOfNegative : null, 
-  routineTimeOut : null, 
-  concurrent : null, 
-  verbosity : 5, 
-  silencing : null, 
-  shoulding : null, 
+  scenario : test,
+  sanitareTime : 500,
+  fails : null,
+  beeping : true,
+  coloring : 1,
+  timing : 1,
+  rapidity : 3,
+  routine : null,
+  importanceOfNegative : null,
+  routineTimeOut : null,
+  concurrent : null,
+  verbosity : 5,
+  silencing : null,
+  shoulding : null,
   accuracy : null
 }
 
@@ -234,12 +228,12 @@ Tester Settings :
 
     Running test suite ( Join ) ..
     at  /.../importanceOfNegative/Join.test.js:38
-      
+
       Running test routine ( routine1 ) ..
         Test check ( Join / routine1 /  # 1 ) ... ok
       Passed test routine ( Join / routine1 ) in 0.067s
       Running test routine ( routine2 ) ..
-        Test check ( Join / routine2 / pass # 1 ) ... ok 
+        Test check ( Join / routine2 / pass # 1 ) ... ok
         Test check ( Join / routine2 / fail # 2 ) ... failed
       Failed test routine ( Join / routine2 ) in 0.106s
 
@@ -256,63 +250,60 @@ Tester Settings :
   Passed test routines 1 / 2
   Passed test suites 0 / 1
   Testing ... in 0.322s ... failed
-
 ```
 
 </details>
 
-При значенні `verbosity:5` зменшіть об'єм виводу про помилки. Для цього використовуйте команду `tst Join.test.js v:5 n:0`. Використання скороченої форми запису опцій зручніша в використанні тому, що і використано в команді.
+При значенні `verbosity:5` зменшіть об'єм виводу про помилки. Для цього використовуйте команду `tst .imply v:5 n:0 .run Join.test.js`. Використання скороченої форми запису опцій зручніша в використанні тому і використанa в команді.
 
 Звіт, на відміну від попереднього, не містить розгорнутої інформації про помилку. Зазначено лише те, що провалена одна тест перевірка.
 
 У випадку, коли потрібно розкрити лише провалені тест перевірки, можна використати комбінацію опції `verbosity:0` i `importanceOfNegative >= 3`. Якщо встановлено опцію `verbosity:0`, то утиліта [не виводить жодного рядка](Verbosity.md#елементи-звіту-що-виводятся-при-зміні-вербальності), якщо додати опцію `importanceOfNegative` то рівень виводу інформації про помилки збільшується.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js v:0 n:3</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply v:0 n:3 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js v:0 n:3
+[user@user ~]$ tst .imply v:0 n:3 .run Join.test.js
 
 Failed test routine ( Join / routine2 ) in 0.051s
-
 ```
 
 </details>
 
-Введіть команду `tst Join.test.js v:0 n:3`. Після виконання тестування порівняйте результат.
+Введіть команду `tst .imply v:0 n:3 .run Join.test.js`. Після виконання тестування порівняйте результат.
 
 Утиліта вивела один рядок з указанням тест рутини, що провалилась.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js v:0 n:5</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply v:0 n:5 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js v:0 n:3
+[user@user ~]$ tst .imply v:0 n:5 .run Join.test.js
 
         - got :
           '13'
         - expected :
-          13 
+          13
         - difference :
           *
-          
+
         /.../importanceOfNegative/Join.test.js:20
             16 :   test.case = 'pass';
             17 :   test.identical( Join.join( 1, 3 ), '13' );
-            18 : 
+            18 :
             19 :   test.case = 'fail';
             20 :   test.identical( Join.join( 1, 3 ), 13 );  
         Test check ( Join / routine2 / fail # 2 ) ... failed
 
       Failed test routine ( Join / routine2 ) in 0.100s
-
 ```
 
 </details>
 
-Підвищіть рівень виводу інформаці про помилки, введіть команду `tst Join.test.js v:0 n:5`.
+Підвищіть рівень виводу інформаці про помилки, введіть команду `tst .imply v:0 n:5 .run Join.test.js`.
 
-Даний звіт дає розробнику звіт про помилку і повністю виключає інформацію про пройдені рутини. 
+Даний звіт дає розробнику звіт про помилку і повністю виключає інформацію про пройдені рутини.
 
 ### Підсумок
 

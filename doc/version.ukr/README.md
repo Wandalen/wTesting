@@ -164,16 +164,6 @@
   </a></summary>
   Як врахувати точність обчислень при порівнянні числових значень.
 </details>
-<details><summary><a href="./tutorial/OptionFails.md">
-      Опція fails
-  </a></summary>
-  Як завершити тестування при досягненні деякого числа провалених тестів.
-</details>
-<details><summary><a href="./tutorial/OptionColoring.md">
-      Опція coloring
-  </a></summary>
-  Використання кольорового звіту.
-</details>
 <details><summary><a href="./tutorial/OptionConcurrent.md">
       Опція concurrent
   </a></summary>
@@ -194,3 +184,17 @@
   </a></summary>
   Як використовувати наслідування від декількох тест сюітів.
 </details>
+
+
+<!--
+<details><summary><a href="./tutorial/OptionFails.md">
+      Опція fails
+  </a></summary>
+  Як завершити тестування при досягненні деякого числа провалених тестів.
+</details>
+<details><summary><a href="./tutorial/OptionColoring.md">
+      Опція coloring
+  </a></summary>
+  Використання кольорового звіту.
+</details>
+-->

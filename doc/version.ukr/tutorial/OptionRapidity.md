@@ -1,10 +1,10 @@
 # Опція rapidity
 
-Як встановити пріоритет виконання тест рутини та .
+Як встановити пріоритет виконання тест рутини та керувати проходженням тестування.
 
-Опція регулює час затрачений на тестування. Кожна тест рутина може мати власну опцію `rapidity` від `1` до `5`. За замовчуванням опція тест `rapidity` має значення `3`. При виконанні тестування із `rapidity` вищим за `rapidity` рутини така рутина просто не виконується.
+Опція регулює час затрачений на тестування. Кожна тест рутина може мати власну опцію `rapidity` зі значенням від `1` до `5`. За замовчуванням опція `rapidity` має значення `3`. При виконанні тестування зі значенням опцієї запуску `rapidity` вищим за `rapidity` рутини така рутина просто не виконується.
 
-Приймає значення від 1 до 5, де 1 - найповільніше тестування, 5 - найшвидше. За замовчуванням - 3.
+Опція приймає значення від 1 до 5, де 1 - найповільніше тестування, 5 - найшвидше. За замовчуванням - 3.
 
 <details>
   <summary><u>Структура файлів</u></summary>
@@ -14,7 +14,6 @@ rapidity
     ├── Sum.js
     ├── Sum.test.js
     └── package.json
-
 ```
 
 </details>
@@ -31,7 +30,6 @@ module.exports.sum = function( a, b )
 {
   return Number( a ) + Number( b );
 };
-
 ```
 
 </details>
@@ -108,16 +106,15 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );  
-
 ```
 
 </details>
 
-Помістіть в  файл `Sum.test.js` приведений вище код. 
+Помістіть в  файл `Sum.test.js` приведений вище код.
 
-Тест сюіт містить п'ять тест рутин - від `routine1` до `routine5`. Значення опції `rapidity` встановлено згідно номеру рутини. В рутині `routine3` опція не встановлена тому, що в кожній тест рутині за замовчуванням це значення рівне `3`. 
+Тест сюіт містить п'ять тест рутин - від `routine1` до `routine5`. Значення опції `rapidity` встановлено згідно номеру рутини. В рутині `routine3` опція не встановлена тому, що за замовчуванням рутина має значення опції рівне `3`.
 
-Всі тест рутини розташовано в порядку пріоритету виконання. Найменший пріоритет має негативне тестування в рутині `routine1`, а найвище - в `routine5` - перевірка того, що враховується числове відхилення. 
+Всі тест рутини розташовано в порядку пріоритету виконання. Найменший пріоритет має негативне тестування в рутині `routine1`, а найвище - в `routine5` - перевірка того, що враховується числове відхилення.
 
 ### Тестування з урахуванням пріоритету рутин
 
@@ -126,19 +123,19 @@ wTester.test( Self.name );
 Проведіть повне тестування використавши команду
 
 ```
-tst Sum.test.js rapidity:1
+tst .imply rapidity:1 .run Sum.test.js
 ```
 
 Порівняйте з указаними результатами.
 
 <details>
-  <summary><u>Вивід команди <code>tst Sum.test.js rapidity:1</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply rapidity:1 .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Sum.test.js rapidity:1
+[user@user ~]$ tst .imply rapidity:1 .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /.../Sum.test.js:60
-      
+
       Passed test routine ( Sum / routine1 ) in 0.075s
       Passed test routine ( Sum / routine2 ) in 0.043s
       Passed test routine ( Sum / routine3 ) in 0.037s
@@ -152,7 +149,6 @@ Running test suite ( Sum ) ..
 
 
   Testing ... in 1.575s ... ok
-
 ```
 
 </details>
@@ -160,13 +156,13 @@ Running test suite ( Sum ) ..
 Утиліта протестувала всі п'ять тест перевірок. Результат тестування - пройдене, час виконання - 1.575s.
 
 <details>
-  <summary><u>Вивід команди <code>tst Sum.test.js</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Sum.test.js 
+[user@user ~]$ tst .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /.../Sum.test.js:60
-      
+
       Passed test routine ( Sum / routine3 ) in 0.054s
       Passed test routine ( Sum / routine4 ) in 0.047s
       Passed test routine ( Sum / routine5 ) in 0.038s
@@ -178,7 +174,6 @@ Running test suite ( Sum ) ..
 
 
   Testing ... in 1.480s ... ok
-
 ```
 
 </details>
@@ -188,13 +183,13 @@ Running test suite ( Sum ) ..
 В звіті указано, що пройдено тестування в рутинах від `routine3` до `routine5`. В рутині `routine3` опція не указана, тож, використано значення за замовчуванням.
 
 <details>
-  <summary><u>Вивід команди <code>tst Sum.test.js rapidity:5</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply rapidity:5 .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Sum.test.js rapidity:5
+[user@user ~]$ tst .imply rapidity:5 .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /.../Sum.test.js:60
-      
+
       Passed test routine ( Sum / routine5 ) in 0.056s
 
     Passed test checks 1 / 1
@@ -204,12 +199,11 @@ Running test suite ( Sum ) ..
 
 
   Testing ... in 1.335s ... ok
-
 ```
 
 </details>
 
-Уявіть, що потрібно провести тестування лише основного функціоналу, тобто, зі значенням `rapidity:5`. Введіть команду `tst Sum.test.js rapidity:5` і порівняйте результати.
+Уявіть, що потрібно провести тестування лише основного функціоналу, тобто, зі значенням `rapidity:5`. Введіть команду `tst .imply rapidity:5 .run Sum.test.js ` і порівняйте результати.
 
 Утиліта протестувала рутину `routine5`, час проходження тесту 1.335s. При різниці в чотири перевірки, час виконання скоротився на 0.2s. Таким чином опція `rapidity` дозволяє сортувати рутини за пріоритетом і проводити тестування з різною швидкістю.
 

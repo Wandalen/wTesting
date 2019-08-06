@@ -219,7 +219,7 @@ The report shows that only one `bufferFrom` test routine was tested. As part of 
 
 ### Group testing
 
-Testing a set of test suites requires [globally installed](Installation.md) utility `Testing`. To run the tests specify the directory with the test files after entering `tst`.
+Testing a set of test suites requires [globally installed](Installation.md) utility `Testing`. To run the tests specify the directory with the test files after entering `tst .run`.
 
 Run the test in the `proto` directory by entering the command
 
@@ -232,19 +232,6 @@ tst .run proto
 
 ```
 [user@user ~]$ tst .run proto
-
-Running test suite ( Tools/base/l1/Long ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
-
-      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.145s
-      Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.073s
-      Passed test routine ( Tools/base/l1/Long / bufferRetype ) in 0.071s
-      ...
-
-    Passed test checks 4293 / 4293
-    Passed test cases 1891 / 1891
-    Passed test routines 173 / 173
-    Test suite ( Tools/base/l1/Long ) ... in 44.598s ... ok
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
     at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
@@ -272,6 +259,19 @@ Running test suite ( Tools/base/l1/Long ) ..
     Passed test cases 80 / 80
     Passed test routines 10 / 10
     Test suite ( Tools/base/l1/Entity ) ... in 1.089s ... ok
+
+    Running test suite ( Tools/base/l1/Long ) ..
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+
+      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.145s
+      Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.073s
+      Passed test routine ( Tools/base/l1/Long / bufferRetype ) in 0.071s
+      ...
+
+    Passed test checks 4293 / 4293
+    Passed test cases 1891 / 1891
+    Passed test routines 173 / 173
+    Test suite ( Tools/base/l1/Long ) ... in 44.598s ... ok
 
     Running test suite ( Tools/base/l1/Map ) ..
     at  /.../sources/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034

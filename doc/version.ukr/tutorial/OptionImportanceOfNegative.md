@@ -311,3 +311,5 @@ Failed test routine ( Join / routine2 ) in 0.051s
 - Опцію `importanceOfNegative` краще використовувати в комбінації з опцією `verbosity`.
 - При значенні `0` опція `importanceOfNegative` обмежує вивід інформації про помилки.
 - При відключенні виводу опцією `verbosity:0` можна отримати звіт встановивши опцію `importanceOfNegative` зі значенням від `3` і вище.
+
+[Повернутись до змісту](../README.md#tutorials)

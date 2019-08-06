@@ -2,9 +2,7 @@
 
 Регулювання часу на завершення виконання асинхронних перевірок.
 
-Встановлює затримку між завершенням тест сюіта і запуском наступного.
-
-Опція призначена для завершення виконання перевірок з асинхронними функціями. Вказується в мілісекундах. За замовчуванням встановлено 500мс.
+Опція встановлює затримку між завершенням тест сюіта і запуском наступного. Призначена для завершення виконання перевірок з асинхронними функціями. Вказується в мілісекундах. За замовчуванням встановлено 500мс.
 
 <details>
   <summary><u>Структура файлів</u></summary>
@@ -18,7 +16,6 @@ sanitareTime
      ├── Sum.js
      ├── Sum.test.js
      └── package.json
-
 ```
 
 </details>
@@ -35,7 +32,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 };
-
 ```
 
 </details>
@@ -50,7 +46,6 @@ module.exports.multiply = function( a, b )
 {
   return Number( a ) * Number( b );
 };
-
 ```
 
 </details>
@@ -65,7 +60,6 @@ module.exports.sum = function( a, b )
 {
   return Number( a ) + Number( b );
 };
-
 ```
 
 </details>
@@ -74,13 +68,12 @@ module.exports.sum = function( a, b )
 
 ### Тестові файли
 
-Для тестування окремих рутин були створені тестові файли. Їх назва починається як і назва файла з рутиною і містить суфікс `.test` щоб утиліта могла виконати тестування. 
+Для тестування окремих рутин були створені тестові файли. Їх назва починається як і назва файла з рутиною і містить суфікс `.test` щоб утиліта могла виконати тестування.
 
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
 ```js    
-
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -94,7 +87,6 @@ function routine1( test )
 
   test.case = 'fail';
   test.identical( Join.join( 1, 3 ), 13 );
-
 }
 
 //
@@ -113,7 +105,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -152,7 +143,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );                            
-
 ```
 
 </details>
@@ -191,7 +181,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );  
-
 ```
 
 </details>
@@ -211,22 +200,21 @@ wTester.test( Self.name );
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
 
 Внесіть приведений код з залежностями для тестування. Їх завантаження здійснюється командою `npm install` в директорії модуля.
 
-### Тестування 
+### Тестування
 
 При тестуванні розробник може встановити очікуваний час за який рутина з асинхронною функцією може викинути помилку.
 
 <details>
-  <summary><u>Вивід команди <code>tst . sanitareTime:1000</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply sanitareTime:1000 .run .</code></u></summary>
 
 ```
-[user@user ~]$ tst . sanitareTime:1000
+[user@user ~]$ tst .imply sanitareTime:1000 .run .
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
 
@@ -261,16 +249,17 @@ Running test suite ( Join ) ..
 
 
   Testing ... in 2.695s ... failed
-
 ```
 
 </details>
 
-Виконайте тестування всіх рутин в директорії `testOptions` командою `tst . sanitareTime:1000`. Це встановить затримку між виконанням рутин в одну секунду. Порівняйте результат з приведеним.
+Виконайте тестування всіх рутин в директорії `testOptions` командою `tst .imply sanitareTime:1000 .run .`. Це встановить затримку між виконанням рутин в одну секунду. Порівняйте результат з приведеним.
 
-Всі тести були виконані за 2.695s з урахуванням затримки в одну секунду між окремими тест сюітами. На проходження окремого тест сюіту витрачався час менший від 0.250s. 
+Всі тести були виконані за 2.695s з урахуванням затримки в одну секунду між окремими тест сюітами. На проходження окремого тест сюіту витрачався час менший від 0.250s.
 
 ### Підсумок
 
 - Опція `sanitareTime` призначена для встановлення затримки між завершенням тестування однієї тест рутини і початком наступної.
 - Час затримки призначений для завершення виконання перевірок асинхронних рутин.
+
+[Повернутись до змісту](../README.md#tutorials)

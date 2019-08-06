@@ -14,7 +14,6 @@ timing
    ├── Join.js
    ├── Join.test.js
    └── package.json
-
 ```
 
 </details>
@@ -33,7 +32,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 };
-
 ```
 
 </details>
@@ -42,7 +40,7 @@ module.exports.join = function( a, b )
 
 ### Тестовий файл
 
-Тестування рутини здійснюється в файлі `Join.test.js`. 
+Тестування рутини здійснюється в файлі `Join.test.js`.
 
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
@@ -76,7 +74,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -96,27 +93,26 @@ wTester.test( Self.name );
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
 
 Внесіть приведений код з залежностю для тестування. Завантаження залежностей здійснюється командою `npm install` в директорії модуля.
 
-### Використання опції 
+### Використання опції
 
 Опція має два значення. Для використання значення за замовчуванням, введіть команду без опції
 
 ```
-tst Join.test.js
+tst .run Join.test.js
 ```
 Порівняйте вивід звіту тестування.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js
+[user@user ~]$ tst .run Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:26
 
@@ -129,17 +125,16 @@ Running test suite ( Join ) ..
 
 
   Testing ... in 1.270s ... ok
-
 ```
 
 </details>
 
 Після виконання тест сюіту звіт містить інформацію щодо часу проходження тест рутин, тест сюіту і загальний час виконання.
 
-  <summary><u>Вивід команди <code>tst Join.test.js timing:0</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply timing:0 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js timing:0
+[user@user ~]$ tst .imply timing:0 .run Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:26
 
@@ -152,12 +147,11 @@ Running test suite ( Join ) ..
 
 
   Testing ... ok
-
 ```
 
 </details>
 
-Виконайте тестування вимкнувши вивід часу. Для цього введіть команду `tst Join.test.js timing:0`.
+Виконайте тестування вимкнувши вивід часу. Для цього введіть команду `tst .imply timing:0 .run Join.test.js`.
 
 Порівнявши з попереднім виводом видно, що звіт не містить часу проходження тест сюіту і загального часу виконання тесту. Час проходження тест рутин указується.
 
@@ -166,3 +160,5 @@ Running test suite ( Join ) ..
 - Опція `timing` призначена для ввімкнення виводу часу тестування в звіті.
 - За замовчуванням утиліта виводить інформацію про час тестування.
 - При значенні `timing:0` звіт не містить інформації про час виконання окремих тест сюітів і загальний час тестування.
+
+[Повернутись до змісту](../README.md#tutorials)

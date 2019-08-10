@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-console.log( 'file.js' );
-=======
-## How to read a report and group test checks
+# How to read a report and group test checks
 
 How to read a test report and group the test checks in groups and test case. How the test suite content is displayed in the report.
 
@@ -13,7 +10,6 @@ report
    ├── Join.js
    ├── Join.test.js
    └── package.json
-
 ```
 
 </details>
@@ -30,7 +26,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 }
-
 ```
 
 </details>
@@ -97,7 +92,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -117,7 +111,6 @@ In the given code two dependencies are injected. The first one is the `Testing` 
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
@@ -131,7 +124,7 @@ There is a correspondence between the structure of the test file and the output 
 Run the test in the `Join.test.js` file by entering the command
 
 ```
-tst Join.test.js verbosity:5
+tst .imply verbosity:5 .run Join.test.js
 ```
 
 The `verbosity` option sets the amount of output information. Learn more about this option in the tutorial [control of verbosity](Verbosity.md).
@@ -152,7 +145,6 @@ If nesting is used, the line of the report of the passed test case looks like:
 
 ```
 Test check ( Join / routine1 / string > trivial # 1) ... ok
-
 ```
 
 This line indicates that the test has been passed, it has the number 1. The string in the parenthesis indicates the path to test check: test suite `Join` / routine `routine1` / group of test cases `string` > test case `trivial`. Accordingly, the `>` symbol is used to denote the nesting of the test case.
@@ -208,7 +200,6 @@ function routine1( test )
 
   test.close( 'mixed' );
 
-
 }
 
 //
@@ -227,7 +218,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -236,7 +226,7 @@ Replace the content of the `Join.test.js` file with the code above.
 
 In the file, the test case `mixed` has been changed, the line `test.will = 'str_num'` is added to it. This line represents the name of the test check. The expected value has the error, because in the `Join.join` routine passes the values `a` and `1`, but the test check expects the value `a2`.
 
-To get the test report, enter `tst Join.test.js v:5`.
+To get the test report, enter `tst .imply v:5 .run Join.test.js`.
 
 ##### Test report for error in test check
 
@@ -263,4 +253,5 @@ The result of test suite report and the overall test result are considered to be
 - The console output of failed test checks can contain information about the difference in the expected and received values, and a part of test suite code with this test check.
 - The test result will be `passed` if all tests were successful. Even after one failed test, the test result will be `failed`.
 - By using the error information, the developer can immediately find the part of the code that was broken.
->>>>>>> 20168db59aea61cb544afa38987b0216ddc3fac1
+
+[Back to content](../README.md#Tutorials)

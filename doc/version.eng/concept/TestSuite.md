@@ -22,4 +22,4 @@ By default, each test routine of a test suite is executed one-by-one from the fi
 
 The figure shows a section of code with a test suite definition. The test suite is called `Join` and has `silencing` [option](./tutorial/TestOptions.md). In this test suite, the first tested routine is `routine1` and the second and the last one is `routine2`.
 
-[Return to content](../README.md#Concepts)
+[Back to content](../README.md#Concepts)

@@ -2,7 +2,7 @@
 
 How to get information about test suites.
 
-To get a list of test suites, the `suites.list` scenario is used. It is used to search for test files in the specified directory. Test files have the suffix `.test`.
+To get a list of test suites, the `.suites.list` command is used. It is used to search for test files in the specified directory. Test files have the suffix `.test`.
 
 ### Downloading
 
@@ -20,7 +20,6 @@ wTools
    ├── sample
    ├── ...
    └── package.json
-
 ```
 
 </details>
@@ -32,16 +31,16 @@ The module code, along with its tests, is located in the `proto` directory. Also
 Enter the command:
 
 ```
-tst ./proto scenario:suites.list
+tst .suites.list ./proto
 ```
 
 The utility should scan the `proto` directory and displays a list of test suites.
 
 <details>
-  <summary><u>Command output <code>tst ./proto scenario:suites.list</code></u></summary>
+  <summary><u>Command output <code>tst .suites.list ./proto</code></u></summary>
 
 ```
-[user@user ~]$ tst ./proto scenario:suites.list
+[user@user ~]$ tst .suites.list ./proto
 
 /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
@@ -53,7 +52,6 @@ The utility should scan the `proto` directory and displays a list of test suites
 /.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
 /.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
 9 test suites
-
 ```
 
 </details>
@@ -64,10 +62,12 @@ Information about the test suite includes the path to the test file, its name, a
 
 In the `Tools` module, all test suites are enabled, so they can be run (`enabled:1` output). Test files that are disconnected from testing have the status `enabled:0`.
 
-If you run the command `tst ./proto/dwtools/abase/l1.test scenario:suites.list`, the utility should list the test files in this directory `./proto/dwtools/abase/l1.test`. There are eight test files in it.
+If you run the command `tst .suites.list ./proto/dwtools/abase/l1.test`, the utility should list the test files in this directory `./proto/dwtools/abase/l1.test`. There are eight test files in it.
 
 ### Summary
 
-- The `suites.list` scenario is used to get a list of test suites.
+- The `.suites.list` command is used to get a list of test suites.
 - The utility searches for test suites in the specified directory at all levels of nesting.
 - The suites test available for testing has the status `enabled:1` and disabled - `enabled:0`.
+
+[Back to content](../README.md#Tutorials)

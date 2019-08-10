@@ -10,7 +10,6 @@ report
    ├── Join.js
    ├── Join.test.js
    └── package.json
-
 ```
 
 </details>
@@ -27,7 +26,6 @@ module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
 }
-
 ```
 
 </details>
@@ -51,7 +49,6 @@ let Join = require( './Join.js' );
 
 function routine1( test )
 {
-
   test.open( 'string' );
 
     test.case = 'trivial';
@@ -75,7 +72,6 @@ function routine1( test )
     test.identical( Join.join( 'a', 1 ), 'a1' );
 
   test.close( 'mixed' );
-
 }
 
 //
@@ -94,7 +90,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -114,7 +109,6 @@ wTester.test( Self.name );
     "wTesting": ""
   }
 }
-
 ```
 
 </details>
@@ -128,7 +122,7 @@ wTester.test( Self.name );
 Запустіть тестування в файлі `Join.test.js`, виконавши команду
 
 ```
-tst Join.test.js verbosity:5
+tst .imply verbosity:5 .run Join.test.js
 ```
 
 Опцією `verbosity` встановлено кількість виводу інформації. Детальніше про опцію можете дізнатись в туторіалі про [контроль рівня вербальності](Verbosity.md).
@@ -179,7 +173,6 @@ let Join = require( './Join.js' );
 
 function routine1( test )
 {
-
   test.open( 'string' );
 
     test.case = 'trivial';
@@ -204,8 +197,6 @@ function routine1( test )
     test.identical( Join.join( 'a', 1 ), 'a2' );
 
   test.close( 'mixed' );
-
-
 }
 
 //
@@ -224,7 +215,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
-
 ```
 
 </details>
@@ -233,7 +223,7 @@ wTester.test( Self.name );
 
 В файлі змінено тест кейс `mixed` - до нього додано рядок `test.will = 'str_num'`, котрий позначає назву перевірки. В перевірку було внесено помилку в очікуваному значенні - рутині `Join.join` передано значення `a` i `1`, а очікується `a2`.
 
-Для отримання звіту тестування введіть команду `tst Join.test.js v:5`.
+Для отримання звіту тестування введіть команду `tst .imply v:5 .run Join.test.js`.
 
 ##### Звіт тестування при помилці в тест перевірці
 
@@ -260,3 +250,5 @@ wTester.test( Self.name );
 - Звіт по проваленим перевіркам може містити інформацію щодо різниці в очікуваному і отриманому значенні, частину коду тест сюіту з проваленою перевіркою.
 - Для того, щоб результат тестування був 'пройдений' потрібно, щоб всі тести були пройдені успішно. Навіть через одну провалену тест перевірку результат тестування буде 'провалений'.
 - Використовуючи інформацію про помилку розробник може відразу знайти частину коду, що була зламана.
+
+[Повернутись до змісту](../README.md#tutorials)

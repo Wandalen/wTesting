@@ -18,7 +18,7 @@ The `-g` attribute indicates a global installation of the utility.
 Once installed, it's possible to run the existing test suites by the command:
 
 ```
-tst dir
+tst .run dir
 ```
 
 `Testing` will find all test suites in the `dir` directory and execute them in turn.
@@ -27,7 +27,9 @@ tst dir
 
 `Testing` can be installed locally.
 
-`npm install wTesting`
+```
+npm install wTesting
+```
 
 But at the same time, executing commands of the utility will become impossible. Therefore, a group run is not possible and each test suite should be run separately.
 
@@ -43,4 +45,4 @@ node dir/TestSuite2.test.js
 - `wTesting` can be installed locally and globally.
 - Nodejs is required for `wTesting`.
 
-[Return to content](../README.md#Tutorials)
+[Back to content](../README.md#Tutorials)

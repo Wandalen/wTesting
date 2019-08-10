@@ -19,32 +19,31 @@
 Введіть команду
 
 ```
-tst Join.test.js verbosity:1
+tst .imply verbosity:1 .run Join.test.js
 ```
 
 Порівняйте результат виводу з приведеним.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js verbosity:1</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply verbosity:1 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js verbosity:1
+[user@user ~]$ tst .imply verbosity:1 .run Join.test.js
 
   Testing ... in 0.278s ... failed
-
 ```
 
 </details>
 
 При значенні `verbosity:1` в консоль виведено один рядок з інфрмацією про те, як і за який час тест було пройдено чи провалено. Якщо утиліта тестувала б групу тест сюітів, то вивід містив би один рядок із загальним підсумком.
 
-Підвищіть рівень вербальності до `4`. Для цього виконайте команду `tst Join.test.js v:4` зі скороченою формою запису опції. Порівняйте з виводом приведеним далі.
+Підвищіть рівень вербальності до `4`. Для цього виконайте команду `tst .imply v:4 .run Join.test.js` зі скороченою формою запису опції. Порівняйте з виводом приведеним далі.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js v:4</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply v:4 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js v:4
+[user@user ~]$ tst .imply v:4 .run Join.test.js
 
   Includes tests from : /.../testCreation/Join.test.js
 
@@ -68,20 +67,19 @@ tst Join.test.js verbosity:1
   Passed test routines 1 / 2
   Passed test suites 0 / 1
   Testing ... in 0.344s ... failed
-
 ```
 
 </details>
 
 В консолі виводиться інформація про проходження тесту рутиною `routine1` та провал тесту в рутині `routine2`. Також, указано, що тест перевірка тест кейсу `fail` другої тест рутини провалена. Вивід містить звіт по тест сюіту і загальний звіт. Так як тестується лише один тест сюіт, то загальний звіт дублює звіт по тест сюіту `Join`.
 
-Введіть команду `tst Join.test.js verbosity:6`. Перегляньте вивід та порівняйте з приведеним.
+Введіть команду `tst .imply verbosity:6 .run Join.test.js`. Перегляньте вивід та порівняйте з приведеним.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js verbosity:6</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply verbosity:6 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js verbosity:6
+[user@user ~]$ tst .imply verbosity:6 .run Join.test.js
 Includes tests from : /.../testCreation/Join.test.js
 
 Tester Settings :
@@ -164,8 +162,6 @@ Tester Settings :
   Passed test routines 1 / 2
   Passed test suites 0 / 1
   Testing ... in 0.389s ... failed
-
-
 ```
 
 </details>
@@ -193,13 +189,13 @@ Tester Settings :
 ```
 яка вказує на різницю між отриманим і очікуваним значеннями.
 
-Запустіть на тестування рутину `routine2` з найвищим рівнем вербальності. Використайте команду `tst Join.test.js routine:routine2 v:9`.
+Запустіть на тестування рутину `routine2` з найвищим рівнем вербальності. Використайте команду `tst .imply routine:routine2 v:9 .run Join.test.js`.
 
 <details>
-  <summary><u>Вивід команди <code>tst Join.test.js routine:routine2 v:9</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply routine:routine2 v:9 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Join.test.js routine:routine2 v:9
+[user@user ~]$ tst .imply routine:routine2 v:9 .run Join.test.js
 Includes tests from : /.../testCreation/Join.test.js
 
 Tester Settings :
@@ -313,7 +309,6 @@ Tester Settings :
   Passed test routines 0 / 1
   Passed test suites 0 / 1
   Testing ... in 0.323s ... failed
-
 ```
 
 </details>
@@ -335,14 +330,14 @@ Tester Settings :
 | Провалені тест перевірки                  | - | - | - | - | + | + | + | + | + | + |
 | Успішно пройдені тест перевірки           | - | - | - | - | - | + | + | + | + | + |
 | Опції тестування                          | - | - | - | - | - | + | + | + | + | + |
-| Різниця між отриманим і очікуваним значенням                                                                                                   | - | - | - | - | - | + | + | + | + | + |
+| Різниця між отриманим і очікуваним значенням                                                                                                                        | - | - | - | - | - | + | + | + | + | + |
 | Код проваленої тест перевірки             | - | - | - | - | - | + | + | + | + | + |
 | Код успішно пройденої тест перевірки      | - | - | - | - | - | - | + | + | + | + |
-| Адреса проваленої тест перевірки                                                                                                               | - | - | - | - | - | + | + | + | + | + |
-| Адреса успішно пройденої тест перевірки                                                                                                         | - | - | - | - | - | - | + | + | + | + |
+| Адреса проваленої тест перевірки                                                                                                                        | - | - | - | - | - | + | + | + | + | + |
+| Адреса успішно пройденої тест перевірки                                                                                                                        | - | - | - | - | - | - | + | + | + | + |
 | Опції і налаштування тест сюіта           | - | - | - | - | - | - | - | + | + | + |
-| Виділення кольором виводу в консоль об'єкта тестування                                                                                           | - | - | - | - | - | - | - | + | + | + |
-| Виділення кольором виводу в консоль тестових рутин                                                                                               | - | - | - | - | - | - | - | + | + | + |
+| Виділення кольором виводу в консоль об'єкта тестування                                                                                                                       | - | - | - | - | - | - | - | + | + | + |
+| Виділення кольором виводу в консоль тестових рутин                                                                                                                            | - | - | - | - | - | - | - | + | + | + |
 
 [Виділення жовтим кольором виводу в консоль](OptionSilencing.md) об'єкта, що тестується або вивовду тестових рутин відбувається при вербальності від 7-го рівня.
 
@@ -355,3 +350,5 @@ Tester Settings :
 - По замовчуванню опція `verbosity` має значення `4`.
 - При використанні значень від `5` і більше, утиліта виводить детальніший від звичайного звіт.
 - При значеннях від `7` вивід об'єкта, що тестується виділяється жовтим кольором.
+
+[Повернутись до змісту](../README.md#tutorials)

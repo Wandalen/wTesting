@@ -36,16 +36,16 @@ It installs module dependencies.
 To get information about available test suites, enter the command
 
 ```
-tst . scenario:suites.list
+tst .suites.list
 ```
 
 <details>
-  <summary><u>Command output <code>tst . scenario:suites.list</code></u></summary>
+  <summary><u>Command output <code>tst .suites.list</code></u></summary>
 
 ```
-[user@user ~]$ tst . scenario:suites.list
+[user@user ~]$ tst .suites.list
 
-/.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
@@ -56,7 +56,6 @@ tst . scenario:suites.list
 /.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
 /.../wTools/sample/Sample.test.s:92 - enabled
 10 test suites
-
 ```
 
 </details>
@@ -70,95 +69,93 @@ The testing is performed by executing the `JavaScript` file with the test suite.
 Enter the command:
 
 ```
-node proto/dwtools/abase/l1.test/Array.test.s
+node proto/dwtools/abase/l1.test/Long.test.s
 ```
 
 As a result, the test will be performed, and a report will be displayed.
 
 <details>
-  <summary><u>Command output <code>node proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
+  <summary><u>Command output <code>node proto/dwtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ node proto/dwtools/abase/l1.test/Array.test.s
+[user@user ~]$ node proto/dwtools/abase/l1.test/Long.test.s
 
-Running test suite ( Tools/base/l1/Array ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
+Running test suite ( Tools/base/l1/Long ) ..
+    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
 
-      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
-      Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
-      Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
-      Passed test routine ( Tools/base/l1/Array / bufferRawFrom ) in 0.118s
-      Passed test routine ( Tools/base/l1/Array / bufferBytesFrom ) in 0.104s
-      Passed test routine ( Tools/base/l1/Array / bufferNodeFrom ) in 0.180s
-      Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
-      Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
-      Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
+      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.358s
+      Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.091s
+      Passed test routine ( Tools/base/l1/Long / bufferRetype ) in 0.080s
+      Passed test routine ( Tools/base/l1/Long / bufferRawFrom ) in 0.118s
+      Passed test routine ( Tools/base/l1/Long / bufferBytesFrom ) in 0.104s
+      Passed test routine ( Tools/base/l1/Long / bufferNodeFrom ) in 0.180s
+      Passed test routine ( Tools/base/l1/Long / bufferRawFromTyped ) in 0.080s
+      Passed test routine ( Tools/base/l1/Long / arrayIs ) in 0.109s
+      Passed test routine ( Tools/base/l1/Long / longIs ) in 0.122s
 
       ...
 
-      Passed test routine ( Tools/base/l1/Array / arraySetContainAny ) in 0.608s
-      Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.422s
+      Passed test routine ( Tools/base/l1/Long / arraySetContainAny ) in 0.608s
+      Passed test routine ( Tools/base/l1/Long / arraySetIdentical ) in 0.422s
 
     Passed test checks 4293 / 4293
     Passed test cases 1891 / 1891
     Passed test routines 173 / 173
-    Test suite ( Tools/base/l1/Array ) ... in 41.251s ... ok
+    Test suite ( Tools/base/l1/Long ) ... in 41.251s ... ok
 
 Testing ... in 41.851s ... ok
-
 ```
 
 </details>
 
-The test object of the suite `Array.test.s` is the` _.array * `and` _.buffer * `routines for handling arrays and buffers.
+The test object of the suite `Long.test.s` is the` _.array*` and `_.buffer*` routines for handling arrays and buffers.
 
-The report shows that all tests were successful: `Test suite (Tools/base/l1/Array) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891 test cases. The detail of the report depends on [the verbose level] (Verbosity.md).
+The report shows that all tests were successful: `Test suite (Tools/base/l1/Long) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891 test cases. The detail of the report depends on [the verbose level](Verbosity.md).
 
 Duration of the first test routine `bufferFrom` is 0.358 seconds, and according to the report, it, like the rest, was passed. The passed tests in the report indicate green. Failed tests indicate red. It's enough one failed test check to consider the entire test suite has failed.
 
 The second way is to use the `tst` command. Enter the command
 ```
-tst proto/dwtools/abase/l1.test/Array.test.s
+tst .run proto/dwtools/abase/l1.test/Long.test.s
 ```
 
 <details>
-  <summary><u>Command output <code>tst proto/dwtools/abase/l1.test/Array.test.s</code></u></summary>
+  <summary><u>Command output <code>tst .run proto/dwtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s
+[user@user ~]$ tst .run proto/dwtools/abase/l1.test/Long.test.s
 
-Running test suite ( Tools/base/l1/Array ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
+Running test suite ( Tools/base/l1/Long ) ..
+    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
 
-     Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.358s
-      Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.091s
-      Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.080s
-      Passed test routine ( Tools/base/l1/Array / bufferRawFrom ) in 0.118s
-      Passed test routine ( Tools/base/l1/Array / bufferBytesFrom ) in 0.104s
-      Passed test routine ( Tools/base/l1/Array / bufferNodeFrom ) in 0.180s
-      Passed test routine ( Tools/base/l1/Array / bufferRawFromTyped ) in 0.080s
-      Passed test routine ( Tools/base/l1/Array / arrayIs ) in 0.109s
-      Passed test routine ( Tools/base/l1/Array / longIs ) in 0.122s
+     Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.358s
+      Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.091s
+      Passed test routine ( Tools/base/l1/Long / bufferRetype ) in 0.080s
+      Passed test routine ( Tools/base/l1/Long / bufferRawFrom ) in 0.118s
+      Passed test routine ( Tools/base/l1/Long / bufferBytesFrom ) in 0.104s
+      Passed test routine ( Tools/base/l1/Long / bufferNodeFrom ) in 0.180s
+      Passed test routine ( Tools/base/l1/Long / bufferRawFromTyped ) in 0.080s
+      Passed test routine ( Tools/base/l1/Long / arrayIs ) in 0.109s
+      Passed test routine ( Tools/base/l1/Long / longIs ) in 0.122s
 
       ...
 
-      Passed test routine ( Tools/base/l1/Array / arraySetContainAny ) in 0.608s
-      Passed test routine ( Tools/base/l1/Array / arraySetIdentical ) in 0.422s
+      Passed test routine ( Tools/base/l1/Long / arraySetContainAny ) in 0.608s
+      Passed test routine ( Tools/base/l1/Long / arraySetIdentical ) in 0.422s
 
     Passed test checks 4293 / 4293
     Passed test cases 1891 / 1891
     Passed test routines 173 / 173
-    Test suite ( Tools/base/l1/Array ) ... in 40.622s ... ok
+    Test suite ( Tools/base/l1/Long ) ... in 40.622s ... ok
 
 
 
 Testing ... in 41.124s ... ok
-
 ```
 
 </details>
 
-Read the command as: find and run all tests in the `proto/dwtools/abase/l1.test/Array.test.s` directory. Compare the resulting output with the previous one. The last test report is similar to the previous. The difference in time, which can range from run to run
+Read the command as: find and run all tests in the `proto/dwtools/abase/l1.test/Long.test.s` directory. Compare the resulting output with the previous one. The last test report is similar to the previous. The difference in time, which can range from run to run
 
 ### Comparison of command input
 
@@ -168,7 +165,7 @@ node File.test.js
 ```
 or enter this path as an utility argument
 ```
-tst File.test.js
+tst .run File.test.js
 ```
 
 ### Testing one test routine
@@ -183,72 +180,58 @@ node path/to/TestSuite.js routine:someRoutine
 or
 
 ```
-tst path/to/TestSuite.js routine:someRoutine
+tst .imply routine:someRoutine .run path/to/TestSuite.js
 ```
 
 This command will run the test routine `someRoutine`  of the test suite `TestSuite.js`.
 
 Running the test with the name of the desired test routine in the `routine` option restricts the testing to the specified test routine. The rest of the test routines do not run. The `routine` option has a shortened entry form -` r`.
 
-Run the `bufferFrom`  routine of ` Array.test.s` test suite. To run the test, enter the command
+Run the `bufferFrom` routine of ` Long.test.s` test suite. To run the test, enter the command
 
 ```
-tst proto/dwtools/abase/l1.test/Array.test.s routine:err
+tst .imply routine:bufferFrom .run proto/dwtools/abase/l1.test/Long.test.s
 ```
 
 <details>
-  <summary><u>Command output <code>tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom</code></u></summary>
+  <summary><u>Command output <code>tst .imply routine:bufferFrom .run proto/dwtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst proto/dwtools/abase/l1.test/Array.test.s routine:bufferFrom
+[user@user ~]$ tst .imply routine:bufferFrom .run proto/dwtools/abase/l1.test/Long.test.s
 
-Running test suite ( Tools/base/l1/Array ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
+Running test suite ( Tools/base/l1/Long ) ..
+    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
 
-      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.220s
+      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.220s
 
     Passed test checks 18 / 18
     Passed test cases 18 / 18
     Passed test routines 1 / 1
-    Test suite ( Tools/base/l1/Array ) ... in 3.645s ... ok
+    Test suite ( Tools/base/l1/Long ) ... in 3.645s ... ok
 
 
   Testing ... in 5.164s ... ok
-
 ```
 
 </details>
 
-The report shows that only one `bufferFrom`  test routine was tested. As part of this routine test, 18th test checks were successfully passed in 18 test cases.
+The report shows that only one `bufferFrom` test routine was tested. As part of this routine test, 18th test checks were successfully passed in 18 test cases.
 
 ### Group testing
 
-Testing a set of test suites requires [globally installed](Installation.md) utility `Testing`. To run the tests specify the directory with the test files after entering `tst`.
+Testing a set of test suites requires [globally installed](Installation.md) utility `Testing`. To run the tests specify the directory with the test files after entering `tst .run`.
 
 Run the test in the `proto` directory by entering the command
 
 ```
-tst proto
+tst .run proto
 ```
 
 <details>
-  <summary><u>Command output <code>tst proto</code></u></summary>
+  <summary><u>Command output <code>tst .run proto</code></u></summary>
 
 ```
-[user@user ~]$ tst proto
-
-Running test suite ( Tools/base/l1/Array ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Array.test.s:19500
-
-      Passed test routine ( Tools/base/l1/Array / bufferFrom ) in 0.145s
-      Passed test routine ( Tools/base/l1/Array / bufferRelen ) in 0.073s
-      Passed test routine ( Tools/base/l1/Array / bufferRetype ) in 0.071s
-      ...
-
-    Passed test checks 4293 / 4293
-    Passed test cases 1891 / 1891
-    Passed test routines 173 / 173
-    Test suite ( Tools/base/l1/Array ) ... in 44.598s ... ok
+[user@user ~]$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
     at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
@@ -276,6 +259,19 @@ Running test suite ( Tools/base/l1/Array ) ..
     Passed test cases 80 / 80
     Passed test routines 10 / 10
     Test suite ( Tools/base/l1/Entity ) ... in 1.089s ... ok
+
+    Running test suite ( Tools/base/l1/Long ) ..
+    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+
+      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.145s
+      Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.073s
+      Passed test routine ( Tools/base/l1/Long / bufferRetype ) in 0.071s
+      ...
+
+    Passed test checks 4293 / 4293
+    Passed test cases 1891 / 1891
+    Passed test routines 173 / 173
+    Test suite ( Tools/base/l1/Long ) ... in 44.598s ... ok
 
     Running test suite ( Tools/base/l1/Map ) ..
     at  /.../sources/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
@@ -357,7 +353,6 @@ Running test suite ( Tools/base/l1/Array ) ..
 
 
   Testing ... in 75.676s ... ok
-
 ```
 
 </details>
@@ -369,12 +364,12 @@ A general summary of the tests is given in the last line: `Testing ... in 75.676
 To [get a list](Help.md) of test suites in the directory, use the command
 
 ```
-tst scenario:suites.list
+tst .suites.list
 ```
 
 ### Summary
 
-- To run the tests, use the `tst ./Suite.test.js` command or the `node ./Suite.test.js` command.
+- To run the tests, use the `tst .run ./Suite.test.js` command or the `node ./Suite.test.js` command.
 - It is possible to run a separate test suite, a separate test routine, or a set of test suites in the directory.
 - To test a set of files, you need to install the `Testing` utility globally.
 - Information about failed tests helps to find errors in the code of test object.

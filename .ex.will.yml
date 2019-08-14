@@ -7,7 +7,7 @@ about :
   version : "1.0.97"
   enabled : 1
   interpreters :
-  - nodejs >= 6.0.0
+  - nodejs >= 8.0.0
   - chrome >= 60.0.0
   - firefox >= 60.0.0
   keywords :

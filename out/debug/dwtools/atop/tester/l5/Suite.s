@@ -700,7 +700,6 @@ function _end( err )
   logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
 
-  debugger;
   if( suite._appExitCode && !_.appExitCode() )
   suite._appExitCode = _.appExitCode( suite._appExitCode );
 
@@ -721,8 +720,8 @@ function _end( err )
 
   /* */
 
-  if( suite.debug )
-  debugger;
+  // if( suite.debug )
+  // debugger;
 
   if( !wTester.activeSuites.length && !wTester.quedSuites.length )
   wTester._testingEndSoon();
@@ -920,20 +919,22 @@ function _reportEnd()
   let suite = this;
   let report = suite.report;
 
-  debugger;
   if( !report.appExitCode )
   report.appExitCode = _.appExitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   report.outcome = false;
 
-  if( suite.report.testCheckFails !== 0 )
+  if( report.testCheckFails !== 0 )
   report.outcome = false;
 
-  if( !( suite.report.testCheckPasses > 0 ) )
+  if( report.testRoutineFails !== 0 )
   report.outcome = false;
 
-  if( suite.report.errorsArray.length )
+  if( !( report.testCheckPasses > 0 ) )
+  report.outcome = false;
+
+  if( report.errorsArray.length )
   report.outcome = false;
 
   if( report.outcome === null )
@@ -971,27 +972,12 @@ function _reportIsPositive()
   let suite = this;
   let report = suite.report;
 
-  // let appExitCode = _.appExitCode();
-  // if( appExitCode !== undefined && appExitCode !== 0 )
-  // return false;
-
   if( !report )
   return false;
 
   suite._reportEnd();
 
   return !!report.outcome;
-
-  // if( suite.report.testCheckFails !== 0 )
-  // return false;
-  //
-  // if( !( suite.report.testCheckPasses > 0 ) )
-  // return false;
-  //
-  // if( suite.report.errorsArray.length )
-  // return false;
-  //
-  // return true;
 }
 
 // --
@@ -1192,7 +1178,7 @@ let Composes =
   accuracy : 1e-7,
   report : null,
 
-  debug : 0,
+  // debug : 0,
 
   override : _.define.own( {} ),
 

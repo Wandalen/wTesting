@@ -7,6 +7,12 @@ qqq :
   extend test coverage for _.entityIdentical, take into account BigInt
   extend test coverage for _.entityEquivalent, take into account BigInt
   extend test coverage for _.entityContain, take into account BigInt
+
+qqq :
+  implement test routine
+  3 test suites, first and third are ok, second has none test routines. general outcome should be fail
+  3 test routines, first and third are ok, second has none test routines. general outcome and test suite outcome should be fail
+
 */
 
 //
@@ -895,13 +901,13 @@ function identical( got, expected )
 
   /* */
 
-  if( !o2.iteration || o2.iteration.lastPath === undefined )
+  if( !o2.it || o2.it.lastPath === undefined )
   {
     debugger;
     outcome = false;
     trd.exceptionReport
     ({
-      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
     });
     return outcome;
@@ -914,7 +920,7 @@ function identical( got, expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : o2.iteration.lastPath,
+    path : o2.it.lastPath,
     usingExtraDetails : 1,
   });
 
@@ -994,13 +1000,13 @@ function notIdentical( got, expected )
 
   /* */
 
-  if( !o2.iteration || o2.iteration.lastPath === undefined )
+  if( !o2.it || o2.it.lastPath === undefined )
   {
     outcome = false;
 
     trd.exceptionReport
     ({
-      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
     });
 
@@ -1014,7 +1020,7 @@ function notIdentical( got, expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : o2.iteration.lastPath,
+    path : o2.it.lastPath,
     usingExtraDetails : 0,
   });
 
@@ -1103,12 +1109,12 @@ function equivalent( got, expected, options )
 
   /* */
 
-  if( !o2.iteration || o2.iteration.lastPath === undefined )
+  if( !o2.it || o2.it.lastPath === undefined )
   {
     outcome = false;
     trd.exceptionReport
     ({
-      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
     });
     return outcome;
@@ -1121,7 +1127,7 @@ function equivalent( got, expected, options )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : o2.iteration.lastPath,
+    path : o2.it.lastPath,
     usingExtraDetails : 1,
     accuracy : accuracy,
   });
@@ -1211,13 +1217,13 @@ function notEquivalent( got, expected, options )
 
   /* */
 
-  if( !o2.iteration || o2.iteration.lastPath === undefined )
+  if( !o2.it || o2.it.lastPath === undefined )
   {
     outcome = false;
 
     trd.exceptionReport
     ({
-      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
     });
 
@@ -1231,7 +1237,7 @@ function notEquivalent( got, expected, options )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : o2.iteration.lastPath,
+    path : o2.it.lastPath,
     usingExtraDetails : 1,
     accuracy : accuracy,
   });
@@ -1310,13 +1316,13 @@ function contains( got, expected )
 
   /* */
 
-  if( !o2.iteration || o2.iteration.lastPath === undefined )
+  if( !o2.it || o2.it.lastPath === undefined )
   {
     outcome = false;
 
     trd.exceptionReport
     ({
-      err : 'something wrong with entityIdentical, iterator misses lastPath',
+      err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
     });
 
@@ -1330,7 +1336,7 @@ function contains( got, expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    path : o2.iteration.lastPath,
+    path : o2.it.lastPath,
     usingExtraDetails : 1,
   });
 
@@ -1383,7 +1389,7 @@ function setsAreIdentical( got, expected )
     outcome : outcome,
     got : got,
     expected : expected,
-    // path : o2.iteration.lastPath, // xxx
+    // path : o2.it.lastPath, // xxx
     usingExtraDetails : 1,
   });
 

@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
-  _.include( 'wExternalFundamentals' );
+  _.include( 'wAppBasic' );
 
   var waitSync = require( 'wait-sync' );
 

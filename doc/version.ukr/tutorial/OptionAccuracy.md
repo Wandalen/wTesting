@@ -1,10 +1,10 @@
 # Опція accuracy
 
-Як врахувати точність обчислень при порівнянні числових значень. 
+Як врахувати точність обчислень при порівнянні числових значень.
 
 Опція встановлює допустиме числове відхилення при порівнянні числових значень. Кожна тест рутина може встановити власну похибку, яку ця опція не змінює.
 
-За замовчуванням встановлено `1е-7`.
+За замовчуванням встановлено відхилення в `1е-7`.
 
 <details>
   <summary><u>Структура файлів</u></summary>
@@ -14,7 +14,6 @@ accuracy
     ├── Sum.js
     ├── Sum.test.js
     └── package.json
-
 ```
 
 </details>
@@ -31,7 +30,6 @@ module.exports.sum = function( a, b )
 {
   return Number( a ) + Number( b );
 };
-
 ```
 
 </details>
@@ -83,28 +81,27 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );  
-
 ```
 
 </details>
 
-Помістіть в  файл `Sum.test.js` приведений вище код. 
+Помістіть в  файл `Sum.test.js` приведений вище код.
 
 Тест сюіт `Sum` включає дві рутини. В рутині `routine1` встановлена опція `accuracy` з допустимим відхиленням 0.01. В рутині `routine2` не встановлюється точність обчислення. В тест рутинах `routine1` i `routine2` використовується перевірка `equivalent` тому, що вона враховує числове відхилення.
 
-Проведіть тестування в тест сюіті виконавши команду 
+Проведіть тестування в тест сюіті виконавши команду
 
 ```
-tst Sum.test.js
+tst .run Sum.test.js
 ```
 
 Порівняйте з указаними результатами.
 
 <details>
-  <summary><u>Вивід команди <code>tst Sum.test.js</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Sum.test.js
+[user@user ~]$ tst .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:35
 
@@ -121,7 +118,6 @@ Running test suite ( Sum ) ..
 
 
   Testing ... in 0.347s ... failed
-
 ```
 
 </details>
@@ -131,10 +127,10 @@ Running test suite ( Sum ) ..
 Можливо змінити результат використавши опцію запуску `accuracy`.
 
 <details>
-  <summary><u>Вивід команди <code>tst Sum.test.js accuracy:2e-5</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply accuracy:1e-5 .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Sum.test.js accuracy:1e-5
+[user@user ~]$ tst .imply accuracy:1e-5 .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:35
 
@@ -148,12 +144,11 @@ Running test suite ( Sum ) ..
 
 
   Testing ... in 1.341s ... ok
-
 ```
 
 </details>
 
-Виконайте тестування в файлі `Sum.test.js` встановивши похибку значенням 2e-5. Для цього введіть команду `tst Sum.test.js accuracy:1e-5`. Порівняйте результати виводу.
+Виконайте тестування в файлі `Sum.test.js` встановивши похибку значенням `2e-5`. Для цього введіть команду `tst .imply accuracy:1e-5 .run Sum.test.js`. Порівняйте результати виводу.
 
 Тест пройдено успішно. Указана опція переписала значення відхилення за замовчуванням і перевірки в тест рутині `routine2` були пройдені. В цей же час, встановлене в тест рутині `routine1` відхилення не змінилось, інакше вона була б провалена.
 
@@ -162,3 +157,5 @@ Running test suite ( Sum ) ..
 - Опція `accuracy` встановлює допустиме числове відхилення при порівнянні числових аргументів.
 - Кожна тест рутина може мати власне числове відхилення.
 - Опція `accuracy` тест рутини має пріоритет над аналогічною опцією запуска і опцією тест сюіта.
+
+[Повернутись до змісту](../README.md#tutorials)

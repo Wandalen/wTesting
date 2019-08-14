@@ -14,7 +14,6 @@ shoulding
      ├── Multiply.js
      ├── Multiply.test.js
      └── package.json
-
 ```
 
 </details>
@@ -31,7 +30,6 @@ module.exports.multiply = function( a, b )
 {
   return Number( a ) * Number( b );
 };
-
 ```
 
 </details>
@@ -40,7 +38,7 @@ module.exports.multiply = function( a, b )
 
 ### Тестовий файл
 
-Назва тест файла починається як і назва файла з рутиною, вона містить суфікс `.test`, щоб утиліта могла виконати тестування. 
+Назва тест файла починається як і назва файла з рутиною, вона містить суфікс `.test`, щоб утиліта могла виконати тестування.
 
 <details>
     <summary><u>Код файла <code>Multiply.test.js</code></u></summary>
@@ -74,7 +72,6 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );                            
-
 ```
 
 </details>
@@ -106,16 +103,16 @@ wTester.test( Self.name );
 Опція має два значення. Перевірте роботу тестера при використанні значення за замовчуванням. Для цього введіть команду
 
 ```
-tst Multiply.test.js
+tst .run Multiply.test.js
 ```
 
 Порівняйте з приведеним виводом
 
 <details>
-  <summary><u>Вивід команди <code>tst Multiply.test.js</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run Multiply.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Multiply.test.js
+[user@user ~]$ tst .run Multiply.test.js
 Running test suite ( Multiply ) ..
     at  /.../Multiply.test.js:27
 
@@ -128,7 +125,6 @@ Running test suite ( Multiply ) ..
 
 
   Testing ... in 1.271s ... ok
-
 ```
 
 </details>
@@ -138,10 +134,10 @@ Running test suite ( Multiply ) ..
 В випадках, коли програма перевіряється на очікувану поведінку, краще пропустити негативні перевірки. Це можливо відлючивши перевірки з `should`.
 
 <details>
-  <summary><u>Вивід команди <code>tst Multiply.test.js shoulding:0</code></u></summary>
+  <summary><u>Вивід команди <code>tst .imply shoulding:0 .run Multiply.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst Multiply.test.js shoulding:0
+[user@user ~]$ tst .imply shoulding:0 .run Multiply.test.js
 Running test suite ( Multiply ) ..
     at  /.../Multiply.test.js:27
 
@@ -154,12 +150,11 @@ Running test suite ( Multiply ) ..
 
 
   Testing ... in 1.257s ... ok
-
 ```
 
 </details>
 
-Протестуйте роботу опції виконавши команду `tst Multiply.test.js shoulding:0`. Порівняйте результати виводу.
+Протестуйте роботу опції виконавши команду `tst .imply shoulding:0 .run Multiply.test.js`. Порівняйте результати виводу.
 
 В отриманому звіті зазначається дві пройдені перевірки, а перевірка `shouldThrowError` пропущена. Застосування опції скоротило час виконання рутини до 0.08s.
 
@@ -168,3 +163,5 @@ Running test suite ( Multiply ) ..
 - Опція `shoulding` призначена для вимкнення перевірок, що починаються на `should`.
 - Перевірки з `should` тестують поведінку модуля при нестандартному вводі.
 - При значенні `shoulding:0` утиліта перевіряє поведінку модуля в нормальних умовах.
+
+[Повернутись до змісту](../README.md#tutorials)

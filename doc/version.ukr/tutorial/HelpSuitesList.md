@@ -2,7 +2,7 @@
 
 Як отримати інформацію про тест-сюіти.
 
-Для отримання списку тест сюітів використовується сценарій `suites.list`. Він використовується для пошуку тест файлів в указаній директорії. Тест файли мають суфікс `.test`.
+Для отримання списку тест сюітів використовується команда `.suites.list`. Вона використовується для пошуку тест файлів в указаній директорії. Тест файли мають суфікс `.test`.
 
 ### Завантаження
 
@@ -20,7 +20,6 @@ wTools
    ├── sample
    ├── ...
    └── package.json
-
 ```
 
 </details>
@@ -32,20 +31,20 @@ wTools
 Виконайте команду
 
 ```
-tst ./proto scenario:suites.list
+tst .suites.list ./proto
 ```
 
 Утиліта просканує директорію `proto` і видасть список тест сюітів.
 
 <details>
-  <summary><u>Вивід команди <code>tst ./proto scenario:suites.list</code></u></summary>
+  <summary><u>Вивід команди <code>tst .suites.list ./proto</code></u></summary>
 
 ```
-[user@user ~]$ tst ./proto scenario:suites.list
+[user@user ~]$ tst .suites.list ./proto
 
-/.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
+/.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749 - enabled
 /.../wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558 - enabled
@@ -53,7 +52,6 @@ tst ./proto scenario:suites.list
 /.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
 /.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
 9 test suites
-
 ```
 
 </details>
@@ -64,10 +62,12 @@ tst ./proto scenario:suites.list
 
 В модулі `Tools` всі тест сюіти увімкнені тому можуть бути запущені на виконання - `enabled:1`. Тест файли, котрі вимкнені з тестування мають статус `enabled:0`.
 
-Якщо виконати команду `tst ./proto/dwtools/abase/l1.test scenario:suites.list`, то утиліта виведе список тест файлів в цій директорії `./proto/dwtools/abase/l1.test`. В ній вісім тест файлів.
+Якщо виконати команду `tst .suites.list ./proto/dwtools/abase/l1.test`, то утиліта виведе список тест файлів в цій директорії `./proto/dwtools/abase/l1.test`. В ній вісім тест файлів.
 
 ### Підсумок
 
-- Сценарій `suites.list` використовується щоб дізнатись список тест сюітів.
+- Команда `.suites.list` використовується щоб дізнатись список тест сюітів.
 - Утиліта веде пошук тест сюітів в указаній директорії на всіх рівнях вкладеності.
 - Тест сюіти, доступні для тестування мають статус `enabled:1`, а вимкнені - `enabled:0`.
+
+[Повернутись до змісту](../README.md#tutorials)

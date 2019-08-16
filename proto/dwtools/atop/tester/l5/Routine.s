@@ -1427,7 +1427,6 @@ function gt( got, than )
 {
   let trd = this;
   let outcome = got > than;
-  debugger;
 
   if( _.bigIntIs( got ) || _.bigIntIs( than ) )
   {

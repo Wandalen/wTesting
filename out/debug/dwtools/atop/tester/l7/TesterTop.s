@@ -7,16 +7,6 @@ let _ = _global.wTools;
 
 _.assert( _.mapIs( _realGlobal_.wTester ) );
 
-// if( !_.instanceIs( _realGlobal_.wTester ) && ! _.symbolIs( _realGlobal_.wTester ) )
-// _realGlobal_.wTester = Symbol.for( 'wTesterCli' );
-
-// if( typeof module !== 'undefined' )
-// {
-//
-//   require( '../MainBase.s' );
-//
-// }
-
 //
 
 let Parent = _realGlobal_.wTesterBasic;
@@ -42,8 +32,6 @@ function Exec()
 function exec()
 {
   let tester = this;
-
-  // tester.formAssociates();
 
   _.assert( _.instanceIs( tester ) );
   _.assert( arguments.length === 0 );
@@ -94,7 +82,7 @@ function _commandsMake()
   {
 
     'help' :                    { e : _.routineJoin( tester, tester.commandHelp ),                        h : 'Get help.' },
-    'imply' :                   { e : _.routineJoin( tester, tester.commandImply ),                       h : 'Change state or imply variable value.' },
+    'imply' :                   { e : _.routineJoin( tester, tester.commandImply ),                       h : 'Change state or imply value of a variable.' },
     'run' :                     { e : _.routineJoin( tester, tester.commandRun ),                         h : 'Run test suites found at a specified path.' },
     'suites list' :             { e : _.routineJoin( tester, tester.commandSuitesList ),                  h : 'Find test suites at a specified path.' },
 
@@ -194,10 +182,7 @@ function commandSuitesList( e )
   let fileProvider = tester.fileProvider;
   let path = tester.fileProvider.path;
   let logger = tester.logger;
-
   let request = _.strRequestParse( e.argument );
-
-  debugger;
 
   tester.appArgsRead({ subject : request.subject, propertiesMap : request.map });
   tester.scenarioSuitesList();
@@ -288,7 +273,6 @@ _realGlobal_[ Self.name ] = _global[ Self.name ] = Self;
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
 
-// if( _realGlobal_.wTester === Symbol.for( 'wTesterCli' ) )
 if( !_.instanceIs( _realGlobal_.wTester ) && !_.symbolIs( _realGlobal_.wTester ) )
 _realGlobal_.wTester = _global.wTester = new Self().form();
 

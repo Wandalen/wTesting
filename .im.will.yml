@@ -1,52 +1,88 @@
 
 submodule :
 
-  wConsequence :
-    path : npm:///wConsequence
+  wTools :
+    path : npm:///wTools
     enabled : 0
   wCopyable :
     path : npm:///wCopyable
     enabled : 0
+  wpathbasic :
+    path : npm:///wpathbasic
+    enabled : 0
+  wverbal :
+    path : npm:///wverbal
+    enabled : 0
   wFiles :
     path : npm:///wFiles
     enabled : 0
-  wLogger :
-    path : npm:///wLogger
-    enabled : 0
-  wProto :
-    path : npm:///wProto
-    enabled : 0
-  wTools :
-    path : npm:///wTools
-    enabled : 0
-  wcomparator :
-    path : npm:///wcomparator
-    enabled : 0
-  wexternalfundamentals :
-    path : npm:///wexternalfundamentals
+  wstarter :
+    path : npm:///wstarter
     enabled : 0
   wcommandsaggregator :
     path : npm:///wcommandsaggregator
     enabled : 0
-  winstancing :
-    path : npm:///winstancing
+  wcommandsconfig :
+    path : npm:///wcommandsconfig
     enabled : 0
-  wlooker :
-    path : npm:///wlooker
+  wstatestorage :
+    path : npm:///wstatestorage
+    enabled : 0
+  wstatesession :
+    path : npm:///wstatesession
+    enabled : 0
+  google-closure-compiler-js :
+    path : npm:///google-closure-compiler-js#20180610.0.0
     enabled : 0
   prepack :
     path : npm:///prepack#0.2.54
     enabled : 0
-  wselector :
-    path : npm:///wselector
+  uglify-es :
+    path : npm:///uglify-es#3.3.9
     enabled : 0
-  wTesting :
+  babylon :
+    path : npm:///babylon#6.18.0
+    enabled : 0
+  babel-core :
+    path : npm:///babel-core#6.26.3
+    enabled : 0
+  babel-polyfill :
+    path : npm:///babel-polyfill#6.26.0
+    enabled : 0
+  babel-preset-stage-0 :
+    path : npm:///babel-preset-stage-0#6.24.1
+    enabled : 0
+  babel-preset-stage-1 :
+    path : npm:///babel-preset-stage-1#6.24.1
+    enabled : 0
+  babel-preset-stage-2 :
+    path : npm:///babel-preset-stage-2#6.24.1
+    enabled : 0
+  babel-preset-stage-3 :
+    path : npm:///babel-preset-stage-3#6.24.1
+    enabled : 0
+  babel-preset-es2015 :
+    path : npm:///babel-preset-es2015#6.24.1
+    enabled : 0
+  babel-preset-es2015-without-strict :
+    path : npm:///babel-preset-es2015-without-strict#0.0.4
+    enabled : 0
+  babel-preset-node6-without-strict :
+    path : npm:///babel-preset-node6-without-strict#0.0.1
+    enabled : 0
+  babel-plugin-transform-runtime :
+    path : npm:///babel-plugin-transform-runtime#6.23.0
+    enabled : 0
+  babel-plugin-transform-class-properties :
+    path : npm:///babel-plugin-transform-class-properties#6.24.1
+    enabled : 0
+  wtranspilationstrategy :
     path : hd://.
     enabled : 0
     criterion :
       development : 1
-  wait-sync :
-    path : npm:///wait-sync
+  wTesting :
+    path : npm:///wTesting
     enabled : 0
     criterion :
       development : 1

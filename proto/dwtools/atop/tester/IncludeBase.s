@@ -29,9 +29,9 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wLooker' );
   _.include( 'wSelector' );
-  _.include( 'wComparator' );
-  _.include( 'wExternalFundamentals' );
-  _.include( 'wRoutineFundamentals' );
+  _.include( 'wEqualer' );
+  _.include( 'wAppBasic' );
+  _.include( 'wRoutineBasic' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
   _.includeAny( 'wEventHandler','' );

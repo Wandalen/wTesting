@@ -421,7 +421,8 @@ function _testingBegin( allSuites, runSuites )
   /* */
 
   let total = _.entityLength( runSuites );
-  logger.logUp( 'Launching several ( ' + total + ' ) test suite(s) ..' );
+  logger.log( 'Launching several ( ' + total + ' ) test suite(s) ..' );
+  logger.up();
   logger.begin({ verbosity : -5 });
   tester.suitesListPrint( allSuites );
   logger.end({ verbosity : -5 });
@@ -770,6 +771,8 @@ function suitesListPrint( suites )
 
 }
 
+//
+
 function _suitesIncludeAt( path )
 {
   let tester = this;
@@ -967,6 +970,12 @@ function _reportEnd()
   if( report.testCheckFails !== 0 )
   report.outcome = false;
 
+  if( report.testRoutineFails !== 0 )
+  report.outcome = false;
+
+  if( report.testSuiteFails !== 0 )
+  report.outcome = false;
+
   if( !( report.testCheckPasses > 0 ) )
   report.outcome = false;
 
@@ -975,9 +984,6 @@ function _reportEnd()
 
   if( report.errorsArray.length )
   report.outcome = false;
-
-  // if( tester.includeFails.length )
-  // report.outcome = false;
 
   if( report.includeErrorsArray.length )
   report.outcome = false;
@@ -1124,7 +1130,6 @@ function _testRoutineConsider( outcome )
   let report = tester.report;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  // _.assert( tester === Self );
 
   if( outcome )
   {
@@ -1145,7 +1150,6 @@ function _testSuiteConsider( outcome )
   let report = tester.report;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  // _.assert( tester === Self );
 
   if( outcome )
   {

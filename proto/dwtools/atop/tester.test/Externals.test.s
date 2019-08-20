@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../Tools.s' );
 
-  _.include( 'wTesting' );;
+  require( '../tester/MainTop.s' );
   _.include( 'wAppBasic' );
   _.include( 'wFiles' );
 
@@ -53,7 +53,19 @@ function run( test )
   let originalDirPath = _.path.join( self.assetDirPath, 'hello' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
+  let execPath = _.path.join( __dirname, '../tester/Exec'  )
+  
 
+  let shellTester = _.sheller
+  ({
+    execPath : execPath,
+    currentPath : routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 0,
+    mode : 'fork',
+    ready : ready,
+  })
+  
   let shell = _.sheller
   ({
     currentPath : routinePath,
@@ -85,7 +97,8 @@ function run( test )
   // shell( 'npm rm -g wTesting' );
   // shell( 'npm i -g ../../../..' );
   // shell( 'npm ln ../../../..' );
-  shell( 'npm rm wTesting -g && npm i wTesting -g' );
+  // shell( 'npm -g uninstall wTesting' );
+  // shell( 'npm -g install wTesting' );
 
   /* - */
 
@@ -103,9 +116,9 @@ function run( test )
 
     test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
     test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
@@ -120,40 +133,16 @@ function run( test )
     return null;
   })
 
-  shell({ args : [ 'wtest', 'Hello.test.js',  'beeping:0' ] })
+  shellTester({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .thenKeep( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
     test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
-
-    return null;
-  })
-
-  /* - */
-
-  ready
-  .thenKeep( () =>
-  {
-    test.case = 'tst Hello.test.js'
-    return null;
-  })
-
-  shell({ args : [ 'tst', 'Hello.test.js',  'beeping:0' ] })
-  .thenKeep( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
@@ -173,7 +162,18 @@ function checkFails( test )
   let originalDirPath = _.path.join( self.assetDirPath, 'check-fails' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
+  let execPath = _.path.join( __dirname, '../tester/Exec'  )
 
+  let shellTester = _.sheller
+  ({
+    execPath : execPath,
+    currentPath : routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 0,
+    mode : 'fork',
+    ready : ready,
+  })
+  
   let shell = _.sheller
   ({
     currentPath : routinePath,
@@ -202,7 +202,8 @@ function checkFails( test )
   // debugger; return; xxx
 
   shell( 'npm i' );
-  shell( 'npm rm wTesting -g && npm i wTesting -g' );
+  // shell( 'npm -g uninstall wTesting' );
+  // shell( 'npm -g install wTesting' );
 
   /* - */
 
@@ -213,16 +214,16 @@ function checkFails( test )
     return null;
   })
 
-  shell({ args : [ 'tst', 'Hello.test.js',  'beeping:0' ] })
+  shellTester({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .thenKeep( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
     test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 4/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 4/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
@@ -237,7 +238,7 @@ function checkFails( test )
     return null;
   })
 
-  shell({ args : [ 'tst', 'Hello.test.js',  'beeping:0', 'fails:1'] })
+  shellTester({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
   .thenKeep( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -265,26 +266,21 @@ function double( test )
   // let mainDirPath = _.path.nativize( _.path.join( __dirname ) );
   let ready = new _.Consequence().take( null );
 
-  console.log( 'mainDirPath', mainDirPath );
-
   let shell = _.sheller
   ({
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
     ready : ready,
-    env :
-    {
-      NODE_PATH : _.path.nativize( mainDirPath ),
-      // NODE_PATH : _.path.nativize( originalDirPath ),
-    }
   })
 
   debugger;
   let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
   debugger;
-
+  
+  shell( 'npm i' );
+  
   /* - */
 
   ready
@@ -293,7 +289,7 @@ function double( test )
     test.case = 'node Hello.test.js'
     return null;
   })
-
+  
   shell({ args : [ 'node', 'Hello.test.js' ] })
   .thenKeep( ( got ) =>
   {
@@ -312,6 +308,220 @@ function double( test )
   })
 
   /* - */
+
+  return ready;
+}
+
+//
+
+function noTestSuite( test )
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'hello' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let execPath = _.path.join( __dirname, '../tester/Exec'  )
+  let ready = new _.Consequence().take( null );
+
+  let shell = _.sheller
+  ({
+    execPath : execPath,
+    currentPath : routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 0,
+    mode : 'fork',
+    ready : ready,
+  })
+
+  _.fileProvider.dirMake( routinePath );
+  
+  ready
+  .thenKeep( () =>
+  {
+    test.case = 'relative path'
+    return null;
+  })
+
+  shell({ args : 'proto' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+  
+  //
+  
+  ready
+  .thenKeep( () =>
+  {
+    test.case = 'relative path'
+    return null;
+  })
+
+  shell({ args : 'proto/dwtools' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+  
+  //
+  
+  .thenKeep( () =>
+  {
+    test.case = 'relative glob'
+    return null;
+  })
+  
+  shell({ args : 'proto/**' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+  
+  //
+  
+  .thenKeep( () =>
+  {
+    test.case = 'absolute'
+    return null;
+  })
+  
+  shell({ args : _.path.nativize( routinePath ) })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+  
+  //
+  
+  .thenKeep( () =>
+  {
+    test.case = 'absolute glob'
+    return null;
+  })
+  
+  shell({ args : _.path.nativize( _.path.join( routinePath, '**' ) ) })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  return ready;
+}
+
+//
+
+function help( test )
+{
+  let self = this;
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let execPath = _.path.join( __dirname, '../tester/Exec'  )
+  let ready = new _.Consequence().take( null );
+
+  let shell = _.sheller
+  ({
+    execPath : execPath,
+    currentPath : routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 0,
+    mode : 'fork',
+    ready : ready,
+  })
+
+  _.fileProvider.dirMake( routinePath );
+  
+  ready
+  .then( ( got ) =>
+  {
+
+    test.case = 'simple run without args'
+
+    return null;
+  })
+
+  shell( '' )
+
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+    test.is( got.output.length );
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    return null;
+  })
+
+  /* */
+
+  ready
+  .then( ( got ) =>
+  {
+
+    test.case = 'simple run without args'
+
+    return null;
+  })
+
+  shell( '.' )
+
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+    test.is( got.output.length );
+    test.ge( _.strLinesCount( got.output ), 8 );
+    return null;
+  })
+
+  /* */
+
+  shell({ execPath : '.help' })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.ge( _.strLinesCount( op.output ), 23 );
+    return op;
+  })
+
+  /* */
+
+  shell({ execPath : '.' })
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.ge( _.strLinesCount( op.output ), 8 );
+    return op;
+  })
+
+  /* */
+
+  shell({ args : [] })
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '0 test suite' ), 1 );
+    return op;
+  })
 
   return ready;
 }
@@ -345,6 +555,8 @@ var Self =
     run,
     checkFails,
     double,
+    noTestSuite,
+    help
 
   }
 

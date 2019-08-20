@@ -1,14 +1,5 @@
 
-let _;
-try
-{
-  _ = require( '../../../tester/MainTop.s' );
-}
-catch( err )
-{
-  _ = require( 'MainTop.s' );
-}
-
+let _ = require( 'wTesting' );
 let Hello = require( './Hello.js' );
 
 //

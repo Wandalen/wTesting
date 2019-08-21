@@ -1,6 +1,6 @@
 # Testing cheat sheet
 
-Framework for convenient unit testing. . This cheat sheet summarizes commonly used Testing command line instructions for quick reference.
+Framework for convenient unit testing. This cheat sheet summarizes commonly used Testing command line instructions for quick reference.
 
 ### Installation of `Testing`
 
@@ -39,7 +39,6 @@ tst .run [ path ]
 ```
 
 Run test suites found at a specified path.
-
 
 ```
 tst .imply [ options... ] .run [ path ]
@@ -159,3 +158,51 @@ tst .imply  concurrent:[ number ] .run [ path ]
 
 Option `concurrent` desined to enable parallel execution of test suites.
 Accepts 0 or 1. Default value is 0.
+
+### Test suite structure
+
+The test file should contain only one test suite.
+Test file structure consists of four main elements:
+
+```js
+////
+// dependency injection section
+////
+let _ = require( 'wTesting' );  // inject utility Testing
+let Join = require( './Join.js' );  // inject test object and other dependencies
+
+////
+// test routines definition section
+////
+
+function routine1( test ) // test routine
+{
+  test.case = 'concatenation';  // test case definition
+  test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' ); // test check
+}
+routine1.timeOut = 10000; // test routine option
+
+////
+// test suite definition
+////
+
+var Self =   // test suite map
+{
+  name : 'Join',  // test suite name
+
+  silencing : 1,  // test suite option
+
+  tests :  // test suite routines
+  {
+    routine1, //
+  }
+}
+
+////
+// test suite launching section
+////
+
+Self = wTestSuite( Self ); // launching by module Testing
+if( typeof module !== 'undefined' && !module.parent ) // launching by NodeJS interpreter
+wTester.test( Self.name );
+```

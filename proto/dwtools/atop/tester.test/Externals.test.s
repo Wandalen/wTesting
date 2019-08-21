@@ -54,6 +54,7 @@ function run( test )
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
+  let testSuitePath = _.path.join( routinePath, 'Hello.test.js' );
 
   let shellTester = _.sheller
   ({
@@ -146,7 +147,199 @@ function run( test )
 
     return null;
   })
+  
+  /* - */
 
+  ready
+  .then( () =>
+  {
+    test.case = 'tst absolute path as subject'
+    return null;
+  })
+
+  shellTester({ args : [ testSuitePath,  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst absolute path as subject + options'
+    return null;
+  })
+
+  shellTester({ args : [ testSuitePath,  'v:7' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute path as subject'
+    return null;
+  })
+
+  shellTester({ args : [ '.run', testSuitePath,  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute path as subject'
+    return null;
+  })
+
+  shellTester({ args : [ '.run', testSuitePath,  'v:7' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+/* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst absolute nativized path as subject'
+    return null;
+  })
+
+  shellTester({ args : [ _.path.nativize( testSuitePath ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst absolute nativized path as subject + options'
+    return null;
+  })
+
+  shellTester({ args : [ _.path.nativize( testSuitePath ),  'v:7' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute nativized path as subject'
+    return null;
+  })
+
+  shellTester({ args : [ '.run', _.path.nativize( testSuitePath ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+
+  ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute nativized path as subject'
+    return null;
+  })
+
+  shellTester({ args : [ '.run', _.path.nativize( testSuitePath ),  'v:7' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
   /* - */
 
   // shell( 'npm rm -g wTesting' );
@@ -399,7 +592,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : _.strQuote( _.path.nativize( routinePath ) ) })
+  shell({ args : _.path.nativize( routinePath ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -418,7 +611,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : _.strQuote( _.path.nativize( _.path.join( routinePath, '**' ) ) ) })
+  shell({ args : _.path.nativize( _.path.join( routinePath, '**' ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );

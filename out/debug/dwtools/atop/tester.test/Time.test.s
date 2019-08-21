@@ -16,7 +16,15 @@ if( typeof module !== 'undefined' )
 
   var _ = _global_.wTools;
 
-  _.include( 'wTesting' );
+  try
+  {
+    require( '../tester/MainTop.s' );
+  }
+  catch( err )
+  {
+    _.include( 'wTesting' );
+  }
+
   _.include( 'wConsequence' );
 
 }

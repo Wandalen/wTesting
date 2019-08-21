@@ -270,6 +270,7 @@ function double( test )
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
+    mode : 'shell',
     ready : ready,
   })
 
@@ -398,7 +399,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : _.path.nativize( routinePath ) })
+  shell({ args : _.strQuote( _.path.nativize( routinePath ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -417,7 +418,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : _.path.nativize( _.path.join( routinePath, '**' ) ) })
+  shell({ args : _.strQuote( _.path.nativize( _.path.join( routinePath, '**' ) ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );

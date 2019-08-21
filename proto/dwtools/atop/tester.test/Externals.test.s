@@ -53,19 +53,18 @@ function run( test )
   let originalDirPath = _.path.join( self.assetDirPath, 'hello' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
-  let execPath = _.path.join( __dirname, '../tester/Exec'  )
-  
+  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
 
   let shellTester = _.sheller
   ({
-    execPath : execPath,
+    execPath : 'node ' + execPath,
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
-    mode : 'fork',
+    mode : 'shell',
     ready : ready,
   })
-  
+
   let shell = _.sheller
   ({
     currentPath : routinePath,
@@ -103,14 +102,14 @@ function run( test )
   /* - */
 
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'node Hello.test.js beeping:0'
     return null;
   })
 
   shell({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
-  .thenKeep( ( got ) =>
+  .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
@@ -127,14 +126,14 @@ function run( test )
   /* - */
 
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'wtest Hello.test.js'
     return null;
   })
 
   shellTester({ args : [ 'Hello.test.js',  'beeping:0' ] })
-  .thenKeep( ( got ) =>
+  .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
@@ -162,18 +161,18 @@ function checkFails( test )
   let originalDirPath = _.path.join( self.assetDirPath, 'check-fails' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
-  let execPath = _.path.join( __dirname, '../tester/Exec'  )
+  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
 
   let shellTester = _.sheller
   ({
-    execPath : execPath,
+    execPath : 'node ' + execPath,
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
-    mode : 'fork',
+    mode : 'shell',
     ready : ready,
   })
-  
+
   let shell = _.sheller
   ({
     currentPath : routinePath,
@@ -208,14 +207,14 @@ function checkFails( test )
   /* - */
 
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'tst Hello.test.js'
     return null;
   })
 
   shellTester({ args : [ 'Hello.test.js',  'beeping:0' ] })
-  .thenKeep( ( got ) =>
+  .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
@@ -232,14 +231,14 @@ function checkFails( test )
 /* - */
 
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'tst Hello.test.js fails:1'
     return null;
   })
 
   shellTester({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
-  .thenKeep( ( got ) =>
+  .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
@@ -278,20 +277,20 @@ function double( test )
   let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
   debugger;
-  
+
   shell( 'npm i' );
-  
+
   /* - */
 
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'node Hello.test.js'
     return null;
   })
-  
+
   shell({ args : [ 'node', 'Hello.test.js' ] })
-  .thenKeep( ( got ) =>
+  .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
@@ -319,23 +318,23 @@ function noTestSuite( test )
   let self = this;
   let originalDirPath = _.path.join( self.assetDirPath, 'hello' );
   let routinePath = _.path.join( self.tempDir, test.name );
-  let execPath = _.path.join( __dirname, '../tester/Exec'  )
+  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
   let ready = new _.Consequence().take( null );
 
   let shell = _.sheller
   ({
-    execPath : execPath,
+    execPath : 'node ' + execPath,
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
-    mode : 'fork',
+    mode : 'shell',
     ready : ready,
   })
 
   _.fileProvider.dirMake( routinePath );
-  
+
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'relative path'
     return null;
@@ -351,11 +350,11 @@ function noTestSuite( test )
 
     return null;
   })
-  
+
   //
-  
+
   ready
-  .thenKeep( () =>
+  .then( () =>
   {
     test.case = 'relative path'
     return null;
@@ -371,15 +370,15 @@ function noTestSuite( test )
 
     return null;
   })
-  
+
   //
-  
-  .thenKeep( () =>
+
+  .then( () =>
   {
     test.case = 'relative glob'
     return null;
   })
-  
+
   shell({ args : 'proto/**' })
   .then( ( got ) =>
   {
@@ -390,15 +389,15 @@ function noTestSuite( test )
 
     return null;
   })
-  
+
   //
-  
-  .thenKeep( () =>
+
+  .then( () =>
   {
     test.case = 'absolute'
     return null;
   })
-  
+
   shell({ args : _.path.nativize( routinePath ) })
   .then( ( got ) =>
   {
@@ -409,15 +408,15 @@ function noTestSuite( test )
 
     return null;
   })
-  
+
   //
-  
-  .thenKeep( () =>
+
+  .then( () =>
   {
     test.case = 'absolute glob'
     return null;
   })
-  
+
   shell({ args : _.path.nativize( _.path.join( routinePath, '**' ) ) })
   .then( ( got ) =>
   {
@@ -437,22 +436,26 @@ function noTestSuite( test )
 function help( test )
 {
   let self = this;
+  debugger;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let execPath = _.path.join( __dirname, '../tester/Exec'  )
+  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
   let ready = new _.Consequence().take( null );
+  debugger;
 
   let shell = _.sheller
   ({
-    execPath : execPath,
+    execPath : 'node ' + execPath,
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
-    mode : 'fork',
+    mode : 'shell',
     ready : ready,
   })
 
   _.fileProvider.dirMake( routinePath );
-  
+
+  /* */
+
   ready
   .then( ( got ) =>
   {

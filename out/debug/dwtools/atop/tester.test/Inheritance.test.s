@@ -85,7 +85,7 @@ function inherit( test )
     test.identical( wTests[ childSuitName ].importanceOfDetails , wTests[ firstParentName ].importanceOfDetails );
     test.identical( wTests[ childSuitName ].silencing , wTests[ firstParentName ].silencing );
     test.identical( wTests[ childSuitName ].importanceOfNegative , wTests[ secondParentName ].importanceOfNegative );
-    test.identical( wTests[ childSuitName ].debug, wTests[ secondParentName ].debug );
+    // test.identical( wTests[ childSuitName ].debug, wTests[ secondParentName ].debug );
 
     test.identical( self.parentValue1 , 1 );
     test.identical( self.parentValue2 , 2 );
@@ -99,7 +99,7 @@ function inherit( test )
   {
     name : secondParentName,
     abstract : 1,
-    debug : 1,
+    // debug : 1,
     override : notTakingIntoAccount,
     importanceOfNegative : 4,
 
@@ -145,7 +145,7 @@ function inherit( test )
   return suit.run()
   .finally( function()
   {
-    test.is( test.report.testCheckPasses > 9  );
+    test.is( test.report.testCheckPasses > 8  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
     test.identical( _.mapOwnKeys( suit.tests ).length, 2 );

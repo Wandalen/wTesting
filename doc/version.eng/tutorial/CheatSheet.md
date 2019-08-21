@@ -162,14 +162,15 @@ Accepts 0 or 1. Default value is 0.
 ### Test suite structure
 
 The test file should contain only one test suite.
-Test file structure consists of four main elements:
+The minimum test file is given below. It uses the basic structural elements and can be considered as a test suite template.
 
 ```js
 ////
 // dependency injection section
 ////
+
 let _ = require( 'wTesting' );  // inject utility Testing
-let Join = require( './Join.js' );  // inject test object and other dependencies
+let Join = require( './Join.js' );  // inject test object
 
 ////
 // test routines definition section
@@ -177,13 +178,18 @@ let Join = require( './Join.js' );  // inject test object and other dependencies
 
 function routine1( test ) // test routine
 {
-  test.case = 'concatenation';  // test case definition
+  test.case = 'concatenation of strings';  // test case definition
   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' ); // test check
 }
 routine1.timeOut = 10000; // test routine option
 
+function routine2( test )
+{
+  // some code
+}
+
 ////
-// test suite definition
+// test suite definition section
 ////
 
 var Self =   // test suite map
@@ -191,10 +197,12 @@ var Self =   // test suite map
   name : 'Join',  // test suite name
 
   silencing : 1,  // test suite option
+  shoulding : 1,  // test suite option
 
   tests :  // test suite routines
   {
-    routine1, //
+    routine1, // routine defined in test routines definition section
+    routine2, // routine defined in test routines definition section
   }
 }
 
@@ -206,3 +214,10 @@ Self = wTestSuite( Self ); // launching by module Testing
 if( typeof module !== 'undefined' && !module.parent ) // launching by NodeJS interpreter
 wTester.test( Self.name );
 ```
+
+Test file structure consists of four main sections.
+
+- Dependency injection. Should inject module Testing and test objects.
+- Test routines definition. Contains routines that test separate functionalities of test object. Test routines consists of test cases and test checks.
+- Test suite definition. Defines test suite settings. 
+- Test suite launching. Allows to run test suite by utility Testing and by NodeJS interpreter.

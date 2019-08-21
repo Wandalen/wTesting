@@ -666,6 +666,7 @@ function _suitesRun( suites )
   {
     tester.suitesListPrint( allSuites );
     logger.log( 'No enabled test suite to run.' );
+    _.appExitCode( -1 );
   }
 
   tester._testingBegin( suites, allSuites );
@@ -810,7 +811,7 @@ function _suitesIncludeAt( path )
 
   if( !files.length )
   {
-    let record = tester.fileProvider.recordFactory().record( path );
+    let record = tester.fileProvider.recordFactory({ allowingMissed : 1 }).record( path );
     if( record.stat && !record.stat.isDir() && record.isActual )
     files = [ record ];
   }

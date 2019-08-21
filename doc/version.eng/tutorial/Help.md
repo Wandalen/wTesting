@@ -185,9 +185,9 @@ The option controls the amount of time spent on testing. Each test routine can s
 
 The option accepts values from `1` to `5`: `1` is the slowest testing, `5` is the fastest. The default value is `3`.
 
-The `tst .imply rapidity:1 path/to/dir` command tests each test routine.
+The `tst .imply rapidity:1 .run path/to/dir` command tests each test routine.
 
-The `tst .imply rapidity:4 path/to/dir` command skips all test routines, which routine options `rapidity` are less than `4` or` 5`.
+The `tst .imply rapidity:4 .run path/to/dir` command skips all test routines, which routine options `rapidity` are less than `4` or` 5`.
 
 ##### Run option `testRoutineTimeOut`
 
@@ -207,7 +207,7 @@ The utility can run more than one test suite at the same time if there are sever
 
 The option has two values: 1 - parallel testing is on, 0 - is disabled and testing is in turn. By default - 0.
 
-The command `tst .imply  concurrent:1 path/to/dir` runs parallel execution of test suites in the` path/to/dir` directory.
+The command `tst .imply  concurrent:1 .run path/to/dir` runs parallel execution of test suites in the` path/to/dir` directory.
 
 ##### Run option `verbosity`
 
@@ -217,7 +217,7 @@ Accepts a value from 0 to 9. When the value is set to 0, it does not display a s
 
 The test suite can have a `verbosity` option. In this case, the value set in the test suite has a priority over the run option.
 
-The `tst .imply verbosity:5 path/to/dir` command prints a more detailed test report by displaying information about test checks. By default, information about the test checks is not displayed.
+The `tst .imply verbosity:5 .run path/to/dir` command prints a more detailed test report by displaying information about test checks. By default, information about the test checks is not displayed.
 
 ##### Run option `importanceOfNegative`
 
@@ -251,7 +251,7 @@ The option sets the numeric deviation for the comparison of numerical values.
 
 The default value is set to `1e-7`.
 
-The `tst .imply accuracy:1e-4 path/to/dir` command changes the result of the next test check:
+The `tst .imply accuracy:1e-4 .run path/to/dir` command changes the result of the next test check:
 
 ```js
 test.equivalent( 1, 1.00001 );

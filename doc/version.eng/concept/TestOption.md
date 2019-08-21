@@ -5,18 +5,17 @@ The control parameter of the testing that is passed to the run command. Run opti
 The run option is specified after the utility command. For example, in the command
 
 ```
-tst .run path/to/dir accuracy:1e-4
+tst .imply accuracy:1e-4 .run path/to/dir
 ```
 
 the `accuracy` option is specified, it sets the allowable numeric deviation. The specified option applies to each test suite in the `path/to/dir` directory.
-
 
 Run options override test suite options. If the same option in the command and in the test code is used, then the command has a higher priority.
 
 The command can use several run options at the same time. For example, a command with `verbosity` and` silencing` options can look like this:
 
 ```
-tst .run path/to/dir verbosity:6 silencing:1
+tst .imply verbosity:6 silencing:1 .run path/to/dir
 ```
 
 You can learn more about the list of run options by going to [tutorial](../tutorial/Help.md#Options-launch-and-options-suites).
@@ -34,7 +33,7 @@ The figure shows the part of the code with the test suite definition. After the 
 The test suite has three options: `silencing`,` verbosity` and `enabled`. If the same options are not specified in the test command, the test report will have a verbosity value `5`, and the report will not contain the output of the test object. When the `silencing` i` verbosity` option is specified in the command, the utility uses the value specified in the command. For example, when using the command
 
 ```
-tst .run path/to/dir verbosity:3
+tst .imply verbosity:3 .run path/to/dir 
 ```
 
 the utility displays a report with a verbosity level `3`.

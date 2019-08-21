@@ -1,10 +1,10 @@
 # Testing cheat sheet
 
-Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. This cheat sheet summarizes commonly used Testing command line instructions for quick reference.
+Framework for convenient unit testing. . This cheat sheet summarizes commonly used Testing command line instructions for quick reference.
 
 ### Installation of `Testing`
 
-To install Testing you need an installed Node.js® and Node package manager ( NPM ). If you do not have it then download the version for your operating system from [official site](<https://nodejs.org/en/>) and follow the [installation instructions](https://nodejs.org/en/download/package-manager/).
+To install Testing you need an installed Node.js® and Node package manager ( NPM ).
 
 ```
 npm install -g wTesting
@@ -21,6 +21,12 @@ tst .help
 ```
 
 Get help.
+
+```
+tst .help [ command ]
+```
+
+Get help about separate command.
 
 ```
 tst .suites.list [ path ]
@@ -61,7 +67,7 @@ tst .run [ path to directory with group of test files ]
 
 Running a set of test suites. NodeJS can't test a set of test suites.
 
-### Mostly used running options
+### Often used running options
 
 To control testing the running options is used.
 
@@ -93,7 +99,7 @@ The option `accuracy` sets the numeric deviation for the comparison of numerical
 tst .imply sanitareTime:[ time ] .run [ path ]
 ```
 
-Option `sanitareTime` sets the delay between completing the test suite and running the next one. Delay sets in milliseconds. Default value is 500ms.
+Option `sanitareTime` sets the delay between completing the test suite and running the next one. Delay sets in milliseconds. Default value is 2000ms.
 
 ```
 tst .imply importanceOfNegative:[ number ] .run [ path ]
@@ -139,7 +145,7 @@ Option `coloring` desined to enable the color marking of the test report. Accept
 tst .imply timing:[ number ] .run [ path ]
 ```
 
-Option `timing` intended to enable measurement of time spent on testing. Accepts 0 or 1. Default value is 1.
+Option `timing` intended to disable measurement of time spent on testing. Accepts 0 or 1. Default value is 1.
 
 ```
 tst .imply rapidity:[ number ] .run [ path ]
@@ -153,23 +159,3 @@ tst .imply  concurrent:[ number ] .run [ path ]
 
 Option `concurrent` desined to enable parallel execution of test suites.
 Accepts 0 or 1. Default value is 0.
-
-### Combining of running options
-
-Any of running test options can be combined in a set.
-
-```
-tst .imply routine:someRoutine verbosity:5 .run [ path ]
-```
-
-Example shows combination of option `routine` and `verbosity`.
-
-### Official repository and documentation
-
-Official repository of utility:
-
-```
-https://github.com/Wandalen/wTesting.git
-```
-
-Directory [`doc`](https://github.com/Wandalen/wTesting/tree/master/doc/version.eng) contains more information about using module Testing. For gentle introduction use tutorials. For getting exhaustive information on one or another aspect use list of concepts to find a concept of interest and get familiar with it.

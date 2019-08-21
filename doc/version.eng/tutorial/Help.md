@@ -143,7 +143,7 @@ Example of command: `tst .imply scenario:suites.list path/to/dir `.
 
 Sets the delay between completing the test suite and running the next.
 
-The option is intended to complete the execution of tests with asynchronous functions. It is determined in milliseconds. The default value is 500ms.
+The option is intended to complete the execution of tests with asynchronous functions. It is determined in milliseconds. The default value is 2000ms.
 
 The `tst .imply sanitareTime:1000 .run path/to/dir` command runs the test in the specified directory; the delay before running the next test suite is set to one second.
 

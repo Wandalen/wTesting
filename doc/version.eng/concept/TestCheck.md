@@ -318,7 +318,7 @@ The `test.le` check will be passed as the value of `a` variable will be coerced 
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine throws an error. The  `shouldThrowErrorSync` check does not notice asynchronous errors.
+The check passes if the routine throws an error. The `shouldThrowErrorSync` check does not notice asynchronous errors.
 
 The check fails if the routine does not throw an error.
 
@@ -335,7 +335,7 @@ The `test.shouldThrowErrorSync` check will be passed as the specified routine th
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine throws an error in asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
+The check passes if the routine throws an error asynchronously, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
 
 The check fails if the routine does not throw an error during the time it was tested.
 
@@ -355,7 +355,7 @@ The `test.shouldThrowErrorAsync` check will be passed as the specified routine t
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine throws an error in synchronous or asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
+The check passes if the routine throws an error synchronously or asynchronously, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
 
 The test fails if the routine does not throws neither synchronous nor an asynchronous error during the time it is tested.
 
@@ -384,7 +384,7 @@ The `test.shouldThrowError` will be passed as the routine `r2` throws the error 
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine does not throw an error either in synchronous or in asynchronous mode.
+The check passes if the routine does not throw an error synchronously or asynchronously.
 
 The check fails if the routine throws the error synchronously or asynchronously. After such an error, the routine can continue execution because it will be isolated in the subroutine.
 
@@ -413,7 +413,7 @@ The `test.mustNotThrowError` check will be passed as the asynchronous routine `r
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine ends synchronously or the result returns only one message.
+The check passes if the routine ends synchronously or the concequence returns only one resource.
 
 The check fails if its consequence receives several messages.
 

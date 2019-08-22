@@ -1,4 +1,4 @@
-# UTILITY TESTING CHEAT SHEET
+# TESTING CHEAT SHEET
 
 Framework for convenient unit testing. This cheat sheet summarizes commonly used utility Testing command line instructions and test suite structure for quick reference.
 
@@ -261,13 +261,13 @@ Passes if the value of the first argument is less or equal to the value of the s
 mustNotThrowError( routine arg );
 ```
 
-Passes if the routine does not throws an error either in synchronous or in asynchronous mode.
+Passes if the routine does not throws an error either synchronously or asynchronously.
 
 ```
 shouldMessageOnlyOnce( routine arg );
 ```
 
-Passes if the routine ends synchronously or the result returns only one message.
+Passes if the routine ends synchronously or the concequence returns only one resource.
 
 ```
 shouldThrowErrorSync( routine arg );
@@ -279,10 +279,10 @@ Passes if the routine throws an error synchronously.
 shouldThrowErrorAsync( routine arg )
 ```
 
-Passes if the routine throws an error in asynchronous mode.
+Passes if the routine throws an error asynchronously.
 
 ```
 shouldThrowError( routine arg )
 ```
 
-Passes if the routine throws an error in synchronous or asynchronous mode.
+Passes if the routine throws an error synchronously or asynchronously.

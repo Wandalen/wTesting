@@ -165,16 +165,12 @@ The test file should contain only one test suite.
 The minimum test file is given below. It uses the basic structural elements and can be considered as a test suite template.
 
 ```js
-////
-// dependency injection section
-////
+/* dependency injection section */
 
 let _ = require( 'wTesting' );  // inject utility Testing
 let Join = require( './Join.js' );  // inject test object
 
-////
-// test routines definition section
-////
+/* test routines definition section */
 
 function routine1( test ) // test routine
 {
@@ -188,9 +184,7 @@ function routine2( test )
   // some code
 }
 
-////
-// test suite definition section
-////
+/* test suite definition section */
 
 var Self =   // test suite map
 {
@@ -206,9 +200,7 @@ var Self =   // test suite map
   }
 }
 
-////
-// test suite launching section
-////
+/* test suite launching section */
 
 Self = wTestSuite( Self ); // launching by module Testing
 if( typeof module !== 'undefined' && !module.parent ) // launching by NodeJS interpreter

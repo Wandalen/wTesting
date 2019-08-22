@@ -1,6 +1,6 @@
 # Testing cheat sheet
 
-Framework for convenient unit testing. This cheat sheet summarizes commonly used Testing command line instructions for quick reference.
+Framework for convenient unit testing. This cheat sheet summarizes commonly used Testing command line instructions and test suite structure for quick reference.
 
 ### Installation of `Testing`
 
@@ -218,6 +218,28 @@ wTester.test( Self.name );
 Test file structure consists of four main sections.
 
 - Dependency injection. Should inject module Testing and test objects.
-- Test routines definition. Contains routines that test separate functionalities of test object. Test routines consists of test cases and test checks.
-- Test suite definition. Defines test suite settings. 
+- Test routines definition. Contains routines that test separate functionalities of a test object. Test routines consist of test cases and test checks.
+- Test suite definition. Defines map with test suite settings.
 - Test suite launching. Allows to run test suite by utility Testing and by NodeJS interpreter.
+
+### Test checks
+
+Module Testing contains next test checks:
+
+- `is( boolLike arg )` - passes if argument is true-like.
+- `isNot( boolLike arg )` - passes  if argument is false-like.
+- `isNotError( errorLike arg )` - passes if argument is not error.
+- `identical( any arg1, any arg2 )` ( shortened form `il` ) - passes if both arguments are identical. The numerical deviation is not allowed.
+- `notIdentical( any arg1, any arg2 )` ( `ni` ) - passes if both arguments are not identical. The numerical deviation is not allowed.
+- `equivalent( any arg1, any arg2 )` ( `et` ) - passes if both arguments are similar. The numerical deviation is allowed.
+- `notEquivalent( any arg1, any arg2 )` ( `ne` ) - passes if both arguments are not similar. The numerical deviation is allowed.
+- `contains( any arg1, any arg2 )` - passes if the arguments are identical or the first argument contains the second argument.
+- `gt( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is greater than the value of the second.
+- `ge( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is greater or equal to the value of the second.
+- `lt( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is less than the value of the second.
+- `le( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is less or equal to the value of the second.
+- `mustNotThrowError( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. passes if the routine does not throw an error either in synchronous or in asynchronous mode.
+- `shouldMessageOnlyOnce( routine arg )` - Expects one argument in the form of a routine, which runs without arguments to test its work. The check passes if the routine ends synchronously or the result returns only one message.
+- `shouldThrowErrorSync( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. Passes if the routine throws an error synchronously.
+- `shouldThrowErrorAsync( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. The check passes if the routine throws an error in asynchronous mode.
+- `shouldThrowError( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. The check passes if the routine throws an error in synchronous or asynchronous mode.

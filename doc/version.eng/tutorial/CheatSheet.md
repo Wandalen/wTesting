@@ -1,8 +1,8 @@
-# Utility Testing cheat sheet
+# UTILITY TESTING CHEAT SHEET
 
 Framework for convenient unit testing. This cheat sheet summarizes commonly used utility Testing command line instructions and test suite structure for quick reference.
 
-### Installation of utility `Testing`
+### Installation of utility Testing
 
 To install utility Testing you need an installed NodeJS and NPM.
 

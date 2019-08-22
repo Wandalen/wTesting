@@ -4,7 +4,7 @@ Framework for convenient unit testing. This cheat sheet summarizes commonly used
 
 ### Installation of `Testing`
 
-To install Testing you need an installed Node.js® and Node package manager ( NPM ).
+To install Testing you need an installed NodeJS and NPM.
 
 ```
 npm install -g wTesting
@@ -26,13 +26,13 @@ Get help.
 tst .help [ command ]
 ```
 
-Get help about separate command.
+Get help on a specific command.
 
 ```
 tst .suites.list [ path ]
 ```
 
-Find test suites at a specified path.
+ Find test suites at a specific path.
 
 ```
 tst .run [ path ]
@@ -49,16 +49,12 @@ Change state or imply variable value.
 ### Running of test suites
 
 ```
-tst .run [ path to single test file ]
-```
+tst .run [ path to single test file || path with glob || path to directory ]
 
-Running of single test suite.
-
-```
 node [ path to single test file ]
 ```
 
-If module Testing installed locally, you can run test suite by NodeJS interpreter.
+Running of single test suite.
 
 ```
 tst .run [ path to directory with group of test files ]
@@ -138,7 +134,7 @@ Option `beeping` is intended to turn on the beep after the test is completed. Ac
 tst .imply coloring:[ number ] .run [ path ]
 ```
 
-Option `coloring` desined to enable the color marking of the test report. Accepts 0 or 1. Default value is 1.
+Option `coloring` designed to enable the color marking of the test report. Accepts 0 or 1. Default value is 1.
 
 ```
 tst .imply timing:[ number ] .run [ path ]
@@ -156,7 +152,7 @@ The option `rapidity` controls the amount of time spent on testing. Test time ch
 tst .imply  concurrent:[ number ] .run [ path ]
 ```
 
-Option `concurrent` desined to enable parallel execution of test suites.
+Option `concurrent` designed to enable parallel execution of test suites.
 Accepts 0 or 1. Default value is 0.
 
 ### Test suite structure
@@ -164,74 +160,42 @@ Accepts 0 or 1. Default value is 0.
 The test file should contain only one test suite.
 The minimum test file is given below. It uses the basic structural elements and can be considered as a test suite template.
 
-```js
-/* dependency injection section */
-
-let _ = require( 'wTesting' );  // inject utility Testing
-let Join = require( './Join.js' );  // inject test object
-
-/* test routines definition section */
-
-function routine1( test ) // test routine
-{
-  test.case = 'concatenation of strings';  // test case definition
-  test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' ); // test check
-}
-routine1.timeOut = 10000; // test routine option
-
-function routine2( test )
-{
-  // some code
-}
-
-/* test suite definition section */
-
-var Self =   // test suite map
-{
-  name : 'Join',  // test suite name
-
-  silencing : 1,  // test suite option
-  shoulding : 1,  // test suite option
-
-  tests :  // test suite routines
-  {
-    routine1, // routine defined in test routines definition section
-    routine2, // routine defined in test routines definition section
-  }
-}
-
-/* test suite launching section */
-
-Self = wTestSuite( Self ); // launching by module Testing
-if( typeof module !== 'undefined' && !module.parent ) // launching by NodeJS interpreter
-wTester.test( Self.name );
-```
-
-Test file structure consists of four main sections.
-
-- Dependency injection. Should inject module Testing and test objects.
-- Test routines definition. Contains routines that test separate functionalities of a test object. Test routines consist of test cases and test checks.
-- Test suite definition. Defines map with test suite settings.
-- Test suite launching. Allows to run test suite by utility Testing and by NodeJS interpreter.
+![join.test.png](../../images/join.test.png)
 
 ### Test checks
 
 Module Testing contains next test checks:
 
-- `is( boolLike arg )` - passes if argument is true-like.
-- `isNot( boolLike arg )` - passes  if argument is false-like.
-- `isNotError( errorLike arg )` - passes if argument is not error.
-- `identical( any arg1, any arg2 )` ( shortened form `il` ) - passes if both arguments are identical. The numerical deviation is not allowed.
-- `notIdentical( any arg1, any arg2 )` ( `ni` ) - passes if both arguments are not identical. The numerical deviation is not allowed.
-- `equivalent( any arg1, any arg2 )` ( `et` ) - passes if both arguments are similar. The numerical deviation is allowed.
-- `notEquivalent( any arg1, any arg2 )` ( `ne` ) - passes if both arguments are not similar. The numerical deviation is allowed.
-- `contains( any arg1, any arg2 )` - passes if the arguments are identical or the first argument contains the second argument.
-- `gt( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is greater than the value of the second.
-- `ge( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is greater or equal to the value of the second.
-- `lt( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is less than the value of the second.
-- `le( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is less or equal to the value of the second.
-- `mustNotThrowError( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. passes if the routine does not throw an error either in synchronous or in asynchronous mode.
-- `shouldMessageOnlyOnce( routine arg )` - Expects one argument in the form of a routine, which runs without arguments to test its work. The check passes if the routine ends synchronously or the result returns only one message.
-- `shouldThrowErrorSync( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. Passes if the routine throws an error synchronously.
-- `shouldThrowErrorAsync( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. The check passes if the routine throws an error in asynchronous mode.
-- `shouldThrowError( routine arg )` - expects one argument in the form of a routine, which runs without arguments to test its work. The check passes if the routine throws an error in synchronous or asynchronous mode.
+`is( boolLike arg )` - passes if argument is true-like.
+
+`isNot( boolLike arg )` - passes  if argument is false-like.
+
+`isNotError( errorLike arg )` - passes if argument is not error.
+
+`identical( any arg1, any arg2 )` ( shortened form `il` ) - passes if both arguments are identical. The numerical deviation is not allowed.
+
+`notIdentical( any arg1, any arg2 )` ( `ni` ) - passes if both arguments are not identical. The numerical deviation is not allowed.
+
+`equivalent( any arg1, any arg2 )` ( `et` ) - passes if both arguments are similar. The numerical deviation is allowed.
+
+`notEquivalent( any arg1, any arg2 )` ( `ne` ) - passes if both arguments are not similar. The numerical deviation is allowed.
+
+`contains( any arg1, any arg2 )` - passes if the arguments are identical or the first argument contains the second argument.
+
+`gt( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is greater than the value of the second.
+
+`ge( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is greater or equal to the value of the second.
+
+`lt( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is less than the value of the second.
+
+`le( numberLike arg1, numberLike arg2 )` - passes if the value of the first argument is less or equal to the value of the second.
+
+`mustNotThrowError( routine arg )` - passes if the routine does not throw an error either in synchronous or in asynchronous mode.
+
+`shouldMessageOnlyOnce( routine arg )` - passes if the routine ends synchronously or the result returns only one message.
+
+`shouldThrowErrorSync( routine arg )` - passes if the routine throws an error synchronously.
+
+`shouldThrowErrorAsync( routine arg )` - passes if the routine throws an error in asynchronous mode.
+
+`shouldThrowError( routine arg )` - passes if the routine throws an error in synchronous or asynchronous mode.

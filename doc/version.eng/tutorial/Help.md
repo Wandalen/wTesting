@@ -149,7 +149,7 @@ The `tst .imply sanitareTime:1000 .run path/to/dir` command runs the test in the
 
 ##### Run option `fails`
 
-Sets the number of errors that the utility must receive to pre-complete the test.
+Sets the number of errors that the utility must receive to interrupt the test.
 
 When the specified number of errors is reached, the utility finishes testing. By default, the number of errors is not limited.
 
@@ -181,13 +181,13 @@ Example: `tst .imply timing:0 .run path/to/dir`. Time data will not be available
 
 ##### Run option `rapidity`
 
-The option controls the amount of time spent on testing. Each test routine can specify its own option `rapidity` with a value from` 1` to `5`. By default, routine option `rapidity`  is` 3`. A routine doesn't run when the value of run option `rapidity` is greater than the value of routine option `rapidity`.
+The option controls the amount of time spent on testing. Each test routine can specify its own option `rapidity` with a value from `-9` to `+9`. By default, routine option `rapidity`  is `0`. A routine doesn't run when the value of run option `rapidity` is greater than the value of routine option `rapidity`.
 
-The option accepts values from `1` to `5`: `1` is the slowest testing, `5` is the fastest. The default value is `3`.
+The option accepts values from `-9` to `+9`: `-9` is the slowest testing, `+9` is the fastest. The default value is `0`.
 
-The `tst .imply rapidity:1 .run path/to/dir` command tests each test routine.
+The `tst .imply rapidity:-9 .run path/to/dir` command tests each test routine.
 
-The `tst .imply rapidity:4 .run path/to/dir` command skips all test routines, which routine options `rapidity` are less than `4` or` 5`.
+The `tst .imply rapidity:4 .run path/to/dir` command skips all test routines, which routine options `rapidity` are less than `4`.
 
 ##### Run option `testRoutineTimeOut`
 

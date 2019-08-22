@@ -128,7 +128,7 @@ tst .imply fails:[ number ] .run [ path ]
 tst .run [ path ] fails:[ number ]
 ```
 
-Option sets the number of errors received to pre-complete the test. Accepts number of fails. By default is unlimited.
+Option sets the number of errors received to interrupt the test. Accepts number of fails. By default is unlimited.
 
 ```
 tst .imply beeping:[ number ] .run [ path ]
@@ -142,11 +142,10 @@ tst .imply coloring:[ number ] .run [ path ]
 tst .run [ path ] coloring:[ number ]
 ```
 
-Option enables the color marking of the test report. Accepts 0 or 1. Default value is 1.
+Option makes report colourful. Accepts 0 or 1. Default value is 1.
 
 ```
 tst .imply timing:[ number ] .run [ path ]
-
 tst .run [ path ] timing:[ number ]
 ```
 
@@ -157,7 +156,7 @@ tst .imply rapidity:[ number ] .run [ path ]
 tst .run [ path ] rapidity:[ number ]
 ```
 
-The option controls the amount of time spent on testing. Accepts values from 1 to 5. Default value is 3.
+The option controls the amount of time spent on testing. Accepts values from -9 to +9. Default value is 0.
 
 ```
 tst .imply  concurrent:[ number ] .run [ path ]
@@ -169,7 +168,7 @@ Option enables parallel execution of test suites. Accepts 0 or 1. Default value 
 ### Test suite structure
 
 The test file should contain only one test suite.
-The minimum test file is given below. It uses the basic structural elements and can be considered as a test suite template.
+Example of a minimum test file is given below. It uses the basic structural elements and can be considered as a test suite template.
 
 ![join.test.png](../../images/join.test.png)
 
@@ -200,34 +199,40 @@ identical( any arg1, any arg2 );
 il( any arg1, any arg2 );
 ```
 
-Passes if both arguments are identical. The numerical deviation is not allowed.
+Passes if both arguments are identical.
 
 ```
 notIdentical( any arg1, any arg2 );
 ni( any arg1, any arg2 );
 ```
 
-Passes if both arguments are not identical. The numerical deviation is not allowed.
+Passes if both arguments are not identical.
 
 ```
 equivalent( any arg1, any arg2 );
 et( any arg1, any arg2 );
 ```
 
-Passes if both arguments are similar. The numerical deviation is allowed.
+Passes if both arguments are similar.
 
 ```
 notEquivalent( any arg1, any arg2 );
 ne( any arg1, any arg2 );
 ```
 
-Passes if both arguments are not similar. The numerical deviation is allowed.
+Passes if both arguments are not similar.
 
 ```
 contains( any arg1, any arg2 );
 ```
 
 Passes if the arguments are identical or the first argument contains the second argument.
+
+```
+setsAreIdentical( arrayLike arg1, arrayLike arg2 );
+```
+
+Passes if elemens of both arguments are identical.
 
 ```
 gt( numberLike arg1, numberLike arg2 );
@@ -256,7 +261,7 @@ Passes if the value of the first argument is less or equal to the value of the s
 mustNotThrowError( routine arg );
 ```
 
-Passes if the routine does not throw an error either in synchronous or in asynchronous mode.
+Passes if the routine does not throws an error either in synchronous or in asynchronous mode.
 
 ```
 shouldMessageOnlyOnce( routine arg );

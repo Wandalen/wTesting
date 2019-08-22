@@ -110,7 +110,7 @@ test.identical( got, expected );
 
 The `test.identical` check will be passed as the values of arguments are identical.
 
-##### Тест перевірка `notIdentical`
+##### Test check `notIdentical`
 
 In addition to the full form, it has a shortened - `ni`.
 

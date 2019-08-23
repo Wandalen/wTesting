@@ -216,7 +216,7 @@ Two arguments of any type are expected.
 
 The check passes if the arguments are identical or the first argument contains the second argument. In the case when associative arrays are compared, then the first one must contain the key-value pair of the second. The numerical deviation is not allowed.
 
-The test fails if the second argument is not completely contained in the second.
+The test fails if the first argument is not completely contained in the second.
 
 ```js
 var got = 13;
@@ -249,6 +249,38 @@ test.contains( got, expected );
 ```
 
 The `test.contains` check will fail the associative array `got` contains not the element `a : 4`.
+
+##### Test check `setsAreIdentical`
+
+Two `array-like` arguments are expected.
+
+The check passes if the set of elements of the first argument is identical to the set of elements of the second argument. The order of the elements is not taken into account.
+
+The test fails if at least one element of the sets is different.
+
+```js
+var got = [ 13, 15, 40, 10 ];
+var expected = [ 40, 13, 10, 15 ];
+test.setsAreIdentical( got, expected );
+```
+
+The check `test.setsAreIdentical` will be passed as quantity and values of elements in array `got` and in array `expected` are identical.
+
+```js
+var got = [ 1, 2, 3, 5, 7 ];
+var expected = [ 1, 2, 3, 5 ];
+test.setsAreIdentical( got, expected );
+```
+
+The check `test.setsAreIdentical` will fail as lengths of array `got` and array `expected` are different.
+
+```js
+var got = [ 4, 2, 3 ];
+var expected = [ 1, 7, 3 ];
+test.setsAreIdentical( got, expected );
+```
+
+The check `test.setsAreIdentical` will fail as the values of `got` array elements and `expected` array elements are different.
 
 ##### Test check `gt`
 

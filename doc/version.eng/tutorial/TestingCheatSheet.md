@@ -55,7 +55,7 @@ $ node [ path to a test file ]
 
 Running of test suite ( test suites ) by utility Testing and NodeJS.
 
-### Prime running options
+### Primary running options
 
 To control testing the running options is used.
 
@@ -264,7 +264,7 @@ mustNotThrowError( routine arg );
 Passes if the routine does not throws an error either synchronously or asynchronously.
 
 ```
-shouldMessageOnlyOnce( routine arg );
+shouldReturnSingleResource( routine arg );
 ```
 
 Passes if the routine ends synchronously or the concequence returns only one resource.

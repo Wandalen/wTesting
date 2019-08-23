@@ -33,7 +33,7 @@ The next test checks can be applied for positive testing:
 - `lt`;
 - `le`;
 - `mustNotThrowError`;
-- `shouldMessageOnlyOnce`.
+- `shouldReturnSingleResource`.
 
 ## Negative testing
 
@@ -441,7 +441,7 @@ test.shouldThrowError( function r1()
 
 The `test.mustNotThrowError` check will be passed as the asynchronous routine `r2` does not throw an error.
 
-##### Test check `shouldMessageOnlyOnce`
+##### Test check `shouldReturnSingleResource`
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
@@ -450,7 +450,7 @@ The check passes if the routine ends synchronously or the concequence returns on
 The check fails if its consequence receives several messages.
 
 ```js
-test.shouldMessageOnlyOnce( function r()
+test.shouldReturnSingleResource( function r()
 {
   var con = new _.Consequence();
   con.take( 1 );
@@ -459,6 +459,6 @@ test.shouldMessageOnlyOnce( function r()
 });
 ```
 
-The `test.shouldMessageOnlyOnce` check will fail as the routine `r` returns consequence with two messages - `1` and `2`.
+The `test.shouldReturnSingleResource` check will fail as the routine `r` returns consequence with two messages - `1` and `2`.
 
 [Back to content](../README.md#Concepts)

@@ -4,7 +4,7 @@ Framework for convenient unit testing. This cheat sheet summarizes commonly used
 
 ### Installation of utility Testing
 
-To install utility Testing you need an installed NodeJS and NPM.
+To install utility Testing an installed NodeJS and NPM are needed.
 
 ```
 npm install -g wTesting
@@ -38,7 +38,7 @@ Find test suites at a specific path.
 tst .run [ path ]
 ```
 
-Run test suites found at a specified path.
+Run test suites found at a specific path.
 
 ```
 tst .imply [ options... ] .run [ path ]
@@ -53,7 +53,7 @@ tst .run [ path to a test file || path to a directory || path with glob ]
 node [ path to a test file ]
 ```
 
-Running of test suite ( test suites ).
+Running of test suite ( test suites ) by utility Testing and NodeJS.
 
 ### Often used running options
 
@@ -186,7 +186,7 @@ Passes if argument is true-like.
 isNot( boolLike arg );
 ```
 
-Passes  if argument is false-like.
+Passes if argument is false-like.
 
 ```
 isNotError( errorLike arg );
@@ -232,7 +232,7 @@ Passes if the arguments are identical or the first argument contains the second 
 setsAreIdentical( arrayLike arg1, arrayLike arg2 );
 ```
 
-Passes if elemens of both arguments are identical.
+Passes if elements of both arguments are identical.
 
 ```
 gt( numberLike arg1, numberLike arg2 );

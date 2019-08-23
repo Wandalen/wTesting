@@ -34,7 +34,7 @@
 - `lt`;
 - `le`;
 - `mustNotThrowError`;
-- `shouldMessageOnlyOnce`.
+- `shouldReturnSingleResource`.
 
 ## Негативне тестування
 
@@ -442,7 +442,7 @@ test.shouldThrowError( function r1()
 
 Перевірку `test.mustNotThrowError` буде пройдено так, як асинхронна рутина `r2` не викидає помилку.
 
-##### Тест перевірка `shouldMessageOnlyOnce`
+##### Тест перевірка `shouldReturnSingleResource`
 
 Очікує один аргумент у вигляді рутини, котру буде запущено без аргументів для перевірки її роботи.
 
@@ -451,7 +451,7 @@ test.shouldThrowError( function r1()
 Перевірка провалюється, якщо її наслідок отримує декілька повідомлень.
 
 ```js
-test.shouldMessageOnlyOnce( function r()
+test.shouldReturnSingleResource( function r()
 {
   var con = new _.Consequence();
   con.take( 1 );
@@ -460,6 +460,6 @@ test.shouldMessageOnlyOnce( function r()
 });
 ```
 
-Перевірка `test.shouldMessageOnlyOnce` буде провалено так як рутина `r` повертає наслідок із двома повідомленнями `1` та `2`.
+Перевірка `test.shouldReturnSingleResource` буде провалено так як рутина `r` повертає наслідок із двома повідомленнями `1` та `2`.
 
 [Повернутись до змісту](../README.md#Концепції)

@@ -2,7 +2,7 @@
 
 Framework for convenient unit testing. This cheat sheet summarizes commonly used utility Testing command line instructions and test suite structure for quick reference.
 
-### Installation of utility Testing
+### INSTALLATION OF UTILITY TESTING
 
 To install utility Testing an installed NodeJS and NPM are needed.
 
@@ -12,7 +12,7 @@ $ npm install -g wTesting
 
 Global installation of utility Testing by NPM.
 
-### Main commands
+### MAIN COMMANDS
 
 All commands of the utility start with `tst .`.
 
@@ -46,7 +46,7 @@ $ tst .imply [ options... ] .run [ path ]
 
 Change state or imply variable value.
 
-### Running of test suites
+### RUNNING TESTS
 
 ```
 $ tst .run [ path to a test file || path to a directory || path with glob ]
@@ -55,7 +55,7 @@ $ node [ path to a test file ]
 
 Running of test suite ( test suites ) by utility Testing and NodeJS.
 
-### Primary running options
+### PRIMARY RUNNING OPTIONS
 
 To control testing the running options is used.
 
@@ -91,7 +91,7 @@ $ tst .run [ path ] accuracy:[ number ]
 
 Option sets the numeric deviation for the comparison of numerical values. Accepts numeric values of deviation. Default value is 1e-7.
 
-### Secondary running options
+### SECONDARY RUNNING OPTIONS
 
 Running options that extend control of testing.
 
@@ -165,14 +165,14 @@ $ tst .run [ path ] concurrent:[ number ]
 
 Option enables parallel execution of test suites. Accepts 0 or 1. Default value is 0.
 
-### Test suite structure
+### TEST SUITE STRUCTURE
 
 The test file should contain only one test suite.
 Example of a minimum test file is given below. It uses the basic structural elements and can be considered as a test suite template.
 
 ![join.test.png](../../images/join.test.png)
 
-### Test checks
+### TEST CHECKS
 
 Test checks are the smallest structural element that checks one aspect of a test object behavior.
 
@@ -213,14 +213,14 @@ equivalent( any arg1, any arg2 );
 et( any arg1, any arg2 );
 ```
 
-Passes if both arguments are similar.
+Passes if both arguments are equivalent.
 
 ```
 notEquivalent( any arg1, any arg2 );
 ne( any arg1, any arg2 );
 ```
 
-Passes if both arguments are not similar.
+Passes if both arguments are not equivalent.
 
 ```
 contains( any arg1, any arg2 );

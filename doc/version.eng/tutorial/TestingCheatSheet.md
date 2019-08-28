@@ -177,112 +177,112 @@ Example of a minimum test file is given below. It uses the basic structural elem
 Test checks are the smallest structural element that checks one aspect of a test object behavior.
 
 ```
-is( boolLike arg );
+test.is( boolLike arg );
 ```
 
 Passes if argument is true-like.
 
 ```
-isNot( boolLike arg );
+test.isNot( boolLike arg );
 ```
 
 Passes if argument is false-like.
 
 ```
-isNotError( errorLike arg );
+test.isNotError( errorLike arg );
 ```
 
 Passes if argument is not error.
 
 ```
-identical( any arg1, any arg2 );
-il( any arg1, any arg2 );
+test.identical( any arg1, any arg2 );
+test.il( any arg1, any arg2 );
 ```
 
 Passes if both arguments are identical.
 
 ```
-notIdentical( any arg1, any arg2 );
-ni( any arg1, any arg2 );
+test.notIdentical( any arg1, any arg2 );
+test.ni( any arg1, any arg2 );
 ```
 
 Passes if both arguments are not identical.
 
 ```
-equivalent( any arg1, any arg2 );
-et( any arg1, any arg2 );
+test.equivalent( any arg1, any arg2 );
+test.et( any arg1, any arg2 );
 ```
 
 Passes if both arguments are equivalent.
 
 ```
-notEquivalent( any arg1, any arg2 );
-ne( any arg1, any arg2 );
+test.notEquivalent( any arg1, any arg2 );
+test.ne( any arg1, any arg2 );
 ```
 
 Passes if both arguments are not equivalent.
 
 ```
-contains( any arg1, any arg2 );
+test.contains( any arg1, any arg2 );
 ```
 
 Passes if the arguments are identical or the first argument contains the second argument.
 
 ```
-setsAreIdentical( arrayLike arg1, arrayLike arg2 );
+test.setsAreIdentical( arrayLike arg1, arrayLike arg2 );
 ```
 
 Passes if elements of both arguments are identical.
 
 ```
-gt( numberLike arg1, numberLike arg2 );
+test.gt( numberLike arg1, numberLike arg2 );
 ```
 
 Passes if the value of the first argument is greater than the value of the second.
 
 ```
-ge( numberLike arg1, numberLike arg2 );
+test.ge( numberLike arg1, numberLike arg2 );
 ```
 
 Passes if the value of the first argument is greater or equal to the value of the second.
 
 ```
-lt( numberLike arg1, numberLike arg2 );
+test.lt( numberLike arg1, numberLike arg2 );
 ```
 
 Passes if the value of the first argument is less than the value of the second.
 
 ```
-le( numberLike arg1, numberLike arg2 );
+test.le( numberLike arg1, numberLike arg2 );
 ```
 Passes if the value of the first argument is less or equal to the value of the second.
 
 ```
-mustNotThrowError( routine arg );
+test.mustNotThrowError( routine arg );
 ```
 
 Passes if the routine does not throws an error either synchronously or asynchronously.
 
 ```
-shouldReturnSingleResource( routine arg );
+test.shouldReturnSingleResource( routine arg );
 ```
 
 Passes if the routine ends synchronously or the concequence returns only one resource.
 
 ```
-shouldThrowErrorSync( routine arg );
+test.shouldThrowErrorSync( routine arg );
 ```
 
 Passes if the routine throws an error synchronously.
 
 ```
-shouldThrowErrorAsync( routine arg )
+test.shouldThrowErrorAsync( routine arg )
 ```
 
 Passes if the routine throws an error asynchronously.
 
 ```
-shouldThrowError( routine arg )
+test.shouldThrowError( routine arg )
 ```
 
 Passes if the routine throws an error synchronously or asynchronously.

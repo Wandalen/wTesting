@@ -85,7 +85,7 @@ Includes tests from : /.../testCreation/Join.test.js
 Tester Settings :
 {
   scenario : test,
-  sanitareTime : 500,
+  sanitareTime : 2000,
   fails : null,
   beeping : true,
   coloring : 1,
@@ -201,7 +201,7 @@ Includes tests from : /.../testCreation/Join.test.js
 Tester Settings :
 {
   scenario : test,
-  sanitareTime : 500,
+  sanitareTime : 2000,
   fails : null,
   beeping : true,
   coloring : 1,

@@ -253,7 +253,7 @@ Includes tests from : /.../suiteInheritanceMulty
 Tester Settings :
 {
   scenario : test,
-  sanitareTime : 500,
+  sanitareTime : 2000,
   fails : null,
   beeping : true,
   coloring : 1,

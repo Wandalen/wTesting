@@ -143,13 +143,13 @@ Example of command: `tst .imply scenario:suites.list path/to/dir `.
 
 Sets the delay between completing the test suite and running the next.
 
-The option is intended to complete the execution of tests with asynchronous functions. It is determined in milliseconds. The default value is 500ms.
+The option is intended to complete the execution of tests with asynchronous functions. It is determined in milliseconds. The default value is 2000ms.
 
 The `tst .imply sanitareTime:1000 .run path/to/dir` command runs the test in the specified directory; the delay before running the next test suite is set to one second.
 
 ##### Run option `fails`
 
-Sets the number of errors that the utility must receive to pre-complete the test.
+Sets the number of errors that the utility must receive to interrupt the test.
 
 When the specified number of errors is reached, the utility finishes testing. By default, the number of errors is not limited.
 
@@ -181,13 +181,13 @@ Example: `tst .imply timing:0 .run path/to/dir`. Time data will not be available
 
 ##### Run option `rapidity`
 
-The option controls the amount of time spent on testing. Each test routine can specify its own option `rapidity` with a value from` 1` to `5`. By default, routine option `rapidity`  is` 3`. A routine doesn't run when the value of run option `rapidity` is greater than the value of routine option `rapidity`.
+The option controls the amount of time spent on testing. Each test routine can specify its own option `rapidity` with a value from `-9` to `+9`. By default, routine option `rapidity`  is `0`. A routine doesn't run when the value of run option `rapidity` is greater than the value of routine option `rapidity`.
 
-The option accepts values from `1` to `5`: `1` is the slowest testing, `5` is the fastest. The default value is `3`.
+The option accepts values from `-9` to `+9`: `-9` is the slowest testing, `+9` is the fastest. The default value is `0`.
 
-The `tst .imply rapidity:1 path/to/dir` command tests each test routine.
+The `tst .imply rapidity:-9 .run path/to/dir` command tests each test routine.
 
-The `tst .imply rapidity:4 path/to/dir` command skips all test routines, which routine options `rapidity` are less than `4` or` 5`.
+The `tst .imply rapidity:4 .run path/to/dir` command skips all test routines, which routine options `rapidity` are less than `4`.
 
 ##### Run option `testRoutineTimeOut`
 
@@ -207,7 +207,7 @@ The utility can run more than one test suite at the same time if there are sever
 
 The option has two values: 1 - parallel testing is on, 0 - is disabled and testing is in turn. By default - 0.
 
-The command `tst .imply  concurrent:1 path/to/dir` runs parallel execution of test suites in the` path/to/dir` directory.
+The command `tst .imply  concurrent:1 .run path/to/dir` runs parallel execution of test suites in the` path/to/dir` directory.
 
 ##### Run option `verbosity`
 
@@ -217,7 +217,7 @@ Accepts a value from 0 to 9. When the value is set to 0, it does not display a s
 
 The test suite can have a `verbosity` option. In this case, the value set in the test suite has a priority over the run option.
 
-The `tst .imply verbosity:5 path/to/dir` command prints a more detailed test report by displaying information about test checks. By default, information about the test checks is not displayed.
+The `tst .imply verbosity:5 .run path/to/dir` command prints a more detailed test report by displaying information about test checks. By default, information about the test checks is not displayed.
 
 ##### Run option `importanceOfNegative`
 
@@ -251,7 +251,7 @@ The option sets the numeric deviation for the comparison of numerical values.
 
 The default value is set to `1e-7`.
 
-The `tst .imply accuracy:1e-4 path/to/dir` command changes the result of the next test check:
+The `tst .imply accuracy:1e-4 .run path/to/dir` command changes the result of the next test check:
 
 ```js
 test.equivalent( 1, 1.00001 );

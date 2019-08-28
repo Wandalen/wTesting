@@ -801,11 +801,11 @@ function _suitesIncludeAt( path )
   let files = tester.fileProvider.filesFind
   ({
     filePath : path,
-    recursive : 2,
     filter :
     {
       ends : ends,
       maskAll : maskAll,
+      recursive : 2,
     }
   });
 

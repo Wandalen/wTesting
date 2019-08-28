@@ -202,7 +202,7 @@ Includes tests from : /.../testCreation/Join.test.js
 Tester Settings :
 {
   scenario : test,
-  sanitareTime : 2000,
+  sanitareTime : 500,
   fails : null,
   beeping : true,
   coloring : 1,

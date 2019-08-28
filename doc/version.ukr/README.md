@@ -119,6 +119,11 @@
   </a></summary>
   Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
 </details>
+<details><summary><a href="./tutorial/TestRoutine.md">
+      Як писати тест рутину
+  </a></summary>
+  Основні правила написання тест рутин.
+</details>
 <details><summary><a href="./tutorial/Verbosity.md">
       Контроль рівня вербальності
   </a></summary>

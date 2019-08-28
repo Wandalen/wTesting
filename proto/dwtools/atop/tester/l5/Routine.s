@@ -2333,17 +2333,17 @@ function mustNotThrowError( routine )
  * @example
  * function sometest( test )
  * {
- *  test.shouldMessageOnlyOnce( () => _.Consequence().take( null ) );//returns true
- *  test.shouldMessageOnlyOnce( () => _.Consequence().take( null ).take( null ) );//returns false
+ *  test.returnsSingleResource( () => _.Consequence().take( null ) );//returns true
+ *  test.returnsSingleResource( () => _.Consequence().take( null ).take( null ) );//returns false
  * }
  * wTester.test( { name : 'test', tests : { sometest : sometest } } );
  *
  * @throws {Exception} If no arguments provided.
- * @method shouldMessageOnlyOnce
+ * @method returnsSingleResource
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function shouldMessageOnlyOnce( routine )
+function returnsSingleResource( routine )
 {
   let trd = this;
 
@@ -3147,7 +3147,7 @@ let Extend =
   shouldThrowErrorAsync,
   shouldThrowError,
   mustNotThrowError,
-  shouldMessageOnlyOnce,
+  returnsSingleResource,
 
   // consider
 

@@ -48,6 +48,9 @@ if( typeof module !== 'undefined' )
 + warning if no test suite under path found
 + checkers ( identical, contains, equivalent ... ) should return boolean
 + routine : 'some', routine : some - should work both variants
++ switch off routine timeout if debugged
+
+- qqq : highlght call in call stack from *.test files. cover it.
 
 - print information about case with color directive avoiding change of color state of logger
 
@@ -65,9 +68,7 @@ if( typeof module !== 'undefined' )
 - use script launcher
 - use multiple processes
 
-+ switch off routine timeout if debugged
-
-- if timeout then print not "failed throwing error", but "failed with timeout"
+- qqq : if timeout then print not "failed throwing error", but "failed because of time out". cover it
 
 - implement onError field for test routine?
 - implement custom handler of test routine fail?
@@ -79,9 +80,13 @@ if( typeof module !== 'undefined' )
         Test check ( Tools/Math/Vector / comparator / trivial # 2 ) ... ok
         Test check ( Tools/Math/Vector / comparator / trivial # 3 ) : test routine has not thrown an error ... ok
 
-- highlght call in call stack from *.test files
-
 - Expose entityDiffExplanation's option levels via CLI.
+
+- Tweak and cover entityDiffExplanation.
+
+- time out in seconds maybe?
+
+- implement running option additive:0
 
 */
 

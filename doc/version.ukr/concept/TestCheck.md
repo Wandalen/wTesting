@@ -28,12 +28,13 @@
 - `equivalent`;
 - `notEquivalent`;
 - `contains`;
+- `setsAreIdentical`;
 - `gt`;
 - `ge`;
 - `lt`;
 - `le`;
 - `mustNotThrowError`;
-- `shouldMessageOnlyOnce`.
+- `shouldReturnSingleResource`.
 
 ## Негативне тестування
 
@@ -216,7 +217,7 @@ test.ne( got, expected );
 
 Перевірка проходиться, якщо передані аргументи ідентичні або перший аргумент містить в собі другий аргумент. У випадку, якщо порівнюються асоціативні масиви то перший має містить пари ключ-значення другого. Числова похибка не допускається.
 
-Перевірка провалюється, якщо другий аргумент не повністю міститься в другому.
+Перевірка провалюється, якщо перший аргумент не повністю міститься в другому.
 
 ```js
 var got = 13;
@@ -249,6 +250,38 @@ test.contains( got, expected );
 ```
 
 Перевірку `test.contains` буде провалено так, як в асоціативному масиві `got` не має елемента `a : 4`.
+
+##### Тест перевірка `setsAreIdentical`
+
+Очікує два `array-like` аргументи.
+
+Перевірка проходиться, якщо множина елементів першого аргумента ідентична множині елементів другого аргумента. При порівнянні множин порядок елементів не враховується.
+
+Перевірка провалюється, якщо принаймні один елемент множин відрізняється.
+
+```js
+var got = [ 13, 15, 40, 10 ];
+var expected = [ 40, 13, 10, 15 ];
+test.setsAreIdentical( got, expected );
+```
+
+Перевірку `test.setsAreIdentical` буде пройдено так, як значення кількість і значення елементів `got` співпадають з `expected`.
+
+```js
+var got = [ 1, 2, 3, 5, 7 ];
+var expected = [ 1, 2, 3, 5 ];
+test.setsAreIdentical( got, expected );
+```
+
+Перевірку `test.setsAreIdentical` буде провалено так, як довжина масиву `got` і масиву `expected` відрізняється.
+
+```js
+var got = [ 4, 2, 3 ];
+var expected = [ 1, 7, 3 ];
+test.setsAreIdentical( got, expected );
+```
+
+Перевірку `test.setsAreIdentical` буде провалено так, елементи масиву `got` і елементи масиву `expected` відрізняються.
 
 ##### Тест перевірка `gt`
 
@@ -409,7 +442,7 @@ test.shouldThrowError( function r1()
 
 Перевірку `test.mustNotThrowError` буде пройдено так, як асинхронна рутина `r2` не викидає помилку.
 
-##### Тест перевірка `shouldMessageOnlyOnce`
+##### Тест перевірка `shouldReturnSingleResource`
 
 Очікує один аргумент у вигляді рутини, котру буде запущено без аргументів для перевірки її роботи.
 
@@ -418,7 +451,7 @@ test.shouldThrowError( function r1()
 Перевірка провалюється, якщо її наслідок отримує декілька повідомлень.
 
 ```js
-test.shouldMessageOnlyOnce( function r()
+test.shouldReturnSingleResource( function r()
 {
   var con = new _.Consequence();
   con.take( 1 );
@@ -427,6 +460,6 @@ test.shouldMessageOnlyOnce( function r()
 });
 ```
 
-Перевірка `test.shouldMessageOnlyOnce` буде провалено так як рутина `r` повертає наслідок із двома повідомленнями `1` та `2`.
+Перевірка `test.shouldReturnSingleResource` буде провалено так як рутина `r` повертає наслідок із двома повідомленнями `1` та `2`.
 
 [Повернутись до змісту](../README.md#Концепції)

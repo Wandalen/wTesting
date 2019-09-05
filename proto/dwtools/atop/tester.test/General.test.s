@@ -127,7 +127,7 @@ function identical( test )
 // should
 // --
 
-function shouldMessageOnlyOnce( test )
+function returnsSingleResource( test )
 {
 
   var counter = new CheckCounter();
@@ -140,7 +140,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
     test.case = 'does not throw error';
-    var c1 = t.shouldMessageOnlyOnce( function()
+    var c1 = t.returnsSingleResource( function()
     {
     });
 
@@ -166,7 +166,7 @@ function shouldMessageOnlyOnce( test )
 
     t.identical( 0,0 );
     test.case = 'does not throw error, string sync message';
-    var c2 = t.shouldMessageOnlyOnce( function()
+    var c2 = t.returnsSingleResource( function()
     {
       return 'msg'
     });
@@ -194,7 +194,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'throw unexpected error, synchronously';
-    var c3 = t.shouldMessageOnlyOnce( function()
+    var c3 = t.returnsSingleResource( function()
     {
       throw _.errAttend( 'error1' );
     });
@@ -223,7 +223,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'throw unexpected error, asynchronously';
-    var c4 = t.shouldMessageOnlyOnce( function()
+    var c4 = t.returnsSingleResource( function()
     {
       return _.timeOut( 150,function()
       {
@@ -255,7 +255,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'single async message, no error';
-    var c5 = t.shouldMessageOnlyOnce( function()
+    var c5 = t.returnsSingleResource( function()
     {
       return _.timeOut( 150 );
     });
@@ -283,7 +283,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'not expected second message';
-    var c6 = t.shouldMessageOnlyOnce( function()
+    var c6 = t.returnsSingleResource( function()
     {
       var con = _.Consequence();
 
@@ -321,7 +321,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'not expected second error';
-    var c7 = t.shouldMessageOnlyOnce( function()
+    var c7 = t.returnsSingleResource( function()
     {
       var con = _.Consequence();
 
@@ -359,7 +359,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with argument';
-    var c8 = t.shouldMessageOnlyOnce( _.Consequence().take( 'arg' ) );
+    var c8 = t.returnsSingleResource( _.Consequence().take( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -384,7 +384,7 @@ function shouldMessageOnlyOnce( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with error';
-    var c9 = t.shouldMessageOnlyOnce( _.Consequence().error( 'error' ) );
+    var c9 = t.returnsSingleResource( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -440,7 +440,7 @@ function shouldMessageOnlyOnce( test )
   return result;
 }
 
-shouldMessageOnlyOnce.timeOut = 30000;
+returnsSingleResource.timeOut = 30000;
 
 //
 
@@ -1666,7 +1666,7 @@ function shouldPassMessage( test )
   });
 
   var con = new _.Consequence().take( '123' );
-  test.shouldMessageOnlyOnce( con )
+  test.returnsSingleResource( con )
   .ifNoErrorThen( function( arg )
   {
     test.identical( arg, '123' );
@@ -2306,7 +2306,7 @@ function chainedShould( test )
     },
 
     {
-      method : 'shouldMessageOnlyOnce',
+      method : 'returnsSingleResource',
       throwingError : 0,
     },
 
@@ -4002,7 +4002,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( () => 1 )
+      return t.returnsSingleResource( () => 1 )
       .finally( ( err, got ) =>
       {
         done1 = 1;
@@ -4014,7 +4014,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( () => { throw _.err( 1 ) } )
+      return t.returnsSingleResource( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4025,7 +4025,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( _.Consequence().take( 1 ) )
+      return t.returnsSingleResource( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4036,7 +4036,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( () => _.Consequence().take( 1 ) )
+      return t.returnsSingleResource( () => _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4047,7 +4047,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( _.Consequence().error( _.err( 1 ) ) )
+      return t.returnsSingleResource( _.Consequence().error( _.err( 1 ) ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4058,7 +4058,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( () => _.Consequence().error( _.err( 1 ) ) )
+      return t.returnsSingleResource( () => _.Consequence().error( _.err( 1 ) ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4070,7 +4070,7 @@ function shouldMessageOnlyOnceReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
-      return t.shouldMessageOnlyOnce( con )
+      return t.returnsSingleResource( con )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4082,7 +4082,7 @@ function shouldMessageOnlyOnceReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
-      return t.shouldMessageOnlyOnce( () => con )
+      return t.returnsSingleResource( () => con )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4093,7 +4093,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( _.timeOutError( 1 ) )
+      return t.returnsSingleResource( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4104,7 +4104,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( () => _.timeOutError( 1 ) )
+      return t.returnsSingleResource( () => _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -4116,7 +4116,7 @@ function shouldMessageOnlyOnceReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.Consequence().take( 1 ).take( 2 );
-      return t.shouldMessageOnlyOnce( con )
+      return t.returnsSingleResource( con )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -4128,7 +4128,7 @@ function shouldMessageOnlyOnceReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       var con = _.Consequence().take( 1 ).take( 2 );
-      return t.shouldMessageOnlyOnce( () => con )
+      return t.returnsSingleResource( () => con )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -4140,7 +4140,7 @@ function shouldMessageOnlyOnceReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'no arguments';
-      return t.shouldMessageOnlyOnce()
+      return t.returnsSingleResource()
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -4152,7 +4152,7 @@ function shouldMessageOnlyOnceReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'not routines';
-      return t.shouldMessageOnlyOnce( 'x' )
+      return t.returnsSingleResource( 'x' )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -4163,7 +4163,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldMessageOnlyOnce( function(){}, function(){} )
+      return t.returnsSingleResource( function(){}, function(){} )
       .finally( ( err, got ) =>
       {
         test.case = 'several functions';
@@ -5658,7 +5658,7 @@ function mustNotThrowErrorExperiment( test )
     return _.timeOut( 500 );
   });
 
-  // var con = test.shouldMessageOnlyOnce( function()
+  // var con = test.returnsSingleResource( function()
   // {
   //   throw _.err( 'err1' );
   // });
@@ -5736,7 +5736,7 @@ var Self =
 
     // should
 
-    shouldMessageOnlyOnce,
+    returnsSingleResource,
     mustNotThrowError,
     shouldThrowErrorSync,
     shouldThrowErrorAsync,

@@ -33,7 +33,7 @@ The next test checks can be applied for positive testing:
 - `lt`;
 - `le`;
 - `mustNotThrowError`;
-- `shouldMessageOnlyOnce`.
+- `shouldReturnSingleResource`.
 
 ## Negative testing
 
@@ -110,7 +110,7 @@ test.identical( got, expected );
 
 The `test.identical` check will be passed as the values of arguments are identical.
 
-##### Тест перевірка `notIdentical`
+##### Test check `notIdentical`
 
 In addition to the full form, it has a shortened - `ni`.
 
@@ -216,7 +216,7 @@ Two arguments of any type are expected.
 
 The check passes if the arguments are identical or the first argument contains the second argument. In the case when associative arrays are compared, then the first one must contain the key-value pair of the second. The numerical deviation is not allowed.
 
-The test fails if the second argument is not completely contained in the second.
+The test fails if the first argument is not completely contained in the second.
 
 ```js
 var got = 13;
@@ -249,6 +249,38 @@ test.contains( got, expected );
 ```
 
 The `test.contains` check will fail the associative array `got` contains not the element `a : 4`.
+
+##### Test check `setsAreIdentical`
+
+Two `array-like` arguments are expected.
+
+The check passes if the set of elements of the first argument is identical to the set of elements of the second argument. The order of the elements is not taken into account.
+
+The test fails if at least one element of the sets is different.
+
+```js
+var got = [ 13, 15, 40, 10 ];
+var expected = [ 40, 13, 10, 15 ];
+test.setsAreIdentical( got, expected );
+```
+
+The check `test.setsAreIdentical` will be passed as quantity and values of elements in array `got` and in array `expected` are identical.
+
+```js
+var got = [ 1, 2, 3, 5, 7 ];
+var expected = [ 1, 2, 3, 5 ];
+test.setsAreIdentical( got, expected );
+```
+
+The check `test.setsAreIdentical` will fail as lengths of array `got` and array `expected` are different.
+
+```js
+var got = [ 4, 2, 3 ];
+var expected = [ 1, 7, 3 ];
+test.setsAreIdentical( got, expected );
+```
+
+The check `test.setsAreIdentical` will fail as the values of `got` array elements and `expected` array elements are different.
 
 ##### Test check `gt`
 
@@ -318,7 +350,7 @@ The `test.le` check will be passed as the value of `a` variable will be coerced 
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine throws an error. The  `shouldThrowErrorSync` check does not notice asynchronous errors.
+The check passes if the routine throws an error. The `shouldThrowErrorSync` check does not notice asynchronous errors.
 
 The check fails if the routine does not throw an error.
 
@@ -335,7 +367,7 @@ The `test.shouldThrowErrorSync` check will be passed as the specified routine th
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine throws an error in asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
+The check passes if the routine throws an error asynchronously, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
 
 The check fails if the routine does not throw an error during the time it was tested.
 
@@ -355,7 +387,7 @@ The `test.shouldThrowErrorAsync` check will be passed as the specified routine t
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine throws an error in synchronous or asynchronous mode, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
+The check passes if the routine throws an error synchronously or asynchronously, that is, through `consequence` or` promise`.  Asynchronous errors can be delayed from the moment the routine returns.
 
 The test fails if the routine does not throws neither synchronous nor an asynchronous error during the time it is tested.
 
@@ -384,7 +416,7 @@ The `test.shouldThrowError` will be passed as the routine `r2` throws the error 
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine does not throw an error either in synchronous or in asynchronous mode.
+The check passes if the routine does not throw an error synchronously or asynchronously.
 
 The check fails if the routine throws the error synchronously or asynchronously. After such an error, the routine can continue execution because it will be isolated in the subroutine.
 
@@ -409,16 +441,16 @@ test.shouldThrowError( function r1()
 
 The `test.mustNotThrowError` check will be passed as the asynchronous routine `r2` does not throw an error.
 
-##### Test check `shouldMessageOnlyOnce`
+##### Test check `shouldReturnSingleResource`
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine ends synchronously or the result returns only one message.
+The check passes if the routine ends synchronously or the concequence returns only one resource.
 
 The check fails if its consequence receives several messages.
 
 ```js
-test.shouldMessageOnlyOnce( function r()
+test.shouldReturnSingleResource( function r()
 {
   var con = new _.Consequence();
   con.take( 1 );
@@ -427,6 +459,6 @@ test.shouldMessageOnlyOnce( function r()
 });
 ```
 
-The `test.shouldMessageOnlyOnce` check will fail as the routine `r` returns consequence with two messages - `1` and `2`.
+The `test.shouldReturnSingleResource` check will fail as the routine `r` returns consequence with two messages - `1` and `2`.
 
 [Back to content](../README.md#Concepts)

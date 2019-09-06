@@ -50,6 +50,8 @@ if( typeof module !== 'undefined' )
 + routine : 'some', routine : some - should work both variants
 + switch off routine timeout if debugged
 
+- cover error throwing in onSuiteBegin, onSuiteEnd.
+
 - qqq : highlght call in call stack from *.test files. cover it.
 
 - print information about case with color directive avoiding change of color state of logger

@@ -22,14 +22,14 @@ function onSuiteBegin()
   let self = this;
 
   self.execPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
-  self.tempDir = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'Will' );
+  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Will' );
   self.assetDirPath = _.path.join( __dirname, '_asset' );
   self.find = _.fileProvider.filesFinder
   ({
     recursive : 2,
-    includingTerminals : 1,
-    includingDirs : 1,
-    includingTransient : 1,
+    withTerminals : 1,
+    withDirs : 1,
+    withTransient/*maybe withStem*/ : 1,
     allowingMissed : 1,
     outputFormat : 'relative',
   });

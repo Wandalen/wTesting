@@ -23,7 +23,7 @@
   "files": [
     "proto/dwtools/atop/tester",
     "proto/dwtools/Tools.s",
-    "production"
+    "out"
   ],
   "scripts": {
     "wtest": "node proto/dwtools/atop/tester/ExecUnrestricted",

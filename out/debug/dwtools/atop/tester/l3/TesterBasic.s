@@ -35,7 +35,7 @@ if( wTester._isReal_ )
 
 _.assert( _.routineIs( _.toStr ), 'wTesting needs Stringer' );
 _.assert( _.routineIs( _.shell ), 'wTesting needs ExternalFundamentals' );
-_.assert( _.routineIs( _.execStages ), 'wTesting needs RoutineFundamentals' );
+_.assert( _.routineIs( _.execStages ), 'wTesting needs RoutineBasic' );
 _.assert( _.routineIs( _.Consequence ), 'wTesting needs Consequence' );
 _.assert( _.numberIs( _.accuracy ), 'wTesting needs _.accuracy' );
 _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );

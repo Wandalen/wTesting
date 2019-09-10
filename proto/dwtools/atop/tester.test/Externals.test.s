@@ -22,11 +22,11 @@ function onSuiteBegin()
   let self = this;
 
   self.execPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Will' );
+  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, '_asset' );
   self.find = _.fileProvider.filesFinder
   ({
-    recursive : 2,
+    filter : { recursive : 2 },
     withTerminals : 1,
     withDirs : 1,
     withTransient/*maybe withStem*/ : 1,
@@ -39,8 +39,8 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.assert( _.strHas( self.tempDir, '/dwtools/tmp.tmp' ) )
-  _.fileProvider.filesDelete( self.tempDir );
+  _.assert( _.strHas( self.tempDir, 'Tester' ) )
+  _.path.pathDirTempClose( self.tempDir );
 }
 
 // --
@@ -147,7 +147,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -171,7 +171,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -181,7 +181,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ testSuitePath,  'v:7' ] })
+  shellTester({ args : [ testSuitePath,  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -195,7 +195,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -219,7 +219,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -229,7 +229,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ '.run', testSuitePath,  'v:7' ] })
+  shellTester({ args : [ '.run', testSuitePath,  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -243,7 +243,7 @@ function run( test )
 
     return null;
   })
-  
+
 /* - */
 
   ready
@@ -267,7 +267,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -277,7 +277,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ _.path.nativize( testSuitePath ),  'v:7' ] })
+  shellTester({ args : [ _.path.nativize( testSuitePath ),  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -291,7 +291,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -315,7 +315,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   ready
@@ -325,7 +325,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ '.run', _.path.nativize( testSuitePath ),  'v:7' ] })
+  shellTester({ args : [ '.run', _.path.nativize( testSuitePath ),  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -339,7 +339,7 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
 
   // shell( 'npm rm -g wTesting' );

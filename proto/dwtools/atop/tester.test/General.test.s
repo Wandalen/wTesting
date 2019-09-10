@@ -5713,6 +5713,114 @@ function experimentTimeOutAsync( test )
 experimentTimeOutAsync.experimental = 1;
 experimentTimeOutAsync.timeOut = 8000;
 
+//
+
+function onSuiteBeginThrowError( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1,1 );
+  }
+
+  let onSuiteBeginErr = _.err( 'onSuiteBegin: some error' );
+
+  function onSuiteBegin()
+  {
+    throw onSuiteBeginErr;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onSuiteBegin,
+    tests : { trivial },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, data )
+  {
+    var got = _.select( data, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ onSuiteBeginErr ] );
+    test.notIdentical( got.appExitCode, 0 );
+    test.identical( got.testCheckPasses, 0 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 0 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testCaseNumber, 0 );
+    test.identical( got.testRoutinePasses, 0 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.is( _.errIs( err ) );
+
+    _.appExitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function onSuiteEndThrowError( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1,1 );
+  }
+
+  let onSuiteEndErr = _.err( 'onSuiteEnd: some error' );
+
+  function onSuiteEnd()
+  {
+    throw onSuiteEndErr;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onSuiteEnd,
+    tests : { trivial },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, data )
+  {
+    var got = _.select( data, '*/report' )[ 0 ];
+
+    debugger
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ onSuiteEndErr ] );
+    test.notIdentical( got.appExitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testCaseNumber, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.is( _.errIs( err ) );
+
+    _.appExitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
 // --
 // declare
 // --
@@ -5793,6 +5901,9 @@ var Self =
     experimentTimeOutSyncNoChecks,
     experimentTimeOutSync,
     experimentTimeOutAsync,
+
+    onSuiteBeginThrowError,
+    onSuiteEndThrowError
 
   },
 

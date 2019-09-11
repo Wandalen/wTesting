@@ -103,8 +103,8 @@ $ tst .run [ path ] sanitareTime:[ time ]
 Option sets the delay between completing the test suite and running the next one. Accepts time in milliseconds. Default value is 2000ms.
 
 ```
-$ tst .imply importanceOfNegative:[ number ] .run [ path ]
-$ tst .run [ path ] importanceOfNegative:[ number ]
+$ tst .imply negativity:[ number ] .run [ path ]
+$ tst .run [ path ] negativity:[ number ]
 ```
 
 Option restricts the console output of passed routines and increases output of failed test checks. Accepts a value from 0 to 9. Default value is 1.
@@ -282,7 +282,7 @@ test.shouldThrowErrorAsync( routine arg )
 Passes if the routine throws an error asynchronously.
 
 ```
-test.shouldThrowError( routine arg )
+test.shouldThrowErrorOfAnyKind( routine arg )
 ```
 
 Passes if the routine throws an error synchronously or asynchronously.

@@ -51,7 +51,7 @@ let Sum = require( './Sum.js' );
 
 function routine1( test )
 {
-  test.shouldThrowError( () => Sum.sum( a, 1 ) );
+  test.shouldThrowErrorOfAnyKind( () => Sum.sum( a, 1 ) );
 }
 routine1.rapidity = 1
 

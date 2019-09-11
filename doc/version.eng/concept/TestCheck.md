@@ -42,7 +42,7 @@ It is a test to show the correct operation of a test object in a false input or 
 The next test checks can be applied for negative testing:
 - `shouldThrowErrorSync`;
 - `shouldThrowErrorAsync`;
-- `shouldThrowError`.
+- `shouldThrowErrorOfAnyKind`.
 
 ### The list of test checks
 
@@ -355,7 +355,7 @@ The check passes if the routine throws an error. The `shouldThrowErrorSync` chec
 The check fails if the routine does not throw an error.
 
 ```js
-test.shouldThrowError( function()
+test.shouldThrowErrorOfAnyKind( function()
 {
   throw 'err1';
 });
@@ -383,7 +383,7 @@ test.shouldThrowErrorAsync( function()
 
 The `test.shouldThrowErrorAsync` check will be passed as the specified routine throws asynchronous error. The routine `timeOut` returns consequence with `_.err( 'test' )` error.
 
-##### Тест перевірка `shouldThrowError`
+##### Тест перевірка `shouldThrowErrorOfAnyKind`
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
@@ -392,16 +392,16 @@ The check passes if the routine throws an error synchronously or asynchronously,
 The test fails if the routine does not throws neither synchronous nor an asynchronous error during the time it is tested.
 
 ```js
-test.shouldThrowError( function r1()
+test.shouldThrowErrorOfAnyKind( function r1()
 {
   throw 'err1';
 });
 ```
 
-The `test.shouldThrowError` check will be passed as the routine `r1` throws the error `throw 'err1'` synchronously.
+The `test.shouldThrowErrorOfAnyKind` check will be passed as the routine `r1` throws the error `throw 'err1'` synchronously.
 
 ```js
-test.shouldThrowError( function r2()
+test.shouldThrowErrorOfAnyKind( function r2()
 {
   return _.timeOut( 250, function()
   {
@@ -410,7 +410,7 @@ test.shouldThrowError( function r2()
 });
 ```
 
-The `test.shouldThrowError` will be passed as the routine `r2` throws the error `throw _.err( 'test' )` asynchronously, it throws the error through `250ms` after run.
+The `test.shouldThrowErrorOfAnyKind` will be passed as the routine `r2` throws the error `throw _.err( 'test' )` asynchronously, it throws the error through `250ms` after run.
 
 ##### Test check `mustNotThrowError`
 
@@ -421,7 +421,7 @@ The check passes if the routine does not throw an error synchronously or asynchr
 The check fails if the routine throws the error synchronously or asynchronously. After such an error, the routine can continue execution because it will be isolated in the subroutine.
 
 ```js
-test.shouldThrowError( function r1()
+test.shouldThrowErrorOfAnyKind( function r1()
 {
   return 'value';
 });
@@ -430,7 +430,7 @@ test.shouldThrowError( function r1()
 The `test.mustNotThrowError` check will be passed as the synchronous routine `r1` does not throw an error.
 
 ```js
-test.shouldThrowError( function r1()
+test.shouldThrowErrorOfAnyKind( function r1()
 {
   return _.timeOut( 250, function()
   {

@@ -1,4 +1,4 @@
-# Опція importanceOfNegative
+# Опція negativity
 
 Як отримати більше інформації про провалені тести.
 
@@ -12,7 +12,7 @@
   <summary><u>Структура модуля</u></summary>
 
 ```
-importanceOfNegative
+negativity
         ├── Join.js
         ├── Join.test.js    
         └── package.json
@@ -20,7 +20,7 @@ importanceOfNegative
 
 </details>
 
-Створіть приведену вище структуру файлів для дослідження опції `importanceOfNegative`.
+Створіть приведену вище структуру файлів для дослідження опції `negativity`.
 
 ### Об'єкт тестування
 
@@ -117,14 +117,14 @@ wTester.test( Self.name );
 
 ### Отримання інформації про помилку
 
-Для того, щоб було помітніше різницю між використанням різних налаштувань опції `importanceOfNegative` використовуйте її в комбінації з опцією `verbosity:5`.
+Для того, щоб було помітніше різницю між використанням різних налаштувань опції `negativity` використовуйте її в комбінації з опцією `verbosity:5`.
 
 <details>
   <summary><u>Вивід команди <code>tst .imply verbosity:5 .run Join.test.js</code></u></summary>
 
 ```
 [user@user ~]$
-Includes tests from : /.../importanceOfNegative
+Includes tests from : /.../negativity
 
 Tester Settings :
 {
@@ -136,7 +136,7 @@ Tester Settings :
   timing : 1,
   rapidity : 3,
   routine : null,
-  importanceOfNegative : null,
+  negativity : null,
   routineTimeOut : null,
   concurrent : null,
   verbosity : 5,
@@ -146,11 +146,11 @@ Tester Settings :
 }
 
   Launching several ( 1 ) test suites ..
-  /.../importanceOfNegative/Join.test.js:38 - enabled
+  /.../negativity/Join.test.js:38 - enabled
   1 test suite
 
     Running test suite ( Join ) ..
-    at  /.../importanceOfNegative/Join.test.js:38
+    at  /.../negativity/Join.test.js:38
 
       Running test routine ( routine1 ) ..
         Test check ( Join / routine1 /  # 1 ) ... ok
@@ -165,7 +165,7 @@ Tester Settings :
         - difference :
           *
 
-        /.../importanceOfNegative/Join.test.js:20
+        /.../negativity/Join.test.js:20
             16 :   test.case = 'pass';
             17 :   test.identical( Join.join( 1, 3 ), '13' );
             18 :
@@ -192,7 +192,7 @@ Tester Settings :
 
 </details>
 
-Введіть команду `tst .imply verbosity:5 .run Join.test.js`, це аналогічно до команди `tst .imply verbosity:5 importanceOfNegative:1 .run Join.test.js`. Порівняйте з привденими вище результатами.
+Введіть команду `tst .imply verbosity:5 .run Join.test.js`, це аналогічно до команди `tst .imply verbosity:5 negativity:1 .run Join.test.js`. Порівняйте з привденими вище результатами.
 
 При використанні опції `verbosity:5` і вище, звіт містить детальну [інформацію про помилку](Verbosity.md#елементи-звіту-що-виводятся-при-зміні-вербальності). Тому в звіті присутня секція з отриманим і очікуваним значенням, а також, різницею між ними. Нижче приведена секцію з кодом проваленої перевірки.
 
@@ -201,7 +201,7 @@ Tester Settings :
 
 ```
 [user@user ~]$ tst .imply v:5 n:0 .run Join.test.js
-Includes tests from : /.../importanceOfNegative
+Includes tests from : /.../negativity
 
 Tester Settings :
 {
@@ -213,7 +213,7 @@ Tester Settings :
   timing : 1,
   rapidity : 3,
   routine : null,
-  importanceOfNegative : null,
+  negativity : null,
   routineTimeOut : null,
   concurrent : null,
   verbosity : 5,
@@ -223,11 +223,11 @@ Tester Settings :
 }
 
   Launching several ( 1 ) test suites ..
-  /.../importanceOfNegative/Join.test.js:38 - enabled
+  /.../negativity/Join.test.js:38 - enabled
   1 test suite
 
     Running test suite ( Join ) ..
-    at  /.../importanceOfNegative/Join.test.js:38
+    at  /.../negativity/Join.test.js:38
 
       Running test routine ( routine1 ) ..
         Test check ( Join / routine1 /  # 1 ) ... ok
@@ -258,7 +258,7 @@ Tester Settings :
 
 Звіт, на відміну від попереднього, не містить розгорнутої інформації про помилку. Зазначено лише те, що провалена одна тест перевірка.
 
-У випадку, коли потрібно розкрити лише провалені тест перевірки, можна використати комбінацію опції `verbosity:0` i `importanceOfNegative >= 3`. Якщо встановлено опцію `verbosity:0`, то утиліта [не виводить жодного рядка](Verbosity.md#елементи-звіту-що-виводятся-при-зміні-вербальності), якщо додати опцію `importanceOfNegative` то рівень виводу інформації про помилки збільшується.
+У випадку, коли потрібно розкрити лише провалені тест перевірки, можна використати комбінацію опції `verbosity:0` i `negativity >= 3`. Якщо встановлено опцію `verbosity:0`, то утиліта [не виводить жодного рядка](Verbosity.md#елементи-звіту-що-виводятся-при-зміні-вербальності), якщо додати опцію `negativity` то рівень виводу інформації про помилки збільшується.
 
 <details>
   <summary><u>Вивід команди <code>tst .imply v:0 n:3 .run Join.test.js</code></u></summary>
@@ -288,7 +288,7 @@ Failed test routine ( Join / routine2 ) in 0.051s
         - difference :
           *
 
-        /.../importanceOfNegative/Join.test.js:20
+        /.../negativity/Join.test.js:20
             16 :   test.case = 'pass';
             17 :   test.identical( Join.join( 1, 3 ), '13' );
             18 :
@@ -307,9 +307,9 @@ Failed test routine ( Join / routine2 ) in 0.051s
 
 ### Підсумок
 
-- Опція `importanceOfNegative` призначена для збільшення об'єму звіту про провалені перевірки.
-- Опцію `importanceOfNegative` краще використовувати в комбінації з опцією `verbosity`.
-- При значенні `0` опція `importanceOfNegative` обмежує вивід інформації про помилки.
-- При відключенні виводу опцією `verbosity:0` можна отримати звіт встановивши опцію `importanceOfNegative` зі значенням від `3` і вище.
+- Опція `negativity` призначена для збільшення об'єму звіту про провалені перевірки.
+- Опцію `negativity` краще використовувати в комбінації з опцією `verbosity`.
+- При значенні `0` опція `negativity` обмежує вивід інформації про помилки.
+- При відключенні виводу опцією `verbosity:0` можна отримати звіт встановивши опцію `negativity` зі значенням від `3` і вище.
 
 [Повернутись до змісту](../README.md#tutorials)

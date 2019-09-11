@@ -174,8 +174,8 @@
   </a></summary>
   Як запустити паралельне виконання тест сюітів.
 </details>
-<details><summary><a href="./tutorial/OptionImportanceOfNegative.md">
-      Опція importanceOfNegative
+<details><summary><a href="./tutorial/Optionnegativity.md">
+      Опція negativity
   </a></summary>
   Як отримати більше інформації про провалені тести.
 </details>

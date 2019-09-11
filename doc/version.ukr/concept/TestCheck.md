@@ -43,7 +43,7 @@
 Для негативного тестування застосовуються такі перевірки:
 - `shouldThrowErrorSync`;
 - `shouldThrowErrorAsync`;
-- `shouldThrowError`.
+- `shouldThrowErrorOfAnyKind`.
 
 ### Перелік перевірок
 
@@ -356,7 +356,7 @@ test.le( a, b )
 Перевірка провалюється, якщо рутина не викидує помилку.
 
 ```js
-test.shouldThrowError( function()
+test.shouldThrowErrorOfAnyKind( function()
 {
   throw 'err1';
 });
@@ -384,7 +384,7 @@ test.shouldThrowErrorAsync( function()
 
 Перевірку `test.shouldThrowErrorAsync` буде пройдено так, як указана рутина викидає асинхронно помилку. Рутина `timeOut` повертає наслідок із помилкою `_.err( 'test' )`.
 
-##### Тест перевірка `shouldThrowError`
+##### Тест перевірка `shouldThrowErrorOfAnyKind`
 
 Очікує один аргумент у вигляді рутини, котру буде запущено без аргументів для перевірки її роботи.
 
@@ -393,16 +393,16 @@ test.shouldThrowErrorAsync( function()
 Перевірка провалюється, якщо рутина не викидує ані синхронну, ані асинхронну помилку за час відведений на її тестуання.
 
 ```js
-test.shouldThrowError( function r1()
+test.shouldThrowErrorOfAnyKind( function r1()
 {
   throw 'err1';
 });
 ```
 
-Перевірку `test.shouldThrowError` буде пройдено так, як рутина `r1` викидає помилку `throw 'err1'` синхронно.
+Перевірку `test.shouldThrowErrorOfAnyKind` буде пройдено так, як рутина `r1` викидає помилку `throw 'err1'` синхронно.
 
 ```js
-test.shouldThrowError( function r2()
+test.shouldThrowErrorOfAnyKind( function r2()
 {
   return _.timeOut( 250, function()
   {
@@ -411,7 +411,7 @@ test.shouldThrowError( function r2()
 });
 ```
 
-Перевірку `test.shouldThrowError` буде пройдено так, як рутина `r2` викидає помилку `throw _.err( 'test' )` асинхронно, через `250мс` після її запуску.
+Перевірку `test.shouldThrowErrorOfAnyKind` буде пройдено так, як рутина `r2` викидає помилку `throw _.err( 'test' )` асинхронно, через `250мс` після її запуску.
 
 ##### Тест перевірка `mustNotThrowError`
 
@@ -422,7 +422,7 @@ test.shouldThrowError( function r2()
 Перевірка провалюється, якщо рутина викидує помилку синхронно або асинхронно. Тестова рутина може продовжити своє виконання після такої помилки так, як її буде ізольовано в підрутині.
 
 ```js
-test.shouldThrowError( function r1()
+test.shouldThrowErrorOfAnyKind( function r1()
 {
   return 'value';
 });
@@ -431,7 +431,7 @@ test.shouldThrowError( function r1()
 Перевірку `test.mustNotThrowError` буде пройдено так, як синхронна рутина `r1` не викидає помилку.
 
 ```js
-test.shouldThrowError( function r1()
+test.shouldThrowErrorOfAnyKind( function r1()
 {
   return _.timeOut( 250, function()
   {

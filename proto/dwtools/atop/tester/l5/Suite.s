@@ -823,7 +823,12 @@ function _testRoutineRun( trd )
     trd._testRoutineBegin();
 
     trd._timeOutCon = _.timeOut( trd.timeOut );
-    trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
+    trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
+    .tap( ( err, arg ) =>
+    {
+      if( err )
+      _.errAttend( err );
+    });
 
     /* */
 
@@ -1001,7 +1006,6 @@ function _testCheckConsider( outcome )
   }
   else
   {
-    debugger;
     if( suite.report )
     suite.report.testCheckFails += 1;
   }
@@ -1161,7 +1165,7 @@ let Composes =
   silencing : null,
   shoulding : 1,
 
-  routineTimeOut : 10000,
+  routineTimeOut : 5000,
   concurrent : 0,
   routine : null,
   platforms : null,
@@ -1180,8 +1184,6 @@ let Composes =
 
   accuracy : 1e-7,
   report : null,
-
-  // debug : 0,
 
   override : _.define.own( {} ),
 

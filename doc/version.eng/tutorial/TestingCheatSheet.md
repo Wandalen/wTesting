@@ -152,6 +152,13 @@ $ tst .run [ path ] timing:[ number ]
 Option disables measurement of time spent on testing. Accepts 0 or 1. Default value is 1.
 
 ```
+$ tst .imply debug:[ number ] .run [ path ]
+$ tst .run [ path ] debug:[ number ]
+```
+
+Option sets value of Config.debug. Accepts 0 or 1. Default value is null, utility does not change debug mode of test object.
+
+```
 $ tst .imply rapidity:[ number ] .run [ path ]
 $ tst .run [ path ] rapidity:[ number ]
 ```

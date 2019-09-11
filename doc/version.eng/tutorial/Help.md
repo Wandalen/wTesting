@@ -48,7 +48,7 @@ Tester options
   routineTimeOut : Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.
   concurrent : Runs test suite in parallel with other test suites.
   verbosity : Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"
-  importanceOfNegative : Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".
+  negativity : Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".
   silencing : Hooking and silencing of object's of testing console output to make clean report of testing.
   shoulding : Switch on/off all should* tests checks.
   accuracy : Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.
@@ -219,13 +219,13 @@ The test suite can have a `verbosity` option. In this case, the value set in the
 
 The `tst .imply verbosity:5 .run path/to/dir` command prints a more detailed test report by displaying information about test checks. By default, information about the test checks is not displayed.
 
-##### Run option `importanceOfNegative`
+##### Run option `negativity`
 
 It is intended to restrict the output of information of routines with the status `ok` / `pass` and to increase the amount of information about the checks with the status `failed`.
 
 Accepts values from 0 to 9. By default - 1.
 
-The `tst .imply importanceOfNegative:0 .run path/to/dir` command displays the report without detailed information about the failed checks.
+The `tst .imply negativity:0 .run path/to/dir` command displays the report without detailed information about the failed checks.
 
 ##### Run option `silencing`
 

@@ -134,14 +134,14 @@ require( './Positive.test.js' );
 
 function sumThrowError( test )
 {
-  test.shouldThrowError( () => Math.sum( a, 1 ) );
+  test.shouldThrowErrorOfAnyKind( () => Math.sum( a, 1 ) );
 }
 
 //
 
 function mulThrowError( test )
 {
-  test.shouldThrowError( () => Math.mul( a, 1 ) );
+  test.shouldThrowErrorOfAnyKind( () => Math.mul( a, 1 ) );
 }
 
 //

@@ -381,49 +381,49 @@ function strCount( test )
   return;
 
   test.case = 'no arguments';
-  test.shouldThrowError( function( )
+  test.shouldThrowErrorOfAnyKind( function( )
   {
     _.strCount( );
   } );
 
   test.case = 'first argument is wrong';
-  test.shouldThrowError( function( )
+  test.shouldThrowErrorOfAnyKind( function( )
   {
     _.strCount( [  ], '\n' );
   } );
 
   test.case = 'second argument is wrong';
-  test.shouldThrowError( function( )
+  test.shouldThrowErrorOfAnyKind( function( )
   {
     _.strCount( 'abc\ndef\nghi', 13 );
   } );
 
   test.case = 'not enough arguments';
-  test.shouldThrowError( function( )
+  test.shouldThrowErrorOfAnyKind( function( )
   {
     _.strCount( 'abc\ndef\nghi' );
   } );
 
   test.case = 'invalid arguments count';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     _.strCount( '1', '2', '3' );
   });
 
   test.case = 'invalid first argument type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     _.strCount( 123, '1' );
   });
 
   test.case = 'invalid second arg type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     _.strCount( 'one two', 123 );
   });
 
   test.case = 'no arguments';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     _.strCount();
   });

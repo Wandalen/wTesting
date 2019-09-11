@@ -125,14 +125,14 @@ let Math = require( './Math.js' );
 
 function sumThrowError( test )
 {
-  test.shouldThrowError( () => Math.sum( a, 1 ) );
+  test.shouldThrowErrorOfAnyKind( () => Math.sum( a, 1 ) );
 }
 
 //
 
 function mulThrowError( test )
 {
-  test.shouldThrowError( () => Math.mul( a, 1 ) );
+  test.shouldThrowErrorOfAnyKind( () => Math.mul( a, 1 ) );
 }
 
 //
@@ -260,7 +260,7 @@ Tester Settings :
   timing : 1,
   rapidity : 3,
   routine : null,
-  importanceOfNegative : null,
+  negativity : null,
   routineTimeOut : null,
   concurrent : null,
   verbosity : 5,
@@ -300,7 +300,7 @@ Tester Settings :
         a is not defined
 
          = Condensed calls stack
-            at Proxy.test.shouldThrowError (/.../suiteInheritanceMulty/Negative.test.js:7:42)
+            at Proxy.test.shouldThrowErrorOfAnyKind (/.../suiteInheritanceMulty/Negative.test.js:7:42)
             ...
 
          = Catches stack
@@ -308,7 +308,7 @@ Tester Settings :
 
          = Source code from /.../suiteInheritanceMulty/Negative.test.js:7
             6 : {
-            7 :   test.shouldThrowError( () => Math.sum( a, 1 ) );
+            7 :   test.shouldThrowErrorOfAnyKind( () => Math.sum( a, 1 ) );
             8 : }
 
         Error throwen synchronously
@@ -316,7 +316,7 @@ Tester Settings :
 
 
         /.../suiteInheritanceMulty/Negative.test.js:7
-            7 :   test.shouldThrowError( () => Math.sum( a, 1 ) );
+            7 :   test.shouldThrowErrorOfAnyKind( () => Math.sum( a, 1 ) );
             8 : }
             9 :
             10 : //
@@ -330,7 +330,7 @@ Tester Settings :
         a is not defined
 
          = Condensed calls stack
-            at Proxy.test.shouldThrowError (/.../suiteInheritanceMulty/Negative.test.js:14:42)
+            at Proxy.test.shouldThrowErrorOfAnyKind (/.../suiteInheritanceMulty/Negative.test.js:14:42)
             ...
 
          = Catches stack
@@ -338,7 +338,7 @@ Tester Settings :
 
          = Source code from /.../suiteInheritanceMulty/Negative.test.js:14
             13 : {
-            14 :   test.shouldThrowError( () => Math.mul( a, 1 ) );
+            14 :   test.shouldThrowErrorOfAnyKind( () => Math.mul( a, 1 ) );
             15 : }
 
         Error throwen synchronously
@@ -346,7 +346,7 @@ Tester Settings :
 
 
         /.../suiteInheritanceMulty/Negative.test.js:14
-            14 :   test.shouldThrowError( () => Math.mul( a, 1 ) );
+            14 :   test.shouldThrowErrorOfAnyKind( () => Math.mul( a, 1 ) );
             15 : }
             16 :
             17 : //

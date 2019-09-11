@@ -30,7 +30,7 @@ var _ = _global_.wTools;
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0, routine : null };
 
 // --
-//
+// tools
 // --
 
 function CheckCounter()
@@ -58,7 +58,23 @@ function CheckCounter()
 
 //
 
-function simplest( test )
+function onSuiteBegin()
+{
+  // throw _.err( 'Error1' );
+}
+
+//
+
+function onSuiteEnd()
+{
+  // throw _.err( 'Error2' );
+}
+
+// --
+// tests
+// --
+
+function trivial( test )
 {
 
   test.identical( 0,0 );
@@ -772,7 +788,7 @@ function shouldThrowErrorSync( test )
     t.will = 'a';
 
     t.identical( 0,0 );
-    test.case = 'simplest, does not throw error, but expected';
+    test.case = 'trivial, does not throw error, but expected';
     var c1 = t.shouldThrowErrorSync( function()
     {
     });
@@ -1056,7 +1072,7 @@ function shouldThrowErrorAsync( test )
     t.will = 'a';
 
     t.identical( 0,0 );
-    test.case = 'simplest, does not throw error, but expected';
+    test.case = 'trivial, does not throw error, but expected';
     var c1 = t.shouldThrowErrorAsync( function()
     {
     });
@@ -1796,7 +1812,7 @@ function _throwingExperiment( test )
 
   /* */
 
-  test.case = 'simplest, does not throw error,  but expected';
+  test.case = 'trivial, does not throw error,  but expected';
   test.shouldThrowErrorAsync( function()
   {
   });
@@ -1896,14 +1912,14 @@ function shouldThrowErrorSyncSimple( test )
 
   var consequence = new _.Consequence().take( null );
   consequence
-  .ifNoErrorThen( function( arg/*aaa*/ )
+  .ifNoErrorThen( function( arg )
   {
     return test.shouldThrowErrorSync( function()
     {
       throw _.err( 'shouldThrowErrorSync a' );
     });
   })
-  .ifNoErrorThen( function( arg/*aaa*/ )
+  .ifNoErrorThen( function( arg )
   {
     return test.shouldThrowErrorSync( function()
     {
@@ -3596,7 +3612,7 @@ function shouldThrowErrorAsyncReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( () => true )
       .finally( ( err, got ) =>
@@ -3607,7 +3623,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -3618,7 +3634,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -3629,7 +3645,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().error( _.err( 'error!' ) ) )
       .finally( ( err, got ) =>
@@ -3640,7 +3656,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
@@ -3651,7 +3667,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -3662,7 +3678,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.shouldThrowErrorAsync()
@@ -3674,7 +3690,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.shouldThrowErrorAsync( 'x' )
@@ -3686,7 +3702,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'several functions';
       return t.shouldThrowErrorAsync( function(){}, function(){} )
@@ -3737,7 +3753,7 @@ function shouldThrowErrorReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorOfAnyKind( () => true )
       .finally( ( err, got ) =>
@@ -3748,7 +3764,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorOfAnyKind( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -3759,7 +3775,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorOfAnyKind( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -3770,7 +3786,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorOfAnyKind( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
@@ -3781,7 +3797,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorOfAnyKind( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -3792,7 +3808,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.shouldThrowErrorOfAnyKind()
@@ -3804,7 +3820,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.shouldThrowErrorOfAnyKind( 'x' )
@@ -3816,7 +3832,7 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorOfAnyKind( function(){}, function(){} )
       .finally( ( err, got ) =>
@@ -3867,7 +3883,7 @@ function mustNotThrowErrorReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( () => true )
       .finally( ( err, got ) =>
@@ -3878,7 +3894,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -3889,7 +3905,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -3900,7 +3916,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
@@ -3911,7 +3927,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -3922,7 +3938,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.mustNotThrowError()
@@ -3934,7 +3950,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.mustNotThrowError( 'x' )
@@ -3946,7 +3962,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( function(){}, function(){} )
       .finally( ( err, got ) =>
@@ -4000,7 +4016,7 @@ function shouldMessageOnlyOnceReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => 1 )
       .finally( ( err, got ) =>
@@ -4012,7 +4028,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -4023,7 +4039,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -4034,7 +4050,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -4045,7 +4061,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( _.Consequence().error( _.err( 1 ) ) )
       .finally( ( err, got ) =>
@@ -4056,7 +4072,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => _.Consequence().error( _.err( 1 ) ) )
       .finally( ( err, got ) =>
@@ -4067,7 +4083,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
       return t.returnsSingleResource( con )
@@ -4079,7 +4095,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
       return t.returnsSingleResource( () => con )
@@ -4091,7 +4107,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -4102,7 +4118,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -4113,9 +4129,9 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      var con = _.Consequence().take( 1 ).take( 2 );
+      var con = _.Consequence({ capacity : 2 }).take( 1 ).take( 2 );
       return t.returnsSingleResource( con )
       .finally( ( err, got ) =>
       {
@@ -4125,9 +4141,9 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      var con = _.Consequence().take( 1 ).take( 2 );
+      var con = _.Consequence({ capacity : 2 }).take( 1 ).take( 2 );
       return t.returnsSingleResource( () => con )
       .finally( ( err, got ) =>
       {
@@ -4137,7 +4153,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.returnsSingleResource()
@@ -4149,7 +4165,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.returnsSingleResource( 'x' )
@@ -4161,7 +4177,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( function(){}, function(){} )
       .finally( ( err, got ) =>
@@ -5741,13 +5757,13 @@ function onSuiteBeginThrowError( test )
   /* */
 
   var result = wTester.test([ suite1 ])
-  .finally( function( err, data )
+  .finally( function( err, suites )
   {
-    var got = _.select( data, '*/report' )[ 0 ];
+    var got = _.select( suites, '*/report' )[ 0 ];
 
     test.identical( got.outcome, false );
     test.identical( got.errorsArray, [ onSuiteBeginErr ] );
-    test.notIdentical( got.appExitCode, 0 );
+    test.identical( got.appExitCode, 0 );
     test.identical( got.testCheckPasses, 0 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 0 );
@@ -5755,9 +5771,11 @@ function onSuiteBeginThrowError( test )
     test.identical( got.testCaseNumber, 0 );
     test.identical( got.testRoutinePasses, 0 );
     test.identical( got.testRoutineFails, 0 );
+    debugger;
 
     _.errAttend( err );
-    test.is( _.errIs( err ) );
+    test.isNot( _.errIs( err ) );
+    test.is( _.arrayIs( suites ) );
 
     _.appExitCode( 0 );
     return null;
@@ -5794,15 +5812,13 @@ function onSuiteEndThrowError( test )
   /* */
 
   var result = wTester.test([ suite1 ])
-  .finally( function( err, data )
+  .finally( function( err, suites )
   {
-    var got = _.select( data, '*/report' )[ 0 ];
-
-    debugger
+    var got = _.select( suites, '*/report' )[ 0 ];
 
     test.identical( got.outcome, false );
     test.identical( got.errorsArray, [ onSuiteEndErr ] );
-    test.notIdentical( got.appExitCode, 0 );
+    test.identical( got.appExitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -5812,7 +5828,8 @@ function onSuiteEndThrowError( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.is( _.errIs( err ) );
+    test.isNot( _.errIs( err ) );
+    test.is( _.arrayIs( suites ) );
 
     _.appExitCode( 0 );
     return null;
@@ -5832,6 +5849,9 @@ var Self =
   silencing : 1,
   enabled : 1,
 
+  onSuiteBegin,
+  onSuiteEnd,
+
   context :
   {
   },
@@ -5839,7 +5859,7 @@ var Self =
   tests :
   {
 
-    simplest,
+    trivial,
     identical,
 
     // should

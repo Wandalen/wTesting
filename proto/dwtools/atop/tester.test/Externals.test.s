@@ -753,7 +753,7 @@ var Self =
     checkFails,
     double,
     noTestSuite,
-    help
+    help,
 
   }
 

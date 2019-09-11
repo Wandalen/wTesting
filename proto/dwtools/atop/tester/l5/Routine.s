@@ -179,7 +179,7 @@ function _testRoutineEnd()
     debugger;
     let wasBarred = suite.consoleBar( 0 );
 
-    let err = _.err( 'Console is missing in logger`s outputs, probably logger was modified' + '\n at' + trd.nameFull );
+    let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.nameFull );
     suite.exceptionReport
     ({
       err : err,
@@ -263,12 +263,12 @@ function _testRoutineEnd()
   str = wTester.textColor( str, ok );
 
   if( !ok )
-  suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
+  suite.logger.begin({ verbosity : -3+suite.negativity });
 
   suite.logger.logDown( str );
 
   if( !ok )
-  suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
+  suite.logger.end({ verbosity : -3+suite.negativity });
 
   suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
   suite.logger.end( 'routine', 'end' );
@@ -2019,7 +2019,7 @@ function _shouldDo( o )
     if( reported || async )
     trd.checkRestore( acheck );
 
-    logger.begin({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
+    logger.begin({ verbosity : positive ? -5 : -5+trd.negativity });
     logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
@@ -2029,7 +2029,7 @@ function _shouldDo( o )
   {
     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
-    logger.end({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
+    logger.end({ verbosity : positive ? -5 : -5+trd.negativity });
     logger.end({ connotation : positive ? 'positive' : 'negative' });
 
     if( reported )
@@ -2432,7 +2432,7 @@ function _outcomeReport( o )
 
   /* */
 
-  let verbosity = o.outcome ? 0 : trd.importanceOfNegative;
+  let verbosity = o.outcome ? 0 : trd.negativity;
   sourceCode = sourceCodeGet();
 
   /* */

@@ -30,7 +30,7 @@ var _ = _global_.wTools;
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0, routine : null };
 
 // --
-//
+// tools
 // --
 
 function CheckCounter()
@@ -58,7 +58,23 @@ function CheckCounter()
 
 //
 
-function simplest( test )
+function onSuiteBegin()
+{
+  // throw _.err( 'Error1' );
+}
+
+//
+
+function onSuiteEnd()
+{
+  // throw _.err( 'Error2' );
+}
+
+// --
+// tests
+// --
+
+function trivial( test )
 {
 
   test.identical( 0,0 );
@@ -772,7 +788,7 @@ function shouldThrowErrorSync( test )
     t.will = 'a';
 
     t.identical( 0,0 );
-    test.case = 'simplest, does not throw error, but expected';
+    test.case = 'trivial, does not throw error, but expected';
     var c1 = t.shouldThrowErrorSync( function()
     {
     });
@@ -1056,7 +1072,7 @@ function shouldThrowErrorAsync( test )
     t.will = 'a';
 
     t.identical( 0,0 );
-    test.case = 'simplest, does not throw error, but expected';
+    test.case = 'trivial, does not throw error, but expected';
     var c1 = t.shouldThrowErrorAsync( function()
     {
     });
@@ -1367,7 +1383,7 @@ shouldThrowErrorSync.timeOut = 30000;
 
 //
 
-function shouldThrowError( test )
+function shouldThrowErrorOfAnyKind( test )
 {
 
   var counter = new CheckCounter();
@@ -1380,7 +1396,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
     test.case = 'does not throw error, but expected';
-    var c1 = t.shouldThrowError( function()
+    var c1 = t.shouldThrowErrorOfAnyKind( function()
     {
     });
 
@@ -1407,7 +1423,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'throw expected synchronous error';
-    var c2 = t.shouldThrowError( function()
+    var c2 = t.shouldThrowErrorOfAnyKind( function()
     {
       throw _.err( 'err1' );
     });
@@ -1436,7 +1452,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'throw expected asynchronous error';
-    var c3 = t.shouldThrowError( function()
+    var c3 = t.shouldThrowErrorOfAnyKind( function()
     {
       return _.timeOut( 150,function()
       {
@@ -1468,7 +1484,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'single message, but error expected';
-    var c4 = t.shouldThrowError( function()
+    var c4 = t.shouldThrowErrorOfAnyKind( function()
     {
       return _.timeOut( 150 );
     });
@@ -1496,7 +1512,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'not expected second message';
-    var c5 = t.shouldThrowError( function()
+    var c5 = t.shouldThrowErrorOfAnyKind( function()
     {
       var con = _.Consequence();
 
@@ -1533,7 +1549,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'not expected second error';
-    var c6 = t.shouldThrowError( function()
+    var c6 = t.shouldThrowErrorOfAnyKind( function()
     {
       var con = _.Consequence();
 
@@ -1571,7 +1587,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with argument';
-    var c8 = t.shouldThrowError( _.Consequence().take( 'arg' ) );
+    var c8 = t.shouldThrowErrorOfAnyKind( _.Consequence().take( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -1596,7 +1612,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with error';
-    var c9 = t.shouldThrowError( _.Consequence().error( 'error' ) );
+    var c9 = t.shouldThrowErrorOfAnyKind( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -1648,7 +1664,7 @@ function shouldThrowError( test )
   return result;
 }
 
-shouldThrowError.timeOut = 30000;
+shouldThrowErrorOfAnyKind.timeOut = 30000;
 
 //
 
@@ -1676,7 +1692,7 @@ function shouldPassMessage( test )
 
   var errOriginal = _.err( 'Err' );
   var con = new _.Consequence().error( errOriginal );
-  test.shouldThrowError( con )
+  test.shouldThrowErrorOfAnyKind( con )
   .finally( function( err,arg )
   {
     test.identical( err, undefined );
@@ -1714,7 +1730,7 @@ function _throwingExperiment( test )
 
   /* */
 
-  t.shouldThrowError( function()
+  t.shouldThrowErrorOfAnyKind( function()
   {
     var con = _.Consequence().take( null );
 
@@ -1729,7 +1745,7 @@ function _throwingExperiment( test )
 
   /* */
 
-  t.shouldThrowError( function()
+  t.shouldThrowErrorOfAnyKind( function()
   {
     return _.timeOut( 150 );
   });
@@ -1796,7 +1812,7 @@ function _throwingExperiment( test )
 
   /* */
 
-  test.case = 'simplest, does not throw error,  but expected';
+  test.case = 'trivial, does not throw error,  but expected';
   test.shouldThrowErrorAsync( function()
   {
   });
@@ -1896,14 +1912,14 @@ function shouldThrowErrorSyncSimple( test )
 
   var consequence = new _.Consequence().take( null );
   consequence
-  .ifNoErrorThen( function( arg/*aaa*/ )
+  .ifNoErrorThen( function( arg )
   {
     return test.shouldThrowErrorSync( function()
     {
       throw _.err( 'shouldThrowErrorSync a' );
     });
   })
-  .ifNoErrorThen( function( arg/*aaa*/ )
+  .ifNoErrorThen( function( arg )
   {
     return test.shouldThrowErrorSync( function()
     {
@@ -2281,12 +2297,12 @@ function chainedShould( test )
   [
 
     {
-      method : 'shouldThrowError',
+      method : 'shouldThrowErrorOfAnyKind',
       throwingError : 'sync',
     },
 
     {
-      method : 'shouldThrowError',
+      method : 'shouldThrowErrorOfAnyKind',
       throwingError : 'async',
     },
 
@@ -3596,7 +3612,7 @@ function shouldThrowErrorAsyncReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( () => true )
       .finally( ( err, got ) =>
@@ -3607,7 +3623,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -3618,7 +3634,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -3629,7 +3645,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().error( _.err( 'error!' ) ) )
       .finally( ( err, got ) =>
@@ -3640,7 +3656,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
@@ -3651,7 +3667,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.shouldThrowErrorAsync( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -3662,7 +3678,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.shouldThrowErrorAsync()
@@ -3674,7 +3690,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.shouldThrowErrorAsync( 'x' )
@@ -3686,7 +3702,7 @@ function shouldThrowErrorAsyncReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'several functions';
       return t.shouldThrowErrorAsync( function(){}, function(){} )
@@ -3737,9 +3753,9 @@ function shouldThrowErrorReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      return t.shouldThrowError( () => true )
+      return t.shouldThrowErrorOfAnyKind( () => true )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3748,9 +3764,9 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      return t.shouldThrowError( () => { throw _.err( 1 ) } )
+      return t.shouldThrowErrorOfAnyKind( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -3759,9 +3775,9 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      return t.shouldThrowError( _.Consequence().take( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3770,9 +3786,9 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      return t.shouldThrowError( _.Consequence().error( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -3781,9 +3797,9 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      return t.shouldThrowError( _.timeOutError( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -3792,10 +3808,10 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
-      return t.shouldThrowError()
+      return t.shouldThrowErrorOfAnyKind()
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3804,10 +3820,10 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
-      return t.shouldThrowError( 'x' )
+      return t.shouldThrowErrorOfAnyKind( 'x' )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3816,9 +3832,9 @@ function shouldThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      return t.shouldThrowError( function(){}, function(){} )
+      return t.shouldThrowErrorOfAnyKind( function(){}, function(){} )
       .finally( ( err, got ) =>
       {
         test.case = 'several functions';
@@ -3867,7 +3883,7 @@ function mustNotThrowErrorReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( () => true )
       .finally( ( err, got ) =>
@@ -3878,7 +3894,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -3889,7 +3905,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -3900,7 +3916,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
@@ -3911,7 +3927,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -3922,7 +3938,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.mustNotThrowError()
@@ -3934,7 +3950,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.mustNotThrowError( 'x' )
@@ -3946,7 +3962,7 @@ function mustNotThrowErrorReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.mustNotThrowError( function(){}, function(){} )
       .finally( ( err, got ) =>
@@ -4000,7 +4016,7 @@ function shouldMessageOnlyOnceReturn( test )
   {
     var con = _.Consequence().take( null )
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => 1 )
       .finally( ( err, got ) =>
@@ -4012,7 +4028,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
@@ -4023,7 +4039,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -4034,7 +4050,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
@@ -4045,7 +4061,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( _.Consequence().error( _.err( 1 ) ) )
       .finally( ( err, got ) =>
@@ -4056,7 +4072,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => _.Consequence().error( _.err( 1 ) ) )
       .finally( ( err, got ) =>
@@ -4067,7 +4083,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
       return t.returnsSingleResource( con )
@@ -4079,7 +4095,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       var con = _.timeOut( 1, () => _.timeOut( 1 ) )
       return t.returnsSingleResource( () => con )
@@ -4091,7 +4107,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -4102,7 +4118,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( () => _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
@@ -4113,9 +4129,9 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      var con = _.Consequence().take( 1 ).take( 2 );
+      var con = _.Consequence({ capacity : 2 }).take( 1 ).take( 2 );
       return t.returnsSingleResource( con )
       .finally( ( err, got ) =>
       {
@@ -4125,9 +4141,9 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
-      var con = _.Consequence().take( 1 ).take( 2 );
+      var con = _.Consequence({ capacity : 2 }).take( 1 ).take( 2 );
       return t.returnsSingleResource( () => con )
       .finally( ( err, got ) =>
       {
@@ -4137,7 +4153,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'no arguments';
       return t.returnsSingleResource()
@@ -4149,7 +4165,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       test.case = 'not routines';
       return t.returnsSingleResource( 'x' )
@@ -4161,7 +4177,7 @@ function shouldMessageOnlyOnceReturn( test )
       })
     })
 
-    .ifNoErrorThen( ( arg/*aaa*/ ) =>
+    .ifNoErrorThen( ( arg ) =>
     {
       return t.returnsSingleResource( function(){}, function(){} )
       .finally( ( err, got ) =>
@@ -5663,7 +5679,7 @@ function mustNotThrowErrorExperiment( test )
   //   throw _.err( 'err1' );
   // });
 
-  // var con = test.shouldThrowError( function()
+  // var con = test.shouldThrowErrorOfAnyKind( function()
   // {
   //   throw _.err( 'err1' );
   // });
@@ -5713,6 +5729,115 @@ function experimentTimeOutAsync( test )
 experimentTimeOutAsync.experimental = 1;
 experimentTimeOutAsync.timeOut = 8000;
 
+//
+
+function onSuiteBeginThrowError( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1,1 );
+  }
+
+  let onSuiteBeginErr = _.err( 'onSuiteBegin: some error' );
+
+  function onSuiteBegin()
+  {
+    throw onSuiteBeginErr;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onSuiteBegin,
+    tests : { trivial },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ onSuiteBeginErr ] );
+    test.identical( got.appExitCode, 0 );
+    test.identical( got.testCheckPasses, 0 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 0 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testCaseNumber, 0 );
+    test.identical( got.testRoutinePasses, 0 );
+    test.identical( got.testRoutineFails, 0 );
+    debugger;
+
+    _.errAttend( err );
+    test.isNot( _.errIs( err ) );
+    test.is( _.arrayIs( suites ) );
+
+    _.appExitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function onSuiteEndThrowError( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1,1 );
+  }
+
+  let onSuiteEndErr = _.err( 'onSuiteEnd: some error' );
+
+  function onSuiteEnd()
+  {
+    throw onSuiteEndErr;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onSuiteEnd,
+    tests : { trivial },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ onSuiteEndErr ] );
+    test.identical( got.appExitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testCaseNumber, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.isNot( _.errIs( err ) );
+    test.is( _.arrayIs( suites ) );
+
+    _.appExitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
 // --
 // declare
 // --
@@ -5724,6 +5849,9 @@ var Self =
   silencing : 1,
   enabled : 1,
 
+  onSuiteBegin,
+  onSuiteEnd,
+
   context :
   {
   },
@@ -5731,7 +5859,7 @@ var Self =
   tests :
   {
 
-    simplest,
+    trivial,
     identical,
 
     // should
@@ -5740,7 +5868,7 @@ var Self =
     mustNotThrowError,
     shouldThrowErrorSync,
     shouldThrowErrorAsync,
-    shouldThrowError,
+    shouldThrowErrorOfAnyKind,
 
     shouldPassMessage,
     _throwingExperiment,
@@ -5793,6 +5921,9 @@ var Self =
     experimentTimeOutSyncNoChecks,
     experimentTimeOutSync,
     experimentTimeOutAsync,
+
+    onSuiteBeginThrowError,
+    onSuiteEndThrowError
 
   },
 

@@ -84,7 +84,7 @@ function inherit( test )
     test.identical( wTests[ childSuitName ].verbosity , wTests[ firstParentName ].verbosity );
     test.identical( wTests[ childSuitName ].importanceOfDetails , wTests[ firstParentName ].importanceOfDetails );
     test.identical( wTests[ childSuitName ].silencing , wTests[ firstParentName ].silencing );
-    test.identical( wTests[ childSuitName ].importanceOfNegative , wTests[ secondParentName ].importanceOfNegative );
+    test.identical( wTests[ childSuitName ].negativity , wTests[ secondParentName ].negativity );
     // test.identical( wTests[ childSuitName ].debug, wTests[ secondParentName ].debug );
 
     test.identical( self.parentValue1 , 1 );
@@ -101,7 +101,7 @@ function inherit( test )
     abstract : 1,
     // debug : 1,
     override : notTakingIntoAccount,
-    importanceOfNegative : 4,
+    negativity : 4,
 
     context :
     {

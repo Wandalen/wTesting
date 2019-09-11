@@ -307,7 +307,6 @@ function consoleBar( value )
     console.error( err );
   }
 
-  // debugger;
   return wasBarred;
 }
 
@@ -485,14 +484,12 @@ function _begin()
 {
   let suite = this;
 
-  // if( suite.debug )
-  // debugger;
-
   if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.timeNow();
 
   /* test routine */
 
+  /* qqq : cover the case, please */
   if( _.routineIs( suite.routine ) )
   debugger;
   if( _.routineIs( suite.routine ) )
@@ -558,8 +555,10 @@ function _begin()
     catch( err )
     {
       debugger;
-      suite.exceptionReport({ err : err });
-      return false;
+      err = _.err( `Error in suite.onSuiteBegin of ${suite.nickName}\n`, err );
+      suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
+      throw err;
+      // return false;
     }
   }
 
@@ -608,6 +607,21 @@ function _end( err )
 
   _.assert( arguments.length === 1 );
 
+  /* on suite end */
+
+  if( suite.onSuiteEnd )
+  {
+    try
+    {
+      suite.onSuiteEnd.call( suite.context, suite );
+    }
+    catch( err )
+    {
+      err = _.err( `Error in suite.onSuiteEnd of ${suite.nickName}\n`, err );
+      suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
+    }
+  }
+
   /* error */
 
   if( !err )
@@ -616,11 +630,13 @@ function _end( err )
 
   if( err )
   {
+    debugger;
+    if( suite.takingIntoAccount )
     suite.consoleBar( 0 );
     try
     {
-      suite.exceptionReport({ err : err });
-      suite._testCheckConsider( 0 );
+      suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
+      // suite._testCheckConsider( 0 );
     }
     catch( err2 )
     {
@@ -636,20 +652,6 @@ function _end( err )
   {
     _global_.process.removeListener( 'exit', suite._terminated_joined );
     suite._terminated_joined = null;
-  }
-
-  /* on suite end */
-
-  if( suite.onSuiteEnd )
-  {
-    try
-    {
-      suite.onSuiteEnd.call( suite.context, suite );
-    }
-    catch( err )
-    {
-      _.errLog( err );
-    }
   }
 
   /* report */
@@ -821,7 +823,12 @@ function _testRoutineRun( trd )
     trd._testRoutineBegin();
 
     trd._timeOutCon = _.timeOut( trd.timeOut );
-    trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime );
+    trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
+    .tap( ( err, arg ) =>
+    {
+      if( err )
+      _.errAttend( err );
+    });
 
     /* */
 
@@ -1059,7 +1066,7 @@ function _exceptionConsider( err )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( suite.constructor === Self );
 
-  suite.report.errorsArray.push( err );
+  _.arrayAppendOnce( suite.report.errorsArray, err );
 
   if( suite.takingIntoAccount )
   wTester._exceptionConsider( err );
@@ -1091,7 +1098,7 @@ function exceptionReport( o )
   suite._exceptionConsider( err );
 
   logger.begin({ verbosity : 9 });
-  _.errLog( err );
+  _.errLogOnce( err );
   logger.end({ verbosity : 9 });
 
   return err;
@@ -1115,7 +1122,7 @@ let routineSymbol = Symbol.for( 'routine' );
  * @property {String} name
  * @property {Number} verbosity=3
  * @property {Number} importanceOfDetails=0
- * @property {Number} importanceOfNegative=1
+ * @property {Number} negativity=1
  * @property {Boolean} silencing
  * @property {Boolean} shoulding=1
  * @property {Number} routineTimeOut=10000
@@ -1153,12 +1160,12 @@ let Composes =
 
   verbosity : 3,
   importanceOfDetails : 0,
-  importanceOfNegative : 1,
+  negativity : 1,
 
   silencing : null,
   shoulding : 1,
 
-  routineTimeOut : 10000,
+  routineTimeOut : 5000,
   concurrent : 0,
   routine : null,
   platforms : null,
@@ -1177,8 +1184,6 @@ let Composes =
 
   accuracy : 1e-7,
   report : null,
-
-  // debug : 0,
 
   override : _.define.own( {} ),
 

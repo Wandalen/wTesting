@@ -226,8 +226,8 @@ function appArgsRead()
   // if( appArgs.subject && !appArgs.map.scenario )
   // settings.scenario = 'test';
 
-  if( settings.importanceOfNegative !== undefined && settings.importanceOfNegative !== null )
-  tester.importanceOfNegative = Number( settings.importanceOfNegative ) || 0;
+  if( settings.negativity !== undefined && settings.negativity !== null )
+  tester.negativity = Number( settings.negativity ) || 0;
 
   tester.verbosity = settings.verbosity;
 
@@ -465,7 +465,6 @@ function _testingEndNow()
 
   tester.state = 'end';
 
-  debugger;
   if( tester.settings.beeping )
   _.diagnosticBeep();
 
@@ -780,7 +779,7 @@ function _suitesIncludeAt( path )
   let logger = tester.logger;
   path = _.path.join( _.path.current(), path );
 
-  _.assert( _.numberIs( tester.importanceOfNegative ) );
+  _.assert( _.numberIs( tester.negativity ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
 
@@ -831,14 +830,13 @@ function _suitesIncludeAt( path )
       debugger;
       err = _.errAttend( 'Cant include', absolutePath + '\n', err );
       tester._includeFailConsider( err );
-      // tester.includeFails.push( err );
 
       if( tester.settings.coloring )
       logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
       else
       logger.error( 'Cant include ' + absolutePath );
 
-      if( logger.verbosity + tester.importanceOfNegative >= 4 )
+      if( logger.verbosity + tester.negativity >= 4 )
       logger.error( _.err( err ) );
     }
 
@@ -1169,7 +1167,8 @@ function _exceptionConsider( err )
 {
   let tester = this;
   _.assert( arguments.length === 1, 'Expects single argument' );
-  tester.report.errorsArray.push( err );
+  // tester.report.errorsArray.push( err );
+  _.arrayAppendOnce( tester.report.errorsArray, err );
 }
 
 //
@@ -1178,7 +1177,7 @@ function _includeFailConsider( err )
 {
   let tester = this;
   _.assert( arguments.length === 1, 'Expects single argument' );
-  tester.report.includeErrorsArray.push( err );
+  _.arrayAppendOnce( tester.report.includeErrorsArray, err );
 }
 
 // --
@@ -1205,7 +1204,7 @@ let ApplicationArgumentsMap =
   concurrent : 'Runs test suite in parallel with other test suites.',
   concurrent : 'Runs test suite in parallel with other test suites.',
   verbosity : 'Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"',
-  importanceOfNegative : 'Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".',
+  negativity : 'Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".',
   silencing : 'Hooking and silencing of object\'s of testing console output to make clean report of testing.',
   shoulding : 'Switch on/off all should* tests checks.',
   accuracy : 'Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.',
@@ -1238,13 +1237,15 @@ let SettingsNameMap =
 
   'v' : 'verbosity',
   'verbosity' : 'verbosity',
-  'importanceOfNegative' : 'importanceOfNegative',
-  'n' : 'importanceOfNegative',
+  'negativity' : 'negativity',
+  'n' : 'negativity',
   'silencing' : 'silencing',
+  's' : 'silencing',
   'shoulding' : 'shoulding',
   'accuracy' : 'accuracy',
+  'debug' : 'debug',
 
-  'parent' : 'parent',
+  // 'parent' : 'parent',
 
 }
 
@@ -1258,24 +1259,23 @@ let SettingsNameMap =
  * @property {Boolean} [timing=1]
  * @property {Number} [rapidity=0]
  * @property {String} [routine=null]
- * @property {Number} [importanceOfNegative=null]
+ * @property {Number} [negativity=null]
  * @memberof module:Tools/Tester.wTester
 */
 
 let SettingsOfTester =
 {
 
-  // scenario : 'test',
-  // scenario : 'help',
   sanitareTime : 500,
   fails : null,
   beeping : null,
   coloring : 1,
+  debug : null,
   timing : 1,
   rapidity : 0,
   routine : null,
-  importanceOfNegative : null,
-  parent : null,
+  negativity : null,
+  // parent : null,
 
 }
 
@@ -1285,7 +1285,7 @@ let SettingsOfTester =
  * @property {Number} routineTimeOut
  * @property {Boolean} concurrent
  * @property {Number} verbosity
- * @property {Number} importanceOfNegative
+ * @property {Number} negativity
  * @property {Boolean} silencing
  * @property {Boolean} shoulding
  * @property {Number} accuracy
@@ -1298,25 +1298,17 @@ let SettingsOfSuite =
   routine : null,
   routineTimeOut : null,
   concurrent : null,
-
+  // rapidity : null,
+  // fails : null,
   verbosity : null,
-  importanceOfNegative : null,
+  negativity : null,
   silencing : null,
   shoulding : null,
   accuracy : null,
 
 }
 
-let Settings = _.mapExtend( null, SettingsOfTester, SettingsOfSuite );
-
-// let Rapidities =
-// [
-//   'slowest',
-//   'slow',
-//   'normal',
-//   'fast',
-//   'fastest',
-// ]
+let Settings = _.mapExtend( null, SettingsOfSuite, SettingsOfTester );
 
 let Composes =
 {
@@ -1325,13 +1317,9 @@ let Composes =
   settings : _.define.own( {} ),
   state : null,
 
-  // logger : new _.Logger({ name : 'LoggerForTester', output : _global.logger, verbosity : 4 }),
-  // _cancelCon : new _.Consequence({ tag : 'TesterCancel' }),
-  // logger : null,
-  _cancelCon : _.define.own( new _.Consequence({ tag : 'TesterCancel' }) ),
+  _cancelCon : _.define.own( new _.Consequence({ tag : 'TesterCancel', capacity : 0 }) ),
   _canceled : 0,
 
-  // includeFails : _.define.own( [] ),
   report : null,
 
   sourceFileLocation : sourceFileLocation,
@@ -1340,9 +1328,8 @@ let Composes =
   _testingBeginTime : null,
   _isReal_ : 1,
 
-  // _defaultVerbosity : 2,
   verbosity : 4,
-  importanceOfNegative : 2,
+  negativity : 2,
 
   _barOptions : null,
   _appArgs : null,

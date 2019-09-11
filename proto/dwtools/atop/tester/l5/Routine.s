@@ -118,7 +118,8 @@ function _testRoutineBegin()
   let trd = this;
   let suite = trd.suite;
 
-  if( wTester )
+  _.assert( !!wTester );
+  // if( wTester )
   trd._testRoutineBeginTime = _.timeNow();
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
@@ -145,17 +146,30 @@ function _testRoutineBegin()
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = trd;
 
+  let debugWas = Config.debug;
+  if( wTester.settings.debug !== null && wTester.settings.debug !== undefined )
+  {
+    _.assert( _.boolLike( wTester.settings.debug ) ); debugger;
+    Config.debug = wTester.settings.debug;
+  }
+
   try
   {
     suite.onRoutineBegin.call( trd.context, trd );
+    if( Config.debug !== debugWas )
+    Config.debug = debugWas;
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
   }
   catch( err )
   {
+    if( Config.debug !== debugWas )
+    Config.debug = debugWas;
     trd.exceptionReport({ err : err });
   }
 
+  if( Config.debug !== debugWas )
+  Config.debug = debugWas;
 }
 
 //
@@ -179,7 +193,7 @@ function _testRoutineEnd()
     debugger;
     let wasBarred = suite.consoleBar( 0 );
 
-    let err = _.err( 'Console is missing in logger`s outputs, probably logger was modified' + '\n at' + trd.nameFull );
+    let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.nameFull );
     suite.exceptionReport
     ({
       err : err,
@@ -263,12 +277,12 @@ function _testRoutineEnd()
   str = wTester.textColor( str, ok );
 
   if( !ok )
-  suite.logger.begin({ verbosity : -3+suite.importanceOfNegative });
+  suite.logger.begin({ verbosity : -3+suite.negativity });
 
   suite.logger.logDown( str );
 
   if( !ok )
-  suite.logger.end({ verbosity : -3+suite.importanceOfNegative });
+  suite.logger.end({ verbosity : -3+suite.negativity });
 
   suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
   suite.logger.end( 'routine', 'end' );
@@ -2019,7 +2033,7 @@ function _shouldDo( o )
     if( reported || async )
     trd.checkRestore( acheck );
 
-    logger.begin({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
+    logger.begin({ verbosity : positive ? -5 : -5+trd.negativity });
     logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
@@ -2029,7 +2043,7 @@ function _shouldDo( o )
   {
     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
-    logger.end({ verbosity : positive ? -5 : -5+trd.importanceOfNegative });
+    logger.end({ verbosity : positive ? -5 : -5+trd.negativity });
     logger.end({ connotation : positive ? 'positive' : 'negative' });
 
     if( reported )
@@ -2266,7 +2280,7 @@ function shouldThrowErrorSync( routine )
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function shouldThrowError( routine )
+function shouldThrowErrorOfAnyKind( routine )
 {
   let trd = this;
 
@@ -2432,7 +2446,7 @@ function _outcomeReport( o )
 
   /* */
 
-  let verbosity = o.outcome ? 0 : trd.importanceOfNegative;
+  let verbosity = o.outcome ? 0 : trd.negativity;
   sourceCode = sourceCodeGet();
 
   /* */
@@ -3145,7 +3159,7 @@ let Extend =
 
   shouldThrowErrorSync,
   shouldThrowErrorAsync,
-  shouldThrowError,
+  shouldThrowErrorOfAnyKind,
   mustNotThrowError,
   returnsSingleResource,
 

@@ -664,7 +664,7 @@ function _suitesRun( suites )
   if( !_.mapKeys( suites ).length )
   {
     tester.suitesListPrint( allSuites );
-    logger.log( 'No enabled test suite to run.' );
+    logger.log( 'No enabled test suite to run at', _.color.strFormat( tester.filePath, 'path' ) );
     _.appExitCode( -1 );
   }
 

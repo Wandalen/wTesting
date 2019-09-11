@@ -118,7 +118,8 @@ function _testRoutineBegin()
   let trd = this;
   let suite = trd.suite;
 
-  if( wTester )
+  _.assert( !!wTester );
+  // if( wTester )
   trd._testRoutineBeginTime = _.timeNow();
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
@@ -145,17 +146,30 @@ function _testRoutineBegin()
   _.assert( !suite.currentRoutine );
   suite.currentRoutine = trd;
 
+  let debugWas = Config.debug;
+  if( wTester.settings.debug !== null && wTester.settings.debug !== undefined )
+  {
+    _.assert( _.boolLike( wTester.settings.debug ) ); debugger;
+    Config.debug = wTester.settings.debug;
+  }
+
   try
   {
     suite.onRoutineBegin.call( trd.context, trd );
+    if( Config.debug !== debugWas )
+    Config.debug = debugWas;
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
   }
   catch( err )
   {
+    if( Config.debug !== debugWas )
+    Config.debug = debugWas;
     trd.exceptionReport({ err : err });
   }
 
+  if( Config.debug !== debugWas )
+  Config.debug = debugWas;
 }
 
 //

@@ -530,7 +530,9 @@ function _begin()
 
   logger.logUp( msg.join( '\n' ) );
 
-  logger.log( wTester.textColor( 'at  ' + suite.suiteFileLocation, 'selected' ) );
+  // logger.log( wTester.textColor( 'at  ' + suite.suiteFileLocation, 'selected' ) );
+  logger.log( 'Located at ' + wTester.textColor( suite.suiteFileLocation, 'path' ) );
+  // logger.log( 'at' + _.color.strFormat( will.suiteFileLocation, 'path' ) );
 
   logger.end( 'suite' );
 

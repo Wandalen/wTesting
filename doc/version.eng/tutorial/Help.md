@@ -183,8 +183,7 @@ Example: `tst .imply timing:0 .run path/to/dir`. Time data will not be available
 
 It is intended to to disable assertion by changing default value of `Config.debug`.
 
-The option has two values: 1 is enabled, 0 is off.
-By default - null, so utility does not change `debug` mode of object of testing.
+The option has two values: 1 is enabled, 0 is off. By default - null, so utility does not change `debug` mode of object of testing.
 
 Example: `tst .imply debug:0 .run path/to/dir`. During testing, the assertions will be ignored.
 

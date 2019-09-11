@@ -307,7 +307,6 @@ function consoleBar( value )
     console.error( err );
   }
 
-  // debugger;
   return wasBarred;
 }
 
@@ -446,6 +445,7 @@ function _runNow()
 
   /* */
 
+  // debugger;
   return _.execStages( testRoutines,
   {
     manual : 1,
@@ -460,6 +460,7 @@ function _runNow()
 
   function handleRoutine( trd, iteration, iterator )
   {
+    // debugger;
     return suite._testRoutineRun( trd );
   }
 

@@ -2266,7 +2266,7 @@ function shouldThrowErrorSync( routine )
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function shouldThrowError( routine )
+function shouldThrowErrorOfAnyKind( routine )
 {
   let trd = this;
 
@@ -3145,7 +3145,7 @@ let Extend =
 
   shouldThrowErrorSync,
   shouldThrowErrorAsync,
-  shouldThrowError,
+  shouldThrowErrorOfAnyKind,
   mustNotThrowError,
   returnsSingleResource,
 

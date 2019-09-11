@@ -1367,7 +1367,7 @@ shouldThrowErrorSync.timeOut = 30000;
 
 //
 
-function shouldThrowError( test )
+function shouldThrowErrorOfAnyKind( test )
 {
 
   var counter = new CheckCounter();
@@ -1380,7 +1380,7 @@ function shouldThrowError( test )
 
     t.identical( 0,0 );
     test.case = 'does not throw error, but expected';
-    var c1 = t.shouldThrowError( function()
+    var c1 = t.shouldThrowErrorOfAnyKind( function()
     {
     });
 
@@ -1407,7 +1407,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'throw expected synchronous error';
-    var c2 = t.shouldThrowError( function()
+    var c2 = t.shouldThrowErrorOfAnyKind( function()
     {
       throw _.err( 'err1' );
     });
@@ -1436,7 +1436,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'throw expected asynchronous error';
-    var c3 = t.shouldThrowError( function()
+    var c3 = t.shouldThrowErrorOfAnyKind( function()
     {
       return _.timeOut( 150,function()
       {
@@ -1468,7 +1468,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'single message, but error expected';
-    var c4 = t.shouldThrowError( function()
+    var c4 = t.shouldThrowErrorOfAnyKind( function()
     {
       return _.timeOut( 150 );
     });
@@ -1496,7 +1496,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'not expected second message';
-    var c5 = t.shouldThrowError( function()
+    var c5 = t.shouldThrowErrorOfAnyKind( function()
     {
       var con = _.Consequence();
 
@@ -1533,7 +1533,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'not expected second error';
-    var c6 = t.shouldThrowError( function()
+    var c6 = t.shouldThrowErrorOfAnyKind( function()
     {
       var con = _.Consequence();
 
@@ -1571,7 +1571,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with argument';
-    var c8 = t.shouldThrowError( _.Consequence().take( 'arg' ) );
+    var c8 = t.shouldThrowErrorOfAnyKind( _.Consequence().take( 'arg' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -1596,7 +1596,7 @@ function shouldThrowError( test )
     t.identical( 0,0 );
 
     test.case = 'consequence with error';
-    var c9 = t.shouldThrowError( _.Consequence().error( 'error' ) );
+    var c9 = t.shouldThrowErrorOfAnyKind( _.Consequence().error( 'error' ) );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.will, 'a' );
@@ -1648,7 +1648,7 @@ function shouldThrowError( test )
   return result;
 }
 
-shouldThrowError.timeOut = 30000;
+shouldThrowErrorOfAnyKind.timeOut = 30000;
 
 //
 
@@ -1676,7 +1676,7 @@ function shouldPassMessage( test )
 
   var errOriginal = _.err( 'Err' );
   var con = new _.Consequence().error( errOriginal );
-  test.shouldThrowError( con )
+  test.shouldThrowErrorOfAnyKind( con )
   .finally( function( err,arg )
   {
     test.identical( err, undefined );
@@ -1714,7 +1714,7 @@ function _throwingExperiment( test )
 
   /* */
 
-  t.shouldThrowError( function()
+  t.shouldThrowErrorOfAnyKind( function()
   {
     var con = _.Consequence().take( null );
 
@@ -1729,7 +1729,7 @@ function _throwingExperiment( test )
 
   /* */
 
-  t.shouldThrowError( function()
+  t.shouldThrowErrorOfAnyKind( function()
   {
     return _.timeOut( 150 );
   });
@@ -2281,12 +2281,12 @@ function chainedShould( test )
   [
 
     {
-      method : 'shouldThrowError',
+      method : 'shouldThrowErrorOfAnyKind',
       throwingError : 'sync',
     },
 
     {
-      method : 'shouldThrowError',
+      method : 'shouldThrowErrorOfAnyKind',
       throwingError : 'async',
     },
 
@@ -3739,7 +3739,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldThrowError( () => true )
+      return t.shouldThrowErrorOfAnyKind( () => true )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3750,7 +3750,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldThrowError( () => { throw _.err( 1 ) } )
+      return t.shouldThrowErrorOfAnyKind( () => { throw _.err( 1 ) } )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -3761,7 +3761,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldThrowError( _.Consequence().take( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.Consequence().take( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3772,7 +3772,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldThrowError( _.Consequence().error( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.Consequence().error( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -3783,7 +3783,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldThrowError( _.timeOutError( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.timeOutError( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -3795,7 +3795,7 @@ function shouldThrowErrorReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'no arguments';
-      return t.shouldThrowError()
+      return t.shouldThrowErrorOfAnyKind()
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3807,7 +3807,7 @@ function shouldThrowErrorReturn( test )
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
       test.case = 'not routines';
-      return t.shouldThrowError( 'x' )
+      return t.shouldThrowErrorOfAnyKind( 'x' )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -3818,7 +3818,7 @@ function shouldThrowErrorReturn( test )
 
     .ifNoErrorThen( ( arg/*aaa*/ ) =>
     {
-      return t.shouldThrowError( function(){}, function(){} )
+      return t.shouldThrowErrorOfAnyKind( function(){}, function(){} )
       .finally( ( err, got ) =>
       {
         test.case = 'several functions';
@@ -5663,7 +5663,7 @@ function mustNotThrowErrorExperiment( test )
   //   throw _.err( 'err1' );
   // });
 
-  // var con = test.shouldThrowError( function()
+  // var con = test.shouldThrowErrorOfAnyKind( function()
   // {
   //   throw _.err( 'err1' );
   // });
@@ -5740,7 +5740,7 @@ var Self =
     mustNotThrowError,
     shouldThrowErrorSync,
     shouldThrowErrorAsync,
-    shouldThrowError,
+    shouldThrowErrorOfAnyKind,
 
     shouldPassMessage,
     _throwingExperiment,

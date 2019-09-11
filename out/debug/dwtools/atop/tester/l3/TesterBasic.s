@@ -465,7 +465,6 @@ function _testingEndNow()
 
   tester.state = 'end';
 
-  debugger;
   if( tester.settings.beeping )
   _.diagnosticBeep();
 

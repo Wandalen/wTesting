@@ -177,7 +177,15 @@ It is intended to enable measurement of time spent on testing.
 
 The option has two values: 1 is enabled, 0 is off. By default - 1.
 
-Example: `tst .imply timing:0 .run path/to/dir`. Time data will not be available in the report after the test is completed
+Example: `tst .imply timing:0 .run path/to/dir`. Time data will not be available in the report after the test is completed.
+
+##### Run option `debug`
+
+It is intended to to disable assertion by changing default value of `Config.debug`.
+
+The option has two values: 1 is enabled, 0 is off. By default - 1.
+
+Example: `tst .imply debug:0 .run path/to/dir`. During testing, the assertions will be ignored.
 
 ##### Run option `rapidity`
 

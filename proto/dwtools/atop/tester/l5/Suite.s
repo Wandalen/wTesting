@@ -822,8 +822,6 @@ function _testRoutineRun( trd )
 
     trd._testRoutineBegin();
 
-    debugger;
-    debugged = false; // xxx
     trd._timeOutCon = _.timeOut( trd.timeOut );
     trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
     .tap( ( err, arg ) =>

@@ -622,6 +622,74 @@ function noTestSuite( test )
     return null;
   })
 
+  .then( () =>
+  {
+    test.case = 'native'
+    return null;
+  })
+
+  shell({ args : routinePath })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  .then( () =>
+  {
+    test.case = 'native'
+    return null;
+  })
+
+  shell({ args : '.run ' + routinePath })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  .then( () =>
+  {
+    test.case = 'only option'
+    return null;
+  })
+
+  shell({ args : 'n:1' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  .then( () =>
+  {
+    test.case = 'only option'
+    return null;
+  })
+
+  shell({ args : '.run n:1' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
   return ready;
 }
 

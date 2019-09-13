@@ -1851,7 +1851,7 @@ function _shouldDo( o )
   {
     begin( 0 );
 
-    let msg = 'error not thrown synchronously, but expected';
+    let msg = 'Error not thrown synchronously, but expected';
 
     trd._outcomeReportBoolean
     ({
@@ -1909,7 +1909,7 @@ function _shouldDo( o )
           trd._outcomeReportBoolean
           ({
             outcome : 0,
-            msg : 'got more than one message',
+            msg : 'Got more than one message',
             stack : stack,
           });
 
@@ -1960,7 +1960,7 @@ function _shouldDo( o )
     begin( 0 );
 
     second = 1;
-    let msg = 'got more than one message';
+    let msg = 'Got more than one message';
 
     trd._outcomeReportBoolean
     ({
@@ -1985,9 +1985,9 @@ function _shouldDo( o )
     {
       begin( 0 );
 
-      let msg = 'error not thrown asynchronously, but expected';
+      let msg = 'Error not thrown asynchronously, but expected';
       if( o.expectingAsyncError )
-      msg = 'error not thrown, but expected either synchronosuly or asynchronously';
+      msg = 'Error not thrown, but expected either synchronosuly or asynchronously';
 
       trd._outcomeReportBoolean
       ({
@@ -2057,7 +2057,7 @@ function _shouldDo( o )
     if( positive )
     con.take( undefined, arg );
     else
-    con.take( arg, undefined );
+    con.take( _.errAttend( arg ), undefined );
 
     trd._inroutineCon.take( null );
 

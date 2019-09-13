@@ -166,7 +166,7 @@ function commandRun( e )
   let path = tester.fileProvider.path;
   let logger = tester.logger;
 
-  let request = _.strRequestParse( e.argument );
+  let request = _.strCommandParse({ src : e.argument, commandFormat : 'subject options?' });
   tester.appArgsRead({ subject : request.subject, propertiesMap : request.map });
   tester.scenarioTest();
 

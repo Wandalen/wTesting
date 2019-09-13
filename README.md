@@ -3,6 +3,8 @@
 
 Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
 
+![help.gif](./doc/images/tester.gif)
+
 ### Installation
 
 To install :
@@ -23,7 +25,7 @@ The utility provides simple and intuitive command line interface for running tes
 
 To get help about commands enter `tst .`, to get complete help use `tst .help`
 
-![help.gif](./doc/images/help.gif)
+
 
 To run test suite by utility, provide path to test file `tst .run ./path/to/test/suite`
 

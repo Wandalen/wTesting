@@ -31,7 +31,7 @@ To run test suite by utility, provide path to test file `tst .run ./path/to/test
 
 or it can runs directly by NodeJS `node ./path/to/test/suite`.
 
-#### Running options
+### Running options
 
 Utility provides more control of testing process by running options. It is control parameters of the testing that is passed to the run command. Run options are performed for each test suite.
 
@@ -47,7 +47,7 @@ Examples of using running options
 
 ### Cheat sheet
 
-All information about utility in short form given in [cheat sheet](./doc/version.eng/tutorial/TestingCheatSheet.pdf)
+All information about utility in short form given in [cheat sheet](./doc/version.eng/tutorial/TestingCheatSheet.pdf).
 
 <!-- Test suit is a set of test routines in one file, each test routine is a set of test features( cases ).
 Test feature is a combination of code execution and validation of obtained results, that is aimed to check some aspect of the program.

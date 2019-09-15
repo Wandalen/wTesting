@@ -201,7 +201,7 @@ function appArgsRead()
 
   _.appArgsReadTo( readOptions );
   if( appArgs.err )
-  throw _.errBriefly( appArgs.err );
+  throw _.errBrief( appArgs.err );
 
   _.assert( _.mapIs( appArgs.map ) );
 
@@ -869,7 +869,7 @@ function suitesIncludeAt( path )
   }
   catch( err )
   {
-    throw _.errLogOnce( _.errBriefly( err ) );
+    throw _.errLogOnce( _.errBrief( err ) );
   }
 
   logger.verbosityPop();
@@ -1389,7 +1389,7 @@ let Statics =
   Settings,
 
   TestSuite : null,
-  TestRoutineDescriptor : null,
+  TestRoutine : null,
 
 }
 

@@ -384,7 +384,7 @@ function _form()
 
     _.assert( _.routineIs( testRoutine ) );
 
-    let trd = wTester.TestRoutineDescriptor
+    let trd = wTester.TestRoutine
     ({
       name : testRoutineName,
       routine : testRoutine,
@@ -557,7 +557,7 @@ function _begin()
     catch( err )
     {
       debugger;
-      err = _.err( `Error in suite.onSuiteBegin of ${suite.nickName}\n`, err );
+      err = _.err( `Error in suite.onSuiteBegin of ${suite.qualifiedName}\n`, err );
       suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
       throw err;
       // return false;
@@ -619,7 +619,7 @@ function _end( err )
     }
     catch( err )
     {
-      err = _.err( `Error in suite.onSuiteEnd of ${suite.nickName}\n`, err );
+      err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, err );
       suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
     }
   }
@@ -628,7 +628,7 @@ function _end( err )
 
   if( !err )
   if( suite.routine !== null && !suite.tests[ suite.routine ] )
-  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
+  err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
 
   if( err )
   {
@@ -1113,6 +1113,45 @@ exceptionReport.defaults =
 }
 
 // --
+// name
+// --
+
+function qualifiedNameGet()
+{
+  let suite = this;
+  debugger;
+  return suite.constructor.shortName + '::' + suite.name;
+}
+
+//
+
+function decoratedQualifiedNameGet()
+{
+  let suite = this;
+  debugger;
+  return wTester.textColor( suite.qualifiedNameGet, 'entity' );
+}
+
+//
+
+function absoluteNameGet()
+{
+  let suite = this;
+  let slash = ' / ';
+  debugger;
+  return suite.qualifiedName;
+}
+
+//
+
+function decoratedAbsoluteNameGet()
+{
+  let suite = this;
+  debugger;
+  return wTester.textColor( suite.absoluteName, 'entity' );
+}
+
+// --
 // let
 // --
 
@@ -1247,9 +1286,16 @@ let Forbids =
 
 let Accessors =
 {
+
   accuracy : 'accuracy',
   routine : 'routine',
   enabled : 'enabled',
+
+  qualifiedName : { readOnly : 1 },
+  decoratedQualifiedName : { readOnly : 1 },
+  absoluteName : { readOnly : 1 },
+  decoratedAbsoluteName : { readOnly : 1 },
+
 }
 
 // --
@@ -1307,6 +1353,13 @@ let Proto =
   _testRoutineConsider,
   _exceptionConsider,
   exceptionReport,
+
+  // name
+
+  qualifiedNameGet,
+  decoratedQualifiedNameGet,
+  absoluteNameGet,
+  decoratedAbsoluteNameGet,
 
   // relations
 

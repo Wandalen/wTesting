@@ -33,7 +33,7 @@ let Self = function wTestRoutineDescriptor( o )
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.shortName = 'TestRoutineDescriptor';
+Self.shortName = 'TestRoutine';
 
 // --
 // inter
@@ -59,7 +59,7 @@ function init( o )
   trd._reportBegin();
 
   _.assert( _.routineIs( trd.routine ) );
-  _.assert( _.strDefined( trd.routine.name ), 'Test routine should have name, ' + trd.name + ' test routine of test suite', trd.suite.name, 'does not have name' );
+  _.assert( _.strDefined( trd.routine.name ), 'Test routine should have name, ' + trd.name + ' test routine of test suite', trd.suite.decoratedNickName, 'does not have name' );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype, trd.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype, trd ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
@@ -91,14 +91,16 @@ function refine()
 {
   let trd = this;
   let routine = trd.routine;
-
-  let preStr = 'Test routine ' + _.strQuote( trd.nameFull );
+  // let preStr = 'Test routine ' + wTester.textColor( trd.absoluteName, 'path' ); xxx
+  debugger;
+  let preStr = trd.decoratedAbsoluteName;
+  debugger;
 
   _.sureMapHasOnly
   (
     routine,
-    wTester.TestRoutineDescriptor.KnownFields,
-    [ preStr, 'has unknown fields :' ]
+    wTester.TestRoutine.KnownFields,
+    preStr + ' has unknown fields :'
   );
 
   _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), preStr, 'Expects bool like in field {-experimental-} if defined' );
@@ -106,6 +108,139 @@ function refine()
   _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), preStr, 'Expects number in field {-routineTimeOut-} if defined' );
   _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), preStr, 'Expects number or range in field {-accuracy-} if defined' );
   _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), preStr, 'Expects number in field {-rapidity-} if defined' );
+
+}
+
+// --
+// accessor
+// --
+
+function _accuracyGet()
+{
+  let trd = this;
+  return trd[ accuracyEffectiveSymbol ];
+}
+
+//
+
+function _accuracySet( accuracy )
+{
+  let trd = this;
+
+  _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'Expects number or range {-accuracy-}' );
+
+  trd[ accuracySymbol ] = accuracy;
+
+  return trd._accuracyChange();
+}
+
+//
+
+function _accuracyEffectiveGet()
+{
+  let trd = this;
+  return trd[ accuracyEffectiveSymbol ];
+}
+
+//
+
+function _accuracyChange()
+{
+  let trd = this;
+  let result;
+
+  if( !trd.suite )
+  return null;
+
+  if( _.numberIs( trd[ accuracySymbol ] ) )
+  result = trd[ accuracySymbol ];
+  else
+  result = trd.suite.accuracy;
+
+  // if( trd.accuracyRange )
+  // debugger;
+  // if( trd.accuracyRange )
+
+  if( _.arrayIs( trd[ accuracySymbol ] ) )
+  result = _.numberClamp( result, trd[ accuracySymbol ] );
+
+  trd[ accuracyEffectiveSymbol ] = result;
+
+  return result;
+}
+
+//
+
+function _timeOutGet()
+{
+  let trd = this;
+  if( trd[ timeOutSymbol ] !== null )
+  return trd[ timeOutSymbol ];
+  if( trd.suite.routineTimeOut !== null )
+  return trd.suite.routineTimeOut;
+  _.assert( 0 );
+}
+
+//
+
+function _timeOutSet( timeOut )
+{
+  let trd = this;
+  // debugger;
+  _.assert( timeOut === null || _.numberIs( timeOut ) );
+  trd[ timeOutSymbol ] = timeOut;
+  return timeOut;
+}
+
+//
+
+function _rapidityGet()
+{
+  let trd = this;
+  if( trd[ rapiditySymbol ] !== null )
+  return trd[ rapiditySymbol ];
+  _.assert( 0 );
+}
+
+//
+
+function _rapiditySet( rapidity )
+{
+  let trd = this;
+  _.assert( _.numberIs( rapidity ) );
+  trd[ rapiditySymbol ] = rapidity;
+  return rapidity;
+}
+
+//
+
+function _usingSourceCodeGet()
+{
+  let trd = this;
+  if( trd[ usingSourceCodeSymbol ] !== null )
+  return trd[ usingSourceCodeSymbol ];
+  if( trd.suite.usingSourceCode !== null )
+  return trd.suite.usingSourceCode;
+  _.assert( 0 );
+}
+
+//
+
+function _usingSourceCodeSet( usingSourceCode )
+{
+  let trd = this;
+  _.assert( usingSourceCode === null || _.boolLike( usingSourceCode ) );
+  trd[ usingSourceCodeSymbol ] = usingSourceCode;
+  return usingSourceCode;
+}
+
+//
+
+function _adoptRoutineFields()
+{
+  let trd = this;
+
+  _.mapExtendByDefined( trd, _.mapOnly( trd.routine, trd.KnownFields ) );
 
 }
 
@@ -132,7 +267,8 @@ function _testRoutineBegin()
 
   let msg =
   [
-    'Running test routine ( ' + trd.routine.name + ' ) ..'
+    // 'Running test routine ( ' + trd.routine.name + ' ) ..'
+    `Running ${trd.decoratedAbsoluteName} ..`
   ];
 
   suite.logger.begin({ verbosity : -4 });
@@ -193,7 +329,7 @@ function _testRoutineEnd()
     debugger;
     let wasBarred = suite.consoleBar( 0 );
 
-    let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.nameFull );
+    let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
     suite.exceptionReport
     ({
       err : err,
@@ -269,10 +405,11 @@ function _testRoutineEnd()
   if( wTester )
   {
     trd.report.timeSpent = _.timeNow() - trd._testRoutineBeginTime;
-    timingStr = ' in ' + _.timeSpentFormat( trd.report.timeSpent );
+    timingStr = 'in ' + _.timeSpentFormat( trd.report.timeSpent );
   }
 
-  let str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.nameFull + ' )' + timingStr;
+  // let str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.absoluteName + ' )' + timingStr;
+  let str = ( ok ? 'Passed' : 'Failed' ) + ` ${trd.absoluteName} ${timingStr}`;
 
   str = wTester.textColor( str, ok );
 
@@ -396,7 +533,8 @@ function _timeOutError()
 
   let err = _._err
   ({
-    args : [ 'Test routine ' + _.strQuote( trd.nameFull ) + ' timed out. TimeOut : ' + trd.timeOut + 'ms' ],
+    // args : [ 'Test routine ' + _.strQuote( trd.absoluteName ) + ' timed out. TimeOut : ' + trd.timeOut + 'ms' ],
+    args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
   });
 
@@ -418,7 +556,7 @@ function _timeOutError()
 function _willGet()
 {
   let trd = this;
-  return trd[ willSymbol ];
+  return trd[ descriptionSymbol ];
 }
 
 //
@@ -430,7 +568,7 @@ function _willSet( src )
   if( wTester.report )
   trd._interruptMaybe( 1 );
 
-  trd[ willSymbol ] = src
+  trd[ descriptionSymbol ] = src
 }
 
 //
@@ -462,7 +600,7 @@ function _descriptionWithNameGet()
 {
   let trd = this;
   let description = trd.descriptionFull;
-  let name = trd.nameFull;
+  let name = trd.absoluteName;
   let slash = ' / ';
   return name + slash + description
 }
@@ -614,17 +752,47 @@ function hasTestGroupExceptOfCase()
   return true;
 }
 
+// --
+// name
+// --
+
+function qualifiedNameGet()
+{
+  let trd = this;
+  debugger;
+  return trd.constructor.shortName + '::' + trd.name;
+}
+
 //
 
-function _nameFullGet()
+function decoratedQualifiedNameGet()
+{
+  let trd = this;
+  debugger;
+  return wTester.textColor( trd.qualifiedNameGet, 'entity' );
+}
+
+//
+
+function absoluteNameGet()
 {
   let trd = this;
   let slash = ' / ';
-  return trd.suite.name + slash + trd.name;
+  debugger;
+  return trd.suite.qualifiedName + slash + trd.qualifiedName;
+}
+
+//
+
+function decoratedAbsoluteNameGet()
+{
+  let trd = this;
+  debugger;
+  return wTester.textColor( trd.absoluteName, 'entity' );
 }
 
 // --
-// store
+// ceck
 // --
 
 /**
@@ -732,7 +900,453 @@ function checkRestore( acheck )
 }
 
 // --
-// equalizer
+// consider
+// --
+
+function _testCheckConsider( outcome )
+{
+  let trd = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( trd.constructor === Self );
+
+  if( outcome )
+  {
+    trd.report.testCheckPasses += 1;
+    trd.report.testCheckPassesOfTestCase += 1;
+  }
+  else
+  {
+    trd.report.testCheckFails += 1;
+    trd.report.testCheckFailsOfTestCase += 1;
+  }
+
+  trd.suite._testCheckConsider( outcome );
+
+  trd.checkNext();
+
+}
+
+//
+
+function _testCaseConsider( outcome )
+{
+  let trd = this;
+  let report = trd.report;
+
+  if( outcome )
+  report.testCasePasses += 1;
+  else
+  report.testCaseFails += 1;
+
+  trd.suite._testCaseConsider( outcome );
+}
+
+//
+
+function _exceptionConsider( err )
+{
+  let trd = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( trd.constructor === Self );
+
+  trd.report.errorsArray.push( err );
+  trd.suite._exceptionConsider( err );
+
+}
+
+// --
+// report
+// --
+
+function _outcomeReport( o )
+{
+  let trd = this;
+  let logger = trd.logger;
+  let sourceCode = '';
+
+  _.routineOptions( _outcomeReport, o );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( o.considering )
+  trd._testCheckConsider( o.outcome );
+
+  /* */
+
+  let verbosity = o.outcome ? 0 : trd.negativity;
+  sourceCode = sourceCodeGet();
+
+  /* */
+
+  logger.begin({ verbosity : o.verbosity });
+
+  if( o.considering )
+  {
+    logger.begin({ 'check' : trd.description || trd._checkIndex });
+    logger.begin({ 'checkIndex' : trd._checkIndex });
+  }
+
+  logger.begin({ verbosity : o.verbosity+verbosity });
+
+  logger.up();
+  if( logger.verbosityReserve() > 1 )
+  logger.log();
+  logger.begin({ 'connotation' : o.outcome ? 'positive' : 'negative' });
+
+  logger.begin({ verbosity : o.verbosity-1+verbosity });
+
+  if( o.details )
+  logger.begin( 'details' ).log( o.details ).end( 'details' );
+
+  if( sourceCode )
+  logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+
+  logger.end({ verbosity : o.verbosity-1+verbosity });
+
+  logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+
+  logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
+  if( logger.verbosityReserve() > 1 )
+  logger.log();
+
+  logger.end({ verbosity : o.verbosity+verbosity });
+
+  if( o.considering )
+  logger.end( 'check', 'checkIndex' );
+  logger.end({ verbosity : o.verbosity });
+
+  trd._interruptMaybe( 1 );
+
+  /* */
+
+  function sourceCodeGet()
+  {
+    let code;
+    if( trd.usingSourceCode && o.usingSourceCode )
+    {
+      let _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 4 });
+      let _code = _.diagnosticCode
+      ({
+        location : _location,
+        selectMode : o.selectMode,
+        numberOfLines : 5,
+      });
+      if( _code )
+      code = '\n' + _code;
+      else
+      code = '\n' + _location.full;
+    }
+
+    if( code )
+    code = ' #inputRaw : 1# ' + code + ' #inputRaw : 0# ';
+
+    return code;
+  }
+
+}
+
+_outcomeReport.defaults =
+{
+  outcome : null,
+  msg : null,
+  details : null,
+  stack : null,
+  usingSourceCode : 1,
+  selectMode : 'end',
+  considering : 1,
+  verbosity : -4,
+}
+
+//
+
+function _outcomeReportBoolean( o )
+{
+  let trd = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.routineOptions( _outcomeReportBoolean, o );
+
+  o.msg = trd._reportTextForTestCheck
+  ({
+    outcome : o.outcome,
+    msg : o.msg,
+    usingDescription : o.usingDescription,
+  });
+
+  trd._outcomeReport
+  ({
+    outcome : o.outcome,
+    msg : o.msg,
+    details : '',
+    stack : o.stack,
+    usingSourceCode : o.usingSourceCode,
+    selectMode : o.selectMode
+  });
+
+}
+
+_outcomeReportBoolean.defaults =
+{
+  outcome : null,
+  msg : null,
+  stack : null,
+  usingSourceCode : 1,
+  usingDescription : 1,
+  selectMode : 'end'
+}
+
+//
+
+function _outcomeReportCompare( o )
+{
+  let trd = this;
+
+  _.assert( trd instanceof Self );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
+
+  let nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
+  let details = '';
+
+  /**/
+
+  if( !o.outcome )
+  if( o.usingExtraDetails )
+  {
+    details += _.entityDiffExplanation
+    ({
+      name1 : '- got',
+      name2 : '- expected',
+      srcs : [ o.got, o.expected ],
+      path : o.path,
+      accuracy : o.accuracy,
+    });
+  }
+
+  let msg = trd._reportTextForTestCheck({ outcome : o.outcome });
+
+  trd._outcomeReport
+  ({
+    outcome : o.outcome,
+    msg : msg,
+    details : details,
+  });
+
+  if( !o.outcome )
+  if( trd.debug )
+  debugger;
+
+  /**/
+
+  function msgExpectedGot()
+  {
+    return '' +
+    'got :\n' + _.toStr( o.got, { stringWrapper : '\'' } ) + '\n' +
+    nameOfExpected + ' :\n' + _.toStr( o.expected, { stringWrapper : '\'' } ) +
+    '';
+  }
+
+}
+
+_outcomeReportCompare.defaults =
+{
+  got : null,
+  expected : null,
+  diff : null,
+  nameOfPositiveExpected : 'expected',
+  nameOfNegativeExpected : 'expected',
+  outcome : null,
+  path : null,
+  usingExtraDetails : 1,
+  accuracy : null,
+}
+
+//
+
+function exceptionReport( o )
+{
+  let trd = this;
+
+  _.routineOptions( exceptionReport, o );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( trd.onError )
+  debugger;
+
+  try
+  {
+    if( trd.onError )
+    trd.onError.call( trd, o );
+  }
+  catch( err2 )
+  {
+    logger.log( err2 );
+  }
+
+  let msg = null;
+  if( o.considering )
+  {
+    debugger;
+    /* qqq : implement and cover different message if time out */
+    msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
+  }
+  else
+  {
+    msg = 'Error throwen'
+  }
+
+  if( o.sync !== null )
+  msg += ( o.sync ? ' synchronously' : ' asynchronously' );
+
+  let err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
+
+  _.errAttend( err );
+
+  let details = err.toString();
+
+  o.stack = o.stack === null ? o.err.stack : o.stack;
+
+  if( o.considering )
+  trd._exceptionConsider( err );
+
+  trd._outcomeReport
+  ({
+    outcome : o.outcome,
+    msg : msg,
+    details : details,
+    stack : o.stack,
+    usingSourceCode : o.usingSourceCode,
+    considering : o.considering,
+  });
+
+  return err;
+}
+
+exceptionReport.defaults =
+{
+  err : null,
+  level : null,
+  stack : null,
+  usingSourceCode : 0,
+  considering : 1,
+  outcome : 0,
+  sync : null,
+}
+
+//
+
+function _reportBegin()
+{
+  let trd = this;
+
+  _.assert( !trd.report, 'test routine already has report' );
+
+  let report = trd.report = Object.create( null );
+
+  report.outcome = null;
+  report.timeSpent = null;
+  report.errorsArray = [];
+  report.appExitCode = null;
+
+  report.testCheckPasses = 0;
+  report.testCheckFails = 0;
+
+  report.testCheckPassesOfTestCase = 0;
+  report.testCheckFailsOfTestCase = 0;
+
+  report.testCasePasses = 0;
+  report.testCaseFails = 0;
+
+  Object.preventExtensions( report );
+}
+
+//
+
+function _reportEnd()
+{
+  let trd = this;
+  let report = trd.report;
+
+  if( !report.appExitCode )
+  report.appExitCode = _.appExitCode();
+
+  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  report.outcome = false;
+
+  if( trd.report.testCheckFails !== 0 )
+  report.outcome = false;
+
+  if( !( trd.report.testCheckPasses > 0 ) )
+  report.outcome = false;
+
+  if( trd.report.errorsArray.length )
+  report.outcome = false;
+
+  if( report.outcome === null )
+  report.outcome = true;
+
+  return report.outcome;
+}
+
+//
+
+function _reportIsPositive()
+{
+  let trd = this;
+  let report = trd.report;
+
+  if( !report )
+  return false;
+
+  trd._reportEnd();
+
+  return report.outcome;
+}
+
+//
+
+function _reportTextForTestCheck( o )
+{
+  let trd = this;
+
+  o = _.routineOptions( _reportTextForTestCheck, o );
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( o.outcome === null || _.boolLike( o.outcome ) );
+  _.assert( o.msg === null || _.strIs( o.msg ) );
+  _.assert( trd instanceof Self );
+  _.assert( trd._checkIndex >= 0 );
+  _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
+
+  let result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
+
+  if( o.msg )
+  result += ' : ' + o.msg;
+
+  if( o.outcome !== null )
+  {
+    if( o.outcome )
+    result += ' ... ok';
+    else
+    result += ' ... failed';
+  }
+
+  if( o.outcome !== null )
+  result = wTester.textColor( result, o.outcome );
+
+  return result;
+}
+
+_reportTextForTestCheck.defaults =
+{
+  outcome : null,
+  msg : null,
+  usingDescription : 1,
+}
+
+// --
+// tester
 // --
 
 /**
@@ -1726,7 +2340,7 @@ function _shouldDo( o )
     err = _.errRestack( err, 3 );
     err = _._err
     ({
-      args : [ 'Illegal usage of should in', trd.nameFull, '\n', err ],
+      args : [ 'Illegal usage of should in', trd.absoluteName, '\n', err ],
     });
     err = trd.exceptionReport
     ({
@@ -2372,591 +2986,10 @@ function returnsSingleResource( routine )
 }
 
 // --
-// consider
-// --
-
-function _testCheckConsider( outcome )
-{
-  let trd = this;
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( trd.constructor === Self );
-
-  if( outcome )
-  {
-    trd.report.testCheckPasses += 1;
-    trd.report.testCheckPassesOfTestCase += 1;
-  }
-  else
-  {
-    trd.report.testCheckFails += 1;
-    trd.report.testCheckFailsOfTestCase += 1;
-  }
-
-  trd.suite._testCheckConsider( outcome );
-
-  trd.checkNext();
-
-}
-
-//
-
-function _testCaseConsider( outcome )
-{
-  let trd = this;
-  let report = trd.report;
-
-  if( outcome )
-  report.testCasePasses += 1;
-  else
-  report.testCaseFails += 1;
-
-  trd.suite._testCaseConsider( outcome );
-}
-
-//
-
-function _exceptionConsider( err )
-{
-  let trd = this;
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( trd.constructor === Self );
-
-  trd.report.errorsArray.push( err );
-  trd.suite._exceptionConsider( err );
-
-}
-
-// --
-// report
-// --
-
-function _outcomeReport( o )
-{
-  let trd = this;
-  let logger = trd.logger;
-  let sourceCode = '';
-
-  _.routineOptions( _outcomeReport, o );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  if( o.considering )
-  trd._testCheckConsider( o.outcome );
-
-  /* */
-
-  let verbosity = o.outcome ? 0 : trd.negativity;
-  sourceCode = sourceCodeGet();
-
-  /* */
-
-  logger.begin({ verbosity : o.verbosity });
-
-  if( o.considering )
-  {
-    logger.begin({ 'check' : trd.description || trd._checkIndex });
-    logger.begin({ 'checkIndex' : trd._checkIndex });
-  }
-
-  logger.begin({ verbosity : o.verbosity+verbosity });
-
-  logger.up();
-  if( logger.verbosityReserve() > 1 )
-  logger.log();
-  logger.begin({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-
-  logger.begin({ verbosity : o.verbosity-1+verbosity });
-
-  if( o.details )
-  logger.begin( 'details' ).log( o.details ).end( 'details' );
-
-  if( sourceCode )
-  logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
-
-  logger.end({ verbosity : o.verbosity-1+verbosity });
-
-  logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
-
-  logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-  if( logger.verbosityReserve() > 1 )
-  logger.log();
-
-  logger.end({ verbosity : o.verbosity+verbosity });
-
-  if( o.considering )
-  logger.end( 'check', 'checkIndex' );
-  logger.end({ verbosity : o.verbosity });
-
-  trd._interruptMaybe( 1 );
-
-  /* */
-
-  function sourceCodeGet()
-  {
-    let code;
-    if( trd.usingSourceCode && o.usingSourceCode )
-    {
-      let _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 4 });
-      let _code = _.diagnosticCode
-      ({
-        location : _location,
-        selectMode : o.selectMode,
-        numberOfLines : 5,
-      });
-      if( _code )
-      code = '\n' + _code;
-      else
-      code = '\n' + _location.full;
-    }
-
-    if( code )
-    code = ' #inputRaw : 1# ' + code + ' #inputRaw : 0# ';
-
-    return code;
-  }
-
-}
-
-_outcomeReport.defaults =
-{
-  outcome : null,
-  msg : null,
-  details : null,
-  stack : null,
-  usingSourceCode : 1,
-  selectMode : 'end',
-  considering : 1,
-  verbosity : -4,
-}
-
-//
-
-function _outcomeReportBoolean( o )
-{
-  let trd = this;
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( _outcomeReportBoolean, o );
-
-  o.msg = trd._reportTextForTestCheck
-  ({
-    outcome : o.outcome,
-    msg : o.msg,
-    usingDescription : o.usingDescription,
-  });
-
-  trd._outcomeReport
-  ({
-    outcome : o.outcome,
-    msg : o.msg,
-    details : '',
-    stack : o.stack,
-    usingSourceCode : o.usingSourceCode,
-    selectMode : o.selectMode
-  });
-
-}
-
-_outcomeReportBoolean.defaults =
-{
-  outcome : null,
-  msg : null,
-  stack : null,
-  usingSourceCode : 1,
-  usingDescription : 1,
-  selectMode : 'end'
-}
-
-//
-
-function _outcomeReportCompare( o )
-{
-  let trd = this;
-
-  _.assert( trd instanceof Self );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
-
-  let nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
-  let details = '';
-
-  /**/
-
-  if( !o.outcome )
-  if( o.usingExtraDetails )
-  {
-    details += _.entityDiffExplanation
-    ({
-      name1 : '- got',
-      name2 : '- expected',
-      srcs : [ o.got, o.expected ],
-      path : o.path,
-      accuracy : o.accuracy,
-    });
-  }
-
-  let msg = trd._reportTextForTestCheck({ outcome : o.outcome });
-
-  trd._outcomeReport
-  ({
-    outcome : o.outcome,
-    msg : msg,
-    details : details,
-  });
-
-  if( !o.outcome )
-  if( trd.debug )
-  debugger;
-
-  /**/
-
-  function msgExpectedGot()
-  {
-    return '' +
-    'got :\n' + _.toStr( o.got, { stringWrapper : '\'' } ) + '\n' +
-    nameOfExpected + ' :\n' + _.toStr( o.expected, { stringWrapper : '\'' } ) +
-    '';
-  }
-
-}
-
-_outcomeReportCompare.defaults =
-{
-  got : null,
-  expected : null,
-  diff : null,
-  nameOfPositiveExpected : 'expected',
-  nameOfNegativeExpected : 'expected',
-  outcome : null,
-  path : null,
-  usingExtraDetails : 1,
-  accuracy : null,
-}
-
-//
-
-function exceptionReport( o )
-{
-  let trd = this;
-
-  _.routineOptions( exceptionReport, o );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  if( trd.onError )
-  debugger;
-
-  try
-  {
-    if( trd.onError )
-    trd.onError.call( trd, o );
-  }
-  catch( err2 )
-  {
-    logger.log( err2 );
-  }
-
-  let msg = null;
-  if( o.considering )
-  {
-    debugger;
-    /* qqq : implement and cover different message if time out */
-    msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
-  }
-  else
-  {
-    msg = 'Error throwen'
-  }
-
-  if( o.sync !== null )
-  msg += ( o.sync ? ' synchronously' : ' asynchronously' );
-
-  let err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
-
-  _.errAttend( err );
-
-  let details = err.toString();
-
-  o.stack = o.stack === null ? o.err.stack : o.stack;
-
-  if( o.considering )
-  trd._exceptionConsider( err );
-
-  trd._outcomeReport
-  ({
-    outcome : o.outcome,
-    msg : msg,
-    details : details,
-    stack : o.stack,
-    usingSourceCode : o.usingSourceCode,
-    considering : o.considering,
-  });
-
-  return err;
-}
-
-exceptionReport.defaults =
-{
-  err : null,
-  level : null,
-  stack : null,
-  usingSourceCode : 0,
-  considering : 1,
-  outcome : 0,
-  sync : null,
-}
-
-//
-
-function _reportBegin()
-{
-  let trd = this;
-
-  _.assert( !trd.report, 'test routine already has report' );
-
-  let report = trd.report = Object.create( null );
-
-  report.outcome = null;
-  report.timeSpent = null;
-  report.errorsArray = [];
-  report.appExitCode = null;
-
-  report.testCheckPasses = 0;
-  report.testCheckFails = 0;
-
-  report.testCheckPassesOfTestCase = 0;
-  report.testCheckFailsOfTestCase = 0;
-
-  report.testCasePasses = 0;
-  report.testCaseFails = 0;
-
-  Object.preventExtensions( report );
-}
-
-//
-
-function _reportEnd()
-{
-  let trd = this;
-  let report = trd.report;
-
-  if( !report.appExitCode )
-  report.appExitCode = _.appExitCode();
-
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
-  report.outcome = false;
-
-  if( trd.report.testCheckFails !== 0 )
-  report.outcome = false;
-
-  if( !( trd.report.testCheckPasses > 0 ) )
-  report.outcome = false;
-
-  if( trd.report.errorsArray.length )
-  report.outcome = false;
-
-  if( report.outcome === null )
-  report.outcome = true;
-
-  return report.outcome;
-}
-
-//
-
-function _reportIsPositive()
-{
-  let trd = this;
-  let report = trd.report;
-
-  if( !report )
-  return false;
-
-  trd._reportEnd();
-
-  return report.outcome;
-}
-
-//
-
-function _reportTextForTestCheck( o )
-{
-  let trd = this;
-
-  o = _.routineOptions( _reportTextForTestCheck, o );
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( o.outcome === null || _.boolLike( o.outcome ) );
-  _.assert( o.msg === null || _.strIs( o.msg ) );
-  _.assert( trd instanceof Self );
-  _.assert( trd._checkIndex >= 0 );
-  _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
-
-  let result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
-
-  if( o.msg )
-  result += ' : ' + o.msg;
-
-  if( o.outcome !== null )
-  {
-    if( o.outcome )
-    result += ' ... ok';
-    else
-    result += ' ... failed';
-  }
-
-  if( o.outcome !== null )
-  result = wTester.textColor( result, o.outcome );
-
-  return result;
-}
-
-_reportTextForTestCheck.defaults =
-{
-  outcome : null,
-  msg : null,
-  usingDescription : 1,
-}
-
-// --
-// etc
-// --
-
-function _accuracyGet()
-{
-  let trd = this;
-  return trd[ accuracyEffectiveSymbol ];
-}
-
-//
-
-function _accuracySet( accuracy )
-{
-  let trd = this;
-
-  _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'Expects number or range {-accuracy-}' );
-
-  trd[ accuracySymbol ] = accuracy;
-
-  return trd._accuracyChange();
-}
-
-//
-
-function _accuracyEffectiveGet()
-{
-  let trd = this;
-  return trd[ accuracyEffectiveSymbol ];
-}
-
-//
-
-function _accuracyChange()
-{
-  let trd = this;
-  let result;
-
-  if( !trd.suite )
-  return null;
-
-  if( _.numberIs( trd[ accuracySymbol ] ) )
-  result = trd[ accuracySymbol ];
-  else
-  result = trd.suite.accuracy;
-
-  // if( trd.accuracyRange )
-  // debugger;
-  // if( trd.accuracyRange )
-
-  if( _.arrayIs( trd[ accuracySymbol ] ) )
-  result = _.numberClamp( result, trd[ accuracySymbol ] );
-
-  trd[ accuracyEffectiveSymbol ] = result;
-
-  return result;
-}
-
-//
-
-function _timeOutGet()
-{
-  let trd = this;
-  if( trd[ timeOutSymbol ] !== null )
-  return trd[ timeOutSymbol ];
-  if( trd.suite.routineTimeOut !== null )
-  return trd.suite.routineTimeOut;
-  _.assert( 0 );
-}
-
-//
-
-function _timeOutSet( timeOut )
-{
-  let trd = this;
-  // debugger;
-  _.assert( timeOut === null || _.numberIs( timeOut ) );
-  trd[ timeOutSymbol ] = timeOut;
-  return timeOut;
-}
-
-//
-
-function _rapidityGet()
-{
-  let trd = this;
-  if( trd[ rapiditySymbol ] !== null )
-  return trd[ rapiditySymbol ];
-  _.assert( 0 );
-}
-
-//
-
-function _rapiditySet( rapidity )
-{
-  let trd = this;
-  _.assert( _.numberIs( rapidity ) );
-  trd[ rapiditySymbol ] = rapidity;
-  return rapidity;
-}
-
-//
-
-function _usingSourceCodeGet()
-{
-  let trd = this;
-  if( trd[ usingSourceCodeSymbol ] !== null )
-  return trd[ usingSourceCodeSymbol ];
-  if( trd.suite.usingSourceCode !== null )
-  return trd.suite.usingSourceCode;
-  _.assert( 0 );
-}
-
-//
-
-function _usingSourceCodeSet( usingSourceCode )
-{
-  let trd = this;
-  _.assert( usingSourceCode === null || _.boolLike( usingSourceCode ) );
-  trd[ usingSourceCodeSymbol ] = usingSourceCode;
-  return usingSourceCode;
-}
-
-//
-
-function _adoptRoutineFields()
-{
-  let trd = this;
-
-  // if( trd.routine.name === 'filesReflect' )
-  // debugger;
-  _.mapExtendByDefined( trd, _.mapOnly( trd.routine, trd.KnownFields ) );
-
-}
-
-// --
 // let
 // --
 
-let willSymbol = Symbol.for( 'will' );
+let descriptionSymbol = Symbol.for( 'will' );
 let accuracySymbol = Symbol.for( 'accuracy' );
 let accuracyEffectiveSymbol = Symbol.for( 'accuracyEffective' );
 let timeOutSymbol = Symbol.for( 'timeOut' );
@@ -2982,6 +3015,7 @@ let KnownFields =
   accuracy : null,
   rapidity : null,
   usingSourceCode : null,
+  description : null,
 }
 
 /**
@@ -3043,7 +3077,7 @@ let Restricts =
 
 let Statics =
 {
-  KnownFields : KnownFields,
+  KnownFields,
   strictEventHandling : 0,
 }
 
@@ -3062,7 +3096,6 @@ let Forbids =
 let AccessorsReadOnly =
 {
   testsGroup : 'testsGroup',
-  nameFull : 'nameFull',
   descriptionFull : 'descriptionFull',
   descriptionWithName : 'descriptionWithName',
   accuracyEffective : 'accuracyEffective',
@@ -3071,6 +3104,7 @@ let AccessorsReadOnly =
 
 let Accessors =
 {
+
   description : 'description',
   will : 'will',
   case : 'case',
@@ -3078,6 +3112,12 @@ let Accessors =
   timeOut : 'timeOut',
   rapidity : 'rapidity',
   usingSourceCode : 'usingSourceCode',
+
+  qualifiedName : { readOnly : 1 },
+  decoratedQualifiedName : { readOnly : 1 },
+  absoluteName : { readOnly : 1 },
+  decoratedAbsoluteName : { readOnly : 1 },
+
 }
 
 // --
@@ -3091,6 +3131,24 @@ let Extend =
 
   init,
   refine,
+
+  // accessor
+
+  _accuracySet,
+  _accuracyGet,
+  _accuracyEffectiveGet,
+  _accuracyChange,
+
+  _timeOutGet,
+  _timeOutSet,
+
+  _rapidityGet,
+  _rapiditySet,
+
+  _usingSourceCodeGet,
+  _usingSourceCodeSet,
+
+  _adoptRoutineFields,
 
   // run
 
@@ -3123,7 +3181,13 @@ let Extend =
   _testsGroupChange,
   testCaseClose,
   hasTestGroupExceptOfCase,
-  _nameFullGet,
+
+  // name
+
+  qualifiedNameGet,
+  decoratedQualifiedNameGet,
+  absoluteNameGet,
+  decoratedAbsoluteNameGet,
 
   // check
 
@@ -3132,7 +3196,25 @@ let Extend =
   checkStore,
   checkRestore,
 
-  // equalizer
+  // consider
+
+  _testCheckConsider,
+  _testCaseConsider,
+  _exceptionConsider,
+
+  // report
+
+  _outcomeReport,
+  _outcomeReportBoolean,
+  _outcomeReportCompare,
+  exceptionReport,
+
+  _reportBegin,
+  _reportEnd,
+  _reportIsPositive,
+  _reportTextForTestCheck,
+
+  // tester
 
   is,
   isNot,
@@ -3162,42 +3244,6 @@ let Extend =
   shouldThrowErrorOfAnyKind,
   mustNotThrowError,
   returnsSingleResource,
-
-  // consider
-
-  _testCheckConsider,
-  _testCaseConsider,
-  _exceptionConsider,
-
-  // report
-
-  _outcomeReport,
-  _outcomeReportBoolean,
-  _outcomeReportCompare,
-  exceptionReport,
-
-  _reportBegin,
-  _reportEnd,
-  _reportIsPositive,
-  _reportTextForTestCheck,
-
-  // fields
-
-  _accuracySet,
-  _accuracyGet,
-  _accuracyEffectiveGet,
-  _accuracyChange,
-
-  _timeOutGet,
-  _timeOutSet,
-
-  _rapidityGet,
-  _rapiditySet,
-
-  _usingSourceCodeGet,
-  _usingSourceCodeSet,
-
-  _adoptRoutineFields,
 
   // relations
 

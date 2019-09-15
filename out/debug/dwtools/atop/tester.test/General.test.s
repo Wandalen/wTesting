@@ -5489,7 +5489,7 @@ function runMultiple( test )
   //   debugger;
   //   testRoutine = t;
   //   t.identical( 1, 1 );
-  //   _.appExitCode( -1 );
+  //   _.process.exitCode( -1 );
   //   logger.log( 'bad' );
   // }
 
@@ -5578,9 +5578,9 @@ function appExitCode( test )
 
   test.identical( 0,0 );
 
-  _.appExitCode( 255 );
+  _.process.exitCode( 255 );
 
-  test.identical( _.appExitCode(), 255 );
+  test.identical( _.process.exitCode(), 255 );
 
   function good( t )
   {
@@ -5621,7 +5621,7 @@ function appExitCode( test )
 
     if( err )
     throw err;
-    _.appExitCode( 0 );
+    _.process.exitCode( 0 );
     return null;
   });
 
@@ -5777,7 +5777,7 @@ function onSuiteBeginThrowError( test )
     test.isNot( _.errIs( err ) );
     test.is( _.arrayIs( suites ) );
 
-    _.appExitCode( 0 );
+    _.process.exitCode( 0 );
     return null;
   });
 
@@ -5831,7 +5831,7 @@ function onSuiteEndThrowError( test )
     test.isNot( _.errIs( err ) );
     test.is( _.arrayIs( suites ) );
 
-    _.appExitCode( 0 );
+    _.process.exitCode( 0 );
     return null;
   });
 
@@ -5845,7 +5845,7 @@ function onSuiteEndThrowError( test )
 var Self =
 {
 
-  name : 'Tools/tester/General',
+  name : 'Tools.tester.General',
   silencing : 1,
   enabled : 1,
 

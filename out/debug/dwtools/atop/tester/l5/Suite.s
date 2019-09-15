@@ -128,6 +128,11 @@ function init( o )
     suite.inherit.apply( suite, inherits );
   }
 
+  /* */
+
+  _.assert( _.objectIs( suite.context ) );
+  Object.preventExtensions( suite.context );
+
   return suite;
 }
 
@@ -499,7 +504,7 @@ function _begin()
 
   suite.report = null;
   suite._reportBegin();
-  suite._appExitCode = _.appExitCode( 0 );
+  suite._appExitCode = _.process.exitCode( 0 );
 
   /* tracking */
 
@@ -704,8 +709,8 @@ function _end( err )
   logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
 
-  if( suite._appExitCode && !_.appExitCode() )
-  suite._appExitCode = _.appExitCode( suite._appExitCode );
+  if( suite._appExitCode && !_.process.exitCode() )
+  suite._appExitCode = _.process.exitCode( suite._appExitCode );
 
   /* silencing */
 
@@ -929,7 +934,7 @@ function _reportEnd()
   let report = suite.report;
 
   if( !report.appExitCode )
-  report.appExitCode = _.appExitCode();
+  report.appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   report.outcome = false;
@@ -959,7 +964,7 @@ function _reportToStr()
   let suite = this;
   let report = suite.report;
   let msg = '';
-  // let appExitCode = _.appExitCode();
+  // let appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   msg = 'ExitCode : ' + report.appExitCode + '\n';
@@ -1119,7 +1124,6 @@ exceptionReport.defaults =
 function qualifiedNameGet()
 {
   let suite = this;
-  debugger;
   return suite.constructor.shortName + '::' + suite.name;
 }
 

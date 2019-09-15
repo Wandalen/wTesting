@@ -92,9 +92,7 @@ function refine()
   let trd = this;
   let routine = trd.routine;
   // let preStr = 'Test routine ' + wTester.textColor( trd.absoluteName, 'path' ); xxx
-  debugger;
   let preStr = trd.decoratedAbsoluteName;
-  debugger;
 
   _.sureMapHasOnly
   (
@@ -259,7 +257,7 @@ function _testRoutineBegin()
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
 
-  trd._appExitCode = _.appExitCode( 0 );
+  trd._appExitCode = _.process.exitCode( 0 );
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
   _.assert( arguments.length === 0 );
@@ -319,8 +317,8 @@ function _testRoutineEnd()
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  if( trd._appExitCode && !_.appExitCode )
-  trd._appExitCode = _.appExitCode( trd._appExitCode );
+  if( trd._appExitCode && !_.process.exitCode )
+  trd._appExitCode = _.process.exitCode( trd._appExitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
@@ -759,7 +757,6 @@ function hasTestGroupExceptOfCase()
 function qualifiedNameGet()
 {
   let trd = this;
-  debugger;
   return trd.constructor.shortName + '::' + trd.name;
 }
 
@@ -778,7 +775,6 @@ function absoluteNameGet()
 {
   let trd = this;
   let slash = ' / ';
-  debugger;
   return trd.suite.qualifiedName + slash + trd.qualifiedName;
 }
 
@@ -787,7 +783,6 @@ function absoluteNameGet()
 function decoratedAbsoluteNameGet()
 {
   let trd = this;
-  debugger;
   return wTester.textColor( trd.absoluteName, 'entity' );
 }
 
@@ -1269,7 +1264,7 @@ function _reportEnd()
   let report = trd.report;
 
   if( !report.appExitCode )
-  report.appExitCode = _.appExitCode();
+  report.appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   report.outcome = false;

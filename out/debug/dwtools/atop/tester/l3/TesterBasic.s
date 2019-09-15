@@ -34,7 +34,7 @@ if( wTester._isReal_ )
 }
 
 _.assert( _.routineIs( _.toStr ), 'wTesting needs Stringer' );
-_.assert( _.routineIs( _.shell ), 'wTesting needs ExternalFundamentals' );
+_.assert( _.routineIs( _.process.start ), 'wTesting needs ProcessBasic' );
 _.assert( _.routineIs( _.execStages ), 'wTesting needs RoutineBasic' );
 _.assert( _.routineIs( _.Consequence ), 'wTesting needs Consequence' );
 _.assert( _.numberIs( _.accuracy ), 'wTesting needs _.accuracy' );
@@ -107,7 +107,7 @@ function form()
   if( tester.formed >= 1 )
   return tester;
 
-  _.appExitHandlerRepair();
+  _.process.exitHandlerRepair();
 
   tester.FormSuites();
   tester.formAssociates();
@@ -184,7 +184,7 @@ function appArgsRead()
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.mapExtend( settings, tester.Settings );
 
-  let appArgs = _.appArgs();
+  let appArgs = _.process.args();
   if( o.propertiesMap !== null )
   appArgs.propertiesMap = o.propertiesMap;
   if( o.subject !== null )
@@ -199,7 +199,7 @@ function appArgsRead()
     only : 1,
   }
 
-  _.appArgsReadTo( readOptions );
+  _.process.argsReadTo( readOptions );
   if( appArgs.err )
   throw _.errBrief( appArgs.err );
 
@@ -275,7 +275,7 @@ function scenarioTest()
   catch( err )
   {
     err = _.errLogOnce( err );
-    _.appExitCode( -1 );
+    _.process.exitCode( -1 );
     _.diagnosticBeep();
     _.diagnosticBeep();
     return;
@@ -468,12 +468,12 @@ function _testingEndNow()
   if( tester.settings.beeping )
   _.diagnosticBeep();
 
-  // if( !ok && !_.appExitCode() )
+  // if( !ok && !_.process.exitCode() )
   if( !ok )
   {
     if( tester.settings.beeping )
     _.diagnosticBeep();
-    _.appExitCode( -1 );
+    _.process.exitCode( -1 );
   }
 
   /* */
@@ -517,7 +517,7 @@ function _testingEndNow()
   if( !ok )
   _.timeOut( 100, function()
   {
-    _.appExit();
+    _.process.exit();
   });
 
   return ok;
@@ -665,7 +665,7 @@ function _suitesRun( suites )
   {
     tester.suitesListPrint( allSuites );
     logger.log( 'No enabled test suite to run at', wTester.textColor( tester.filePath, 'path' ) );
-    _.appExitCode( -1 );
+    _.process.exitCode( -1 );
   }
 
   tester._testingBegin( suites, allSuites );
@@ -961,7 +961,7 @@ function _reportEnd()
   let report = tester.report;
 
   if( !report.appExitCode )
-  report.appExitCode = _.appExitCode();
+  report.appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   report.outcome = false;

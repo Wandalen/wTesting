@@ -139,7 +139,7 @@ For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). 
 #### Quick references
 
 - [Writing tests](./doc/version.eng/tutorial/HelloWorld.md)
-- [Grouping of tests cases](./doc/version.eng/tutorial/HelloWorld.md)
+- [Grouping of tests cases](./doc/version.eng/tutorial/Report.md)
 - [Test checks](./doc/version.eng/concept/TestCheck.md)
 - [Running tests](./doc/version.eng/tutorial/Running.md)
 - [Running options](./doc/version.eng/tutorial/Help.md)

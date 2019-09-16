@@ -127,6 +127,10 @@ tst .run ./path/to/ testRoutineTimeOut:[ time ]
 
 - `testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
 
+### Documentation
+
+Please see the files in the `doc` directory:
+
 More details about writing test files in tutorial ['Hello World'](./doc/version.eng/tutorial/HelloWorld.md).
 
 

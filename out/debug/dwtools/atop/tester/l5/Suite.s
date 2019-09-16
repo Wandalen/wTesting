@@ -128,6 +128,11 @@ function init( o )
     suite.inherit.apply( suite, inherits );
   }
 
+  /* */
+
+  _.assert( _.objectIs( suite.context ) );
+  Object.preventExtensions( suite.context );
+
   return suite;
 }
 
@@ -384,7 +389,7 @@ function _form()
 
     _.assert( _.routineIs( testRoutine ) );
 
-    let trd = wTester.TestRoutineDescriptor
+    let trd = wTester.TestRoutine
     ({
       name : testRoutineName,
       routine : testRoutine,
@@ -499,7 +504,7 @@ function _begin()
 
   suite.report = null;
   suite._reportBegin();
-  suite._appExitCode = _.appExitCode( 0 );
+  suite._appExitCode = _.process.exitCode( 0 );
 
   /* tracking */
 
@@ -557,7 +562,7 @@ function _begin()
     catch( err )
     {
       debugger;
-      err = _.err( `Error in suite.onSuiteBegin of ${suite.nickName}\n`, err );
+      err = _.err( `Error in suite.onSuiteBegin of ${suite.qualifiedName}\n`, err );
       suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
       throw err;
       // return false;
@@ -619,7 +624,7 @@ function _end( err )
     }
     catch( err )
     {
-      err = _.err( `Error in suite.onSuiteEnd of ${suite.nickName}\n`, err );
+      err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, err );
       suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
     }
   }
@@ -628,7 +633,7 @@ function _end( err )
 
   if( !err )
   if( suite.routine !== null && !suite.tests[ suite.routine ] )
-  err = _.errBriefly( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
+  err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
 
   if( err )
   {
@@ -704,8 +709,8 @@ function _end( err )
   logger.end({ verbosity : -6 + suite.importanceOfDetails });
   logger.verbosityPop();
 
-  if( suite._appExitCode && !_.appExitCode() )
-  suite._appExitCode = _.appExitCode( suite._appExitCode );
+  if( suite._appExitCode && !_.process.exitCode() )
+  suite._appExitCode = _.process.exitCode( suite._appExitCode );
 
   /* silencing */
 
@@ -929,7 +934,7 @@ function _reportEnd()
   let report = suite.report;
 
   if( !report.appExitCode )
-  report.appExitCode = _.appExitCode();
+  report.appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   report.outcome = false;
@@ -959,7 +964,7 @@ function _reportToStr()
   let suite = this;
   let report = suite.report;
   let msg = '';
-  // let appExitCode = _.appExitCode();
+  // let appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   msg = 'ExitCode : ' + report.appExitCode + '\n';
@@ -1113,6 +1118,44 @@ exceptionReport.defaults =
 }
 
 // --
+// name
+// --
+
+function qualifiedNameGet()
+{
+  let suite = this;
+  return suite.constructor.shortName + '::' + suite.name;
+}
+
+//
+
+function decoratedQualifiedNameGet()
+{
+  let suite = this;
+  debugger;
+  return wTester.textColor( suite.qualifiedNameGet, 'entity' );
+}
+
+//
+
+function absoluteNameGet()
+{
+  let suite = this;
+  let slash = ' / ';
+  debugger;
+  return suite.qualifiedName;
+}
+
+//
+
+function decoratedAbsoluteNameGet()
+{
+  let suite = this;
+  debugger;
+  return wTester.textColor( suite.absoluteName, 'entity' );
+}
+
+// --
 // let
 // --
 
@@ -1247,9 +1290,16 @@ let Forbids =
 
 let Accessors =
 {
+
   accuracy : 'accuracy',
   routine : 'routine',
   enabled : 'enabled',
+
+  qualifiedName : { readOnly : 1 },
+  decoratedQualifiedName : { readOnly : 1 },
+  absoluteName : { readOnly : 1 },
+  decoratedAbsoluteName : { readOnly : 1 },
+
 }
 
 // --
@@ -1307,6 +1357,13 @@ let Proto =
   _testRoutineConsider,
   _exceptionConsider,
   exceptionReport,
+
+  // name
+
+  qualifiedNameGet,
+  decoratedQualifiedNameGet,
+  absoluteNameGet,
+  decoratedAbsoluteNameGet,
 
   // relations
 

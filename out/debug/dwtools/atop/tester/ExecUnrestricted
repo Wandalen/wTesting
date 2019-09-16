@@ -12,5 +12,5 @@ let o =
   execPath : _.path.join( __dirname, 'MainTop.s' ),
   // mode : 'shell',
 }
-_.appExitHandlerRepair();
-_.shellNodePassingThrough( o );
+_.process.exitHandlerRepair();
+_.process.startNodePassingThrough( o );

@@ -54,9 +54,9 @@ function run( test )
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
-  let testSuitePath = _.path.join( routinePath, 'Hello.test.js' );
+  let suitePath = _.path.join( routinePath, 'Hello.test.js' );
 
-  let shellTester = _.sheller
+  let shellTester = _.process.starter
   ({
     execPath : 'node ' + execPath,
     currentPath : routinePath,
@@ -66,7 +66,7 @@ function run( test )
     ready : ready,
   })
 
-  let shell = _.sheller
+  let shell = _.process.starter
   ({
     currentPath : routinePath,
     outputCollecting : 1,
@@ -157,7 +157,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ testSuitePath,  'beeping:0' ] })
+  shellTester({ args : [ suitePath,  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -181,7 +181,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ testSuitePath,  'v:7 beeping:0' ] })
+  shellTester({ args : [ suitePath,  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -205,7 +205,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ '.run', testSuitePath,  'beeping:0' ] })
+  shellTester({ args : [ '.run', suitePath,  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -229,7 +229,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ '.run', testSuitePath,  'v:7 beeping:0' ] })
+  shellTester({ args : [ '.run', suitePath,  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -253,7 +253,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ _.path.nativize( testSuitePath ),  'beeping:0' ] })
+  shellTester({ args : [ _.path.nativize( suitePath ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -277,7 +277,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ _.path.nativize( testSuitePath ),  'v:7 beeping:0' ] })
+  shellTester({ args : [ _.path.nativize( suitePath ),  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -301,7 +301,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ '.run', _.path.nativize( testSuitePath ),  'beeping:0' ] })
+  shellTester({ args : [ '.run', _.path.nativize( suitePath ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -325,7 +325,7 @@ function run( test )
     return null;
   })
 
-  shellTester({ args : [ '.run', _.path.nativize( testSuitePath ),  'v:7 beeping:0' ] })
+  shellTester({ args : [ '.run', _.path.nativize( suitePath ),  'v:7 beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -356,7 +356,7 @@ function checkFails( test )
   let ready = new _.Consequence().take( null );
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
 
-  let shellTester = _.sheller
+  let shellTester = _.process.starter
   ({
     execPath : 'node ' + execPath,
     currentPath : routinePath,
@@ -366,7 +366,7 @@ function checkFails( test )
     ready : ready,
   })
 
-  let shell = _.sheller
+  let shell = _.process.starter
   ({
     currentPath : routinePath,
     outputCollecting : 1,
@@ -458,7 +458,7 @@ function double( test )
   // let mainDirPath = _.path.nativize( _.path.join( __dirname ) );
   let ready = new _.Consequence().take( null );
 
-  let shell = _.sheller
+  let shell = _.process.starter
   ({
     currentPath : routinePath,
     outputCollecting : 1,
@@ -515,7 +515,7 @@ function noTestSuite( test )
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
   let ready = new _.Consequence().take( null );
 
-  let shell = _.sheller
+  let shell = _.process.starter
   ({
     execPath : 'node ' + execPath,
     currentPath : routinePath,
@@ -622,6 +622,74 @@ function noTestSuite( test )
     return null;
   })
 
+  .then( () =>
+  {
+    test.case = 'native'
+    return null;
+  })
+
+  shell({ args : routinePath })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  .then( () =>
+  {
+    test.case = 'native'
+    return null;
+  })
+
+  shell({ args : '.run ' + routinePath })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  .then( () =>
+  {
+    test.case = 'only option'
+    return null;
+  })
+
+  shell({ args : 'n:1' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  .then( () =>
+  {
+    test.case = 'only option'
+    return null;
+  })
+
+  shell({ args : '.run n:1' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
   return ready;
 }
 
@@ -636,7 +704,7 @@ function help( test )
   let ready = new _.Consequence().take( null );
   debugger;
 
-  let shell = _.sheller
+  let shell = _.process.starter
   ({
     execPath : 'node ' + execPath,
     currentPath : routinePath,
@@ -730,7 +798,7 @@ function help( test )
 var Self =
 {
 
-  name : 'Tools/atop/Tester',
+  name : 'Tools.atop.Tester',
   silencing : 1,
   enabled : 1,
 

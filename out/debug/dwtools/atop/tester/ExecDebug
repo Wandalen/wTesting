@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _ = wTools;
-let shell = _.shellPassingThrough
+let shell = _.process.startPassingThrough
 ({
   execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'MainTop.s' ) ),
 });

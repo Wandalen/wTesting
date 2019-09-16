@@ -38,7 +38,7 @@ function exec()
 
   let logger = tester.logger;
   let fileProvider = tester.fileProvider;
-  let appArgs = _.appArgs({ keyValDelimeter : 0 });
+  let appArgs = _.process.args({ keyValDelimeter : 0 });
   let ca = tester._commandsMake();
 
   return ca.appArgsPerform({ appArgs : appArgs });
@@ -69,7 +69,7 @@ function _commandsMake()
   let tester = this;
   let logger = tester.logger;
   let fileProvider = tester.fileProvider;
-  let appArgs = _.appArgs();
+  let appArgs = _.process.args();
 
   _.assert( _.instanceIs( tester ) );
   _.assert( arguments.length === 0 );
@@ -147,7 +147,7 @@ function commandImply( e )
   //
   // let request = tester.Resolver.strRequestParse( e.argument );
   //
-  // _.appArgsReadTo
+  // _.process.argsReadTo
   // ({
   //   dst : tester,
   //   propertiesMap : request.map,
@@ -166,7 +166,7 @@ function commandRun( e )
   let path = tester.fileProvider.path;
   let logger = tester.logger;
 
-  let request = _.strRequestParse( e.argument );
+  let request = _.strCommandParse({ src : e.argument, commandFormat : 'subject options?' });
   tester.appArgsRead({ subject : request.subject, propertiesMap : request.map });
   tester.scenarioTest();
 

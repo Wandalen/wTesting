@@ -34,7 +34,7 @@ if( wTester._isReal_ )
 }
 
 _.assert( _.routineIs( _.toStr ), 'wTesting needs Stringer' );
-_.assert( _.routineIs( _.shell ), 'wTesting needs ExternalFundamentals' );
+_.assert( _.routineIs( _.process.start ), 'wTesting needs ProcessBasic' );
 _.assert( _.routineIs( _.execStages ), 'wTesting needs RoutineBasic' );
 _.assert( _.routineIs( _.Consequence ), 'wTesting needs Consequence' );
 _.assert( _.numberIs( _.accuracy ), 'wTesting needs _.accuracy' );
@@ -107,7 +107,7 @@ function form()
   if( tester.formed >= 1 )
   return tester;
 
-  _.appExitHandlerRepair();
+  _.process.exitHandlerRepair();
 
   tester.FormSuites();
   tester.formAssociates();
@@ -184,7 +184,7 @@ function appArgsRead()
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.mapExtend( settings, tester.Settings );
 
-  let appArgs = _.appArgs();
+  let appArgs = _.process.args();
   if( o.propertiesMap !== null )
   appArgs.propertiesMap = o.propertiesMap;
   if( o.subject !== null )
@@ -199,9 +199,9 @@ function appArgsRead()
     only : 1,
   }
 
-  _.appArgsReadTo( readOptions );
+  _.process.argsReadTo( readOptions );
   if( appArgs.err )
-  throw _.errBriefly( appArgs.err );
+  throw _.errBrief( appArgs.err );
 
   _.assert( _.mapIs( appArgs.map ) );
 
@@ -275,7 +275,7 @@ function scenarioTest()
   catch( err )
   {
     err = _.errLogOnce( err );
-    _.appExitCode( -1 );
+    _.process.exitCode( -1 );
     _.diagnosticBeep();
     _.diagnosticBeep();
     return;
@@ -468,12 +468,12 @@ function _testingEndNow()
   if( tester.settings.beeping )
   _.diagnosticBeep();
 
-  // if( !ok && !_.appExitCode() )
+  // if( !ok && !_.process.exitCode() )
   if( !ok )
   {
     if( tester.settings.beeping )
     _.diagnosticBeep();
-    _.appExitCode( -1 );
+    _.process.exitCode( -1 );
   }
 
   /* */
@@ -517,7 +517,7 @@ function _testingEndNow()
   if( !ok )
   _.timeOut( 100, function()
   {
-    _.appExit();
+    _.process.exit();
   });
 
   return ok;
@@ -664,8 +664,8 @@ function _suitesRun( suites )
   if( !_.mapKeys( suites ).length )
   {
     tester.suitesListPrint( allSuites );
-    logger.log( 'No enabled test suite to run.' );
-    _.appExitCode( -1 );
+    logger.log( 'No enabled test suite to run at', wTester.textColor( tester.filePath, 'path' ) );
+    _.process.exitCode( -1 );
   }
 
   tester._testingBegin( suites, allSuites );
@@ -869,7 +869,7 @@ function suitesIncludeAt( path )
   }
   catch( err )
   {
-    throw _.errLogOnce( _.errBriefly( err ) );
+    throw _.errLogOnce( _.errBrief( err ) );
   }
 
   logger.verbosityPop();
@@ -961,7 +961,7 @@ function _reportEnd()
   let report = tester.report;
 
   if( !report.appExitCode )
-  report.appExitCode = _.appExitCode();
+  report.appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   report.outcome = false;
@@ -1192,22 +1192,38 @@ function _includeFailConsider( err )
 let ApplicationArgumentsMap =
 {
 
-  scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list"',
-  sanitareTime : 'Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later.',
-  fails : 'Maximum number of fails allowed before shutting down testing.',
-  beeping : 'Make diagnosticBeep sound after testing to let developer know it\'s done.',
-  coloring : 'Switch on/off coloring.',
-  timing : 'Switch on/off measuing of time.',
-  rapidity : 'How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing -9 .. -5 should be used. +9 for the fastest testing. Default is 0.',
+  verbosity :  `Sets the verbosity of report. Accepts a value from 0 to 9. Default value is 4.`,
+  routine : `Testing of separate test routine. Accepts name of test routine.`,
+  testRoutineTimeOut : `Limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.`,
+  accuracy : `Sets the numeric deviation for the comparison of numerical values. Accepts numeric values of deviation. Default value is 1e-7.`,
+  sanitareTime : `Sets the delay between completing the test suite and running the next one. Accepts time in milliseconds. Default value is 2000ms.`,
+  negativity : `Restricts the console output of passed routines and increases output of failed test checks. Accepts a value from 0 to 9. Default value is 1.`,
+  silencing : `Enables hiding the console output from the test object. Accepts 0 or 1. Default value is 0.`,
+  shoulding : `Disables negative testing. Accepts 0 or 1. Default value is 0.`,
+  fails : `Sets the number of errors received to interrupt the test. Accepts number of fails. By default is unlimited.`,
+  beeping : `Disables the beep after test completion. Accepts 0 or 1. Default value is 1.`,
+  coloring : `Makes report colourful. Accepts 0 or 1. Default value is 1.`,
+  timing : `Disables measurement of time spent on testing. Accepts 0 or 1. Default value is 1.`,
+  debug : `Sets value of Config.debug. Accepts 0 or 1. Default value is null, utility does not change debug mode of test object.`,
+  rapidity : `Controls the amount of time spent on testing. Accepts values from -9 to +9. Default value is 0.`,
+  concurrent : `Enables parallel execution of test suites. Accepts 0 or 1. Default value is 0.`,
 
-  routineTimeOut : 'Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.',
-  concurrent : 'Runs test suite in parallel with other test suites.',
-  concurrent : 'Runs test suite in parallel with other test suites.',
-  verbosity : 'Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"',
-  negativity : 'Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".',
-  silencing : 'Hooking and silencing of object\'s of testing console output to make clean report of testing.',
-  shoulding : 'Switch on/off all should* tests checks.',
-  accuracy : 'Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.',
+  // scenario : 'Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list"',
+  // sanitareTime : 'Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later.',
+  // fails : 'Maximum number of fails allowed before shutting down testing.',
+  // beeping : 'Make diagnosticBeep sound after testing to let developer know it\'s done.',
+  // coloring : 'Switch on/off coloring.',
+  // timing : 'Switch on/off measuing of time.',
+  // rapidity : 'How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing -9 .. -5 should be used. +9 for the fastest testing. Default is 0.',
+  //
+  // routineTimeOut : 'Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.',
+  // concurrent : 'Runs test suite in parallel with other test suites.',
+  // concurrent : 'Runs test suite in parallel with other test suites.',
+  // verbosity : 'Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"',
+  // negativity : 'Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".',
+  // silencing : 'Hooking and silencing of object\'s of testing console output to make clean report of testing.',
+  // shoulding : 'Switch on/off all should* tests checks.',
+  // accuracy : 'Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.',
 
 }
 
@@ -1373,7 +1389,7 @@ let Statics =
   Settings,
 
   TestSuite : null,
-  TestRoutineDescriptor : null,
+  TestRoutine : null,
 
 }
 

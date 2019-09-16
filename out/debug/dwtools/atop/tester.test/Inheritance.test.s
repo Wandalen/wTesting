@@ -158,7 +158,7 @@ function inherit( test )
 var Proto =
 {
 
-  name : 'Tools/tester/Inheritance',
+  name : 'Tools.tester.Inheritance',
   silencing : 1,
   enabled : 1,
 

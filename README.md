@@ -104,19 +104,19 @@ Utility provides more control of testing process by running options. It is contr
 tst .run ./someDirectory verbosity:5
 ```
 
-`verbosity` - change amount of output test information. Accepts a value from 0 to 9. Default value is 4.
+Option `verbosity` - change amount of output test information. Accepts a value from 0 to 9. Default value is 4.
 
 ```
 tst .run ./path/to/suite routine:someRoutine
 ```
 
-`routine` - used to test separate test routine. Accepts name of test routine.
+Option `routine` - used to test separate test routine. Accepts name of test routine.
 
 ```
 tst .run ./someDirectory testRoutineTimeOut:[ time ]
 ```
 
-`testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
+Option `testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
 
 ### Documentation
 

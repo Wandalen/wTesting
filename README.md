@@ -78,18 +78,6 @@ testSuite = wTestSuite( testSuite );
 wTester.test( testSuite.name );
 ```
 
-So, your `devDependencies` section in `package.json` file can looks like
-
-```json
-{
-	"devDependencies": {
-		"wTesting": ""
-	}
-}
-```
-
-Before running test suite create file `package.json` with code above and install dependencies by command `npm i`.
-
 ### Running tests
 
 ```
@@ -116,23 +104,23 @@ Utility provides more control of testing process by running options. It is contr
 tst .run ./someDirectory verbosity:5
 ```
 
-- `verbosity` - change amount of output test information. Accepts a value from 0 to 9. Default value is 4.
+`verbosity` - change amount of output test information. Accepts a value from 0 to 9. Default value is 4.
 
 ```
 tst .run ./path/to/suite routine:someRoutine
 ```
 
-- `routine` - used to test separate test routine. Accepts name of test routine.
+`routine` - used to test separate test routine. Accepts name of test routine.
 
 ```
 tst .run ./someDirectory testRoutineTimeOut:[ time ]
 ```
 
-- `testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
+`testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
 
 ### Documentation
 
-Please see documentation in the `doc` directory. It is available in [English](./doc/version.eng/) and [Ukrainian](./doc/version.ukr/)
+Please see documentation in the `doc` directory.
 
 For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). For getting exhaustive information on one or another aspect use [list of concepts](./doc/version.eng/README.md#Concepts) to find a concept of interest and get familiar with it.
 

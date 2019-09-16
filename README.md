@@ -113,7 +113,7 @@ tst .run ./path/to/suite routine:someRoutine
 Option `routine` - used to test separate test routine. Accepts name of test routine.
 
 ```
-tst .run ./someDirectory testRoutineTimeOut:[ time ]
+tst .run ./someDirectory testRoutineTimeOut:10000
 ```
 
 Option `testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.

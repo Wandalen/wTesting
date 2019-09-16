@@ -138,11 +138,12 @@ For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). 
 
 #### Quick references
 
+- [Get help on commands](./doc/version.eng/tutorial/Help.md)
+- [Running tests](./doc/version.eng/tutorial/Running.md)
+- [Running options](./doc/version.eng/tutorial/Help.md#test-run-options-and-suite-options)
 - [Writing tests](./doc/version.eng/tutorial/HelloWorld.md)
 - [Grouping of tests cases](./doc/version.eng/tutorial/Report.md)
 - [Test checks](./doc/version.eng/concept/TestCheck.md)
-- [Running tests](./doc/version.eng/tutorial/Running.md)
-- [Running options](./doc/version.eng/tutorial/Help.md)
 
 
 <!-- Test suit is a set of test routines in one file, each test routine is a set of test features( cases ).

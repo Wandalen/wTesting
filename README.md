@@ -113,7 +113,7 @@ Running of separate test suite by NodeJS directly.
 Utility provides more control of testing process by running options. It is control parameters of the testing that is passed to the run command.
 
 ```
-tst .run ./directory verbosity:5
+tst .run ./someDirectory verbosity:5
 ```
 
 - `verbosity` - change amount of output test information. Accepts a value from 0 to 9. Default value is 4.
@@ -125,7 +125,7 @@ tst .run ./path/to/suite routine:someRoutine
 - `routine` - used to test separate test routine. Accepts name of test routine.
 
 ```
-tst .run ./path/to/ testRoutineTimeOut:[ time ]
+tst .run ./someDirectory testRoutineTimeOut:[ time ]
 ```
 
 - `testRoutineTimeOut` - limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
@@ -138,7 +138,7 @@ For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). 
 
 #### Quick references
 
-- [Get help on commands](./doc/version.eng/tutorial/Help.md)
+- [Get help on commands of CLI](./doc/version.eng/tutorial/Help.md)
 - [Running tests](./doc/version.eng/tutorial/Running.md)
 - [Running options](./doc/version.eng/tutorial/Help.md#test-run-options-and-suite-options)
 - [Writing tests](./doc/version.eng/tutorial/HelloWorld.md)

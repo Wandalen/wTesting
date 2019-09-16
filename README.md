@@ -3,7 +3,9 @@
 
 Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
 
-![tester.gif](./doc/images/tester.gif)
+<div align="center">
+		<img src="./doc/images/tester.gif" alt="tester.gif">
+</div>
 
 ### Cheat sheet
 
@@ -17,7 +19,8 @@ All information about utility in short form given in [cheat sheet](./doc/version
 - Testing of separate routines
 - Colorful report
 - Verbosity control
-- Enhanced assertion messages
+- Enhanced test checks messages
+- Displaying code of test case in report
 - Async function support
 - Abstract test suites
 - Runs tests concurrently
@@ -107,7 +110,7 @@ Running of separate test suite by NodeJS directly.
 
 ### Running options
 
-Utility provides more control of testing process by running options. It is control parameters of the testing that is passed to the run command. Run options are performed for each test suite.
+Utility provides more control of testing process by running options. It is control parameters of the testing that is passed to the run command.
 
 ```
 tst .run ./directory verbosity:5
@@ -129,9 +132,17 @@ tst .run ./path/to/ testRoutineTimeOut:[ time ]
 
 ### Documentation
 
-Please see the files in the `doc` directory:
+Please see documentation in the `doc` directory. It is available in [English](./doc/version.eng/) and [Ukrainian](./doc/version.ukr/)
 
-More details about writing test files in tutorial ['Hello World'](./doc/version.eng/tutorial/HelloWorld.md).
+For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). For getting exhaustive information on one or another aspect use [list of concepts](./doc/version.eng/README.md#Concepts) to find a concept of interest and get familiar with it.
+
+#### Quick references
+
+- [Writing tests](./doc/version.eng/tutorial/HelloWorld.md)
+- [Grouping of tests cases](./doc/version.eng/tutorial/HelloWorld.md)
+- [Test checks](./doc/version.eng/concept/TestCheck.md)
+- [Running tests](./doc/version.eng/tutorial/Running.md)
+- [Running options](./doc/version.eng/tutorial/Help.md)
 
 
 <!-- Test suit is a set of test routines in one file, each test routine is a set of test features( cases ).

@@ -36,7 +36,7 @@ The `join` function performs the concatenation of two strings. It is exported fo
 
 ### Test file
 
-The test suite `Join.test.js` has the suffix` .test` so that the testing utility could find it.
+The test suite `Join.test.js` has the suffix `.test` so that the testing utility could find it.
 
 <details>
     <summary><u>Code of file <code>Join.test.js</code></u></summary>
@@ -102,7 +102,7 @@ The figure shows test file structure. It consists of four main elements:
 - test suite definition;
 - test suite launching.
 
-### Dependency injection section
+### Dependencies section
 
 The section is intended to inject dependencies required for testing.
 

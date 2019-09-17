@@ -17,8 +17,8 @@ function routine2( test )
   test.case = 'pass';
   test.identical( Join.join( 1, 3 ), '13' );
 
-  test.case = 'fail';
-  test.identical( Join.join( 1, 3 ), 13 );
+  // test.case = 'fail';
+  // test.identical( Join.join( 1, 3 ), 13 );
 
 }
 

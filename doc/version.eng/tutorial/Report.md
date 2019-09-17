@@ -1,355 +1,262 @@
-# Verbosity control
+## How to read a report and group test checks
 
-Changing the amount of output test information using the verbosity option.
-
-Excessive detail of the report of test suites execution may make it difficult to find the necessary information. Conversely, when testing of a separate test routine is performed, there may not be enough information in the report. Therefore, the utility can control the amount of output information. To do this the `verbosity` option is used.
-
-The `verbosity` option takes values from` 0` to `9`. By default, `verbosity` is set to `4`. The value `0` is the lowest level and does not display any test information. The value `9` is the highest level of verbosity and displays the maximum information about the test results. If `verbosity:1` is specified, exactly one line is displayed.
-
-### Test object and test file
-
-Use the test module from the tutorial about [creating a test file](HelloWorld.md). To complete the preparation, install dependencies. To do this, open a directory with files in the terminal and enter `npm install`. After installing dependencies, the module is ready for testing.
-
-### Testing with different verbosity levels
-
-The parameter `verbosity` is specified after the name of the test, directory or routine. Also, the option has a shortened entry form - `v`.
-
-When the value `0` is used, the utility does not display a single line. This can be useful when only the test result is important. This result can be used by another utility or script. For example, if the test fails, the console holds a non-zero error code.
-
-Enter the command
-
-```
-tst .imply verbosity:1 Join.test.js
-```
-
-Compare the console output with given one.
+How to read a test report and group the test checks in groups and test case. How the test suite content is displayed in the report.
 
 <details>
-  <summary><u>Command output <code>tst .imply verbosity:1 Join.test.js</code></u></summary>
+  <summary><u>Module structure</u></summary>
 
 ```
-[user@user ~]$ tst .imply verbosity:1 Join.test.js
-
-  Testing ... in 0.278s ... failed
+report
+   ├── Join.js
+   ├── Join.test.js
+   └── package.json
 
 ```
 
 </details>
 
-When command contains `verbosity:1` option, the console displays one line with an indication of how and for what time the test was passed or failed. If the utility would test the test suites group, the output would contain one line with the total result.
+Create the file structure above for routine testing.
 
-Increase the level of detail to `4`. To do this, run the command `tst .imply v:4 Join.test.js ` with the shortened form of the option. Compare the result with the output shown below.
-
-<details>
-  <summary><u>Command output <code>tst .imply v:4 Join.test.js</code></u></summary>
-
-```
-[user@user ~]$ tst .imply v:4 Join.test.js
-
-  Includes tests from : /.../testCreation/Join.test.js
-
-  Launching several ( 1 ) test suites ..
-
-    Running test suite ( Join ) ..
-    at  /.../testCreation/Join.test.js:39
-
-      Passed test routine ( Join / routine1 ) in 0.056s
-        Test check ( Join / routine2 / fail # 2 ) ... failed
-      Failed test routine ( Join / routine2 ) in 0.074s
-
-    Passed test checks 2 / 3
-    Passed test cases 1 / 2
-    Passed test routines 1 / 2
-    Test suite ( Join ) ... in 0.252s ... failed
-
-  ExitCode : -1
-  Passed test checks 2 / 3
-  Passed test cases 1 / 2
-  Passed test routines 1 / 2
-  Passed test suites 0 / 1
-  Testing ... in 0.344s ... failed
-```
-
-</details>
-
-The console displays information that the test routine `routine1` successfully passed, and the test routine `routine2` failed. Also, it is indicated that the test check failed in the test case `fail` of the second test routine. The output contains the test suite report and the general report. Since only one test suite has been tested, the general report duplicates the test suite `Join` report.
-
-Enter `tst .imply verbosity:6 Join.test.js ` command. Look at the output and compare with the below.
+### Test object
 
 <details>
-  <summary><u>Command output <code>tst .imply verbosity:6 Join.test.js</code></u></summary>
+    <summary><u>Code of file <code>Join.js</code></u></summary>
 
-```
-[user@user ~]$ tst .imply verbosity:6 Join.test.js
-Includes tests from : /.../testCreation/Join.test.js
-
-Tester Settings :
+```js    
+module.exports.join = function( a, b )
 {
-  scenario : test,
-  sanitareTime : 2000,
-  fails : null,
-  beeping : true,
-  coloring : 1,
-  timing : 1,
-  rapidity : 3,
-  routine : null,
-  negativity : null,
-  routineTimeOut : null,
-  concurrent : null,
-  verbosity : 6,
-  silencing : null,
-  shoulding : null,
-  accuracy : null
+  return String( a ) + String( b );
 }
 
-  Launching several ( 1 ) test suites ..
-  /.../testCreation/Join.test.js:39 - enabled
-  1 test suite
-
-    Running test suite ( Join ) ..
-    at  /.../testCreation/Join.test.js:39
-
-      Running test routine ( routine1 ) ..
-
-
-        /.../testCreation/Join.test.js:9
-            5 : //
-            6 :
-            7 : function routine1( test )
-            8 : {
-            9 :   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );  
-        Test check ( Join / routine1 /  # 1 ) ... ok
-
-      Passed test routine ( Join / routine1 ) in 0.091s
-      Running test routine ( routine2 ) ..
-
-
-        /.../testCreation/Join.test.js:18
-            14 : function routine2( test )
-            15 : {
-            16 :
-            17 :   test.case = 'pass';
-            18 :   test.identical( Join.join( 1, 3 ), '13' );  
-        Test check ( Join / routine2 / pass # 1 ) ... ok
-
-
-        - got :
-          '13'
-        - expected :
-          13
-        - difference :
-          *
-
-        /.../testCreation/Join.test.js:21
-            17 :   test.case = 'pass';
-            18 :   test.identical( Join.join( 1, 3 ), '13' );
-            19 :
-            20 :   test.case = 'fail';
-            21 :   test.identical( Join.join( 1, 3 ), 13 );  
-        Test check ( Join / routine2 / fail # 2 ) ... failed
-
-      Failed test routine ( Join / routine2 ) in 0.098s
-
-    Passed test checks 2 / 3
-    Passed test cases 1 / 2
-    Passed test routines 1 / 2
-    Test suite ( Join ) ... in 0.294s ... failed
-
-
-
-  ExitCode : -1
-  Passed test checks 2 / 3
-  Passed test cases 1 / 2
-  Passed test routines 1 / 2
-  Passed test suites 0 / 1
-  Testing ... in 0.389s ... failed
 ```
 
 </details>
 
-At the verbosity level `6`, the utility displays a section with the settings of the tester (test options) and report on a separate test check.
+Enter the code above into the `Join.js` file.
 
-At the beginning of the report, all settled [test options](Help.md#Test-run-options-and-suite-options) are specified. Since the test suite has no specified test options, and the command has only `verbosity` option, all other options have the default settings.
+The `join` function concatenates two strings. It is exported for use.
 
-The test report for the `ok` test includes:
+### Test file
 
-- path to the test file;
-- number of line with test check;
-- test suite code with test check;
-- result of testing.
-
-The test report with the status `failed` additionally contains a section with description of an error. For example, in this report this section is
-
-```
-        - got :
-          '13'
-        - expected :
-          13
-        - difference :
-          *
-```
-It indicates the difference between the received and the expected values.
-
-Run the test routine `routine2` with the highest level of verbosity Use the `tst .imply routine:routine2 v:9 Join.test.js` command.
+The suite `Join.test.js` has the suffix` .test` so that the testing utility could find it.
 
 <details>
-  <summary><u>Command output <code>tst .imply routine:routine2 v:9 Join.test.js</code></u></summary>
+    <summary><u>Code of file <code>Join.test.js</code></u></summary>
 
-```
-[user@user ~]$ tst .imply routine:routine2 v:9 Join.test.js
-Includes tests from : /.../testCreation/Join.test.js
+```js    
+let _ = require( 'wTesting' );
+let Join = require( './Join.js' );
 
-Tester Settings :
+//
+
+function routine1( test )
 {
-  scenario : test,
-  sanitareTime : 500,
-  fails : null,
-  beeping : true,
-  coloring : 1,
-  timing : 1,
-  rapidity : 3,
-  routine : routine2,
-  negativity : null,
-  routineTimeOut : null,
-  concurrent : null,
-  verbosity : 9,
-  silencing : null,
-  shoulding : null,
-  accuracy : null
+
+  test.open( 'string' );
+
+    test.case = 'trivial';
+    test.identical( Join.join( 'a', 'b' ), 'ab' );
+
+    test.case = 'empty';
+    test.identical( Join.join( '', '' ), '' );
+
+  test.close( 'string' );
+  test.open( 'number' );
+
+    test.case = 'trivial';
+    test.identical( Join.join( 1, 3 ), '13' );
+
+    test.case = 'zeroes';
+    test.identical( Join.join( 0, 0 ), '00' );
+
+  test.close( 'number' );
+  test.open( 'mixed' );
+
+    test.identical( Join.join( 'a', 1 ), 'a1' );
+
+  test.close( 'mixed' );
+
 }
 
-  Launching several ( 1 ) test suites ..
-  /.../testCreation/Join.test.js:39 - enabled
-  1 test suite
+//
 
-    Running test suite ( Join ) ..
-    at  /.../testCreation/Join.test.js:39
+var Self =
+{
+  name : 'Join',
+  tests :
+  {
+    routine1,
+  }
+}
 
-    wTestSuite( Join#in0 )
-    {
-      name : 'Join',
-      verbosity : 8,
-      importanceOfDetails : 0,
-      negativity : 1,
-      silencing : null,
-      shoulding : 1,
-      routineTimeOut : 5000,
-      concurrent : 0,
-      routine : 'routine2',
-      platforms : null,
-      suiteFilePath : [ '/path_to_' ... 'reation/Join.test.js' ],
-      suiteFileLocation : [ '/path_to_' ... 'tion/Join.test.js:39' ],
-      tests : [ Map:Pure with 2 elements ],
-      abstract : 0,
-      enabled : 1,
-      takingIntoAccount : 1,
-      usingSourceCode : 1,
-      ignoringTesterOptions : 0,
-      accuracy : 1e-7,
-      report : [ Map:Pure with 9 elements ],
-      debug : 0,
-      override : [ Map:Pure with 0 elements ],
-      _routineCon : [ routine bound anonymous ],
-      _inroutineCon : [ routine bound anonymous ],
-      onRoutineBegin : [ routine onRoutineBegin ],
-      onRoutineEnd : [ routine onRoutineEnd ],
-      onSuiteBegin : [ routine onSuiteBegin ],
-      onSuiteEnd : [ routine onSuiteEnd ]
-    }
-      Running test routine ( routine1 ) ..
+//
 
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );
 
-        /.../testCreation/Join.test.js:9
-            5 : //
-            6 :
-            7 : function routine1( test )
-            8 : {
-            9 :   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );  
-        Test check ( Join / routine1 /  # 1 ) ... ok
-
-      Passed test routine ( Join / routine1 ) in 0.066s
-      Running test routine ( routine2 ) ..
-
-
-        /.../testCreation/Join.test.js:18
-            14 : function routine2( test )
-            15 : {
-            16 :
-            17 :   test.case = 'pass';
-            18 :   test.identical( Join.join( 1, 3 ), '13' );  
-        Test check ( Join / routine2 / pass # 1 ) ... ok
-
-
-        - got :
-          '13'
-        - expected :
-          13
-        - difference :
-          *
-
-        /.../testCreation/Join.test.js:21
-            17 :   test.case = 'pass';
-            18 :   test.identical( Join.join( 1, 3 ), '13' );
-            19 :
-            20 :   test.case = 'fail';
-            21 :   test.identical( Join.join( 1, 3 ), 13 );  
-        Test check ( Join / routine2 / fail # 2 ) ... failed
-
-      Failed test routine ( Join / routine2 ) in 0.147s
-
-    Passed test checks 1 / 2
-    Passed test cases 1 / 2
-    Passed test routines 0 / 1
-    Test suite ( Join ) ... in 0.226s ... failed
-
-
-
-  ExitCode : -1
-  Passed test checks 1 / 2
-  Passed test cases 1 / 2
-  Passed test routines 0 / 1
-  Passed test suites 0 / 1
-  Testing ... in 0.323s ... failed
 ```
 
 </details>
 
-Test output is as detailed as possible. It includes general information about test options and additional information about the settings of the test suite `Join`.
+Enter the code above into `Join.test.js` file.
 
-### Test report elements displayed at different levels of verbosity
+The test routine `routine1` has 2 test groups that named `string` and `number`, as well as a test case `mixed` with one test check. The `string` group contains 2 test cases -` trivial` and `empty`, each of which has one check. The `number` group has test cases `trivial` and `zeroes`, each of which has one test check. The groups were formed by the type of arguments passed to the `Join.join` function that is being tested. In the test checks of the `string` group string values are used, the `number` group - numeric values, and in the test case `mixed` string and numeric values are used.
 
-The table provides information on the details of the test report,  depending on the value of the `verbosity` option.
+In the given code two dependencies are injected. The first one is the `Testing` utility to perform a test. The second is a `Join.js` file in which there is a routine for testing.
 
-| Verbosity level                           | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|-------------------------------------------|---|---|---|---|---|---|---|---|---|---|
-| Single line test result                   | - | + | + | + | + | + | + | + | + | + |
-| Detailed test summary                     | - | - | + | + | + | + | + | + | + | + |
-| Single line summary of passing the test suite | - | - | + | + | + | + | + | + | + | + |
-| Detailed summary of passing the test suite    | - | - | - | + | + | + | + | + | + | + |
-| Failed test routines                      | - | - | - | + | + | + | + | + | + | + |
-| Passed test routines                      | - | - | - | - | + | + | + | + | + | + |
-| Failed test checks                        | - | - | - | - | + | + | + | + | + | + |
-| Passed test checks                        | - | - | - | - | - | + | + | + | + | + |
-| Test options                              | - | - | - | - | - | + | + | + | + | + |
-| Difference between the received and the expected value                                                                                                                                                                        | - | - | - | - | - | + | + | + | + | + |
-| Code of failed test check                 | - | - | - | - | - | + | + | + | + | + |
-| Code of passed test check                 | - | - | - | - | - | - | + | + | + | + |
-| Address of failed test check              | - | - | - | - | - | + | + | + | + | + |
-| Address of passed test check              | - | - | - | - | - | - | + | + | + | + |
-| Options and settings of test suite        | - | - | - | - | - | - | - | + | + | + |
-| Output of a test object that is colored in console                                                                                                                                                                      | - | - | - | - | - | - | - | + | + | + |
-| Output of a test routines that is colored in console                                                                                                                                                                      | - | - | - | - | - | - | - | + | + | + |
+<details>
+    <summary><u>Code of file <code>package.json</code></u></summary>
 
-Output of test object or test routines [is highlighted in yellow](OptionSilencing.md) at the verbosity level from `7` to `9`.
+```json    
+{
+  "dependencies": {
+    "wTesting": ""
+  }
+}
+
+```
+
+</details>
+
+Enter the given code in the file with dependencies. They download by the `npm install` command in the module directory.
+
+### How to read a report of testing
+
+There is a correspondence between the structure of the test file and the output of the test results.
+
+Run the test in the `Join.test.js` file by entering the command
+
+```
+tst Join.test.js verbosity:5
+```
+
+The `verbosity` option sets the amount of output information. Learn more about this option in the tutorial [control of verbosity](Verbosity.md).
+
+##### Correspondence between the console report and the contents of `Join.test.js` file
+
+![report.png](../../images/report.png)
+
+The figure on the left side shows the console output after the command has been executed. It is divided into four main sections and contains several additional service messages.
+
+The first section is the testing options. It is intended to display current testing parameters. In the fourth line from the bottom of the section, you can find the `verbosity` option with the value `5`. This value was set in the option of the entered command.
+
+The second section is a test report for a separate test routine.  When testing of a test suites group is performed, each test suite has such a section.
+
+The number of test routines, test cases, and test checks is determined by the test suite code. The figure on the right shows the code of `Join.test.js` file. The report includes the results of performing five test cases in the test routine `routine1`. Two groups have been created from the given test cases - `string` and` number`. In order to merge the test cases into a group, the routines [`open()` and `close()`](../concept/TestCase.md) are used.
+
+If nesting is used, the line of the report of the passed test case looks like:
+
+```
+Test check ( Join / routine1 / string > trivial # 1) ... ok
+
+```
+
+This line indicates that the test has passed, it has the number 1. The string in the parenthesis indicates the path to test check: test suite `Join` / routine `routine1` / group of test cases `string` > test case `trivial`. Accordingly, the `>` symbol is used to denote the nesting of the test case.
+
+The utility makes a conclusion regarding the passed test checks in the routine: `Passed test routine ( Join / routine1 ) in 0,173s`.
+
+The third section is the final report for one test suite. When testing of test suites group is performed, a separate test report is displayed as soon as the test is completed. The section gives a general summary - the number of passed checks, test cases, test routines, and utility makes a conclusion regarding it.
+
+In this test suite, 5 test check passed in the 5 test cases, and one test routine was done. Conclusion on the suite `Join` - passed.
+
+The fourth section is the general test report. The report also includes the number of passed test checks, test cases, test routines, and test suites. When testing of test suites group is performed, the relevant information is summarized.
+
+The directory has only one test suite, so the total result includes information from the previous section only.
+
+### The report with failed check
+
+The report may contain failed test checks that indicate program code errors or errors in the code of test suite.
+
+<details>
+    <summary><u>Code of file <code>Join.test.js</code> with an error in test check</u></summary>
+
+```js    
+let _ = require( 'wTesting' );
+let Join = require( './Join.js' );
+
+//
+
+function routine1( test )
+{
+
+  test.open( 'string' );
+
+    test.case = 'trivial';
+    test.identical( Join.join( 'a', 'b' ), 'ab' );
+
+    test.case = 'empty';
+    test.identical( Join.join( '', '' ), '' );
+
+  test.close( 'string' );
+  test.open( 'number' );
+
+    test.case = 'trivial';
+    test.identical( Join.join( 1, 3 ), '13' );
+
+    test.case = 'zeroes';
+    test.identical( Join.join( 0, 0 ), '00' );
+
+  test.close( 'number' );
+  test.open( 'mixed' );
+
+    test.will = 'str_num';
+    test.identical( Join.join( 'a', 1 ), 'a2' );
+
+  test.close( 'mixed' );
+
+
+}
+
+//
+
+var Self =
+{
+  name : 'Join',
+  tests :
+  {
+    routine1,
+  }
+}
+
+//
+
+Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+wTester.test( Self.name );
+
+```
+
+</details>
+
+Replace the content of the `Join.test.js` file with the code above.
+
+In the file, the test case `mixed` has been changed, the line `test.will = 'str_num'` is added to it. This line represents the name of the test check. The expected value has the error, because in the `Join.join` routine passes the values `a` and `1`, but the test check expects the value `a2`.
+
+To get the test report, enter `tst Join.test.js v:5`.
+
+##### Test report for error in test check
+
+![report2.png](../../images/report2.png)
+
+Utility displays expanded error information.
+
+The error report first states:
+- received value `got`;
+- expected value `expected`;
+- the difference between the received and the expected value is `difference`.
+The output shows that the expected and received values coincide in the `a` letter, but differ in the next characters -` 1` and `2`.
+
+The next section shows the name of the file with the error, the number of line with failed test check, as well as the part of the test suite code with failed test check.
+
+The result of the test check looks like `Test test ( Join / routine1 / mixed < str_num #5 ) ... failed`, it contains the name `str_num` specified in the code of test file. The name of the test check and its number are separated by a `< ` symbol.
+
+The result of test suite report and the overall test result are considered to be failed due to one failed check.
 
 ### Summary
 
-- To set the verbosity level of the test report, the `verbosity` option is used.
-- The `verbosity` option takes values from` 0` to `9`.
-- When `verbosity: 0` is set, not a single line is displayed.
-- When `verbosity: 1` is set, exactly one line is displayed.
-- By default, the `verbosity` option is set to `4`.
-- When values from `5` or more are used, the utility displays a more detailed report than the regular report.
-- When values from `7` are used, the output of the test object is highlighted in yellow.
-
-[Back to content](../README.md#Tutorials)
+- Test cases can be grouped, it is done by nesting test cases in the form `test.open()`, `test.close()`.
+- The test report about passed test check contains the location of test check, its name and number.
+- The console output of failed test checks can contain information about the difference in the expected and received values, and a part of test suite code with this test check.
+- The test result will be `passed` if all tests were successful. Even after one failed test, the test result will be `failed`.
+- By using the error information, the developer can immediately find the part of the code that was broken.

@@ -130,8 +130,10 @@ function init( o )
 
   /* */
 
+  if( suite.context === null )
+  suite.context = Object.create( null );
   _.assert( _.objectIs( suite.context ) );
-  Object.preventExtensions( suite.context );
+  // Object.preventExtensions( suite.context );
 
   return suite;
 }
@@ -509,6 +511,9 @@ function _begin()
   /* tracking */
 
   _.arrayAppendOnceStrictly( wTester.activeSuites, suite );
+
+  _.assert( _.objectIs( suite.context ) );
+  Object.preventExtensions( suite.context );
 
   /* logger */
 

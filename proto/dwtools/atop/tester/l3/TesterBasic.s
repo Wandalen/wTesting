@@ -828,7 +828,8 @@ function _suitesIncludeAt( path )
     catch( err )
     {
       debugger;
-      err = _.errAttend( 'Cant include', absolutePath + '\n', err );
+      err = _.err( err, '\nCant include', absolutePath );
+      _.errAttend( err );
       tester._includeFailConsider( err );
 
       if( tester.settings.coloring )

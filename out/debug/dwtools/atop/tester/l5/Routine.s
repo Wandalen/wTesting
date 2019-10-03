@@ -1182,7 +1182,7 @@ function exceptionReport( o )
   let msg = null;
   if( o.considering )
   {
-    debugger;
+    // debugger;
     /* qqq : implement and cover different message if time out */
     msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
   }

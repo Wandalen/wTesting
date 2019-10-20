@@ -40,13 +40,16 @@ about :
 path :
 
   repository : git+https:///github.com/Wandalen/wTesting.git
+  remotes :
+   - git+https:///github.com/Wandalen/wTesting.git
+   - npm:///wTesting
   bugtracker : https:///github.com/Wandalen/wTesting/issues
 
 step :
 
   proto.export :
     inherit : module.export
-    export : path::proto
+    export : path::export
     tar : 0
     criterion :
       content : 'proto'

@@ -39,20 +39,20 @@
   }, 
   "dependencies" : 
   {
-    "wConsequence" : "", 
-    "wCopyable" : "", 
-    "wFiles" : "", 
-    "wLogger" : "", 
-    "wProto" : "", 
-    "wTools" : "", 
-    "wequaler" : "", 
-    "wappbasic" : "", 
-    "wcommandsaggregator" : "", 
-    "winstancing" : "", 
-    "wlooker" : "", 
-    "wselector" : ""
+    "wConsequence" : "beta", 
+    "wCopyable" : "beta", 
+    "wFiles" : "beta", 
+    "wLogger" : "beta", 
+    "wProto" : "beta", 
+    "wTools" : "beta", 
+    "wequaler" : "beta", 
+    "wappbasic" : "beta", 
+    "wcommandsaggregator" : "beta", 
+    "winstancing" : "beta", 
+    "wlooker" : "beta", 
+    "wselector" : "beta"
   }, 
-  "optionalDependencies" : { "wEventHandler" : "" }, 
-  "devDependencies" : { "wait-sync" : "" }, 
+  "optionalDependencies" : { "wEventHandler" : "beta" }, 
+  "devDependencies" : { "wait-sync" : "beta" }, 
   "keywords" : [ "testing", "unit test", "functional test", "wTools" ]
 }

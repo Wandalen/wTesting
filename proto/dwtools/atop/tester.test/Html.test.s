@@ -106,6 +106,56 @@ function trivial( test )
   return _.Consequence.From( ready );
 }
 
+//
+
+function consequenceFromExperiment( test )
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'html' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.join( routinePath, 'main.js' );
+  let mainPathNativized= _.path.nativize( mainPath );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let app = new spectron.Application
+  ({
+    path : electronPath,
+    args : [ mainPathNativized ]
+  })
+
+  let ready = app.start(); //returns promise
+
+  test.is( _.promiseIs( ready ) )
+
+  ready.then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
+
+  ready = _.Consequence.From( ready );
+
+  ready.then( () => _.Consequence.From( app.client.getValue( '#input1' ) ) )// returns promiseLike object
+
+  ready.then( ( got ) =>
+  {
+    test.case = 'input field value expected, but not object';
+
+    console.log( 'promiseIs:', _.promiseIs( got ) )
+    console.log( 'promiseLike:', _.promiseLike( got ) )
+    console.log( 'typeof:', typeof got )
+    console.log( 'has then routine:', _.routineIs( got.then ) )
+    console.log( 'has catch routine:', _.routineIs( got.catch ) )
+
+    test.identical( got, '123' )
+    return got;
+  })
+
+  ready.then( () =>_.Consequence.From( app.stop() ) )
+
+  return ready;
+
+}
+
+consequenceFromExperiment.experimental = 1;
+
 // --
 // suite
 // --
@@ -129,7 +179,8 @@ var Self =
 
   tests :
   {
-    trivial
+    trivial,
+    consequenceFromExperiment
   }
 
 }

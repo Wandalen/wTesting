@@ -490,6 +490,7 @@ function _runNow()
 function _begin()
 {
   let suite = this;
+  let ready = new _.Consequence().take( null );
 
   if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.timeNow();
@@ -562,13 +563,16 @@ function _begin()
   {
     try
     {
-      suite.onSuiteBegin.call( suite.context, suite );
+/*
+xxx qqq : cover returned consequence works 
+*/
+      ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
     }
     catch( err )
     {
       debugger;
-      err = _.err( `Error in suite.onSuiteBegin of ${suite.qualifiedName}\n`, err );
-      suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
+      err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
+      suite.exceptionReport({ err : err });
       throw err;
       // return false;
     }
@@ -582,17 +586,34 @@ function _begin()
     _global_.process.on( 'exit', suite._terminated_joined );
   }
 
-  /* */
-
-  if( !wTester._canContinue() )
+  ready.finally( ( err, arg ) =>
   {
-    debugger;
-    return false;
-  }
+    if( err )
+    {
+      err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
+      suite.exceptionReport({ err : err });
+      throw err;
+    }
+    if( !wTester._canContinue() )
+    {
+      debugger;
+      return false;
+    }
+    return true;
+  });
 
-  /* */
-
-  return true;
+  return ready;
+  // /* */
+  //
+  // if( !wTester._canContinue() )
+  // {
+  //   debugger;
+  //   return false;
+  // }
+  //
+  // /* */
+  //
+  // return true;
 }
 
 //

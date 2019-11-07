@@ -677,7 +677,7 @@ function _suitesRun( suites )
   for( let s in suites )
   {
     let suite = suites[ s ];
-    con.and( suite._runSoon() );
+    con.andKeepAccumulative( suite._runSoon() );
   }
 
   return con;

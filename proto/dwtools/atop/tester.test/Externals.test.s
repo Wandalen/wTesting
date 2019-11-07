@@ -50,7 +50,7 @@ function onSuiteEnd()
 function run( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'hello' );
+  let originalAssetPath = _.path.join( self.assetDirPath, 'hello' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
@@ -87,7 +87,7 @@ function run( test )
   }
 
   debugger;
-  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath }, onUp : onUp });
+  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalAssetPath ] : routinePath }, onUp : onUp });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
   debugger;
 
@@ -351,7 +351,7 @@ function run( test )
 function checkFails( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'check-fails' );
+  let originalAssetPath = _.path.join( self.assetDirPath, 'check-fails' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let ready = new _.Consequence().take( null );
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
@@ -387,7 +387,7 @@ function checkFails( test )
   }
 
   debugger;
-  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath }, onUp : onUp });
+  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalAssetPath ] : routinePath }, onUp : onUp });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
   debugger;
 
@@ -452,7 +452,7 @@ function checkFails( test )
 function double( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'double' );
+  let originalAssetPath = _.path.join( self.assetDirPath, 'double' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let mainDirPath = _.path.nativize( _.path.join( __dirname, '../tester' ) );
   // let mainDirPath = _.path.nativize( _.path.join( __dirname ) );
@@ -468,7 +468,7 @@ function double( test )
   })
 
   debugger;
-  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } });
+  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalAssetPath ] : routinePath } });
   test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
   debugger;
 
@@ -510,7 +510,7 @@ function double( test )
 function noTestSuite( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'hello' );
+  let originalAssetPath = _.path.join( self.assetDirPath, 'hello' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
   let ready = new _.Consequence().take( null );

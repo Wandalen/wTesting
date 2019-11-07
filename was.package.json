@@ -53,6 +53,6 @@
     "wselector" : ""
   },
   "optionalDependencies" : { "wEventHandler" : "" },
-  "devDependencies" : { "wait-sync" : "", "electron": "^5.0.0", "spectron": "^7.0.0" },
+  "devDependencies" : { "wait-sync" : "", "electron": "^5.0.0", "spectron": "^7.0.0", "puppeteer" : "2.0.0" },
   "keywords" : [ "testing", "unit test", "functional test", "wTools" ]
 }

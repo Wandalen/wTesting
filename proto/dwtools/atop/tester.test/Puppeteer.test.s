@@ -46,7 +46,10 @@ function html( test )
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
 
-  let page = createPage();
+  let page = null;
+  let browser = null;
+
+  setup();
 
   ready.then( () =>
   {
@@ -86,22 +89,27 @@ function html( test )
 
   ready.then( () =>
   {
-    return page.$eval( '#input1', ( e ) => { e.value = '321'; return e.value })
-    .then( ( got ) =>
-    {
-      test.identical( got, '321' )
-      return got;
-    })
-  })
+    return browser.close()
+    .then( () => null )
+  });
 
   return ready;
 
   //
 
-  function createPage()
+  function setup()
   {
     let ready = puppeteer.launch({ headless : false })
-    .then( ( browser ) => browser.newPage() )
+    .then( ( got ) =>
+    {
+      browser = got;
+      return browser.newPage()
+    })
+    .then( ( got ) =>
+    {
+      page = got;
+      return got;
+    })
     ready = _.Consequence.From( ready );
     return ready.deasync();
   }

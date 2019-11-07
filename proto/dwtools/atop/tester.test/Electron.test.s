@@ -9,8 +9,8 @@ if( typeof module !== 'undefined' )
   require( '../tester/MainTop.s' );
   _.include( 'wFiles' );
 
-  var electronPath = require( 'electron' );
-  var spectron = require( 'spectron' );
+  var ElectronPath = require( 'electron' );
+  var Spectron = require( 'spectron' );
 
 }
 
@@ -43,15 +43,14 @@ function html( test )
   let self = this;
   let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.join( routinePath, 'main.js' );
-  let mainPathNativized= _.path.nativize( mainPath );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
 
-  let app = new spectron.Application
+  let app = new Spectron.Application
   ({
-    path : electronPath,
-    args : [ mainPathNativized ]
+    path : ElectronPath,
+    args : [ mainPath ]
   })
 
   let ready = app.start()
@@ -117,9 +116,9 @@ function consequenceFromExperiment( test )
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
 
-  let app = new spectron.Application
+  let app = new Spectron.Application
   ({
-    path : electronPath,
+    path : ElectronPath,
     args : [ mainPath ],
   })
 

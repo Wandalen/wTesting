@@ -1,4 +1,4 @@
-( function _Html_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -38,10 +38,10 @@ function onSuiteEnd()
 // tests
 // --
 
-function trivial( test )
+function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'html' );
+  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let mainPath = _.path.join( routinePath, 'main.js' );
   let mainPathNativized= _.path.nativize( mainPath );
@@ -163,7 +163,7 @@ consequenceFromExperiment.experimental = 1;
 var Self =
 {
 
-  name : 'Tools.atop.Tester.HTML',
+  name : 'Tools.atop.Tester.Electron',
   silencing : 1,
   enabled : 1,
 
@@ -179,7 +179,7 @@ var Self =
 
   tests :
   {
-    trivial,
+    html,
     consequenceFromExperiment
   }
 

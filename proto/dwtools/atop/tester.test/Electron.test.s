@@ -7,6 +7,7 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../Tools.s' );
 
   require( '../tester/MainTop.s' );
+
   _.include( 'wFiles' );
 
   var ElectronPath = require( 'electron' );
@@ -17,12 +18,13 @@ if( typeof module !== 'undefined' )
 var _global = _global_;
 var _ = _global_.wTools;
 
-//
+// --
+// context
+// --
 
 function onSuiteBegin()
 {
   let self = this;
-
   self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, '_asset' );
 }

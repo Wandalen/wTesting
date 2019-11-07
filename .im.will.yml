@@ -52,6 +52,22 @@ submodule :
     enabled : 0 # submodule
     criterion :
       development : 1
+  electron :
+    path : npm:///electron#^5.0.0
+    enabled : 0 # submodule
+    criterion :
+      development : 1
+  spectron :
+    path : npm:///spectron#^7.0.0
+    enabled : 0 # submodule
+    criterion :
+      development : 1
+  puppeteer :
+    path : npm:///puppeteer#2.0.0
+    enabled : 0 # submodule
+    criterion :
+      development : 1
+
 
 path :
 

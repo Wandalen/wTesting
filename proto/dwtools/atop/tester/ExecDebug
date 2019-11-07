@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wAppBasic' );
 }
 
-let _ = wTools;
+let _ = _global_.wTools;
 let shell = _.process.startPassingThrough
 ({
   execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'MainTop.s' ) ),

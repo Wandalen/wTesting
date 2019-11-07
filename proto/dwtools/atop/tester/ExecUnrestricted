@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wAppBasic' );
 }
 
-let _ = wTools;
+let _ = _global_.wTools;
 let o =
 {
   execPath : _.path.join( __dirname, 'MainTop.s' ),

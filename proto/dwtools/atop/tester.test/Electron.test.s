@@ -156,6 +156,40 @@ function consequenceFromExperiment( test )
 
 consequenceFromExperiment.experimental = 1;
 
+//
+
+function chaining()
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
+  })
+
+  let ready = app.start()
+
+  .then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
+
+  //select command is chained with .getText
+
+  .then( () => app.client.$( '.class1 p' ).getText() )
+
+  .then( ( text ) =>
+  {
+    console.log( text )
+    return null;
+  })
+
+  return _.Consequence.From( ready );
+}
+
 // --
 // suite
 // --
@@ -180,7 +214,8 @@ var Self =
   tests :
   {
     html,
-    consequenceFromExperiment
+    consequenceFromExperiment,
+    chaining
   }
 
 }

@@ -179,7 +179,7 @@ function chaining()
 
   //select command is chained with .getText
 
-  .then( () => app.client.$( '.class1 p' ).getText() )
+  .then( () => app.client.$( '.class1 p' ).getProperty( 'innerText' ) )
 
   .then( ( text ) =>
   {

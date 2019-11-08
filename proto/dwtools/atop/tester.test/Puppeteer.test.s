@@ -185,6 +185,68 @@ function html2( test )
   }
 }
 
+//
+
+function chaining( test )
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'Puppeteer' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+  let ready = new _.Consequence().take( null )
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let page = null;
+  let browser = null;
+
+  setup();
+
+  ready.then( () =>
+  {
+    let path = 'file:///' + _.path.nativize( indexHtmlPath );
+    return page.goto( path, { waitUntil : 'load' } )
+  })
+
+  ready.then( () =>
+  {
+    return page.$eval( '.class1 p' )
+    .then( ( element ) => element.getProperty( 'innerText' ) )
+    .then( ( text ) =>
+    {
+      console.log( text)
+      return null;
+    })
+  })
+
+  ready.then( () =>
+  {
+    return browser.close()
+    .then( () => null )
+  });
+
+  return ready;
+
+  //
+
+  function setup()
+  {
+    let ready = Puppeteer.launch({ headless : false })
+    .then( ( got ) =>
+    {
+      browser = got;
+      return browser.newPage()
+    })
+    .then( ( got ) =>
+    {
+      page = got;
+      return got;
+    })
+    ready = _.Consequence.From( ready );
+    return ready.deasync();
+  }
+}
+
 // --
 // suite
 // --

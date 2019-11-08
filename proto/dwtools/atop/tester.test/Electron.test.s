@@ -7,22 +7,24 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../Tools.s' );
 
   require( '../tester/MainTop.s' );
+
   _.include( 'wFiles' );
 
-  var electronPath = require( 'electron' );
-  var spectron = require( 'spectron' );
+  var ElectronPath = require( 'electron' );
+  var Spectron = require( 'spectron' );
 
 }
 
 var _global = _global_;
 var _ = _global_.wTools;
 
-//
+// --
+// context
+// --
 
 function onSuiteBegin()
 {
   let self = this;
-
   self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, '_asset' );
 }
@@ -43,15 +45,14 @@ function html( test )
   let self = this;
   let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.join( routinePath, 'main.js' );
-  let mainPathNativized= _.path.nativize( mainPath );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
 
-  let app = new spectron.Application
+  let app = new Spectron.Application
   ({
-    path : electronPath,
-    args : [ mainPathNativized ]
+    path : ElectronPath,
+    args : [ mainPath ]
   })
 
   let ready = app.start()
@@ -111,33 +112,33 @@ function html( test )
 function consequenceFromExperiment( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'html' );
+  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.join( routinePath, 'main.js' );
-  let mainPathNativized= _.path.nativize( mainPath );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
 
-  let app = new spectron.Application
+  let app = new Spectron.Application
   ({
-    path : electronPath,
-    args : [ mainPathNativized ]
+    path : ElectronPath,
+    args : [ mainPath ],
   })
 
-  let ready = app.start(); //returns promise
+  let ready = app.start();
 
-  test.is( _.promiseIs( ready ) )
+  test.is( _.promiseIs( ready ) );
 
-  ready.then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
+  ready.then( () => app.client.waitUntilTextExists( 'p', 'Hello world', 5000 ) )
 
   ready = _.Consequence.From( ready );
 
-  ready.then( () => _.Consequence.From( app.client.getValue( '#input1' ) ) )// returns promiseLike object
+  ready.then( () => _.Consequence.From( app.client.getValue( '#input1' ) ) ) /* returns promiseLike object */
 
   ready.then( ( got ) =>
   {
     test.case = 'input field value expected, but not object';
 
+    debugger;
     console.log( 'promiseIs:', _.promiseIs( got ) )
     console.log( 'promiseLike:', _.promiseLike( got ) )
     console.log( 'typeof:', typeof got )
@@ -151,7 +152,6 @@ function consequenceFromExperiment( test )
   ready.then( () =>_.Consequence.From( app.stop() ) )
 
   return ready;
-
 }
 
 consequenceFromExperiment.experimental = 1;

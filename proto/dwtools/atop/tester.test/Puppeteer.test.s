@@ -15,7 +15,9 @@ if( typeof module !== 'undefined' )
 var _global = _global_;
 var _ = _global_.wTools;
 
-//
+// --
+// context
+// --
 
 function onSuiteBegin()
 {
@@ -24,6 +26,8 @@ function onSuiteBegin()
   self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, '_asset' );
 }
+
+//
 
 function onSuiteEnd()
 {
@@ -39,7 +43,7 @@ function onSuiteEnd()
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'puppeteer' );
+  let originalDirPath = _.path.join( self.assetDirPath, 'Puppeteer' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )

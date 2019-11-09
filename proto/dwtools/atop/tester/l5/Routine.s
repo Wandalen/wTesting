@@ -2541,7 +2541,7 @@ function _shouldDo( o )
 
   }
 
-  //
+  /* */
 
   function handleSecondResource()
   {
@@ -2553,6 +2553,7 @@ function _shouldDo( o )
     let r = result.orKeepingSplit([ trd._timeOutCon, wTester._cancelCon ]);
     r.finally( ( err, arg ) =>
     {
+      if( result.hasCompetitor( gotSecondResource ) )
       result.competitorsCancel( gotSecondResource );
       if( err )
       throw err;
@@ -2561,10 +2562,12 @@ function _shouldDo( o )
 
   }
 
+  /* */
+
   function gotSecondResource( err, arg )
   {
     if( reported && !good )
-    return;
+    return null;
 
     begin( 0 );
 

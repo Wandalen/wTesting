@@ -121,6 +121,45 @@ function html( test )
 
 //
 
+async function htmlAwait( test )
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'puppeteer' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let browser = await Puppeteer.launch({ headless : false });
+  let page = await browser.newPage();
+
+  let path = 'file:///' + _.path.nativize( indexHtmlPath );
+  await page.goto( path, { waitUntil : 'load' } );
+
+  test.case = 'Check element text'
+  var got = await page.$eval( '.class1 p', ( e ) => e.innerText );
+  test.identical( got, 'Text1' )
+
+  test.case = 'Check href attribute'
+  var got = await page.$eval( '.class1 a', ( e ) => e.href );
+  test.is( _.strEnds( got,'index.html' ) );
+
+  test.case = 'Check input field value'
+  var got = await page.$eval( '#input1', ( e ) => e.value )
+  test.identical( got, '123' )
+
+  test.case = 'Change input field value and check it'
+  await page.$eval( '#input1', ( e ) => { e.value = '321' })
+  var got = await page.$eval( '#input1', ( e ) => e.value )
+  test.identical( got, '321' );
+
+  await browser.close();
+
+  return null;
+}
+
+//
+
 function html2( test )
 {
   let self = this;
@@ -271,7 +310,9 @@ var Self =
   tests :
   {
     html,
-    html2
+    htmlAwait,
+    html2,
+    chaining
   }
 
 }

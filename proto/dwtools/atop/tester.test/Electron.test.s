@@ -109,7 +109,7 @@ function html( test )
 
 //
 
-function htmlAwait( test )
+async function htmlAwait( test )
 {
   let self = this;
   let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
@@ -124,34 +124,29 @@ function htmlAwait( test )
     args : [ mainPath ]
   })
 
-  return _.Consequence.From( _htmlAwait() );
+  await app.start()
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
-  async function _htmlAwait()
-  {
-    await app.start()
-    await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  test.case = 'Check element text'
+  var got = await app.client.$( '.class1 p' ).getText();
+  test.identical( got, 'Text1' )
 
-    test.case = 'Check element text'
-    var got = await app.client.$( '.class1 p' ).getText();
-    test.identical( got, 'Text1' )
+  test.case = 'Check href attribute'
+  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
+  test.is( _.strEnds( got, '/index.html' ) )
 
-    test.case = 'Check href attribute'
-    var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
-    test.is( _.strEnds( got, '/index.html' ) )
+  test.case = 'Check input field value'
+  var got = await app.client.getValue( '#input1' );
+  test.identical( got, '123' )
 
-    test.case = 'Check input field value'
-    var got = await app.client.getValue( '#input1' );
-    test.identical( got, '123' )
+  test.case = 'Change input field value and check it'
+  await app.client.$( '#input1' ).setValue( '321' )
+  var got = await app.client.getValue( '#input1' )
+  test.identical( got, '321' )
 
-    test.case = 'Change input field value and check it'
-    await app.client.$( '#input1' ).setValue( '321' )
-    var got = await app.client.getValue( '#input1' )
-    test.identical( got, '321' )
+  await app.stop();
 
-    await app.stop();
-
-    return null;
-  }
+  return null;
 }
 
 //
@@ -240,7 +235,7 @@ function chaining()
 // --
 // suite
 // --
-
+debugger
 var Self =
 {
 

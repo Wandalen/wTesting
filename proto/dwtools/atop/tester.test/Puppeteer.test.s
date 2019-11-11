@@ -15,7 +15,9 @@ if( typeof module !== 'undefined' )
 var _global = _global_;
 var _ = _global_.wTools;
 
-//
+// --
+// context
+// --
 
 function onSuiteBegin()
 {
@@ -24,6 +26,8 @@ function onSuiteBegin()
   self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, '_asset' );
 }
+
+//
 
 function onSuiteEnd()
 {
@@ -39,7 +43,7 @@ function onSuiteEnd()
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'puppeteer' );
+  let originalDirPath = _.path.join( self.assetDirPath, 'Puppeteer' );
   let routinePath = _.path.join( self.tempDir, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
@@ -178,6 +182,68 @@ function html2( test )
     }
 
     return new Proxy( Puppeteer, handler );
+  }
+}
+
+//
+
+function chaining( test )
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'Puppeteer' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+  let ready = new _.Consequence().take( null )
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let page = null;
+  let browser = null;
+
+  setup();
+
+  ready.then( () =>
+  {
+    let path = 'file:///' + _.path.nativize( indexHtmlPath );
+    return page.goto( path, { waitUntil : 'load' } )
+  })
+
+  ready.then( () =>
+  {
+    return page.$eval( '.class1 p' )
+    .then( ( element ) => element.getProperty( 'innerText' ) )
+    .then( ( text ) =>
+    {
+      console.log( text)
+      return null;
+    })
+  })
+
+  ready.then( () =>
+  {
+    return browser.close()
+    .then( () => null )
+  });
+
+  return ready;
+
+  //
+
+  function setup()
+  {
+    let ready = Puppeteer.launch({ headless : false })
+    .then( ( got ) =>
+    {
+      browser = got;
+      return browser.newPage()
+    })
+    .then( ( got ) =>
+    {
+      page = got;
+      return got;
+    })
+    ready = _.Consequence.From( ready );
+    return ready.deasync();
   }
 }
 

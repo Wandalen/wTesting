@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wTesting.out
 consistency:
-  wTesting.out.will.yml: &ref_0
-    hash: 6e22b4c0733cecb39815016e12bf766e
-    size: 43743
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: fc47038001de4dfcffe47a0cf38aa58e
     size: 2723
-  ../.im.will.yml: &ref_2
-    hash: e2fd0fa08128715aa314afa83a1ea24a
-    size: 5784
+  ../.im.will.yml: &ref_1
+    hash: b0c65a167871103b742293b96c50a990
+    size: 5858
 module:
   wTesting.out:
     about:
@@ -23,23 +20,23 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - testing
         - unit test
         - functional test
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@willbe.so>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       npm.name: wTesting
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         wtest: node proto/dwtools/atop/tester/ExecUnrestricted
         single-process-wtest: node proto/dwtools/atop/tester/Exec
@@ -47,7 +44,7 @@ module:
         tst: node proto/dwtools/atop/tester/ExecUnrestricted
         single-process-tst: node proto/dwtools/atop/tester/Exec
         debug-tst: node proto/dwtools/atop/tester/ExecDebug
-      npm.bin:
+      npm.bin: &ref_6
         wtest: proto/dwtools/atop/tester/ExecUnrestricted
         single-process-wtest: proto/dwtools/atop/tester/Exec
         debug-wtest: proto/dwtools/atop/tester/ExecDebug
@@ -82,9 +79,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wTesting.git'
       origins:
@@ -94,15 +88,15 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/wTesting/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: .
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - ../package-lock.json
+          - ../package.json
+          - ../node_modules
       proto:
         path: ../proto
       export:
@@ -167,11 +161,13 @@ module:
         path: '{path::out.*=}/source/Index.s'
       exported.dir.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path: ../proto
       exported.files.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path:
@@ -196,9 +192,11 @@ module:
           - ../proto/dwtools/atop/tester/l7
           - ../proto/dwtools/atop/tester/l7/TesterTop.s
           - ../proto/dwtools/atop/tester.test
+          - ../proto/dwtools/atop/tester.test/Electron.test.s
           - ../proto/dwtools/atop/tester.test/Externals.test.s
           - ../proto/dwtools/atop/tester.test/General.test.s
           - ../proto/dwtools/atop/tester.test/Inheritance.test.s
+          - ../proto/dwtools/atop/tester.test/Puppeteer.test.s
           - ../proto/dwtools/atop/tester.test/Time.test.s
           - ../proto/dwtools/atop/tester.test/_asset
           - ../proto/dwtools/atop/tester.test/_asset/check-fails
@@ -209,6 +207,9 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/double/Hello.js
           - ../proto/dwtools/atop/tester.test/_asset/double/Hello.test.js
           - ../proto/dwtools/atop/tester.test/_asset/double/package.json
+          - ../proto/dwtools/atop/tester.test/_asset/electron
+          - ../proto/dwtools/atop/tester.test/_asset/electron/index.html
+          - ../proto/dwtools/atop/tester.test/_asset/electron/main.js
           - ../proto/dwtools/atop/tester.test/_asset/grouping
           - ../proto/dwtools/atop/tester.test/_asset/grouping/Grouping.test.js
           - ../proto/dwtools/atop/tester.test/_asset/grouping/Hello.js
@@ -218,6 +219,8 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.js
           - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.test.js
           - ../proto/dwtools/atop/tester.test/_asset/hello/package.json
+          - ../proto/dwtools/atop/tester.test/_asset/puppeteer
+          - ../proto/dwtools/atop/tester.test/_asset/puppeteer/index.html
     submodule:
       wConsequence:
         path: 'npm:///wConsequence'
@@ -433,6 +436,7 @@ module:
           prefixPath: ../proto
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
       exported.files.proto.export:
@@ -445,6 +449,7 @@ module:
         recursive: 0
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
     step:
@@ -798,22 +803,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          reflector: 'reflector::exported.proto.export*'
-        criterion:
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          reflector: 'reflector::exported.files.proto.export*'
-        criterion:
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -902,9 +891,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wTesting.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wTesting
@@ -916,37 +904,14 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
-        - njs >= 8.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - testing
-        - unit test
-        - functional test
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
-        - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
+      contributors: *ref_4
       npm.name: wTesting
-      npm.scripts:
-        test: wtest .run proto/**
-        wtest: node proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-wtest: node proto/dwtools/atop/tester/Exec
-        debug-wtest: node proto/dwtools/atop/tester/ExecDebug
-        tst: node proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-tst: node proto/dwtools/atop/tester/Exec
-        debug-tst: node proto/dwtools/atop/tester/ExecDebug
-      npm.bin:
-        wtest: proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-wtest: proto/dwtools/atop/tester/Exec
-        debug-wtest: proto/dwtools/atop/tester/ExecDebug
-        tst: proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-tst: proto/dwtools/atop/tester/Exec
-        debug-tst: proto/dwtools/atop/tester/ExecDebug
+      npm.scripts: *ref_5
+      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
@@ -975,9 +940,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wTesting.git'
       origins:
@@ -991,13 +953,17 @@ module:
       out:
         path: out
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - package-lock.json
+          - package.json
+          - node_modules
       proto:
-        path: ./proto
+        path: proto
       export:
         path: '{path::proto}/**'
       doc:
-        path: ./doc
+        path: doc
       out.raw.debug:
         criterion:
           debug: debug
@@ -1665,8 +1631,5 @@ module:
         hash: fc47038001de4dfcffe47a0cf38aa58e
         size: 2723
       ../.im.will.yml:
-        hash: e2fd0fa08128715aa314afa83a1ea24a
-        size: 5784
-      wTesting.out.will.yml:
-        hash: 6e22b4c0733cecb39815016e12bf766e
-        size: 43743
+        hash: b0c65a167871103b742293b96c50a990
+        size: 5858

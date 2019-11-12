@@ -135,7 +135,6 @@ function commandVersion( e )
 
   let packageJsonPath = path.join( __dirname, '../../../../../package.json' );
   let packageJson =  fileProvider.fileRead({ filePath : packageJsonPath, encoding : 'json' });
-  logger.log( 'Current version:', packageJson.version );
 
   return _.process.start
   ({
@@ -147,6 +146,7 @@ function commandVersion( e )
   })
   .then( ( got ) =>
   {
+    logger.log( 'Current version:', packageJson.version );
     logger.log( 'Latest stable version:', got.output );
     return null;
   })

@@ -7,12 +7,12 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 ## Concepts
 
 <details><summary><a href="./concept/Spectron.md">
-      Visual testing framework
+      Spectron
   </a></summary>
 </details>
 
-<details><summary><a href="./concept/Electron.md">
-      Electron
+<details><summary><a href="./concept/Puppeteer.md">
+      Puppeteer
   </a></summary>
 </details>
 

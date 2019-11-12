@@ -134,7 +134,7 @@ function commandVersion( e )
   let logger = tester.logger;
 
   let packageJsonPath = path.join( __dirname, '../../../../../package.json' );
-  let packageJson =  fileProvider.fileRead({ filePath : packageJsonPath, encoding : 'json' });
+  let packageJson =  fileProvider.fileRead({ filePath : packageJsonPath, encoding : 'json', throwing : 0 });
 
   return _.process.start
   ({
@@ -142,15 +142,22 @@ function commandVersion( e )
     outputCollecting : 1,
     outputPiping : 0,
     inputMirroring : 0,
+    throwingExitCode : 0,
     mode : 'spawn'
   })
   .then( ( got ) =>
   {
-    logger.log( 'Current version:', packageJson.version );
-    logger.log( 'Latest stable version:', got.output );
+    let current = packageJson ? packageJson.version : 'unknown';
+    let latest = _.strStrip( got.output );
+
+    if( got.exitCode || !latest )
+    latest = 'unknown'
+
+    logger.log( 'Current version:', current );
+    logger.log( 'Available version:', latest );
+
     return null;
   })
-
 }
 
 //

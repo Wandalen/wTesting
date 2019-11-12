@@ -791,6 +791,41 @@ function help( test )
   return ready;
 }
 
+//
+
+function version( test )
+{
+  let self = this;
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
+  let ready = new _.Consequence().take( null );
+
+  let shell = _.process.starter
+  ({
+    execPath : 'node ' + execPath,
+    currentPath : routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 0,
+    mode : 'shell',
+    ready : ready,
+  })
+
+  _.fileProvider.dirMake( routinePath );
+
+  /* */
+
+  shell({ execPath : '.version' })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.is( _.strHas( op.output, /Current version:.*\..*\..*/ ) );
+    test.is( _.strHas( op.output, /Available version:.*\..*\..*/ ) );
+    return op;
+  })
+
+  return ready;
+}
+
 // --
 // suite
 // --
@@ -822,6 +857,7 @@ var Self =
     double,
     noTestSuite,
     help,
+    version
 
   }
 

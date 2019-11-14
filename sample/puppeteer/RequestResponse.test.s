@@ -1,4 +1,4 @@
-( function _Worker_test_s_( ) {
+( function _Request_test_s_( ) {
 
 'use strict';
 
@@ -39,35 +39,27 @@ function onSuiteEnd()
 // tests
 // --
 
-async function worker( test )
+async function request( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.join( routinePath, 'worker.html' );
+  let indexHtmlPath = _.path.join( routinePath, 'request.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let browser = await Puppeteer.launch({ headless : true });
+  let browser = await Puppeteer.launch({ headless : true, args : [ '--disable-web-security' ] });
   let page = await browser.newPage();
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  page.on( 'workercreated', async () =>
+  page.on( 'requestfinished', async ( request ) =>
   {
-    let workers = await page.workers();
-
-    test.case = 'check number of workers';
-    test.identical( workers.length, 1 );
-
-    test.case = 'execute code from worker context and check result';
-    let worker = workers[ 0 ];
-    await worker.evaluate( () => { postMessage( 123 ) });
-    let workerMessages = await page.evaluate( () => window.workerMessages );
-    test.identical( workerMessages, [ 123 ] );
+    let response = request.response();
+    let data = await response.json();
+    test.identical( data.name, 'wTesting' );
   })
 
-  await page.waitFor( 1000 );
-
+  await page.waitFor( 5000 );
   await browser.close();
 
   return null;
@@ -80,7 +72,7 @@ async function worker( test )
 var Self =
 {
 
-  name : 'Visual.Puppeteer.Worker',
+  name : 'Visual.Puppeteer.Request',
   silencing : 0,
   enabled : 1,
 
@@ -96,7 +88,7 @@ var Self =
 
   tests :
   {
-    worker
+    request
   }
 
 }

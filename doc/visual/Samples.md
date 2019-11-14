@@ -121,7 +121,7 @@
 </details>
 
 <details><summary><a href="../../sample/puppeteer/RequestResponse.test.s">
-  [X] Request/Response api
+  Request/Response api
   </a></summary>
 </details>
 

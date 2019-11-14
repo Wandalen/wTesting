@@ -141,7 +141,7 @@
 </details>
 
 <details><summary><a href="../../sample/puppeteer/FunctionExposing.test.s">
-  [X] Function exposing
+  Function exposing
   </a></summary>
 </details>
 

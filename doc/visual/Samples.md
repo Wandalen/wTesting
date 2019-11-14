@@ -126,7 +126,7 @@
 </details>
 
 <details><summary><a href="../../sample/puppeteer/Dialog.test.s">
-  [X] Dialog api
+  Dialog api
   </a></summary>
 </details>
 

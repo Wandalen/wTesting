@@ -52,19 +52,21 @@ async function worker( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  var workerMessages;
-
   page.on( 'workercreated', async () =>
   {
     let workers = await page.workers();
+
+    test.case = 'check number of workers';
     test.identical( workers.length, 1 );
-    await workers[ 0 ].evaluate( () => { postMessage( 123 ) });
-    workerMessages = await page.evaluate( () => window.workerMessages );
+
+    test.case = 'execute code from worker context and check result';
+    let worker = workers[ 0 ];
+    await worker.evaluate( () => { postMessage( 123 ) });
+    let workerMessages = await page.evaluate( () => window.workerMessages );
+    test.identical( workerMessages, [ 123 ] );
   })
 
   await page.waitFor( 1000 );
-
-  test.identical( workerMessages, [ 123 ]);
 
   await browser.close();
 

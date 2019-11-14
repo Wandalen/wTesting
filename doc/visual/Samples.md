@@ -115,7 +115,7 @@
   </a></summary>
 </details>
 
-<details><summary><a href="../../sample/puppeteer/Input.test.s">
+<details><summary><a href="../../sample/puppeteer/Worker.test.s">
   Worker api
   </a></summary>
 </details>

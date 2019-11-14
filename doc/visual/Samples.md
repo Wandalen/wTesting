@@ -131,12 +131,12 @@
 </details>
 
 <details><summary><a href="../../sample/puppeteer/Device.test.s">
-  [X] Device emulation
+  Device emulation
   </a></summary>
 </details>
 
 <details><summary><a href="../../sample/puppeteer/Navigation.test.s">
-  [X] Page navigation
+  Page navigation
   </a></summary>
 </details>
 

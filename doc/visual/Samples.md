@@ -146,17 +146,12 @@
 </details>
 
 <details><summary><a href="../../sample/puppeteer/Screenshot.test.s">
-  [X] Screenshots creation
-  </a></summary>
-</details>
-
-<details><summary><a href="../../sample/puppeteer/DragAndDrop.test.s">
-  [X] Drag and drop
+  Screenshots creation
   </a></summary>
 </details>
 
 <details><summary><a href="../../sample/puppeteer/CDP.test.s">
-  [X] Access to raw Chrome Devtools Protocol
+  Access to raw Chrome Devtools Protocol
   </a></summary>
 </details>
 

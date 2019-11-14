@@ -155,7 +155,7 @@
   </a></summary>
 </details>
 
-<details><summary><a href="../../sample/puppeteer/HeadlessTesting.test.s">
-  [X] Headless testing
+<details><summary><a href="../../sample/puppeteer/Headless.test.s">
+  Headless testing
   </a></summary>
 </details>

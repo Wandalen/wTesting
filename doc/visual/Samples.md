@@ -31,7 +31,7 @@
 </details>
 
 <details><summary><a href="../../sample/spectron/Browser.test.s">
-  [X] Browser api
+  Browser api
   </a></summary>
 </details>
 

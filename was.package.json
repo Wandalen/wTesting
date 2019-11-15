@@ -54,7 +54,8 @@
   }, 
   "optionalDependencies" : { "wEventHandler" : "" }, 
   "devDependencies" : 
-  {
+  { 
+    "wTesting" : "file:.",
     "wait-sync" : "", 
     "electron" : "^5.0.0", 
     "spectron" : "^7.0.0", 

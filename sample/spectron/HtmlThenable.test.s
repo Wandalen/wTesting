@@ -4,8 +4,9 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../..' );
-  require( 'wFiles' )
+  let _ = require( 'wTools' );
+  _.include( 'wTesting' );
+  _.include( 'wFiles' );
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );
@@ -111,8 +112,8 @@ var Self =
 {
 
   name : 'Visual.Spectron.Html.Thenable',
-
-
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

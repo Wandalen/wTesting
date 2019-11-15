@@ -4,8 +4,9 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../..' );
-  require( 'wFiles' )
+  let _ = require( 'wTools' );
+  _.include( 'wTesting' );
+  _.include( 'wFiles' );
 
   var Puppeteer = require( 'puppeteer' );
 }
@@ -105,8 +106,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Chaining',
-
-
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

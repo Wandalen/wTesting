@@ -41,7 +41,7 @@ function onSuiteEnd()
 
 async function accessingCDP( test )
 {
-  let browser = await Puppeteer.launch({ headless : false });
+  let browser = await Puppeteer.launch({ headless : true });
   let page = await browser.newPage();
 
   test.case = 'create cdp session and navigate to url'

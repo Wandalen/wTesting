@@ -295,7 +295,7 @@ var Self =
 
   name : 'Tools.atop.Tester.Puppeteer',
   silencing : 0,
-  enabled : 1,
+  enabled : 0,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

@@ -62,6 +62,7 @@ function run( test )
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
+    outputGraying : 1,
     mode : 'shell',
     ready : ready,
   })
@@ -71,6 +72,7 @@ function run( test )
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
+    outputGraying : 1,
     ready : ready,
   })
 
@@ -114,8 +116,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test routine ( Hello / routine1 ) in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed test routine ( Hello / routine2 ) in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -138,8 +140,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -162,8 +164,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -186,8 +188,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -210,8 +212,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -234,8 +236,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -258,8 +260,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -282,8 +284,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -306,8 +308,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -330,8 +332,8 @@ function run( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -362,6 +364,7 @@ function checkFails( test )
     currentPath : routinePath,
     outputCollecting : 1,
     throwingExitCode : 0,
+    outputGraying : 1,
     mode : 'shell',
     ready : ready,
   })
@@ -411,12 +414,12 @@ function checkFails( test )
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 4/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test checks 2 / 4' ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test cases 1 / 2' ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test routines 1 / 2' ), 2 );
+    test.identical( _.strCount( got.output, /Test suite \( Hello \) ... in .* ... failed/ ), 1 );
 
     return null;
   })
@@ -434,10 +437,9 @@ function checkFails( test )
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*Hello.*routine1.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*Hello.*routine2.*in/ ), 1 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( Hello \) ... in .* ... failed/ ), 1 );
 
     return null;
   })

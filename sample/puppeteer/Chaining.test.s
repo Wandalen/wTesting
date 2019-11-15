@@ -106,7 +106,7 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Chaining',
-  silencing : 0,
+  
   enabled : 1,
 
   onSuiteBegin : onSuiteBegin,

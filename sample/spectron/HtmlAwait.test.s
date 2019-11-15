@@ -87,7 +87,7 @@ var Self =
 {
 
   name : 'Visual.Spectron.Html.Await',
-  silencing : 1,
+
   enabled : 1,
 
   onSuiteBegin : onSuiteBegin,

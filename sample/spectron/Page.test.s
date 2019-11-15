@@ -74,7 +74,7 @@ var Self =
 {
 
   name : 'Visual.Spectron.Page',
-  silencing : 1,
+  
   enabled : 1,
 
   onSuiteBegin : onSuiteBegin,

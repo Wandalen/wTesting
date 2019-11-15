@@ -73,7 +73,7 @@ var Self =
 {
 
   name : 'Visual.Spectron.Html.Chaining',
-  silencing : 1,
+  
   enabled : 1,
 
   onSuiteBegin : onSuiteBegin,

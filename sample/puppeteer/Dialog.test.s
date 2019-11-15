@@ -69,7 +69,7 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Dialog',
-  silencing : 0,
+  
   enabled : 1,
 
   onSuiteBegin : onSuiteBegin,

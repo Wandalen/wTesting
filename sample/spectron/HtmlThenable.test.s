@@ -112,7 +112,7 @@ var Self =
 {
 
   name : 'Visual.Spectron.Html.Thenable',
-  silencing : 1,
+  
   enabled : 1,
 
   onSuiteBegin : onSuiteBegin,

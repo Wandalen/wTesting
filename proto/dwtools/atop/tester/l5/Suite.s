@@ -564,7 +564,7 @@ function _begin()
     try
     {
 /*
-xxx qqq : cover returned consequence works 
+xxx qqq : cover returned consequence works
 */
       ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
     }
@@ -1349,6 +1349,7 @@ let Proto =
   _enabledSet,
   _enabledGet,
   consoleBar,
+
 
   // test suite run
 

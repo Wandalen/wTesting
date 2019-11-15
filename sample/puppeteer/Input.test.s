@@ -4,9 +4,8 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( 'wTools' );
-  _.include( 'wTesting' );
-  _.include( 'wFiles' );
+  let _ = require( '../..' );
+  require( 'wFiles' )
 
   var Puppeteer = require( 'puppeteer' );
 }
@@ -71,8 +70,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Input',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

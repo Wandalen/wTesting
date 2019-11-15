@@ -241,7 +241,7 @@ var Self =
 
   name : 'Tools.atop.Tester.Electron',
   silencing : 1,
-  enabled : 1,
+  enabled : 0,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

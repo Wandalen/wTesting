@@ -142,8 +142,7 @@ function commandVersion( e )
     outputCollecting : 1,
     outputPiping : 0,
     inputMirroring : 0,
-    throwingExitCode : 0,
-    mode : 'spawn'
+    throwingExitCode : 0
   })
   .then( ( got ) =>
   {

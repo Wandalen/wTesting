@@ -1,6 +1,6 @@
 #### Comparison of Spectron and Puppeteer
 
-| Feature/Api                            | Spectron | Puppeteer |
+| Feature                                | Spectron | Puppeteer |
 | -------------------------------------- | -------- | --------- |
 | Element API                            | 2        | 1         |
 | Page API                               | 1        | 2         |
@@ -22,25 +22,23 @@
 
 #### Legend
 
-0 - missing
-1 - basic API or feature exists
-2 - advanced API
+0. missing
+1. basic API or feature exists
+2. advanced API
 
 #### Summary
 
-- Both have similar API related to interaction with page and element.
-  If some method is missing, desired result can be achieved via other methods.
-
-- Puppeteer methods return promise. No chaining support.
+- Both have similar API related to interaction with page and element. If some method is missing, the desired result can be achieved via other methods.
+- Puppeteer methods return a promise. No chaining support.
 - Puppeteer has more browser and page related API.
-- Puppeteer has convenient mouse/keyboard/touchscreen/dialog API.
+- Puppeteer has a convenient mouse/keyboard/touchscreen/dialog API.
 - Puppeteer supports only testing in Chrome.
 - Puppeteer has workers API
 - Puppeteer supports headless mode
 
-- Spectron has more usefull methods/shortcuts related to element interaction.
-- Spectron methods return thenable object, supports command chaining.
+- Spectron has more useful methods/shortcuts related to element interaction.
+- Spectron methods return the thenable object, supports command chaining.
 - Spectron has shortcut for element drag-and-drop
 - Spectron has debug feature( allows to pause browser execution and just into devtools )
 - Spectron has full access to electron API( requires nodeIntegration to be enabled in electron )
-- Spectron does not supports headless mode out of the box
+- Spectron does not support headless mode out of the box

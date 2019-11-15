@@ -21,9 +21,10 @@
 | Headless testing                       | 0        | 1         |
 
 #### Legend
+
 0 - missing
 1 - basic API or feature exists
-2 - extended API
+2 - advanced API
 
 #### Summary
 

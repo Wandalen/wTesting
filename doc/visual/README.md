@@ -1,9 +1,3 @@
-## Quick start
-
-For quick start [install](<./tutorial/Installation.md>) utility `Testing`, get acquainted [how to run](<./tutorial/Running.md>) tests and create the first test suite ["Hello World"](<./tutorial/HelloWorld.md>). Read [abstract](<./tutorial/Abstract.md>) if you are wondering what is it for and what philosophy is behind utility `Testing`.
-
-For gentle introduction use tutorials. For getting exhaustive information on one or another aspect use list of concepts to find a concept of interest and get familiar with it.
-
 ## Concepts
 
 <details><summary><a href="./concept/Spectron.md">

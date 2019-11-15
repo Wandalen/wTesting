@@ -21,12 +21,12 @@
 </details>
 
 <details><summary><a href="../../sample/spectron/Element.test.s">
-  [X] Element api
+  Element api
   </a></summary>
 </details>
 
 <details><summary><a href="../../sample/spectron/Page.test.s">
-  [X] Page api
+  Page api
   </a></summary>
 </details>
 

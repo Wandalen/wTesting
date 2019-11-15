@@ -83,8 +83,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Headless',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

@@ -81,8 +81,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Worker',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

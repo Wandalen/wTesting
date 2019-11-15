@@ -69,8 +69,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Page',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

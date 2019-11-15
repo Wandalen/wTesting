@@ -65,8 +65,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.CDP',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

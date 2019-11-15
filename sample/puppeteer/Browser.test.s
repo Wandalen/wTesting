@@ -68,8 +68,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Browser',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

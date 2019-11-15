@@ -63,8 +63,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.FunctionExposing',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

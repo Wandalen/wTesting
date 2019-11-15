@@ -74,8 +74,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Navigation',
-  silencing : 0,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

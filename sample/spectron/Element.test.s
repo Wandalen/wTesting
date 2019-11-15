@@ -74,8 +74,8 @@ var Self =
 {
 
   name : 'Visual.Spectron.Element',
-  silencing : 1,
-  enabled : 1,
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

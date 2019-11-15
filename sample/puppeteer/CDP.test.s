@@ -66,7 +66,7 @@ var Self =
 
   name : 'Visual.Puppeteer.CDP',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

@@ -72,7 +72,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Input',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

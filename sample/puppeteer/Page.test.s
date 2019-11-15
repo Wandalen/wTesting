@@ -70,7 +70,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Page',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

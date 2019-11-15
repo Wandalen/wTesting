@@ -75,7 +75,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Navigation',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

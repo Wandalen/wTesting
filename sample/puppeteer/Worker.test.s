@@ -82,7 +82,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Worker',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

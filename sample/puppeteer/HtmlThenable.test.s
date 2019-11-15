@@ -126,7 +126,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Html.Thenable',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

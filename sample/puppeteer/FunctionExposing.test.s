@@ -64,7 +64,7 @@ var Self =
 
   name : 'Visual.Puppeteer.FunctionExposing',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

@@ -74,7 +74,7 @@ var Self =
 
   name : 'Visual.Spectron.Html.Chaining',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

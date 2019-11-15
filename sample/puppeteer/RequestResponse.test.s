@@ -74,7 +74,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Request',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

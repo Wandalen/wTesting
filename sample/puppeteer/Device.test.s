@@ -65,7 +65,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Device',
 
-  enabled : 1,
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

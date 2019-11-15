@@ -84,7 +84,7 @@ var Self =
 
   name : 'Visual.Puppeteer.Html.Await',
   
-  enabled : 1,
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

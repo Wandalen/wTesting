@@ -82,6 +82,7 @@ function _commandsMake()
   {
 
     'help' :                    { e : _.routineJoin( tester, tester.commandHelp ),                        h : 'Get help.' },
+    'version' :                 { e : _.routineJoin( tester, tester.commandVersion ),                     h : 'Get current version.' },
     'imply' :                   { e : _.routineJoin( tester, tester.commandImply ),                       h : 'Change state or imply value of a variable.' },
     'run' :                     { e : _.routineJoin( tester, tester.commandRun ),                         h : 'Run test suites found at a specified path.' },
     'suites list' :             { e : _.routineJoin( tester, tester.commandSuitesList ),                  h : 'Find test suites at a specified path.' },
@@ -121,6 +122,42 @@ function commandHelp( e )
 
   tester.scenarioOptionsList();
 
+}
+
+//
+
+function commandVersion( e )
+{
+  let tester = this.form();
+  let fileProvider = tester.fileProvider;
+  let path = tester.fileProvider.path;
+  let logger = tester.logger;
+
+  let packageJsonPath = path.join( __dirname, '../../../../../package.json' );
+  let packageJson =  fileProvider.fileRead({ filePath : packageJsonPath, encoding : 'json', throwing : 0 });
+
+  return _.process.start
+  ({
+    execPath : 'npm view wTesting@latest version',
+    outputCollecting : 1,
+    outputPiping : 0,
+    inputMirroring : 0,
+    throwingExitCode : 0,
+    mode : 'spawn'
+  })
+  .then( ( got ) =>
+  {
+    let current = packageJson ? packageJson.version : 'unknown';
+    let latest = _.strStrip( got.output );
+
+    if( got.exitCode || !latest )
+    latest = 'unknown'
+
+    logger.log( 'Current version:', current );
+    logger.log( 'Available version:', latest );
+
+    return null;
+  })
 }
 
 //
@@ -242,6 +279,7 @@ let Extend =
   _commandsMake,
 
   commandHelp,
+  commandVersion,
   commandImply,
   commandRun,
   commandSuitesList,

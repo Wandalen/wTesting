@@ -109,6 +109,48 @@ function html( test )
 
 //
 
+async function htmlAwait( test )
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
+  })
+
+  await app.start()
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+
+  test.case = 'Check element text'
+  var got = await app.client.$( '.class1 p' ).getText();
+  test.identical( got, 'Text1' )
+
+  test.case = 'Check href attribute'
+  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
+  test.is( _.strEnds( got, '/index.html' ) )
+
+  test.case = 'Check input field value'
+  var got = await app.client.getValue( '#input1' );
+  test.identical( got, '123' )
+
+  test.case = 'Change input field value and check it'
+  await app.client.$( '#input1' ).setValue( '321' )
+  var got = await app.client.getValue( '#input1' )
+  test.identical( got, '321' )
+
+  await app.stop();
+
+  return null;
+}
+
+//
+
 function consequenceFromExperiment( test )
 {
   let self = this;
@@ -156,10 +198,44 @@ function consequenceFromExperiment( test )
 
 consequenceFromExperiment.experimental = 1;
 
+//
+
+function chaining()
+{
+  let self = this;
+  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
+  })
+
+  let ready = app.start()
+
+  .then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
+
+  //select command is chained with .getText
+
+  .then( () => app.client.$( '.class1 p' ).getProperty( 'innerText' ) )
+
+  .then( ( text ) =>
+  {
+    console.log( text )
+    return null;
+  })
+
+  return _.Consequence.From( ready );
+}
+
 // --
 // suite
 // --
-
+debugger
 var Self =
 {
 
@@ -180,7 +256,9 @@ var Self =
   tests :
   {
     html,
-    consequenceFromExperiment
+    htmlAwait,
+    consequenceFromExperiment,
+    chaining
   }
 
 }

@@ -2,23 +2,23 @@
 
 | Feature                                | Spectron | Puppeteer |
 | -------------------------------------- | -------- | --------- |
-| Element API                            | 2        | 1         |
-| Page API                               | 1        | 2         |
-| Browser API                            | 1        | 2         |
-| Touchscreen/mouse/keyboard API         | 1        | 2         |
-| Workers API                            | 0        | 2         |
-| Request/Response API                   | 0        | 2         |
-| Dialog API                             | 0        | 1         |
-| Electron API                           | 2        | 0         |
-| Device emulation                       | 1        | 2         |
-| Page navigation                        | 1        | 1         |
-| Function exposing                      | 0        | 1         |
-| Commands chaining                      | 1        | 0         |
-| Screenshots creation                   | 1        | 1         |
-| Screen recording                       | 0        | 0         |
-| Drag and drop                          | 2        | 1         |
-| Access to raw Chrome Devtools Protocol | 1        | 1         |
-| Headless testing                       | 0        | 1         |
+| [ Element API ](feature/ElementAPI.md)                            | 2        | 1         |
+| [ Page API ](feature/PageAPI.md)                               | 1        | 2         |
+| [ Browser API ](feature/BrowserAPI.md)                            | 1        | 2         |
+| [ Touchscreen/mouse/keyboard API ](feature/InputAPI.md)         | 1        | 2         |
+| [ Workers API ](feature/WorkersAPI.md)                            | 0        | 2         |
+| [ Request/Response API ](feature/RequestResponseAPI.md)                   | 0        | 2         |
+| [ Dialog API ](feature/DialogAPI.md)                             | 0        | 1         |
+| [ Electron API ](feature/ElectronAPI.md)                           | 2        | 0         |
+| [ Device emulation ](feature/DeviceEmulation.md)                       | 1        | 2         |
+| [ Page navigation ](feature/PageNavigation.md)                        | 1        | 1         |
+| [ Function exposing ](feature/FunctionExposing.md)                      | 0        | 1         |
+| [ Commands chaining ](feature/CommandsChaining.md)                      | 1        | 0         |
+| [ Screenshots creation ](feature/ScreenshotsCreation.md)                   | 1        | 2         |
+| [ Screen recording ](feature/ScreenRecording.md)                       | 0        | 0         |
+| [ Drag and drop ](feature/DragAndDrop.md)                          | 2        | 1         |
+| [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | 1        | 1         |
+| [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
 
 #### Legend
 

@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _CDP_test_s_( ) {
 
 'use strict';
 
@@ -38,7 +38,9 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function accessChromeDevToolsProtocol( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
@@ -53,14 +55,12 @@ async function chaining( test )
   })
 
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
-  await app.stop();
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
+  //xxx:find how to send cdp command, contents.debugger is not defined
+  
+  await app.stop();
+
   return null;
 }
 
@@ -71,7 +71,7 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
+  name : 'Visual.Spectron.CDP',
   
   
 
@@ -87,7 +87,7 @@ var Self =
 
   tests :
   {
-    chaining
+    accessChromeDevToolsProtocol,
   }
 
 }

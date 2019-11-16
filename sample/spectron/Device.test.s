@@ -1,12 +1,11 @@
-( function _Electron_test_s_( ) {
+( function _Device_test_s_( ) {
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( 'wTools' );
-  _.include( 'wTesting' );
-  _.include( 'wFiles' );
+  let _ = require( '../..' );
+  require( 'wFiles' )
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );
@@ -38,29 +37,29 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function deviceEmulation( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-
+  
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainPath ],
   })
 
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  //xxx:find how to emulate device
+  var result = await app.client.execute( () => window.navigator.userAgent );
+  console.log( result.value )
   await app.stop();
-  
+
   return null;
 }
 
@@ -71,9 +70,9 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
-  
-  
+  name : 'Visual.Spectron.DeviceEmulation',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -87,7 +86,7 @@ var Self =
 
   tests :
   {
-    chaining
+    deviceEmulation,
   }
 
 }

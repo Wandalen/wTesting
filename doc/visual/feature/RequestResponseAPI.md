@@ -1,4 +1,10 @@
 ## Abstract
+Puppeteer classes that allows send and intercept requests.
+
+[Puppeteer Request](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-request)
+
+[Puppeteer Response](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-response)
+
 ## Spectron
 ```javascript
   

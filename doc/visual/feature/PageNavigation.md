@@ -1,7 +1,38 @@
 ## Abstract
+Methods to move forward and backward in page history.
+
+[Spectron Navigation methods](https://webdriver.io/docs/api/webdriver.html#navigateto)
+
+[Puppeteer Navigation methods](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagegoforwardoptions)
+
 ## Spectron
 ```javascript
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
+  })
+
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+  await app.client.url( 'https://www.npmjs.com/' );
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/' );
   
+  await app.client.url( 'https://www.npmjs.com/wTesting' );
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  
+  await app.client.back();
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/' );
+  
+  await app.client.forward();
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  
+  await app.stop();
 ```
 [Full sample](../../../sample/spectron/Navigation.test.s)
 

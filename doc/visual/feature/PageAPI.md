@@ -1,4 +1,10 @@
 ## Abstract
+Provides methods to interact with a single tab( page ).
+
+[Spectron client API](https://webdriver.io/docs/api.html)
+
+[Puppeteer Page API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-page)
+
 ## Spectron
 ```javascript
   let app = new Spectron.Application

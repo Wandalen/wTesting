@@ -1,4 +1,6 @@
 ## Abstract
+Methods to move elements on the page.
+
 ## Spectron
 ```javascript
 ```

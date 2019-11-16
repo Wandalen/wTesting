@@ -1,6 +1,22 @@
 ## Abstract
+
+Spectron allows to get full access to full Electron API.
+
+[Spectron API](https://github.com/electron-userland/spectron#application-api)
+
 ## Spectron
 ```javascript
-  
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
+  })
+
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  //app.browserWindow is a shortcut to app.electron.remote.getCurrentWindow()
+  let title = await app.browserWindow.getTitle();
+  test.identical( title, 'Test' );
+  await app.stop();
 ```
 [Full sample](../../../sample/spectron/Electron.test.s)

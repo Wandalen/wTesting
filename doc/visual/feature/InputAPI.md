@@ -1,7 +1,32 @@
 ## Abstract
+
+Collection of classes/methods that allow to simulate user input, for example, keyboard key press,mouse click,tap on touchscreen.
+
+[Spectron client API](https://webdriver.io/docs/api.html)
+
+[Puppeteer Keyboard API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-keyboard)
+
+[Puppeteer Mouse API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-mouse)
+
+[Puppeteer Touchscreen API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-touchscreen)
+
 ## Spectron
 ```javascript
- 
+  let app = new Spectron.Application
+    ({
+      path : ElectronPath,
+      args : [ mainPath ]
+    })
+
+    await app.start()
+    await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+    test.case = 'keyboard';
+    await app.client.$( '#input1' ).setValue( '0123' );
+    var got = await app.client.getValue( '#input1' );
+    test.identical( got, '0123' );
+
+    await app.stop();
 ```
 [Full sample](../../../sample/spectron/Input.test.s)
 

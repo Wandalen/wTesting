@@ -1,4 +1,4 @@
-( function _Input_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -39,7 +39,7 @@ function onSuiteEnd()
 
 //
 
-async function input( test )
+async function electron( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
@@ -56,11 +56,8 @@ async function input( test )
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  test.case = 'keyboard';
-  await app.client.$( '#input1' ).setValue( '0123' );
-  var got = await app.client.getValue( '#input1' );
-  test.identical( got, '0123' );
-
+  let title = await app.browserWindow.getTitle();
+  test.identical( title, 'Test' );
   await app.stop();
 
   return null;
@@ -73,7 +70,7 @@ async function input( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Input',
+  name : 'Visual.Spectron.ElectronAPI',
   silencing : 1,
   enabled : 1,
 
@@ -89,7 +86,7 @@ var Self =
 
   tests :
   {
-    input,
+    electron,
   }
 
 }

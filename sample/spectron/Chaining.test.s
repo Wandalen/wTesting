@@ -38,7 +38,7 @@ function onSuiteEnd()
 // tests
 // --
 
-function chaining( test )
+async function chaining( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
@@ -52,17 +52,16 @@ function chaining( test )
     args : [ mainPath ]
   })
 
-  return app.start()
-  .then( () =>
-  {
-    test.case = 'wait for load then check innerText property'
-    return app.client
-    .waitUntilTextExists( 'p','Hello world', 5000 )
-    .$( '.class1 p' )
-    .getText()
-    .then( ( text ) => test.identical( text, 'Text1' ) )
-  })
-  .then( () => app.stop() )
+  await app.start()
+  test.case = 'wait for load then check innerText property'
+  var text = await app.client
+  .waitUntilTextExists( 'p','Hello world', 5000 )
+  .$( '.class1 p' )
+  .getText()
+  test.identical( text, 'Text1' );
+  await app.stop();
+  
+  return null;
 }
 
 // --

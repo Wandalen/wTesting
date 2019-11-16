@@ -2,23 +2,23 @@
 
 | Feature                                | Spectron | Puppeteer |
 | -------------------------------------- | -------- | --------- |
-| [ Element API ](feaure/ElementAPI.md)                            | 2        | 1         |
-| [ Page API ](feaure/PageAPI.md)                               | 1        | 2         |
-| [ Browser API ](feaure/BrowserAPI.md)                            | 1        | 2         |
-| [ Touchscreen/mouse/keyboard API ](feaure/InputAPI.md)         | 1        | 2         |
-| [ Workers API ](feaure/WorkersAPI.md)                            | 0        | 2         |
-| [ Request/Response API ](feaure/RequestResponseAPI.md)                   | 0        | 2         |
-| [ Dialog API ](feaure/DialogAPI.md)                             | 0        | 1         |
-| [ Electron API ](feaure/ElectronAPI.md)                           | 2        | 0         |
-| [ Device emulation ](feaure/DeviceEmulation.md)                       | 1        | 2         |
-| [ Page navigation ](feaure/PageNavigation.md)                        | 1        | 1         |
-| [ Function exposing ](feaure/FunctionExposing.md)                      | 0        | 1         |
-| [ Commands chaining ](feaure/CommandsChaining.md)                      | 1        | 0         |
-| [ Screenshots creation ](feaure/ScreenshotsCreation.md)                   | 1        | 1         |
-| [ Screen recording ](feaure/ScreenRecording.md)                       | 0        | 0         |
-| [ Drag and drop ](feaure/DragAndDrop.md)                          | 2        | 1         |
-| [ Access to raw Chrome Devtools Protocol ](feaure/ChromeDevToolsProtocol.md) | 1        | 1         |
-| [ Headless testing ](feaure/HeadlessTesting.md)                       | 0        | 1         |
+| [ Element API ](feature/ElementAPI.md)                            | 2        | 1         |
+| [ Page API ](feature/PageAPI.md)                               | 1        | 2         |
+| [ Browser API ](feature/BrowserAPI.md)                            | 1        | 2         |
+| [ Touchscreen/mouse/keyboard API ](feature/InputAPI.md)         | 1        | 2         |
+| [ Workers API ](feature/WorkersAPI.md)                            | 0        | 2         |
+| [ Request/Response API ](feature/RequestResponseAPI.md)                   | 0        | 2         |
+| [ Dialog API ](feature/DialogAPI.md)                             | 0        | 1         |
+| [ Electron API ](feature/ElectronAPI.md)                           | 2        | 0         |
+| [ Device emulation ](feature/DeviceEmulation.md)                       | 1        | 2         |
+| [ Page navigation ](feature/PageNavigation.md)                        | 1        | 1         |
+| [ Function exposing ](feature/FunctionExposing.md)                      | 0        | 1         |
+| [ Commands chaining ](feature/CommandsChaining.md)                      | 1        | 0         |
+| [ Screenshots creation ](feature/ScreenshotsCreation.md)                   | 1        | 1         |
+| [ Screen recording ](feature/ScreenRecording.md)                       | 0        | 0         |
+| [ Drag and drop ](feature/DragAndDrop.md)                          | 2        | 1         |
+| [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | 1        | 1         |
+| [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
 
 #### Legend
 

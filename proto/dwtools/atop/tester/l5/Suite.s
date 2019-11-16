@@ -1350,7 +1350,6 @@ let Proto =
   _enabledGet,
   consoleBar,
 
-
   // test suite run
 
   run,

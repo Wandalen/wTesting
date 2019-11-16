@@ -1,4 +1,7 @@
 ## Abstract
+
+Puppteer allows interaction with workers via methods of [Worker clas](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-worker)
+
 ## Spectron
 ```javascript
   

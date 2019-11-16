@@ -1,17 +1,19 @@
 ## Abstract
+How to use Element API to interact with DOM element. 
 
-Collection of routines that allows interaction with DOM element from page. For example:
+This interface can be used to:
 - Find the element on the page
 - Get/Set properties of the element
 - Click,Drag,Focus,Input
 - Evaluate script on the element
 - Upload file
+- Etc
 
-[Spectron Element API](https://webdriver.io/docs/api.html)
-
-[Puppeteer Element API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-elementhandle)
+Samples show how to load page and check text property of dom element.
 
 ## Spectron
+[Spectron Element API](https://webdriver.io/docs/api.html)
+
 ```javascript
   let app = new Spectron.Application
   ({
@@ -31,6 +33,7 @@ Collection of routines that allows interaction with DOM element from page. For e
 [Full sample](../../../sample/spectron/Element.test.s)
 
 ## Puppeteer
+[Puppeteer Element API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-elementhandle)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

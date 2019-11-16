@@ -1,11 +1,9 @@
 ## Abstract
-Methods to move forward and backward in page history.
-
-[Spectron Navigation methods](https://webdriver.io/docs/api/webdriver.html#navigateto)
-
-[Puppeteer Navigation methods](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagegoforwardoptions)
+How to move forward and backward in page history.
 
 ## Spectron
+[Spectron Navigation methods](https://webdriver.io/docs/api/webdriver.html#navigateto)
+
 ```javascript
   let app = new Spectron.Application
   ({
@@ -37,6 +35,7 @@ Methods to move forward and backward in page history.
 [Full sample](../../../sample/spectron/Navigation.test.s)
 
 ## Puppeteer
+[Puppeteer Navigation methods](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagegoforwardoptions)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

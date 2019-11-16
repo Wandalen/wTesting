@@ -1,9 +1,8 @@
 ## Abstract
-Feature allows to add custom function to window object and call it from the page.
-
-[Puppeteer exposeFunction](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pageexposefunctionname-puppeteerfunction)
+How to register user-defined function on window object and call it from the page.
 
 ## Puppeteer
+[Puppeteer exposeFunction](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pageexposefunctionname-puppeteerfunction)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

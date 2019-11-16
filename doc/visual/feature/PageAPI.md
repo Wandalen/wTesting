@@ -1,11 +1,21 @@
 ## Abstract
-Provides methods to interact with a single tab( page ).
+Page API allows to:
+- Open url
+- Inject script into page
+- Register event handler
+- Find element
+- Access browser context
+- Navigate in history
+- Make screenshot
+- Wait for defined condition
 
-[Spectron client API](https://webdriver.io/docs/api.html)
+This sample shows how to get page HTML code. 
 
 [Puppeteer Page API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-page)
 
 ## Spectron
+[Spectron client API](https://webdriver.io/docs/api.html)
+
 ```javascript
   let app = new Spectron.Application
   ({

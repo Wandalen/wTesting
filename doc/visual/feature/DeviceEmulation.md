@@ -1,7 +1,6 @@
 ## Abstract
-Allows to simulate other device to test how page will look on device with different browser,screen size, etc.
-
-[Puppeteer emulate method](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pageemulateoptions)
+How to simulate other device.
+Device simulation can be used to test how page looks on different browser,screen size,etc.
 
 ## Spectron
 ```javascript
@@ -10,6 +9,8 @@ Allows to simulate other device to test how page will look on device with differ
 [Full sample](../../../sample/spectron/Device.test.s)
 
 ## Puppeteer
+
+[Puppeteer emulate method](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pageemulateoptions)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

@@ -1,6 +1,5 @@
 ## Abstract
-
-Puppteer allows interaction with workers via methods of [Worker clas](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-worker)
+How to get list of available workers and inject js script to execute from worker's context.
 
 ## Spectron
 ```javascript
@@ -9,6 +8,8 @@ Puppteer allows interaction with workers via methods of [Worker clas](https://pp
 [Full sample](../../../sample/spectron/Worker.test.s)
 
 ## Puppeteer
+
+[Worker clas](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-worker)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

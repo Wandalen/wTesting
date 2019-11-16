@@ -1,5 +1,5 @@
 ## Abstract
-Collection of routines that allows interaction with browser instance.
+How to get information about browser like user agent,version and window size.
 
 [Spectron Browser API](https://webdriver.io/docs/api.html)
 

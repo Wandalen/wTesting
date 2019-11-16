@@ -1,11 +1,8 @@
 ## Abstract
-Feature that allows to take a screenshot of the element or whole page.
-
-[Spectron capturePage](https://github.com/electron-userland/spectron#capturepage)
-
-[Puppeteer screenshot](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagescreenshotoptions)
+How to create screenshow of whole page and selected dom element.
 
 ## Spectron
+[Spectron capturePage](https://github.com/electron-userland/spectron#capturepage)
 
 ```javascript
   let app = new Spectron.Application
@@ -26,6 +23,7 @@ Feature that allows to take a screenshot of the element or whole page.
 [Full sample](../../../sample/spectron/Screenshots.test.s)
 
 ## Puppeteer
+[Puppeteer screenshot](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagescreenshotoptions)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

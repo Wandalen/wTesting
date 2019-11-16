@@ -1,4 +1,10 @@
 ## Abstract
+Methods that allow raw communication with [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
+
+Spectron allows to access Chrome DevTools Protocol by using [Electron Debugger API](https://electronjs.org/docs/api/debugger#debuggersendcommandmethod-commandparams-callback).
+
+[Puppeteer CDP API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-cdpsession)
+
 ## Spectron
 ```javascript
 ```

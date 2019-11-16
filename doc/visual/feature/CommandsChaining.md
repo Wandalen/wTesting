@@ -1,4 +1,8 @@
 ## Abstract
+This feature allows to run commands in series and omit resolving of intermediate results.
+
+[Spectron commands chaining](https://webdriver.io/docs/pageobjects.html#chaining-commands)
+
 ## Spectron
 ```javascript
   let app = new Spectron.Application
@@ -19,6 +23,8 @@
 [Full sample](../../../sample/spectron/Chaining.test.s)
 
 ## Puppeteer
+
+Puppeteer commands return Promise as result, but don't support chaining.
 
 ```javascript
   let page = null;

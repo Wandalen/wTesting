@@ -1,9 +1,7 @@
 ## Abstract
-## Spectron
-```javascript
+Feature allows to add custom function to window object and call it from the page.
 
-```
-[Full sample](../../../sample/spectron/FunctionExposing.test.s)
+[Puppeteer exposeFunction](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pageexposefunctionname-puppeteerfunction)
 
 ## Puppeteer
 

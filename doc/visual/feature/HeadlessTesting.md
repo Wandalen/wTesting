@@ -1,7 +1,23 @@
 ## Abstract
+Feature allows to run tests without showing browser window.
+
 ## Spectron
+For Spectron headless testing is not supported out of the box, but Electron app can be executed without window. Take a look on [main script](../../../sample/spectron/asset/headless.js) file used in that sample.
+
 ```javascript
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
+  })
+
+  await app.start()
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
+  var title = await app.client.getTitle();
+  test.identical( title, 'Test' );
+    
+  await app.stop();
 ```
 [Full sample](../../../sample/spectron/Headless.test.s)
 

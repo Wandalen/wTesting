@@ -14,7 +14,7 @@
 | [ Page navigation ](feature/PageNavigation.md)                        | 1        | 1         |
 | [ Function exposing ](feature/FunctionExposing.md)                      | 0        | 1         |
 | [ Commands chaining ](feature/CommandsChaining.md)                      | 1        | 0         |
-| [ Screenshots creation ](feature/ScreenshotsCreation.md)                   | 1        | 1         |
+| [ Screenshots creation ](feature/ScreenshotsCreation.md)                   | 1        | 2         |
 | [ Screen recording ](feature/ScreenRecording.md)                       | 0        | 0         |
 | [ Drag and drop ](feature/DragAndDrop.md)                          | 2        | 1         |
 | [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | 1        | 1         |

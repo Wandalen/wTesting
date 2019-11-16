@@ -7,9 +7,9 @@
 | Workers api                            | - | [Sample](../../sample/puppeteer/Worker.test.s)
 | Request/Response api                   | - | [Sample](../../sample/puppeteer/RequestResponse.test.s)
 | Dialog api                             | - | [Sample](../../sample/puppeteer/Dialog.test.s)
-| Electron api                           | [X][Sample](../../sample/spectron/Electron.test.s) | -
+| Electron api                           | [Sample](../../sample/spectron/Electron.test.s) | -
 | Device emulation                       | [X][Sample](../../sample/spectron/Device.test.s) | [Sample](../../sample/puppeteer/Device.test.s)         |
-| Page navigation                        | [X][Sample](../../sample/spectron/Navigation.test.s) | [Sample](../../sample/puppeteer/Navigation.test.s)         |
+| Page navigation                        | [Sample](../../sample/spectron/Navigation.test.s) | [Sample](../../sample/puppeteer/Navigation.test.s)         |
 | Function exposing                      | - | [Sample](../../sample/puppeteer/FunctionExposing.test.s)
 | Commands chaining                      | [Sample](../../sample/spectron/Chaining.test.s) | -
 | Screenshots creation                   | [X][Sample](../../sample/spectron/Screenshots.test.s) | [X][Sample](../../sample/puppeteer/Screenshots.test.s)         |

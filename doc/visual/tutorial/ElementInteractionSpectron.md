@@ -45,17 +45,18 @@ async function domElementProperties( test )
 
 ## Register and run test routine
 
-Add test routine to `tests` map:
+Add test routine to `tests` map. It should look like:
 ```javascript
 tests :
-{
-  domElementProperties,
+{ 
+  trivial,
+  domElementProperties
 }
 ```
 
 To run test routine enter:
 ```
-node Spectron.test.ss r:domElementProperties vs:5
+node Spectron.test.ss r:domElementProperties v:5
 ```
 
 [Full sample](../../../sample/spectron/ElementProperties.test.s)

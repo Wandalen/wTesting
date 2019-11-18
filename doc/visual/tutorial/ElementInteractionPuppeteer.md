@@ -37,22 +37,25 @@ async function domElementProperties( test )
 
   //Close browser
   await browser.close();
+  
+  return null;
 }
 ```
 
 ## Register and run test routine
 
-Add test routine to `tests` map:
+Add test routine to `tests` map. It should look like:
 ```javascript
 tests :
-{
-  domElementProperties,
+{ 
+  trivial,
+  domElementProperties
 }
 ```
 
 To run test routine enter:
 ```
-node Puppeteer.test.ss r:domElementProperties vs:5
+node Puppeteer.test.ss r:domElementProperties v:5
 ```
 
 [Full sample](../../../sample/puppeteer/ElementProperties.test.s)

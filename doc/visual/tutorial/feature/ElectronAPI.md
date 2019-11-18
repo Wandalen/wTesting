@@ -19,3 +19,6 @@ How to use Electron API from Spectron. Get current window title.
   await app.stop();
 ```
 [Full sample](../../../../sample/spectron/Electron.test.s)
+
+
+[Back to content](../Comparison.md)

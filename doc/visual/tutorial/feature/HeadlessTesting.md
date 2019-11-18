@@ -38,3 +38,6 @@ For Spectron headless testing is not supported out of the box, but Electron app 
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Headless.test.s)
+
+
+[Back to content](../Comparison.md)

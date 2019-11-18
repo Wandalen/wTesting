@@ -79,3 +79,6 @@ Puppeteer commands return Promise as result, but don't support chaining.
   }
 ```
 [Full sample](../../../../sample/puppeteer/Chaining.test.s)
+
+
+[Back to content](../Comparison.md)

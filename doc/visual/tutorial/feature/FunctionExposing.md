@@ -17,3 +17,6 @@ How to register user-defined function on window object and call it from the page
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/FunctionExposing.test.s)
+
+
+[Back to content](../Comparison.md)

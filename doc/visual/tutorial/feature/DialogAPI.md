@@ -28,3 +28,6 @@ How to interact with dialog created by [alert](https://developer.mozilla.org/en-
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Dialog.test.s)
+
+
+[Back to content](../Comparison.md)

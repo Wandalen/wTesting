@@ -28,3 +28,6 @@ Spectron allows to access Chrome DevTools Protocol by using [Electron Debugger A
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/CDP.test.s)
+
+
+[Back to content](../Comparison.md)

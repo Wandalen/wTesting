@@ -11,3 +11,6 @@ How to move elements on the page.
 ```javascript
 ```
 [Full sample](../../../../sample/puppeteer/DragAndDrop.test.s)
+
+
+[Back to content](../Comparison.md)

@@ -49,3 +49,6 @@ This sample shows how to get page HTML code.
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Page.test.s)
+
+
+[Back to content](../Comparison.md)

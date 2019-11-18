@@ -164,3 +164,5 @@ To run test Spectron test execute:
 ```
 node Spectron.test.ss
 ```
+
+[Back to content](../README.md#Tutorials)

@@ -42,3 +42,6 @@
 - Spectron has debug feature( allows to pause browser execution and just into devtools )
 - Spectron has full access to electron API( requires nodeIntegration to be enabled in electron )
 - Spectron does not support headless mode out of the box
+
+[Back to content](../README.md#Tutorials)
+

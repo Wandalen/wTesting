@@ -30,3 +30,6 @@ How to send and intercept requests using Puppeteer.
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/RequestResponse.test.s)
+
+
+[Back to content](../Comparison.md)

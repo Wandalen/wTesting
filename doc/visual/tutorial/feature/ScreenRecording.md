@@ -9,3 +9,6 @@
 ```javascript
 ```
 [Full sample](../../../../sample/puppeteer/ScreenRecording.test.s)
+
+
+[Back to content](../Comparison.md)

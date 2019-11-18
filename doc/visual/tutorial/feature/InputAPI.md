@@ -45,3 +45,6 @@ Testing frameworks allow simulation of keyboard,mouse,touchscreen input. This sa
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Input.test.s)
+
+
+[Back to content](../Comparison.md)

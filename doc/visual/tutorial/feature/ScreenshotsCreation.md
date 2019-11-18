@@ -51,3 +51,6 @@ How to create screenshow of whole page and selected DOM element.
 ```
 
 [Full sample](../../../../sample/puppeteer/Screenshots.test.s)
+
+
+[Back to content](../Comparison.md)

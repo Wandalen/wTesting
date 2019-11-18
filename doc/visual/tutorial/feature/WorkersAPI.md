@@ -36,3 +36,6 @@ How to get list of available workers and inject js script to execute from worker
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Worker.test.s)
+
+
+[Back to content](../Comparison.md)

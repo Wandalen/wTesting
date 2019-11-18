@@ -123,3 +123,5 @@ To run test Puppeteer test execute:
 ```
 node Puppeteer.test.ss
 ```
+
+[Back to content](../README.md#Tutorials)

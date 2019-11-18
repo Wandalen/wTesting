@@ -41,3 +41,7 @@ How to get information about browser like user agent,version and window size.
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Browser.test.s)
+
+
+[Back to content](../Comparison.md)
+

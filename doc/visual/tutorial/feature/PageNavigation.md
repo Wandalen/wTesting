@@ -61,3 +61,6 @@ How to move forward and backward in page history.
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Navigation.test.s)
+
+
+[Back to content](../Comparison.md)

@@ -48,3 +48,6 @@ Samples show how to load page and check text property of DOM element.
   await browser.close();
 ```
 [Full sample](../../../../sample/puppeteer/Element.test.s)
+
+
+[Back to content](../Comparison.md)

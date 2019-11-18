@@ -7,7 +7,7 @@ Spectron works with any testing framework, but our samples and tutorials are usi
 
 ## Features
 
-A part of available features are listed in table [here](../tutorial/Comparison.md).
+A part of available features are listed in table [here](Comparison.md).
 
 Information about API can be found on [Spectron repository page](https://github.com/electron-userland/spectron)and in [WebDriveIO API Docs](https://webdriver.io/docs/api.html).
 
@@ -15,5 +15,6 @@ Information about API can be found on [Spectron repository page](https://github.
 
 A list of available Spectron tutorials can be found [here](../README.md)
 
-[Back to content](../README.md#Concepts)
+[Back to content](../README.md#Tutorials)
+
 

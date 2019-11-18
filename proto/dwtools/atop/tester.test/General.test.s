@@ -5841,6 +5841,53 @@ function onSuiteEndThrowError( test )
 
   return result;
 }
+
+//
+
+function asyncTestRoutine( test )
+{
+  var testRoutine;
+
+  async function asyncTest( t )
+  { 
+    testRoutine = t;
+    
+    var got = await new _.Consequence().take( 1 );
+    t.identical( got, 1 );
+  
+    var got = await _.timeOut( 1000, () => 2 );
+    t.identical( got, 2 );
+    
+    var got = await Promise.resolve( 3 )
+    t.identical( got, 3 );
+    
+    return null;
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { asyncTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
+    var acheck = testRoutine.checkCurrent();
+    test.identical( acheck.checkIndex, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
+    test.identical( suite.report.testCheckFails, 0 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
+
 //
 
 function asyncTestRoutineWithProperty( test )
@@ -5969,6 +6016,7 @@ var Self =
     onSuiteBeginThrowError,
     onSuiteEndThrowError,
     
+    asyncTestRoutine,
     asyncTestRoutineWithProperty
 
   },

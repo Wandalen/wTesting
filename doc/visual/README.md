@@ -64,10 +64,10 @@
   How to inject a snippet of JavaScript into the page for execution in browser context.
 </details>
 
-<details><summary><a href="./tutorial/WaitForCondition.md">
-    How to wait for some condition.
+<details><summary><a href="./tutorial/WaitForConditionSpectron.md">
+    How to wait for specific condition.
   </a></summary>
-  How to register custom function that checks for some condition on page.
+  How to register condition and wait until it will be fulfilled with a truthy value. 
 </details>
 
 <details><summary><a href="./tutorial/SubmitForm.md">
@@ -97,9 +97,9 @@
 </details>
 
 <details><summary><a href="./tutorial/WaitForConditionPuppeteer.md">
-    How to wait for some condition.
+    How to wait for specific condition.
   </a></summary>
-  How to register custom function that checks for some condition on page.
+  How to register condition and wait until it will be fulfilled with a truthy value. 
 </details>
 
 <details><summary><a href="./tutorial/SubmitFormPuppeteer.md">

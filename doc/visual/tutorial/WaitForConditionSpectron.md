@@ -1,4 +1,6 @@
-## How to use Spectron to inject a snippet of JavaScript into the page for execution in browser context.
+## How to register condition and wait it will be fulfilled with a truthy value
+
+This tutorial shows how to wait until text property of a DOM element will be changed.
 
 Please check out [previous tutorial](FirstSpectronTemplate.md) if you don't have test suite prepared.
 
@@ -7,7 +9,7 @@ Please check out [previous tutorial](FirstSpectronTemplate.md) if you don't have
 Add following test routine to your suite:
 
 ```javascript
-async function injectScript( test )
+async function waitForTextChange( test )
 {
   let self = this;
   
@@ -26,14 +28,25 @@ async function injectScript( test )
   // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
-  //Inject script that changes text property of DOM element and return it as value
-  let got = await app.client.execute( () => 
+  //Change text property after delay
+  _.timeOut( 1500, () => 
   {
-    let element = document.querySelector( 'p' );
-    element.innerText = 'Hello from test';
-    return element.innerText;
+     app.client.execute( () => 
+     {  
+      let element = document.querySelector( 'p' );
+      element.innerText = 'Hello from test'
+     })
   })
-  test.identical( got.value, 'Hello from test' );
+  
+  //Wait until text will be changed
+  await app.client.waitUntil( async () => 
+  {
+    return await app.client.$( 'p' ).getText() === 'Hello from test';
+  })
+  
+  //Check text property
+  var got = await app.client.$( 'p' ).getText();
+  test.identical( got, 'Hello from test' );
 
   //Stop the electron app
   return app.stop();
@@ -46,10 +59,10 @@ Add test routine to `tests` map and the end of test suite file.
 
 To run test routine enter:
 ```
-node Spectron.test.ss r:injectScript v:5
+node Spectron.test.ss r:waitForTextChange v:5
 ```
 
-[Full sample](../../../sample/spectron/InjectScript.test.s)
+[Full sample](../../../sample/spectron/WaitForCondition.test.s)
 
 [Back to content](../README.md#Tutorials)
 

@@ -39,21 +39,21 @@
 </details>
 
 <details><summary><a href="./tutorial/FirstSpectronTest.md">
-    How to launch simplest Spectron template.
+    How to launch simplest Spectron test.
   </a></summary>
-  Create and launch first Spectron test.
+  Write and run test that checks page title.
 </details>
 
 <details><summary><a href="./tutorial/FirstPuppeteerTest.md">
-    How to launch simplest Puppeteer template.
+    How to launch simplest Puppeteer test.
   </a></summary>
-    Create and launch first Puppeteer test.
+    Write and run test that checks page title.
 </details>
 
 <details><summary><a href="./tutorial/ElementInteraction.md">
-    How to find element on page and access it properties.
+    How to find DOM element on page and access it properties using Spectron.
   </a></summary>
-  How to find element on page and check value of innerText property.
+  How to find DOM element on page and check value of different properties.
 </details>
 
 <details><summary><a href="./tutorial/InjectScript.md">

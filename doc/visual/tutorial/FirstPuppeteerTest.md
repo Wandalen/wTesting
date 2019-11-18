@@ -1,6 +1,6 @@
-## How to launch simplest Spectron template
+## How to launch simplest Puppeteer test
 
-This tutorial shows how to prepare minimal test suite template and launch it.
+This tutorial shows how to prepare minimal test and launch it.
 
 ### Prepare asset
 
@@ -46,7 +46,7 @@ var _ = _global_.wTools;
 
 //
 
-async function template( test )
+async function trivial( test )
 {
   let self = this;
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
@@ -57,7 +57,8 @@ async function template( test )
   let path = 'file:///' + _.path.nativize( indexHtmlPath );
   await page.goto( path, { waitUntil : 'load' } ); )
   
-  //Test cases here
+  var title = await page.title();
+  test.identical( title, 'Test' );
 
   await browser.close();
 
@@ -73,7 +74,7 @@ var Self =
   name : 'Puppeteer.Sample',
   tests :
   {
-    template
+    trivial
   }
 }
 
@@ -92,7 +93,7 @@ wTester.test( Self.name );
 Lets split out template routine into steps and take a look what each step is for.
 
 ```javascript
-async function template( test )
+async function trivial( test )
 {
   let self = this;
   
@@ -107,7 +108,9 @@ async function template( test )
   let path = 'file:///' + _.path.nativize( indexHtmlPath );
   await page.goto( path, { waitUntil : 'load' } ); )
   
-  //Write some test cases here
+  //Check window title
+  var title = await page.title();
+  test.identical( title, 'Test' );
 
   //Close browser
   await browser.close();

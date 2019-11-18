@@ -6,7 +6,7 @@ Device simulation can be used to test how page looks on different browser,screen
 ```javascript
   
 ```
-[Full sample](../../../sample/spectron/Device.test.s)
+[Full sample](../../../../sample/spectron/Device.test.s)
 
 ## Puppeteer
 
@@ -23,4 +23,7 @@ Device simulation can be used to test how page looks on different browser,screen
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Device.test.s)
+[Full sample](../../../../sample/puppeteer/Device.test.s)
+
+
+[Back to content](../Comparison.md)

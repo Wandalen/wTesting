@@ -1,18 +1,28 @@
 ## Concepts
 
-<details><summary><a href="./concept/Spectron.md">
-    Spectron
+<details><summary><a href="./concept/VisualTesting.md">
+    Visual testing
+  </a></summary>
+</details>
+
+<details><summary><a href="./concept/HeadlessRun.md">
+    Headless run
+  </a></summary>
+</details>
+
+## Tutorials
+
+<details><summary><a href="./tutorial/Spectron.md">
+    About Spectron
   </a></summary>
   General information about Spectron.
 </details>
 
-<details><summary><a href="./concept/Puppeteer.md">
-    Puppeteer
+<details><summary><a href="./tutorial/Puppeteer.md">
+    About Puppeteer
   </a></summary>
   General information about Puppeteer.
 </details>
-
-## Tutorials
 
 <details><summary><a href="./tutorial/Comparison.md">
   Comparison of Spectron and Puppeteer.

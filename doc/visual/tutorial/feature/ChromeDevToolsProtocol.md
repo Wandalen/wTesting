@@ -7,7 +7,7 @@ Spectron allows to access Chrome DevTools Protocol by using [Electron Debugger A
 
 ```javascript
 ```
-[Full sample](../../../sample/spectron/CDP.test.s)
+[Full sample](../../../../sample/spectron/CDP.test.s)
 
 ## Puppeteer
 
@@ -27,4 +27,7 @@ Spectron allows to access Chrome DevTools Protocol by using [Electron Debugger A
   await client.detach();
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/CDP.test.s)
+[Full sample](../../../../sample/puppeteer/CDP.test.s)
+
+
+[Back to content](../Comparison.md)

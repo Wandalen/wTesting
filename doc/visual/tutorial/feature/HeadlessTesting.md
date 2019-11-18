@@ -3,7 +3,7 @@ How to run visual testing in headless mode. Headless mode is needed to run test 
 continuous integration services.
 
 ## Spectron
-For Spectron headless testing is not supported out of the box, but Electron app can be executed without window. Take a look on [main script](../../../sample/spectron/asset/headless.js) file used in that sample.
+For Spectron headless testing is not supported out of the box, but Electron app can be executed without window. Take a look on [main script](../../../../sample/spectron/asset/headless.js) file used in that sample.
 
 ```javascript
   let app = new Spectron.Application
@@ -20,7 +20,7 @@ For Spectron headless testing is not supported out of the box, but Electron app 
     
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Headless.test.s)
+[Full sample](../../../../sample/spectron/Headless.test.s)
 
 ## Puppeteer
 
@@ -37,4 +37,7 @@ For Spectron headless testing is not supported out of the box, but Electron app 
   test.identical( url, 'https://www.npmjs.com/package/wTesting' );
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Headless.test.s)
+[Full sample](../../../../sample/puppeteer/Headless.test.s)
+
+
+[Back to content](../Comparison.md)

@@ -9,7 +9,7 @@ This interface can be used to:
 - Upload file
 - Etc
 
-Samples show how to load page and check text property of dom element.
+Samples show how to load page and check text property of DOM element.
 
 ## Spectron
 [Spectron Element API](https://webdriver.io/docs/api.html)
@@ -30,7 +30,7 @@ Samples show how to load page and check text property of dom element.
 
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Element.test.s)
+[Full sample](../../../../sample/spectron/Element.test.s)
 
 ## Puppeteer
 [Puppeteer Element API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-elementhandle)
@@ -47,4 +47,7 @@ Samples show how to load page and check text property of dom element.
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Element.test.s)
+[Full sample](../../../../sample/puppeteer/Element.test.s)
+
+
+[Back to content](../Comparison.md)

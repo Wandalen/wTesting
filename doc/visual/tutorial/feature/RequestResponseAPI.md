@@ -9,7 +9,7 @@ How to send and intercept requests using Puppeteer.
 ```javascript
   
 ```
-[Full sample](../../../sample/spectron/RequestResponse.test.s)
+[Full sample](../../../../sample/spectron/RequestResponse.test.s)
 
 ## Puppeteer
 
@@ -29,4 +29,7 @@ How to send and intercept requests using Puppeteer.
   await page.waitFor( 5000 );
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/RequestResponse.test.s)
+[Full sample](../../../../sample/puppeteer/RequestResponse.test.s)
+
+
+[Back to content](../Comparison.md)

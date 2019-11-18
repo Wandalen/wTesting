@@ -25,7 +25,7 @@ How to get information about browser like user agent,version and window size.
 
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Browser.test.s)
+[Full sample](../../../../sample/spectron/Browser.test.s)
 
 ## Puppeteer
 
@@ -40,4 +40,8 @@ How to get information about browser like user agent,version and window size.
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Browser.test.s)
+[Full sample](../../../../sample/puppeteer/Browser.test.s)
+
+
+[Back to content](../Comparison.md)
+

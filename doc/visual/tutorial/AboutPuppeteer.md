@@ -7,16 +7,15 @@ Puppeteer works with any testing framework, but our samples and tutorials are us
 
 ## Features
 
-A part of available features are listed in table [here.](../Comparison.md).
+A part of available features are listed in table [here](Comparison.md).
 
 Information about API can be found in [Puppeteer Documentation](https://pptr.dev/).
 
-## Samples
-
-A list of available samples for Puppeteer can be found [here](../doc/Samples)
-
 ## Tutorials
 
-A list of available Puppeteer tutorials can be found [here](../doc/README)
+A list of available Puppeteer tutorials can be found [here](../README.md)
+
+[Back to content](../README.md#Tutorials)
+
 
 

@@ -1,9 +1,15 @@
 ## Concepts
 
-<details><summary><a href="./concept/VisualTesting.md">
-    Visual testing
+<details><summary><a href="./concept/VisualTest.md">
+    Visual test
   </a></summary>
   Visual test ( UI test ) - that object of testing of which is visual UI instead of API.
+</details>
+
+<details><summary><a href="./concept/UiTest.md">
+    UI test
+  </a></summary>
+  UI test ( Visual test ) - that object of testing of which is visual UI instead of API.
 </details>
 
 <details><summary><a href="./concept/HeadlessRun.md">
@@ -33,21 +39,27 @@
 </details>
 
 <details><summary><a href="./tutorial/FirstSpectronTest.md">
-    How to launch simplest Spectron template.
+    How to launch simplest Spectron test.
   </a></summary>
-  How to prepare Spectron test template and run it.
+  Write and run test that checks page title.
 </details>
 
 <details><summary><a href="./tutorial/FirstPuppeteerTest.md">
-    How to launch simplest Puppeteer template.
+    How to launch simplest Puppeteer test.
   </a></summary>
-    How to prepare Puppeteer test template and run it.
+    Write and run test that checks page title.
 </details>
 
-<details><summary><a href="./tutorial/ElementInteraction.md">
-    How to find element on page and access it properties.
+<details><summary><a href="./tutorial/ElementInteractionSpectron.md">
+    How to find DOM element on page and access it properties using Spectron.
   </a></summary>
-  How to find element on page and check value of innerText property.
+  How to find DOM element on page and check value of different properties.
+</details>
+
+<details><summary><a href="./tutorial/ElementInteractionPuppeteer.md">
+    How to find DOM element on page and access it properties using Puppeteer.
+  </a></summary>
+  How to find DOM element on page and check value of different properties.
 </details>
 
 <details><summary><a href="./tutorial/InjectScript.md">

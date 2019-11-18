@@ -1,6 +1,6 @@
-## How to launch simplest Puppeteer template
+## How to launch simplest Spectron test
 
-This tutorial shows how to prepare minimal test suite template and launch it.
+This tutorial shows how to prepare minimal test and launch it.
 
 ### Prepare asset
 
@@ -84,7 +84,7 @@ var _ = _global_.wTools;
 
 //
 
-async function template( test )
+async function trivial( test )
 {
   let self = this;
   let mainJsPath = _.path.nativize( _.path.join( __dirname, 'main.js' ) );
@@ -98,7 +98,8 @@ async function template( test )
   await app.start()
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
-  //some test cases here
+  var title = await app.client.getTitle();
+  test.identical( title, 'Test' )
 
   return app.stop();
 }
@@ -112,7 +113,7 @@ var Self =
   name : 'Spectron.Sample',
   tests :
   {
-    template
+    trivial
   }
 }
 
@@ -131,7 +132,7 @@ wTester.test( Self.name );
 Lets split out template routine into steps and take a look what each step is for.
 
 ```javascript
-async function template( test )
+async function trivial( test )
 {
   let self = this;
   
@@ -150,7 +151,9 @@ async function template( test )
   // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
-  //Write test cases here
+  //Check window title
+  var title = await app.client.getTitle();
+  test.identical( title, 'Test' )
 
   //Stop the electron app
   return app.stop();

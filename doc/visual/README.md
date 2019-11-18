@@ -1,9 +1,15 @@
 ## Concepts
 
-<details><summary><a href="./concept/VisualTesting.md">
-    Visual testing
+<details><summary><a href="./concept/VisualTest.md">
+    Visual test
   </a></summary>
   Visual test ( UI test ) - that object of testing of which is visual UI instead of API.
+</details>
+
+<details><summary><a href="./concept/UiTest.md">
+    UI test
+  </a></summary>
+  UI test ( Visual test ) - that object of testing of which is visual UI instead of API.
 </details>
 
 <details><summary><a href="./concept/HeadlessRun.md">
@@ -35,13 +41,13 @@
 <details><summary><a href="./tutorial/FirstSpectronTest.md">
     How to launch simplest Spectron template.
   </a></summary>
-  How to prepare Spectron test template and run it.
+  Create and launch first Spectron test.
 </details>
 
 <details><summary><a href="./tutorial/FirstPuppeteerTest.md">
     How to launch simplest Puppeteer template.
   </a></summary>
-    How to prepare Puppeteer test template and run it.
+    Create and launch first Puppeteer test.
 </details>
 
 <details><summary><a href="./tutorial/ElementInteraction.md">

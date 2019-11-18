@@ -5653,20 +5653,6 @@ asyncExperiment.experimental = 1;
 
 //
 
-function failExperiment( test )
-{
-
-  test.case = 'this test fails';
-
-  test.identical( 0, 1 );
-  test.identical( 0, 1 );
-
-}
-
-failExperiment.experimental = 1;
-
-//
-
 function mustNotThrowErrorExperiment( test )
 {
 
@@ -5841,21 +5827,61 @@ function onSuiteEndThrowError( test )
 
   return result;
 }
+
+//
+
+function syncTestRoutineWithProperty( test )
+{
+  var trd;
+
+  function syncTest( t )
+  {
+    trd = t;
+    t.identical( 1, 1 );
+  }
+
+  syncTest.description = 'description';
+
+  var suite = wTestSuite
+  ({
+    tests : { syncTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
+
+    var acheck = trd.checkCurrent();
+    test.identical( acheck.checkIndex, 2 );
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.testCheckFails, 0 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
+
 //
 
 function asyncTestRoutineWithProperty( test )
 {
-  var testRoutine;
+  var trd;
 
   async function asyncTest( t )
-  { 
-    testRoutine = t;
+  {
+    trd = t;
     var got = await Promise.resolve( 1 );
     t.identical( got, 1 );
-    return got;
+    return got; /* xxx */
   }
-  
-  asyncTest.description = 'description'
+
+  asyncTest.description = 'description';
 
   var suite = wTestSuite
   ({
@@ -5868,7 +5894,7 @@ function asyncTestRoutineWithProperty( test )
   .finally( function( err, data )
   {
 
-    var acheck = testRoutine.checkCurrent();
+    var acheck = trd.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 0 );
@@ -5960,7 +5986,6 @@ var Self =
     // etc
 
     asyncExperiment,
-    failExperiment,
     mustNotThrowErrorExperiment,
     experimentTimeOutSyncNoChecks,
     experimentTimeOutSync,
@@ -5968,8 +5993,9 @@ var Self =
 
     onSuiteBeginThrowError,
     onSuiteEndThrowError,
-    
-    asyncTestRoutineWithProperty
+
+    syncTestRoutineWithProperty,
+    asyncTestRoutineWithProperty,
 
   },
 

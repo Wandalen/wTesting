@@ -72,8 +72,10 @@ function init( o )
   if( o && o.tests !== undefined )
   suite.tests = o.tests;
 
+  // debugger;
   if( o )
   suite.copy( o );
+  // debugger;
 
   suite._initialOptions = o;
 

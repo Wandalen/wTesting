@@ -1,7 +1,5 @@
 ## Abstract
-Methods to work with dialogs, like [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)
-
-[Puppeteer Dialog API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-dialog)
+How to interact with dialog created by [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert).
 
 ## Spectron
 ```javascript
@@ -10,6 +8,8 @@ Methods to work with dialogs, like [alert](https://developer.mozilla.org/en-US/d
 [Full sample](../../../sample/spectron/Dialog.test.s)
 
 ## Puppeteer
+
+[Puppeteer Dialog API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-dialog)
 
 ```javascript
   let browser = await Puppeteer.launch({ headless : true });

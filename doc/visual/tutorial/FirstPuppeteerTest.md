@@ -1,6 +1,6 @@
-## How to setup and launch Puppeteer test
+## How to launch simplest Spectron template
 
-This tutorial shows how to prepare minimal test suite for writting Puppeteer tests.
+This tutorial shows how to prepare minimal test suite template and launch it.
 
 ### Prepare asset
 
@@ -87,7 +87,7 @@ wTester.test( Self.name );
 
 ```
 
-### Test routine tempalte explanation
+### Test routine template explanation
 
 Lets split out template routine into steps and take a look what each step is for.
 

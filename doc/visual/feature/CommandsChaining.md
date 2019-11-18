@@ -1,5 +1,7 @@
 ## Abstract
-This feature allows to run commands in series and omit resolving of intermediate results.
+How to run commands in series to get text value of dom element.
+Running command in chain allows to omit resolving of intermediate results. 
+Result of previous command is passed to next command.
 
 [Spectron commands chaining](https://webdriver.io/docs/pageobjects.html#chaining-commands)
 

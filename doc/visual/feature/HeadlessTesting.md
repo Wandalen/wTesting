@@ -1,5 +1,6 @@
 ## Abstract
-Feature allows to run tests without showing browser window.
+How to run visual testing in headless mode. Headless mode is needed to run test on 
+continuous integration services.
 
 ## Spectron
 For Spectron headless testing is not supported out of the box, but Electron app can be executed without window. Take a look on [main script](../../../sample/spectron/asset/headless.js) file used in that sample.

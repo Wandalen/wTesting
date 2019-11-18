@@ -1,10 +1,9 @@
 ## Abstract
-
-Spectron allows to get full access to full Electron API.
-
-[Spectron API](https://github.com/electron-userland/spectron#application-api)
+How to use Electron API from Spectron. Get current window title.
 
 ## Spectron
+[Spectron API](https://github.com/electron-userland/spectron#application-api)
+
 ```javascript
   let app = new Spectron.Application
   ({

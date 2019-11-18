@@ -1,16 +1,16 @@
-## How to setup and launch Spectron test
+## How to launch simplest Puppeteer template
 
-This tutorial shows how to prepare minimal test suite for writting Spectron tests.
+This tutorial shows how to prepare minimal test suite template and launch it.
 
 ### Prepare asset
 
-If you already have electron application, plese move to the next section.
+If you already have electron application, please move to the next section.
 
 Create file structure:
-asset
-    ├── main.js
-    └── index.html
-
+```
+  ├── main.js
+  └── index.html
+```
 Fill `index.html` with test page code:
 
 ``` html
@@ -126,7 +126,7 @@ wTester.test( Self.name );
 
 ```
 
-### Test routine tempalte explanation
+### Test routine template explanation
 
 Lets split out template routine into steps and take a look what each step is for.
 

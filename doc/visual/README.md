@@ -14,6 +14,12 @@
 
 ## Tutorials
 
+<details><summary><a href="./tutorial/Comparison.md">
+  Comparison of Spectron and Puppeteer.
+  </a></summary>
+  Comparison of Spectron and Puppeteer.
+</details>
+
 <details><summary><a href="./tutorial/FirstSpectronTest.md">
     How to launch simplest spectron template.
   </a></summary>

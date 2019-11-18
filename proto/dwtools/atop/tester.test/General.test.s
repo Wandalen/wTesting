@@ -5830,23 +5830,6 @@ function onSuiteEndThrowError( test )
 
 //
 
-<<<<<<< HEAD
-function syncTestRoutineWithProperty( test )
-{
-  var trd;
-
-  function syncTest( t )
-  {
-    trd = t;
-    t.identical( 1, 1 );
-  }
-
-  syncTest.description = 'description';
-
-  var suite = wTestSuite
-  ({
-    tests : { syncTest },
-=======
 function asyncTestRoutine( test )
 {
   var testRoutine;
@@ -5870,7 +5853,6 @@ function asyncTestRoutine( test )
   var suite = wTestSuite
   ({
     tests : { asyncTest },
->>>>>>> e704a56e6b82c32c7d9a4113d41ca05abc448e65
     override : notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -5878,16 +5860,48 @@ function asyncTestRoutine( test )
   var result = suite.run()
   .finally( function( err, data )
   {
-<<<<<<< HEAD
+
+    var acheck = testRoutine.checkCurrent();
+    test.identical( acheck.checkIndex, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function syncTestRoutineWithProperty( test )
+{
+  var trd;
+
+  function syncTest( t )
+  {
+    trd = t;
+    t.identical( 1, 1 );
+  }
+
+  syncTest.description = 'description';
+
+  var suite = wTestSuite
+  ({
+    tests : { syncTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
 
     var acheck = trd.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 1 );
-=======
-    var acheck = testRoutine.checkCurrent();
-    test.identical( acheck.checkIndex, 4 );
-    test.identical( suite.report.testCheckPasses, 3 );
->>>>>>> e704a56e6b82c32c7d9a4113d41ca05abc448e65
     test.identical( suite.report.testCheckFails, 0 );
 
     if( err )
@@ -5910,7 +5924,7 @@ function asyncTestRoutineWithProperty( test )
     trd = t;
     var got = await Promise.resolve( 1 );
     t.identical( got, 1 );
-    return got; /* xxx */
+    // return got; /* xxx */
   }
 
   asyncTest.description = 'description';
@@ -6025,15 +6039,10 @@ var Self =
 
     onSuiteBeginThrowError,
     onSuiteEndThrowError,
-<<<<<<< HEAD
-
-    syncTestRoutineWithProperty,
-    asyncTestRoutineWithProperty,
-=======
 
     asyncTestRoutine,
-    asyncTestRoutineWithProperty
->>>>>>> e704a56e6b82c32c7d9a4113d41ca05abc448e65
+    syncTestRoutineWithProperty,
+    asyncTestRoutineWithProperty,
 
   },
 

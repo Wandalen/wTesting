@@ -30,7 +30,8 @@ async function domElementProperties( test )
   test.identical( html, '<p>Hello world</p>' );
   
   //Elements position on page
-  var location = await page.$( 'p' ).boundingBox();
+  var element = await page.$( 'p' );
+  var location = await element.boundingBox();
   test.gt( location.x, 0 );
   test.gt( location.y, 0 );
 

@@ -50,28 +50,24 @@
     Write and run test that checks page title.
 </details>
 
+### Spectron
+
 <details><summary><a href="./tutorial/ElementInteractionSpectron.md">
-    How to find DOM element on page and access it properties using Spectron.
+    How to find DOM element on page and access it properties.
   </a></summary>
   How to find DOM element on page and check value of different properties.
 </details>
 
-<details><summary><a href="./tutorial/ElementInteractionPuppeteer.md">
-    How to find DOM element on page and access it properties using Puppeteer.
-  </a></summary>
-  How to find DOM element on page and check value of different properties.
-</details>
-
-<details><summary><a href="./tutorial/InjectScript.md">
+<details><summary><a href="./tutorial/InjectScriptSpectron.md">
     How to inject a js snippet into the page for execution in browser context.
   </a></summary>
   How to inject a snippet of JavaScript into the page for execution in browser context.
 </details>
 
-<details><summary><a href="./tutorial/WaitForCondition.md">
-    How to wait for some condition.
+<details><summary><a href="./tutorial/WaitForConditionSpectron.md">
+    How to wait for specific condition.
   </a></summary>
-  How to register custom function that checks for some condition on page.
+  How to register condition and wait until it will be fulfilled with a truthy value. 
 </details>
 
 <details><summary><a href="./tutorial/SubmitForm.md">
@@ -85,3 +81,36 @@
   </a></summary>
  How to move backward/forward in history and wait until page will be loaded.
 </details>
+
+### Puppeteer
+
+<details><summary><a href="./tutorial/ElementInteractionPuppeteer.md">
+    How to find DOM element on page and access it properties using Puppeteer.
+  </a></summary>
+  How to find DOM element on page and check value of different properties.
+</details>
+
+<details><summary><a href="./tutorial/InjectScriptPuppeteer.md">
+    How to inject a js snippet into the page for execution in browser context.
+  </a></summary>
+  How to inject a snippet of JavaScript into the page for execution in browser context.
+</details>
+
+<details><summary><a href="./tutorial/WaitForConditionPuppeteer.md">
+    How to wait for specific condition.
+  </a></summary>
+  How to register condition and wait until it will be fulfilled with a truthy value. 
+</details>
+
+<details><summary><a href="./tutorial/SubmitFormPuppeteer.md">
+    How to fill and submit a form.
+  </a></summary>
+ How to fill input fields of a form and click submit button.
+</details>
+
+<details><summary><a href="./tutorial/NavigateHistoryPuppeteer.md">
+    How to navigate in history.
+  </a></summary>
+ How to move backward/forward in history and wait until page will be loaded.
+</details>
+

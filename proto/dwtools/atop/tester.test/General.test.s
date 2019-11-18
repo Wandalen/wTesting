@@ -5830,6 +5830,7 @@ function onSuiteEndThrowError( test )
 
 //
 
+<<<<<<< HEAD
 function syncTestRoutineWithProperty( test )
 {
   var trd;
@@ -5845,6 +5846,31 @@ function syncTestRoutineWithProperty( test )
   var suite = wTestSuite
   ({
     tests : { syncTest },
+=======
+function asyncTestRoutine( test )
+{
+  var testRoutine;
+
+  async function asyncTest( t )
+  {
+    testRoutine = t;
+
+    var got = await new _.Consequence().take( 1 );
+    t.identical( got, 1 );
+
+    var got = await _.timeOut( 1000, () => 2 );
+    t.identical( got, 2 );
+
+    var got = await Promise.resolve( 3 )
+    t.identical( got, 3 );
+
+    return null;
+  }
+
+  var suite = wTestSuite
+  ({
+    tests : { asyncTest },
+>>>>>>> e704a56e6b82c32c7d9a4113d41ca05abc448e65
     override : notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -5852,10 +5878,16 @@ function syncTestRoutineWithProperty( test )
   var result = suite.run()
   .finally( function( err, data )
   {
+<<<<<<< HEAD
 
     var acheck = trd.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 1 );
+=======
+    var acheck = testRoutine.checkCurrent();
+    test.identical( acheck.checkIndex, 4 );
+    test.identical( suite.report.testCheckPasses, 3 );
+>>>>>>> e704a56e6b82c32c7d9a4113d41ca05abc448e65
     test.identical( suite.report.testCheckFails, 0 );
 
     if( err )
@@ -5993,9 +6025,15 @@ var Self =
 
     onSuiteBeginThrowError,
     onSuiteEndThrowError,
+<<<<<<< HEAD
 
     syncTestRoutineWithProperty,
     asyncTestRoutineWithProperty,
+=======
+
+    asyncTestRoutine,
+    asyncTestRoutineWithProperty
+>>>>>>> e704a56e6b82c32c7d9a4113d41ca05abc448e65
 
   },
 

@@ -2,14 +2,14 @@
 
 | Feature                                | Spectron | Puppeteer |
 | -------------------------------------- | -------- | --------- |
-| [ Element API ](feature/ElementAPI.md)                            | 2        | 1         |
-| [ Page API ](feature/PageAPI.md)                               | 1        | 2         |
-| [ Browser API ](feature/BrowserAPI.md)                            | 1        | 2         |
-| [ Touchscreen/mouse/keyboard API ](feature/InputAPI.md)         | 1        | 2         |
-| [ Workers API ](feature/WorkersAPI.md)                            | 0        | 2         |
-| [ Request/Response API ](feature/RequestResponseAPI.md)                   | 0        | 2         |
-| [ Dialog API ](feature/DialogAPI.md)                             | 0        | 1         |
-| [ Electron API ](feature/ElectronAPI.md)                           | 2        | 0         |
+| [ Element API ](feature/ElementApi.md)                            | 2        | 1         |
+| [ Page API ](feature/PageApi.md)                               | 1        | 2         |
+| [ Browser API ](feature/BrowserApi.md)                            | 1        | 2         |
+| [ Touchscreen/mouse/keyboard API ](feature/InputApi.md)         | 1        | 2         |
+| [ Workers API ](feature/WorkersApi.md)                            | 0        | 2         |
+| [ Request/Response API ](feature/RequestResponseApi.md)                   | 0        | 2         |
+| [ Dialog API ](feature/DialogApi.md)                             | 0        | 1         |
+| [ Electron API ](feature/ElectronApi.md)                           | 2        | 0         |
 | [ Device emulation ](feature/DeviceEmulation.md)                       | 1        | 2         |
 | [ Page navigation ](feature/PageNavigation.md)                        | 1        | 1         |
 | [ Function exposing ](feature/FunctionExposing.md)                      | 0        | 1         |

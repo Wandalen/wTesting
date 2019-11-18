@@ -1,2 +1,3 @@
-## VisualTesting
-Visual testing allows to verify that application works on different browsers and devices as expected.
+## Visual test ~ UI test
+
+Visual test ( UI test ) - that which object of testing of which is visual UI instead of API.

@@ -28,9 +28,11 @@ async function domElementProperties( test )
   //innerText
   var text = await app.client.$( 'p' ).getText();
   test.identical( text, 'Hello world' );
+  
   //outerHtml 
   var html = await app.client.$( 'p' ).getHTML();
   test.identical( html, '<p>Hello world</p>' );
+  
   //Elements position on page
   var location = await app.client.$( 'p' ).getLocation();
   test.gt( location.x, 0 );

@@ -56,6 +56,12 @@
   How to find DOM element on page and check value of different properties.
 </details>
 
+<details><summary><a href="./tutorial/ElementInteractionPuppeteer.md">
+    How to find DOM element on page and access it properties using Puppeteer.
+  </a></summary>
+  How to find DOM element on page and check value of different properties.
+</details>
+
 <details><summary><a href="./tutorial/InjectScript.md">
     How to inject a js snippet into the page for execution in browser context.
   </a></summary>

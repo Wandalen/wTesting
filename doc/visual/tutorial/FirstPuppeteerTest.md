@@ -100,7 +100,7 @@ async function trivial( test )
   //Prepare path to test page
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
-  //Create browser and new page instances
+  //Create browser and new page instance
   let browser = await Puppeteer.launch();
   let page = await browser.newPage();
   

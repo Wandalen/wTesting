@@ -50,7 +50,7 @@
     Write and run test that checks page title.
 </details>
 
-<details><summary><a href="./tutorial/ElementInteraction.md">
+<details><summary><a href="./tutorial/ElementInteractionSpectron.md">
     How to find DOM element on page and access it properties using Spectron.
   </a></summary>
   How to find DOM element on page and check value of different properties.

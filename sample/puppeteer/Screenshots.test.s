@@ -1,4 +1,4 @@
-( function _CDP_test_s_( ) {
+( function _Screenshots_test_s_( ) {
 
 'use strict';
 
@@ -39,19 +39,29 @@ function onSuiteEnd()
 // tests
 // --
 
-async function accessingCDP( test )
+async function screenshot( test )
 {
   let browser = await Puppeteer.launch({ headless : true });
   let page = await browser.newPage();
 
-  test.case = 'create cdp session and navigate to url'
-  let client = await page.target().createCDPSession();
-  await client.send( 'Page.enable' );
-  await client.send( 'Page.navigate', { url : 'https://www.npmjs.com/' });
+  test.case = 'go to npm and check url'
+  page.goto( 'https://www.npmjs.com/' )
   await page.waitForNavigation();
-  let url = await page.url();
-  test.identical( url, 'https://www.npmjs.com/' )
-  await client.detach();
+    
+  test.case = 'screenshot whole window'
+  var screenshot = await page.screenshot();
+  test.is( _.bufferNodeIs( screenshot ) )
+  
+  test.case = 'screenshot whole window and save to disk'
+  var path = _.path.nativize( _.path.join( __dirname, 'screenshot.png' ) );
+  await page.screenshot({ path });
+  test.is( _.fileProvider.fileExists( path ) )
+  
+  test.case = 'screenshot element'
+  var element = await page.$( '#search');
+  var screenshot = await element.screenshot();
+  test.is( _.bufferNodeIs( screenshot ) )
+
   await browser.close();
 
   return null;
@@ -64,7 +74,7 @@ async function accessingCDP( test )
 var Self =
 {
 
-  name : 'Visual.Puppeteer.CDP',
+  name : 'Visual.Puppeteer.Screenshots',
   
   
 
@@ -80,7 +90,7 @@ var Self =
 
   tests :
   {
-    accessingCDP
+    screenshot
   }
 
 }

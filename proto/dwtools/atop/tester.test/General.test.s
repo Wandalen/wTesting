@@ -5841,6 +5841,46 @@ function onSuiteEndThrowError( test )
 
   return result;
 }
+//
+
+function asyncTestRoutineWithProperty( test )
+{
+  var testRoutine;
+
+  async function asyncTest( t )
+  { 
+    testRoutine = t;
+    var got = await Promise.resolve( 1 );
+    t.identical( got, 1 );
+    return got;
+  }
+  
+  asyncTest.description = 'description'
+
+  var suite = wTestSuite
+  ({
+    tests : { asyncTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
+
+    var acheck = testRoutine.checkCurrent();
+    test.identical( acheck.checkIndex, 2 );
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.testCheckFails, 0 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
 
 // --
 // declare
@@ -5927,7 +5967,9 @@ var Self =
     experimentTimeOutAsync,
 
     onSuiteBeginThrowError,
-    onSuiteEndThrowError
+    onSuiteEndThrowError,
+    
+    asyncTestRoutineWithProperty
 
   },
 

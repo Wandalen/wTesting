@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _ElementProperties_test_s_( ) {
 
 'use strict';
 
@@ -38,30 +38,40 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function domElementProperties( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  
+  // Prepare path to electron app script( main.js )
+  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.js' ) );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-
+  // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainJsPath ]
   })
 
+  // Start the electron app
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
-  await app.stop();
-  
-  return null;
+  // Waint until page will be loaded( Text appears on page )
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+
+  //innerText
+  var text = await app.client.$( 'p' ).getText();
+  test.identical( text, 'Hello world' );
+  //outerHtml 
+  var html = await app.client.$( 'p' ).getHTML();
+  test.identical( html, '<p>Hello world</p>' );
+  //Elements position on page
+  var location = await app.client.$( 'p' ).getLocation();
+  test.gt( location.x, 0 );
+  test.gt( location.y, 0 );
+
+  //Stop the electron app
+  return app.stop();
 }
 
 // --
@@ -71,7 +81,7 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
+  name : 'Visual.Spectron.ElementProperties',
   
   
 
@@ -87,7 +97,7 @@ var Self =
 
   tests :
   {
-    chaining
+    domElementProperties,
   }
 
 }

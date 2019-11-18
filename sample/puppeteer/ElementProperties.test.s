@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _ElementProperties_test_s_( ) {
 
 'use strict';
 
@@ -8,9 +8,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
   _.include( 'wFiles' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
-
+  var Puppeteer = require( 'puppeteer' );
 }
 
 var _global = _global_;
@@ -23,9 +21,12 @@ var _ = _global_.wTools;
 function onSuiteBegin()
 {
   let self = this;
+
   self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
+
+//
 
 function onSuiteEnd()
 {
@@ -38,28 +39,40 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function domElementProperties( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+  
+  //Create browser and new page instance
+  let browser = await Puppeteer.launch();
+  let page = await browser.newPage();
+  
+  //Open test page
+  let path = 'file:///' + _.path.nativize( indexHtmlPath );
+  await page.goto( path, { waitUntil : 'load' } );
+  
+  //innerText
+  var text = await page.$eval( 'p', ( e ) => e.innerText )
+  test.identical( text, 'Hello world' );
+  
+  //outerHtml 
+  var html = await page.$eval( 'p', ( e ) => e.outerHTML )
+  test.identical( html, '<p>Hello world</p>' );
+  
+  //Elements position on page
+  var element = await page.$( 'p' );
+  var location = await element.boundingBox();
+  test.gt( location.x, 0 );
+  test.gt( location.y, 0 );
 
-  let app = new Spectron.Application
-  ({
-    path : ElectronPath,
-    args : [ mainPath ]
-  })
-
-  await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
-  await app.stop();
+  //Close browser
+  await browser.close();
   
   return null;
 }
@@ -71,7 +84,7 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
+  name : 'Visual.Puppeteer.ElementProperties',
   
   
 
@@ -87,7 +100,7 @@ var Self =
 
   tests :
   {
-    chaining
+    domElementProperties
   }
 
 }

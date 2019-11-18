@@ -1,75 +1,87 @@
 ## Concepts
 
-<details><summary><a href="./concept/Spectron.md">
-      Spectron
+<details><summary><a href="./concept/VisualTest.md">
+    Visual test
   </a></summary>
+  Visual test ( UI test ) - that object of testing of which is visual UI instead of API.
 </details>
 
-<details><summary><a href="./concept/Puppeteer.md">
-      Puppeteer
+<details><summary><a href="./concept/UiTest.md">
+    UI test
   </a></summary>
+  UI test ( Visual test ) - that object of testing of which is visual UI instead of API.
 </details>
 
-<details><summary><a href="./concept/BrowserWindow.md">
-      BrowserWindow
+<details><summary><a href="./concept/HeadlessRun.md">
+    Headless run
   </a></summary>
-</details>
-
-<details><summary><a href="./concept/Page.md">
-      Page
-  </a></summary>
-</details>
-
-<details><summary><a href="./concept/Element.md">
-      Element
-  </a></summary>
-</details>
-
-<details><summary><a href="./concept/WebDriver.md">
-      WebDriver
-  </a></summary>
+  Run of a visual application without actually showing a window on the screen.
 </details>
 
 ## Tutorials
 
-<details><summary><a href="./tutorial/Abstract.md">
-      Abstract
+<details><summary><a href="./tutorial/AboutSpectron.md">
+    About Spectron
   </a></summary>
-  General information about visual testing.
+  Spectron is a package for testing Element apps.
 </details>
 
-<details><summary><a href="./tutorial/ApplicationLaunch.md">
-      How to setup and launch electron application.
+<details><summary><a href="./tutorial/AboutPuppeteer.md">
+    About Puppeteer
   </a></summary>
-  How to setup and launch electron application.
+  Puppeteer is a high-level NodeJs library for Chrome automation.
 </details>
 
-<details><summary><a href="./tutorial/FindElement.md">
-      How to find element(s) on page.
+<details><summary><a href="./tutorial/Comparison.md">
+  Comparison of Spectron and Puppeteer.
   </a></summary>
-  How to find element(s) on page.
+  Feature/API comparison with links to description and samples.
 </details>
 
-<details><summary><a href="./tutorial/Properties.md">
-      How to get/set element(s) property value.
+<details><summary><a href="./tutorial/FirstSpectronTest.md">
+    How to launch simplest Spectron test.
   </a></summary>
-  How to get/set element(s) property value.
+  Write and run test that checks page title.
 </details>
 
-<details><summary><a href="./tutorial/Execute.md">
-      How to execute custom script on page and get result.
+<details><summary><a href="./tutorial/FirstPuppeteerTest.md">
+    How to launch simplest Puppeteer test.
   </a></summary>
-  How to execute custom script on page and get result
+    Write and run test that checks page title.
 </details>
 
-<details><summary><a href="./tutorial/WaitFor.md">
-      How to wait for some condition.
+<details><summary><a href="./tutorial/ElementInteractionSpectron.md">
+    How to find DOM element on page and access it properties using Spectron.
   </a></summary>
-  How to wait for some condition.
+  How to find DOM element on page and check value of different properties.
 </details>
 
-<details><summary><a href="./tutorial/Form.md">
-      How to fill and submit a form.
+<details><summary><a href="./tutorial/ElementInteractionPuppeteer.md">
+    How to find DOM element on page and access it properties using Puppeteer.
   </a></summary>
- How to fill and submit a form.
+  How to find DOM element on page and check value of different properties.
+</details>
+
+<details><summary><a href="./tutorial/InjectScript.md">
+    How to inject a js snippet into the page for execution in browser context.
+  </a></summary>
+  How to inject a snippet of JavaScript into the page for execution in browser context.
+</details>
+
+<details><summary><a href="./tutorial/WaitForCondition.md">
+    How to wait for some condition.
+  </a></summary>
+  How to register custom function that checks for some condition on page.
+</details>
+
+<details><summary><a href="./tutorial/SubmitForm.md">
+    How to fill and submit a form.
+  </a></summary>
+ How to fill input fields of a form and click submit button.
+</details>
+
+<details><summary><a href="./tutorial/NavigateHistory.md">
+    How to navigate in history.
+  </a></summary>
+ How to move backward/forward in history and wait until page will be loaded.
 </details>

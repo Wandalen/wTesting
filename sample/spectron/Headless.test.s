@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _Headless_test_s_( ) {
 
 'use strict';
 
@@ -38,11 +38,13 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function headless( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'headless.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -53,14 +55,13 @@ async function chaining( test )
   })
 
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
-  await app.stop();
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
+  var title = await app.client.getTitle();
+  test.identical( title, 'Test' );
+    
+  await app.stop();
+
   return null;
 }
 
@@ -71,7 +72,7 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
+  name : 'Visual.Spectron.Headless',
   
   
 
@@ -87,7 +88,7 @@ var Self =
 
   tests :
   {
-    chaining
+    headless,
   }
 
 }

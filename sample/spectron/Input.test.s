@@ -1,12 +1,11 @@
-( function _Electron_test_s_( ) {
+( function _Input_test_s_( ) {
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( 'wTools' );
-  _.include( 'wTesting' );
-  _.include( 'wFiles' );
+  let _ = require( '../..' );
+  require( 'wFiles' )
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );
@@ -38,7 +37,9 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function input( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
@@ -53,14 +54,15 @@ async function chaining( test )
   })
 
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+  test.case = 'keyboard';
+  await app.client.$( '#input1' ).setValue( '0123' );
+  var got = await app.client.getValue( '#input1' );
+  test.identical( got, '0123' );
+
   await app.stop();
-  
+
   return null;
 }
 
@@ -71,9 +73,9 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
-  
-  
+  name : 'Visual.Spectron.Input',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -87,7 +89,7 @@ var Self =
 
   tests :
   {
-    chaining
+    input,
   }
 
 }

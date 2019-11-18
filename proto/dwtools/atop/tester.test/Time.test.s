@@ -37,7 +37,7 @@ var _ = _global_.wTools;
 function timeOut( test )
 {
   var c = this;
-  var que = new _.Consequence().take( null )
+  var ready = new _.Consequence().take( null )
 
   /* */
 
@@ -426,12 +426,12 @@ function timeOut( test )
     return null;
   })
 
-  que.tap( ( err, arg ) =>
+  ready.tap( ( err, arg ) =>
   {
     debugger;
   });
 
-  return que;
+  return ready;
 }
 
 timeOut.timeOut = 20000;
@@ -442,7 +442,7 @@ function timeOutMode01( test )
 {
   var c = this;
   var mode = _.Consequence.AsyncModeGet();
-  var que = new _.Consequence().take( null )
+  var ready = new _.Consequence().take( null )
 
   /* AsyncCompetitorHanding : 0, AsyncResourceAdding : 1 */
 
@@ -742,7 +742,7 @@ function timeOutMode01( test )
 
   })
 
-  return que;
+  return ready;
 }
 
 timeOutMode10.timeOut = 30000;
@@ -753,7 +753,7 @@ timeOutMode10.timeOut = 30000;
 // {
 //   var c = this;
 //   var mode = _.Consequence.AsyncModeGet();
-//   var que = new _.Consequence().take( null )
+//   var ready = new _.Consequence().take( null )
 //
 //   /* AsyncCompetitorHanding : 0, AsyncResourceAdding : 1 */
 //
@@ -1058,7 +1058,7 @@ timeOutMode10.timeOut = 30000;
 //
 //   })
 //
-//   return que;
+//   return ready;
 // }
 //
 // timeOutMode10.timeOut = 30000;
@@ -1069,7 +1069,7 @@ timeOutMode10.timeOut = 30000;
 // {
 //   var c = this;
 //   var mode = _.Consequence.AsyncModeGet();
-//   var que = new _.Consequence().take( null )
+//   var ready = new _.Consequence().take( null )
 //   /* AsyncCompetitorHanding : 1, AsyncResourceAdding : 0, */
 //
 //   .finally( () =>
@@ -1361,7 +1361,7 @@ timeOutMode10.timeOut = 30000;
 //     return con;
 //   })
 //
-//   return que;
+//   return ready;
 // }
 //
 // timeOutMode01.timeOut = 30000;
@@ -1374,7 +1374,7 @@ function timeOutMode10( test )
 {
   var c = this;
   var mode = _.Consequence.AsyncModeGet();
-  var que = new _.Consequence().take( null )
+  var ready = new _.Consequence().take( null )
   /* AsyncCompetitorHanding : 1, AsyncResourceAdding : 0, */
 
   .finally( () =>
@@ -1670,7 +1670,7 @@ function timeOutMode10( test )
     return con;
   })
 
-  return que;
+  return ready;
 }
 
 timeOutMode01.timeOut = 30000;
@@ -1681,7 +1681,7 @@ function timeOutMode11( test )
 {
   var c = this;
   var mode = _.Consequence.AsyncModeGet();
-  var que = new _.Consequence().take( null )
+  var ready = new _.Consequence().take( null )
 
   /* AsyncResourceAdding : 1, AsyncCompetitorHanding : 1 */
 
@@ -1979,7 +1979,7 @@ function timeOutMode11( test )
     return con;
   })
 
-  return que;
+  return ready;
 }
 
 timeOutMode11.timeOut = 30000;
@@ -1989,10 +1989,14 @@ timeOutMode11.timeOut = 30000;
 function timeOutError( test )
 {
   var c = this;
-  var que = new _.Consequence().take( null )
+  var ready = new _.Consequence().take( null );
+
+  // test.is( 0 );
+  // test.identical( 0, 1 );
 
   /* */
 
+  ready
   .then( function( arg )
   {
     test.case = 'delay only';
@@ -2042,7 +2046,7 @@ function timeOutError( test )
     });
   })
 
-  // /* */
+  /* */
 
   .then( function( arg )
   {
@@ -2052,7 +2056,6 @@ function timeOutError( test )
     .finally( function( err, got )
     {
       var elapsedTime = _.timeNow() - timeBefore;
-      // test.is( elapsedTime >= c.delay * 2 );
       test.ge( elapsedTime, 2 * c.delay-c.timeAccuracy );
       test.identical( got, undefined );
       test.is( _.errIs( err ) );
@@ -2134,7 +2137,7 @@ function timeOutError( test )
       test.identical( t.resourcesGet().length, 0 );
       return null;
     })
-    _.timeOut( c.delay / 2, () => { t.error( 'stop' ); return null; } );
+    _.timeOut( c.delay / 2, () => { t.error( _.errAttend( 'stop' ) ); return null; } );
 
     return t;
   })
@@ -2168,10 +2171,15 @@ function timeOutError( test )
     return null;
   });
 
-  return que;
+  return ready;
 }
 
 timeOutError.timeOut = 30000;
+timeOutError.description =
+`
+throw error on time out
+stop timer with error
+`
 
 // --
 // test suite

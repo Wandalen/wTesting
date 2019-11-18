@@ -9,8 +9,8 @@
 <details><summary><a href="./concept/HeadlessRun.md">
     Headless run
   </a></summary>
+  Run of a visual application without actually showing a window on the screen.
 </details>
-Run of a visual application without actually showing a window on the screen.
 
 ## Tutorials
 

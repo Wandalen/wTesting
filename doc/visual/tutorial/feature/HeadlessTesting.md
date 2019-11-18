@@ -1,4 +1,4 @@
-## Abstract
+## Headless testing
 How to run visual testing in headless mode. Headless mode is needed to run test on 
 continuous integration services.
 

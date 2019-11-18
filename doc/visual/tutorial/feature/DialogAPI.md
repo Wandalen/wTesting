@@ -1,4 +1,4 @@
-## Abstract
+## Dialog API
 How to interact with dialog created by [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert).
 
 ## Spectron

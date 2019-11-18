@@ -1,4 +1,4 @@
-## Abstract
+## Page API
 Page API allows to:
 - Open url
 - Inject script into page

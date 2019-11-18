@@ -1,4 +1,4 @@
-## Abstract
+## Screen recording
 ## Spectron
 ```javascript
 ```

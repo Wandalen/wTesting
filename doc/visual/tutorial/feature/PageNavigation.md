@@ -1,4 +1,4 @@
-## Abstract
+## Page navigation
 How to move forward and backward in page history.
 
 ## Spectron

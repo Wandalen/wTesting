@@ -1,4 +1,4 @@
-## Abstract
+## Commands chaining
 How to run commands in series to get text value of dom element.
 Running command in chain allows to omit resolving of intermediate results. 
 Result of previous command is passed to next command.

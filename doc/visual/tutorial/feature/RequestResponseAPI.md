@@ -1,4 +1,4 @@
-## Abstract
+## Request and Response API
 How to send and intercept requests using Puppeteer.
 
 [Puppeteer Request](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-request)

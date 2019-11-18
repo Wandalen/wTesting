@@ -1,4 +1,4 @@
-## Abstract
+## Input API
 Testing frameworks allow simulation of keyboard,mouse,touchscreen input. This sample shows how to simulate keyboard input to dom element.
 
 ## Spectron

@@ -1,5 +1,4 @@
-## Abstract
-
+## Access to raw Chrome Devtools Protocol
 How to establish raw communication with [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/). Open url by sending `Page.navigate` command.
 
 ## Spectron

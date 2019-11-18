@@ -1,4 +1,4 @@
-## Abstract
+## Screenshots creation
 How to create screenshow of whole page and selected dom element.
 
 ## Spectron

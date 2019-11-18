@@ -32,7 +32,7 @@ How to move forward and backward in page history.
   
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Navigation.test.s)
+[Full sample](../../../../sample/spectron/Navigation.test.s)
 
 ## Puppeteer
 [Puppeteer Navigation methods](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagegoforwardoptions)
@@ -60,4 +60,4 @@ How to move forward and backward in page history.
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Navigation.test.s)
+[Full sample](../../../../sample/puppeteer/Navigation.test.s)

@@ -18,4 +18,4 @@ How to use Electron API from Spectron. Get current window title.
   test.identical( title, 'Test' );
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Electron.test.s)
+[Full sample](../../../../sample/spectron/Electron.test.s)

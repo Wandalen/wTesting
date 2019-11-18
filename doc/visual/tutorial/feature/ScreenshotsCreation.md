@@ -1,5 +1,5 @@
 ## Screenshots creation
-How to create screenshow of whole page and selected dom element.
+How to create screenshow of whole page and selected DOM element.
 
 ## Spectron
 [Spectron capturePage](https://github.com/electron-userland/spectron#capturepage)
@@ -20,7 +20,7 @@ How to create screenshow of whole page and selected dom element.
   await app.stop();
 ```
 
-[Full sample](../../../sample/spectron/Screenshots.test.s)
+[Full sample](../../../../sample/spectron/Screenshots.test.s)
 
 ## Puppeteer
 [Puppeteer screenshot](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagescreenshotoptions)
@@ -50,4 +50,4 @@ How to create screenshow of whole page and selected dom element.
   await browser.close();
 ```
 
-[Full sample](../../../sample/puppeteer/Screenshots.test.s)
+[Full sample](../../../../sample/puppeteer/Screenshots.test.s)

@@ -5,7 +5,7 @@ How to get list of available workers and inject js script to execute from worker
 ```javascript
   
 ```
-[Full sample](../../../sample/spectron/Worker.test.s)
+[Full sample](../../../../sample/spectron/Worker.test.s)
 
 ## Puppeteer
 
@@ -35,4 +35,4 @@ How to get list of available workers and inject js script to execute from worker
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Worker.test.s)
+[Full sample](../../../../sample/puppeteer/Worker.test.s)

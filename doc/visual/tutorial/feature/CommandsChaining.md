@@ -1,5 +1,5 @@
 ## Commands chaining
-How to run commands in series to get text value of dom element.
+How to run commands in series to get text value of DOM element.
 Running command in chain allows to omit resolving of intermediate results. 
 Result of previous command is passed to next command.
 
@@ -22,7 +22,7 @@ Result of previous command is passed to next command.
   test.identical( text, 'Text1' );
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Chaining.test.s)
+[Full sample](../../../../sample/spectron/Chaining.test.s)
 
 ## Puppeteer
 
@@ -78,4 +78,4 @@ Puppeteer commands return Promise as result, but don't support chaining.
     return ready.deasync();
   }
 ```
-[Full sample](../../../sample/puppeteer/Chaining.test.s)
+[Full sample](../../../../sample/puppeteer/Chaining.test.s)

@@ -5,7 +5,7 @@ How to interact with dialog created by [alert](https://developer.mozilla.org/en-
 ```javascript
   
 ```
-[Full sample](../../../sample/spectron/Dialog.test.s)
+[Full sample](../../../../sample/spectron/Dialog.test.s)
 
 ## Puppeteer
 
@@ -27,4 +27,4 @@ How to interact with dialog created by [alert](https://developer.mozilla.org/en-
   await page.waitFor( 1000 );
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Dialog.test.s)
+[Full sample](../../../../sample/puppeteer/Dialog.test.s)

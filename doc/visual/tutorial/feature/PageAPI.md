@@ -32,7 +32,7 @@ This sample shows how to get page HTML code.
 
   await app.stop();
 ```
-[Full sample](../../../sample/spectron/Page.test.s)
+[Full sample](../../../../sample/spectron/Page.test.s)
 
 ## Puppeteer
 
@@ -48,4 +48,4 @@ This sample shows how to get page HTML code.
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Page.test.s)
+[Full sample](../../../../sample/puppeteer/Page.test.s)

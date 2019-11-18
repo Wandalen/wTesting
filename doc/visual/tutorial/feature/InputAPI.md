@@ -1,5 +1,5 @@
 ## Input API
-Testing frameworks allow simulation of keyboard,mouse,touchscreen input. This sample shows how to simulate keyboard input to dom element.
+Testing frameworks allow simulation of keyboard,mouse,touchscreen input. This sample shows how to simulate keyboard input to DOM element.
 
 ## Spectron
 [Spectron client API](https://webdriver.io/docs/api.html)
@@ -21,7 +21,7 @@ Testing frameworks allow simulation of keyboard,mouse,touchscreen input. This sa
 
     await app.stop();
 ```
-[Full sample](../../../sample/spectron/Input.test.s)
+[Full sample](../../../../sample/spectron/Input.test.s)
 
 ## Puppeteer
 [Puppeteer Keyboard API](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-class-keyboard)
@@ -44,4 +44,4 @@ Testing frameworks allow simulation of keyboard,mouse,touchscreen input. This sa
 
   await browser.close();
 ```
-[Full sample](../../../sample/puppeteer/Input.test.s)
+[Full sample](../../../../sample/puppeteer/Input.test.s)

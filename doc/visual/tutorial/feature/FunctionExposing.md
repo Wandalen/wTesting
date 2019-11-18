@@ -1,4 +1,4 @@
-## Abstract
+## Function exposing
 How to register user-defined function on window object and call it from the page.
 
 ## Puppeteer

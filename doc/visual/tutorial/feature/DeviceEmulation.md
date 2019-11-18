@@ -1,4 +1,4 @@
-## Abstract
+## Device emulation
 How to simulate other device.
 Device simulation can be used to test how page looks on different browser,screen size,etc.
 

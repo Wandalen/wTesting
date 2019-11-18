@@ -1,4 +1,4 @@
-## Abstract
+## Element API
 How to use Element API to interact with DOM element. 
 
 This interface can be used to:

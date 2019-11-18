@@ -1,4 +1,4 @@
-## Abstract
+## Workerks API
 How to get list of available workers and inject js script to execute from worker's context.
 
 ## Spectron

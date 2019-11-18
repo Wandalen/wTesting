@@ -1,4 +1,4 @@
-## Abstract
+## Browser API
 How to get information about browser like user agent,version and window size.
 
 [Spectron Browser API](https://webdriver.io/docs/api.html)

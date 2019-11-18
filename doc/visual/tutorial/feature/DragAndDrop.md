@@ -1,4 +1,4 @@
-## Abstract
+## Drag and drop
 How to move elements on the page.
 
 ## Spectron

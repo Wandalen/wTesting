@@ -1,4 +1,4 @@
-## Abstract
+## Electron API
 How to use Electron API from Spectron. Get current window title.
 
 ## Spectron

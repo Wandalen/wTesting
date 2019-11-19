@@ -4,7 +4,32 @@ Samples are using custom user data directory to cache localStorage.
 
 ## Spectron
 ```javascript
+  test.case = 'create new item'
+  var app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ],
+    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
+  })
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  await app.client.localStorage( 'POST', { key : 'itemKey', value : 'itemValue' })
+  await app.stop();
   
+  //
+  
+  test.case = 'open browser again and get item value'
+  var app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ],
+    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
+  })
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  var got = await app.client.localStorage( 'GET', 'itemKey' );
+  test.identical( got.value, 'itemValue' );
+  await app.stop();
 ```
 
 [Full sample](../../../../sample/spectron/LocalStorage.test.s)

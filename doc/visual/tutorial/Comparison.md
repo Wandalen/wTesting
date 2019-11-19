@@ -10,14 +10,14 @@
 | [ Request/Response API ](feature/RequestResponseApi.md)                   | 0        | 2         |
 | [ Dialog API ](feature/DialogApi.md)                             | 0        | 1         |
 | [ Electron API ](feature/ElectronApi.md)                           | 2        | 0         |
-| [ Device emulation ](feature/DeviceEmulation.md)                       | 1        | 2         |
+| [ Device emulation ](feature/DeviceEmulation.md)                       | ?        | 2         |
 | [ Page navigation ](feature/PageNavigation.md)                        | 1        | 1         |
 | [ Function exposing ](feature/FunctionExposing.md)                      | 0        | 1         |
 | [ Commands chaining ](feature/CommandsChaining.md)                      | 1        | 0         |
 | [ Screenshots creation ](feature/ScreenshotsCreation.md)                   | 1        | 2         |
 | [ Screen recording ](feature/ScreenRecording.md)                       | 0        | 0         |
-| [ Drag and drop ](feature/DragAndDrop.md)                          | 2        | 1         |
-| [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | 1        | 1         |
+| [ Drag and drop ](feature/DragAndDrop.md)                          | ?        | ?         |
+| [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | ?        | 1         |
 | [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
 
 #### Legend

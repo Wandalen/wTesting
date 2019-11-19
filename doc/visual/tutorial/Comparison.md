@@ -21,6 +21,7 @@
 | [ LocalStorage support ](feature/LocalStorage.md) | 2        | 1         |
 | [ Opening the HTML page using local path without server ](feature/ServerlessTesting.md) | 1        | 1 |
 | [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
+| [ Performance ](feature/Performance.md)                       |         |       |
 
 #### Legend
 

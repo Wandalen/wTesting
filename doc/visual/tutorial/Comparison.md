@@ -21,7 +21,7 @@
 | [ LocalStorage support ](feature/LocalStorage.md) | 2        | 1         |
 | [ Opening the HTML page using local path without server ](feature/ServerlessTesting.md) | 1        | 1 |
 | [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
-| [ Performance ](feature/Performance.md)                       |         |       |
+| [ Performance ](feature/Performance.md)                       |    0     |   1    |
 
 #### Legend
 
@@ -38,6 +38,7 @@
 - Puppeteer supports only testing in Chrome.
 - Puppeteer has workers API
 - Puppeteer supports headless mode
+- Puppeteer is better for unit tests, as unit tests should be fast enough
 
 - Spectron has more useful methods/shortcuts related to element interaction.
 - Spectron methods return the thenable object, supports command chaining.
@@ -45,6 +46,7 @@
 - Spectron has debug feature( allows to pause browser execution and just into devtools )
 - Spectron has full access to electron API( requires nodeIntegration to be enabled in electron )
 - Spectron does not support headless mode out of the box
+- Spectron is good for integration tests because the integration tests do not have to be fast
 
 [Back to content](../README.md#Tutorials)
 

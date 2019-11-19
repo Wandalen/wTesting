@@ -5954,6 +5954,45 @@ function asyncTestRoutineWithProperty( test )
   return result;
 }
 
+//
+
+function asyncTestRoutineCatchTimeout( test )
+{
+  async function asyncTest( t )
+  {
+    try 
+    {  
+      await _.timeOut( 2000 )
+    }
+    catch( err ) 
+    { 
+      _.errAttend( err );
+    }
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { asyncTest },
+    routineTimeOut : 1000,
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  { 
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.testCheckFails, 0 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
+
 // --
 // declare
 // --
@@ -6043,7 +6082,7 @@ var Self =
     asyncTestRoutine,
     syncTestRoutineWithProperty,
     asyncTestRoutineWithProperty,
-
+    asyncTestRoutineCatchTimeout,
   },
 
 }

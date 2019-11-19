@@ -1,8 +1,10 @@
 ## LocalStorage support
 How to set and get localStorage item using Spectron and Puppeteer.
-Samples are using custom user data directory to cache localStorage.
+Samples are using custom user data directory to persist localStorage between launches of the browser.
 
 ## Spectron
+[Spectron localStorage API](http://v4.webdriver.io/api/protocol/localStorage.html)
+
 ```javascript
   test.case = 'create new item'
   var app = new Spectron.Application

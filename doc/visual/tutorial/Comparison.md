@@ -18,7 +18,7 @@
 | [ Screen recording ](feature/ScreenRecording.md)                       | 0        | 0         |
 | [ Drag and drop ](feature/DragAndDrop.md)                          | ?        | ?         |
 | [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | ?        | 1         |
-| [ LocalStorage support ](feature/LocalStorage.md) | ?        | 1         |
+| [ LocalStorage support ](feature/LocalStorage.md) | 2        | 1         |
 | [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
 
 #### Legend

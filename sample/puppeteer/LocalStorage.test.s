@@ -42,9 +42,9 @@ function onSuiteEnd()
 async function localStorage( test )
 {
   let self = this;
-  let userDataDirPath = _.path.nativize( _.path.join( __dirname, 'user-dir' ) );
   let routinePath = _.path.join( self.tempDir, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+  let userDataDirPath = _.path.nativize( _.path.join( routinePath, 'user-dir' ) );
   indexHtmlPath = _.path.nativize( indexHtmlPath );
   
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })

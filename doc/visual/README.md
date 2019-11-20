@@ -76,7 +76,7 @@
  How to fill input fields of a form and click submit button.
 </details>
 
-<details><summary><a href="./tutorial/NavigateHistory.md">
+<details><summary><a href="./tutorial/NavigateHistorySpectron.md">
     How to navigate in history.
   </a></summary>
  How to move backward/forward in history and wait until page will be loaded.

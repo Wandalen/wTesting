@@ -39,25 +39,39 @@ function onSuiteEnd()
 
 //
 
-async function deviceEmulation( test )
+async function emulateDevice( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-  
+
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ],
+    args : [ mainPath ]
   })
 
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  //xxx:find how to emulate device
-  var result = await app.client.execute( () => window.navigator.userAgent );
-  console.log( result.value )
+
+  var originalSize = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  
+  test.case = 'emulate mobile screen'
+  await app.webContents.enableDeviceEmulation
+  ({ 
+    screenPosition : 'mobile',
+    screenSize : { width : 400, height: 600 } 
+  })
+  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  test.identical( size.value , { width : 400, height: 600 } )
+  
+  test.case = 'disable emulation'
+  await app.webContents.disableDeviceEmulation()
+  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  test.identical( size.value , originalSize.size )
+
   await app.stop();
 
   return null;
@@ -70,7 +84,7 @@ async function deviceEmulation( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.DeviceEmulation',
+  name : 'Visual.Spectron.Device',
   silencing : 1,
   enabled : 1,
 
@@ -86,7 +100,7 @@ var Self =
 
   tests :
   {
-    deviceEmulation,
+    emulateDevice,
   }
 
 }

@@ -5956,42 +5956,40 @@ function asyncTestRoutineWithProperty( test )
 
 //
 
-function asyncTestRoutineCatchTimeout( test )
-{
-  async function asyncTest( t )
-  {
-    try 
-    {  
-      await _.timeOut( 2000 )
-    }
-    catch( err ) 
-    { 
-      _.errAttend( err );
-    }
+async function asyncTestRoutineCatchTimeout( test )
+{ 
+  let isRunning = true;
+  
+  try 
+  { 
+    //simulates wait for condition
+    await _.timeOut( 5000 )
+    //simulates wait for app stop
+    await stop();
+  }
+  catch( err ) 
+  { 
+    if( isRunning )
+    await stop();
   }
   
-  var suite = wTestSuite
-  ({
-    tests : { asyncTest },
-    routineTimeOut : 1000,
-    override : notTakingIntoAccount,
-    ignoringTesterOptions : 1,
-  });
-
-  var result = suite.run()
-  .finally( function( err, data )
-  { 
-    test.identical( suite.report.testCheckPasses, 0 );
-    test.identical( suite.report.testCheckFails, 0 );
-
-    if( err )
-    throw err;
-
-    return null;
-  });
-
-  return result;
+  test.identical( isRunning, false )
+  
+  return null;
+  
+  /* */
+  
+  function stop()
+  {
+    return _.timeOut( 100, () => 
+    {
+      isReturn = false;
+      return isReturn;
+    })
+  }
 }
+
+asyncTestRoutineCatchTimeout.timeOut = 2000;
 
 // --
 // declare

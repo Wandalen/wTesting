@@ -383,7 +383,7 @@ function _form()
 
   _.mapExtend( suite, extend );
 
-  /* refine test routines */
+  /* form test routines */
 
   for( let testRoutineName in suite.tests )
   {
@@ -398,10 +398,9 @@ function _form()
       suite : suite,
     });
 
-    trd.refine();
+    trd.form();
 
-    suite.tests[ testRoutineName ] = trd;
-
+    _.assert( suite.tests[ testRoutineName ] === trd )
   }
 
   /* */
@@ -414,6 +413,7 @@ function _form()
   _.assert( wTester.settings.sanitareTime >= 0 );
   _.assert( _.numberIs( suite.verbosity ) );
 
+  return suite;
 }
 
 //
@@ -755,9 +755,6 @@ function _end( err )
 
   /* */
 
-  // if( suite.debug )
-  // debugger;
-
   if( !wTester.activeSuites.length && !wTester.quedSuites.length )
   wTester._testingEndSoon();
 
@@ -833,7 +830,7 @@ function onSuiteEnd( t )
 function _testRoutineRun( trd )
 {
   let suite = this;
-  let result = null;
+  // let result = null;
   let report = suite.report;
 
   /* */
@@ -841,56 +838,57 @@ function _testRoutineRun( trd )
   if( !wTester._canContinue() )
   return null;
 
-  if( !trd.able )
+  if( !trd.runnable )
   return null;
 
   /* */
 
-  _.assert( _.routineIs( trd._testRoutineEndHandle ) );
+  // _.assert( _.routineIs( trd._runFinally ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   return suite._routineCon
-  .finally( function _testRoutineRun()
-  {
-
-    trd._testRoutineBegin();
-
-    trd._timeOutCon = _.timeOut( trd.timeOut );
-    trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
-    .tap( ( err, arg ) =>
-    {
-      if( err )
-      _.errAttend( err );
-    });
-
-    /* */
-
-    try
-    {
-      result = trd.routine.call( suite.context, trd );
-      if( result === undefined )
-      result = null;
-    }
-    catch( err )
-    {
-      result = new _.Consequence().error( _.err( err ) );
-    }
-
-    /* */
-
-    result = trd._returnCon = _.Consequence.From( result );
-
-    if( Config.debug && !result.tag )
-    result.tag = trd.name;
-
-    result.andKeep( suite._inroutineCon );
-
-    result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
-
-    result.finally( ( err, msg ) => trd._testRoutineEndHandle( err, msg ) );
-
-    return result;
-  })
+  .then( () => trd._run() )
+  // .finally( function _testRoutineRun()
+  // {
+  //
+  //   trd._testRoutineBegin();
+  //
+  //   trd._timeOutCon = _.timeOut( trd.timeOut );
+  //   trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
+  //   .tap( ( err, arg ) =>
+  //   {
+  //     if( err )
+  //     _.errAttend( err );
+  //   });
+  //
+  //   /* */
+  //
+  //   try
+  //   {
+  //     result = trd.routine.call( suite.context, trd );
+  //     if( result === undefined )
+  //     result = null;
+  //   }
+  //   catch( err )
+  //   {
+  //     result = new _.Consequence().error( _.err( err ) );
+  //   }
+  //
+  //   /* */
+  //
+  //   result = trd._returnCon = _.Consequence.From( result );
+  //
+  //   if( Config.debug && !result.tag )
+  //   result.tag = trd.name;
+  //
+  //   result.andKeep( suite._inroutineCon );
+  //
+  //   result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
+  //
+  //   result.finally( ( err, msg ) => trd._runFinally( err, msg ) );
+  //
+  //   return result;
+  // })
   .split();
 
 }
@@ -990,7 +988,6 @@ function _reportToStr()
   let suite = this;
   let report = suite.report;
   let msg = '';
-  // let appExitCode = _.process.exitCode();
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   msg = 'ExitCode : ' + report.appExitCode + '\n';

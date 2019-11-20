@@ -2,19 +2,6 @@
 
 'use strict';
 
-/*
-qqq :
-  extend test coverage for _.entityIdentical, take into account BigInt
-  extend test coverage for _.entityEquivalent, take into account BigInt
-  extend test coverage for _.entityContain, take into account BigInt
-
-qqq :
-  implement test routine
-  3 test suites, first and third are ok, second has none test routines. general outcome should be fail
-  3 test routines, first and third are ok, second has none test routines. general outcome and test suite outcome should be fail
-
-*/
-
 //
 
 /**
@@ -44,25 +31,27 @@ function init( o )
   let trd = this;
 
   trd[ accuracyEffectiveSymbol ] = null;
-
   _.workpiece.initFields( trd );
-
   Object.preventExtensions( trd );
 
   if( o )
   trd.copy( o );
 
-  trd._adoptRoutineFields();
-  trd._accuracyChange();
-  trd._returnCon = null;
-
-  trd._reportBegin();
+  // trd._adoptRoutineFields();
+  // trd._accuracyChange();
+  // trd._returnCon = null;
+  //
+  // trd._reportBegin();
 
   _.assert( _.routineIs( trd.routine ) );
-  _.assert( _.strDefined( trd.routine.name ), 'Test routine should have name, ' + trd.name + ' test routine of test suite', trd.suite.decoratedNickName, 'does not have name' );
   _.assert( Object.isPrototypeOf.call( wTestSuite.prototype, trd.suite ) );
   _.assert( Object.isPrototypeOf.call( Self.prototype, trd ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert
+  (
+    _.strDefined( trd.routine.name ),
+    `Test routine should have name ${trd.name} test routine of test suite ${trd.suite.decoratedNickName} does not have name`
+  );
 
   let proxy =
   {
@@ -83,30 +72,40 @@ function init( o )
 
 /**
  * @summary Ensures that instance has all required properties defined.
- * @function refine
+ * @function form
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function refine()
+function form()
 {
   let trd = this;
   let routine = trd.routine;
-  // let preStr = 'Test routine ' + wTester.textColor( trd.absoluteName, 'path' ); xxx
-  let preStr = trd.decoratedAbsoluteName;
+  let name = trd.decoratedAbsoluteName;
+  let suite = trd.suite;
 
-  _.sureMapHasOnly
+  trd._returnCon = null;
+  trd._adoptRoutineFields();
+  trd._accuracyChange();
+  trd._reportBegin();
+
+  _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), name, 'Expects bool like in field {-experimental-} if defined' );
+  _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), name, 'Expects number in field {-timeOut-} if defined' );
+  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), name, 'Expects number in field {-routineTimeOut-} if defined' );
+  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), name, 'Expects number or range in field {-accuracy-} if defined' );
+  _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), name, 'Expects number in field {-rapidity-} if defined' );
+
+  _.assert
   (
-    routine,
-    wTester.TestRoutine.KnownFields,
-    preStr + ' has unknown fields :'
+    _.strDefined( trd.name ),
+    `Test routine should have name ${trd.name} test routine of test suite ${trd.suite.decoratedNickName} does not have name`
   );
+  _.assert( suite instanceof wTestSuite );
+  _.assert( suite.tests[ trd.name ] === routine || suite.tests[ trd.name ] === trd );
 
-  _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), preStr, 'Expects bool like in field {-experimental-} if defined' );
-  _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), preStr, 'Expects number in field {-timeOut-} if defined' );
-  _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), preStr, 'Expects number in field {-routineTimeOut-} if defined' );
-  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), preStr, 'Expects number or range in field {-accuracy-} if defined' );
-  _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), preStr, 'Expects number in field {-rapidity-} if defined' );
+  suite.tests[ trd.name ] = trd;
 
+  trd._formed = 1;
+  return trd;
 }
 
 // --
@@ -155,10 +154,6 @@ function _accuracyChange()
   else
   result = trd.suite.accuracy;
 
-  // if( trd.accuracyRange )
-  // debugger;
-  // if( trd.accuracyRange )
-
   if( _.arrayIs( trd[ accuracySymbol ] ) )
   result = _.numberClamp( result, trd[ accuracySymbol ] );
 
@@ -184,7 +179,6 @@ function _timeOutGet()
 function _timeOutSet( timeOut )
 {
   let trd = this;
-  // debugger;
   _.assert( timeOut === null || _.numberIs( timeOut ) );
   trd[ timeOutSymbol ] = timeOut;
   return timeOut;
@@ -237,8 +231,23 @@ function _usingSourceCodeSet( usingSourceCode )
 function _adoptRoutineFields()
 {
   let trd = this;
+  let routine = trd.routine;
+  let name = trd.decoratedAbsoluteName;
 
-  _.mapExtendByDefined( trd, _.mapOnly( trd.routine, trd.KnownFields ) );
+  // _.mapExtendByDefined( trd, _.mapOnly( routine, trd.RoutineFields ) );
+
+  for( let f in trd.RoutineFields )
+  {
+    if( routine[ f ] !== undefined )
+    trd[ trd.RoutineFields[ f ] ] = routine[ f ];
+  }
+
+  _.sureMapHasOnly
+  (
+    routine,
+    wTester.TestRoutine.RoutineFields,
+    name + ' has unknown fields :'
+  );
 
 }
 
@@ -246,13 +255,59 @@ function _adoptRoutineFields()
 // run
 // --
 
-function _testRoutineBegin()
+function _run()
+{
+  let trd = this;
+  let suite = trd.suite;
+  let result;
+
+  trd._runBegin();
+
+  trd._timeOutCon = _.timeOut( trd.timeOut );
+  trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
+  .tap( ( err, arg ) =>
+  {
+    if( err )
+    _.errAttend( err );
+  });
+
+  /* */
+
+  try
+  {
+    result = trd.routine.call( suite.context, trd );
+    if( result === undefined )
+    result = null;
+  }
+  catch( err )
+  {
+    result = new _.Consequence().error( _.err( err ) );
+  }
+
+  /* */
+
+  result = trd._returnCon = _.Consequence.From( result );
+
+  if( Config.debug && !result.tag )
+  result.tag = trd.name;
+
+  result.andKeep( suite._inroutineCon );
+
+  result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
+
+  result.finally( ( err, msg ) => trd._runFinally( err, msg ) );
+
+  return result;
+}
+
+//
+
+function _runBegin()
 {
   let trd = this;
   let suite = trd.suite;
 
   _.assert( !!wTester );
-  // if( wTester )
   trd._testRoutineBeginTime = _.timeNow();
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
@@ -265,7 +320,6 @@ function _testRoutineBegin()
 
   let msg =
   [
-    // 'Running test routine ( ' + trd.routine.name + ' ) ..'
     `Running ${trd.decoratedAbsoluteName} ..`
   ];
 
@@ -308,7 +362,7 @@ function _testRoutineBegin()
 
 //
 
-function _testRoutineEnd()
+function _runEnd()
 {
   let trd = this;
   let suite = trd.suite;
@@ -406,7 +460,6 @@ function _testRoutineEnd()
     timingStr = 'in ' + _.timeSpentFormat( trd.report.timeSpent );
   }
 
-  // let str = ( ok ? 'Passed' : 'Failed' ) + ' test routine ( ' + trd.absoluteName + ' )' + timingStr;
   let str = ( ok ? 'Passed' : 'Failed' ) + ` ${trd.absoluteName} ${timingStr}`;
 
   str = wTester.textColor( str, ok );
@@ -431,12 +484,10 @@ function _testRoutineEnd()
 
 //
 
-function _testRoutineEndHandle( err, arg )
+function _runFinally( err, arg )
 {
   let trd = this;
   let suite = trd.suite;
-
-  // debugger;
 
   _.assert( arguments.length === 2 );
 
@@ -454,17 +505,17 @@ function _testRoutineEndHandle( err, arg )
       err : err,
     });
 
-    trd._testRoutineEnd();
+    trd._runEnd();
     return err;
   }
 
-  trd._testRoutineEnd();
+  trd._runEnd();
   return arg;
 }
 
 //
 
-function _interruptMaybe( throwing )
+function _runInterruptMaybe( throwing )
 {
   let trd = this;
 
@@ -502,7 +553,7 @@ function _interruptMaybe( throwing )
 
 //
 
-function _ableGet()
+function _runnableGet()
 {
   let trd = this;
   let suite = trd.suite;
@@ -527,11 +578,8 @@ function _timeOutError()
 {
   let trd = this;
 
-  // debugger;
-
   let err = _._err
   ({
-    // args : [ 'Test routine ' + _.strQuote( trd.absoluteName ) + ' timed out. TimeOut : ' + trd.timeOut + 'ms' ],
     args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
   });
@@ -548,7 +596,7 @@ function _timeOutError()
 }
 
 // --
-// tests groups
+// checks grouping
 // --
 
 function _willGet()
@@ -564,7 +612,7 @@ function _willSet( src )
   let trd = this;
 
   if( wTester.report )
-  trd._interruptMaybe( 1 );
+  trd._runInterruptMaybe( 1 );
 
   trd[ descriptionSymbol ] = src
 }
@@ -718,7 +766,7 @@ function _testsGroupChange()
 
   trd.will = '';
   trd.testCaseClose();
-  trd._interruptMaybe( 1 );
+  trd._runInterruptMaybe( 1 );
 
 }
 
@@ -1011,7 +1059,7 @@ function _outcomeReport( o )
   logger.end( 'check', 'checkIndex' );
   logger.end({ verbosity : o.verbosity });
 
-  trd._interruptMaybe( 1 );
+  trd._runInterruptMaybe( 1 );
 
   /* */
 
@@ -1182,7 +1230,6 @@ function exceptionReport( o )
   let msg = null;
   if( o.considering )
   {
-    // debugger;
     /* qqq : implement and cover different message if time out */
     msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
   }
@@ -2995,7 +3042,7 @@ let rapiditySymbol = Symbol.for( 'rapidity' );
 let usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
 
 /**
- * @typedef {Object} KnownFields
+ * @typedef {Object} RoutineFields
  * @property {Boolean} experimental
  * @property {Number} routineTimeOut
  * @property {Number} timeOut
@@ -3005,15 +3052,15 @@ let usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
  * @memberof module:Tools/Tester.wTestRoutineDescriptor
  */
 
-let KnownFields =
+let RoutineFields =
 {
-  experimental : null,
-  routineTimeOut : null,
-  timeOut : null,
-  accuracy : null,
-  rapidity : null,
-  usingSourceCode : null,
-  description : null,
+  experimental : 'experimental',
+  routineTimeOut : 'timeOut',
+  timeOut : 'timeOut',
+  accuracy : 'accuracy',
+  rapidity : 'rapidity',
+  usingSourceCode : 'usingSourceCode',
+  description : 'routineDescription', /* qqq : implement separate test routine per each test routine option */
 }
 
 /**
@@ -3041,6 +3088,7 @@ let Composes =
   timeOut : null,
   experimental : 0,
   usingSourceCode : null,
+  routineDescription : null,
 }
 
 let Aggregates =
@@ -3056,6 +3104,7 @@ let Associates =
 let Restricts =
 {
 
+  _formed : 0,
   _checkIndex : 1,
   _checksStack : _.define.own( [] ),
   _testsGroupOpenedWithCase : 0,
@@ -3075,7 +3124,7 @@ let Restricts =
 
 let Statics =
 {
-  KnownFields,
+  RoutineFields,
   strictEventHandling : 0,
 }
 
@@ -3097,7 +3146,7 @@ let AccessorsReadOnly =
   descriptionFull : 'descriptionFull',
   descriptionWithName : 'descriptionWithName',
   accuracyEffective : 'accuracyEffective',
-  able : 'able',
+  runnable : 'runnable',
 }
 
 let Accessors =
@@ -3128,7 +3177,7 @@ let Extend =
   // inter
 
   init,
-  refine,
+  form,
 
   // accessor
 
@@ -3150,15 +3199,16 @@ let Extend =
 
   // run
 
-  _testRoutineBegin,
-  _testRoutineEnd,
-  _testRoutineEndHandle,
+  _run,
+  _runBegin,
+  _runEnd,
+  _runFinally,
 
-  _interruptMaybe,
-  _ableGet,
+  _runInterruptMaybe,
+  _runnableGet,
   _timeOutError,
 
-  // tests groups
+  // checks grouping
 
   _willGet,
   _willSet,

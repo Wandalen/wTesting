@@ -5653,20 +5653,6 @@ asyncExperiment.experimental = 1;
 
 //
 
-function failExperiment( test )
-{
-
-  test.case = 'this test fails';
-
-  test.identical( 0, 1 );
-  test.identical( 0, 1 );
-
-}
-
-failExperiment.experimental = 1;
-
-//
-
 function mustNotThrowErrorExperiment( test )
 {
 
@@ -5849,21 +5835,21 @@ function asyncTestRoutine( test )
   var testRoutine;
 
   async function asyncTest( t )
-  { 
+  {
     testRoutine = t;
-    
+
     var got = await new _.Consequence().take( 1 );
     t.identical( got, 1 );
-  
+
     var got = await _.timeOut( 1000, () => 2 );
     t.identical( got, 2 );
-    
+
     var got = await Promise.resolve( 3 )
     t.identical( got, 3 );
-    
+
     return null;
   }
-  
+
   var suite = wTestSuite
   ({
     tests : { asyncTest },
@@ -5874,9 +5860,48 @@ function asyncTestRoutine( test )
   var result = suite.run()
   .finally( function( err, data )
   {
+
     var acheck = testRoutine.checkCurrent();
     test.identical( acheck.checkIndex, 4 );
     test.identical( suite.report.testCheckPasses, 3 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function syncTestRoutineWithProperty( test )
+{
+  var trd;
+
+  function syncTest( t )
+  {
+    trd = t;
+    t.identical( 1, 1 );
+  }
+
+  syncTest.description = 'description';
+
+  var suite = wTestSuite
+  ({
+    tests : { syncTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
+
+    var acheck = trd.checkCurrent();
+    test.identical( acheck.checkIndex, 2 );
+    test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 0 );
 
     if( err )
@@ -5892,17 +5917,17 @@ function asyncTestRoutine( test )
 
 function asyncTestRoutineWithProperty( test )
 {
-  var testRoutine;
+  var trd;
 
   async function asyncTest( t )
-  { 
-    testRoutine = t;
+  {
+    trd = t;
     var got = await Promise.resolve( 1 );
     t.identical( got, 1 );
-    return got;
+    // return got; /* xxx */
   }
-  
-  asyncTest.description = 'description'
+
+  asyncTest.description = 'description';
 
   var suite = wTestSuite
   ({
@@ -5915,7 +5940,7 @@ function asyncTestRoutineWithProperty( test )
   .finally( function( err, data )
   {
 
-    var acheck = testRoutine.checkCurrent();
+    var acheck = trd.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 0 );
@@ -5928,6 +5953,43 @@ function asyncTestRoutineWithProperty( test )
 
   return result;
 }
+
+//
+
+async function asyncTestRoutineCatchTimeout( test )
+{ 
+  let isRunning = true;
+  
+  try 
+  { 
+    //simulates wait for condition
+    await _.timeOut( 5000 )
+    //simulates wait for app stop
+    await stop();
+  }
+  catch( err ) 
+  { 
+    if( isRunning )
+    await stop();
+  }
+  
+  test.identical( isRunning, false )
+  
+  return null;
+  
+  /* */
+  
+  function stop()
+  {
+    return _.timeOut( 100, () => 
+    {
+      isReturn = false;
+      return isReturn;
+    })
+  }
+}
+
+asyncTestRoutineCatchTimeout.timeOut = 2000;
 
 // --
 // declare
@@ -6007,7 +6069,6 @@ var Self =
     // etc
 
     asyncExperiment,
-    failExperiment,
     mustNotThrowErrorExperiment,
     experimentTimeOutSyncNoChecks,
     experimentTimeOutSync,
@@ -6015,10 +6076,11 @@ var Self =
 
     onSuiteBeginThrowError,
     onSuiteEndThrowError,
-    
-    asyncTestRoutine,
-    asyncTestRoutineWithProperty
 
+    asyncTestRoutine,
+    syncTestRoutineWithProperty,
+    asyncTestRoutineWithProperty,
+    asyncTestRoutineCatchTimeout,
   },
 
 }

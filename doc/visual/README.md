@@ -70,7 +70,7 @@
   How to register condition and wait until it will be fulfilled with a truthy value. 
 </details>
 
-<details><summary><a href="./tutorial/SubmitForm.md">
+<details><summary><a href="./tutorial/SubmitFormSpectron.md">
     How to fill and submit a form.
   </a></summary>
  How to fill input fields of a form and click submit button.

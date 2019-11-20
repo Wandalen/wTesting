@@ -1,6 +1,6 @@
 ## How to find DOM element on page and access it properties using Spectron
 
-Please check out [previous tutorial](FirstSpectronTemplate.md) if you don't have test suite prepared.
+Please check out [previous tutorial](FirstSpectronTest.md) if you don't have test suite prepared.
 
 ## Write a test routine
 Add following test routine to your suite:

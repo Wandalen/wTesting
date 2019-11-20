@@ -2,15 +2,11 @@
 How to move elements on the page.
 
 ## Spectron
-```javascript
-```
-[Full sample](../../../../sample/spectron/DragAndDrop.test.s)
+
+>Does not work on Spectron v7.0.0
 
 ## Puppeteer
 
-```javascript
-```
-[Full sample](../../../../sample/puppeteer/DragAndDrop.test.s)
-
+>Does not work on Puppeteer v2.0.0
 
 [Back to content](../Comparison.md)

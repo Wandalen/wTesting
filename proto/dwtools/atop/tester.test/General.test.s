@@ -5636,91 +5636,6 @@ function appExitCode( test )
 // etc
 // --
 
-function asyncExperiment( test )
-{
-  var con = _.timeOutError( 1000 );
-
-  test.identical( 0, 0 );
-
-  con.finally( function()
-  {
-  });
-
-  return con;
-}
-
-asyncExperiment.experimental = 1;
-
-//
-
-function mustNotThrowErrorExperiment( test )
-{
-
-  test.case = 'mustNotThrowError experiment';
-
-  var con = test.mustNotThrowError( function()
-  {
-    console.log( 'x' );
-    return _.timeOut( 500 );
-  });
-
-  // var con = test.returnsSingleResource( function()
-  // {
-  //   throw _.err( 'err1' );
-  // });
-
-  // var con = test.shouldThrowErrorOfAnyKind( function()
-  // {
-  //   throw _.err( 'err1' );
-  // });
-
-  return con;
-}
-
-mustNotThrowErrorExperiment.experimental = 1;
-
-//
-
-function experimentTimeOutSyncNoChecks( test )
-{
-  /* No test check after waitSync - timeOut error is not thrown, but expected*/
-
-  test.identical( test.timeOut, 3000 );
-  waitSync( 4 );//4000ms
-}
-
-experimentTimeOutSyncNoChecks.experimental = 1;
-experimentTimeOutSyncNoChecks.timeOut = 3000;
-
-//
-
-function experimentTimeOutSync( test )
-{
-  /*
-    Test check after waitSync - timeOut error is thrown, but not expected
-    because timeOut is set to 8000
-  */
-  waitSync( 6 ); //6000ms
-  test.identical( test.timeOut, 8000 );
-}
-
-experimentTimeOutSync.experimental = 1;
-experimentTimeOutSync.timeOut = 8000;
-
-//
-
-function experimentTimeOutAsync( test )
-{
-  /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
-  test.identical( test.timeOut, 8000 );
-  return _.timeOut( 6000 );
-}
-
-experimentTimeOutAsync.experimental = 1;
-experimentTimeOutAsync.timeOut = 8000;
-
-//
-
 function onSuiteBeginThrowError( test )
 {
   function trivial( t )
@@ -5954,6 +5869,134 @@ function asyncTestRoutineWithProperty( test )
   return result;
 }
 
+//
+
+function asyncTimeout1()
+{
+  var trd;
+
+  async function asyncTest( t )
+  {
+    trd = t;
+    var got = await Promise.resolve( 1 );
+    t.identical( got, 1 );
+    // return got; /* xxx */
+  }
+
+  asyncTest.description = 'description';
+
+  var suite = wTestSuite
+  ({
+    tests : { asyncTest },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
+
+    var acheck = trd.checkCurrent();
+    test.identical( acheck.checkIndex, 2 );
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.testCheckFails, 0 );
+
+    if( err )
+    throw err;
+
+    return null;
+  });
+
+  return result;
+}
+
+// --
+// experiment
+// --
+
+function asyncExperiment( test )
+{
+  var con = _.timeOutError( 1000 );
+
+  test.identical( 0, 0 );
+
+  con.finally( function()
+  {
+  });
+
+  return con;
+}
+
+asyncExperiment.experimental = 1;
+
+//
+
+function mustNotThrowErrorExperiment( test )
+{
+
+  test.case = 'mustNotThrowError experiment';
+
+  var con = test.mustNotThrowError( function()
+  {
+    console.log( 'x' );
+    return _.timeOut( 500 );
+  });
+
+  // var con = test.returnsSingleResource( function()
+  // {
+  //   throw _.err( 'err1' );
+  // });
+
+  // var con = test.shouldThrowErrorOfAnyKind( function()
+  // {
+  //   throw _.err( 'err1' );
+  // });
+
+  return con;
+}
+
+mustNotThrowErrorExperiment.experimental = 1;
+
+//
+
+function experimentTimeOutSyncNoChecks( test )
+{
+  /* No test check after waitSync - timeOut error is not thrown, but expected*/
+
+  test.identical( test.timeOut, 3000 );
+  waitSync( 4 );//4000ms
+}
+
+experimentTimeOutSyncNoChecks.experimental = 1;
+experimentTimeOutSyncNoChecks.timeOut = 3000;
+
+//
+
+function experimentTimeOutSync( test )
+{
+  /*
+    Test check after waitSync - timeOut error is thrown, but not expected
+    because timeOut is set to 8000
+  */
+  waitSync( 6 ); //6000ms
+  test.identical( test.timeOut, 8000 );
+}
+
+experimentTimeOutSync.experimental = 1;
+experimentTimeOutSync.timeOut = 8000;
+
+//
+
+function experimentTimeOutAsync( test )
+{
+  /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
+  test.identical( test.timeOut, 8000 );
+  return _.timeOut( 6000 );
+}
+
+experimentTimeOutAsync.experimental = 1;
+experimentTimeOutAsync.timeOut = 8000;
+
 // --
 // declare
 // --
@@ -6031,18 +6074,22 @@ var Self =
 
     // etc
 
-    asyncExperiment,
-    mustNotThrowErrorExperiment,
-    experimentTimeOutSyncNoChecks,
-    experimentTimeOutSync,
-    experimentTimeOutAsync,
-
     onSuiteBeginThrowError,
     onSuiteEndThrowError,
 
     asyncTestRoutine,
     syncTestRoutineWithProperty,
     asyncTestRoutineWithProperty,
+
+    asyncTimeout1,
+
+    // experiment
+
+    asyncExperiment,
+    mustNotThrowErrorExperiment,
+    experimentTimeOutSyncNoChecks,
+    experimentTimeOutSync,
+    experimentTimeOutAsync,
 
   },
 

@@ -1,4 +1,4 @@
-( function _CDP_test_s_( ) {
+( function _SubmitForm_test_s_( ) {
 
 'use strict';
 
@@ -40,35 +40,37 @@ function onSuiteEnd()
 
 //
 
-async function accessChromeDevToolsProtocol( test )
+async function submitForm( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  
+  // Prepare path to electron app script( main.js )
+  let indexHtml = _.path.nativize( _.path.join( __dirname, 'asset/form/index.html' ) );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-
+  // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ indexHtml ]//use path to index html as arg for electron app
   })
 
+  // Start the electron app
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  // Waint until page will be loaded
+  await app.client.waitUntilTextExists( 'p', 'Result', 5000 );
   
-  /* Does not work on Spectron v7.0.0 */
+  // Set input field value
+  await app.client.$( '#input1' ).setValue( '321' );
   
-  await app.webContents.debugger.attach( '1.1' );
-  await app.webContents.debugger.sendCommand( 'Page.enable' );
-  await app.webContents.debugger.sendCommand( 'Page.navigate', { url : 'https://www.npmjs.com/' });
+  //Click submit button
+  await app.client.$( '#submit' ).click();
   
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
-  
-  await app.stop();
+  // Check text result
+  var result = await app.client.$( '#result' ).getText();
+  test.identical( result, 'Result:321' )
 
-  return null;
+  //Stop the electron app
+  return app.stop();
 }
 
 // --
@@ -78,10 +80,8 @@ async function accessChromeDevToolsProtocol( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.CDP',
+  name : 'Visual.Spectron.SubmitForm',
   
-  
-
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -94,7 +94,7 @@ var Self =
 
   tests :
   {
-    accessChromeDevToolsProtocol,
+    submitForm,
   }
 
 }

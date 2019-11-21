@@ -1,4 +1,4 @@
-( function _Device_test_s_( ) {
+( function _LocalStorage_test_s_( ) {
 
 'use strict';
 
@@ -39,39 +39,42 @@ function onSuiteEnd()
 
 //
 
-async function emulateDevice( test )
+async function localStorage( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let userDataDirPath = _.path.nativize( _.path.join( routinePath, 'user-dir' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let app = new Spectron.Application
+  /* Use custom user-data-dir to persist localStorage between launches */
+  
+  test.case = 'create new item'
+  var app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainPath ],
+    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
   })
-
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-
-  var originalSize = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  await app.client.localStorage( 'POST', { key : 'itemKey', value : 'itemValue' })
+  await app.stop();
   
-  test.case = 'emulate mobile screen'
-  await app.webContents.enableDeviceEmulation
-  ({ 
-    screenPosition : 'mobile',
-    screenSize : { width : 400, height: 600 } 
+  //
+  
+  test.case = 'open browser again and get item value'
+  var app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ],
+    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
   })
-  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value , { width : 400, height: 600 } )
-  
-  test.case = 'disable emulation'
-  await app.webContents.disableDeviceEmulation()
-  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value , originalSize.size )
-
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  var got = await app.client.localStorage( 'GET', 'itemKey' );
+  test.identical( got.value, 'itemValue' );
   await app.stop();
 
   return null;
@@ -84,7 +87,7 @@ async function emulateDevice( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Device',
+  name : 'Visual.Spectron.LocalStorage',
   silencing : 1,
   enabled : 1,
 
@@ -100,7 +103,7 @@ var Self =
 
   tests :
   {
-    emulateDevice,
+    localStorage,
   }
 
 }

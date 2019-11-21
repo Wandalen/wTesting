@@ -5875,19 +5875,20 @@ function asyncTimeout1()
 {
   var trd;
 
-  async function asyncTest( t )
+  function testRoutine( t )
   {
     trd = t;
-    var got = await Promise.resolve( 1 );
-    t.identical( got, 1 );
-    // return got; /* xxx */
+    t.description = 'description1';
+    t.identical( 0, 1 );
+    _.timeOut( 500 ).deasyncWait();
+    t.description = 'description2';
   }
 
-  asyncTest.description = 'description';
+  testRoutine.timeOut = 250;
 
   var suite = wTestSuite
   ({
-    tests : { asyncTest },
+    tests : { testRoutine },
     override : notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });

@@ -1,4 +1,4 @@
-( function _CDP_test_s_( ) {
+( function _Serverless_test_s_( ) {
 
 'use strict';
 
@@ -8,9 +8,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
   _.include( 'wFiles' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
-
+  var Puppeteer = require( 'puppeteer' );
 }
 
 var _global = _global_;
@@ -23,9 +21,12 @@ var _ = _global_.wTools;
 function onSuiteBegin()
 {
   let self = this;
+
   self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
+
+//
 
 function onSuiteEnd()
 {
@@ -38,35 +39,33 @@ function onSuiteEnd()
 // tests
 // --
 
-//
-
-async function accessChromeDevToolsProtocol( test )
+async function loadLocalHtmlFile( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let indexHtmlPath = _.path.join( routinePath, 'serverless/index.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let app = new Spectron.Application
-  ({
-    path : ElectronPath,
-    args : [ mainPath ]
-  })
+  let browser = await Puppeteer.launch({ headless : true });
+  let page = await browser.newPage();
 
-  await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await page.goto( 'file:///D:/work/wTesting/sample/puppeteer/asset/serverless/index.html', { waitUntil : 'load' } );
+    
+  test.case = 'script and style files are loaded'
   
-  /* Does not work on Spectron v7.0.0 */
+  var got = await page.evaluate( () => window.scriptLoaded )
+  test.identical( got, true );
   
-  await app.webContents.debugger.attach( '1.1' );
-  await app.webContents.debugger.sendCommand( 'Page.enable' );
-  await app.webContents.debugger.sendCommand( 'Page.navigate', { url : 'https://www.npmjs.com/' });
+  var got = await page.evaluate( () => 
+  {
+    let p = document.querySelector( 'p' );
+    let styles = window.getComputedStyle( p );
+    return styles.getPropertyValue( 'color' )
+  })
+  test.identical( got, 'rgb(192, 192, 192)' );
   
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
-  
-  await app.stop();
+  await browser.close();
 
   return null;
 }
@@ -78,7 +77,7 @@ async function accessChromeDevToolsProtocol( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.CDP',
+  name : 'Visual.Puppeteer.Serverless',
   
   
 
@@ -94,7 +93,7 @@ var Self =
 
   tests :
   {
-    accessChromeDevToolsProtocol,
+    loadLocalHtmlFile
   }
 
 }

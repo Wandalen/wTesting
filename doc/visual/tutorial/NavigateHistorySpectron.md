@@ -1,44 +1,12 @@
-( function _Navigation_test_s_( ) {
+## How to move backward/forward in history and wait until page will be loaded.
 
-'use strict';
+Please check out [previous tutorial](FirstSpectronTest.md) if you don't have test suite prepared.
 
-if( typeof module !== 'undefined' )
-{
-  let _ = require( '../..' );
-  require( 'wFiles' )
+## Write a test routine
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+Add following test routine to your suite:
 
-}
-
-var _global = _global_;
-var _ = _global_.wTools;
-
-// --
-// context
-// --
-
-function onSuiteBegin()
-{
-  let self = this;
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetDirPath = _.path.join( __dirname, 'asset' );
-}
-
-function onSuiteEnd()
-{
-  let self = this;
-  _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
-}
-
-// --
-// tests
-// --
-
-//
-
+```javascript
 async function navigation( test )
 {
   let self = this;
@@ -82,39 +50,22 @@ async function navigation( test )
 
   return null;
 }
+```
 
-// --
-// suite
-// --
+## Register and run test routine
 
-var Self =
-{
+Add test routine to `tests` map and the end of test suite file.
 
-  name : 'Visual.Spectron.Navigation',
-  silencing : 1,
-  enabled : 1,
+To run test routine enter:
+```
+node Spectron.test.ss r:navigation v:5
+```
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
-  routineTimeOut : 300000,
+[Full sample](../../../sample/spectron/Navigation.test.s)
 
-  context :
-  {
-    tempDir : null,
-    assetDirPath : null,
-  },
+[Back to content](../README.md#Tutorials)
 
-  tests :
-  {
-    navigation,
-  }
 
-}
 
-//
 
-Self = wTestSuite( Self );
-if( typeof module !== 'undefined' && !module.parent )
-wTester.test( Self.name );
 
-})();

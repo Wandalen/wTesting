@@ -1,6 +1,6 @@
 ## How to use Spectron to inject a snippet of JavaScript into the page for execution in browser context.
 
-Please check out [previous tutorial](FirstSpectronTemplate.md) if you don't have test suite prepared.
+Please check out [previous tutorial](FirstSpectronTest.md) if you don't have test suite prepared.
 
 ## Write a test routine
 

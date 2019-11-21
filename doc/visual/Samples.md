@@ -8,7 +8,7 @@
 | Request/Response API                   | - | [Sample](../../sample/puppeteer/RequestResponse.test.s)
 | Dialog API                             | - | [Sample](../../sample/puppeteer/Dialog.test.s)
 | Electron API                           | [Sample](../../sample/spectron/Electron.test.s) | -
-| Device emulation                       | [X][Sample](../../sample/spectron/Device.test.s) | [Sample](../../sample/puppeteer/Device.test.s)         |
+| Device emulation                       | [Sample](../../sample/spectron/Device.test.s) | [Sample](../../sample/puppeteer/Device.test.s)         |
 | Page navigation                        | [Sample](../../sample/spectron/Navigation.test.s) | [Sample](../../sample/puppeteer/Navigation.test.s)         |
 | Function exposing                      | - | [Sample](../../sample/puppeteer/FunctionExposing.test.s)
 | Commands chaining                      | [Sample](../../sample/spectron/Chaining.test.s) | -

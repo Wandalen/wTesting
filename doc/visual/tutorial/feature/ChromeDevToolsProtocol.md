@@ -3,6 +3,8 @@ How to establish raw communication with [Chrome DevTools Protocol](https://chrom
 
 ## Spectron
 
+>Does not work on Spectron v7.0.0
+
 Spectron allows to access Chrome DevTools Protocol by using [Electron Debugger API](https://electronjs.org/docs/api/debugger#debuggersendcommandmethod-commandparams-callback).
 
 ```javascript

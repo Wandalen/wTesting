@@ -2,7 +2,7 @@
 
 This tutorial shows how to wait until text property of a DOM element will be changed.
 
-Please check out [previous tutorial](FirstSpectronTemplate.md) if you don't have test suite prepared.
+Please check out [previous tutorial](FirstSpectronTest.md) if you don't have test suite prepared.
 
 ## Write a test routine
 

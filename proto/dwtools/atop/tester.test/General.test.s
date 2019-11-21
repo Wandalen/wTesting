@@ -5954,6 +5954,43 @@ function asyncTestRoutineWithProperty( test )
   return result;
 }
 
+//
+
+async function asyncTestRoutineCatchTimeout( test )
+{ 
+  let isRunning = true;
+  
+  try 
+  { 
+    //simulates wait for condition
+    await _.timeOut( 5000 )
+    //simulates wait for app stop
+    await stop();
+  }
+  catch( err ) 
+  { 
+    if( isRunning )
+    await stop();
+  }
+  
+  test.identical( isRunning, false )
+  
+  return null;
+  
+  /* */
+  
+  function stop()
+  {
+    return _.timeOut( 100, () => 
+    {
+      isReturn = false;
+      return isReturn;
+    })
+  }
+}
+
+asyncTestRoutineCatchTimeout.timeOut = 2000;
+
 // --
 // declare
 // --
@@ -6043,7 +6080,7 @@ var Self =
     asyncTestRoutine,
     syncTestRoutineWithProperty,
     asyncTestRoutineWithProperty,
-
+    asyncTestRoutineCatchTimeout,
   },
 
 }

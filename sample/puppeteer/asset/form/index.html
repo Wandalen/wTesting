@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>Form examples</title>
+</head>
+<body>
+	<form name="testForm" method="post" onsubmit="return validate()">
+		Value:<input type="text" id="input1" name="input1" >
+		<input type="submit" value="Submit" id="submit">
+		<p id="result">Result:</p>
+  </form>
+  <script>
+    function validate()
+    {
+      var result =document.getElementById("result");
+      result.innerText = 'Result:' + document.forms["testForm"]["input1"].value;
+      return false;
+    }
+  </script>
+</body>
+</html>

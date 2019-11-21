@@ -1,6 +1,6 @@
 ## How to find DOM element on page and access it properties using Puppeteer
 
-Please check out [previous tutorial](FirstPuppeteerTemplate.md) if you don't have test suite prepared.
+Please check out [previous tutorial](FirstPuppeteerTest.md) if you don't have test suite prepared.
 
 ## Write a test routine
 Add following test routine to your suite:

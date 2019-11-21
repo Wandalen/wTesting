@@ -5871,7 +5871,7 @@ function asyncTestRoutineWithProperty( test )
 
 //
 
-function asyncTimeout1()
+function syncTimeout1()
 {
   var trd;
 
@@ -6082,7 +6082,7 @@ var Self =
     syncTestRoutineWithProperty,
     asyncTestRoutineWithProperty,
 
-    asyncTimeout1,
+    syncTimeout1,
 
     // experiment
 

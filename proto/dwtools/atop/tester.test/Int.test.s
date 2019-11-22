@@ -1,13 +1,6 @@
-( function _General_test_s_( ) {
+( function _Int_test_s_( ) {
 
 'use strict';
-
-/*
-
-node builder/include/dwtools/atop/tester/zTesting.test.s v:4 n:1
-echo $?
-
-*/
 
 if( typeof module !== 'undefined' )
 {
@@ -5871,9 +5864,10 @@ function asyncTestRoutineWithProperty( test )
 
 //
 
-function syncTimeout1()
+function syncTimeout1( test )
 {
-  var trd;
+  let trd;
+  let testRoutineDone = 0;
 
   function testRoutine( t )
   {
@@ -5882,9 +5876,145 @@ function syncTimeout1()
     t.identical( 0, 1 );
     _.timeOut( 500 ).deasyncWait();
     t.description = 'description2';
+    testRoutineDone = 1;
   }
 
   testRoutine.timeOut = 250;
+
+  var suite = wTestSuite
+  ({
+    name : 'TestSuiteSyncTimeout1',
+    tests : { testRoutine },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+
+    var acheck = trd.checkCurrent();
+    test.identical( acheck.checkIndex, 3 );
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.testCheckFails, 2 );
+
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+    test.identical( testRoutineDone, 0 );
+
+    if( err )
+    throw err;
+    return null;
+  });
+
+  return result;
+}
+
+syncTimeout1.timeOut = 300000;
+syncTimeout1.description =
+`
+- test failed because of time out
+- error detected synchonously in description setter
+- tester works, despite of timeout error
+`
+
+/* qqq : ask
+write equivalen external test
+- make sure error is printed with default verbosity
+- make sure error message has proper message
+*/
+
+//
+
+function syncTimeout2( test )
+{
+  let trd;
+  let counter = 0;
+  let testRoutineDone = 0;
+
+  function testRoutine( t )
+  {
+    trd = t;
+    t.description = 'description1';
+    t.identical( 0, 1 );
+    _.timeOut( 500 ).deasyncWait();
+    t.identical( 1, 1 );
+    testRoutineDone = 1;
+  }
+
+  testRoutine.timeOut = 250;
+
+  var suite = wTestSuite
+  ({
+    name : 'TestSuiteSyncTimeout2',
+    tests : { testRoutine },
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+
+    var acheck = trd.checkCurrent();
+    test.identical( acheck.checkIndex, 4 );
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.testCheckFails, 2 );
+
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+    test.identical( testRoutineDone, 0 );
+
+    if( err )
+    throw err;
+    return null;
+  });
+
+  test.is( false );
+
+  return result;
+}
+
+syncTimeout2.timeOut = 300000;
+syncTimeout2.description =
+`
+- test failed because of time out
+- error detected synchonously in test check
+- tester works, despite of timeout error
+`
+
+//
+
+function asyncTimeout1( test )
+{
+  let trd;
+  let counter = 0;
+  let v0 = 0;
+  let v1 = 0;
+  let v2 = 0;
+  let v3 = 0;
+
+  function testRoutine( t )
+  {
+    trd = t;
+    t.description = 'description1';
+    v0 = 1;
+    return _.timeOut( 200, () =>
+    {
+      v1 = 1;
+      t.identical( 0, 1 );
+      t.identical( 1, 1 );
+      v2 = 1;
+    })
+  }
+
+  testRoutine.timeOut = 100;
 
   var suite = wTestSuite
   ({
@@ -5893,23 +6023,50 @@ function syncTimeout1()
     ignoringTesterOptions : 1,
   });
 
-  var result = suite.run()
-  .finally( function( err, data )
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
   {
 
     var acheck = trd.checkCurrent();
-    test.identical( acheck.checkIndex, 2 );
+    test.identical( acheck.checkIndex, 4 );
     test.identical( suite.report.testCheckPasses, 1 );
-    test.identical( suite.report.testCheckFails, 0 );
+    test.identical( suite.report.testCheckFails, 2 );
 
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+    test.identical( testRoutineDone, 0 );
+
+    test.identical( v0, 1 );
+    test.identical( v1, 0 );
+    test.identical( v2, 0 );
+    test.identical( v3, 0 );
+
+    v3 = 1;
     if( err )
     throw err;
-
     return null;
   });
 
-  return result;
+  test.is( false );
+
+  return _.timeOut( 500() =>
+  {
+    test.identical( v0, 1 );
+    test.identical( v1, 1 );
+    test.identical( v2, 1 );
+    test.identical( v3, 1 );
+  });
+
 }
+
+asyncTimeout1.timeOut = 300000;
+asyncTimeout1.description =
+`
+- test failed because of time out
+`
 
 // --
 // experiment
@@ -6083,6 +6240,8 @@ var Self =
     asyncTestRoutineWithProperty,
 
     syncTimeout1,
+    syncTimeout2,
+    asyncTimeout1,
 
     // experiment
 

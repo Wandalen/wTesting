@@ -586,18 +586,22 @@ function cancel()
 
   /* */
 
+  if( o.global )
   try
   {
+    debugger;
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnCon )
     {
-      tester.activeRoutines[ t ]._returnCon.cancel();
+      if( tester.activeRoutines[ t ]._returnCon.resourcesCount() === 0 )
+      tester.activeRoutines[ t ]._returnCon.error( o.err );
+      // tester.activeRoutines[ t ]._returnCon.cancel();
     }
   }
   catch( err2 )
   {
     debugger;
-    console.log( err2 );
+    logger.log( err2 );
   }
 
   /* */
@@ -610,7 +614,7 @@ function cancel()
   catch( err2 )
   {
     debugger;
-    console.log( err2 );
+    logger.log( err2 );
   }
 
   return o.err;

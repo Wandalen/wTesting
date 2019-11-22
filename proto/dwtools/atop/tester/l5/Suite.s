@@ -431,12 +431,16 @@ function _runSoon()
 
   let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
-  return con
+  let result = con
   .finally( () => _.timeReady() )
   .finally( () => suite._runNow() )
   .split()
   ;
 
+  if( Config.debug )
+  result.tag = suite.name;
+
+  return result;
 }
 
 //
@@ -452,7 +456,7 @@ function _runNow()
 
   /* */
 
-  return _.execStages( testRoutines,
+  let r = _.execStages( testRoutines,
   {
     manual : 1,
     onEachRoutine : handleRoutine,
@@ -461,6 +465,8 @@ function _runNow()
     onRoutine : ( trd ) => trd.routine,
     delay : 10,
   });
+
+  return r;
 
   /* */
 
@@ -541,9 +547,7 @@ function _begin()
 
   logger.logUp( msg.join( '\n' ) );
 
-  // logger.log( wTester.textColor( 'at  ' + suite.suiteFileLocation, 'selected' ) );
   logger.log( 'Located at ' + wTester.textColor( suite.suiteFileLocation, 'path' ) );
-  // logger.log( 'at' + _.color.strFormat( will.suiteFileLocation, 'path' ) );
 
   logger.end( 'suite' );
 
@@ -603,17 +607,6 @@ xxx qqq : cover returned consequence works
   });
 
   return ready;
-  // /* */
-  //
-  // if( !wTester._canContinue() )
-  // {
-  //   debugger;
-  //   return false;
-  // }
-  //
-  // /* */
-  //
-  // return true;
 }
 
 //
@@ -651,7 +644,7 @@ function _end( err )
     catch( err )
     {
       err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, err );
-      suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
+      suite.exceptionReport({ err : err });
     }
   }
 
@@ -664,12 +657,11 @@ function _end( err )
   if( err )
   {
     debugger;
-    if( suite.takingIntoAccount )
-    suite.consoleBar( 0 );
     try
     {
-      suite.exceptionReport({ err : err/*, considering : !!suite.takingIntoAccount*/ });
-      // suite._testCheckConsider( 0 );
+      if( suite.takingIntoAccount )
+      suite.consoleBar( 0 );
+      suite.exceptionReport({ err : err });
     }
     catch( err2 )
     {
@@ -830,7 +822,6 @@ function onSuiteEnd( t )
 function _testRoutineRun( trd )
 {
   let suite = this;
-  // let result = null;
   let report = suite.report;
 
   /* */
@@ -843,52 +834,10 @@ function _testRoutineRun( trd )
 
   /* */
 
-  // _.assert( _.routineIs( trd._runFinally ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   return suite._routineCon
   .then( () => trd._run() )
-  // .finally( function _testRoutineRun()
-  // {
-  //
-  //   trd._testRoutineBegin();
-  //
-  //   trd._timeOutCon = _.timeOut( trd.timeOut );
-  //   trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
-  //   .tap( ( err, arg ) =>
-  //   {
-  //     if( err )
-  //     _.errAttend( err );
-  //   });
-  //
-  //   /* */
-  //
-  //   try
-  //   {
-  //     result = trd.routine.call( suite.context, trd );
-  //     if( result === undefined )
-  //     result = null;
-  //   }
-  //   catch( err )
-  //   {
-  //     result = new _.Consequence().error( _.err( err ) );
-  //   }
-  //
-  //   /* */
-  //
-  //   result = trd._returnCon = _.Consequence.From( result );
-  //
-  //   if( Config.debug && !result.tag )
-  //   result.tag = trd.name;
-  //
-  //   result.andKeep( suite._inroutineCon );
-  //
-  //   result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
-  //
-  //   result.finally( ( err, msg ) => trd._runFinally( err, msg ) );
-  //
-  //   return result;
-  // })
   .split();
 
 }

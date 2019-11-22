@@ -14,6 +14,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
+
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
 {
@@ -265,10 +266,9 @@ function _run()
 
   trd._timeOutCon = _.timeOut( trd.timeOut );
   trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
-  .tap( ( err, arg ) =>
+  .catch( ( err ) =>
   {
-    if( err )
-    _.errAttend( err );
+    throw _.errAttend( trd._timeOutError( err ) );
   });
 
   /* */
@@ -491,10 +491,15 @@ function _runFinally( err, arg )
 
   _.assert( arguments.length === 2 );
 
-  if( err )
-  if( err.timeOut )
-  err = trd._timeOutError();
+  // _global_.logger.log( `_runFinally of ${trd.name}` );
 
+  // if( err )
+  // if( err.timeOut )
+  // {
+  //   err = trd._timeOutError( err );
+  // }
+
+  // debugger;
   trd._returned = [ err, arg ];
 
   if( err )
@@ -574,13 +579,16 @@ function _runnableGet()
 
 //
 
-function _timeOutError()
+function _timeOutError( err )
 {
   let trd = this;
 
-  let err = _._err
+  if( err && err._testRoutine )
+  return err;
+
+  err = _._err
   ({
-    args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
+    args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms\n`, err || '' ],
     usingSourceCode : 0,
   });
 
@@ -590,6 +598,14 @@ function _timeOutError()
     configurable : false,
     writable : false,
     value : 1,
+  });
+
+  Object.defineProperty( err, '_testRoutine',
+  {
+    enumerable : false,
+    configurable : false,
+    writable : false,
+    value : trd,
   });
 
   return err;
@@ -2581,7 +2597,7 @@ function _shouldDo( o )
 
     });
 
-    /* xxx */
+    /* */
 
     if( !o.allowingMultipleResources )
     handleSecondResource();
@@ -2600,7 +2616,7 @@ function _shouldDo( o )
     let r = result.orKeepingSplit([ trd._timeOutCon, wTester._cancelCon ]);
     r.finally( ( err, arg ) =>
     {
-      if( result.hasCompetitor( gotSecondResource ) )
+      if( result.competitorHas( gotSecondResource ) )
       result.competitorsCancel( gotSecondResource );
       if( err )
       throw err;

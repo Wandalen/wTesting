@@ -223,9 +223,6 @@ function appArgsRead()
   tester.filePath = appArgs.subject || _.path.current();
   tester.filePath = _.path.join( _.path.current(), tester.filePath );
 
-  // if( appArgs.subject && !appArgs.map.scenario )
-  // settings.scenario = 'test';
-
   if( settings.negativity !== undefined && settings.negativity !== null )
   tester.negativity = Number( settings.negativity ) || 0;
 
@@ -571,6 +568,7 @@ function cancel()
 
   if( o.terminatedByUser )
   o.global = 1;
+
   if( tester._canceled )
   return tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
 
@@ -580,8 +578,8 @@ function cancel()
 
   if( o.global )
   {
-    tester._cancelCon.error( o.err );
     tester._canceled = 1;
+    tester._cancelCon.error( o.err );
   }
 
   /* */
@@ -589,13 +587,14 @@ function cancel()
   if( o.global )
   try
   {
-    debugger;
+    /* xxx : dubious */
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnCon )
     {
-      if( tester.activeRoutines[ t ]._returnCon.resourcesCount() === 0 )
-      tester.activeRoutines[ t ]._returnCon.error( o.err );
-      // tester.activeRoutines[ t ]._returnCon.cancel();
+      let con = tester.activeRoutines[ t ]._returnCon;
+      if( con.resourcesCount() === 0 )
+      con.error( o.err );
+      // con.cancel();
     }
   }
   catch( err2 )
@@ -733,6 +732,12 @@ function suitesFilterOut( suites )
     }
     if( suite.abstract )
     return;
+    if( tester.settings.suite )
+    {
+      debugger;
+      if( !_.path.globFit( suite.name, tester.settings.suite ) )
+      return;
+    }
     return suite;
   });
 
@@ -790,6 +795,7 @@ function _suitesIncludeAt( path )
   if( !tester.report )
   tester._reportBegin();
 
+  debugger;
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :', path, '\n' );
 
@@ -1198,7 +1204,8 @@ let ApplicationArgumentsMap =
 {
 
   verbosity :  `Sets the verbosity of report. Accepts a value from 0 to 9. Default value is 4.`,
-  routine : `Testing of separate test routine. Accepts name of test routine.`,
+  suite : `Testing of separate test suite. Accepts name of test suite or a glob.`,
+  routine : `Testing of separate test routine. Accepts name of test routine or a glob.`,
   testRoutineTimeOut : `Limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.`,
   accuracy : `Sets the numeric deviation for the comparison of numerical values. Accepts numeric values of deviation. Default value is 1e-7.`,
   sanitareTime : `Sets the delay between completing the test suite and running the next one. Accepts time in milliseconds. Default value is 2000ms.`,
@@ -1240,7 +1247,7 @@ let ApplicationArgumentsMap =
 let SettingsNameMap =
 {
 
-  'scenario' : 'scenario',
+  // 'scenario' : 'scenario',
   'sanitareTime' : 'sanitareTime',
   'fails' : 'fails',
   'beeping' : 'beeping',
@@ -1248,6 +1255,7 @@ let SettingsNameMap =
   'timing' : 'timing',
   'rapidity' : 'rapidity',
   'routine' : 'routine',
+  'suite' : 'suite',
 
   /**/
 
@@ -1294,9 +1302,9 @@ let SettingsOfTester =
   debug : null,
   timing : 1,
   rapidity : 0,
-  routine : null,
   negativity : null,
-  // parent : null,
+  routine : null,
+  suite : null,
 
 }
 
@@ -1319,8 +1327,6 @@ let SettingsOfSuite =
   routine : null,
   routineTimeOut : null,
   concurrent : null,
-  // rapidity : null,
-  // fails : null,
   verbosity : null,
   negativity : null,
   silencing : null,

@@ -14,6 +14,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
+debugged = 0;
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -107,6 +108,31 @@ function form()
 
   trd._formed = 1;
   return trd;
+}
+
+//
+
+function _adoptRoutineFields()
+{
+  let trd = this;
+  let routine = trd.routine;
+  let name = trd.decoratedAbsoluteName;
+
+  // _.mapExtendByDefined( trd, _.mapOnly( routine, trd.RoutineFields ) );
+
+  for( let f in trd.RoutineFields )
+  {
+    if( routine[ f ] !== undefined )
+    trd[ trd.RoutineFields[ f ] ] = routine[ f ];
+  }
+
+  _.sureMapHasOnly
+  (
+    routine,
+    wTester.TestRoutine.RoutineFields,
+    name + ' has unknown fields :'
+  );
+
 }
 
 // --
@@ -227,31 +253,6 @@ function _usingSourceCodeSet( usingSourceCode )
   return usingSourceCode;
 }
 
-//
-
-function _adoptRoutineFields()
-{
-  let trd = this;
-  let routine = trd.routine;
-  let name = trd.decoratedAbsoluteName;
-
-  // _.mapExtendByDefined( trd, _.mapOnly( routine, trd.RoutineFields ) );
-
-  for( let f in trd.RoutineFields )
-  {
-    if( routine[ f ] !== undefined )
-    trd[ trd.RoutineFields[ f ] ] = routine[ f ];
-  }
-
-  _.sureMapHasOnly
-  (
-    routine,
-    wTester.TestRoutine.RoutineFields,
-    name + ' has unknown fields :'
-  );
-
-}
-
 // --
 // run
 // --
@@ -264,12 +265,18 @@ function _run()
 
   trd._runBegin();
 
-  trd._timeOutCon = _.timeOut( trd.timeOut );
+  // trd._timeOutCon = _.timeOut( trd.timeOut );
+  trd._timeOutCon = new _.Consequence();
   trd._timeOutErrorCon = _.timeOutError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
-  .catch( ( err ) =>
+  .tap( ( err, arg ) =>
   {
-    throw _.errAttend( trd._timeOutError( err ) );
+    trd._timeOutCon.take( err || null );
   });
+  // .catch( ( err ) =>
+  // {
+  //   throw _.errAttend( trd._timeOutError( err ) );
+  // });
+  trd._timeOutErrorCon.tag = '_timeOutErrorCon';
 
   /* */
 
@@ -286,14 +293,20 @@ function _run()
 
   /* */
 
-  result = trd._returnCon = _.Consequence.From( result );
+  result = trd._returnCon = _.Consequence.From( result ); /* xxx : expose split instead */
 
   if( Config.debug && !result.tag )
   result.tag = trd.name;
 
+  // result.tap( ( err, arg ) => { debugger } );
+
   result.andKeep( suite._inroutineCon );
 
+  // result.tap( ( err, arg ) => { debugger } );
+
   result = result.orKeepingSplit([ trd._timeOutErrorCon, wTester._cancelCon ]);
+
+  // result.tap( ( err, arg ) => { debugger } );
 
   result.finally( ( err, msg ) => trd._runFinally( err, msg ) );
 
@@ -371,14 +384,16 @@ function _runEnd()
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
+  if( !trd._timeOutErrorCon.resourcesCount() && !trd._timeOutCon.resourcesCount() )
+  trd._timeOutErrorCon.take( _.dont );
+
   if( trd._appExitCode && !_.process.exitCode )
   trd._appExitCode = _.process.exitCode( trd._appExitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
-  if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs )
+  if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
 
-    debugger;
     let wasBarred = suite.consoleBar( 0 );
 
     let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
@@ -393,18 +408,21 @@ function _runEnd()
 
   /* groups stack */
 
-  trd.testCaseClose();
-  trd.will = '';
+  trd._descriptionChange({ src : '', touching : 0 });
 
-  if( trd._testsGroupsStack.length && !trd._testsGroupError )
-  {
-    debugger;
-    let err = trd.exceptionReport
-    ({
-      err : _.err( 'Tests group', _.strQuote( trd.testsGroup ), 'was not closed' ),
-      usingSourceCode : 0,
-    });
-  }
+  trd._testsGroupTestEnd();
+
+  // trd._caseClose();
+  //
+  // if( trd._testsGroupsStack.length && !trd._testsGroupError )
+  // {
+  //   debugger;
+  //   let err = trd.exceptionReport
+  //   ({
+  //     err : _.err( 'Tests group', _.strQuote( trd.testsGroup ), 'was not closed' ),
+  //     usingSourceCode : 0,
+  //   });
+  // }
 
   /* last test check */
 
@@ -424,6 +442,8 @@ function _runEnd()
     usingSourceCode : 0,
     usingDescription : 0,
   });
+
+  /* qqq xxx : cover timed out routine has proper description of fail of the routine */
 
   /* on end */
 
@@ -490,16 +510,8 @@ function _runFinally( err, arg )
   let suite = trd.suite;
 
   _.assert( arguments.length === 2 );
+  _.assert( trd._returned === null );
 
-  // _global_.logger.log( `_runFinally of ${trd.name}` );
-
-  // if( err )
-  // if( err.timeOut )
-  // {
-  //   err = trd._timeOutError( err );
-  // }
-
-  // debugger;
   trd._returned = [ err, arg ];
 
   if( err )
@@ -523,22 +535,26 @@ function _runFinally( err, arg )
 function _runInterruptMaybe( throwing )
 {
   let trd = this;
+  let logger = trd.logger;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( !!wTester.report );
 
   if( trd._returned )
-  return false;
-
-  if( wTester._canceled )
-  return true;
+  {
+    let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
+    logger.log( _.errOnce( err ) );
+    throw err;
+    return false;
+  }
 
   if( !wTester._canContinue() )
   {
     debugger; /* xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
-    let result = wTester.cancel({ global : 0 });
+    // let result = wTester.cancel({ global : 0 });
+    let result = trd.cancel();
     if( throwing )
     throw result;
     return result;
@@ -547,7 +563,9 @@ function _runInterruptMaybe( throwing )
   let elapsed = _.timeNow() - trd._testRoutineBeginTime;
   if( elapsed > trd.timeOut && !debugged )
   {
-    let result = wTester.cancel({ err : trd._timeOutError(), global : 0 });
+    logger.log( `Test routine ${trd.absoluteName} timed out, cant continue!` );
+    // let result = wTester.cancel({ err : trd._timeOutError(), global : 0 });
+    let result = trd.cancel({ err : trd._timeOutError() });
     if( throwing )
     throw result;
     return result;
@@ -566,7 +584,9 @@ function _runnableGet()
   _.assert( _.numberIs( wTester.settings.rapidity ) );
 
   if( suite.routine )
-  return suite.routine === trd.name;
+  {
+    return _.path.globFit( trd.name, suite.routine );
+  }
 
   if( trd.experimental )
   return false;
@@ -611,11 +631,34 @@ function _timeOutError( err )
   return err;
 }
 
+//
+
+function cancel( o )
+{
+  let trd = this;
+  o = _.routineOptions( cancel, arguments );
+
+  if( trd._returnCon )
+  if( trd._returnCon.resourcesCount() === 0 )
+  {
+    debugger;
+    trd._returnCon.error( _.errBrief( `Test routine ${trd.absoluteName} was canceled!` ) );
+  }
+
+  return wTester.cancel( o );
+}
+
+cancel.defaults =
+{
+  global : 0,
+  err : null,
+}
+
 // --
-// checks grouping
+// check description
 // --
 
-function _willGet()
+function _descriptionGet()
 {
   let trd = this;
   return trd[ descriptionSymbol ];
@@ -623,14 +666,33 @@ function _willGet()
 
 //
 
-function _willSet( src )
+function _descriptionSet( src )
+{
+  let trd = this;
+  return trd._descriptionChange({ src });
+}
+
+//
+
+function _descriptionChange( o )
 {
   let trd = this;
 
+  _.assert( _.mapIs( o ) );
+  _.routineOptions( _descriptionChange, o );
+
+  if( o.touching )
   if( wTester.report )
   trd._runInterruptMaybe( 1 );
 
-  trd[ descriptionSymbol ] = src
+  trd[ descriptionSymbol ] = o.src;
+
+}
+
+_descriptionChange.defaults =
+{
+  src : null,
+  touching : 9,
 }
 
 //
@@ -647,11 +709,11 @@ function _descriptionFullGet()
   result += right + trd.case
   else
   result += trd.case
-  if( trd.will )
+  if( trd.description )
   result += left;
 
-  if( trd.will )
-  result += trd.will;
+  if( trd.description )
+  result += trd.description;
 
   return result;
 }
@@ -667,34 +729,9 @@ function _descriptionWithNameGet()
   return name + slash + description
 }
 
-//
-
-function _caseGet()
-{
-  let trd = this;
-  return trd.testsGroup;
-}
-
-//
-
-function _caseSet( src )
-{
-  let trd = this;
-
-  _.assert( arguments.length === 1 );
-  _.assert( src === null || _.strIs( src ), 'Expects string or null {-src-}, but got', _.strType( src ) );
-
-  trd._testsGroupChange();
-
-  if( src !== null )
-  {
-    trd.testsGroupOpen( src );
-    trd._testsGroupOpenedWithCase = 1;
-  }
-
-}
-
-//
+// --
+// checks group
+// --
 
 function _testsGroupGet()
 {
@@ -716,13 +753,15 @@ function testsGroupOpen( groupName )
   let trd = this;
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  trd._testsGroupChange();
+  trd._testsGroupChange({ group : groupName, open : 1 });
 
-  trd._testsGroupsStack.push( groupName );
+  // trd._testsGroupsStack.push( groupName );
+  //
+  // trd._testsGroupIsCase = 1;
+  // trd.report.testCheckPassesOfTestCase = 0;
+  // trd.report.testCheckFailsOfTestCase = 0;
 
-  trd._testsGroupIsCase = 1;
-  trd.report.testCheckPassesOfTestCase = 0;
-  trd.report.testCheckFailsOfTestCase = 0;
+  // trd._runInterruptMaybe( 1 );
 
 }
 
@@ -740,55 +779,126 @@ function testsGroupClose( groupName )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  if( trd.testsGroup !== groupName )
-  trd.testCaseClose();
+  trd._testsGroupChange({ group : groupName, open : 0 });
 
-  if( trd.testsGroup !== groupName )
-  {
-    let err = _._err
-    ({
-      args : [ 'Attempt to close not the topmost tests group', _.strQuote( groupName ), 'current tests group is', _.strQuote( trd.testsGroup ) ],
-      level : 2,
-    });
-    err = trd.exceptionReport
-    ({
-      err : err,
-    });
-    trd._testsGroupError = err;
-  }
-  else
-  {
-    trd._testsGroupsStack.splice( trd._testsGroupsStack.length-1, 1 );
-  }
-
-  if( trd._testsGroupIsCase )
-  {
-    if( trd.report.testCheckFailsOfTestCase > 0 || trd.report.testCheckPassesOfTestCase > 0 )
-    trd._testCaseConsider( !trd.report.testCheckFailsOfTestCase );
-  }
-
-  trd._testsGroupIsCase = 0;
-  trd._testsGroupChange();
+  // trd._runInterruptMaybe( 1 );
 
   return trd.testsGroup;
 }
 
 //
 
-function _testsGroupChange()
+function _testsGroupChange( o )
 {
   let trd = this;
-  _.assert( arguments.length === 0, 'Expects no arguments' );
 
-  trd.will = '';
-  trd.testCaseClose();
-  trd._runInterruptMaybe( 1 );
+  _.routineOptions( _testsGroupChange, o );
+  _.assert( arguments.length === 1, 'Expects no arguments' );
+  _.assert( _.strIs( o.group ) );
+
+  // trd.description = '';
+  trd._descriptionChange({ src : '', touching : 0 });
+  trd._caseClose();
+  // trd._runInterruptMaybe( 1 );
+
+  if( o.open )
+  open();
+  else
+  close();
+
+  /* */
+
+  function open()
+  {
+    trd._testsGroupsStack.push( o.group );
+    trd._testsGroupIsCase = 1;
+    trd.report.testCheckPassesOfTestCase = 0;
+    trd.report.testCheckFailsOfTestCase = 0;
+  }
+
+  /* */
+
+  function close()
+  {
+    if( trd.testsGroup !== o.group )
+    trd._caseClose();
+
+    if( trd.testsGroup !== o.group )
+    {
+      let err = _._err
+      ({
+        args : [ 'Attempt to close not the topmost tests group', _.strQuote( o.group ), 'current tests group is', _.strQuote( trd.testsGroup ) ],
+        level : 2,
+      });
+      err = _.errBrief( err );
+      err = trd.exceptionReport
+      ({
+        err : err,
+      });
+      trd._testsGroupError = err;
+    }
+    else
+    {
+      trd._testsGroupsStack.splice( trd._testsGroupsStack.length-1, 1 );
+    }
+
+    if( trd._testsGroupIsCase )
+    {
+      if( trd.report.testCheckFailsOfTestCase > 0 || trd.report.testCheckPassesOfTestCase > 0 )
+      trd._testCaseConsider( !trd.report.testCheckFailsOfTestCase );
+    }
+
+    trd._testsGroupIsCase = 0;
+  }
+
+}
+
+_testsGroupChange.defaults =
+{
+  group : null,
+  open : null,
+  touching : 9,
+}
+
+//
+
+function _testsGroupTestEnd()
+{
+  let trd = this;
+
+  trd._caseClose();
+
+  if( trd._testsGroupsStack.length && !trd._testsGroupError )
+  {
+    let err = trd.exceptionReport
+    ({
+      err : _.errBrief( 'Tests group', _.strQuote( trd.testsGroup ), 'was not closed' ),
+      usingSourceCode : 0,
+    });
+  }
 
 }
 
 //
 
-function testCaseClose()
+function _caseGet()
+{
+  let trd = this;
+  return trd.testsGroup;
+}
+
+//
+
+function _caseSet( src )
+{
+  let trd = this;
+  _.assert( arguments.length === 1 );
+  return trd._caseChange({ src });
+}
+
+//
+
+function _caseClose()
 {
   let trd = this;
   let report = trd.report;
@@ -797,22 +907,62 @@ function testCaseClose()
   {
     trd._testsGroupOpenedWithCase = 0;
     _.assert( _.strIs( trd.testsGroup ) );
-    trd.testsGroupClose( trd.testsGroup );
+    // trd.testsGroupClose( trd.testsGroup );
+    trd._testsGroupChange({ group : trd.testsGroup, touching : 0, open : 0 });
   }
 
 }
 
 //
 
-function hasTestGroupExceptOfCase()
+function _caseChange( o )
 {
   let trd = this;
-  if( trd._testsGroupsStack.length === 0 )
-  return false;
-  if( trd._testsGroupOpenedWithCase && trd._testsGroupsStack.length === 1 )
-  return false;
-  return true;
+
+  _.routineOptions( _caseChange, o );
+  _.assert( _.mapIs( o ) );
+  _.assert( arguments.length === 1 );
+  _.assert( o.src === null || _.strIs( o.src ), 'Expects string or null {-o.src-}, but got', _.strType( o.src ) );
+
+  // trd._testsGroupChange();
+
+  if( o.src !== null )
+  {
+    // trd.testsGroupOpen( o.src );
+    trd._testsGroupChange({ group : o.src, touching : o.touching, open : 1 });
+    trd._testsGroupOpenedWithCase = 1;
+  }
+  else
+  {
+    /* qqq xxx : test case = null and other combinations */
+    if( trd.case )
+    trd._testsGroupChange({ group : o.src, touching : o.touching, open : 0 });
+    // trd.testsGroupClose( trd.case );
+  }
+
+  // if( o.touching )
+  // trd._runInterruptMaybe( 1 );
+
+  return o.src;
 }
+
+_caseChange.defaults =
+{
+  src : null,
+  touching : 9,
+}
+
+// //
+//
+// function hasTestGroupExceptOfCase()
+// {
+//   let trd = this;
+//   if( trd._testsGroupsStack.length === 0 )
+//   return false;
+//   if( trd._testsGroupOpenedWithCase && trd._testsGroupsStack.length === 1 )
+//   return false;
+//   return true;
+// }
 
 // --
 // name
@@ -868,7 +1018,7 @@ function checkCurrent()
   _.assert( arguments.length === 0 );
 
   result.testsGroupsStack = trd._testsGroupsStack;
-  result.will = trd.will;
+  result.description = trd.description; /* xxx : rename */
   result.checkIndex = trd._checkIndex;
 
   return result;
@@ -882,7 +1032,7 @@ function checkCurrent()
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function checkNext( will )
+function checkNext( description )
 {
   let trd = this;
 
@@ -894,8 +1044,8 @@ function checkNext( will )
   else
   trd._checkIndex += 1;
 
-  if( will !== undefined )
-  trd.will = will;
+  if( description !== undefined )
+  trd.description = description;
 
   return trd.checkCurrent();
 }
@@ -953,7 +1103,8 @@ function checkRestore( acheck )
 
   trd._checkIndex = acheck.checkIndex;
   trd._testsGroupsStack = acheck.testsGroupsStack;
-  trd.will = acheck.will;
+  // trd.description = acheck.description; /* xxx : rename */
+  trd._descriptionChange({ src : acheck.description, touching : 0 });
 
   return trd;
 }
@@ -1075,7 +1226,7 @@ function _outcomeReport( o )
   logger.end( 'check', 'checkIndex' );
   logger.end({ verbosity : o.verbosity });
 
-  trd._runInterruptMaybe( 1 );
+  // trd._runInterruptMaybe( 1 );
 
   /* */
 
@@ -1092,7 +1243,7 @@ function _outcomeReport( o )
         numberOfLines : 5,
       });
       if( _code )
-      code = '\n' + _code;
+      code = '\n' + _code + '\n';
       else
       code = '\n' + _location.full;
     }
@@ -1142,6 +1293,8 @@ function _outcomeReportBoolean( o )
     usingSourceCode : o.usingSourceCode,
     selectMode : o.selectMode
   });
+
+  trd._runInterruptMaybe( 1 );
 
 }
 
@@ -1195,6 +1348,8 @@ function _outcomeReportCompare( o )
   if( !o.outcome )
   if( trd.debug )
   debugger;
+
+  trd._runInterruptMaybe( 1 );
 
   /**/
 
@@ -1259,6 +1414,8 @@ function exceptionReport( o )
 
   let err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
 
+  if( _.errIsAttended( err ) )
+  err = _.errBrief( err );
   _.errAttend( err );
 
   let details = err.toString();
@@ -1377,6 +1534,9 @@ function _reportTextForTestCheck( o )
   _.assert( trd._checkIndex >= 0 );
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
 
+  // if( trd._returned )
+  // debugger;
+
   let result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
 
   if( o.msg )
@@ -1404,7 +1564,7 @@ _reportTextForTestCheck.defaults =
 }
 
 // --
-// tester
+// checker
 // --
 
 /**
@@ -1476,45 +1636,45 @@ function isNot( outcome )
   return outcome;
 }
 
+// //
 //
-
-/**
- * @summary Checks if provided argument is not an Error object.
- * @description Check passes if result if positive, otherwise fails. After check function reports result of test
- * to the testing system. If test is failed function also outputs additional information.
- * @param {} maybeError Entity to check.
- * @function isNotError
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
- */
-
-function isNotError( maybeError )
-{
-  let trd = this;
-  let outcome = !_.errIs( maybeError );
-
-  if( arguments.length !== 1 )
-  {
-
-    outcome = false;
-
-    trd.exceptionReport
-    ({
-      err : '"isNotError" expects single argument',
-      level : 2,
-    });
-
-  }
-  else
-  {
-    trd._outcomeReportBoolean
-    ({
-      outcome : outcome,
-      msg : 'expected variable is not error',
-    });
-  }
-
-  return outcome;
-}
+// /**
+//  * @summary Checks if provided argument is not an Error object.
+//  * @description Check passes if result if positive, otherwise fails. After check function reports result of test
+//  * to the testing system. If test is failed function also outputs additional information.
+//  * @param {} maybeError Entity to check.
+//  * @function isNotError
+//  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+//  */
+//
+// function isNotError( maybeError )
+// {
+//   let trd = this;
+//   let outcome = !_.errIs( maybeError );
+//
+//   if( arguments.length !== 1 )
+//   {
+//
+//     outcome = false;
+//
+//     trd.exceptionReport
+//     ({
+//       err : '"isNotError" expects single argument',
+//       level : 2,
+//     });
+//
+//   }
+//   else
+//   {
+//     trd._outcomeReportBoolean
+//     ({
+//       outcome : outcome,
+//       msg : 'expected variable is not error',
+//     });
+//   }
+//
+//   return outcome;
+// }
 
 //
 
@@ -2033,56 +2193,56 @@ function contains( got, expected )
 
 //
 
-function setsAreIdentical( got, expected )
-{
-  let trd = this;
-  let o2, outcome;
-
-  /* */
-
-  try
-  {
-    outcome = _.arraySetIdentical( got, expected );
-  }
-  catch( err )
-  {
-    trd.exceptionReport
-    ({
-      err : err,
-    });
-    return false;
-  }
-
-  /* */
-
-  if( arguments.length !== 2 )
-  {
-    outcome = false;
-
-    trd.exceptionReport
-    ({
-      err : '"identical" expects two arguments',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  trd._outcomeReportCompare
-  ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
-    // path : o2.it.lastPath, // xxx
-    usingExtraDetails : 1,
-  });
-
-  /* */
-
-  return outcome;
-}
+// function setsAreIdentical( got, expected )
+// {
+//   let trd = this;
+//   let o2, outcome;
+//
+//   /* */
+//
+//   try
+//   {
+//     outcome = _.arraySetIdentical( got, expected );
+//   }
+//   catch( err )
+//   {
+//     trd.exceptionReport
+//     ({
+//       err : err,
+//     });
+//     return false;
+//   }
+//
+//   /* */
+//
+//   if( arguments.length !== 2 )
+//   {
+//     outcome = false;
+//
+//     trd.exceptionReport
+//     ({
+//       err : '"identical" expects two arguments',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   trd._outcomeReportCompare
+//   ({
+//     outcome : outcome,
+//     got : got,
+//     expected : expected,
+//     // path : o2.it.lastPath, // xxx
+//     usingExtraDetails : 1,
+//   });
+//
+//   /* */
+//
+//   return outcome;
+// }
 
 //
 
@@ -2369,7 +2529,9 @@ function le( got, than )
   return outcome;
 }
 
-//
+// --
+// shoulding
+// --
 
 function _shouldDo( o )
 {
@@ -2378,7 +2540,7 @@ function _shouldDo( o )
   let reported = 0;
   let good = 1;
   let async = 0;
-  let stack = _.diagnosticStack([ 3, -1 ]);
+  let stack = _.diagnosticStack([ 2, -1 ]);
   let logger = trd.logger;
   let err, arg;
   let con = new _.Consequence();
@@ -2455,6 +2617,8 @@ function _shouldDo( o )
 
     err = _err;
 
+    _.errAttend( err );
+
     if( o.ignoringError )
     {
       begin( 1 );
@@ -2463,7 +2627,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'error throwen synchronously, ignored',
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center'
       });
       end( 1, err );
       return con;
@@ -2490,7 +2654,7 @@ function _shouldDo( o )
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously as expected',
           stack : stack,
-          selectMode : 'end'
+          selectMode : 'center',
         });
 
       }
@@ -2502,7 +2666,7 @@ function _shouldDo( o )
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously, what was not expected',
           stack : stack,
-          selectMode : 'end'
+          selectMode : 'center',
         });
 
       }
@@ -2530,7 +2694,7 @@ function _shouldDo( o )
       outcome : 0,
       msg : msg,
       stack : stack,
-      selectMode : 'end'
+      selectMode : 'center',
     });
 
     end( 0, _.err( msg ) );
@@ -2543,11 +2707,14 @@ function _shouldDo( o )
   function handleAsyncResult()
   {
 
+    // debugger;
+    // let stack = _.diagnosticStack([ 3, Infinity ]);
     trd.checkNext();
     async = 1;
 
     result.give( function( _err, _arg )
     {
+      // debugger;
 
       err = _err;
       arg = _arg;
@@ -2616,6 +2783,7 @@ function _shouldDo( o )
     let r = result.orKeepingSplit([ trd._timeOutCon, wTester._cancelCon ]);
     r.finally( ( err, arg ) =>
     {
+      // debugger;
       if( result.competitorHas( gotSecondResource ) )
       result.competitorsCancel( gotSecondResource );
       if( err )
@@ -2669,7 +2837,7 @@ function _shouldDo( o )
         outcome : 0,
         msg : msg,
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center',
       });
 
       end( 0, _.err( msg ) );
@@ -2683,7 +2851,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'no error thrown, as expected',
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center',
       });
 
       end( 1, result );
@@ -2744,6 +2912,9 @@ function _shouldDo( o )
   function reportAsync()
   {
 
+    /* yyy */
+    if( trd._returned )
+    return;
     if( reported )
     return;
 
@@ -2756,7 +2927,7 @@ function _shouldDo( o )
         outcome : 1,
         msg : 'got single message',
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center'
       });
 
       end( 1, err ? err : arg );
@@ -2779,7 +2950,7 @@ function _shouldDo( o )
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously as expected',
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center'
       });
       else
       trd._outcomeReportBoolean
@@ -2787,7 +2958,7 @@ function _shouldDo( o )
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously, not expected',
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center'
       });
 
       end( o.expectingAsyncError, err );
@@ -2805,11 +2976,11 @@ function _shouldDo( o )
         outcome : !o.expectingAsyncError,
         msg : msg,
         stack : stack,
-        selectMode : 'end'
+        selectMode : 'center'
       });
 
       if( o.expectingAsyncError )
-      end( !o.expectingAsyncError, _.err( msg ) );
+      end( !o.expectingAsyncError, _._err({ args : [ msg ], caughtCallsStack : stack }) );
       else
       end( !o.expectingAsyncError, arg );
 
@@ -3046,11 +3217,238 @@ function returnsSingleResource( routine )
 
 }
 
+//
+
+function assetFor( a )
+{
+  let trd = this;
+  let context = trd.context;
+  let suite = trd.suite;
+
+  if( !_.mapIs( a ) )
+  {
+    if( _.boolIs( arguments[ 0 ] ) )
+    a = { originalAssetPath : arguments[ 0 ] }
+    else
+    a = { assetName : arguments[ 0 ] }
+  }
+
+  _.assert( a.trd === undefined );
+  _.assert( a.suite === undefined );
+  _.assert( a.routine === undefined );
+
+  _.routineOptions( assetFor, a );
+
+  a.trd = trd;
+  a.suite = suite;
+  a.routine = trd.routine;
+  if( !a.assetName )
+  a.assetName = a.routine.name;
+
+  _.sure( arguments.length === 0 || arguments.length === 1 );
+  _.sure( _.mapIs( a ) );
+  _.sure( _.routineIs( a.routine ) );
+  _.sure( _.strDefined( a.assetName ) );
+  _.sure( _.strDefined( context.suiteTempPath ), `Test suite should have defined path to suite temp directory. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory. But test suite ${suite.name} does not have.` );
+  _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file. But test suite ${suite.name} does not have.` );
+
+  if( a.process === null )
+  a.process = _testerGlobal_.wTools.process;
+  if( a.fileProvider === null )
+  a.fileProvider = _testerGlobal_.wTools.fileProvider;
+  if( a.path === null )
+  a.path = a.fileProvider.path || _testerGlobal_.wTools.uri;
+  if( a.uri === null )
+  a.uri = _testerGlobal_.wTools.uri || a.fileProvider.path;
+  if( a.Consequence === null )
+  a.Consequence = _testerGlobal_.wTools.Consequence;
+  if( a.ready === null )
+  a.ready = a.Consequence().take( null );
+
+  if( _.boolLike( a.originalAssetPath ) && a.originalAssetPath )
+  a.originalAssetPath = null
+  if( a.originalAssetPath === null )
+  a.originalAssetPath = a.path.join( context.assetsOriginalSuitePath, a.assetName );
+  if( a.routinePath === null )
+  a.routinePath = a.path.join( context.suiteTempPath, a.routine.name );
+
+  if( a.abs === null )
+  a.abs = abs_functor( a.routinePath );
+  if( a.rel === null )
+  a.rel = rel_functor( a.routinePath );
+  if( a.originalAbs === null && a.originalAssetPath )
+  a.originalAbs = abs_functor( a.originalAssetPath );
+  if( a.originalRel === null && a.originalAssetPath )
+  a.originalRel = rel_functor( a.originalAssetPath );
+
+  if( a.reflect === null )
+  a.reflect = function reflect()
+  {
+    a.fileProvider.filesDelete( a.routinePath );
+    a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });
+  }
+
+  if( a.shell === null )
+  a.shell = a.process.starter
+  ({
+    currentPath : a.routinePath,
+    outputCollecting : 1,
+    outputGraying : 1,
+    throwingExitCode : 1,
+    ready : a.ready,
+    mode : 'shell',
+  })
+
+  if( a.shellNonThrowing === null )
+  a.shellNonThrowing = a.process.starter
+  ({
+    currentPath : a.routinePath,
+    outputCollecting : 1,
+    outputGraying : 1,
+    throwingExitCode : 0,
+    ready : a.ready,
+    mode : 'shell',
+  })
+
+  if( a.js === null )
+  a.js = a.process.starter
+  ({
+    execPath : context.defaultJsPath || null,
+    currentPath : a.routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 1,
+    outputGraying : 1,
+    ready : a.ready,
+    mode : 'fork',
+  })
+
+  if( a.jsNonThrowing === null )
+  a.jsNonThrowing = a.process.starter
+  ({
+    execPath : context.defaultJsPath || null,
+    currentPath : a.routinePath,
+    outputCollecting : 1,
+    outputGraying : 1,
+    throwingExitCode : 0,
+    ready : a.ready,
+    mode : 'fork',
+  })
+
+  if( a.find === null )
+  a.find = a.fileProvider.filesFinder
+  ({
+    withTerminals : 1,
+    withDirs : 1,
+    withStem : 1,
+    allowingMissed : 1,
+    maskPreset : 0,
+    outputFormat : 'relative',
+    filter :
+    {
+      recursive : 2,
+      maskAll :
+      {
+        excludeAny : [ /(^|\/)\.git($|\/)/, /(^|\/)\+/ ],
+      },
+      maskTransientAll :
+      {
+        excludeAny : [ /(^|\/)\.git($|\/)/, /(^|\/)\+/ ],
+      },
+    },
+  });
+
+  if( a.findAll === null )
+  a.findAll = a.fileProvider.filesFinder
+  ({
+    withTerminals : 1,
+    withDirs : 1,
+    withStem : 1,
+    withTransient : 1,
+    allowingMissed : 1,
+    maskPreset : 0,
+    outputFormat : 'relative',
+  });
+
+  if( a.originalAssetPath )
+  _.sure( a.fileProvider.isDir( a.originalAssetPath ) );
+
+  return a;
+
+  /**/
+
+  function abs_functor( routinePath )
+  {
+    _.assert( _.strIs( routinePath ) );
+    _.assert( arguments.length === 1 );
+    return function abs( filePath )
+    {
+      if( arguments.length === 1 && filePath === null )
+      return filePath;
+      let args = _.longSlice( arguments );
+      args.unshift( routinePath );
+      return a.uri.s.join.apply( a.uri.s, args );
+    }
+  }
+
+  /**/
+
+  function rel_functor( routinePath )
+  {
+    _.assert( _.strIs( routinePath ) );
+    _.assert( arguments.length === 1 );
+    return function rel( filePath )
+    {
+      _.assert( arguments.length === 1 );
+      if( filePath === null )
+      return filePath;
+      if( _.arrayIs( filePath ) || _.mapIs( filePath ) )
+      {
+        return _.filter( filePath, ( filePath ) => rel( filePath ) );
+      }
+      if( a.uri.isRelative( filePath ) && !a.uri.isRelative( routinePath ) )
+      return filePath;
+      return a.uri.s.relative.apply( a.uri.s, [ routinePath, filePath ] );
+    }
+  }
+
+  /**/
+
+}
+
+assetFor.defaults =
+{
+
+  assetName : null,
+
+  process : null,
+  fileProvider : null,
+  path : null,
+  uri : null,
+  Consequence : null,
+  ready : null,
+
+  originalAssetPath : null,
+  originalAbs : null,
+  originalRel : null,
+  routinePath : null,
+  abs : null,
+  rel : null,
+  reflect : null,
+  shell : null,
+  shellNonThrowing : null,
+  js : null,
+  jsNonThrowing : null,
+  find : null,
+  findAll : null,
+
+}
+
 // --
 // let
 // --
 
-let descriptionSymbol = Symbol.for( 'will' );
+let descriptionSymbol = Symbol.for( 'description' );
 let accuracySymbol = Symbol.for( 'accuracy' );
 let accuracyEffectiveSymbol = Symbol.for( 'accuracyEffective' );
 let timeOutSymbol = Symbol.for( 'timeOut' );
@@ -3082,7 +3480,7 @@ let RoutineFields =
 /**
  * @typedef {Object} TestRoutineFields
  * @property {String} name
- * @property {String} will
+ * @property {String} description
  * @property {Number} accuracy
  * @property {Number} rapidity=3
  * @property {Number} timeOut
@@ -3098,7 +3496,7 @@ let RoutineFields =
 let Composes =
 {
   name : null,
-  will : '',
+  description : '',
   accuracy : null,
   rapidity : 0,
   timeOut : null,
@@ -3194,6 +3592,7 @@ let Extend =
 
   init,
   form,
+  _adoptRoutineFields,
 
   // accessor
 
@@ -3211,8 +3610,6 @@ let Extend =
   _usingSourceCodeGet,
   _usingSourceCodeSet,
 
-  _adoptRoutineFields,
-
   // run
 
   _run,
@@ -3223,28 +3620,32 @@ let Extend =
   _runInterruptMaybe,
   _runnableGet,
   _timeOutError,
+  cancel,
 
-  // checks grouping
+  // check description
 
-  _willGet,
-  _willSet,
-  _descriptionGet : _willGet,
-  _descriptionSet : _willSet,
+  _willGet : _descriptionGet,
+  _willSet : _descriptionSet,
+  _descriptionGet,
+  _descriptionSet,
+  _descriptionChange,
   _descriptionFullGet,
   _descriptionWithNameGet,
 
-  _caseGet,
-  _caseSet,
+  // checks group
 
   _testsGroupGet,
   testsGroupOpen,
   testsGroupClose,
   open : testsGroupOpen,
   close : testsGroupClose,
-
   _testsGroupChange,
-  testCaseClose,
-  hasTestGroupExceptOfCase,
+  _testsGroupTestEnd,
+
+  _caseGet,
+  _caseSet,
+  _caseClose,
+  _caseChange,
 
   // name
 
@@ -3278,18 +3679,18 @@ let Extend =
   _reportIsPositive,
   _reportTextForTestCheck,
 
-  // tester
+  // checker
 
   is,
   isNot,
-  isNotError,
+  // isNotError,
 
   identical,
   notIdentical,
   equivalent,
   notEquivalent,
   contains,
-  setsAreIdentical,
+  // setsAreIdentical, /* xxx : deprecate */
 
   il : identical,
   ni : notIdentical,
@@ -3301,6 +3702,8 @@ let Extend =
   lt : lt,
   le : le,
 
+  // shoulding
+
   _shouldDo,
 
   shouldThrowErrorSync,
@@ -3308,6 +3711,10 @@ let Extend =
   shouldThrowErrorOfAnyKind,
   mustNotThrowError,
   returnsSingleResource,
+
+  // asset
+
+  assetFor,
 
   // relations
 

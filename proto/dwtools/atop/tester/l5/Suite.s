@@ -5,6 +5,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
+debugged = 0;
 
 //
 
@@ -292,15 +293,15 @@ function consoleBar( value )
       logger.begin({ verbosity : -8 });
       logger.log( 'Silencing console' );
       logger.end({ verbosity : -8 });
-      if( !_.Logger.consoleIsBarred( console ) )
-      wTester._barOptions = _.Logger.consoleBar({ outputPrinter : logger, on : 1 });
+      if( !_.Logger.ConsoleIsBarred( console ) )
+      wTester._barOptions = _.Logger.ConsoleBar({ outputPrinter : logger, on : 1 });
     }
     else
     {
-      if( _.Logger.consoleIsBarred( console ) )
+      if( _.Logger.ConsoleIsBarred( console ) )
       {
         wTester._barOptions.on = 0;
-        _.Logger.consoleBar( wTester._barOptions );
+        _.Logger.ConsoleBar( wTester._barOptions );
       }
     }
 
@@ -651,14 +652,19 @@ function _end( err )
   /* error */
 
   if( !err )
-  if( suite.routine !== null && !suite.tests[ suite.routine ] )
-  err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
+  // if( suite.routine !== null && !suite.tests[ suite.routine ] )
+  if( suite.routine !== null )
+  if( suite.report.testRoutineFails + suite.report.testRoutinePasses === 0 )
+  {
+    debugger;
+    err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
+  }
 
   if( err )
   {
-    debugger;
     try
     {
+      debugger;
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
@@ -758,8 +764,9 @@ function _end( err )
 function _terminated()
 {
   let suite = this;
-  debugger;
-  let err = _.err( 'Terminated by user' );
+  let err = _.process ? _.process.exitReason() : null;
+  if( !err )
+  err = _.errBrief( 'Terminated by user' );
   wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }
 
@@ -1077,7 +1084,8 @@ function exceptionReport( o )
   suite._exceptionConsider( err );
 
   logger.begin({ verbosity : 9 });
-  _.errLogOnce( err );
+  // _.errLogOnce( err );
+  logger.log( _.errOnce( err ) );
   logger.end({ verbosity : 9 });
 
   return err;

@@ -15,32 +15,72 @@ if( typeof module !== 'undefined' )
 var _global = _global_;
 var _ = _global_.wTools;
 
-//
+// --
+// context
+// --
 
 function onSuiteBegin()
 {
   let self = this;
 
-  self.execPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetDirPath = _.path.join( __dirname, '_asset' );
-  self.find = _.fileProvider.filesFinder
-  ({
-    filter : { recursive : 2 },
-    withTerminals : 1,
-    withDirs : 1,
-    withTransient/*maybe withStem*/ : 1,
-    allowingMissed : 1,
-    outputFormat : 'relative',
-  });
+  self.defaultJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
+
+  // self.find = a.fileProvider.filesFinder
+  // ({
+  //   filter : { recursive : 2 },
+  //   withTerminals : 1,
+  //   withDirs : 1,
+  //   withTransient/*maybe withStem*/ : 1,
+  //   allowingMissed : 1,
+  //   outputFormat : 'relative',
+  // });
 
 }
+
+//
 
 function onSuiteEnd()
 {
   let self = this;
-  _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.assert( _.strHas( self.suiteTempPath, 'Tester' ) )
+  _.path.pathDirTempClose( self.suiteTempPath );
+}
+
+//
+
+function assetFor( test, asset )
+{
+  let self = this;
+  let a = test.assetFor( asset );
+
+  a.reflect = function reflect()
+  {
+
+    function onUp( r )
+    {
+      if( !_.strHas( r.dst.relative, '.atest.' ) )
+      return;
+      let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
+      r.dst.relative = relative;
+      _.assert( _.strHas( r.dst.absolute, '.test.' ) );
+    }
+
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
+
+    reflected.forEach( ( r ) =>
+    {
+      if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
+      return;
+      var read = a.fileProvider.fileRead( r.dst.absolute );
+      read = read.replace( `wTesting`, _.strEscape( self.defaultJsPath ) );
+      a.fileProvider.fileWrite( r.dst.absolute, read );
+    });
+
+  }
+
+  return a;
 }
 
 // --
@@ -50,74 +90,29 @@ function onSuiteEnd()
 function run( test )
 {
   let self = this;
-  let originalAssetPath = _.path.join( self.assetDirPath, 'hello' );
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let ready = new _.Consequence().take( null );
-  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
-  let suitePath = _.path.join( routinePath, 'Hello.test.js' );
+  let a = self.assetFor( test, 'hello' );
 
-  let shellTester = _.process.starter
-  ({
-    execPath : 'node ' + execPath,
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    outputGraying : 1,
-    mode : 'shell',
-    ready : ready,
-  })
+  a.reflect();
+  test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
 
-  let shell = _.process.starter
-  ({
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    outputGraying : 1,
-    ready : ready,
-  })
-
-  function onUp( r )
-  {
-    if( !_.strHas( r.dst.relative, '.atest.' ) )
-    return;
-
-    let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
-    debugger;
-    r.dst.relative = relative;
-    _.assert( _.strHas( r.dst.absolute, '.test.' ) );
-
-  }
-
-  debugger;
-  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalAssetPath ] : routinePath }, onUp : onUp });
-  test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
-  debugger;
-
-  // debugger; return; xxx
-
-  shell( 'npm i' );
-  // shell( 'npm rm -g wTesting' );
-  // shell( 'npm i -g ../../../..' );
-  // shell( 'npm ln ../../../..' );
-  // shell( 'npm -g uninstall wTesting' );
-  // shell( 'npm -g install wTesting' );
+  // shell( 'npm i' );
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'node Hello.test.js beeping:0'
     return null;
   })
 
-  shell({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
+  a.shellNonThrowing({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Passed test routine ( Hello / routine1 ) in' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed test routine ( Hello / routine2 ) in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
     test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
     test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
@@ -128,14 +123,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'wtest Hello.test.js'
     return null;
   })
 
-  shellTester({ args : [ 'Hello.test.js',  'beeping:0' ] })
+  a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -152,14 +147,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst absolute path as subject'
     return null;
   })
 
-  shellTester({ args : [ suitePath,  'beeping:0' ] })
+  a.jsNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -176,14 +171,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst absolute path as subject + options'
     return null;
   })
 
-  shellTester({ args : [ suitePath,  'v:7 beeping:0' ] })
+  a.jsNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -200,14 +195,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst .run absolute path as subject'
     return null;
   })
 
-  shellTester({ args : [ '.run', suitePath,  'beeping:0' ] })
+  a.jsNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -224,14 +219,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst .run absolute path as subject'
     return null;
   })
 
-  shellTester({ args : [ '.run', suitePath,  'v:7 beeping:0' ] })
+  a.jsNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -248,14 +243,14 @@ function run( test )
 
 /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst absolute nativized path as subject'
     return null;
   })
 
-  shellTester({ args : [ _.path.nativize( suitePath ),  'beeping:0' ] })
+  a.jsNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -272,14 +267,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst absolute nativized path as subject + options'
     return null;
   })
 
-  shellTester({ args : [ _.path.nativize( suitePath ),  'v:7 beeping:0' ] })
+  a.jsNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -296,14 +291,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst .run absolute nativized path as subject'
     return null;
   })
 
-  shellTester({ args : [ '.run', _.path.nativize( suitePath ),  'beeping:0' ] })
+  a.jsNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -320,14 +315,14 @@ function run( test )
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst .run absolute nativized path as subject'
     return null;
   })
 
-  shellTester({ args : [ '.run', _.path.nativize( suitePath ),  'v:7 beeping:0' ] })
+  a.jsNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -345,7 +340,7 @@ function run( test )
   /* - */
 
   // shell( 'npm rm -g wTesting' );
-  return ready;
+  return a.ready;
 }
 
 //
@@ -353,63 +348,23 @@ function run( test )
 function checkFails( test )
 {
   let self = this;
-  let originalAssetPath = _.path.join( self.assetDirPath, 'check-fails' );
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let ready = new _.Consequence().take( null );
-  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
+  let a = self.assetFor( test, 'check-fails' );
 
-  let shellTester = _.process.starter
-  ({
-    execPath : 'node ' + execPath,
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    outputGraying : 1,
-    mode : 'shell',
-    ready : ready,
-  })
+  a.reflect();
+  test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
 
-  let shell = _.process.starter
-  ({
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    ready : ready,
-  })
-
-  function onUp( r )
-  {
-    if( !_.strHas( r.dst.relative, '.atest.' ) )
-    return;
-
-    let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
-    debugger;
-    r.dst.relative = relative;
-    _.assert( _.strHas( r.dst.absolute, '.test.' ) );
-
-  }
-
-  debugger;
-  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalAssetPath ] : routinePath }, onUp : onUp });
-  test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
-  debugger;
-
-  // debugger; return; xxx
-
-  shell( 'npm i' );
-  // shell( 'npm -g uninstall wTesting' );
-  // shell( 'npm -g install wTesting' );
+  // shell( 'npm i' );
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst Hello.test.js'
     return null;
   })
 
-  shellTester({ args : [ 'Hello.test.js',  'beeping:0' ] })
+  a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -424,16 +379,16 @@ function checkFails( test )
     return null;
   })
 
-/* - */
+  /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'tst Hello.test.js fails:1'
     return null;
   })
 
-  shellTester({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
+  a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -446,7 +401,7 @@ function checkFails( test )
 
   /* - */
 
-  return ready;
+  return a.ready;
 }
 
 //
@@ -454,57 +409,124 @@ function checkFails( test )
 function double( test )
 {
   let self = this;
-  let originalAssetPath = _.path.join( self.assetDirPath, 'double' );
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainDirPath = _.path.nativize( _.path.join( __dirname, '../tester' ) );
-  // let mainDirPath = _.path.nativize( _.path.join( __dirname ) );
-  let ready = new _.Consequence().take( null );
+  let a = self.assetFor( test );
 
-  let shell = _.process.starter
-  ({
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    mode : 'shell',
-    ready : ready,
-  })
+  a.reflect();
+  test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
 
-  debugger;
-  let reflected = _.fileProvider.filesReflect({ reflectMap : { [ originalAssetPath ] : routinePath } });
-  test.is( _.fileProvider.fileExists( _.path.join( routinePath, 'Hello.test.js' ) ) );
-  debugger;
-
-  shell( 'npm i' );
+  // shell( 'npm i' );
 
   /* - */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'node Hello.test.js'
     return null;
   })
 
-  shell({ args : [ 'node', 'Hello.test.js' ] })
+  a.shellNonThrowing({ execPath : `node Hello.test.js v:5` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*\(.*Hello1.*\/.*routine1.*\)/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*\(.*Hello1.*\/.*routine2.*\)/ ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test.*routine.*\(.*Hello2.*\/.*routine1.*\)/ ), 1 );
-    test.identical( _.strCount( got.output, /Failed.*test.*routine.*\(.*Hello2.*\/.*routine2.*\)/ ), 1 );
-
-    // test.identical( _.strCount( got.output, 'Failed test routine ( Hello1 / routine2 )' ), 1 );
-    // test.identical( _.strCount( got.output, 'Passed test routine ( Hello2 / routine1 )' ), 1 );
-    // test.identical( _.strCount( got.output, 'Failed test routine ( Hello2 / routine2 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello2 / TestRoutine::routine2' ), 1 );
 
     return null;
   })
 
   /* - */
 
-  return ready;
+  return a.ready;
+}
+
+//
+
+function optionSuite( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'optionSuite' );
+
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run **'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine2' ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** suite:OptionSuiteA1'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** suite:OptionSuiteA1` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine2' ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** suite:*A*'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** suite:*A*` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine2' ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
 }
 
 //
@@ -512,31 +534,18 @@ function double( test )
 function noTestSuite( test )
 {
   let self = this;
-  let originalAssetPath = _.path.join( self.assetDirPath, 'hello' );
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
-  let ready = new _.Consequence().take( null );
+  let a = self.assetFor( test, false );
 
-  let shell = _.process.starter
-  ({
-    execPath : 'node ' + execPath,
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    mode : 'shell',
-    ready : ready,
-  })
+  a.fileProvider.dirMake( a.routinePath );
 
-  _.fileProvider.dirMake( routinePath );
-
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'relative path'
     return null;
   })
 
-  shell({ args : 'proto' })
+  a.jsNonThrowing({ args : 'proto' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -547,16 +556,16 @@ function noTestSuite( test )
     return null;
   })
 
-  //
+  /* */
 
-  ready
+  a.ready
   .then( () =>
   {
     test.case = 'relative path'
     return null;
   })
 
-  shell({ args : 'proto/dwtools' })
+  a.jsNonThrowing({ args : 'proto/dwtools' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -567,7 +576,7 @@ function noTestSuite( test )
     return null;
   })
 
-  //
+  /* */
 
   .then( () =>
   {
@@ -575,7 +584,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : 'proto/**' })
+  a.jsNonThrowing({ args : 'proto/**' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -586,7 +595,7 @@ function noTestSuite( test )
     return null;
   })
 
-  //
+  /* */
 
   .then( () =>
   {
@@ -594,7 +603,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : _.path.nativize( routinePath ) })
+  a.jsNonThrowing({ args : a.path.nativize( a.abs( '.' ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -605,7 +614,7 @@ function noTestSuite( test )
     return null;
   })
 
-  //
+  /* */
 
   .then( () =>
   {
@@ -613,7 +622,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : _.path.nativize( _.path.join( routinePath, '**' ) ) })
+  a.jsNonThrowing({ args : a.path.nativize( a.abs( '**' ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -623,6 +632,8 @@ function noTestSuite( test )
 
     return null;
   })
+
+  /* */
 
   .then( () =>
   {
@@ -630,7 +641,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : routinePath })
+  a.jsNonThrowing({ args : a.abs( '.' ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -640,6 +651,8 @@ function noTestSuite( test )
 
     return null;
   })
+
+  /* */
 
   .then( () =>
   {
@@ -647,7 +660,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : '.run ' + routinePath })
+  a.jsNonThrowing({ args : '.run ' + a.abs( '.' ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -657,6 +670,8 @@ function noTestSuite( test )
 
     return null;
   })
+
+  /* */
 
   .then( () =>
   {
@@ -664,7 +679,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : 'n:1' })
+  a.jsNonThrowing({ args : 'n:1' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -674,6 +689,8 @@ function noTestSuite( test )
 
     return null;
   })
+
+  /* */
 
   .then( () =>
   {
@@ -681,7 +698,7 @@ function noTestSuite( test )
     return null;
   })
 
-  shell({ args : '.run n:1' })
+  a.jsNonThrowing({ args : '.run n:1' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -692,7 +709,9 @@ function noTestSuite( test )
     return null;
   })
 
-  return ready;
+  /* */
+
+  return a.ready;
 }
 
 //
@@ -700,27 +719,12 @@ function noTestSuite( test )
 function help( test )
 {
   let self = this;
-  debugger;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
-  let ready = new _.Consequence().take( null );
-  debugger;
-
-  let shell = _.process.starter
-  ({
-    execPath : 'node ' + execPath,
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    mode : 'shell',
-    ready : ready,
-  })
-
-  _.fileProvider.dirMake( routinePath );
+  let a = self.assetFor( test, false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
 
   /* */
 
-  ready
+  a.ready
   .then( ( got ) =>
   {
 
@@ -729,7 +733,7 @@ function help( test )
     return null;
   })
 
-  shell( '' )
+  a.jsNonThrowing( '' )
 
   .then( ( got ) =>
   {
@@ -741,7 +745,7 @@ function help( test )
 
   /* */
 
-  ready
+  a.ready
   .then( ( got ) =>
   {
 
@@ -750,7 +754,7 @@ function help( test )
     return null;
   })
 
-  shell( '.' )
+  a.jsNonThrowing( '.' )
 
   .then( ( got ) =>
   {
@@ -762,7 +766,7 @@ function help( test )
 
   /* */
 
-  shell({ execPath : '.help' })
+  a.jsNonThrowing({ execPath : '.help' })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -772,7 +776,7 @@ function help( test )
 
   /* */
 
-  shell({ execPath : '.' })
+  a.jsNonThrowing({ execPath : '.' })
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
@@ -782,7 +786,7 @@ function help( test )
 
   /* */
 
-  shell({ args : [] })
+  a.jsNonThrowing({ args : [] })
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
@@ -790,7 +794,7 @@ function help( test )
     return op;
   })
 
-  return ready;
+  return a.ready;
 }
 
 //
@@ -798,25 +802,12 @@ function help( test )
 function version( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let execPath = _.path.nativize( _.path.join( __dirname, '../tester/Exec' ) );
-  let ready = new _.Consequence().take( null );
-
-  let shell = _.process.starter
-  ({
-    execPath : 'node ' + execPath,
-    currentPath : routinePath,
-    outputCollecting : 1,
-    throwingExitCode : 0,
-    mode : 'shell',
-    ready : ready,
-  })
-
-  _.fileProvider.dirMake( routinePath );
+  let a = self.assetFor( test, false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
 
   /* */
 
-  shell({ execPath : '.version' })
+  a.jsNonThrowing( '.version' )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -825,7 +816,7 @@ function version( test )
     return op;
   })
 
-  return ready;
+  return a.ready;
 }
 
 // --
@@ -835,7 +826,7 @@ function version( test )
 var Self =
 {
 
-  name : 'Tools.atop.Tester',
+  name : 'Tools.Tester.Ext',
   silencing : 1,
   enabled : 1,
 
@@ -845,10 +836,13 @@ var Self =
 
   context :
   {
-    execPath : null,
-    tempDir : null,
-    assetDirPath : null,
-    find : null,
+
+    assetFor,
+
+    suiteTempPath : null,
+    assetsOriginalSuitePath : null,
+    defaultJsPath : null,
+
   },
 
   tests :
@@ -857,9 +851,10 @@ var Self =
     run,
     checkFails,
     double,
+    optionSuite,
     noTestSuite,
     help,
-    version
+    version,
 
   }
 

@@ -351,7 +351,7 @@ function _testAllAct()
  * @memberof module:Tools/Tester.wTester
  */
 
-let testAll = _.timeReadyJoin( undefined, _testAllAct );
+let testAll = _.time.readyJoin( undefined, _testAllAct );
 
 //
 
@@ -379,7 +379,7 @@ function _test()
  * @memberof module:Tools/Tester.wTester
  */
 
-let test = _.timeReadyJoin( undefined, _test );
+let test = _.time.readyJoin( undefined, _test );
 
 //
 
@@ -405,7 +405,7 @@ function _testingBegin( allSuites, runSuites )
   tester.state = 'begin';
 
   if( tester.settings.timing )
-  tester._testingBeginTime = _.timeNow();
+  tester._testingBeginTime = _.time.now();
 
   logger.begin({ verbosity : -5 });
   logger.log( 'Tester Settings :' );
@@ -442,7 +442,7 @@ function _testingEndSoon()
   _.assert( arguments.length === 0 );
 
   if( tester._reportIsPositive() )
-  return _.timeOut( tester.settings.sanitareTime, () => tester._testingEndNow() );
+  return _.time.out( tester.settings.sanitareTime, () => tester._testingEndNow() );
   else
   tester._testingEndNow();
 
@@ -488,8 +488,8 @@ function _testingEndNow()
   let timingStr = '';
   if( tester.settings.timing )
   {
-    tester.report.timeSpent = _.timeNow() - tester._testingBeginTime;
-    timingStr = ' ... in ' + _.timeSpentFormat( tester.report.timeSpent );
+    tester.report.timeSpent = _.time.now() - tester._testingBeginTime;
+    timingStr = ' ... in ' + _.time.spentFormat( tester.report.timeSpent );
   }
 
   msg = 'Testing' + timingStr + ' ... '  + ( ok ? 'ok' : 'failed' );
@@ -512,7 +512,7 @@ function _testingEndNow()
   _.procedure.terminationBegin();
 
   if( !ok )
-  _.timeOut( 100, function()
+  _.time.out( 100, function()
   {
     _.process.exit();
   });
@@ -795,7 +795,6 @@ function _suitesIncludeAt( path )
   if( !tester.report )
   tester._reportBegin();
 
-  debugger;
   if( tester.verbosity > 1 )
   logger.log( 'Includes tests from :', path, '\n' );
 

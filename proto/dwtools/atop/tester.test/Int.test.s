@@ -164,7 +164,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c1.resourcesGet().length, 1 );
       c1.give( function( err, arg )
@@ -191,7 +191,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c2.resourcesGet().length, 1 );
       c2.give( function( err, arg )
@@ -219,7 +219,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c3.resourcesGet().length, 1 );
       c3.give( function( err, arg )
@@ -238,7 +238,7 @@ function returnsSingleResource( test )
     test.case = 'throw unexpected error, asynchronously';
     var c4 = t.returnsSingleResource( function()
     {
-      return _.timeOut( 150, function()
+      return _.time.out( 150, function()
       {
         throw _.errAttend( 'error1' );
       });
@@ -251,7 +251,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c4.resourcesGet().length, 1 );
       c4.give( function( err, arg )
@@ -270,7 +270,7 @@ function returnsSingleResource( test )
     test.case = 'single async message, no error';
     var c5 = t.returnsSingleResource( function()
     {
-      return _.timeOut( 150 );
+      return _.time.out( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -280,13 +280,13 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c5.resourcesGet().length, 1 );
       c5.give( function( err, arg )
       {
         test.is( err === undefined );
-        test.is( arg === _.timeOut );
+        test.is( arg === _.time.out );
       });
       return null;
     });
@@ -300,7 +300,7 @@ function returnsSingleResource( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.take( 'msg1' );
         con.take( 'msg2' );
@@ -317,7 +317,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c6.resourcesGet().length, 1 );
       c6.give( function( err, arg )
@@ -338,7 +338,7 @@ function returnsSingleResource( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.error( _.errAttend( 'error1' ) );
         con.error( _.errAttend( 'error2' ) );
@@ -355,7 +355,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c7.resourcesGet().length, 1 );
       c7.give( function( err, arg )
@@ -381,7 +381,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c8.resourcesGet().length, 1 );
       c8.give( function( err, arg )
@@ -406,7 +406,7 @@ function returnsSingleResource( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c9.resourcesGet().length, 1 );
       c9.give( function( err, arg )
@@ -420,7 +420,7 @@ function returnsSingleResource( test )
 
     /* */
 
-    return _.timeOut( 950 );
+    return _.time.out( 950 );
   }
 
   /* */
@@ -482,7 +482,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c1.resourcesGet().length, 1 );
       c1.give( function( err, arg )
@@ -509,7 +509,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c2.resourcesGet().length, 1 );
       c2.give( function( err, arg )
@@ -537,7 +537,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c3.resourcesGet().length, 1 );
       c3.give( function( err, arg )
@@ -555,7 +555,7 @@ function mustNotThrowError( test )
     test.case = 'throw unexpected error, asynchronously';
     var c4 = t.mustNotThrowError( function()
     {
-      return _.timeOut( 150, function()
+      return _.time.out( 150, function()
       {
         throw _.err( 'test' );
       });
@@ -569,7 +569,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c4.resourcesGet().length, 1 );
       c4.give( function( err, arg )
@@ -587,7 +587,7 @@ function mustNotThrowError( test )
     test.case = 'single async message, no error';
     var c5 = t.mustNotThrowError( function()
     {
-      return _.timeOut( 150 );
+      return _.time.out( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -597,13 +597,13 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c5.resourcesGet().length, 1 );
       c5.give( function( err, arg )
       {
         test.is( err === undefined );
-        test.is( arg === _.timeOut );
+        test.is( arg === _.time.out );
       });
       return null;
     });
@@ -617,7 +617,7 @@ function mustNotThrowError( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.take( 'msg1' );
         con.take( 'msg2' );
@@ -634,7 +634,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c6.resourcesGet().length, 1 );
       c6.give( function( err, arg )
@@ -655,7 +655,7 @@ function mustNotThrowError( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.error( _.errAttend( 'error1' ) );
         con.error( _.errAttend( 'error2' ) );
@@ -672,7 +672,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c7.resourcesGet().length, 1 );
       c7.give( function( err, arg )
@@ -697,7 +697,7 @@ function mustNotThrowError( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c8.resourcesGet().length, 1 );
       c8.give( function( err, arg )
@@ -727,7 +727,7 @@ function mustNotThrowError( test )
 
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c9.resourcesGet().length, 1 );
       c9.give( function( err, arg )
@@ -740,7 +740,7 @@ function mustNotThrowError( test )
 
     /* */
 
-    return _.timeOut( 950 );
+    return _.time.out( 950 );
   }
 
   /* */
@@ -800,7 +800,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.isNot( c1 );
       // test.identical( c1.resourcesGet().length, 1 );
@@ -829,7 +829,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.is( _.errIs( c2 ) );
       // test.identical( c2.resourcesGet().length, 1 );
@@ -848,7 +848,7 @@ function shouldThrowErrorSync( test )
     test.case = 'throw unexpected asynchronous error';
     var c3 = t.shouldThrowErrorSync( function()
     {
-      return _.timeOut( 150, function()
+      return _.time.out( 150, function()
       {
         throw _.errAttend( 'test1' );
       });
@@ -861,7 +861,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.is( c3 === false );
       // test.identical( c3.resourcesGet().length, 1 );
@@ -880,7 +880,7 @@ function shouldThrowErrorSync( test )
     test.case = 'single message, while synchronous error expected';
     var c4 = t.shouldThrowErrorSync( function()
     {
-      return _.timeOut( 150 );
+      return _.time.out( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -890,7 +890,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.is( c4 === false );
       // test.identical( c4.resourcesGet().length, 1 );
@@ -911,7 +911,7 @@ function shouldThrowErrorSync( test )
     {
       var con = _.Consequence({ capacity : 0 });
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.take( null );
         con.take( null );
@@ -928,7 +928,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.is( c5 === false );
       // test.identical( c5.resourcesGet().length, 1 );
@@ -949,7 +949,7 @@ function shouldThrowErrorSync( test )
     {
       var con = _.Consequence({ capacity : 0 }).error( _.errAttend( 'error1' ) );
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.error( _.errAttend( 'error2' ) );
         return null;
@@ -965,7 +965,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c6, false );
       // test.identical( c6.resourcesGet().length, 1 );
@@ -991,7 +991,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c7, false );
       // test.identical( c7.resourcesGet().length, 1 );
@@ -1018,7 +1018,7 @@ function shouldThrowErrorSync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c8, false );
       test.identical( c80.resourcesGet().length, 1 );
@@ -1034,7 +1034,7 @@ function shouldThrowErrorSync( test )
 
     /* */
 
-    return _.timeOut( 950 );
+    return _.time.out( 950 );
   }
 
   var suite = wTestSuite
@@ -1095,7 +1095,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c1.resourcesGet().length, 1 );
       c1.give( function( err, arg )
@@ -1123,7 +1123,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c2.resourcesGet().length, 1 );
       c2.give( function( err, arg )
@@ -1141,7 +1141,7 @@ function shouldThrowErrorAsync( test )
     test.case = 'throw expected asynchronous error';
     var c3 = t.shouldThrowErrorAsync( function()
     {
-      return _.timeOut( 150, function()
+      return _.time.out( 150, function()
       {
         throw _.err( 'test' );
       });
@@ -1154,7 +1154,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c3.resourcesGet().length, 1 ); /* xxx : phantom? */
       c3.give( function( err, arg )
@@ -1172,7 +1172,7 @@ function shouldThrowErrorAsync( test )
     test.case = 'single message while asynchronous error expected';
     var c4 = t.shouldThrowErrorAsync( function()
     {
-      return _.timeOut( 150 );
+      return _.time.out( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -1182,7 +1182,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c4.resourcesGet().length, 1 );
       c4.give( function( err, arg )
@@ -1202,7 +1202,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.error( 'error1' );
         return null;
@@ -1218,7 +1218,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c5.resourcesGet().length, 1 );
       c5.give( function( err, arg )
@@ -1238,7 +1238,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.take( null );
         con.take( null );
@@ -1255,7 +1255,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c6.resourcesGet().length, 1 );
       c6.give( function( err, arg )
@@ -1275,7 +1275,7 @@ function shouldThrowErrorAsync( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.error( _.errAttend( 'error1' ) );
         con.error( _.errAttend( 'error2' ) );
@@ -1292,7 +1292,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c7.resourcesGet().length, 1 );
       c7.give( function( err, arg )
@@ -1318,7 +1318,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c8.resourcesGet().length, 1 );
       c8.give( function( err, arg )
@@ -1343,7 +1343,7 @@ function shouldThrowErrorAsync( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c9.resourcesGet().length, 1 );
       c9.give( function( err, arg )
@@ -1356,7 +1356,7 @@ function shouldThrowErrorAsync( test )
 
     /* */
 
-    return _.timeOut( 950 );
+    return _.time.out( 950 );
   }
 
   /* */
@@ -1418,7 +1418,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c1.resourcesGet().length, 1 );
       c1.give( function( err, arg )
@@ -1446,7 +1446,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c2.resourcesGet().length, 1 );
       c2.give( function( err, arg )
@@ -1465,7 +1465,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.case = 'throw expected asynchronous error';
     var c3 = t.shouldThrowErrorOfAnyKind( function()
     {
-      return _.timeOut( 150, function()
+      return _.time.out( 150, function()
       {
         throw _.err( 'err1' );
       });
@@ -1478,7 +1478,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c3.resourcesGet().length, 1 );
       c3.give( function( err, arg )
@@ -1497,7 +1497,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.case = 'single message, but error expected';
     var c4 = t.shouldThrowErrorOfAnyKind( function()
     {
-      return _.timeOut( 150 );
+      return _.time.out( 150 );
     });
 
     counter.acheck = t.checkCurrent();
@@ -1507,7 +1507,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c4.resourcesGet().length, 1 );
       c4.give( function( err, arg )
@@ -1527,7 +1527,7 @@ function shouldThrowErrorOfAnyKind( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.take( 'arg1' );
         con.take( 'arg2' );
@@ -1544,7 +1544,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c5.resourcesGet().length, 1 );
       c5.give( function( err, arg )
@@ -1564,7 +1564,7 @@ function shouldThrowErrorOfAnyKind( test )
     {
       var con = _.Consequence();
 
-      _.timeOut( 150, function()
+      _.time.out( 150, function()
       {
         con.error( _.errAttend( 'error1' ) );
         con.error( _.errAttend( 'error2' ) );
@@ -1581,7 +1581,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 ); /* delayed */
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c6.resourcesGet().length, 1 );
       c6.give( function( err, arg )
@@ -1607,7 +1607,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c8.resourcesGet().length, 1 );
       c8.give( function( err, arg )
@@ -1632,7 +1632,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    _.timeOut( 500, function()
+    _.time.out( 500, function()
     {
       test.identical( c9.resourcesGet().length, 1 );
       c9.give( function( err, arg )
@@ -1645,7 +1645,7 @@ function shouldThrowErrorOfAnyKind( test )
 
     /* */
 
-    return _.timeOut( 950 );
+    return _.time.out( 950 );
   }
 
   var suite = wTestSuite
@@ -1714,7 +1714,7 @@ function shouldPassMessage( test )
     return null;
   });
 
-  return _.timeOut( 500 );
+  return _.time.out( 500 );
 }
 
 shouldPassMessage.timeOut = 15000;
@@ -1733,7 +1733,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 150, function()
+    _.time.out( 150, function()
     {
       con.take( null );
       con.take( null );
@@ -1748,7 +1748,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 2000, function()
+    _.time.out( 2000, function()
     {
       con.take( null );
       con.take( null );
@@ -1761,7 +1761,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorOfAnyKind( function()
   {
-    return _.timeOut( 150 );
+    return _.time.out( 150 );
   });
 
   /* */
@@ -1784,7 +1784,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    return _.timeOut( 150, function()
+    return _.time.out( 150, function()
     {
       throw _.err( 'test' );
     });
@@ -1794,7 +1794,7 @@ function _throwingExperiment( test )
 
   t.shouldThrowErrorAsync( function()
   {
-    return _.timeOut( 150 );
+    return _.time.out( 150 );
   });
 
   t.identical( 0, 0 );
@@ -1803,7 +1803,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 150, function()
+    _.time.out( 150, function()
     {
       con.take( null );
       con.take( null );
@@ -1814,7 +1814,7 @@ function _throwingExperiment( test )
 
   t.identical( 0, 0 );
 
-  _.timeOut( 2000, function()
+  _.time.out( 2000, function()
   {
 
     counter.acheck = t.checkCurrent();
@@ -1836,7 +1836,7 @@ function _throwingExperiment( test )
   test.case = 'single message';
   test.mustNotThrowError( function()
   {
-    return _.timeOut( 150 );
+    return _.time.out( 150 );
   });
 
   /* */
@@ -1845,7 +1845,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 150, function()
+    _.time.out( 150, function()
     {
       con.take( null );
       con.take( null );
@@ -1858,7 +1858,7 @@ function _throwingExperiment( test )
 
   test.shouldThrowErrorSync( function()
   {
-    return _.timeOut( 150 );
+    return _.time.out( 150 );
   });
 
   /* */
@@ -1888,7 +1888,7 @@ function _throwingExperiment( test )
   test.case = 'if not passes then appears in output/total counter';
   test.mustNotThrowError( function()
   {
-    return _.timeOut( 1000, function()
+    return _.time.out( 1000, function()
     {
       throw _.err( 'test' );
     });
@@ -1902,7 +1902,7 @@ function _throwingExperiment( test )
   {
     var con = _.Consequence().take( null );
 
-    _.timeOut( 1000, function()
+    _.time.out( 1000, function()
     {
       con.take( null );
       con.take( null );
@@ -1962,7 +1962,7 @@ function shouldThrowErrorAsyncSimple( test )
   {
     test.case = 'a';
     test.description = 'aa';
-    var con = _.timeOut( 150, function()
+    var con = _.time.out( 150, function()
     {
       throw _.errAttend( 'async error' );
     });
@@ -1984,7 +1984,7 @@ function shouldThrowErrorAsyncSimple( test )
     }
     test.identical( acheck, expectedCheck );
 
-    var con = _.timeOut( 50, function()
+    var con = _.time.out( 50, function()
     {
       throw _.errAttend( 'async error' );
     });
@@ -2037,7 +2037,7 @@ function shouldThrowErrorAsyncConcurrent( test )
 
     test.case = 'a';
     test.description = 'aa';
-    var con = _.timeOut( 150, function()
+    var con = _.time.out( 150, function()
     {
       throw _.errAttend( 'async error' );
     });
@@ -2045,18 +2045,18 @@ function shouldThrowErrorAsyncConcurrent( test )
 
     test.case = 'b';
     test.description = 'bb';
-    var con = _.timeOut( 50, function()
+    var con = _.time.out( 50, function()
     {
       throw _.errAttend( 'async error' );
     });
     var con2 = test.shouldThrowErrorAsync( con );
 
-    return _.timeOut( 200 );
+    return _.time.out( 200 );
   })
   .finally( function( err, arg )
   {
 
-    test.identical( arg, _.timeOut );
+    test.identical( arg, _.time.out );
     test.identical( err, undefined );
 
     test.identical( test.report.testCheckPasses-counter.prevCheckPasses, 5 );
@@ -2240,7 +2240,7 @@ function shouldThrowErrorAsyncReturn( test )
     .then( ( arg ) =>
     {
       debugger;
-      return t.shouldThrowErrorAsync( _.timeOutError( 500 ) )
+      return t.shouldThrowErrorAsync( _.time.outError( 500 ) )
       .finally( ( err, got ) =>
       {
         debugger;
@@ -2371,7 +2371,7 @@ function shouldThrowErrorReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.shouldThrowErrorOfAnyKind( _.timeOutError( 1 ) )
+      return t.shouldThrowErrorOfAnyKind( _.time.outError( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -2501,7 +2501,7 @@ function mustNotThrowErrorReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.mustNotThrowError( _.timeOutError( 1 ) )
+      return t.mustNotThrowError( _.time.outError( 1 ) )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -2568,7 +2568,7 @@ function shouldMessageOnlyOnceReturn( test )
     onSuiteEnd : onSuiteEnd,
   });
 
-  // _.timeOutError( 0 );
+  // _.time.outError( 0 );
 
   return suite.run();
 
@@ -2659,7 +2659,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      var con = _.timeOut( 1, () => _.timeOut( 1 ) )
+      var con = _.time.out( 1, () => _.time.out( 1 ) )
       return t.returnsSingleResource( con )
       .finally( ( err, got ) =>
       {
@@ -2671,7 +2671,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      var con = _.timeOut( 1, () => _.timeOut( 1 ) )
+      var con = _.time.out( 1, () => _.time.out( 1 ) )
       return t.returnsSingleResource( () => con )
       .finally( ( err, got ) =>
       {
@@ -2683,7 +2683,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.returnsSingleResource( _.timeOutError( 1 ).tap( ( err, arg ) => _.errAttend( err ) ) )
+      return t.returnsSingleResource( _.time.outError( 1 ).tap( ( err, arg ) => _.errAttend( err ) ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -2694,7 +2694,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.returnsSingleResource( _.timeOutError( 1 ).tap( ( err, arg ) => _.errAttend( err ) ) )
+      return t.returnsSingleResource( _.time.outError( 1 ).tap( ( err, arg ) => _.errAttend( err ) ) )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
@@ -2853,7 +2853,7 @@ function chainedShould( test )
         test.identical( t.suite.report.testCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails, 0 );
 
-        var con = _.timeOut( 50, function( err )
+        var con = _.time.out( 50, function( err )
         {
           test.case = prefix + 'give the first message';
           test.is( 1 );
@@ -2878,7 +2878,7 @@ function chainedShould( test )
         test.identical( t.suite.report.testCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails, 0 );
 
-        var con = _.timeOut( 50, function( err )
+        var con = _.time.out( 50, function( err )
         {
           test.case = prefix + 'give the second message';
           test.is( 1 );
@@ -2926,7 +2926,7 @@ function chainedShould( test )
       function first()
       {
 
-        var result = _.timeOut( 50, function()
+        var result = _.time.out( 50, function()
         {
 
           test.case = prefix + 'first timeout of the included test routine ';
@@ -2958,7 +2958,7 @@ function chainedShould( test )
 
       function second()
       {
-        return _.timeOut( 50, function()
+        return _.time.out( 50, function()
         {
 
           test.case = prefix + 'first ' + method + ' done';
@@ -2973,9 +2973,9 @@ function chainedShould( test )
           test.identical( counter.acheck.checkIndex, 3 );
 
           if( o.throwingError === 'async' )
-          t[ method ]( _.timeOutError( 50 ).tap( ( err, arg ) => _.errAttend( err ) ) );
+          t[ method ]( _.time.outError( 50 ).tap( ( err, arg ) => _.errAttend( err ) ) );
           else if( !o.throwingError )
-          t[ method ]( _.timeOut( 50 ) );
+          t[ method ]( _.time.out( 50 ) );
           else
           t.identical( 1, 1 );
 
@@ -6002,7 +6002,7 @@ function asyncTestRoutine( test )
     var got = await new _.Consequence().take( 1 );
     t.identical( got, 1 );
 
-    var got = await _.timeOut( 1000, () => 2 );
+    var got = await _.time.out( 1000, () => 2 );
     t.identical( got, 2 );
 
     var got = await Promise.resolve( 3 )
@@ -6127,7 +6127,7 @@ function syncTimeout1( test )
     trd = t;
     t.description = 'description1';
     t.identical( 0, 1 );
-    _.timeOut( 500 ).deasyncWait();
+    _.time.out( 500 ).deasyncWait();
     t.description = 'description2';
     testRoutineDone = 1;
   }
@@ -6193,7 +6193,7 @@ function syncTimeout2( test )
     trd = t;
     t.description = 'description1';
     t.identical( 0, 1 );
-    _.timeOut( 500 ).deasyncWait();
+    _.time.out( 500 ).deasyncWait();
     t.identical( 1, 1 );
     testRoutineDone = 1;
   }
@@ -6253,7 +6253,7 @@ function asyncTimeout1( test )
     trd = t;
     t.description = 'description1';
     visit( 'v0' );
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       visit( 'v1' );
       t.identical( 0, 1 );
@@ -6295,7 +6295,7 @@ function asyncTimeout1( test )
     return null;
   });
 
-  return _.timeOut( 2000, () =>
+  return _.time.out( 2000, () =>
   {
     test.identical( visits, [ 'v0', 'v3', 'v1' ] );
   });
@@ -6320,7 +6320,7 @@ asyncTimeout1.description =
 
 function asyncExperiment( test )
 {
-  var con = _.timeOutError( 1000 );
+  var con = _.time.outError( 1000 );
 
   test.identical( 0, 0 );
 
@@ -6343,7 +6343,7 @@ function mustNotThrowErrorExperiment( test )
   var con = test.mustNotThrowError( function()
   {
     console.log( 'x' );
-    return _.timeOut( 500 );
+    return _.time.out( 500 );
   });
 
   // var con = test.returnsSingleResource( function()
@@ -6395,7 +6395,7 @@ function experimentTimeOutAsync( test )
 {
   /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
   test.identical( test.timeOut, 8000 );
-  return _.timeOut( 6000 );
+  return _.time.out( 6000 );
 }
 
 experimentTimeOutAsync.experimental = 1;

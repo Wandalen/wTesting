@@ -196,11 +196,34 @@ module:
           - ../proto/dwtools/atop/tester/l7/TesterTop.s
           - ../proto/dwtools/atop/tester.test
           - ../proto/dwtools/atop/tester.test/Electron.test.s
-          - ../proto/dwtools/atop/tester.test/Externals.test.s
-          - ../proto/dwtools/atop/tester.test/General.test.s
+          - ../proto/dwtools/atop/tester.test/Ext.test.s
           - ../proto/dwtools/atop/tester.test/Inheritance.test.s
+          - ../proto/dwtools/atop/tester.test/Int.test.s
           - ../proto/dwtools/atop/tester.test/Puppeteer.test.s
           - ../proto/dwtools/atop/tester.test/Time.test.s
+          - ../proto/dwtools/atop/tester.test/-_asset
+          - ../proto/dwtools/atop/tester.test/-_asset/check-fails
+          - ../proto/dwtools/atop/tester.test/-_asset/check-fails/Hello.js
+          - ../proto/dwtools/atop/tester.test/-_asset/check-fails/Hello.test.js
+          - ../proto/dwtools/atop/tester.test/-_asset/check-fails/package.json
+          - ../proto/dwtools/atop/tester.test/-_asset/double
+          - ../proto/dwtools/atop/tester.test/-_asset/double/Hello.js
+          - ../proto/dwtools/atop/tester.test/-_asset/double/Hello.test.js
+          - ../proto/dwtools/atop/tester.test/-_asset/double/package.json
+          - ../proto/dwtools/atop/tester.test/-_asset/electron
+          - ../proto/dwtools/atop/tester.test/-_asset/electron/index.html
+          - ../proto/dwtools/atop/tester.test/-_asset/electron/main.js
+          - ../proto/dwtools/atop/tester.test/-_asset/grouping
+          - ../proto/dwtools/atop/tester.test/-_asset/grouping/Grouping.test.js
+          - ../proto/dwtools/atop/tester.test/-_asset/grouping/Hello.js
+          - ../proto/dwtools/atop/tester.test/-_asset/grouping/package-lock.json
+          - ../proto/dwtools/atop/tester.test/-_asset/grouping/package.json
+          - ../proto/dwtools/atop/tester.test/-_asset/hello
+          - ../proto/dwtools/atop/tester.test/-_asset/hello/Hello.js
+          - ../proto/dwtools/atop/tester.test/-_asset/hello/Hello.test.js
+          - ../proto/dwtools/atop/tester.test/-_asset/hello/package.json
+          - ../proto/dwtools/atop/tester.test/-_asset/puppeteer
+          - ../proto/dwtools/atop/tester.test/-_asset/puppeteer/index.html
           - ../proto/dwtools/atop/tester.test/_asset
           - ../proto/dwtools/atop/tester.test/_asset/check-fails
           - ../proto/dwtools/atop/tester.test/_asset/check-fails/Hello.js
@@ -210,9 +233,6 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/double/Hello.js
           - ../proto/dwtools/atop/tester.test/_asset/double/Hello.test.js
           - ../proto/dwtools/atop/tester.test/_asset/double/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/electron
-          - ../proto/dwtools/atop/tester.test/_asset/electron/index.html
-          - ../proto/dwtools/atop/tester.test/_asset/electron/main.js
           - ../proto/dwtools/atop/tester.test/_asset/grouping
           - ../proto/dwtools/atop/tester.test/_asset/grouping/Grouping.test.js
           - ../proto/dwtools/atop/tester.test/_asset/grouping/Hello.js
@@ -222,8 +242,11 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.js
           - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.test.js
           - ../proto/dwtools/atop/tester.test/_asset/hello/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/puppeteer
-          - ../proto/dwtools/atop/tester.test/_asset/puppeteer/index.html
+          - ../proto/dwtools/atop/tester.test/_asset/optionSuite
+          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A1.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A2.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/B1.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/package.json
     submodule:
       wConsequence:
         path: 'npm:///wConsequence'

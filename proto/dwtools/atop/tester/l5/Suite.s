@@ -5,7 +5,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-debugged = 0;
+// debugged = 0;
 
 //
 
@@ -433,7 +433,7 @@ function _runSoon()
   let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
   let result = con
-  .finally( () => _.timeReady() )
+  .finally( () => _.time.ready() )
   .finally( () => suite._runNow() )
   .split()
   ;
@@ -500,7 +500,7 @@ function _begin()
   let ready = new _.Consequence().take( null );
 
   if( wTester.settings.timing )
-  suite._testSuiteBeginTime = _.timeNow();
+  suite._testSuiteBeginTime = _.time.now();
 
   /* test routine */
 
@@ -620,7 +620,7 @@ function _endSoon( err, arg )
   suite._reportEnd();
 
   if( suite._reportIsPositive() )
-  return _.timeOut( wTester.settings.sanitareTime, () => suite._end( err ) );
+  return _.time.out( wTester.settings.sanitareTime, () => suite._end( err ) );
   else
   return suite._end( err );
 }
@@ -664,7 +664,7 @@ function _end( err )
   {
     try
     {
-      debugger;
+      // debugger;
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
@@ -710,8 +710,8 @@ function _end( err )
   let timingStr = '';
   if( wTester.settings.timing )
   {
-    suite.report.timeSpent = _.timeNow() - suite._testSuiteBeginTime;
-    timingStr = ' ... in ' + _.timeSpentFormat( suite.report.timeSpent );
+    suite.report.timeSpent = _.time.now() - suite._testSuiteBeginTime;
+    timingStr = ' ... in ' + _.time.spentFormat( suite.report.timeSpent );
   }
 
   msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );

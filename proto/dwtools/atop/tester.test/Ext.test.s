@@ -23,19 +23,10 @@ function onSuiteBegin()
 {
   let self = this;
 
-  self.defaultJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
-
-  // self.find = a.fileProvider.filesFinder
-  // ({
-  //   filter : { recursive : 2 },
-  //   withTerminals : 1,
-  //   withDirs : 1,
-  //   withTransient/*maybe withStem*/ : 1,
-  //   allowingMissed : 1,
-  //   outputFormat : 'relative',
-  // });
+  self.defaultJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
 
 }
 
@@ -74,7 +65,8 @@ function assetFor( test, asset )
       if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
       return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
-      read = read.replace( `wTesting`, _.strEscape( self.defaultJsPath ) );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.defaultJsPath )}'` );
+      read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
 
@@ -448,7 +440,7 @@ function double( test )
 function optionSuite( test )
 {
   let self = this;
-  let a = self.assetFor( test, 'optionSuite' );
+  let a = self.assetFor( test );
 
   a.reflect();
 
@@ -520,6 +512,114 @@ function optionSuite( test )
     test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteA2 / TestRoutine::routine2' ), 1 );
     test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine1' ), 0 );
     test.identical( _.strCount( got.output, 'TestSuite::OptionSuiteB1 / TestRoutine::routine2' ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function noTestCheck( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run **'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( passed none test check ) TestSuite::NoTestCheckAsset / TestRoutine::routine1' ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function asyncTimeOut( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run **'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'failed throwing error' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
+    test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function checksAfterTimeOut( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run **'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'failed throwing error' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
+    test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
 
     return null;
   })
@@ -842,6 +942,7 @@ var Self =
     suiteTempPath : null,
     assetsOriginalSuitePath : null,
     defaultJsPath : null,
+    toolsPath : null,
 
   },
 
@@ -852,6 +953,9 @@ var Self =
     checkFails,
     double,
     optionSuite,
+    noTestCheck,
+    asyncTimeOut,
+    checksAfterTimeOut,
     noTestSuite,
     help,
     version,

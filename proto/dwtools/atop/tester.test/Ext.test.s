@@ -340,7 +340,7 @@ function run( test )
 function checkFails( test )
 {
   let self = this;
-  let a = self.assetFor( test, 'check-fails' );
+  let a = self.assetFor( test );
 
   a.reflect();
   test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
@@ -385,7 +385,7 @@ function checkFails( test )
   {
     test.ni( got.exitCode, 0 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( thrown error ) TestSuite::Hello / TestRoutine::routine2' ), 1 );
     test.identical( _.strCount( got.output, /Test suite \( Hello \) ... in .* ... failed/ ), 1 );
 
     return null;
@@ -606,20 +606,32 @@ function checksAfterTimeOut( test )
   a.ready
   .then( () =>
   {
-    test.case = 'tst .run **'
+    test.case = 'tst .run ** v:5'
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.jsNonThrowing({ execPath : `.run ** v:5` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
     test.identical( _.strCount( got.output, 'failed throwing error' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
-    test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test checks 2 / 3' ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test routines 1 / 2' ), 2 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+
+    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description1 # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description2 # 2 ) ... failed throwing error' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine2 /  < description1 # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Test check' ), 3 );
+
+    test.identical( _.strCount( got.output, 'v0' ), 1 );
+    test.identical( _.strCount( got.output, 'v1' ), 1 );
+    test.identical( _.strCount( got.output, 'v2' ), 0 );
+    test.identical( _.strCount( got.output, 'v3' ), 1 );
 
     return null;
   })

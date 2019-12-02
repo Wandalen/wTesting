@@ -6,200 +6,273 @@
 
 ## Концепції
 
-<details><summary><a href="./concept/TestObject.md">
-      Об'єкт тестування
+<details>
+  <summary><a href="./concept/TestObject.md">
+    Об'єкт тестування
   </a></summary>
-  Об'єкт тестування - система, коректна робота, якої тестується.
+    Об'єкт тестування - система, коректна робота, якої тестується.
 </details>
-<details><summary><a href="./concept/TestSuite.md">
-      Тест сюіт
+
+<details>
+  <summary><a href="./concept/TestSuite.md">
+    Тест сюіт
   </a></summary>
-  Тест сюіт ( тестовий комлект, тестовий набір ) - це набір тест рутин, та тестових данних для тестування об'єкту тестування.
+    Тест сюіт ( тестовий комлект, тестовий набір ) - це набір тест рутин, та тестових данних для тестування об'єкту тестування.
 </details>
-<details><summary><a href="./concept/TestRoutine.md">
-      Тест рутина
+
+<details>
+  <summary><a href="./concept/TestRoutine.md">
+    Тест рутина
   </a></summary>
-  Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест сюіт розбивається на тест рутини, кожна із котрих виконується незалежно одна від одної. Інструкції тест рутини виконується послідовно та містять в собі тест перевірки, котрі можуть об'єднуватися в тест кейси та можуть мати опис.
+    Тест рутина - рутина ( функція, метод ) розроблена для тестування, якогось із аспектів об'кту тестування. Тест сюіт розбивається на тест рутини, кожна із котрих виконується незалежно одна від одної. Інструкції тест рутини виконується послідовно та містять в собі тест перевірки, котрі можуть об'єднуватися в тест кейси та можуть мати опис.
 </details>
-<details><summary><a href="./concept/TestCheck.md">
-      Тест перевірка
+
+<details>
+  <summary><a href="./concept/TestCheck.md">
+    Тест перевірка
   </a></summary>
-  Тест перевірка - очікування розробника стосовно поведінки об'єкту, що тестується виражене якоюсь умовою. Це найнижча структурна одиниця тестування.
+    Тест перевірка - очікування розробника стосовно поведінки об'єкту, що тестується виражене якоюсь умовою. Це найнижча структурна одиниця тестування.
 </details>
-<details><summary><a href="./concept/TestCase.md">
-      Тест кейс
+
+<details>
+  <summary><a href="./concept/TestCase.md">
+    Тест кейс
   </a></summary>
-  Тест кейс або група тест перевірок - це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
+    Тест кейс або група тест перевірок - це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/TestCase.md">
-      Група тест перевірок
+
+<details>
+  <summary><a href="./concept/TestCase.md">
+    Група тест перевірок
   </a></summary>
-  Тест кейс або група тест перевірок - це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
+    Тест кейс або група тест перевірок - це одна або декілька тест перевірок із супровідним кодом поєднаних в логічну структурну одиницю для перевірки функціональності якогось аспекту об'єкту, що тестується.
 </details>
-<details><summary><a href="./concept/TestCoverage.md">
-      Тестове покриття
+
+<details>
+  <summary><a href="./concept/TestCoverage.md">
+    Тестове покриття
   </a></summary>
-  Тестове покриття — метрика тестування програмного забезпечення, що визначається відсотком тестованого вихідного коду програми.
+    Тестове покриття — метрика тестування програмного забезпечення, що визначається відсотком тестованого вихідного коду програми.
 </details>
-<details><summary><a href="./concept/TestCheck.md#Позитивне-тестування">
-      Позитивне тестування
+
+<details>
+  <summary><a href="./concept/TestCheck.md#Позитивне-тестування">
+    Позитивне тестування
   </a></summary>
-  Тестування коректності роботи об'єкта тестування за нормальних умов, при відсутності помилок в вхідних даних та нормальному стані.
+    Тестування коректності роботи об'єкта тестування за нормальних умов, при відсутності помилок в вхідних даних та нормальному стані.
 </details>
-<details><summary><a href="./concept/TestCheck.md#Негативне-тестування">
-      Негативне тестування
+
+<details>
+  <summary><a href="./concept/TestCheck.md#Негативне-тестування">
+    Негативне тестування
   </a></summary>
-  Тестування коректності обробки об'єктом тестування помилкових даних чи помилкового стану.
+    Тестування коректності обробки об'єктом тестування помилкових даних чи помилкового стану.
 </details>
-<details><summary><a href="./concept/TestingStatus.md#Помилка-тестування">
-      Помилка тестування
+
+<details>
+  <summary><a href="./concept/TestingStatus.md#Помилка-тестування">
+    Помилка тестування
   </a></summary>
-  Подія чи умова, яка призвела до провалу тестування.
+    Подія чи умова, яка призвела до провалу тестування.
 </details>
-<details><summary><a href="./concept/TestingStatus.md#Пройдене-тестування">
-      Пройдене тестування
+
+<details>
+  <summary><a href="./concept/TestingStatus.md#Пройдене-тестування">
+    Пройдене тестування
   </a></summary>
-  Результат проходження тестування, котрий не містить помилок тестування.
+    Результат проходження тестування, котрий не містить помилок тестування.
 </details>
-<details><summary><a href="./concept/TestingStatus.md#Провалене-тестування">
-      Провалене тестування
+
+<details>
+  <summary><a href="./concept/TestingStatus.md#Провалене-тестування">
+    Провалене тестування
   </a></summary>
-  Результат виконання тестування, котрий містить принаймні одну помилку тестування.  
+    Результат виконання тестування, котрий містить принаймні одну помилку тестування.  
 </details>
-<details><summary><a href="./concept/TestOption.md#Опція-запуска">
-      Опція запуска
+
+<details>
+  <summary><a href="./concept/TestOption.md#Опція-запуска">
+    Опція запуска
   </a></summary>
-  Параметр для керування процесом тестування, який передається через команду запуску. Опції тестування застосовується до кожного тест сюіта.
+    Параметр для керування процесом тестування, який передається через команду запуску. Опції тестування застосовується до кожного тест сюіта.
 </details>
-<details><summary><a href="./concept/TestOption.md#Опція-тест-сюіта">
-      Опція тест сюіта
+
+<details>
+  <summary><a href="./concept/TestOption.md#Опція-тест-сюіта">
+    Опція тест сюіта
   </a></summary>
-  Параметр для керування процесом тестування, який вказується в коді визначення тест сюіта. Такі опції переписують значення за замовучуванням і, в свою чергу, можуть бути переписані опціями запуску.
+    Параметр для керування процесом тестування, який вказується в коді визначення тест сюіта. Такі опції переписують значення за замовучуванням і, в свою чергу, можуть бути переписані опціями запуску.
 </details>
-<details><summary><a href="./concept/TestOption.md#Опція-тест-рутини">
-      Опція тест рутини
+
+<details>
+  <summary><a href="./concept/TestOption.md#Опція-тест-рутини">
+    Опція тест рутини
   </a></summary>
-  Параметр для керування процесом тестування заданий в окремій тест рутині.
+    Параметр для керування процесом тестування заданий в окремій тест рутині.
 </details>
 
 ## Туторіали
 
-<details><summary><a href="./tutorial/Abstract.md">
-      Загальна інформація
+<details>
+  <summary><a href="./tutorial/Abstract.md">
+    Загальна інформація
   </a></summary>
-  Загальна інформація про утиліту Testing.
+    Загальна інформація про утиліту Testing.
 </details>
-<details><summary><a href="./tutorial/Installation.md">
-      Встановлення
+
+<details>
+  <summary><a href="./tutorial/Installation.md">
+    Встановлення
   </a></summary>
-  Процедура встановлення утиліти Testing.
+    Процедура встановлення утиліти Testing.
 </details>
-<details><summary><a href="./tutorial/Help.md">
-      Як отримати довідку
+
+<details>
+  <summary><a href="./tutorial/Help.md">
+    Як отримати довідку
   </a></summary>
-  Як отримати загальну довідку.
+    Як отримати загальну довідку.
 </details>
-<details><summary><a href="./tutorial/HelpSuitesList.md">
-      Як отримати список тест сюітів
+
+<details>
+  <summary><a href="./tutorial/HelpSuitesList.md">
+    Як отримати список тест сюітів
   </a></summary>
-  Як отримати інформацію про тест-сюіти.
+    Як отримати інформацію про тест-сюіти.
 </details>
-<details><summary><a href="./tutorial/Running.md">
-      Запуск тестів
+
+<details>
+  <summary><a href="./tutorial/Running.md">
+    Запуск тестів
   </a></summary>
-  Як запускати тестування окремих тест сюітів та тестування скопом.
+    Як запускати тестування окремих тест сюітів та тестування скопом.
 </details>
-<details><summary><a href="./tutorial/HelloWorld.md">
-      Тест сюіт "Hello World!"
+
+<details>
+  <summary><a href="./tutorial/HelloWorld.md">
+    Тест сюіт "Hello World!"
   </a></summary>
-  Створення простого тест сюіта.
+    Створення простого тест сюіта.
 </details>
-<details><summary><a href="./tutorial/Report.md">
-      Як читати звіт та групувати перевірки
+
+<details>
+  <summary><a href="./tutorial/Report.md">
+    Як читати звіт та групувати перевірки
   </a></summary>
-  Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
+    Як читати звіт тестування та групувати тест перевірки в групи та тест кейси. Як опис відображається в звіті.
 </details>
-<details><summary><a href="./tutorial/TestRoutine.md">
-      Як писати тест рутину
+
+<details>
+  <summary><a href="./tutorial/TestRoutine.md">
+    Як писати тест рутину
   </a></summary>
-  Основні правила написання тест рутин.
+    Основні правила написання тест рутин.
 </details>
-<details><summary><a href="./tutorial/Verbosity.md">
-      Контроль рівня вербальності
+
+<details>
+  <summary><a href="./tutorial/Verbosity.md">
+    Контроль рівня вербальності
   </a></summary>
-  Зміна кількості виведеної інформації опцією verbosity.
+    Зміна кількості виведеної інформації опцією verbosity.
 </details>
-<details><summary><a href="./tutorial/OptionSanitareTime.md">
-      Опція sanitareTime
+
+<details>
+  <summary><a href="./tutorial/OptionSanitareTime.md">
+    Опція sanitareTime
   </a></summary>
-  Регулювання часу на завершення виконання асинхронних перевірок.
+    Регулювання часу на завершення виконання асинхронних перевірок.
 </details>
-<details><summary><a href="./tutorial/OptionBeeping.md">
-      Опція beeping
+
+<details>
+  <summary><a href="./tutorial/OptionBeeping.md">
+    Опція beeping
   </a></summary>
-  Сигналізація про закінчення тестування.
+    Сигналізація про закінчення тестування.
 </details>
-<details><summary><a href="./tutorial/OptionTiming.md">
-      Опція timing
+
+<details>
+  <summary><a href="./tutorial/OptionTiming.md">
+    Опція timing
   </a></summary>
-  Ввімкнення підрахунку часу тестування.
+    Ввімкнення підрахунку часу тестування.
 </details>
-<details><summary><a href="./tutorial/OptionRoutineTimeOut.md">
-      Опція routineTimeOut
+
+<details>
+  <summary><a href="./tutorial/OptionRoutineTimeOut.md">
+    Опція routineTimeOut
   </a></summary>
-  Як задати час на виконання тест рутини.
+    Як задати час на виконання тест рутини.
 </details>
-<details><summary><a href="./tutorial/OptionRapidity.md">
-      Опція rapidity
+
+<details>
+  <summary><a href="./tutorial/OptionRapidity.md">
+    Опція rapidity
   </a></summary>
-  Як встановити пріоритет виконання тест рутини та керувати проходженням тестування.
+    Як встановити пріоритет виконання тест рутини та керувати проходженням тестування.
 </details>
-<details><summary><a href="./tutorial/OptionShoulding.md">
-      Опція shoulding
+
+<details>
+  <summary><a href="./tutorial/OptionShoulding.md">
+    Опція shoulding
   </a></summary>
-  Як вимкнути перевірки з should*.
+    Як вимкнути перевірки з should*.
 </details>
-<details><summary><a href="./tutorial/OptionSilencing.md">
-      Опція silencing
+
+<details>
+  <summary><a href="./tutorial/OptionSilencing.md">
+    Опція silencing
   </a></summary>
-  Фільтрування звіту тестування від сторонніх включень.
+    Фільтрування звіту тестування від сторонніх включень.
 </details>
-<details><summary><a href="./tutorial/OptionAccuracy.md">
-      Опція accuracy
+
+<details>
+  <summary><a href="./tutorial/OptionAccuracy.md">
+    Опція accuracy
   </a></summary>
-  Як врахувати точність обчислень при порівнянні числових значень.
+    Як врахувати точність обчислень при порівнянні числових значень.
 </details>
-<details><summary><a href="./tutorial/OptionConcurrent.md">
-      Опція concurrent
+
+<details>
+  <summary><a href="./tutorial/OptionConcurrent.md">
+    Опція concurrent
   </a></summary>
-  Як запустити паралельне виконання тест сюітів.
+    Як запустити паралельне виконання тест сюітів.
 </details>
-<details><summary><a href="./tutorial/Optionnegativity.md">
-      Опція negativity
+
+<details>
+  <summary><a href="./tutorial/Optionnegativity.md">
+    Опція negativity
   </a></summary>
-  Як отримати більше інформації про провалені тести.
+    Як отримати більше інформації про провалені тести.
 </details>
-<details><summary><a href="./tutorial/SuiteInheritance.md">
-      Наслідування тест сюіта
+
+<details>
+  <summary><a href="./tutorial/SuiteInheritance.md">
+    Наслідування тест сюіта
   </a></summary>
-  Наслідування одного тест сюіта іншим.
+    Наслідування одного тест сюіта іншим.
 </details>
-<details><summary><a href="./tutorial/SuiteInheritance.md">
-      Наслідування тест сюіта
+
+<details>
+  <summary><a href="./tutorial/SuiteInheritance.md">
+    Наслідування тест сюіта
   </a></summary>
-  Як використовувати наслідування від декількох тест сюітів.
+    Як використовувати наслідування від декількох тест сюітів.
 </details>
 
 
 <!--
-<details><summary><a href="./tutorial/OptionFails.md">
-      Опція fails
+<details>
+  <summary><a href="./tutorial/OptionFails.md">
+    Опція fails
   </a></summary>
-  Як завершити тестування при досягненні деякого числа провалених тестів.
+    Як завершити тестування при досягненні деякого числа провалених тестів.
 </details>
-<details><summary><a href="./tutorial/OptionColoring.md">
-      Опція coloring
+
+<details>
+  <summary><a href="./tutorial/OptionColoring.md">
+    Опція coloring
   </a></summary>
-  Використання кольорового звіту.
+    Використання кольорового звіту.
 </details>
 -->

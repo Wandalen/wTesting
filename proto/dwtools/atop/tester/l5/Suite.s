@@ -1074,19 +1074,34 @@ function exceptionReport( o )
 {
   let suite = this;
   let logger = suite.logger || wTester.settings.logger || _global_.logger;
+  let err;
 
   _.routineOptions( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  let err = _.err( o.err );
+  try
+  {
 
-  if( o.considering )
-  suite._exceptionConsider( err );
+    let wasBarred;
+    if( o.unbarring )
+    wasBarred = suite.consoleBar( 0 );
 
-  logger.begin({ verbosity : 9 });
-  // _.errLogOnce( err );
-  logger.log( _.errOnce( err ) );
-  logger.end({ verbosity : 9 });
+    err = _.err( o.err );
+
+    if( o.considering )
+    suite._exceptionConsider( err );
+
+    logger.begin({ verbosity : 9 });
+    logger.log( _.errOnce( err ) );
+    logger.end({ verbosity : 9 });
+
+    if( o.unbarring )
+    suite.consoleBar( wasBarred );
+
+  }
+  catch( err2 )
+  {
+  }
 
   return err;
 }
@@ -1095,6 +1110,7 @@ exceptionReport.defaults =
 {
   err : null,
   considering : 1,
+  unbarring : 0,
 }
 
 // --

@@ -615,7 +615,7 @@ function checksAfterTimeOut( test )
   {
     test.notIdentical( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
     test.identical( _.strCount( got.output, 'failed throwing error' ), 1 );
     test.identical( _.strCount( got.output, 'Passed test checks 2 / 3' ), 2 );
     test.identical( _.strCount( got.output, 'Passed test routines 1 / 2' ), 2 );
@@ -639,6 +639,87 @@ function checksAfterTimeOut( test )
   /* - */
 
   return a.ready;
+}
+
+//
+
+function checksAfterTimeOutSilenced( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:5'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** v:5` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error(s)' ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test checks 2 / 2' ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test routines 2 / 2' ), 2 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+    test.identical( _.strCount( got.output, 'failed throwing error' ), 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutSilencedAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutSilencedAsset / TestRoutine::routine2' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Test check' ), 2 );
+    test.identical( _.strCount( got.output, 'returned, cant continue!' ), 2 );
+
+    test.identical( _.strCount( got.output, 'v0' ), 0 );
+    test.identical( _.strCount( got.output, 'v1' ), 0 );
+    test.identical( _.strCount( got.output, 'v2' ), 0 );
+    test.identical( _.strCount( got.output, 'v3' ), 0 );
+    test.identical( _.strCount( got.output, 'v4' ), 0 );
+    test.identical( _.strCount( got.output, 'v10' ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function timeLimitConsequence( test )
+{
+  let t = 25;
+  let ready = new _.Consequence().take( null )
+
+  /* */
+
+  .thenKeep( function timeLimit1( arg )
+  {
+    test.case = 'timeOut timeLimit a timeLimitOut';
+
+    var con = _.time.out( t*1 );
+    var con0 = _.time.out( t*3, 'a' );
+    con.timeLimit( t*6, con0 );
+
+    return _.time.out( t*15, function()
+    {
+      debugger;
+      test.is( con.argumentsGet()[ 0 ] === 'a' );
+      test.identical( con.argumentsCount(), 1 );
+      test.identical( con.errorsCount(), 0 );
+      test.identical( con.competitorsCount(), 0 );
+      return null;
+    })
+  })
+
+  /* */
+
 }
 
 //
@@ -968,6 +1049,7 @@ var Self =
     noTestCheck,
     asyncTimeOut,
     checksAfterTimeOut,
+    checksAfterTimeOutSilenced,
     noTestSuite,
     help,
     version,

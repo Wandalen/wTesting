@@ -377,15 +377,16 @@ function _runEnd()
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
 
-    let wasBarred = suite.consoleBar( 0 );
+    // let wasBarred = suite.consoleBar( 0 );
 
     let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
     suite.exceptionReport
     ({
+      unbarring : 1,
       err : err,
     });
 
-    suite.consoleBar( wasBarred );
+    // suite.consoleBar( wasBarred );
 
   }
 
@@ -560,6 +561,7 @@ function _runInterruptMaybe( throwing )
 function _returnedVerification()
 {
   let trd = this;
+  let suite = trd.suite;
   let logger = trd.logger;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -568,7 +570,12 @@ function _returnedVerification()
   if( trd._returned )
   {
     let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
-    logger.log( _.errOnce( err ) );
+    suite.exceptionReport
+    ({
+      unbarring : 1,
+      err : err,
+    });
+    // logger.log( _.errOnce( err ) );
     debugger;
     throw err;
   }
@@ -1357,59 +1364,75 @@ _outcomeReportCompare.defaults =
 function exceptionReport( o )
 {
   let trd = this;
+  let err;
 
   _.routineOptions( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  if( trd.onError )
-  debugger;
-
   try
   {
-    if( trd.onError )
-    trd.onError.call( trd, o );
+
+    let wasBarred;
+    if( o.unbarring )
+    wasBarred = suite.consoleBar( 0 );
+
+    try
+    {
+      if( trd.onError )
+      trd.onError.call( trd, o );
+    }
+    catch( err2 )
+    {
+      logger.log( err2 );
+    }
+
+    let msg = null;
+    if( o.considering )
+    {
+      /* qqq : implement and cover different message if time out */
+      msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
+    }
+    else
+    {
+      msg = 'Error throwen'
+    }
+
+    if( o.sync !== null )
+    msg += ( o.sync ? ' synchronously' : ' asynchronously' );
+
+    err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
+
+    if( _.errIsAttended( err ) )
+    err = _.errBrief( err );
+    _.errAttend( err );
+
+    let details = err.toString();
+
+    o.stack = o.stack === null ? o.err.stack : o.stack;
+
+    if( o.considering )
+    trd._exceptionConsider( err );
+
+    trd._outcomeReport
+    ({
+      outcome : o.outcome,
+      msg : msg,
+      details : details,
+      stack : o.stack,
+      usingSourceCode : o.usingSourceCode,
+      considering : o.considering,
+    });
+
+    if( o.unbarring )
+    suite.consoleBar( wasBarred );
+
   }
   catch( err2 )
   {
-    logger.log( err2 );
+    debugger;
+    console.error( err2 );
+    console.error( msg );
   }
-
-  let msg = null;
-  if( o.considering )
-  {
-    /* qqq : implement and cover different message if time out */
-    msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
-  }
-  else
-  {
-    msg = 'Error throwen'
-  }
-
-  if( o.sync !== null )
-  msg += ( o.sync ? ' synchronously' : ' asynchronously' );
-
-  let err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
-
-  if( _.errIsAttended( err ) )
-  err = _.errBrief( err );
-  _.errAttend( err );
-
-  let details = err.toString();
-
-  o.stack = o.stack === null ? o.err.stack : o.stack;
-
-  if( o.considering )
-  trd._exceptionConsider( err );
-
-  trd._outcomeReport
-  ({
-    outcome : o.outcome,
-    msg : msg,
-    details : details,
-    stack : o.stack,
-    usingSourceCode : o.usingSourceCode,
-    considering : o.considering,
-  });
 
   return err;
 }
@@ -1422,6 +1445,7 @@ exceptionReport.defaults =
   usingSourceCode : 0,
   considering : 1,
   outcome : 0,
+  unbarring : 0,
   sync : null,
 }
 
@@ -3262,9 +3286,9 @@ function assetFor( a )
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
-  _.sure( _.strDefined( context.suiteTempPath ), `Test suite should have defined path to suite temp directory. But test suite ${suite.name} does not have.` );
-  _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory. But test suite ${suite.name} does not have.` );
-  _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.suiteTempPath ), `Test suite should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
+  _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file {- defaultJsPath -}. But test suite ${suite.name} does not have.` );
 
   if( a.process === null )
   a.process = _testerGlobal_.wTools.process;

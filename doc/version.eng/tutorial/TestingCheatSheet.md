@@ -69,10 +69,10 @@ $ tst .run [ path ] v:[ number ]
 Option sets the verbosity of report. Accepts a value from 0 to 9. Default value is 4.
 
 ```
-$ tst .imply routine:[ name ] .run [ path ]
-$ tst .imply r:[ name ] .run [ path ]
-$ tst .run [ path ] routine:[ name ]
-$ tst .run [ path ] r:[ name ]
+$ tst .imply routine:[ name || glob ] .run [ path ]
+$ tst .imply r:[ name || glob ] .run [ path ]
+$ tst .run [ path ] routine:[ name || glob ]
+$ tst .run [ path ] r:[ name || glob ]
 ```
 
 Option to test separate test routine. Accepts name of test routine or glob.

@@ -1012,6 +1012,39 @@ function version( test )
   return a.ready;
 }
 
+//
+
+function manualTermination( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'manualTermination' );
+  
+  /* - */
+
+  let o = 
+  { 
+    execPath : 'node manualTermination.test.js v:7',
+    currentPath : a.originalAssetPath,
+    mode : 'spawn',
+    outputCollecting : 1,
+    throwingExitCode : 0
+  };
+  a.shellNonThrowing( o )
+  
+  /* */
+
+  a.ready
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.is( _.strHas( op.output, 'onSuiteEnd- 1' ) );
+    test.is( _.strHas( op.output, 'exitHandlerOnce- 2' ) );
+    return op;
+  })
+
+  return a.ready;
+}
+
 // --
 // suite
 // --
@@ -1053,6 +1086,7 @@ var Self =
     noTestSuite,
     help,
     version,
+    manualTermination
 
   }
 

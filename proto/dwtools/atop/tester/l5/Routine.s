@@ -14,7 +14,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-// debugged = 0;
+debugged = 0;
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -377,16 +377,13 @@ function _runEnd()
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
 
-    // let wasBarred = suite.consoleBar( 0 );
-
+    debugger;
     let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
     suite.exceptionReport
     ({
       unbarring : 1,
       err : err,
     });
-
-    // suite.consoleBar( wasBarred );
 
   }
 
@@ -396,7 +393,12 @@ function _runEnd()
   trd._testsGroupTestEnd();
 
   if( trd.report.errorsArray.length && !trd.report.reason )
-  trd.report.reason = 'thrown error';
+  {
+    if( trd.report.errorsArray[ 0 ].reason )
+    trd.report.reason = trd.report.errorsArray[ 0 ].reason;
+    else
+    trd.report.reason = 'thrown error';
+  }
 
   /* last test check */
 
@@ -521,18 +523,10 @@ function _runInterruptMaybe( throwing )
   _.assert( !!wTester.report );
 
   trd._returnedVerification();
-  // if( trd._returned )
-  // {
-  //   let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
-  //   logger.log( _.errOnce( err ) );
-  //   debugger;
-  //   throw err;
-  //   return false;
-  // }
 
   if( !wTester._canContinue() )
   {
-    debugger; /* xxx */
+    debugger; /* qqq xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
     // let result = wTester.cancel({ global : 0 });
@@ -546,7 +540,6 @@ function _runInterruptMaybe( throwing )
   if( elapsed > trd.timeOut && !debugged )
   {
     logger.log( `Test routine ${trd.absoluteName} timed out, cant continue!` );
-    // let result = wTester.cancel({ err : trd._timeOutError(), global : 0 });
     let result = trd.cancel({ err : trd._timeOutError() });
     if( throwing )
     throw result;
@@ -570,13 +563,14 @@ function _returnedVerification()
   if( trd._returned )
   {
     let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
+    err.reason = 'returned';
     suite.exceptionReport
     ({
       unbarring : 1,
       err : err,
     });
     // logger.log( _.errOnce( err ) );
-    debugger;
+    // debugger; // xxx
     throw err;
   }
 
@@ -618,15 +612,16 @@ function _timeOutError( err )
   ({
     args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms\n`, err || '' ],
     usingSourceCode : 0,
+    reason : 'time limit',
   });
 
-  Object.defineProperty( err, 'timeOut',
-  {
-    enumerable : false,
-    configurable : false,
-    writable : false,
-    value : 1,
-  });
+  // Object.defineProperty( err, 'reason',
+  // {
+  //   enumerable : false,
+  //   configurable : false,
+  //   writable : false,
+  //   value : 'time limit',
+  // });
 
   Object.defineProperty( err, '_testRoutine',
   {
@@ -636,6 +631,8 @@ function _timeOutError( err )
     value : trd,
   });
 
+  err = _.errBrief( err );
+
   return err;
 }
 
@@ -644,13 +641,17 @@ function _timeOutError( err )
 function cancel( o )
 {
   let trd = this;
+  let logger = trd.logger;
   o = _.routineOptions( cancel, arguments );
 
   if( trd._returnCon )
   if( trd._returnCon.resourcesCount() === 0 )
   {
     debugger;
-    trd._returnCon.error( _.errBrief( `Test routine ${trd.absoluteName} was canceled!` ) );
+    if( !o.err )
+    o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
+    logger.error( _.errOnce( o.err ) );
+    trd._returnCon.error( o.err );
   }
 
   return wTester.cancel( o );
@@ -1390,7 +1391,12 @@ function exceptionReport( o )
     if( o.considering )
     {
       /* qqq : implement and cover different message if time out */
-      msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
+      /* qqq : implement and cover different message if user terminated the program */
+      debugger;
+      if( o.err && o.err.reason )
+      msg = trd._reportTextForTestCheck({ outcome : null }) + ` ... failed, ${o.err.reason}`;
+      else
+      msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed, throwing error';
     }
     else
     {

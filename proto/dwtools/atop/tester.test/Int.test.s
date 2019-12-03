@@ -55,14 +55,12 @@ function CheckCounter()
 
 function onSuiteBegin()
 {
-  // throw _.err( 'Error1' );
 }
 
 //
 
 function onSuiteEnd()
 {
-  // throw _.err( 'Error2' );
 }
 
 // --
@@ -6318,89 +6316,6 @@ asyncTimeout1.description =
 // experiment
 // --
 
-function asyncExperiment( test )
-{
-  var con = _.time.outError( 1000 );
-
-  test.identical( 0, 0 );
-
-  con.finally( function()
-  {
-  });
-
-  return con;
-}
-
-asyncExperiment.experimental = 1;
-
-//
-
-function mustNotThrowErrorExperiment( test )
-{
-
-  test.case = 'mustNotThrowError experiment';
-
-  var con = test.mustNotThrowError( function()
-  {
-    console.log( 'x' );
-    return _.time.out( 500 );
-  });
-
-  // var con = test.returnsSingleResource( function()
-  // {
-  //   throw _.err( 'err1' );
-  // });
-
-  // var con = test.shouldThrowErrorOfAnyKind( function()
-  // {
-  //   throw _.err( 'err1' );
-  // });
-
-  return con;
-}
-
-mustNotThrowErrorExperiment.experimental = 1;
-
-//
-//
-// function experimentTimeOutSyncNoChecks( test )
-// {
-//   /* No test check after waitSync - timeOut error is not thrown, but expected*/
-//
-//   test.identical( test.timeOut, 3000 );
-//   waitSync( 4 );//4000ms
-// }
-//
-// experimentTimeOutSyncNoChecks.experimental = 1;
-// experimentTimeOutSyncNoChecks.timeOut = 3000;
-
-//
-//
-// function experimentTimeOutSync( test )
-// {
-//   /*
-//     Test check after waitSync - timeOut error is thrown, but not expected
-//     because timeOut is set to 8000
-//   */
-//   waitSync( 6 ); //6000ms
-//   test.identical( test.timeOut, 8000 );
-// }
-//
-// experimentTimeOutSync.experimental = 1;
-// experimentTimeOutSync.timeOut = 8000;
-
-//
-
-function experimentTimeOutAsync( test )
-{
-  /* TimeOut error is thrown, but not expected because timeOut is set to 8000*/
-  test.identical( test.timeOut, 8000 );
-  return _.time.out( 6000 );
-}
-
-experimentTimeOutAsync.experimental = 1;
-experimentTimeOutAsync.timeOut = 8000;
-
 // --
 // declare
 // --
@@ -6495,12 +6410,6 @@ var Self =
     asyncTimeout1,
 
     // experiment
-
-    asyncExperiment,
-    mustNotThrowErrorExperiment,
-    // experimentTimeOutSyncNoChecks,
-    // experimentTimeOutSync,
-    experimentTimeOutAsync,
 
   },
 

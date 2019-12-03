@@ -195,6 +195,7 @@ module:
           - ../proto/dwtools/atop/tester/l7
           - ../proto/dwtools/atop/tester/l7/TesterTop.s
           - ../proto/dwtools/atop/tester.test
+          - ../proto/dwtools/atop/tester.test/AsyncTimeout.test.s
           - ../proto/dwtools/atop/tester.test/Electron.test.s
           - ../proto/dwtools/atop/tester.test/Ext.test.s
           - ../proto/dwtools/atop/tester.test/Inheritance.test.s

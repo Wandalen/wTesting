@@ -1045,6 +1045,12 @@ function manualTermination( test )
   return a.ready;
 }
 
+manualTermination.description = 
+`
+  User terminates execution when second test routine is runnning.
+  onSuiteEnd handler should be executed before exitHandlerOnce
+`
+
 // --
 // suite
 // --

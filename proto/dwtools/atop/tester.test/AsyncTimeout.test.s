@@ -107,7 +107,7 @@ must be only test routine in the test suite!
 var Self =
 {
 
-  name : 'Tools.Tester.Int',
+  name : 'Tools.Tester.AsyncTimeout',
   silencing : 1, /* silencing must be on */
   routineTimeOut : 30000,
 

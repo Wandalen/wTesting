@@ -562,15 +562,13 @@ function _returnedVerification()
 
   if( trd._returned )
   {
-    let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
-    err.reason = 'returned';
+    let err = _._err({ args : [ `Test routine ${trd.absoluteName} returned, cant continue!` ], reason : 'returned' });
+    err = _.errBrief( err );
     suite.exceptionReport
     ({
       unbarring : 1,
       err : err,
     });
-    // logger.log( _.errOnce( err ) );
-    // debugger; // xxx
     throw err;
   }
 
@@ -614,14 +612,6 @@ function _timeOutError( err )
     usingSourceCode : 0,
     reason : 'time limit',
   });
-
-  // Object.defineProperty( err, 'reason',
-  // {
-  //   enumerable : false,
-  //   configurable : false,
-  //   writable : false,
-  //   value : 'time limit',
-  // });
 
   Object.defineProperty( err, '_testRoutine',
   {
@@ -1392,7 +1382,6 @@ function exceptionReport( o )
     {
       /* qqq : implement and cover different message if time out */
       /* qqq : implement and cover different message if user terminated the program */
-      debugger;
       if( o.err && o.err.reason )
       msg = trd._reportTextForTestCheck({ outcome : null }) + ` ... failed, ${o.err.reason}`;
       else

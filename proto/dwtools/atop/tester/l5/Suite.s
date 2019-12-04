@@ -799,7 +799,8 @@ function _terminated()
   if( !err )
   {
     err = _.errBrief( 'Terminated by user' );
-    err.reason = 'terminated by user';
+    _.errReason( err, 'terminated by user' );
+    // err.reason = 'terminated by user';
   }
   wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }

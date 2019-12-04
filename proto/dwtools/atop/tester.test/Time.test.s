@@ -442,8 +442,6 @@ function timeOut( test )
     if( !Config.debug )
     return null;
 
-    debugger;
-
     test.case = 'delay must be number';
     test.shouldThrowErrorSync( () => _.time.out( 'x' ) );
 

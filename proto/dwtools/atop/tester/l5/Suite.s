@@ -5,7 +5,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-// debugged = 0;
+debugged = 0;
 
 //
 
@@ -266,17 +266,7 @@ function _enabledGet( src )
 
 //
 
-/**
- * @descripton
- * Redirects all console output to logger of the tester. That makes other loggers connected after it unable to
- * receive messages from console, logger of the tester prints messages through original console methods. All this allows to hide/show/style
- * console output if necessary.
- * @param {Boolean} value Controls barring/unbarring of the console.
- * @function consoleBar
- * @memberof module:Tools/Tester.wTestSuite#
- */
-
-function consoleBar( value )
+function _consoleBar( o )
 {
   let suite = this;
   let logger = suite.logger;
@@ -286,15 +276,27 @@ function consoleBar( value )
   {
 
     _.assert( arguments.length === 1 );
-    _.assert( _.boolLike( value ) );
+    _.assert( _.boolLike( o.value ) );
 
-    if( value )
+    if( o.value )
     {
       logger.begin({ verbosity : -8 });
       logger.log( 'Silencing console' );
       logger.end({ verbosity : -8 });
       if( !_.Logger.ConsoleIsBarred( console ) )
-      wTester._barOptions = _.Logger.ConsoleBar({ outputPrinter : logger, on : 1 });
+      {
+        if( o.preserving )
+        {
+          wTester._barOptions.on = 1;
+          if( !wTester._barOptions.outputPrinter )
+          wTester._barOptions.outputPrinter = logger;
+        }
+        else
+        {
+          wTester._barOptions = { outputPrinter : logger, on : 1 };
+        }
+        wTester._barOptions = _.Logger.ConsoleBar( wTester._barOptions );
+      }
     }
     else
     {
@@ -302,6 +304,8 @@ function consoleBar( value )
       {
         wTester._barOptions.on = 0;
         _.Logger.ConsoleBar( wTester._barOptions );
+        if( !o.preserving )
+        wTester._barOptions = null;
       }
     }
 
@@ -316,6 +320,38 @@ function consoleBar( value )
   }
 
   return wasBarred;
+}
+
+_consoleBar.defaults =
+{
+  preserving : 1,
+  value : null,
+}
+
+//
+
+/**
+ * @descripton
+ * Redirects all console output to logger of the tester. That makes other loggers connected after it unable to
+ * receive messages from console, logger of the tester prints messages through original console methods. All this allows to hide/show/style
+ * console output if necessary.
+ * @param {Boolean} value Controls barring/unbarring of the console.
+ * @function consoleBar
+ * @memberof module:Tools/Tester.wTestSuite#
+ */
+
+function consoleBar( value )
+{
+  let suite = this;
+  return suite._consoleBar({ preserving : 0, value });
+}
+
+//
+
+function consoleBarPreserving( value )
+{
+  let suite = this;
+  return suite._consoleBar({ preserving : 1, value });
 }
 
 // --
@@ -382,7 +418,7 @@ function _form()
 
   }
 
-  _.mapExtend( suite, extend );
+  _.mapExtend( suite, extend ); /* xxx */
 
   /* form test routines */
 
@@ -404,16 +440,13 @@ function _form()
     _.assert( suite.tests[ testRoutineName ] === trd )
   }
 
-  /* */
-
-  suite._formed = 1;
-
   /* validate */
 
   _.assert( suite.concurrent !== null && suite.concurrent !== undefined );
   _.assert( wTester.settings.sanitareTime >= 0 );
   _.assert( _.numberIs( suite.verbosity ) );
 
+  suite._formed = 1;
   return suite;
 }
 
@@ -450,7 +483,7 @@ function _runNow()
 {
   let suite = this;
   let testRoutines = suite.tests;
-  let logger = suite.logger || wTester.settings.logger || _global_.logger;
+  let logger = suite.logger || wTester.logger || _global_.logger;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0 );
@@ -531,7 +564,7 @@ function _begin()
 
   if( suite.silencing )
   {
-    suite.consoleBar( 1 );
+    suite.consoleBar( 1 ); /* xxx */
   }
 
   /* */
@@ -569,7 +602,7 @@ function _begin()
     try
     {
 /*
-xxx qqq : cover returned consequence works
+xxx qqq : cover returned consequence
 */
       ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
     }
@@ -579,7 +612,6 @@ xxx qqq : cover returned consequence works
       err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
       suite.exceptionReport({ err : err });
       throw err;
-      // return false;
     }
   }
 
@@ -664,7 +696,6 @@ function _end( err )
   {
     try
     {
-      // debugger;
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
@@ -766,7 +797,11 @@ function _terminated()
   let suite = this;
   let err = _.process ? _.process.exitReason() : null;
   if( !err )
-  err = _.errBrief( 'Terminated by user' );
+  {
+    err = _.errBrief( 'Terminated by user' );
+    _.errReason( err, 'terminated by user' );
+    // err.reason = 'terminated by user';
+  }
   wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }
 
@@ -1073,20 +1108,35 @@ function _exceptionConsider( err )
 function exceptionReport( o )
 {
   let suite = this;
-  let logger = suite.logger || wTester.settings.logger || _global_.logger;
+  let logger = suite.logger || wTester.logger || _global_.logger;
+  let err;
 
   _.routineOptions( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  let err = _.err( o.err );
+  try
+  {
 
-  if( o.considering )
-  suite._exceptionConsider( err );
+    let wasBarred;
+    if( o.unbarring )
+    wasBarred = suite.consoleBarPreserving( 0 );
 
-  logger.begin({ verbosity : 9 });
-  // _.errLogOnce( err );
-  logger.log( _.errOnce( err ) );
-  logger.end({ verbosity : 9 });
+    err = _.err( o.err );
+
+    if( o.considering )
+    suite._exceptionConsider( err );
+
+    logger.begin({ verbosity : 9 });
+    logger.log( _.errOnce( err ) );
+    logger.end({ verbosity : 9 });
+
+    if( o.unbarring )
+    suite.consoleBarPreserving( wasBarred );
+
+  }
+  catch( err2 )
+  {
+  }
 
   return err;
 }
@@ -1095,6 +1145,7 @@ exceptionReport.defaults =
 {
   err : null,
   considering : 1,
+  unbarring : 0,
 }
 
 // --
@@ -1280,6 +1331,13 @@ let Accessors =
   absoluteName : { readOnly : 1 },
   decoratedAbsoluteName : { readOnly : 1 },
 
+  // logger : { setter : function( src )
+  // {
+  //   if( src && !src.name )
+  //   debugger;
+  //   this[ Symbol.for( 'logger' ) ] = src;
+  // }},
+
 }
 
 // --
@@ -1302,7 +1360,9 @@ let Proto =
   _routineSet,
   _enabledSet,
   _enabledGet,
+  _consoleBar,
   consoleBar,
+  consoleBarPreserving,
 
   // test suite run
 

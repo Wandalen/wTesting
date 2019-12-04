@@ -14,7 +14,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-// debugged = 0;
+debugged = 0;
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -377,15 +377,13 @@ function _runEnd()
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
 
-    let wasBarred = suite.consoleBar( 0 );
-
+    debugger;
     let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
     suite.exceptionReport
     ({
+      unbarring : 1,
       err : err,
     });
-
-    suite.consoleBar( wasBarred );
 
   }
 
@@ -395,7 +393,12 @@ function _runEnd()
   trd._testsGroupTestEnd();
 
   if( trd.report.errorsArray.length && !trd.report.reason )
-  trd.report.reason = 'thrown error';
+  {
+    if( trd.report.errorsArray[ 0 ].reason )
+    trd.report.reason = trd.report.errorsArray[ 0 ].reason;
+    else
+    trd.report.reason = 'thrown error';
+  }
 
   /* last test check */
 
@@ -520,18 +523,10 @@ function _runInterruptMaybe( throwing )
   _.assert( !!wTester.report );
 
   trd._returnedVerification();
-  // if( trd._returned )
-  // {
-  //   let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
-  //   logger.log( _.errOnce( err ) );
-  //   debugger;
-  //   throw err;
-  //   return false;
-  // }
 
   if( !wTester._canContinue() )
   {
-    debugger; /* xxx */
+    debugger; /* qqq xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
     // let result = wTester.cancel({ global : 0 });
@@ -545,7 +540,6 @@ function _runInterruptMaybe( throwing )
   if( elapsed > trd.timeOut && !debugged )
   {
     logger.log( `Test routine ${trd.absoluteName} timed out, cant continue!` );
-    // let result = wTester.cancel({ err : trd._timeOutError(), global : 0 });
     let result = trd.cancel({ err : trd._timeOutError() });
     if( throwing )
     throw result;
@@ -560,6 +554,7 @@ function _runInterruptMaybe( throwing )
 function _returnedVerification()
 {
   let trd = this;
+  let suite = trd.suite;
   let logger = trd.logger;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -567,9 +562,13 @@ function _returnedVerification()
 
   if( trd._returned )
   {
-    let err = _.errBrief( `Test routine ${trd.absoluteName} returned, cant continue!` );
-    logger.log( _.errOnce( err ) );
-    debugger;
+    let err = _._err({ args : [ `Test routine ${trd.absoluteName} returned, cant continue!` ], reason : 'returned' });
+    err = _.errBrief( err );
+    suite.exceptionReport
+    ({
+      unbarring : 1,
+      err : err,
+    });
     throw err;
   }
 
@@ -611,14 +610,7 @@ function _timeOutError( err )
   ({
     args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms\n`, err || '' ],
     usingSourceCode : 0,
-  });
-
-  Object.defineProperty( err, 'timeOut',
-  {
-    enumerable : false,
-    configurable : false,
-    writable : false,
-    value : 1,
+    reason : 'time limit',
   });
 
   Object.defineProperty( err, '_testRoutine',
@@ -629,6 +621,8 @@ function _timeOutError( err )
     value : trd,
   });
 
+  err = _.errBrief( err );
+
   return err;
 }
 
@@ -637,13 +631,17 @@ function _timeOutError( err )
 function cancel( o )
 {
   let trd = this;
+  let logger = trd.logger;
   o = _.routineOptions( cancel, arguments );
 
   if( trd._returnCon )
   if( trd._returnCon.resourcesCount() === 0 )
   {
     debugger;
-    trd._returnCon.error( _.errBrief( `Test routine ${trd.absoluteName} was canceled!` ) );
+    if( !o.err )
+    o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
+    logger.error( _.errOnce( o.err ) );
+    trd._returnCon.error( o.err );
   }
 
   return wTester.cancel( o );
@@ -1357,59 +1355,79 @@ _outcomeReportCompare.defaults =
 function exceptionReport( o )
 {
   let trd = this;
+  let err;
 
   _.routineOptions( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  if( trd.onError )
-  debugger;
-
   try
   {
-    if( trd.onError )
-    trd.onError.call( trd, o );
+
+    let wasBarred;
+    if( o.unbarring )
+    wasBarred = suite.consoleBar( 0 );
+
+    try
+    {
+      if( trd.onError )
+      trd.onError.call( trd, o );
+    }
+    catch( err2 )
+    {
+      logger.log( err2 );
+    }
+
+    let msg = null;
+    if( o.considering )
+    {
+      /* qqq : implement and cover different message if time out */
+      /* qqq : implement and cover different message if user terminated the program */
+      if( o.err && o.err.reason )
+      msg = trd._reportTextForTestCheck({ outcome : null }) + ` ... failed, ${o.err.reason}`;
+      else
+      msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed, throwing error';
+    }
+    else
+    {
+      msg = 'Error throwen'
+    }
+
+    if( o.sync !== null )
+    msg += ( o.sync ? ' synchronously' : ' asynchronously' );
+
+    err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
+
+    if( _.errIsAttended( err ) )
+    err = _.errBrief( err );
+    _.errAttend( err );
+
+    let details = err.toString();
+
+    o.stack = o.stack === null ? o.err.stack : o.stack;
+
+    if( o.considering )
+    trd._exceptionConsider( err );
+
+    trd._outcomeReport
+    ({
+      outcome : o.outcome,
+      msg : msg,
+      details : details,
+      stack : o.stack,
+      usingSourceCode : o.usingSourceCode,
+      considering : o.considering,
+    });
+
+    if( o.unbarring )
+    suite.consoleBar( wasBarred );
+
   }
   catch( err2 )
   {
-    logger.log( err2 );
+    debugger;
+    console.error( err2 );
+    console.error( msg );
   }
-
-  let msg = null;
-  if( o.considering )
-  {
-    /* qqq : implement and cover different message if time out */
-    msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed throwing error';
-  }
-  else
-  {
-    msg = 'Error throwen'
-  }
-
-  if( o.sync !== null )
-  msg += ( o.sync ? ' synchronously' : ' asynchronously' );
-
-  let err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
-
-  if( _.errIsAttended( err ) )
-  err = _.errBrief( err );
-  _.errAttend( err );
-
-  let details = err.toString();
-
-  o.stack = o.stack === null ? o.err.stack : o.stack;
-
-  if( o.considering )
-  trd._exceptionConsider( err );
-
-  trd._outcomeReport
-  ({
-    outcome : o.outcome,
-    msg : msg,
-    details : details,
-    stack : o.stack,
-    usingSourceCode : o.usingSourceCode,
-    considering : o.considering,
-  });
 
   return err;
 }
@@ -1422,6 +1440,7 @@ exceptionReport.defaults =
   usingSourceCode : 0,
   considering : 1,
   outcome : 0,
+  unbarring : 0,
   sync : null,
 }
 
@@ -3262,9 +3281,9 @@ function assetFor( a )
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
-  _.sure( _.strDefined( context.suiteTempPath ), `Test suite should have defined path to suite temp directory. But test suite ${suite.name} does not have.` );
-  _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory. But test suite ${suite.name} does not have.` );
-  _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.suiteTempPath ), `Test suite should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
+  _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file {- defaultJsPath -}. But test suite ${suite.name} does not have.` );
 
   if( a.process === null )
   a.process = _testerGlobal_.wTools.process;

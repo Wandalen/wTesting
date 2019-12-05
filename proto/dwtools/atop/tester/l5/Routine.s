@@ -14,7 +14,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-debugged = 0;
+// debugged = 0;
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -1355,6 +1355,7 @@ _outcomeReportCompare.defaults =
 function exceptionReport( o )
 {
   let trd = this;
+  let msg = '';
   let err;
 
   _.routineOptions( exceptionReport, o );
@@ -1377,7 +1378,6 @@ function exceptionReport( o )
       logger.log( err2 );
     }
 
-    let msg = null;
     if( o.considering )
     {
       /* qqq : implement and cover different message if time out */

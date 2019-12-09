@@ -16,13 +16,10 @@ if( typeof module !== 'undefined' )
   _.include( 'wAppBasic' );
   _.include( 'wFiles' );
 
-  // var waitSync = require( 'wait-sync' );
-
 }
 
 var _global = _global_;
 var _ = _global_.wTools;
-var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
 // --
 // tools
@@ -107,7 +104,7 @@ function identical( test )
   var suite = wTestSuite
   ({
     tests : { r1 : r1 },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -427,7 +424,7 @@ function returnsSingleResource( test )
   ({
     name : 'Suite::ShouldMessageOnlyOnce',
     tests : { r1 : r1 },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -746,7 +743,7 @@ function mustNotThrowError( test )
   var suite = wTestSuite
   ({
     tests : { r1 : r1 },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
   var result = suite.run()
@@ -1038,7 +1035,7 @@ function shouldThrowErrorSync( test )
   var suite = wTestSuite
   ({
     tests : { r1 : r1 },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -1154,7 +1151,7 @@ function shouldThrowErrorAsync( test )
 
     _.time.out( 500, function()
     {
-      test.identical( c3.resourcesGet().length, 1 ); /* xxx : phantom? */
+      test.identical( c3.resourcesGet().length, 1 ); /* zzz : phantom? */
       c3.give( function( err, arg )
       {
         test.is( err === undefined );
@@ -1362,7 +1359,7 @@ function shouldThrowErrorAsync( test )
   var suite = wTestSuite
   ({
     tests : { r1 : r1 },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
   var result = suite.run()
@@ -1649,7 +1646,7 @@ function shouldThrowErrorOfAnyKind( test )
   var suite = wTestSuite
   ({
     tests : { r1 : r1 },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -1976,7 +1973,7 @@ function shouldThrowErrorAsyncSimple( test )
     var acheck = test.checkCurrent();
     var expectedCheck =
     {
-      testsGroupsStack : [ 'b' ],
+      groupsStack : [ 'b' ],
       description : 'bb',
       checkIndex : 5,
     }
@@ -1999,7 +1996,7 @@ function shouldThrowErrorAsyncSimple( test )
     var acheck = test.checkCurrent();
     var expectedCheck =
     {
-      testsGroupsStack : [ 'b' ],
+      groupsStack : [ 'b' ],
       description : 'bb',
       checkIndex : 11,
     }
@@ -2063,7 +2060,7 @@ function shouldThrowErrorAsyncConcurrent( test )
     var acheck = test.checkCurrent();
     var expectedCheck =
     {
-      testsGroupsStack : [ 'b' ],
+      groupsStack : [ 'b' ],
       description : 'bb',
       checkIndex : 8,
     }
@@ -2088,7 +2085,7 @@ function shouldThrowErrorSyncReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -2156,7 +2153,7 @@ function shouldThrowErrorAsyncReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -2299,7 +2296,7 @@ function shouldThrowErrorReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -2429,7 +2426,7 @@ function mustNotThrowErrorReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -2560,7 +2557,7 @@ function shouldMessageOnlyOnceReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -2775,7 +2772,7 @@ function chainedShould( test )
 {
   var con = _.Consequence().take( null );
 
-  /* qqq : double check _hasConsoleInOutputs */
+  /* qqq : too complex. think how to write simpler alternative test routines */
 
   var iterations =
   [
@@ -2815,7 +2812,6 @@ function chainedShould( test )
   for( var i = 0 ; i < iterations.length ; i++ )
   {
     con.then( _.routineSeal( this, _chainedShould, [ test, iterations[ i ] ] ) );
-    // break; // xxx
   }
 
   return con;
@@ -2991,7 +2987,7 @@ function chainedShould( test )
     var suite = wTestSuite
     ({
       tests : { row : row, include : include },
-      override : notTakingIntoAccount, // xxx
+      override : this.notTakingIntoAccount,
       ignoringTesterOptions : 1,
       name : _.diagnosticLocation().name + '/' + method + '/' + o.throwingError,
     });
@@ -3046,7 +3042,7 @@ function isReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -3148,7 +3144,7 @@ function isNotReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -3251,7 +3247,7 @@ function isNotReturn( test )
 //   var suite = wTestSuite
 //   ({
 //     tests : { returnTest : returnTest },
-//     override : notTakingIntoAccount,
+//     override : this.notTakingIntoAccount,
 //     ignoringTesterOptions : 1,
 //     name : test.name,
 //     onSuiteEnd : onSuiteEnd,
@@ -3365,7 +3361,7 @@ function identicalReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -3498,7 +3494,7 @@ function notIdenticalReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -3620,7 +3616,7 @@ function equivalentReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -3854,7 +3850,7 @@ function notEquivalentReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -4080,7 +4076,7 @@ function containReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -4223,7 +4219,7 @@ function ilReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -4354,7 +4350,7 @@ function niReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -4476,7 +4472,7 @@ function etReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -4706,7 +4702,7 @@ function neReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -4939,7 +4935,7 @@ function gtReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -5075,7 +5071,7 @@ function geReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -5212,7 +5208,7 @@ function ltReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -5347,7 +5343,7 @@ function leReturn( test )
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
     onSuiteEnd : onSuiteEnd,
@@ -5477,6 +5473,1101 @@ function leReturn( test )
 }
 
 // --
+// grouping
+// --
+
+function testCase( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'abc';
+
+    test.identical( t.case, 'abc' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, 'abc' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 1 );
+
+    test.identical( t.case, 'abc' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    t.case = 'def';
+
+    test.identical( t.case, 'def' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, 'def' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    debugger;
+    t.case = null;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = null;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = null;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = '';
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'def';
+
+    test.identical( t.case, 'def' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, 'def' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = '';
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = '';
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : false,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 4,
+      'testCheckFails' : 1,
+      'testCasePasses' : 2,
+      'testCaseFails' : 1,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : false,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 4,
+      'testCheckFails' : 1,
+      'testCasePasses' : 2,
+      'testCaseFails' : 1,
+      'testRoutinePasses' : 0,
+      'testRoutineFails' : 1
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+}
+
+//
+
+function testsGroupSameNameError( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'def' );
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'def' );
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'def' );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( String( testRoutine._groupError ), `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?` );
+
+    var exp =
+    {
+      'reason' : 'grouping error',
+      'outcome' : false,
+      'errorsArray' : [ `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?` ],
+      'appExitCode' : 0,
+      'testCheckPasses' : 2,
+      'testCheckFails' : 1,
+      'testCasePasses' : 1,
+      'testCaseFails' : 0,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : false,
+      'errorsArray' : [ `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?` ],
+      'appExitCode' : 0,
+      'testCheckPasses' : 2,
+      'testCheckFails' : 1,
+      'testCasePasses' : 1,
+      'testCaseFails' : 0,
+      'testRoutinePasses' : 0,
+      'testRoutineFails' : 1,
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
+    test.identical( got, exp );
+
+  });
+
+}
+
+//
+
+function testsGroupDiscrepancyError( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'def' );
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'def2' );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( String( testRoutine._groupError ), `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "def2", but current tests group is "def". Might be you want to close it first.` );
+
+    var exp =
+    {
+      'reason' : 'grouping error',
+      'outcome' : false,
+      'errorsArray' : [ `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "def2", but current tests group is "def". Might be you want to close it first.` ],
+      'appExitCode' : 0,
+      'testCheckPasses' : 1,
+      'testCheckFails' : 1,
+      'testCasePasses' : 0,
+      'testCaseFails' : 1,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : false,
+      'errorsArray' : [ `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "def2", but current tests group is "def". Might be you want to close it first.` ],
+      'appExitCode' : 0,
+      'testCheckPasses' : 1,
+      'testCheckFails' : 1,
+      'testCasePasses' : 0,
+      'testCaseFails' : 1,
+      'testRoutinePasses' : 0,
+      'testRoutineFails' : 1,
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
+    test.identical( got, exp );
+
+  });
+
+}
+
+//
+
+function testsGroupSingleLevel( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'abc' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    t.close( 'abc' );
+    t.open( 'def' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'def' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = null;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    t.case = '';
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    t.open( 'def' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = null;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = null;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 2 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = '';
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 2 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = '';
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 2 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'def2' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def2' );
+    test.identical( t._groupsStack, [ 'def', 'def2' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def2' );
+    test.identical( t._groupsStack, [ 'def', 'def2' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'def2' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'def' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : false,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 6,
+      'testCheckFails' : 2,
+      'testCasePasses' : 2,
+      'testCaseFails' : 1,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : false,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 6,
+      'testCheckFails' : 2,
+      'testCasePasses' : 2,
+      'testCaseFails' : 1,
+      'testRoutinePasses' : 0,
+      'testRoutineFails' : 1,
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+
+}
+
+//
+
+function testsGroupMultipleLevels( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'abc' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 0 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'def' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'abc', 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'def' );
+    test.identical( t._groupsStack, [ 'abc', 'def' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    t.close( 'def' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'abc' );
+    test.identical( t._groupsStack, [ 'abc' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    t.close( 'abc' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.identical( 0, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : false,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 1,
+      'testCheckFails' : 3,
+      'testCasePasses' : 0,
+      'testCaseFails' : 2,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : false,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 1,
+      'testCheckFails' : 3,
+      'testCasePasses' : 0,
+      'testCaseFails' : 2,
+      'testRoutinePasses' : 0,
+      'testRoutineFails' : 1,
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+}
+
+//
+
+function testsGroupTestCaseSingleLevel( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'group1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'group1' );
+    test.identical( t._groupsStack, [ 'group1' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case1';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case1' );
+    test.identical( t.group, 'case1' );
+    test.identical( t._groupsStack, [ 'group1', 'case1' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case2';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case2' );
+    test.identical( t.group, 'case2' );
+    test.identical( t._groupsStack, [ 'group1', 'case2' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'group1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 4,
+      'testCheckFails' : 0,
+      'testCasePasses' : 2,
+      'testCaseFails' : 0,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 4,
+      'testCheckFails' : 0,
+      'testCasePasses' : 2,
+      'testCaseFails' : 0,
+      'testRoutinePasses' : 1,
+      'testRoutineFails' : 0
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+}
+
+//
+
+function testsGroupAfterTestCase( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case1';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case1' );
+    test.identical( t.group, 'case1' );
+    test.identical( t._groupsStack, [ 'case1' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'group1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'group1' );
+    test.identical( t._groupsStack, [ 'group1' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case2';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case2' );
+    test.identical( t.group, 'case2' );
+    test.identical( t._groupsStack, [ 'group1', 'case2' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'group1' );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 3,
+      'testCheckFails' : 0,
+      'testCasePasses' : 2,
+      'testCaseFails' : 0,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 3,
+      'testCheckFails' : 0,
+      'testCasePasses' : 2,
+      'testCaseFails' : 0,
+      'testRoutinePasses' : 1,
+      'testRoutineFails' : 0
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+}
+
+//
+
+function testsGroupTestCaseMultipleLevels( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'group1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'group1' );
+    test.identical( t._groupsStack, [ 'group1' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.open( 'group2' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'group2' );
+    test.identical( t._groupsStack, [ 'group1', 'group2' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case1';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case1' );
+    test.identical( t.group, 'case1' );
+    test.identical( t._groupsStack, [ 'group1', 'group2', 'case1' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case2';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case2' );
+    test.identical( t.group, 'case2' );
+    test.identical( t._groupsStack, [ 'group1', 'group2', 'case2' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'group2' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'group1' );
+    test.identical( t._groupsStack, [ 'group1' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'group1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 6,
+      'testCheckFails' : 0,
+      'testCasePasses' : 3,
+      'testCaseFails' : 0,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 6,
+      'testCheckFails' : 0,
+      'testCasePasses' : 3,
+      'testCaseFails' : 0,
+      'testRoutinePasses' : 1,
+      'testRoutineFails' : 0
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+}
+
+// --
 // outcome
 // --
 
@@ -5488,7 +6579,6 @@ function runMultiple( test )
 
   function good( t )
   {
-    debugger;
     testRoutine = t;
     t.identical( 0, 0 );
     logger.log( 'good' );
@@ -5496,47 +6586,35 @@ function runMultiple( test )
 
   function thr( t )
   {
-    debugger;
     testRoutine = t;
     t.identical( 1, 1 );
     return x;
   }
 
-  // function bad( t )
-  // {
-  //   debugger;
-  //   testRoutine = t;
-  //   t.identical( 1, 1 );
-  //   _.process.exitCode( -1 );
-  //   logger.log( 'bad' );
-  // }
-
   var suite1 = wTestSuite
   ({
     tests : { good },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
   var suite2 = wTestSuite
   ({
     tests : { thr },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
   var suite3 = wTestSuite
   ({
     tests : { good },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
-  debugger;
   var result = wTester.test([ suite1, suite2, suite3 ])
   .finally( function( err, data )
   {
-    debugger;
 
     var got = _.select( data, '*/report' );
     var expected =
@@ -5549,7 +6627,7 @@ function runMultiple( test )
         "testCheckFails" : 0,
         "testCasePasses" : 0,
         "testCaseFails" : 0,
-        "testCaseNumber" : 0,
+        // "testCaseNumber" : 0,
         "testRoutinePasses" : 1,
         "testRoutineFails" : 0
       },
@@ -5560,7 +6638,7 @@ function runMultiple( test )
         "testCheckFails" : 1,
         "testCasePasses" : 0,
         "testCaseFails" : 0,
-        "testCaseNumber" : 0,
+        // "testCaseNumber" : 0,
         "testRoutinePasses" : 0,
         "testRoutineFails" : 1
       },
@@ -5572,7 +6650,7 @@ function runMultiple( test )
         "testCheckFails" : 0,
         "testCasePasses" : 0,
         "testCaseFails" : 0,
-        "testCaseNumber" : 0,
+        // "testCaseNumber" : 0,
         "testRoutinePasses" : 1,
         "testRoutineFails" : 0
       }
@@ -5611,7 +6689,7 @@ function appExitCode( test )
   var suite1 = wTestSuite
   ({
     tests : { good },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -5630,7 +6708,7 @@ function appExitCode( test )
         "testCheckFails" : 0,
         "testCasePasses" : 0,
         "testCaseFails" : 0,
-        "testCaseNumber" : 0,
+        // "testCaseNumber" : 0,
         "testRoutinePasses" : 1,
         "testRoutineFails" : 0
       }
@@ -5669,7 +6747,7 @@ function onSuiteBeginThrowError( test )
   ({
     onSuiteBegin,
     tests : { trivial },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -5687,7 +6765,7 @@ function onSuiteBeginThrowError( test )
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 0 );
     test.identical( got.testCaseFails, 0 );
-    test.identical( got.testCaseNumber, 0 );
+    // test.identical( got.testCaseNumber, 0 );
     test.identical( got.testRoutinePasses, 0 );
     test.identical( got.testRoutineFails, 0 );
     debugger;
@@ -5724,7 +6802,7 @@ function onSuiteEndThrowError( test )
   ({
     onSuiteEnd,
     tests : { trivial },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -5742,7 +6820,7 @@ function onSuiteEndThrowError( test )
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
     test.identical( got.testCaseFails, 0 );
-    test.identical( got.testCaseNumber, 0 );
+    // test.identical( got.testCaseNumber, 0 );
     test.identical( got.testRoutinePasses, 1 );
     test.identical( got.testRoutineFails, 0 );
 
@@ -5777,7 +6855,7 @@ function optionRoutine( test )
     ({
       onSuiteEnd,
       tests : { a1, a2, b1 },
-      override : notTakingIntoAccount,
+      override : this.notTakingIntoAccount,
       ignoringTesterOptions : 1,
     });
 
@@ -5793,7 +6871,7 @@ function optionRoutine( test )
       test.identical( got.testCheckFails, 0 );
       test.identical( got.testCasePasses, 3 );
       test.identical( got.testCaseFails, 0 );
-      test.identical( got.testCaseNumber, 0 );
+      // test.identical( got.testCaseNumber, 0 );
       test.identical( got.testRoutinePasses, 3 );
       test.identical( got.testRoutineFails, 0 );
 
@@ -5820,7 +6898,7 @@ function optionRoutine( test )
     ({
       onSuiteEnd,
       tests : { a1, a2, b1 },
-      override : notTakingIntoAccount,
+      override : this.notTakingIntoAccount,
       ignoringTesterOptions : 1,
       routine : 'a1',
     });
@@ -5840,7 +6918,7 @@ function optionRoutine( test )
       test.identical( report.testCheckFails, 0 );
       test.identical( report.testCasePasses, 1 );
       test.identical( report.testCaseFails, 0 );
-      test.identical( report.testCaseNumber, 0 );
+      // test.identical( report.testCaseNumber, 0 );
       test.identical( report.testRoutinePasses, 1 );
       test.identical( report.testRoutineFails, 0 );
 
@@ -5869,7 +6947,7 @@ function optionRoutine( test )
     ({
       onSuiteEnd,
       tests : { a1, a2, b1 },
-      override : notTakingIntoAccount,
+      override : this.notTakingIntoAccount,
       ignoringTesterOptions : 1,
       routine : 'a*',
     });
@@ -5889,7 +6967,7 @@ function optionRoutine( test )
       test.identical( report.testCheckFails, 0 );
       test.identical( report.testCasePasses, 2 );
       test.identical( report.testCaseFails, 0 );
-      test.identical( report.testCaseNumber, 0 );
+      // test.identical( report.testCaseNumber, 0 );
       test.identical( report.testRoutinePasses, 2 );
       test.identical( report.testRoutineFails, 0 );
 
@@ -5918,7 +6996,7 @@ function optionRoutine( test )
     ({
       onSuiteEnd,
       tests : { a1, a2, b1 },
-      override : notTakingIntoAccount,
+      override : this.notTakingIntoAccount,
       ignoringTesterOptions : 1,
       routine : 'c*',
     });
@@ -5938,7 +7016,7 @@ function optionRoutine( test )
       test.identical( report.testCheckFails, 0 );
       test.identical( report.testCasePasses, 0 );
       test.identical( report.testCaseFails, 0 );
-      test.identical( report.testCaseNumber, 0 );
+      // test.identical( report.testCaseNumber, 0 );
       test.identical( report.testRoutinePasses, 0 );
       test.identical( report.testRoutineFails, 0 );
 
@@ -6012,7 +7090,7 @@ function asyncTestRoutine( test )
   var suite = wTestSuite
   ({
     tests : { asyncTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -6050,7 +7128,7 @@ function syncTestRoutineWithProperty( test )
   var suite = wTestSuite
   ({
     tests : { syncTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -6091,7 +7169,7 @@ function asyncTestRoutineWithProperty( test )
   var suite = wTestSuite
   ({
     tests : { asyncTest },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -6136,7 +7214,7 @@ function syncTimeout1( test )
   ({
     name : 'TestSuiteSyncTimeout1',
     tests : { testRoutine },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -6202,7 +7280,7 @@ function syncTimeout2( test )
   ({
     name : 'TestSuiteSyncTimeout2',
     tests : { testRoutine },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -6265,7 +7343,7 @@ function asyncTimeout1( test )
   var suite = wTestSuite
   ({
     tests : { testRoutine },
-    override : notTakingIntoAccount,
+    override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
 
@@ -6320,6 +7398,9 @@ asyncTimeout1.description =
 // declare
 // --
 
+// var notTakingIntoAccount = { concurrent : 1, takingIntoAccount : 0 };
+var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
+
 var Self =
 {
 
@@ -6332,6 +7413,7 @@ var Self =
 
   context :
   {
+    notTakingIntoAccount,
   },
 
   tests :
@@ -6383,6 +7465,17 @@ var Self =
     geReturn,
     ltReturn,
     leReturn,
+
+    // grouping
+
+    testCase,
+    testsGroupSameNameError,
+    testsGroupDiscrepancyError,
+    testsGroupSingleLevel,
+    testsGroupMultipleLevels,
+    testsGroupTestCaseSingleLevel,
+    testsGroupAfterTestCase,
+    testsGroupTestCaseMultipleLevels,
 
     // outcome
 

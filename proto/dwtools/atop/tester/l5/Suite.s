@@ -933,7 +933,6 @@ function _reportBegin()
 
   report.testCasePasses = 0;
   report.testCaseFails = 0;
-  report.testCaseNumber = 0;
 
   report.testRoutinePasses = 0;
   report.testRoutineFails = 0;

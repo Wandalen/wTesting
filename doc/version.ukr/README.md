@@ -92,7 +92,7 @@
 <details><summary><a href="./tutorial/Installation.md">
       Встановлення
   </a></summary>
-  Процедура встановлення утиліти Testing.
+  Процедура встановлення утиліти для тестування Testing.
 </details>
 <details><summary><a href="./tutorial/Help.md">
       Як отримати довідку

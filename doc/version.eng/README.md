@@ -77,7 +77,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 <details><summary><a href="./tutorial/Installation.md">
       Installation
   </a></summary>
-  Installation of the Testing module to test code.
+  Installation of utility Testing.
 </details>
 <details><summary><a href="./tutorial/Help.md">
       Help

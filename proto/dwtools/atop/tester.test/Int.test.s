@@ -5694,15 +5694,17 @@ function testsGroupSameNameError( test )
     test.identical( t._testCheckPassesOfTestCase, 1 );
     test.identical( t._testCheckFailsOfTestCase, 0 );
 
+    debugger;
     t.open( 'def' );
+    debugger;
     t.identical( 0, 0 );
 
     test.identical( t.case, '' );
     test.identical( t.group, 'def' );
-    test.identical( t._groupsStack, [ 'def' ] );
+    test.identical( t._groupsStack, [ 'def', 'def' ] );
     test.identical( t._groupOpenedWithCase, 0 );
     test.identical( t._testCheckPassesOfTestCase, 1 );
-    test.identical( t._testCheckFailsOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 1 );
 
     t.close( 'def' );
 
@@ -5729,8 +5731,8 @@ function testsGroupSameNameError( test )
       'appExitCode' : 0,
       'testCheckPasses' : 2,
       'testCheckFails' : 1,
-      'testCasePasses' : 1,
-      'testCaseFails' : 0,
+      'testCasePasses' : 0,
+      'testCaseFails' : 1,
     }
     var got = _.mapBut( testRoutine.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
@@ -5743,8 +5745,8 @@ function testsGroupSameNameError( test )
       'appExitCode' : 0,
       'testCheckPasses' : 2,
       'testCheckFails' : 1,
-      'testCasePasses' : 1,
-      'testCaseFails' : 0,
+      'testCasePasses' : 0,
+      'testCaseFails' : 1,
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }

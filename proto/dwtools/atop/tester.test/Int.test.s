@@ -6338,6 +6338,114 @@ function testsGroupTestCaseSingleLevel( test )
 
 //
 
+function testsGroupTestCaseSameName( test )
+{
+  let testRoutine;
+  let visited = [];
+
+  function routine1( t )
+  {
+    testRoutine = t;
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 0 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.case = 'case1';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case1' );
+    test.identical( t.group, 'case1' );
+    test.identical( t._groupsStack, [ 'case1' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    debugger;
+    t.open( 'case1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, 'case1' );
+    test.identical( t._groupsStack, [ 'case1' ] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    debugger;
+    t.case = 'case1';
+    t.identical( 1, 1 );
+
+    test.identical( t.case, 'case1' );
+    test.identical( t.group, 'case1' );
+    test.identical( t._groupsStack, [ 'case1', 'case1' ] );
+    test.identical( t._groupOpenedWithCase, 1 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    t.close( 'case1' );
+    t.identical( 1, 1 );
+
+    test.identical( t.case, '' );
+    test.identical( t.group, '' );
+    test.identical( t._groupsStack, [] );
+    test.identical( t._groupOpenedWithCase, 0 );
+    test.identical( t._testCheckPassesOfTestCase, 1 );
+    test.identical( t._testCheckFailsOfTestCase, 0 );
+
+    visited.push( 'routine1' );
+  }
+
+  var suite1 = wTestSuite
+  ({
+    tests : { routine1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  return suite1.run().tap( ( err, arg ) =>
+  {
+
+    test.identical( visited, [ 'routine1' ] );
+    test.identical( testRoutine._groupError, null );
+
+    var exp =
+    {
+      'reason' : null,
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 4,
+      'testCheckFails' : 0,
+      'testCasePasses' : 2,
+      'testCaseFails' : 0,
+    }
+    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+    var exp =
+    {
+      'outcome' : true,
+      'errorsArray' : [],
+      'appExitCode' : 0,
+      'testCheckPasses' : 4,
+      'testCheckFails' : 0,
+      'testCasePasses' : 2,
+      'testCaseFails' : 0,
+      'testRoutinePasses' : 1,
+      'testRoutineFails' : 0
+    }
+    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    test.identical( got, exp );
+
+  });
+}
+
+//
+
 function testsGroupAfterTestCase( test )
 {
   let testRoutine;
@@ -7474,6 +7582,7 @@ var Self =
     testsGroupSingleLevel,
     testsGroupMultipleLevels,
     testsGroupTestCaseSingleLevel,
+    testsGroupTestCaseSameName,
     testsGroupAfterTestCase,
     testsGroupTestCaseMultipleLevels,
 

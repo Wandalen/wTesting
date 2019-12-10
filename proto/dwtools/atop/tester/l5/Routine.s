@@ -754,7 +754,18 @@ function groupOpen( groupName )
   {
     _.assert( arguments.length === 1, 'Expects single argument' );
     _.assert( _.strIs( groupName ), 'Expects string' );
+    trd._caseClose();
     trd._groupChange({ group : groupName, open : 1 });
+
+    if( trd._groupsStack.length >= 2 )
+    if( trd._groupsStack[ trd._groupsStack.length-1 ] === trd._groupsStack[ trd._groupsStack.length-2 ] )
+    {
+      debugger;
+      let err = trd._groupingErorr( `Attempt to open group "${groupName}". Group with the same name is already opened. Might be you meant to close it?`, 2 );
+      err = trd.exceptionReport({ err : err });
+      return;
+    }
+
   }
   catch( err )
   {
@@ -831,18 +842,21 @@ function _groupChange( o )
   function open()
   {
     let group = trd.group;
-    if( group !== o.group )
-    trd._caseClose();
+    // if( group !== o.group )
+    // trd._caseClose();
+
+    _.assert( trd._groupOpenedWithCase === 0 );
 
     if( !o.group )
     return
 
-    if( trd._groupsStack[ trd._groupsStack.length-1 ] === o.group )
-    {
-      let err = trd._groupingErorr( `Attempt to open group "${o.group}". Group with the same name is already opened. Might be you meant to close it?`, 4 );
-      err = trd.exceptionReport({ err : err });
-      return;
-    }
+    // if( trd._groupsStack[ trd._groupsStack.length-1 ] === o.group )
+    // {
+    //   debugger;
+    //   let err = trd._groupingErorr( `Attempt to open group "${o.group}". Group with the same name is already opened. Might be you meant to close it?`, 4 );
+    //   err = trd.exceptionReport({ err : err });
+    //   return;
+    // }
 
     trd._groupsStack.push( o.group );
 
@@ -852,12 +866,15 @@ function _groupChange( o )
 
   function close()
   {
+    // let group = trd.group;
+    // if( group !== o.group )
+    // if(  )
+    // trd._caseClose();
     let group = trd.group;
-    if( group !== o.group )
-    trd._caseClose();
 
     if( group !== o.group )
     {
+      debugger;
       let err = trd._groupingErorr( `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "${o.group}", but current tests group is "${group}". Might be you want to close it first.`, 4 );
       err = trd.exceptionReport({ err : err });
     }
@@ -883,6 +900,7 @@ _groupChange.defaults =
   group : null,
   open : null,
   touching : 9,
+  // closingCase : 0,
 }
 
 //
@@ -975,9 +993,9 @@ function _caseChange( o )
   _.assert( arguments.length === 1 );
   _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.strType( o.src )}` );
 
+  // yyy
   if( trd.case )
   {
-    // debugger;
     trd._groupChange({ group : trd.group, touching : o.touching, open : 0 });
   }
 

@@ -141,6 +141,15 @@ function init( o )
 
 //
 
+function precopy( o )
+{
+  let suite = this;
+  if( o && o.name )
+  suite.name = o.name;
+}
+
+//
+
 function copy( o )
 {
   let suite = this;
@@ -148,8 +157,14 @@ function copy( o )
   if( ( o instanceof Self ) )
   debugger;
 
+  suite.precopy( o );
+
   return _.Copyable.prototype.copy.call( suite, o );
 }
+
+/* qqq : write external test rouine
+the test routine checks that error caused by unknown field in test suite definition thows error with good explanation having name of the suite
+*/
 
 //
 
@@ -1349,6 +1364,7 @@ let Proto =
   // inter
 
   init,
+  precopy,
   copy,
   inherit,
   Froms,

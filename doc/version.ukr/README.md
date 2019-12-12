@@ -177,7 +177,7 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestRoutineExperimental.md">
+  <summary><a href="./tutorial/TestRoutineExperiment.md">
    Експериментальна тест рутина
   </a></summary>
     Створення експериментальних тест рутин для відладки тест об'єкта. 

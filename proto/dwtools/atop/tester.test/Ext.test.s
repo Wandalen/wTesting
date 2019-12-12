@@ -1051,6 +1051,37 @@ manualTermination.description =
   onSuiteEnd handler should be executed before exitHandlerOnce
 `
 
+//
+
+function asyncErrorHandling( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'asyncErrorHandling' );
+  
+  /* - */
+
+  let o = 
+  { 
+    execPath : 'node asyncErrorHandling.test.js v:7',
+    currentPath : a.originalAssetPath,
+    mode : 'spawn',
+    outputCollecting : 1,
+    throwingExitCode : 0
+  };
+  a.shellNonThrowing( o )
+  
+  /* */
+
+  a.ready
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    return op;
+  })
+
+  return a.ready;
+}
+
 // --
 // suite
 // --
@@ -1092,7 +1123,8 @@ var Self =
     noTestSuite,
     help,
     version,
-    manualTermination
+    manualTermination,
+    asyncErrorHandling
 
   }
 

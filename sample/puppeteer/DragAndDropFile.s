@@ -50,33 +50,30 @@ async function fileDragAndDrop( test )
   let browser = await Puppeteer.launch({ headless : false });
   let page = await browser.newPage();
   
-  var fileInputIdentifier = "fileInput";
-  var dropZoneSelector = "#drop_zone";
-  var filePath = __filename;
+  var fileInputId = 'fileInput';
+  var dropZoneSelector = '#dropzone';
   
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
   
-  await page.evaluate((fileInputIdentifier, dropZoneSelector) => 
-  {
-    document.body.appendChild( Object.assign(
-        document.createElement( "input" ),
-        {
-            id: fileInputIdentifier,
-            type: "file",
-            onchange: e => 
-            {
-              document.querySelector(dropZoneSelector).dispatchEvent(Object.assign(
-                  new Event("drop"),
-                  { dataTransfer: { files: e.target.files } }
-              ));
-            }
-        }
-    ));
-  }, fileInputIdentifier, dropZoneSelector );
-
-  const fileInput = await page.$(`#${fileInputIdentifier}`);
-  await fileInput.uploadFile(filePath);
+  await page.evaluate(( fileInputId, dropZoneSelector) => 
+  { 
+    let input = document.createElement( 'input' );
+    input.id = fileInputId,
+    input.type = 'file'
+    input.onchange = ( e ) => 
+    { 
+      let event = new Event( 'drop' );
+      Object.assign( event, { dataTransfer: { files: e.target.files } } )
+      document.querySelector( dropZoneSelector ).dispatchEvent( event );
+    }
+    document.body.appendChild( input );
   
+  }, fileInputId, dropZoneSelector );
+
+  const fileInput = await page.$(`#${fileInputId}`);
+  await fileInput.uploadFile( __filename );
+  let result = await page.evaluate( () => window.dropFiles );
+  test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
   await browser.close();
 
   return null;

@@ -177,6 +177,13 @@
 </details>
 
 <details>
+  <summary><a href="./tutorial/TestRoutineExperimental.md">
+   Експериментальна тест рутина
+  </a></summary>
+    Створення експериментальних тест рутин для тестування нового функціоналу 
+</details>
+
+<details>
   <summary><a href="./tutorial/OptionSanitareTime.md">
     Опція sanitareTime
   </a></summary>

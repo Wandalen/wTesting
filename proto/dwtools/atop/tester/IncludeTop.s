@@ -42,7 +42,7 @@ if( typeof module !== 'undefined' )
   require( './l5/Suite.s' );
 
   require( './l7/TesterTop.s' );
-
+  
   //
 
   var _ = _global_.wTools;
@@ -63,6 +63,8 @@ if( typeof module !== 'undefined' )
 
   Module._cache = cache;
   _global_ = _wasGlobal;
+  
+  require( './l8/Helper.s' )
 
 }
 

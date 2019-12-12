@@ -13,6 +13,7 @@
 | Function exposing                      | - | [Sample](../../sample/puppeteer/FunctionExposing.test.s)
 | Commands chaining                      | [Sample](../../sample/spectron/Chaining.test.s) | -
 | Screenshots creation                   | [Sample](../../sample/spectron/Screenshots.test.s) | [Sample](../../sample/puppeteer/Screenshots.test.s)         |
-| Drag and drop                          | [X][Sample](../../sample/spectron/DragAndDrop.test.s) | [X][Sample](../../sample/puppeteer/DragAndDrop.test.s)         |
+| Drag and drop element on page                         | [X][Sample](../../sample/spectron/DragAndDrop.test.s) | [X][Sample](../../sample/puppeteer/DragAndDrop.test.s)         |
+| Drag and drop file from system into browser                          | [X][Sample](../../sample/spectron/DragAndDropFile.test.s) | [X][Sample](../../sample/puppeteer/DragAndDropFile.test.s)         |
 | Access to raw Chrome Devtools Protocol | [X][Sample](../../sample/spectron/CDP.test.s) | [Sample](../../sample/puppeteer/CDP.test.s)         |
 | Headless testing                       | [Sample](../../sample/spectron/Headless.test.s) | [Sample](../../sample/puppeteer/Headless.test.s)         |

@@ -69,13 +69,20 @@ $ tst .run [ path ] v:[ number ]
 Option sets the verbosity of report. Accepts a value from 0 to 9. Default value is 4.
 
 ```
-$ tst .imply routine:[ name ] .run [ path ]
-$ tst .imply r:[ name ] .run [ path ]
-$ tst .run [ path ] routine:[ name ]
-$ tst .run [ path ] r:[ name ]
+$ tst .imply routine:[ name || glob ] .run [ path ]
+$ tst .imply r:[ name || glob ] .run [ path ]
+$ tst .run [ path ] routine:[ name || glob ]
+$ tst .run [ path ] r:[ name || glob ]
 ```
 
-Option to test separate test routine. Accepts name of test routine.
+Option to test separate test routine. Accepts name of test routine or glob.
+
+```
+$ tst .imply suite:[ name ] .run [ path ]
+$ tst .run [ path ] suite:[ name ]
+```
+
+Option to test separate test suites. Accepts name of test suite or glob.
 
 ```
 $ tst .imply testRoutineTimeOut:[ time ] .run [ path ]
@@ -196,12 +203,6 @@ test.isNot( boolLike arg );
 Passes if argument is false-like.
 
 ```
-test.isNotError( errorLike arg );
-```
-
-Passes if argument is not error.
-
-```
 test.identical( any arg1, any arg2 );
 test.il( any arg1, any arg2 );
 ```
@@ -234,12 +235,6 @@ test.contains( any arg1, any arg2 );
 ```
 
 Passes if the arguments are identical or the first argument contains the second argument.
-
-```
-test.setsAreIdentical( arrayLike arg1, arrayLike arg2 );
-```
-
-Passes if elements of both arguments are identical.
 
 ```
 test.gt( numberLike arg1, numberLike arg2 );

@@ -185,7 +185,7 @@ tst .imply routine:someRoutine .run path/to/TestSuite.js
 
 This command will run the test routine `someRoutine`  of the test suite `TestSuite.js`.
 
-Running the test with the name of the desired test routine in the `routine` option restricts the testing to the specified test routine. The rest of the test routines do not run. The `routine` option has a shortened entry form - `r`.
+Running the test with the name of the desired test routine in the `routine` option restricts the testing to the specified test routine. The rest of the test routines do not run. The `routine` option has a shortened entry form - `r`. Also, the option can accept glob instead of full name of routine.
 
 Run the `bufferFrom` routine of ` Long.test.s` test suite. To run the test, enter the command
 

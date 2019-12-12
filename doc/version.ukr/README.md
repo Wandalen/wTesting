@@ -177,10 +177,10 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestRoutineExperimental.md">
-    Експериментальна тест рутина
+  <summary><a href="./tutorial/TestRoutineExperiment.md">
+   Експериментальна тест рутина
   </a></summary>
-    Створення експериментальних тест рутин для відладки тест об'єкта.
+    Створення експериментальних тест рутин як засобу для поліпшення розуміння коду і комунікації між членами команди розробників. 
 </details>
 
 <details>

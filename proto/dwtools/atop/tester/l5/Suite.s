@@ -5,7 +5,7 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-debugged = 0;
+// debugged = 0;
 
 //
 
@@ -141,6 +141,15 @@ function init( o )
 
 //
 
+function precopy( o )
+{
+  let suite = this;
+  if( o && o.name )
+  suite.name = o.name;
+}
+
+//
+
 function copy( o )
 {
   let suite = this;
@@ -148,8 +157,14 @@ function copy( o )
   if( ( o instanceof Self ) )
   debugger;
 
+  suite.precopy( o );
+
   return _.Copyable.prototype.copy.call( suite, o );
 }
+
+/* qqq : write external test rouine
+the test routine checks that error caused by unknown field in test suite definition thows error with good explanation having name of the suite
+*/
 
 //
 
@@ -799,7 +814,8 @@ function _terminated()
   if( !err )
   {
     err = _.errBrief( 'Terminated by user' );
-    err.reason = 'terminated by user';
+    _.errReason( err, 'terminated by user' );
+    // err.reason = 'terminated by user';
   }
   wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }
@@ -932,7 +948,6 @@ function _reportBegin()
 
   report.testCasePasses = 0;
   report.testCaseFails = 0;
-  report.testCaseNumber = 0;
 
   report.testRoutinePasses = 0;
   report.testRoutineFails = 0;
@@ -1349,6 +1364,7 @@ let Proto =
   // inter
 
   init,
+  precopy,
   copy,
   inherit,
   Froms,

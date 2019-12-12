@@ -1,6 +1,6 @@
 # Installation
 
-Installation of the Testing module to test code.
+Installation of utility Testing.
 
 ### Installation of `NodeJS`
 

@@ -2,6 +2,8 @@
 
 'use strict';
 
+/* xxx : remove the suite from tester */
+
 if( typeof module !== 'undefined' )
 {
 
@@ -32,7 +34,9 @@ if( typeof module !== 'undefined' )
 var _global = _global_;
 var _ = _global_.wTools;
 
-//
+// --
+// tests
+// --
 
 function timeOut( test )
 {
@@ -441,8 +445,6 @@ function timeOut( test )
 
     if( !Config.debug )
     return null;
-
-    debugger;
 
     test.case = 'delay must be number';
     test.shouldThrowErrorSync( () => _.time.out( 'x' ) );

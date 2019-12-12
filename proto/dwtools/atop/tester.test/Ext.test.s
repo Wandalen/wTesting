@@ -99,16 +99,16 @@ function run( test )
   })
 
   a.shellNonThrowing({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.ni( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
   })
@@ -123,16 +123,16 @@ function run( test )
   })
 
   a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.ni( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
   })
@@ -147,16 +147,16 @@ function run( test )
   })
 
   a.jsNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.ni( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
   })
@@ -171,16 +171,16 @@ function run( test )
   })
 
   a.jsNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.ni( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
-    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
-    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
 
     return null;
   })
@@ -580,7 +580,7 @@ function asyncTimeOut( test )
     test.notIdentical( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
-    test.identical( _.strCount( got.output, 'failed throwing error' ), 1 );
+    test.identical( _.strCount( got.output, 'failed, time out' ), 1 );
     test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
     test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
@@ -616,13 +616,15 @@ function checksAfterTimeOut( test )
     test.notIdentical( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
-    test.identical( _.strCount( got.output, 'failed throwing error' ), 1 );
+    test.identical( _.strCount( got.output, 'failed, time out' ), 1 );
     test.identical( _.strCount( got.output, 'Passed test checks 2 / 3' ), 2 );
     test.identical( _.strCount( got.output, 'Passed test routines 1 / 2' ), 2 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+    test.identical( _.strCount( got.output, 'failed' ), 3 );
+    test.identical( _.strCount( got.output, 'Failed' ), 1 );
 
     test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description1 # 1 ) ... ok' ), 1 );
-    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description2 # 2 ) ... failed throwing error' ), 1 );
+    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description2 # 2 ) ... failed, time out' ), 1 );
     test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine2 /  < description1 # 1 ) ... ok' ), 1 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine2' ), 1 );
@@ -667,7 +669,7 @@ function checksAfterTimeOutSilenced( test )
     test.identical( _.strCount( got.output, 'Passed test checks 2 / 2' ), 2 );
     test.identical( _.strCount( got.output, 'Passed test routines 2 / 2' ), 2 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
-    test.identical( _.strCount( got.output, 'failed throwing error' ), 0 );
+    test.identical( _.strCount( got.output, 'failed, throwing error' ), 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutSilencedAsset / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutSilencedAsset / TestRoutine::routine2' ), 1 );
@@ -681,6 +683,71 @@ function checksAfterTimeOutSilenced( test )
     test.identical( _.strCount( got.output, 'v3' ), 0 );
     test.identical( _.strCount( got.output, 'v4' ), 0 );
     test.identical( _.strCount( got.output, 'v10' ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function timeOutExternalMessage( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:5'
+    return null;
+  })
+
+  a.js({ execPath : `.run ** v:5` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'v2' ), 1 );
+    test.identical( _.strCount( op.output, 'v3' ), 1 );
+    test.identical( _.strCount( op.output, 'v4' ), 1 );
+    test.identical( _.strCount( op.output, 'v5' ), 0 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4(.|\n|\r)*/mg ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'node .run ** v:5'
+    return null;
+  })
+
+  a.shell({ execPath : `node Suite.test.js v:5` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'v2' ), 1 );
+    test.identical( _.strCount( op.output, 'v3' ), 1 );
+    test.identical( _.strCount( op.output, 'v4' ), 1 );
+    test.identical( _.strCount( op.output, 'v5' ), 0 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4(.|\n|\r)*/mg ), 1 );
 
     return null;
   })
@@ -720,6 +787,7 @@ function timeLimitConsequence( test )
 
   /* */
 
+  return ready;
 }
 
 //
@@ -1120,6 +1188,8 @@ var Self =
     asyncTimeOut,
     checksAfterTimeOut,
     checksAfterTimeOutSilenced,
+    timeOutExternalMessage,
+    timeLimitConsequence,
     noTestSuite,
     help,
     version,

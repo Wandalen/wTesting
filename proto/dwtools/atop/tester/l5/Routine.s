@@ -3497,6 +3497,12 @@ function assetFor( a )
   //   throw _.err( `Context of test suite which use routine \`assetFor\` should have such fields : \n${_.mapKeys( fields ).join( ', ' )}` );
   // }
 
+  program.defaults =
+  {
+    program : null,
+    globalsMap : null,
+  }
+
   return a;
 
   /**/
@@ -3546,21 +3552,38 @@ function assetFor( a )
 
   /**/
 
-  function program( routine )
+  function program( o )
   {
     let a = this;
 
-    _.assert( _.routineIs( routine ) );
+    if( !_.mapIs( o ) )
+    o = { program : o }
+    _.routineOptions( program, o );
+    _.assert( _.routineIs( o.program ) );
     _.assert( arguments.length === 1 );
 
     let programPath = a.abs( 'Program.js' );
-    let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) ) );
-    let programSourceCode =
-    `
-    var toolsPath = '${toolsPath}';
-    ${routine.toString()}
-    program();
-    `
+    if( o.globalsMap === null )
+    {
+      o.globalsMap = Object.create( null );
+      o.globalsMap.toolsPath = a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) );
+      // o.globalsMap.toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) ) );
+    }
+
+    let programSourceCode = '';
+
+    programSourceCode += o.program.toString() + '\n\n';
+
+    for( let g in o.globalsMap )
+    {
+      debugger;
+      programSourceCode += `var ${g} = ${_.toJs( o.globalsMap[ g ] )};\n`
+    }
+
+    programSourceCode +=
+`
+program();
+`
 
     logger.log( _.strLinesNumber( programSourceCode ) );
     a.fileProvider.fileWrite( programPath, programSourceCode );

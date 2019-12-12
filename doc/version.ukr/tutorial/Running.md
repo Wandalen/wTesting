@@ -4,7 +4,7 @@
 
 ### Завантаження
 
-В модулі [`wTools`](<https://github.com/Wandalen/wTools>) є готові тест сюіти. Використайте їх для дослідження тестера. Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
+В модулі [`wTools`](<https://github.com/Wandalen/wTools>) є готові тест сюіти. Використайте їх щоб побачити як працює фреймворк для тестування. Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
 
 <details>
   <summary><u>Структура файлів модуля <code>wTools</code></u></summary>

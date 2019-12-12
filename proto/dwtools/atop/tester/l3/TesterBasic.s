@@ -952,7 +952,6 @@ function _reportBegin()
 
   report.testCasePasses = 0;
   report.testCaseFails = 0;
-  report.testCaseNumber = 0;
 
   report.testRoutinePasses = 0;
   report.testRoutineFails = 0;
@@ -1010,12 +1009,19 @@ function _reportToStr()
   let tester = this;
   let report = tester.report;
   let msg = '';
+  let errorsCount = report.errorsArray.length + report.includeErrorsArray.length;
 
   if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
   msg = 'ExitCode : ' + report.appExitCode + '\n';
 
-  if( report.errorsArray.length )
-  msg += 'Thrown ' + ( report.errorsArray.length ) + ' error(s)\n';
+  /*
+    qqq : cover case when all passes testing, but it has include error
+    Final report should have that error accounted in couner of errors.
+    Should be 'Thrown' * 'error(s)'
+  */
+
+  if( errorsCount )
+  msg += 'Thrown ' + ( errorsCount ) + ' error(s)\n';
 
   msg += 'Passed test checks ' + ( report.testCheckPasses ) + ' / ' + ( report.testCheckPasses + report.testCheckFails ) + '\n';
   msg += 'Passed test cases ' + ( report.testCasePasses ) + ' / ' + ( report.testCasePasses + report.testCaseFails ) + '\n';

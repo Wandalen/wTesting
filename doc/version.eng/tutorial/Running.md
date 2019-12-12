@@ -4,7 +4,7 @@ How to run single file testing and group testing.
 
 ### Downloading
 
-The [`Tools`](<https://github.com/Wandalen/wTools>) module has a ready test suites. Use them to test the tester. Clone the repository of the module by executing the `git clone https://github.com/Wandalen/wTools.git` command.
+The [`Tools`](<https://github.com/Wandalen/wTools>) module has a ready test suites. Use them see how the framework works. Clone the repository of the module by executing the `git clone https://github.com/Wandalen/wTools.git` command.
 
 <details>
   <summary><u>The file structure of <code>Tools</code> module</u></summary>

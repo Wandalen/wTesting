@@ -390,7 +390,7 @@ function _runEnd()
   /* groups stack */
 
   trd._descriptionChange({ src : '', touching : 0 });
-  trd._testsGroupTestEnd();
+  trd._groupTestEnd();
 
   if( trd.report.errorsArray.length && !trd.report.reason )
   {
@@ -424,8 +424,6 @@ function _runEnd()
       usingDescription : 0,
     });
   }
-
-  /* qqq xxx : cover timed out routine has proper description of fail of the routine */
 
   /* on end */
 
@@ -526,7 +524,8 @@ function _runInterruptMaybe( throwing )
 
   if( !wTester._canContinue() )
   {
-    debugger; /* qqq xxx */
+    debugger; xxx
+    /* qqq xxx */
     // if( trd._returnCon )
     // trd._returnCon.cancel();
     // let result = wTester.cancel({ global : 0 });
@@ -703,7 +702,7 @@ function _descriptionFullGet()
   let right = ' > ';
   let left = ' < ';
 
-  result = trd._testsGroupsStack.slice( 0, trd._testsGroupsStack.length-1 ).join( right );
+  result = trd._groupsStack.slice( 0, trd._groupsStack.length-1 ).join( right );
   if( result )
   result += right + trd.case
   else
@@ -732,11 +731,11 @@ function _descriptionWithNameGet()
 // checks group
 // --
 
-function _testsGroupGet()
+function _groupGet()
 {
   let trd = this;
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  return trd._testsGroupsStack[ trd._testsGroupsStack.length-1 ] || '';
+  return trd._groupsStack[ trd._groupsStack.length-1 ] || '';
 }
 
 //
@@ -747,12 +746,35 @@ function _testsGroupGet()
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function testsGroupOpen( groupName )
+function groupOpen( groupName )
 {
   let trd = this;
-  _.assert( arguments.length === 1, 'Expects single argument' );
 
-  trd._testsGroupChange({ group : groupName, open : 1 });
+  try
+  {
+    _.assert( arguments.length === 1, 'Expects single argument' );
+    _.assert( _.strIs( groupName ), 'Expects string' );
+    trd._caseClose();
+    trd._groupChange({ group : groupName, open : 1 });
+
+    if( trd._groupsStack.length >= 2 )
+    if( trd._groupsStack[ trd._groupsStack.length-1 ] === trd._groupsStack[ trd._groupsStack.length-2 ] )
+    {
+      debugger;
+      let err = trd._groupingErorr( `Attempt to open group "${groupName}". Group with the same name is already opened. Might be you meant to close it?`, 2 );
+      err = trd.exceptionReport({ err : err });
+      return;
+    }
+
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
 
 }
 
@@ -764,106 +786,162 @@ function testsGroupOpen( groupName )
  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
  */
 
-function testsGroupClose( groupName )
+function groupClose( groupName )
 {
   let trd = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  trd._testsGroupChange({ group : groupName, open : 0 });
+  try
+  {
+    trd._caseClose();
+    trd._groupChange({ group : groupName, open : 0 });
+  }
+  catch( err )
+  {
+    trd.exceptionReport
+    ({
+      err : err,
+    });
+    return false;
+  }
 
-  return trd.testsGroup;
+  return trd.group;
 }
 
 //
 
-function _testsGroupChange( o )
+function _groupChange( o )
 {
   let trd = this;
 
-  _.routineOptions( _testsGroupChange, o );
+  _.routineOptions( _groupChange, o );
   _.assert( arguments.length === 1, 'Expects no arguments' );
-  _.assert( _.strIs( o.group ) );
-
-  trd._descriptionChange({ src : '', touching : 0 });
-  trd._caseClose();
+  _.assert( _.strIs( o.group ) || o.group === null );
 
   if( o.open )
   open();
   else
   close();
 
+  reset();
+
+  /* */
+
+  function reset()
+  {
+    trd._groupOpenedWithCase = 0;
+    trd._testCheckPassesOfTestCase = 0;
+    trd._testCheckFailsOfTestCase = 0;
+    trd._descriptionChange({ src : '', touching : 0 });
+    // trd._caseClose();
+  }
+
   /* */
 
   function open()
   {
-    trd._testsGroupsStack.push( o.group );
-    trd._testsGroupIsCase = 1;
-    trd.report.testCheckPassesOfTestCase = 0;
-    trd.report.testCheckFailsOfTestCase = 0;
+    let group = trd.group;
+    // if( group !== o.group )
+    // trd._caseClose();
+
+    _.assert( trd._groupOpenedWithCase === 0 );
+
+    if( !o.group )
+    return
+
+    // if( trd._groupsStack[ trd._groupsStack.length-1 ] === o.group )
+    // {
+    //   debugger;
+    //   let err = trd._groupingErorr( `Attempt to open group "${o.group}". Group with the same name is already opened. Might be you meant to close it?`, 4 );
+    //   err = trd.exceptionReport({ err : err });
+    //   return;
+    // }
+
+    trd._groupsStack.push( o.group );
+
   }
 
   /* */
 
   function close()
   {
-    if( trd.testsGroup !== o.group )
-    trd._caseClose();
+    // let group = trd.group;
+    // if( group !== o.group )
+    // if(  )
+    // trd._caseClose();
+    let group = trd.group;
 
-    if( trd.testsGroup !== o.group )
+    if( group !== o.group )
     {
-      let err = _._err
-      ({
-        args : [ 'Attempt to close not the topmost tests group', _.strQuote( o.group ), 'current tests group is', _.strQuote( trd.testsGroup ) ],
-        level : 2,
-      });
-      err = _.errBrief( err );
-      err = trd.exceptionReport
-      ({
-        err : err,
-      });
-      trd._testsGroupError = err;
+      debugger;
+      let err = trd._groupingErorr( `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "${o.group}", but current tests group is "${group}". Might be you want to close it first.`, 4 );
+      err = trd.exceptionReport({ err : err });
     }
     else
     {
-      trd._testsGroupsStack.splice( trd._testsGroupsStack.length-1, 1 );
+      trd._groupsStack.pop();
     }
 
-    if( trd._testsGroupIsCase )
+    // if( trd._groupIsCase )
+    if( group )
     {
-      if( trd.report.testCheckFailsOfTestCase > 0 || trd.report.testCheckPassesOfTestCase > 0 )
-      trd._testCaseConsider( !trd.report.testCheckFailsOfTestCase );
+      if( trd._testCheckFailsOfTestCase > 0 || trd._testCheckPassesOfTestCase > 0 )
+      trd._testCaseConsider( !trd._testCheckFailsOfTestCase );
     }
 
-    trd._testsGroupIsCase = 0;
+    // trd._groupIsCase = 0;
   }
 
 }
 
-_testsGroupChange.defaults =
+_groupChange.defaults =
 {
   group : null,
   open : null,
   touching : 9,
+  // closingCase : 0,
 }
 
 //
 
-function _testsGroupTestEnd()
+function _groupTestEnd()
 {
   let trd = this;
 
   trd._caseClose();
 
-  if( trd._testsGroupsStack.length && !trd._testsGroupError )
+  if( trd._groupsStack.length && !trd._groupError )
   {
-    let err = trd.exceptionReport
-    ({
-      err : _.errBrief( 'Tests group', _.strQuote( trd.testsGroup ), 'was not closed' ),
-      usingSourceCode : 0,
-    });
+    let err = trd._groupingErorr( `Tests group ${trd.group} was not closed`, 4 );
+    err = trd.exceptionReport({ err : err, usingSourceCode : 0 });
   }
 
+}
+
+//
+
+function _groupingErorr( msg, level )
+{
+  let trd = this;
+
+  if( level === undefined || level === null )
+  level = 4;
+
+  let err = _._err
+  ({
+    args : [ msg ],
+    level : level,
+    reason : 'grouping error',
+    usingSourceCode : 0,
+  });
+
+  err = _.errBrief( err );
+
+  if( !trd._groupError )
+  trd._groupError = err;
+
+  return err;
 }
 
 //
@@ -871,7 +949,11 @@ function _testsGroupTestEnd()
 function _caseGet()
 {
   let trd = this;
-  return trd.testsGroup;
+  _.assert( arguments.length === 0, 'Expects no arguments' );
+  if( trd._groupOpenedWithCase )
+  return trd._groupsStack[ trd._groupsStack.length-1 ] || '';
+  else
+  return '';
 }
 
 //
@@ -890,11 +972,12 @@ function _caseClose()
   let trd = this;
   let report = trd.report;
 
-  if( trd._testsGroupOpenedWithCase )
+  if( trd._groupOpenedWithCase )
   {
-    trd._testsGroupOpenedWithCase = 0;
-    _.assert( _.strIs( trd.testsGroup ) );
-    trd._testsGroupChange({ group : trd.testsGroup, touching : 0, open : 0 });
+    // trd._groupOpenedWithCase = 0;
+    _.assert( _.strIs( trd.group ) );
+    trd._groupChange({ group : trd.group, touching : 0, open : 0 });
+    _.assert( trd._groupOpenedWithCase === 0 );
   }
 
 }
@@ -908,18 +991,23 @@ function _caseChange( o )
   _.routineOptions( _caseChange, o );
   _.assert( _.mapIs( o ) );
   _.assert( arguments.length === 1 );
-  _.assert( o.src === null || _.strIs( o.src ), 'Expects string or null {-o.src-}, but got', _.strType( o.src ) );
+  _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.strType( o.src )}` );
 
-  if( o.src !== null )
+  // yyy
+  if( trd.case )
   {
-    trd._testsGroupChange({ group : o.src, touching : o.touching, open : 1 });
-    trd._testsGroupOpenedWithCase = 1;
+    trd._groupChange({ group : trd.group, touching : o.touching, open : 0 });
+  }
+
+  if( o.src )
+  {
+    trd._groupChange({ group : o.src, touching : o.touching, open : 1 });
+    trd._groupOpenedWithCase = 1;
   }
   else
   {
-    /* qqq xxx : test case = null and other combinations */
-    if( trd.case )
-    trd._testsGroupChange({ group : o.src, touching : o.touching, open : 0 });
+    // if( trd.case )
+    // trd._groupChange({ group : o.src, touching : o.touching, open : 0 });
   }
 
   return o.src;
@@ -984,8 +1072,8 @@ function checkCurrent()
 
   _.assert( arguments.length === 0 );
 
-  result.testsGroupsStack = trd._testsGroupsStack;
-  result.description = trd.description; /* xxx : rename */
+  result.groupsStack = trd._groupsStack;
+  result.description = trd.description;
   result.checkIndex = trd._checkIndex;
 
   return result;
@@ -1069,8 +1157,7 @@ function checkRestore( acheck )
   }
 
   trd._checkIndex = acheck.checkIndex;
-  trd._testsGroupsStack = acheck.testsGroupsStack;
-  // trd.description = acheck.description; /* xxx : rename */
+  trd._groupsStack = acheck.groupsStack;
   trd._descriptionChange({ src : acheck.description, touching : 0 });
 
   return trd;
@@ -1090,12 +1177,12 @@ function _testCheckConsider( outcome )
   if( outcome )
   {
     trd.report.testCheckPasses += 1;
-    trd.report.testCheckPassesOfTestCase += 1;
+    trd._testCheckPassesOfTestCase += 1;
   }
   else
   {
     trd.report.testCheckFails += 1;
-    trd.report.testCheckFailsOfTestCase += 1;
+    trd._testCheckFailsOfTestCase += 1;
   }
 
   trd.suite._testCheckConsider( outcome );
@@ -1463,8 +1550,8 @@ function _reportBegin()
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
 
-  report.testCheckPassesOfTestCase = 0;
-  report.testCheckFailsOfTestCase = 0;
+  // report.testCheckPassesOfTestCase = 0;
+  // report.testCheckFailsOfTestCase = 0;
 
   report.testCasePasses = 0;
   report.testCaseFails = 0;
@@ -2253,7 +2340,7 @@ function contains( got, expected )
 //     outcome : outcome,
 //     got : got,
 //     expected : expected,
-//     // path : o2.it.lastPath, // xxx
+//     // path : o2.it.lastPath,
 //     usingExtraDetails : 1,
 //   });
 //
@@ -3268,7 +3355,6 @@ function assetFor( a )
   _.assert( a.trd === undefined );
   _.assert( a.suite === undefined );
   _.assert( a.routine === undefined );
-
   _.routineOptions( assetFor, a );
 
   a.trd = trd;
@@ -3285,6 +3371,8 @@ function assetFor( a )
   _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
   _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file {- defaultJsPath -}. But test suite ${suite.name} does not have.` );
 
+  Object.setPrototypeOf( a, context );
+
   if( a.process === null )
   a.process = _testerGlobal_.wTools.process;
   if( a.fileProvider === null )
@@ -3293,10 +3381,10 @@ function assetFor( a )
   a.path = a.fileProvider.path || _testerGlobal_.wTools.uri;
   if( a.uri === null )
   a.uri = _testerGlobal_.wTools.uri || a.fileProvider.path;
-  if( a.Consequence === null )
-  a.Consequence = _testerGlobal_.wTools.Consequence;
+  // if( a.Consequence === null )
+  // a.Consequence = _testerGlobal_.wTools.Consequence;
   if( a.ready === null )
-  a.ready = a.Consequence().take( null );
+  a.ready = _.Consequence().take( null );
 
   if( _.boolLike( a.originalAssetPath ) && a.originalAssetPath )
   a.originalAssetPath = null
@@ -3315,11 +3403,9 @@ function assetFor( a )
   a.originalRel = rel_functor( a.originalAssetPath );
 
   if( a.reflect === null )
-  a.reflect = function reflect()
-  {
-    a.fileProvider.filesDelete( a.routinePath );
-    a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });
-  }
+  a.reflect = reflect;
+  if( a.program === null )
+  a.program = program;
 
   if( a.shell === null )
   a.shell = a.process.starter
@@ -3405,6 +3491,12 @@ function assetFor( a )
   if( a.originalAssetPath )
   _.sure( a.fileProvider.isDir( a.originalAssetPath ) );
 
+  // if( !_.mapHasAll( context, a ) )
+  // {
+  //   let fields = _.mapBut( a, context );
+  //   throw _.err( `Context of test suite which use routine \`assetFor\` should have such fields : \n${_.mapKeys( fields ).join( ', ' )}` );
+  // }
+
   return a;
 
   /**/
@@ -3444,6 +3536,38 @@ function assetFor( a )
     }
   }
 
+  /* */
+
+  function reflect()
+  {
+    a.fileProvider.filesDelete( a.routinePath );
+    a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });
+  }
+
+  /**/
+
+  function program( routine )
+  {
+    let a = this;
+
+    _.assert( _.routineIs( routine ) );
+    _.assert( arguments.length === 1 );
+
+    let programPath = a.abs( 'Program.js' );
+    let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) ) );
+    let programSourceCode =
+    `
+    var toolsPath = '${toolsPath}';
+    ${routine.toString()}
+    program();
+    `
+
+    logger.log( _.strLinesNumber( programSourceCode ) );
+    a.fileProvider.fileWrite( programPath, programSourceCode );
+
+    return programPath;
+  }
+
   /**/
 
 }
@@ -3457,7 +3581,6 @@ assetFor.defaults =
   fileProvider : null,
   path : null,
   uri : null,
-  Consequence : null,
   ready : null,
 
   originalAssetPath : null,
@@ -3467,6 +3590,7 @@ assetFor.defaults =
   abs : null,
   rel : null,
   reflect : null,
+  program : null,
   shell : null,
   shellNonThrowing : null,
   js : null,
@@ -3553,10 +3677,11 @@ let Restricts =
   _formed : 0,
   _checkIndex : 1,
   _checksStack : _.define.own( [] ),
-  _testsGroupOpenedWithCase : 0,
-  _testsGroupIsCase : 0,
-  _testsGroupError : 0,
-  _testsGroupsStack : _.define.own( [] ),
+  _groupOpenedWithCase : 0,
+  _testCheckPassesOfTestCase : 0,
+  _testCheckFailsOfTestCase : 0,
+  _groupError : null,
+  _groupsStack : _.define.own( [] ),
 
   _testRoutineBeginTime : null,
   _returned : null,
@@ -3586,15 +3711,6 @@ let Forbids =
   _currentRoutinePasses : '_currentRoutinePasses',
 }
 
-let AccessorsReadOnly =
-{
-  testsGroup : 'testsGroup',
-  descriptionFull : 'descriptionFull',
-  descriptionWithName : 'descriptionWithName',
-  accuracyEffective : 'accuracyEffective',
-  runnable : 'runnable',
-}
-
 let Accessors =
 {
 
@@ -3605,6 +3721,12 @@ let Accessors =
   timeOut : 'timeOut',
   rapidity : 'rapidity',
   usingSourceCode : 'usingSourceCode',
+
+  group : { readOnly : 1 },
+  descriptionFull : { readOnly : 1 },
+  descriptionWithName : { readOnly : 1 },
+  accuracyEffective : { readOnly : 1 },
+  runnable : { readOnly : 1 },
 
   qualifiedName : { readOnly : 1 },
   decoratedQualifiedName : { readOnly : 1 },
@@ -3667,13 +3789,14 @@ let Extend =
 
   // checks group
 
-  _testsGroupGet,
-  testsGroupOpen,
-  testsGroupClose,
-  open : testsGroupOpen,
-  close : testsGroupClose,
-  _testsGroupChange,
-  _testsGroupTestEnd,
+  _groupGet,
+  groupOpen,
+  groupClose,
+  open : groupOpen,
+  close : groupClose,
+  _groupChange,
+  _groupTestEnd,
+  _groupingErorr,
 
   _caseGet,
   _caseSet,
@@ -3758,7 +3881,6 @@ let Extend =
   Statics,
   Events,
   Forbids,
-  AccessorsReadOnly,
   Accessors,
 
 }

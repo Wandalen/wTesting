@@ -5,7 +5,7 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
-  _.include( 'wTesting' );
+  require( '../..' );
   _.include( 'wFiles' );
 
   var Puppeteer = require( 'puppeteer' );
@@ -79,6 +79,36 @@ async function fileDragAndDrop( test )
   return null;
 }
 
+//
+
+async function fileDragAndDrop2( test )
+{
+  let self = this;
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let indexHtmlPath = _.path.join( routinePath, 'fileDragAndDrop.html' );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
+  let browser = await Puppeteer.launch({ headless : false });
+  let page = await browser.newPage();
+  
+  await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
+  
+  await _.test.fileDrop
+  ({
+    filePath : [ __filename ],
+    targetSelector : '#dropzone',
+    fileInputId : 'fileInput',
+    page : page,
+    library : 'puppeteer'
+  })
+  let result = await page.evaluate( () => window.dropFiles );
+  test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
+  await browser.close();
+
+  return null;
+}
+
 // --
 // suite
 // --
@@ -102,7 +132,8 @@ var Self =
 
   tests :
   {
-    fileDragAndDrop
+    fileDragAndDrop,
+    fileDragAndDrop2
   }
 
 }

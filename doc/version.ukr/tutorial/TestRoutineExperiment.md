@@ -9,7 +9,6 @@
 
 ```
 testExperiment
-        ├── Math.js
         ├── Experiment.test.js
         └── package.json
 ```
@@ -18,66 +17,43 @@ testExperiment
 
 Створіть приведену вище структуру файлів для дослідження наслідування тест сюітів.
 
-### Об'єкт тестування
+### Тестовий файл
 
-В приведеному модулі використовується один файл з об'єктами тестування.
-
-<details>
-    <summary><u>Код файла <code>Math.js</code></u></summary>
-
-```js    
-module.exports.sum = function( a, b )
-{
-  return Number( a ) + Number( b );
-};
-
-module.exports.mul = function( a, b )
-{
-  return Number( a ) * Number( b );
-};
-```
-
-</details>
-
-Внесіть приведений вище код в файл `Math.js`.
-
-Функція `sum` виконує додавання двох числових значень, функція `mul` повертає добуток двох числових значень. Вони експортуються для використання.
-
-### Тестові файли
-
-Модуль має один тестовий файл - `Expriment.test.js` в якому буде поміщено дві тест рутини - одну звичайну, іншу експериментальну.
+Модуль має один тестовий файл - `Expriment.test.js` в якому поміщено тест об'єкт - рутину `sum` i дві тест рутини - одну звичайну, іншу експериментальну.
 
 <details>
     <summary><u>Код файла <code>Experiment.test.js</code></u></summary>
 
 ```js
 let _ = require( 'wTesting' );
-let Math = require( './Math.js' );
+
+//
+
+function sum( a, b )
+{
+  return a + b;
+}
 
 //
 
 function sumTest( test )
 {
   test.case = 'integer';
-  test.equivalent( Math.sum( 1, 1 ), 2 );
+  test.equivalent( sum( 1, 1 ), 2 );
   test.case = 'float';
-  test.equivalent( Math.sum( 1.01, 2.21 ), 3.22 );
+  test.equivalent( sum( 1.01, 2.21 ), 3.22 );
   test.case = 'negative';
-  test.equivalent( Math.sum( -1, -2 ), -3 );
+  test.equivalent( sum( -1, -2 ), -3 );
 }
 
 //
 
-function mulTest( test )
+function sumTestExperiment( test )
 {
-  test.case = 'integer';
-  test.equivalent( Math.mul( 1, 1 ), 1 );
-  test.case = 'float';
-  test.equivalent( Math.mul( 2.5, 2.5 ), 6.25 );
-  test.case = 'negative';
-  test.equivalent( Math.mul( -1, -2 ), 2 );
+  test.case = 'strings';
+  test.equivalent( sum( 'a', 'b' ), NaN );
 }
-mulTest.experimental = 1;
+sumTestExperiment.experimental = 1;
 
 //
 
@@ -87,7 +63,7 @@ var Self =
   tests :
   {
     sumTest,
-    mulTest,
+    sumTestExperiment,
   }
 }
 
@@ -102,10 +78,12 @@ wTester.test( Self.name );
 
 Внесіть приведений вище код в файл `Expriment.test.js`.
 
+Функція `sum` виконує додавання двох значень. Тест рутина `sumTest` виконує тестування основного функціоналу при використанні числових значень, а рутина `sumTestExperiment` виконує спеціальний експеримент, котрий показує бажану поведінку рутини `sum`. Тест рутина `sumTestExperiment` провалиться, адже, рутина `sum` проведе конкатенування рядкових значень.
+
 Вимоги, які ставляться до написання експериментальних тест рутин відповідають [вимогам до звичайних тест рутин](./TestRoutine.md). Одночасно з цим, для того, щоб зробити тест рутину експериментальною потрібно додати властивість `experimental`, як в коді приведеному вище.
 
 ```js 
-mulTest.experimental = 1;
+sumTestExperiment.experimental = 1;
 ```
 
 ### Встановлення залежностей
@@ -140,7 +118,7 @@ Launching several ( 1 ) test suite(s) ..
   /.../testExperiment/Experiment.test.js:43 - enabled
   1 test suite
     Running test suite ( Experiment ) ..
-    Located at /.../testExperiment/Experiment.test.js:43
+    Located at /.../testExperiment/Experiment.test.js:45
       
       Running TestSuite::Experiment / TestRoutine::sumTest ..
         Test check ( TestSuite::Experiment / TestRoutine::sumTest / integer # 1 ) ... ok
@@ -164,10 +142,10 @@ Launching several ( 1 ) test suite(s) ..
 
 Введіть команду `tst .run . v:5` в директорії модуля. Перевірте результати виводу з приведеними вище.
 
-Приведений звіт показує, що було протестовано одну тест рутину `sumTest`, а експериментальну `mulTest` - ні. Щоб протестувати експериментальну тест рутину, потрібно [запустити її окремо](./Running.md).
+Приведений звіт показує, що було протестовано одну тест рутину `sumTest`, а експериментальну `sumTestExperiment` - ні. Щоб протестувати експериментальну тест рутину, потрібно [запустити її окремо](./Running.md).
 
 <details>
-  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js v:5 r:mulTest</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js v:5 r:sumTestExperiment</code></u></summary>
 
 ```
 [user@user ~]$ tst .run . v:5
@@ -175,35 +153,49 @@ Launching several ( 1 ) test suite(s) ..
   /.../testExperiment/Experiment.test.js:43 - enabled
   1 test suite
     Running test suite ( Experiment ) ..
-    Located at /.../testExperiment/Experiment.test.js:43
+    Located at /.../testExperiment/Experiment.test.js:45
       
-      Running TestSuite::Experiment / TestRoutine::mulTest ..
-        Test check ( TestSuite::Experiment / TestRoutine::mulTest / integer # 1 ) ... ok
-        Test check ( TestSuite::Experiment / TestRoutine::mulTest / float # 2 ) ... ok
-        Test check ( TestSuite::Experiment / TestRoutine::mulTest / negative # 3 ) ... ok
-      Passed TestSuite::Experiment / TestRoutine::mulTest in 0.068s
-    Passed test checks 3 / 3
-    Passed test cases 3 / 3
-    Passed test routines 1 / 1
-    Test suite ( Experiment ) ... in 0.640s ... ok
+      Running TestSuite::Experiment / TestRoutine::sumTestExperiment ..
+        - got :
+          'ab'
+        - expected :
+          NaN 
+        - difference :
+          *
+        with accuracy 1e-7
+        
+          
+        /home/dmytry/Documents/UpWork/IntellectualServiceMysnyk/sources/wPathFundamentals/sample/Experiment.test.js:27
+          23 : 
+          24 : function sumTestExperiment( test )
+          25 : {
+          26 :   test.case = 'strings';
+        * 27 :   test.equivalent( sum( 'a', 'b' ), NaN );
+          
+        Test check ( TestSuite::Experiment / TestRoutine::sumTestExperiment / strings # 1 ) ... failed
+      Failed TestSuite::Experiment / TestRoutine::sumTestExperiment in 0.070s
+    Passed test checks 0 / 1
+    Passed test cases 0 / 1
+    Passed test routines 0 / 1
+    Test suite ( Experiment ) ... in 0.137s ... failed
+
 
   
-  Passed test checks 3 / 3
-  Passed test cases 3 / 3
-  Passed test routines 1 / 1
-  Passed test suites 1 / 1
-  Testing ... in 1.204s ... ok
-```
+  Passed test checks 0 / 1
+  Passed test cases 0 / 1
+  Passed test routines 0 / 1
+  Passed test suites 0 / 1
+  Testing ... in 0.198s ... failed```
 
 </details>
 
-Введіть команду `tst .run ./Experiment.test.js v:5 r:mulTest` в директорії модуля. Перевірте результати виводу з приведеними вище.
+Введіть команду `tst .run ./Experiment.test.js v:5 r:sumTestExperiment` в директорії модуля. Перевірте результати виводу з приведеними вище.
 
-При індивідуальному запуску тест рутини `mulTest`, тестування було виконано. Всі тести пройдено.
+При індивідуальному запуску тест рутини `sumTestExperiment`, тестування було виконано. Як було указано раніше, тест рутина провалена.
 
-Індивідуальний запуск експериментальної тест рутини дозволяє розробнику писати тести для основного функціоналу і експериментального в одному місці. При цьому в результати загального тестування не будуть включені експериментальні тест рутини. 
+Експериментальні тест рутини зручно використовувати для відладки та уточнення поведінки тест об'єкта. Адже, в експериментальну тест рутину можна окремо помістити необхідний тест кейс, який тестує один окремий випадок.
 
-Окремо потрібно позначити, що експериментальні тест рутини зручно використовувати для дебагінгу та уточнення поведінки тест об'єкта. Адже, в експериментальну тест рутину можна окремо помістити необхідний тест кейс, який тестує один окремий випадок.
+Індивідуальний запуск експериментальної тест рутини дозволяє розробнику писати тести для основного функціоналу і експериментального в одному місці. При цьому в результати загального тестування не будуть включені експериментальні тест рутини.
 
 ### Підсумок
 

@@ -1,30 +1,32 @@
 let _ = require( 'wTesting' );
-let Math = require( './Math.js' );
+
+//
+
+function sum( a, b )
+{
+  return a + b;
+};
 
 //
 
 function sumTest( test )
 {
   test.case = 'integer';
-  test.equivalent( Math.sum( 1, 1 ), 2 );
+  test.equivalent( sum( 1, 1 ), 2 );
   test.case = 'float';
-  test.equivalent( Math.sum( 1.01, 2.21 ), 3.22 );
+  test.equivalent( sum( 1.01, 2.21 ), 3.22 );
   test.case = 'negative';
-  test.equivalent( Math.sum( -1, -2 ), -3 );
+  test.equivalent( sum( -1, -2 ), -3 );
 }
 
 //
 
-function mulTest( test )
+function sumTestExperiment( test )
 {
-  test.case = 'integer';
-  test.equivalent( Math.mul( 1, 1 ), 1 );
-  test.case = 'float';
-  test.equivalent( Math.mul( 2.5, 2.5 ), 6.25 );
-  test.case = 'negative';
-  test.equivalent( Math.mul( -1, -2 ), 2 );
+  test.case = 'strings';
+  test.equivalent( sum( 'a', 'b' ), NaN );
 }
-mulTest.experimental = 1;
+sumTestExperiment.experimental = 1;
 
 //
 
@@ -34,7 +36,7 @@ var Self =
   tests :
   {
     sumTest,
-    mulTest,
+    sumTestExperiment,
   }
 }
 

@@ -1,158 +1,145 @@
 # Експериментальна тест рутина
 
-Створення експериментальних тест рутин як засобу для поліпшення розуміння коду і комунікації між членами команди розробників.
+Створення експериментальних тест рутин ( експериментів ) як інструмент для дослідження і комунікації між членами команди розробників.
 
-Відстань між окремими членами команди розробників, а також складність пояснень можуть погіршити розуміння між членами команди і зменшити ефективність розробки в цілому. Експериментальні тест рутини призначені для покращення діалогу між розробниками при виникненні незрозумілих деталей реалізації певного функціоналу програми.
+Експеримент це особлива тест рутина, що не виконується за замовчуванням. За допомогою експерименту розробник може включити код який не є тестом в тест сюїт і виконати його в такому ж середовищі в якому виконується тестування.
 
-<details>
-  <summary><u>Структура модуля</u></summary>
+Відстань між окремими членами команди, а також складність пояснень можуть погіршити розуміння між членами команди. Експериментальні тест рутини призначені для покращення діалогу між розробниками. Краще один раз побачити ніж 7-м разів почути.
 
-```
-testExperiment
-        ├── Experiment.test.js
-        └── package.json
-```
+Експериментальні тест рутини зручно використовувати для відлагодження та уточнення поведінки тест об'єкта. В експериментальну тест рутину можливо помістити необхідний експериментальний код отримавши при цьому таке ж середовище, як і в тест рутини. Іншому розробнику буде легко знайти експериментальну тест рутину і дати пояснення щодо поведінки. Те що експерименти не мають впливу на звіт тестування дуже зручно.
 
-</details>
+### Приклад
 
-Створіть приведену вище структуру файлів для дослідження експериментальних тест рутин в тест сюіті.
+Для ознайомленням із цією фічою створіть тест сюїт `Expriment.test.js` із повторіть дії описані нижче.
 
-### Тестовий файл
+### Тест сюїт
 
-Модуль має один тестовий файл - `Expriment.test.js` в якому поміщено дві тест рутини - одну звичайну та другу - експериментальну.
+Модуль має один тестовий файл - `Expriment.test.js` в якому поміщено дві тест рутини - одну звичайну та другу - експериментальну. Для простоти реалізуємо тестування стандартної рутини `Math.sqrt`. Припустимо `Math.sqrt` не є стандартною і мета розробника дослідити її.
 
 <details>
-    <summary><u>Код файла <code>Experiment.test.js</code></u></summary>
+<summary><u>Код файла <code>Experiment.test.js</code></u></summary>
 
 ```js
-let _ = require( 'wTesting' );
+let _ = require( `wTesting` );
 
 //
 
 function sqrtTest( test )
 {
-  test.case = 'integer';
-  test.equivalent( Math.sqrt( 4 ), 2 );
+test.case = `integer`;
+test.identical( Math.sqrt( 4 ), 2 );
 }
 
 //
 
-function sqrtTestExperiment( test )
+function experiment( test )
 {
-  test.case = 'strings';
-  test.equivalent( sum( -4 ), 'Complex value' );
+test.case = `strings`;
+test.identical( Math.sqrt( -1 ), `?` );
 }
-sqrtTestExperiment.experimental = true;
+experiment.experimental = true;
 
 //
 
 var Self =
 {
-  name : 'Experiment',
-  tests :
-  {
-    sqrtTest,
-    sqrtTestExperiment,
-  }
+name : `Experiment`,
+tests :
+{
+sqrtTest,
+experiment,
+}
 }
 
 //
 
 Self = wTestSuite( Self );
-if( typeof module !== 'undefined' && !module.parent )
+if( typeof module !== `undefined` && !module.parent )
 wTester.test( Self.name );
+
 ```
 
 </details>
 
 Внесіть приведений вище код в файл `Expriment.test.js`.
 
-Метод `Math.sqrt` визначає квадратний корінь числа. Тест рутина `sqrtTest` виконує тестування при використанні позитивних числових значень, а рутина `sqrtTestExperiment` виконує експеримент, котрий показує бажану поведінку при використанні  негативних чисел. Тест рутина `sqrtTestExperiment` провалиться, адже, `Math.sqrt` поверне значення `NaN`.
+Рутина `Math.sqrt` визначає квадратний корінь числа. Тест рутина `sqrtTest` виконує примітивне тестування `Math.sqrt`.
 
-З коду тест файла видно, що вимоги, які ставляться до написання експериментальних тест рутин відповідають [вимогам до звичайних тест рутин](./TestRoutine.md). A для того, щоб зробити тест рутину експериментальною потрібно призначити полю `experimental` тест рутини `true`.
+Припустимо розробник не має чіткого розуміння, як саме `Math.sqrt` має реагувати на негативні числа. В такому разі розробник може її дослідити написавши експеримент. Експеримент після дослідження можна перетворити в повноцінну тест рутину або поділитися ним із членами команди.
 
-```js 
+Рутина `experiment` є експериментальною, вона перевіряє аспект роботи уніта, котрий є незрозумілим для розробника. Щоб зробити тест рутину експериментальною присвойте полю `experimental` цієї рутини `true`.
+
+```js
 sqrtTestExperiment.experimental = true;
 ```
 
-### Тестування
+### Виконання
 
-Для дослідження особливостей експериментальних тест рутин виконайте тестування в директорії `testExperiment`.
+Запустіть тест сюїт `Expriment.test.js`. Для цього введіть команду `node Experiment.test.js` в директорії з файлом.
 
 <details>
-  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js</code></u></summary>
+<summary><u>Вивід команди <code>tst .run ./Experiment.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Experiment.test.js
-Launching several ( 1 ) test suite(s) ..
-  /.../testExperiment/Experiment.test.js:43 - enabled
-  1 test suite
-    Running test suite ( Experiment ) ..
-    Located at /.../testExperiment/Experiment.test.js:34
-      
-      Passed TestSuite::Experiment / TestRoutine::sqrtTest in 0.031s
-    Passed test checks 1 / 1
-    Passed test cases 1 / 1
-    Passed test routines 1 / 1
-    Test suite ( Experiment ) ... in 0.601s ... ok
+[user@user ~]$ node Experiment.test.js
 
-  
-  Passed test checks 1 / 1
-  Passed test cases 1 / 1
-  Passed test routines 1 / 1
-  Passed test suites 1 / 1
-  Testing ... in 1.159s ... ok
+Running test suite ( Experiment ) ..
+Located at Experiment.test.js:34
+Passed TestSuite::Experiment / TestRoutine::sqrtTest in 0.031s
+Passed test checks 1 / 1
+Passed test cases 1 / 1
+Passed test routines 1 / 1
+Test suite ( Experiment ) ... in 0.601s ... ok
+
 ```
 
 </details>
 
-Введіть команду `tst .run ./Experiment.test.js` в директорії модуля. Перевірте результати виводу з приведеними вище.
+Вище наведений фрагмент звіту тестування. З нього стає очевидним що було виконано лише одну тест рутину `sqrtTest` попри те що в тест сюїті їх дві. Друга рутина `experiment` експериментальна тому її виконано не було.
 
-Приведений звіт показує, що було протестовано одну тест рутину `sqrtTest`, а експериментальну `sqrtTestExperiment` - ні. Щоб протестувати експериментальну тест рутину, потрібно [запустити її окремо](./Running.md).
+Для того щоб виконати експериментальну тест рутину [запустіть її явно](./Running.md) за допомогою команди `node Experiment.test.js r:experiment`.
 
 <details>
-  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js r:sumTestExperiment</code></u></summary>
+<summary><u>Вивід команди <code>tst .run ./Experiment.test.js r:sumTestExperiment</code></u></summary>
 
 ```
-[user@user ~]$ tst .run ./Experiment.test.js r:sumTestExperiment
-Launching several ( 1 ) test suite(s) ..
-  /.../testExperiment/Experiment.test.js:43 - enabled
-  1 test suite
-    Running test suite ( Experiment ) ..
-    Located at /.../testExperiment/Experiment.test.js:34
-      
-      Test check ( TestSuite::Experiment / TestRoutine::sqrtTestExperiment / strings # 1 ) ... failed, throwing error
-      Failed ( thrown error ) TestSuite::Experiment / TestRoutine::sqrtTestExperiment in 0.050s
-    Thrown 1 error(s)
-    Passed test checks 0 / 1
-    Passed test cases 0 / 1
-    Passed test routines 0 / 1
-    Test suite ( Experiment ) ... in 0.117s ... failed
+[user@user ~]$ node Experiment.test.js r:experiment
 
+Running test suite ( Experiment ) ..
+Located at Experiment.test.js:34
 
-  
-  Thrown 1 error(s)
-  Passed test checks 0 / 1
-  Passed test cases 0 / 1
-  Passed test routines 0 / 1
-  Passed test suites 0 / 1
-  Testing ... in 0.167s ... failed
+Running TestSuite::Experiment / TestRoutine::experiment ..
+- got :
+NaN
+- expected :
+`?`
+
+Test check ( TestSuite::Experiment / TestRoutine::experiment / strings # 1 ) ... failed
+Failed TestSuite::Experiment / TestRoutine::experiment in 0.084s
+Passed test checks 0 / 1
+Passed test cases 0 / 1
+Passed test routines 0 / 1
+Test suite ( Experiment ) ... in 0.169s ... failed
 ```
 
 </details>
 
-Введіть команду `tst .run ./Experiment.test.js r:sqrtTestExperiment` в директорії модуля. Перевірте результати виводу з приведеними вище.
+Вище наведено фрагмент виводу експерименту `experiment`. Так як ім'я експерименту було вказано явно то його було виконано. Експеримент може мати, будь який код, а також тестові перевірки як і звичайна тест рутина. В даному випадку експеримент має єдину тестову перевірку і вона провалюється так, як `Math.sqrt( -1 )` повертає не ``?``.
 
-При індивідуальному запуску тест рутини `sqrtTestExperiment`, тестування було виконано. Як було указано раніше, тест рутина провалена. Після уточнення деталей поведінки рутини `Math.sqrt` розробник може розширити метод або використати інший підхід для вирішення задачі. 
+### Чому
 
-Експериментальні тест рутини зручно використовувати для відлагодження та уточнення поведінки тест об'єкта. Адже, в експериментальну тест рутину можна окремо помістити необхідний тест кейс з одним окремим випадком. Відповідно, іншому розробнику буде легко знайти експериментальну тест рутину і дати пояснення щодо поведінки. А відсутність результатів тестування експериментальних тест рутин в загальному звіті, дозволяє розробнику писати тести для основного функціоналу і експериментального в одному місці.
+Виникає логічне питання: чому просто не винести код, що має бути в експерименті в окремий незалежний файл. Є ряд причин через, які розробник може бути зацікавлений тримати експеримент в тест сюїті. Чому винести експериментальний код в окремий JS файл може бути не ліпшим рішенням?
+
+- Експеримент виконується в точно такому ж середовищі, як і звичайна тест рутина, що не гарантується окремо-стоячим JS файлом.
+- Зручно мати увесь споріднений код в одному місці. Експерименти часто споріднені із тестами і часто в них перетворюються.
+- З експерименту простіше зробити тест рутину ніж із окремо-стоячого JS файла.
 
 ### Підсумок
 
-- При проведенні загального тестування експериментальні тест рутини не виконуються.
-- Для проведення тестування в експериментальній тест рутині її потрібно викликати окремо. 
-- Для створення експериментальної тест рутини потрібно встановити властивість `experimental`.
-- Експериментальні тест рутини призначені спрощення взаємодії між командою розробників при використанні спільного коду, для уточнення деталей реалізації і поведінки коду.
+- Експериментальні тест рутини не виконуються, якщо це не вказано явно.
+- Для створення експеремента потрібно встановити поле `experimental` цієї тест рутини.
+- По-замовчуванню, експеременти не має впливу на звіт тестування.
+- Експеременти призначені для спрощення взаємодії між командою розробників при використанні спільного коду, для уточнення деталей реалізації і поведінки коду.
+- Експериментальні тест рутини зручно використовувати для дослідів.
 
 [Повернутись до змісту](../README.md#tutorials)
-

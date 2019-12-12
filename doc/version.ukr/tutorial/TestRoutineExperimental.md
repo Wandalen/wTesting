@@ -1,8 +1,8 @@
 # Експериментальна тест рутина
 
-Створення експериментальних тест рутин для відладки тест об'єкта.
+Створення експериментальних тест рутин як засобу для поліпшення розуміння коду і комунікації між членами команди розробників.
 
-Експериментальні тест рутини призначені для проведення відладки та уточнення поведінки тест об'єкта.
+Відстань між окремими членами команди розробників, а також складність пояснень можуть погіршити розуміння між членами команди і зменшити ефективність розробки в цілому. Експериментальні тест рутини призначені для покращення діалогу між розробниками при виникненні незрозумілих деталей реалізації певного функціоналу програми.
 
 <details>
   <summary><u>Структура модуля</u></summary>
@@ -19,7 +19,7 @@ testExperiment
 
 ### Тестовий файл
 
-Модуль має один тестовий файл - `Expriment.test.js` в якому поміщено тест об'єкт - рутину `sum` i дві тест рутини - одну звичайну та другу - експериментальну.
+Модуль має один тестовий файл - `Expriment.test.js` в якому поміщено дві тест рутини - одну звичайну та другу - експериментальну.
 
 <details>
     <summary><u>Код файла <code>Experiment.test.js</code></u></summary>
@@ -29,31 +29,20 @@ let _ = require( 'wTesting' );
 
 //
 
-function sum( a, b )
-{
-  return a + b;
-}
-
-//
-
-function sumTest( test )
+function sqrtTest( test )
 {
   test.case = 'integer';
-  test.equivalent( sum( 1, 1 ), 2 );
-  test.case = 'float';
-  test.equivalent( sum( 1.01, 2.21 ), 3.22 );
-  test.case = 'negative';
-  test.equivalent( sum( -1, -2 ), -3 );
+  test.equivalent( Math.sqrt( 4 ), 2 );
 }
 
 //
 
-function sumTestExperiment( test )
+function sqrtTestExperiment( test )
 {
   test.case = 'strings';
-  test.equivalent( sum( 'a', 'b' ), NaN );
+  test.equivalent( sum( -4 ), 'Complex value' );
 }
-sumTestExperiment.experimental = 1;
+sqrtTestExperiment.experimental = true;
 
 //
 
@@ -62,8 +51,8 @@ var Self =
   name : 'Experiment',
   tests :
   {
-    sumTest,
-    sumTestExperiment,
+    sqrtTest,
+    sqrtTestExperiment,
   }
 }
 
@@ -78,143 +67,92 @@ wTester.test( Self.name );
 
 Внесіть приведений вище код в файл `Expriment.test.js`.
 
-Функція `sum` виконує додавання двох значень. Тест рутина `sumTest` виконує тестування основного функціоналу при використанні числових значень, а рутина `sumTestExperiment` виконує спеціальний експеримент, котрий показує бажану поведінку рутини `sum`. Тест рутина `sumTestExperiment` провалиться, адже, рутина `sum` проведе конкатенування рядкових значень.
+Метод `Math.sqrt` визначає квадратний корінь числа. Тест рутина `sqrtTest` виконує тестування при використанні позитивних числових значень, а рутина `sqrtTestExperiment` виконує експеримент, котрий показує бажану поведінку при використанні  негативних чисел. Тест рутина `sqrtTestExperiment` провалиться, адже, `Math.sqrt` поверне значення `NaN`.
 
-З коду тест файла видно, що вимоги, які ставляться до написання експериментальних тест рутин відповідають [вимогам до звичайних тест рутин](./TestRoutine.md). Одночасно з цим, для того, щоб зробити тест рутину експериментальною потрібно додати властивість `experimental`.
+З коду тест файла видно, що вимоги, які ставляться до написання експериментальних тест рутин відповідають [вимогам до звичайних тест рутин](./TestRoutine.md). A для того, щоб зробити тест рутину експериментальною потрібно призначити полю `experimental` тест рутини `true`.
 
 ```js 
-sumTestExperiment.experimental = 1;
+sqrtTestExperiment.experimental = true;
 ```
-
-### Встановлення залежностей
-
-В приведеному тест сюіті є одна зовнішня залежність - утиліта `Testing` для здійснення тесту.
-
-<details>
-    <summary><u>Код файла <code>package.json</code></u></summary>
-
-```json    
-{
-  "dependencies": {
-    "wTesting": ""
-  }
-}
-```
-
-</details>
-
-Внесіть приведений код з залежностями для тестування. Їх завантаження здійснюється командою `npm install` в директорії модуля.
 
 ### Тестування
 
 Для дослідження особливостей експериментальних тест рутин виконайте тестування в директорії `testExperiment`.
 
 <details>
-  <summary><u>Вивід команди <code>tst .run . v:5</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run . v:5
+[user@user ~]$ tst .run Experiment.test.js
 Launching several ( 1 ) test suite(s) ..
   /.../testExperiment/Experiment.test.js:43 - enabled
   1 test suite
     Running test suite ( Experiment ) ..
-    Located at /.../testExperiment/Experiment.test.js:45
+    Located at /.../testExperiment/Experiment.test.js:34
       
-      Running TestSuite::Experiment / TestRoutine::sumTest ..
-        Test check ( TestSuite::Experiment / TestRoutine::sumTest / integer # 1 ) ... ok
-        Test check ( TestSuite::Experiment / TestRoutine::sumTest / float # 2 ) ... ok
-        Test check ( TestSuite::Experiment / TestRoutine::sumTest / negative # 3 ) ... ok
-      Passed TestSuite::Experiment / TestRoutine::sumTest in 0.064s
-    Passed test checks 3 / 3
-    Passed test cases 3 / 3
+      Passed TestSuite::Experiment / TestRoutine::sqrtTest in 0.031s
+    Passed test checks 1 / 1
+    Passed test cases 1 / 1
     Passed test routines 1 / 1
-    Test suite ( Experiment ) ... in 0.637s ... ok
+    Test suite ( Experiment ) ... in 0.601s ... ok
 
   
-  Passed test checks 3 / 3
-  Passed test cases 3 / 3
+  Passed test checks 1 / 1
+  Passed test cases 1 / 1
   Passed test routines 1 / 1
   Passed test suites 1 / 1
-  Testing ... in 1.200s ... ok
+  Testing ... in 1.159s ... ok
 ```
 
 </details>
 
-Введіть команду `tst .run . v:5` в директорії модуля. Перевірте результати виводу з приведеними вище.
+Введіть команду `tst .run ./Experiment.test.js` в директорії модуля. Перевірте результати виводу з приведеними вище.
 
-Приведений звіт показує, що було протестовано одну тест рутину `sumTest`, а експериментальну `sumTestExperiment` - ні. Щоб протестувати експериментальну тест рутину, потрібно [запустити її окремо](./Running.md).
+Приведений звіт показує, що було протестовано одну тест рутину `sqrtTest`, а експериментальну `sqrtTestExperiment` - ні. Щоб протестувати експериментальну тест рутину, потрібно [запустити її окремо](./Running.md).
 
 <details>
-  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js v:5 r:sumTestExperiment</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run ./Experiment.test.js r:sumTestExperiment</code></u></summary>
 
 ```
-[user@user ~]$ tst .run . v:5
+[user@user ~]$ tst .run ./Experiment.test.js r:sumTestExperiment
 Launching several ( 1 ) test suite(s) ..
   /.../testExperiment/Experiment.test.js:43 - enabled
   1 test suite
     Running test suite ( Experiment ) ..
-    Located at /.../testExperiment/Experiment.test.js:45
+    Located at /.../testExperiment/Experiment.test.js:34
       
-      Running TestSuite::Experiment / TestRoutine::sumTestExperiment ..
-        - got :
-          'ab'
-        - expected :
-          NaN 
-        - difference :
-          *
-        with accuracy 1e-7
-        
-          
-        /home/dmytry/Documents/UpWork/IntellectualServiceMysnyk/sources/wPathFundamentals/sample/Experiment.test.js:27
-          23 : 
-          24 : function sumTestExperiment( test )
-          25 : {
-          26 :   test.case = 'strings';
-        * 27 :   test.equivalent( sum( 'a', 'b' ), NaN );
-          
-        Test check ( TestSuite::Experiment / TestRoutine::sumTestExperiment / strings # 1 ) ... failed
-      Failed TestSuite::Experiment / TestRoutine::sumTestExperiment in 0.070s
+      Test check ( TestSuite::Experiment / TestRoutine::sqrtTestExperiment / strings # 1 ) ... failed, throwing error
+      Failed ( thrown error ) TestSuite::Experiment / TestRoutine::sqrtTestExperiment in 0.050s
+    Thrown 1 error(s)
     Passed test checks 0 / 1
     Passed test cases 0 / 1
     Passed test routines 0 / 1
-    Test suite ( Experiment ) ... in 0.137s ... failed
+    Test suite ( Experiment ) ... in 0.117s ... failed
 
 
   
+  Thrown 1 error(s)
   Passed test checks 0 / 1
   Passed test cases 0 / 1
   Passed test routines 0 / 1
   Passed test suites 0 / 1
-  Testing ... in 0.198s ... failed
+  Testing ... in 0.167s ... failed
 ```
 
 </details>
 
-Введіть команду `tst .run ./Experiment.test.js v:5 r:sumTestExperiment` в директорії модуля. Перевірте результати виводу з приведеними вище.
+Введіть команду `tst .run ./Experiment.test.js r:sqrtTestExperiment` в директорії модуля. Перевірте результати виводу з приведеними вище.
 
-При індивідуальному запуску тест рутини `sumTestExperiment`, тестування було виконано. Як було указано раніше, тест рутина провалена. Після уточнення деталей поведінки рутини `sum` розробник може продовжити роботу з рутиною. Наприклад, провівши відладку замінити код рутини `sum`
+При індивідуальному запуску тест рутини `sqrtTestExperiment`, тестування було виконано. Як було указано раніше, тест рутина провалена. Після уточнення деталей поведінки рутини `Math.sqrt` розробник може розширити метод або використати інший підхід для вирішення задачі. 
 
-```js
-return a + b;
-```
-
-на такий 
-
-```js 
-return Number( a ) + Number( b );
-```
-
-Експериментальні тест рутини зручно використовувати для відладки та уточнення поведінки тест об'єкта. Адже, в експериментальну тест рутину можна окремо помістити необхідний тест кейс, який тестує один окремий випадок. Відповідно, при відладці і в звіті тестера не буде зайвих деталей.
-
-Також, відсутність результатів тестування експериментальних тест рутин при проведенні загального тестування, дозволяє розробнику писати тести для основного функціоналу і експериментального в одному місці.
+Експериментальні тест рутини зручно використовувати для відлагодження та уточнення поведінки тест об'єкта. Адже, в експериментальну тест рутину можна окремо помістити необхідний тест кейс з одним окремим випадком. Відповідно, іншому розробнику буде легко знайти експериментальну тест рутину і дати пояснення щодо поведінки. А відсутність результатів тестування експериментальних тест рутин в загальному звіті, дозволяє розробнику писати тести для основного функціоналу і експериментального в одному місці.
 
 ### Підсумок
 
 - При проведенні загального тестування експериментальні тест рутини не виконуються.
 - Для проведення тестування в експериментальній тест рутині її потрібно викликати окремо. 
 - Для створення експериментальної тест рутини потрібно встановити властивість `experimental`.
-- Експериментальні тест рутини призначені для проведення відладки та уточнення поведінки тест об'єкта.
-- Експериментальні тест рутини можуть використовуватись для тестування експериментального функціоналу тест об'єкта.
+- Експериментальні тест рутини призначені спрощення взаємодії між командою розробників при використанні спільного коду, для уточнення деталей реалізації і поведінки коду.
 
 [Повернутись до змісту](../README.md#tutorials)
 

@@ -36,13 +36,15 @@ if( typeof module !== 'undefined' )
 
   require( './IncludeBase.s' );
 
+  require( './l1/Namespace.s' )
+
   require( './l3/TesterBasic.s' );
 
   require( './l5/Routine.s' );
   require( './l5/Suite.s' );
 
   require( './l7/TesterTop.s' );
-  
+
   //
 
   var _ = _global_.wTools;
@@ -63,8 +65,6 @@ if( typeof module !== 'undefined' )
 
   Module._cache = cache;
   _global_ = _wasGlobal;
-  
-  require( './l8/Helper.s' )
 
 }
 

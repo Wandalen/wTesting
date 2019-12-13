@@ -187,6 +187,8 @@ module:
           - ../proto/dwtools/atop/tester/IncludeBase.s
           - ../proto/dwtools/atop/tester/IncludeTop.s
           - ../proto/dwtools/atop/tester/MainTop.s
+          - ../proto/dwtools/atop/tester/l1
+          - ../proto/dwtools/atop/tester/l1/Namespace.s
           - ../proto/dwtools/atop/tester/l3
           - ../proto/dwtools/atop/tester/l3/TesterBasic.s
           - ../proto/dwtools/atop/tester/l5
@@ -194,6 +196,7 @@ module:
           - ../proto/dwtools/atop/tester/l5/Suite.s
           - ../proto/dwtools/atop/tester/l7
           - ../proto/dwtools/atop/tester/l7/TesterTop.s
+          - ../proto/dwtools/atop/tester/l8
           - ../proto/dwtools/atop/tester.test
           - ../proto/dwtools/atop/tester.test/AsyncTimeout.test.s
           - ../proto/dwtools/atop/tester.test/Electron.test.s
@@ -203,6 +206,9 @@ module:
           - ../proto/dwtools/atop/tester.test/Puppeteer.test.s
           - ../proto/dwtools/atop/tester.test/Time.test.s
           - ../proto/dwtools/atop/tester.test/_asset
+          - ../proto/dwtools/atop/tester.test/_asset/asyncErrorHandling
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/asyncErrorHandling/asyncErrorHandling.test.js
           - ../proto/dwtools/atop/tester.test/_asset/asyncTimeOut
           - ../proto/dwtools/atop/tester.test/_asset/asyncTimeOut/package.json
           - ../proto/dwtools/atop/tester.test/_asset/asyncTimeOut/Suite.test.js
@@ -231,6 +237,11 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.js
           - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.test.js
           - ../proto/dwtools/atop/tester.test/_asset/hello/package.json
+          - ../proto/dwtools/atop/tester.test/_asset/manualTermination
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/manualTermination/manualTermination.test.js
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/manualTermination/package.json
           - ../proto/dwtools/atop/tester.test/_asset/noTestCheck
           - ../proto/dwtools/atop/tester.test/_asset/noTestCheck/package.json
           - ../proto/dwtools/atop/tester.test/_asset/noTestCheck/Suite.test.js

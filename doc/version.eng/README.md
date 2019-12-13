@@ -8,44 +8,44 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 
 <details>
   <summary><a href="./concept/TestObject.md">
-    Test object
+    Test unit
   </a></summary>
-    Test object is a system proper functioning of which is tested.
+    Test unit is a system proper functioning of which is tested.
 </details>
 
 <details>
   <summary><a href="./concept/TestSuite.md">
     Test suite
   </a></summary>
-    Test suite is a set of test routines and test data for testing a test object.
+    Test suite is a set of test routines and test data for testing a test unit.
 </details>
 
 <details>
   <summary><a href="./concept/TestRoutine.md">
     Test routine
   </a></summary>
-    Test routine is a routine ( function, method ) designed to test some aspect of a test object. A test suite includes test routines, each of which is executed independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
+    Test routine is a routine ( function, method ) designed to test some aspect of a test unit. A test suite includes test routines, each of which is executed independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
 </details>
 
 <details>
   <summary><a href="./concept/TestCheck.md">
     Test check
   </a></summary>
-    Test check is a developer's expectation regarding the behavior of the test object. Test check is expressed by some condition. It is the smallest structural unit of testing.
+    Test check is a developer's expectation regarding the behavior of the test unit. Test check is expressed by some condition. It is the smallest structural unit of testing.
 </details>
 
 <details>
   <summary><a href="./concept/TestCase.md">
     Test case
   </a></summary>
- Test case or group of test checks are one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
+ Test case or group of test checks are one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test unit.
 </details>
 
 <details>
   <summary><a href="./concept/TestCase.md">
     Group of test checks
   </a></summary>
- Test case or group of test checks is one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
+ Test case or group of test checks is one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test unit.
 </details>
 
 <details>
@@ -59,14 +59,14 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   <summary><a href="./concept/TestCheck.md#Positive-testing">
     Positive testing
   </a></summary>
-    It is a test to show the correct operation of the test object under normal conditions without errors in the input data and in the normal state.
+    It is a test to show the correct operation of the test unit under normal conditions without errors in the input data and in the normal state.
 </details>
 
 <details>
   <summary><a href="./concept/TestCheck.md#Negative-testing">
     Negative testing
   </a></summary>
-    It is a test to show the correct operation of a test object in a false input or an erroneous state.
+    It is a test to show the correct operation of a test unit in a false input or an erroneous state.
 </details>
 
 <details>

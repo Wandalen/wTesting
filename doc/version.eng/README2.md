@@ -6,7 +6,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 
 ## Concepts
 
-- [Test object](./concept/TestObject.md)
+- [Test unit](./concept/TestObject.md)
 - [Test suite](./concept/TestSuite.md)    
 - [Test routine](./concept/TestRoutine.md)   
 - [Test check](./concept/TestCheck.md)     

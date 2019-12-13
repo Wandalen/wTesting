@@ -1,13 +1,13 @@
 ## Test check
 
-Test check is a developer's expectation regarding the behavior of the test object. Test check is expressed by some condition. It is the smallest structural unit of testing.
+Test check is a developer's expectation regarding the behavior of the test unit. Test check is expressed by some condition. It is the smallest structural unit of testing.
 
 Most test checks accept two arguments and compare them to give a positive or negative test result:
 
 - received data;
 - expected data.
 
-[Test case](TestCase.md) contains one or more test checks. One test check with the result of `failed` is enough for the utility to consider that the entire test object did not pass it.
+[Test case](TestCase.md) contains one or more test checks. One test check with the result of `failed` is enough for the utility to consider that the entire test unit did not pass it.
 
 ### An example of test case with test checks
 
@@ -17,7 +17,7 @@ The figure shows a test case `join strings` with three test checks. Each of the 
 
 ## Positive testing
 
-It is a test to show the correct operation of the test object under normal conditions without errors in the input data and in the normal state.
+It is a test to show the correct operation of the test unit under normal conditions without errors in the input data and in the normal state.
 
 The next test checks can be applied for positive testing:
 - `is`;
@@ -36,7 +36,7 @@ The next test checks can be applied for positive testing:
 
 ## Negative testing
 
-It is a test to show the correct operation of a test object in a false input or an erroneous state.
+It is a test to show the correct operation of a test unit in a false input or an erroneous state.
 
 The next test checks can be applied for negative testing:
 - `shouldThrowErrorSync`;

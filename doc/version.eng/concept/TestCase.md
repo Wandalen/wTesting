@@ -1,6 +1,6 @@
 ## Test case
 
-Test case or group of test checks are one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test object.
+Test case or group of test checks are one or more test checks with an accompanying code combined into a logical unit to test the functionality of an aspect of a test unit.
 
 ### Definition using `test.case` field
 

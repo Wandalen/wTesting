@@ -30,7 +30,7 @@ The input format of run options and test suite options is the same. The test sui
 
 The figure shows the part of the code with the test suite definition. After the name of the test suite, test options are indicated.
 
-The test suite has three options: `silencing`,` verbosity` and `enabled`. If the same options are not specified in the test command, the test report will have a verbosity value `5`, and the report will not contain the output of the test object. When the `silencing` i` verbosity` option is specified in the command, the utility uses the value specified in the command. For example, when using the command
+The test suite has three options: `silencing`,` verbosity` and `enabled`. If the same options are not specified in the test command, the test report will have a verbosity value `5`, and the report will not contain the output of the test unit. When the `silencing` i` verbosity` option is specified in the command, the utility uses the value specified in the command. For example, when using the command
 
 ```
 tst .imply verbosity:3 .run path/to/dir 

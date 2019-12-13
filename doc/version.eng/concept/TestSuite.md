@@ -1,6 +1,6 @@
 # Test suite
 
-Test suite is a set of test routines and test data for testing a test object.
+Test suite is a set of test routines and test data for testing a test unit.
 
 A test suite located in its own file. The test suite consists of:
 

@@ -7498,7 +7498,77 @@ asyncTimeout1.timeOut = 15000;
 asyncTimeout1.description =
 `
 - test failed because of time out
+
+//
 `
+
+//
+
+function processWatching( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
 
 // --
 // experiment
@@ -7612,6 +7682,10 @@ var Self =
     syncTimeout1,
     syncTimeout2,
     asyncTimeout1,
+    
+    //
+    
+    processWatching
 
     // experiment
 

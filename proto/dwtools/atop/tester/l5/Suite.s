@@ -609,6 +609,24 @@ function _begin()
   logger.end({ verbosity : -6 });
 
   logger.begin({ verbosity : -6 + suite.importanceOfDetails });
+  
+  /* process watcher */
+  
+  if( suite.processWatching )
+  {  
+    suite._processWatcherMap = Object.create( null );
+    function onBegin( o )
+    { 
+      _.assert( !suite._processWatcherMap[ o.process.pid ] )
+      suite._processWatcherMap[ o.process.pid ] = o;
+    }
+    function onEnd( o )
+    { 
+      _.assert( suite._processWatcherMap[ o.process.pid ] )
+      delete suite._processWatcherMap[ o.process.pid ];
+    }
+    suite._processWatcher = _.process.watchMaking({ onBegin, onEnd })
+  }
 
   /* */
 
@@ -637,7 +655,7 @@ xxx qqq : cover returned consequence
     suite._terminated_joined = _.routineJoin( suite, _terminated );
     _global_.process.on( 'exit', suite._terminated_joined );
   }
-
+  
   ready.finally( ( err, arg ) =>
   {
     if( err )
@@ -680,7 +698,38 @@ function _end( err )
   let logger = suite.logger;
 
   _.assert( arguments.length === 1 );
-
+  
+  /* process watcher */
+   
+  
+  if( suite.processWatching )
+  { 
+    suite._processWatcher.unwatch();
+    _.each( suite._processWatcherMap, ( p ) =>
+    { 
+      let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', p.process.pid, '\n' );
+      if( suite.takingIntoAccount )
+      suite.consoleBar( 0 );
+      suite.exceptionReport({ err : err });
+      _.process.killHard( p.process );
+    })
+    _.time.out( 1000, () => 
+    {
+      _.each( suite._processWatcherMap, ( p, pid ) =>
+      { 
+        if( _.process.isRunning( p.process.pid ) )
+        {
+          let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
+          if( suite.takingIntoAccount )
+          suite.consoleBar( 0 );
+          suite.exceptionReport({ err : err });
+        }
+      })
+    })
+  }
+  
+  
+  
   /* on suite end */
 
   if( suite.onSuiteEnd )
@@ -695,6 +744,8 @@ function _end( err )
       suite.exceptionReport({ err : err });
     }
   }
+  
+  
 
   /* error */
 
@@ -730,7 +781,7 @@ function _end( err )
     _global_.process.removeListener( 'exit', suite._terminated_joined );
     suite._terminated_joined = null;
   }
-
+  
   /* report */
 
   suite._reportEnd();
@@ -1259,6 +1310,8 @@ let Composes =
   concurrent : 0,
   routine : null,
   platforms : null,
+  
+  processWatching : 0,
 
   /* */
 
@@ -1307,6 +1360,8 @@ let Restricts =
   _testSuiteBeginTime : null,
   _formed : 0,
   _appExitCode : null,
+  _processWatcher : null,
+  _processWatcherMap : null
 }
 
 let Statics =

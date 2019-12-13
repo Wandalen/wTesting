@@ -30,6 +30,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wLooker' );
   _.include( 'wSelector' );
   _.include( 'wEqualer' );
+  require( 'wprocesswatcher' );
   _.include( 'wAppBasic' );
   _.include( 'wRoutineBasic' );
   _.include( 'wCopyable' );

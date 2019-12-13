@@ -1306,7 +1306,7 @@ let Composes =
   routine : null,
   platforms : null,
   
-  processWatching : 0,
+  processWatching : 1,
 
   /* */
 

@@ -73,6 +73,58 @@ fileDrop.defaults =
   library : null
 }
 
+//
+
+function eventDispatch( o )
+{
+  _.assert( arguments.length === 1 );
+  _.routineOptions( eventDispatch, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.strIs( o.eventType ) )
+  _.assert( _.objectIs( o.eventData ) || o.eventData === null )
+  _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
+  _.assert( _.objectIs( o.page ) )
+  
+  if( o.eventData === null )
+  o.eventData = {};
+  
+  let ready = new _.Consequence().take( null );
+  
+  if( o.library === 'puppeteer' )
+  eventDispatchPuppeteer();
+  else if( o.library === 'spectron' )
+  eventDispatchSpectron();
+  
+  return ready;
+  
+  /* */
+  
+  function eventDispatchPuppeteer()
+  {
+    ready.then( () => o.page.evaluate( _eventDispatch, o.eventType, o.eventData, o.targetSelector ) )
+  }
+  
+  function eventDispatchSpectron()
+  {
+    ready.then( () => o.page.execute( _eventDispatch, o.eventType, o.eventData, o.targetSelector ) )
+  }
+  
+  function _eventDispatch( eventType, eventData, targetSelector )
+  {
+    let event = new Event( eventType );
+    Object.assign( event, eventData )
+    document.querySelector( targetSelector ).dispatchEvent( event );
+  }
+}
+
+eventDispatch.defaults = 
+{
+  targetSelector : null,
+  eventType : null,
+  eventData : null,
+  page : null,
+  library : null
+}
 
 let Fields =
 {

@@ -36,6 +36,8 @@ if( typeof module !== 'undefined' )
 
   require( './IncludeBase.s' );
 
+  require( './l1/Namespace.s' )
+
   require( './l3/TesterBasic.s' );
 
   require( './l5/Routine.s' );

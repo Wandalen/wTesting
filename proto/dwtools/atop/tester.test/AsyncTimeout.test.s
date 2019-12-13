@@ -96,7 +96,7 @@ asyncTimeout1.timeOut = 15000;
 asyncTimeout1.description =
 `
 - test failed because of time out
-- barring works properly
+- console barring works properly
 must be only test routine in the test suite!
 `
 

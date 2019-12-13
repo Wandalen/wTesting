@@ -260,14 +260,6 @@
     Наслідування одного тест сюіта іншим.
 </details>
 
-<details>
-  <summary><a href="./tutorial/SuiteInheritance.md">
-    Наслідування тест сюіта
-  </a></summary>
-    Як використовувати наслідування від декількох тест сюітів.
-</details>
-
-
 <!--
 <details>
   <summary><a href="./tutorial/OptionFails.md">

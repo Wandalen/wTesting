@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>DragAndDropFile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div id="dropzone" ondrop="dropHandler(event);"></div>
+  <script>
+  function dropHandler( e )
+  { 
+    window.dropFiles = [];
+    for( var i = 0; i < e.dataTransfer.files.length; i++ )
+    { 
+      let name = e.dataTransfer.files[ i ].name;
+      window.dropFiles.push( name )
+    }
+  }
+  </script>
+</body>
+</html>

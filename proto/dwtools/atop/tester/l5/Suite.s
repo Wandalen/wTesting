@@ -699,8 +699,22 @@ function _end( err )
 
   _.assert( arguments.length === 1 );
   
+  /* on suite end */
+
+  if( suite.onSuiteEnd )
+  {
+    try
+    {
+      suite.onSuiteEnd.call( suite.context, suite );
+    }
+    catch( err )
+    {
+      err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, err );
+      suite.exceptionReport({ err : err });
+    }
+  }
+  
   /* process watcher */
-   
   
   if( suite.processWatching )
   { 
@@ -727,25 +741,6 @@ function _end( err )
       })
     })
   }
-  
-  
-  
-  /* on suite end */
-
-  if( suite.onSuiteEnd )
-  {
-    try
-    {
-      suite.onSuiteEnd.call( suite.context, suite );
-    }
-    catch( err )
-    {
-      err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, err );
-      suite.exceptionReport({ err : err });
-    }
-  }
-  
-  
 
   /* error */
 

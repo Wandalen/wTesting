@@ -705,19 +705,19 @@ function _end( err )
   if( suite.processWatching )
   { 
     suite._processWatcher.unwatch();
-    _.each( suite._processWatcherMap, ( p ) =>
+    _.each( suite._processWatcherMap, ( descriptor, pid ) =>
     { 
-      let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', p.process.pid, '\n' );
+      let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
-      _.process.killHard( p.process );
+      descriptor.process.kill( 'SIGINT' )
     })
     _.time.out( 1000, () => 
     {
-      _.each( suite._processWatcherMap, ( p, pid ) =>
+      _.each( suite._processWatcherMap, ( descriptor, pid ) =>
       { 
-        if( _.process.isRunning( p.process.pid ) )
+        if( _.process.isRunning( descriptor.process.pid ) )
         {
           let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
           if( suite.takingIntoAccount )

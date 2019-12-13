@@ -21,7 +21,7 @@ function fileDrop( o )
   _.assert( _.objectIs( o.page ) )
   
   let ready = new _.Consequence().take( null );
-  let filePath = _.path.s.nativize( o.filePath );
+  let filePath = _.path.s.nativize( _.arrayAs( o.filePath ) );
   
   if( o.library === 'puppeteer' )
   fileDropPuppeteer();
@@ -44,8 +44,8 @@ function fileDrop( o )
   {
     ready
     .then( () => o.page.execute( fileInputCreate, o.fileInputId, o.targetSelector ) )
-    .then( () => _.Consequence.And( filePath.map( path => o.page.uploadFile( path ) ) ) )
-    .then( () => o.page.$(`#${o.fileInputId}`).setValue( filePath.join( '\n' ) ) )
+    // .then( () => _.Consequence.And( filePath.map( path => _.Consequence.From( o.page.uploadFile( path ) ) ) ) )
+    .then( () => o.page.$(`#${o.fileInputId}`).addValue( filePath.join( '\n' ) ) )
   }
   
   function fileInputCreate( fileInputId, targetSelector )
@@ -80,7 +80,8 @@ let Fields =
 
 let Routines =
 {
-  fileDrop
+  fileDrop,
+  eventDispatch
 }
 
 _.mapExtend( Self, Fields );

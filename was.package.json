@@ -50,7 +50,8 @@
     "wcommandsaggregator" : "", 
     "winstancing" : "", 
     "wlooker" : "", 
-    "wselector" : ""
+    "wselector" : "",
+    "wprocesswatcher": ""
   }, 
   "optionalDependencies" : { "wEventHandler" : "" }, 
   "devDependencies" : 

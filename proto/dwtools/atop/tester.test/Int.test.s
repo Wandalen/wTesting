@@ -7498,6 +7498,518 @@ asyncTimeout1.timeOut = 15000;
 asyncTimeout1.description =
 `
 - test failed because of time out
+
+//
+`
+
+//
+
+function processWatchingOnDefault( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingOnDefault.description = 
+`
+  Three processes are terminated. 
+  Test suite ends with three errors.
+`
+
+//
+
+function processWatchingOnExplicit( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingOnExplicit.description = 
+`
+  Three processes are terminated. 
+  Test suite ends with three errors.
+`
+
+//
+
+function processWatchingOff( test )
+{
+  let trd;
+  var o = 
+  {
+    execPath : 'node -e "setTimeout(()=>{},10000)"', 
+    inputMirroring : 0,
+    throwingExitCode : 0,
+    mode : 'spawn'
+  }
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    _.process.start( o );
+    t.identical( 1,1 );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    processWatching : 0,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.errorsArray.length, 0 );
+    test.identical( suite.report.testCheckFails, 0 );
+    test.identical( suite._processWatcherMap, null );
+    test.is( _.process.isRunning( o.process.pid ) )
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    
+    o.process.kill();
+    
+    return _.time.out( 1000, () => 
+    {
+      test.is( !_.process.isRunning( o.process.pid ) )
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingOnExplicit.description = 
+`
+  Zombie proces continues to work after testing. 
+  Test suite ends with positive result.
+`
+
+//
+
+function processWatchingRoutineTimeOut( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    return _.process.start( o );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    routineTimeOut : 100,
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Time out' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingRoutineTimeOut.description = 
+` 
+  Test routine ends with time out error.
+  Zombie proces is killed. 
+  Test suite end with two errors.
+`
+
+//
+
+function processWatchingErrorInTestRoutine( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( o );
+    throw _.err( 'Test' );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Test' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingErrorInTestRoutine.description = 
+` 
+  Test routine creates zombie process and throws sync error.
+  Zombie proces is killed on suite end stage. 
+  Test suite ends with two errors.
+`
+
+//
+
+function processWatchingOnSuiteBegin( test )
+{
+  let trd;
+  
+  function onSuiteBegin()
+  {
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( o );
+  }
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.identical( 1,1 );
+  }
+  
+  var suite = wTestSuite
+  ({
+    onSuiteBegin,
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.errorsArray.length, 1 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 0 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingOnSuiteBegin.description = 
+` 
+  onSuiteBegin handler creates zombie process.
+  Test suite ends with single error.
+  Zombie proces is killed on suite end stage. 
+`
+
+//
+
+function processWatchingOnSuiteEnd( test )
+{
+  let trd;
+  
+  function onSuiteEnd()
+  {
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( o );
+  }
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.identical( 1,1 );
+  }
+  
+  var suite = wTestSuite
+  ({
+    onSuiteEnd,
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.errorsArray.length, 1 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 0 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingOnSuiteEnd.description = 
+` 
+  onSuiteEnd handler creates zombie process.
+  Test suite ends with single error.
+  Zombie proces is killed on suite end stage. 
 `
 
 // --
@@ -7612,6 +8124,16 @@ var Self =
     syncTimeout1,
     syncTimeout2,
     asyncTimeout1,
+    
+    //
+    
+    processWatchingOnDefault,
+    processWatchingOnExplicit,
+    processWatchingOff,
+    processWatchingRoutineTimeOut,
+    processWatchingErrorInTestRoutine,
+    processWatchingOnSuiteBegin,
+    processWatchingOnSuiteEnd
 
     // experiment
 

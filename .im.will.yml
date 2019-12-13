@@ -37,6 +37,9 @@ submodule :
   wSelector :
     path : npm:///wselector
     enabled : 0 # submodule
+  wprocesswatcher :
+    path : npm:///wprocesswatcher
+    enabled : 0 # submodule
   wEventHandler :
    path : npm:///wEventHandler
    enabled : 0 # submodule

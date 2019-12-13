@@ -4,7 +4,8 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../..' );
+  let _ = require( 'wTools' );
+  require( '../..' );
   require( 'wFiles' )
 
   var ElectronPath = require( 'electron' );
@@ -85,6 +86,42 @@ async function dragAndDropFile( test )
   return null;
 }
 
+//
+
+async function dragAndDropFileWithHelper( test )
+{
+  let self = this;
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let htmlFilePath = _.path.nativize( _.path.join( routinePath, 'fileDragAndDrop.html' ) );
+
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ htmlFilePath ]
+  })
+
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Drag & Drop file', 5000 )
+  
+  await _.test.fileDrop
+  ({
+    filePath : __filename,
+    targetSelector : '#dropzone',
+    fileInputId : 'fileInput',
+    page : app.client,
+    library : 'spectron'
+  })
+  
+  let result = await app.client.execute( () => window.dropFiles );
+  test.identical( result.value, [ _.path.name({ path : __filename, full : 1 }) ] )
+  
+  await app.stop();
+
+  return null;
+}
+
 // --
 // suite
 // --
@@ -109,6 +146,7 @@ var Self =
   tests :
   {
     dragAndDropFile,
+    dragAndDropFileWithHelper
   }
 
 }

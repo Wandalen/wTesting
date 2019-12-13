@@ -81,7 +81,7 @@ async function fileDragAndDrop( test )
 
 //
 
-async function fileDragAndDrop2( test )
+async function fileDragAndDropWithHelper( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
@@ -133,7 +133,7 @@ var Self =
   tests :
   {
     fileDragAndDrop,
-    fileDragAndDrop2
+    fileDragAndDropWithHelper
   }
 
 }

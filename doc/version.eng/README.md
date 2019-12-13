@@ -147,6 +147,14 @@ For gentle introduction use tutorials. For getting exhaustive information on one
   </a></summary>
     Changing the amount of output test information using the verbosity option.
 </details>
+
+<details>
+  <summary><a href="./tutorial/TestRoutineExperimental.md">
+    Experimental test routine
+  </a></summary>
+    Creation of experimental test routines ( experiments ) as a tool for research and communication between members of the development team.
+</details>
+
 <!--
 <details>
   <summary><a href="./tutorial/SuiteInheritance.md">

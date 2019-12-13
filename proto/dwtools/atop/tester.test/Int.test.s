@@ -7570,6 +7570,276 @@ function processWatching( test )
   return result;
 }
 
+//
+
+function processWatchingRoutineTimeOut( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    return _.process.start( o );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    routineTimeOut : 100,
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Time out' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+//
+
+function processWatchingErrorInTestRoutine( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( o );
+    throw _.err( 'Test' );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Test' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+//
+
+function processWatchingOnSuiteBegin( test )
+{
+  let trd;
+  
+  function onSuiteBegin()
+  {
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( o );
+  }
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.identical( 1,1 );
+  }
+  
+  var suite = wTestSuite
+  ({
+    onSuiteBegin,
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.errorsArray.length, 1 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 0 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+//
+
+function processWatchingOnSuiteEnd( test )
+{
+  let trd;
+  
+  function onSuiteEnd()
+  {
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( o );
+  }
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.identical( 1,1 );
+  }
+  
+  var suite = wTestSuite
+  ({
+    onSuiteEnd,
+    tests : { testRoutine },
+    processWatching : 1,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.errorsArray.length, 1 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 0 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
 // --
 // experiment
 // --
@@ -7685,7 +7955,11 @@ var Self =
     
     //
     
-    processWatching
+    processWatching,
+    processWatchingRoutineTimeOut,
+    processWatchingErrorInTestRoutine,
+    processWatchingOnSuiteBegin,
+    processWatchingOnSuiteEnd
 
     // experiment
 

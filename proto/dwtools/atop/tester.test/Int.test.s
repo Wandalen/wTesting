@@ -7572,6 +7572,63 @@ function processWatching( test )
 
 //
 
+function processWatchingOff( test )
+{
+  let trd;
+  var o = 
+  {
+    execPath : 'node -e "setTimeout(()=>{},5000)"', 
+    inputMirroring : 0,
+    throwingExitCode : 0,
+    mode : 'spawn'
+  }
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    _.process.start( o );
+    t.identical( 1,1 );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    processWatching : 0,
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 1 );
+    test.identical( suite.report.errorsArray.length, 0 );
+    test.identical( suite.report.testCheckFails, 0 );
+    test.identical( suite._processWatcherMap, null );
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    o.process.kill();
+    
+    return _.time.out( 1000, () => 
+    {
+      test.is( !_.process.isRunning( o.process.pid ) )
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+//
+
 function processWatchingRoutineTimeOut( test )
 {
   let trd;
@@ -7956,6 +8013,7 @@ var Self =
     //
     
     processWatching,
+    processWatchingOff,
     processWatchingRoutineTimeOut,
     processWatchingErrorInTestRoutine,
     processWatchingOnSuiteBegin,

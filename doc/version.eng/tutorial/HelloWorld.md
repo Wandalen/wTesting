@@ -16,7 +16,7 @@ testHello
 
 Create the file structure above for testing.
 
-### Test object
+### Test unit
 
 <details>
     <summary><u>Code of file <code>Join.js</code></u></summary>
@@ -125,7 +125,7 @@ Enter the code below with the dependencies for testing. They are loaded by the `
 
 ### Section of test routines definition
 
-The second section is intended for definition of the test routines. A test routine is a routine (function, method) designed to test some aspect of a test object. Test routine can include:
+The second section is intended for definition of the test routines. A test routine is a routine (function, method) designed to test some aspect of a test unit. Test routine can include:
 - initial data, definition of variables (if necessary);
 - [test cases](../concept/TestCase.md);
 - [test checks](../concept/TestCheck.md).

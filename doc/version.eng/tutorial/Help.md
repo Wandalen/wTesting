@@ -237,13 +237,13 @@ The `tst .imply negativity:0 .run path/to/dir` command displays the report witho
 
 ##### Run option `silencing`
 
-Enables hiding the console output from the test object. The test object and the code of the test routines can have its own output. This issue may worsen the readability of the test report.
+Enables hiding the console output from the test unit. The test object and the code of the test routines can have its own output. This issue may worsen the readability of the test report.
 
 The `silencing` run option has priority over the test suite option.
 
 The option has two values: 1 is enabled, 0 is off. By default - 0.
 
-The `tst .imply silencing:1 .run path/to/dir` command displays a clean report without additional output of the test object.
+The `tst .imply silencing:1 .run path/to/dir` command displays a clean report without additional output of the test unit.
 
 ##### Run option `shoulding`
 

@@ -17,7 +17,7 @@ report
 
 Create the file structure above for routine testing.
 
-### Test object
+### Test unit
 
 <details>
     <summary><u>Code of file <code>Join.js</code></u></summary>

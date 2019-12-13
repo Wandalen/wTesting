@@ -1,6 +1,6 @@
 # Test routine
 
-Test routine is a routine ( function, method ) designed to test some aspect of a test object. A test suite includes test routines, each of which is executed independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
+Test routine is a routine ( function, method ) designed to test some aspect of a test unit. A test suite includes test routines, each of which is executed independently of each other. Instructions of test routines are performed sequentially and include test checks that can be combined into test cases and can have a description.
 
 Partitioning of a test suite on the test routines should be designed, taking into account that the routine stops its performance at the first thrown mistake.
 

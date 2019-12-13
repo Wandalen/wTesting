@@ -6,7 +6,7 @@ The experiment is a special test routine that is not performed by default. Using
 
 The distance between individual team members, as well as the complexity of explanations, can impair understanding among team members. Experimental test routines are designed to improve dialogue between developers. A picture is worth a thousand words.
 
-The experimental test routine is useful for debugging and clarifying the test object behaviors. It is possible to place the required experimental code in the experimental routine while receiving the same environment as in the test routine. It will be easy for another developer to find an experimental test routine and explain behavior. The fact that experiments do not affect the test report is very convenient.
+The experimental test routine is useful for debugging and clarifying the test unit behaviors. It is possible to place the required experimental code in the experimental routine while receiving the same environment as in the test routine. It will be easy for another developer to find an experimental test routine and explain behavior. The fact that experiments do not affect the test report is very convenient.
 
 ### Example
 

@@ -121,7 +121,7 @@ $ tst .imply silencing:[ number ] .run [ path ]
 $ tst .run [ path ] silencing:[ number ]
 ```
 
-Option enables hiding the console output from the test object. Accepts 0 or 1. Default value is 0.
+Option enables hiding the console output from the test unit. Accepts 0 or 1. Default value is 0.
 
 ```
 $ tst .imply shoulding:[ number ] .run [ path ]
@@ -163,7 +163,7 @@ $ tst .imply debug:[ number ] .run [ path ]
 $ tst .run [ path ] debug:[ number ]
 ```
 
-Option sets value of Config.debug. Accepts 0 or 1. Default value is null, utility does not change debug mode of test object.
+Option sets value of Config.debug. Accepts 0 or 1. Default value is null, utility does not change debug mode of test unit.
 
 ```
 $ tst .imply rapidity:[ number ] .run [ path ]
@@ -188,7 +188,7 @@ Example of a minimum test file is given below. It uses the basic structural elem
 
 ### TEST CHECKS
 
-Test checks are the smallest structural element that checks one aspect of a test object behavior.
+Test checks are the smallest structural element that checks one aspect of a test unit behavior.
 
 ```
 test.is( boolLike arg );

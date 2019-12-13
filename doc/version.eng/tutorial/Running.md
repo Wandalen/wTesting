@@ -108,7 +108,7 @@ Testing ... in 41.851s ... ok
 
 </details>
 
-The test object of the suite `Long.test.s` is the` _.array*` and `_.buffer*` routines for handling arrays and buffers.
+The test unit of the suite `Long.test.s` is the` _.array*` and `_.buffer*` routines for handling arrays and buffers.
 
 The report shows that all tests were successful: `Test suite (Tools/base/l1/Long) ... in 41.251s ... ok`. The test was completed in 42 seconds, and 173 test routines were run. During the testing, 4293 test checks were made, which were grouped by the developer in the 1891 test cases. The detail of the report depends on [the verbose level](Verbosity.md).
 
@@ -372,6 +372,6 @@ tst .suites.list
 - To run the tests, use the `tst .run ./Suite.test.js` command or the `node ./Suite.test.js` command.
 - It is possible to run a separate test suite, a separate test routine, or a set of test suites in the directory.
 - To test a set of files, you need to install the `Testing` utility globally.
-- Information about failed tests helps to find errors in the code of test object.
+- Information about failed tests helps to find errors in the code of test unit.
 
 [Back to content](../README.md#Tutorials)

@@ -6,13 +6,13 @@ The experiment is a special test routine that is not run by default. Using an ex
 
 The distance between individual team members, as well as the complexity, can impair understanding among team members. Experimental test routines are designed to improve dialogue between developers. A picture is worth a thousand words.
 
-The experimental test routine is useful for debugging and clarifying the test unit behaviors. It is possible to place the required experimental code in the experimental routine and have it running in the same environment as ordinary test routine. It will help another developer to find an experimental test routine and understand the first one. The fact that experiments do not affect the test report is very convenient.
+The experimental test routine is useful for debugging and clarifying the test unit behaviors. It is possible to place the required experimental code in the experimental routine and have it running in the same environment as an ordinary test routine. It will help another developer to find an experimental test routine and understand the first one. The fact that experiments do not affect the test report is very convenient.
 
 ### Example
 
 For an introduction to this feature, create a test suite `Expriment.test.js` and follow the steps outlined below.
 
-The module has one test file `Expriment.test.js`, which contains two test routines. One of them is a normal test routine, and the other is experimental. For simplicity, we implement the testing of the standard routine `Math.sqrt`. Suppose that `Math.sqrt` is not standard, not described well, and the developer's goal is to investigate it.
+The module has one test file, `Expriment.test.js`, which contains two test routines. One of them is a typical test routine, and the other is experimental. For simplicity, we implement the testing of the standard routine `Math.sqrt`. Suppose that `Math.sqrt` is not standard, not described well, and the developer's goal is to investigate it.
 
 <details>
 <summary><u>Code of the file <code>Experiment.test.js</code></u></summary>
@@ -94,7 +94,7 @@ Test suite ( Experiment ) ... in 0.601s ... ok
 
 </details>
 
-Above is a part of the test report. It shows that only one test routine `sqrtTest` was performed, even though there were two test routines. The second routine `experiment` is experimental, so it was not performed.
+The above is a part of the test report. It shows that only one test routine `sqrtTest` was performed, even though there were two test routines. The second routine `experiment` is experimental, so it was not performed.
 
 To execute an experimental test routine [run it explicitly](./Running.md) using the command `node Experiment.test.js r:experiment`.
 
@@ -123,7 +123,7 @@ Test suite ( Experiment ) ... in 0.169s ... failed
 
 </details>
 
-Above is a part of the test report with experimental test routine `experiment` run. The name of the experiment was explicitly provided, so it was performed. An experiment can have any code, as well as test checks like a regular test routine. In this case, the experiment has a single test check and it fails as `Math.sqrt( -1 )` does not return `'?'`.
+Above is a part of the test report with experimental test routine `experiment` run. The name of the experiment was explicitly provided, so it was performed. An experiment can have any code, as well as test checks like a regular test routine. In this case, the experiment has a single test check, and it fails as `Math.sqrt( -1 )` does not return `'?'`.
 
 ### Why
 
@@ -138,7 +138,7 @@ The logical question arises. Why not just pass the experiment code into a separa
 - The experimental test routine is not performed unless it explicitly asked.
 - To create an experiment, set the field `experimental` to `true` of the test routine.
 - By default, experiments have no effect on the test report.
-- The experiments are designed to facilitate interaction between the members of a development team when using common code, to clarify implementation details and code behavior.
+- The experiments are designed to facilitate interaction between the members of a development team when using common code to clarify implementation details and code behavior.
 - The experimental test routine is convenient to use for experimenting.
 
 [Back to content](../README.md#Tutorials)

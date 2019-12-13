@@ -7504,7 +7504,80 @@ asyncTimeout1.description =
 
 //
 
-function processWatching( test )
+function processWatchingOnDefault( test )
+{
+  let trd;
+  function testRoutine( t )
+  { 
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o = 
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+  }
+  
+  var suite = wTestSuite
+  ({
+    tests : { testRoutine },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run();
+
+  result
+  .finally( function( err, arg )
+  {
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.errorsArray.length, 3 );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
+    test.identical( suite.report.testCheckFails, 1 );
+    
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+    _.each( suite._processWatcherMap, ( o ) => 
+    { 
+      test.is( _.process.isRunning( o.process.pid ) )
+    })
+    
+    test.is( err === undefined );
+    test.is( arg === suite );
+    test.identical( result.tag, suite.name );
+
+    if( err )
+    throw err;
+    
+    return _.time.out( 2000, () => 
+    {
+      test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
+      _.each( suite._processWatcherMap, ( o ) => 
+      { 
+        test.is( !_.process.isRunning( o.process.pid ) )
+      })
+      return null;
+    })
+  });
+  
+  return result;
+}
+
+processWatchingOnDefault.description = 
+`
+  Three processes are terminated. 
+  Test suite ends with three errors.
+`
+
+//
+
+function processWatchingOnExplicit( test )
 {
   let trd;
   function testRoutine( t )
@@ -7570,6 +7643,12 @@ function processWatching( test )
   return result;
 }
 
+processWatchingOnExplicit.description = 
+`
+  Three processes are terminated. 
+  Test suite ends with three errors.
+`
+
 //
 
 function processWatchingOff( test )
@@ -7577,7 +7656,7 @@ function processWatchingOff( test )
   let trd;
   var o = 
   {
-    execPath : 'node -e "setTimeout(()=>{},5000)"', 
+    execPath : 'node -e "setTimeout(()=>{},10000)"', 
     inputMirroring : 0,
     throwingExitCode : 0,
     mode : 'spawn'
@@ -7607,6 +7686,7 @@ function processWatchingOff( test )
     test.identical( suite.report.errorsArray.length, 0 );
     test.identical( suite.report.testCheckFails, 0 );
     test.identical( suite._processWatcherMap, null );
+    test.is( _.process.isRunning( o.process.pid ) )
     
     test.is( err === undefined );
     test.is( arg === suite );
@@ -7614,6 +7694,7 @@ function processWatchingOff( test )
 
     if( err )
     throw err;
+    
     
     o.process.kill();
     
@@ -7626,6 +7707,12 @@ function processWatchingOff( test )
   
   return result;
 }
+
+processWatchingOnExplicit.description = 
+`
+  Zombie proces continues to work after testing. 
+  Test suite ends with positive result.
+`
 
 //
 
@@ -7693,6 +7780,13 @@ function processWatchingRoutineTimeOut( test )
   return result;
 }
 
+processWatchingRoutineTimeOut.description = 
+` 
+  Test routine ends with time out error.
+  Zombie proces is killed. 
+  Test suite end with two errors.
+`
+
 //
 
 function processWatchingErrorInTestRoutine( test )
@@ -7758,6 +7852,13 @@ function processWatchingErrorInTestRoutine( test )
   
   return result;
 }
+
+processWatchingErrorInTestRoutine.description = 
+` 
+  Test routine creates zombie process and throws sync error.
+  Zombie proces is killed on suite end stage. 
+  Test suite ends with two errors.
+`
 
 //
 
@@ -7828,6 +7929,13 @@ function processWatchingOnSuiteBegin( test )
   return result;
 }
 
+processWatchingOnSuiteBegin.description = 
+` 
+  onSuiteBegin handler creates zombie process.
+  Test suite ends with single error.
+  Zombie proces is killed on suite end stage. 
+`
+
 //
 
 function processWatchingOnSuiteEnd( test )
@@ -7896,6 +8004,13 @@ function processWatchingOnSuiteEnd( test )
   
   return result;
 }
+
+processWatchingOnSuiteEnd.description = 
+` 
+  onSuiteEnd handler creates zombie process.
+  Test suite ends with single error.
+  Zombie proces is killed on suite end stage. 
+`
 
 // --
 // experiment
@@ -8012,7 +8127,8 @@ var Self =
     
     //
     
-    processWatching,
+    processWatchingOnDefault,
+    processWatchingOnExplicit,
     processWatchingOff,
     processWatchingRoutineTimeOut,
     processWatchingErrorInTestRoutine,

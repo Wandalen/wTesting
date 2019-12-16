@@ -25,7 +25,7 @@ function onSuiteBegin()
 
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
-  self.defaultJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
 
 }
@@ -65,7 +65,7 @@ function assetFor( test, asset )
       if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
       return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
-      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.defaultJsPath )}'` );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
@@ -1086,11 +1086,11 @@ function manualTermination( test )
 {
   let self = this;
   let a = self.assetFor( test, 'manualTermination' );
-  
+
   /* - */
 
-  let o = 
-  { 
+  let o =
+  {
     execPath : 'node manualTermination.test.js v:7',
     currentPath : a.originalAssetPath,
     mode : 'spawn',
@@ -1098,7 +1098,7 @@ function manualTermination( test )
     throwingExitCode : 0
   };
   a.shellNonThrowing( o )
-  
+
   /* */
 
   a.ready
@@ -1113,7 +1113,7 @@ function manualTermination( test )
   return a.ready;
 }
 
-manualTermination.description = 
+manualTermination.description =
 `
   User terminates execution when second test routine is runnning.
   onSuiteEnd handler should be executed before exitHandlerOnce
@@ -1125,11 +1125,11 @@ function asyncErrorHandling( test )
 {
   let self = this;
   let a = self.assetFor( test, 'asyncErrorHandling' );
-  
+
   /* - */
 
-  let o = 
-  { 
+  let o =
+  {
     execPath : 'node asyncErrorHandling.test.js v:7',
     currentPath : a.originalAssetPath,
     mode : 'spawn',
@@ -1137,13 +1137,17 @@ function asyncErrorHandling( test )
     throwingExitCode : 0
   };
   a.shellNonThrowing( o )
-  
+
   /* */
 
   a.ready
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Cannot find' ), 0 );
+    test.identical( _.strCount( op.output, 'error' ), 0 );
+    test.identical( _.strCount( op.output, 'nhandled' ), 0 );
+    test.identical( _.strCount( op.output, 'uncaught' ), 0 );
     return op;
   })
 
@@ -1172,7 +1176,7 @@ var Self =
 
     suiteTempPath : null,
     assetsOriginalSuitePath : null,
-    defaultJsPath : null,
+    execJsPath : null,
     toolsPath : null,
 
   },
@@ -1194,7 +1198,7 @@ var Self =
     help,
     version,
     manualTermination,
-    asyncErrorHandling
+    asyncErrorHandling,
 
   }
 

@@ -1290,8 +1290,8 @@ function _outcomeReport( o )
     let code;
     if( trd.usingSourceCode && o.usingSourceCode )
     {
-      let _location = o.stack ? _.diagnosticLocation({ stack : o.stack }) : _.diagnosticLocation({ level : 4 });
-      let _code = _.diagnosticCode
+      let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 4 });
+      let _code = _.introspector.code
       ({
         location : _location,
         selectMode : o.selectMode,
@@ -2657,7 +2657,7 @@ function _shouldDo( o )
   let reported = 0;
   let good = 1;
   let async = 0;
-  let stack = _.diagnosticStack([ 2, -1 ]);
+  let stack = _.introspector.stack([ 2, -1 ]);
   let logger = trd.logger;
   let err, arg;
   let con = new _.Consequence();
@@ -2827,7 +2827,7 @@ function _shouldDo( o )
   {
 
     // debugger;
-    // let stack = _.diagnosticStack([ 3, Infinity ]);
+    // let stack = _.introspector.stack([ 3, Infinity ]);
     trd.checkNext();
     async = 1;
 
@@ -3367,9 +3367,9 @@ function assetFor( a )
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
-  _.sure( _.strDefined( context.suiteTempPath ), `Test suite should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
-  _.sure( _.strDefined( context.assetsOriginalSuitePath ), `Test suite should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
-  _.sure( context.defaultJsPath === null || _.strDefined( context.defaultJsPath ), `Test suite should have defined path to default JS file {- defaultJsPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.suiteTempPath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( context.assetsOriginalSuitePath === null || _.strDefined( context.assetsOriginalSuitePath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
+  _.sure( context.execJsPath === null || _.strDefined( context.execJsPath ), `Test suite's context should have defined path to default JS file {- execJsPath -}. But test suite ${suite.name} does not have.` );
 
   Object.setPrototypeOf( a, context );
 
@@ -3388,7 +3388,7 @@ function assetFor( a )
 
   if( _.boolLike( a.originalAssetPath ) && a.originalAssetPath )
   a.originalAssetPath = null
-  if( a.originalAssetPath === null )
+  if( a.originalAssetPath === null && context.assetsOriginalSuitePath )
   a.originalAssetPath = a.path.join( context.assetsOriginalSuitePath, a.assetName );
   if( a.routinePath === null )
   a.routinePath = a.path.join( context.suiteTempPath, a.routine.name );
@@ -3432,7 +3432,7 @@ function assetFor( a )
   if( a.js === null )
   a.js = a.process.starter
   ({
-    execPath : context.defaultJsPath || null,
+    execPath : context.execJsPath || null,
     currentPath : a.routinePath,
     outputCollecting : 1,
     throwingExitCode : 1,
@@ -3444,7 +3444,7 @@ function assetFor( a )
   if( a.jsNonThrowing === null )
   a.jsNonThrowing = a.process.starter
   ({
-    execPath : context.defaultJsPath || null,
+    execPath : context.execJsPath || null,
     currentPath : a.routinePath,
     outputCollecting : 1,
     outputGraying : 1,
@@ -3489,7 +3489,7 @@ function assetFor( a )
   });
 
   if( a.originalAssetPath )
-  _.sure( a.fileProvider.isDir( a.originalAssetPath ) );
+  _.sure( a.fileProvider.isDir( a.originalAssetPath ), `Expects directory ${a.originalAssetPath} exists. Make one or change {- assetsOriginalSuitePath -}` );
 
   // if( !_.mapHasAll( context, a ) )
   // {
@@ -3500,7 +3500,7 @@ function assetFor( a )
   program.defaults =
   {
     program : null,
-    globalsMap : null,
+    globals : null,
   }
 
   return a;
@@ -3560,29 +3560,28 @@ function assetFor( a )
     o = { program : o }
     _.routineOptions( program, o );
     _.assert( _.routineIs( o.program ) );
+    _.assert( _.strDefined( o.program.name ), 'Program should have name' )
     _.assert( arguments.length === 1 );
 
-    let programPath = a.abs( 'Program.js' );
-    if( o.globalsMap === null )
+    let programPath = a.abs( o.program.name + '.js' );
+    if( o.globals === null )
     {
-      o.globalsMap = Object.create( null );
-      o.globalsMap.toolsPath = a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) );
-      // o.globalsMap.toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) ) );
+      o.globals = Object.create( null );
+      o.globals.toolsPath = a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) );
     }
 
     let programSourceCode = '';
 
     programSourceCode += o.program.toString() + '\n\n';
 
-    for( let g in o.globalsMap )
+    for( let g in o.globals )
     {
-      debugger;
-      programSourceCode += `var ${g} = ${_.toJs( o.globalsMap[ g ] )};\n`
+      programSourceCode += `var ${g} = ${_.toJs( o.globals[ g ] )};\n`
     }
 
     programSourceCode +=
 `
-program();
+${o.program.name}();
 `
 
     logger.log( _.strLinesNumber( programSourceCode ) );

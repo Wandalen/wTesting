@@ -29,14 +29,14 @@ let Self = function wTestSuite( o )
 
   if( !o.suiteFilePath )
   {
-    location = location || _.diagnosticLocation( 1 );
-    o.suiteFilePath = location.path;
+    location = location || _.introspector.location( 1 );
+    o.suiteFilePath = location.filePath;
   }
 
   if( !o.suiteFileLocation )
   {
-    location = location || _.diagnosticLocation( 1 );
-    o.suiteFileLocation = location.full;
+    location = location || _.introspector.location( 1 );
+    o.suiteFileLocation = location.filePathLineCol;
   }
 
   if( !( this instanceof Self ) )
@@ -92,7 +92,7 @@ function init( o )
 
   if( !( o instanceof Self ) )
   if( !_.strDefined( suite.name ) )
-  suite.name = _.diagnosticLocation( suite.suiteFileLocation ).nameLong;
+  suite.name = _.introspector.location( suite.suiteFileLocation ).fileNameLineCol; 
 
   if( !( o instanceof Self ) )
   if( !_.strDefined( suite.name ) )
@@ -609,19 +609,19 @@ function _begin()
   logger.end({ verbosity : -6 });
 
   logger.begin({ verbosity : -6 + suite.importanceOfDetails });
-  
+
   /* process watcher */
-  
+
   if( suite.processWatching )
-  {  
+  {
     suite._processWatcherMap = Object.create( null );
     function onBegin( o )
-    { 
+    {
       _.assert( !suite._processWatcherMap[ o.process.pid ] )
       suite._processWatcherMap[ o.process.pid ] = o;
     }
     function onEnd( o )
-    { 
+    {
       _.assert( suite._processWatcherMap[ o.process.pid ] )
       delete suite._processWatcherMap[ o.process.pid ];
     }
@@ -655,7 +655,7 @@ xxx qqq : cover returned consequence
     suite._terminated_joined = _.routineJoin( suite, _terminated );
     _global_.process.on( 'exit', suite._terminated_joined );
   }
-  
+
   ready.finally( ( err, arg ) =>
   {
     if( err )
@@ -698,7 +698,7 @@ function _end( err )
   let logger = suite.logger;
 
   _.assert( arguments.length === 1 );
-  
+
   /* on suite end */
 
   if( suite.onSuiteEnd )
@@ -713,24 +713,24 @@ function _end( err )
       suite.exceptionReport({ err : err });
     }
   }
-  
+
   /* process watcher */
-  
+
   if( suite.processWatching )
-  { 
+  {
     suite._processWatcher.unwatch();
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
-    { 
+    {
       let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
       descriptor.process.kill( 'SIGINT' )
     })
-    _.time.out( 1000, () => 
+    _.time.out( 1000, () =>
     {
       _.each( suite._processWatcherMap, ( descriptor, pid ) =>
-      { 
+      {
         if( _.process.isRunning( descriptor.process.pid ) )
         {
           let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
@@ -776,7 +776,7 @@ function _end( err )
     _global_.process.removeListener( 'exit', suite._terminated_joined );
     suite._terminated_joined = null;
   }
-  
+
   /* report */
 
   suite._reportEnd();
@@ -1296,7 +1296,7 @@ let Composes =
 
   verbosity : 3,
   importanceOfDetails : 0,
-  negativity : 1,
+  negativity : 3,
 
   silencing : null,
   shoulding : 1,
@@ -1305,7 +1305,7 @@ let Composes =
   concurrent : 0,
   routine : null,
   platforms : null,
-  
+
   processWatching : 1,
 
   /* */

@@ -15,8 +15,8 @@
 
 let _global = _global_;
 let _ = _global.wTools;
-let sourceFileLocation = _.diagnosticLocation().full;
-let sourceFileStack = _.diagnosticStack();
+let sourceFileLocation = _.introspector.location().full;
+let sourceFileStack = _.introspector.stack();
 
 if( wTester._isReal_ )
 {
@@ -550,7 +550,7 @@ function _canContinue()
  * @summary Stops execution of the tester.
  * @description There are several reasons to stop the execution:
  * 1. Exectuion can be terminated by a used, for example, by CTRL+C combination.
- * 2. Execution of test suite throws unhandled error.
+ * 2. Execution of test suite throws uncaught error.
  * @function cancel
  * @memberof module:Tools/Tester.wTester
  */

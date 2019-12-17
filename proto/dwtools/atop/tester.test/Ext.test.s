@@ -29,6 +29,7 @@ function onSuiteBegin()
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.spectronPath = require.resolve( 'spectron' );
   self.electronPath = require.resolve( 'electron' );
+  self.puppeteerPath = require.resolve( 'puppeteer' );
 }
 
 //
@@ -70,6 +71,7 @@ function assetFor( test, asset )
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
       read = _.strReplace( read, `'electron'`, `'${_.strEscape( self.electronPath )}'` );
       read = _.strReplace( read, `'spectron'`, `'${_.strEscape( self.spectronPath )}'` );
+      read = _.strReplace( read, `'puppeteer'`, `'${_.strEscape( self.puppeteerPath )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
 
@@ -1219,6 +1221,68 @@ function processWatchingOnSpectronZombie( test )
   return a.ready;
 }
 
+//
+
+function processWatchingOnPuppeteerZombie( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'puppeteer' );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = ''
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:routineTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:puppeteerTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:errorInTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:clientContinuesToWorkAfterTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // suite
 // --
@@ -1244,7 +1308,8 @@ var Self =
     execJsPath : null,
     toolsPath : null,
     spectronPath : null,
-    electronPath : null
+    electronPath : null,
+    puppeteerPath : null
 
   },
 
@@ -1268,6 +1333,7 @@ var Self =
     asyncErrorHandling,
     
     processWatchingOnSpectronZombie,
+    processWatchingOnPuppeteerZombie
 
   }
 

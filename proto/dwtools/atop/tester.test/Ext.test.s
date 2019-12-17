@@ -27,7 +27,8 @@ function onSuiteBegin()
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
   self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
-
+  self.spectronPath = require.resolve( 'spectron' );
+  self.electronPath = require.resolve( 'electron' );
 }
 
 //
@@ -67,6 +68,8 @@ function assetFor( test, asset )
       var read = a.fileProvider.fileRead( r.dst.absolute );
       read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
+      read = _.strReplace( read, `'electron'`, `'${_.strEscape( self.electronPath )}'` );
+      read = _.strReplace( read, `'spectron'`, `'${_.strEscape( self.spectronPath )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
 
@@ -1154,6 +1157,68 @@ function asyncErrorHandling( test )
   return a.ready;
 }
 
+//
+
+function processWatchingOnSpectronZombie( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'spectron' );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = ''
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:spectronTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:errorInTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:clientContinuesToWorkAfterTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // suite
 // --
@@ -1178,6 +1243,8 @@ var Self =
     assetsOriginalSuitePath : null,
     execJsPath : null,
     toolsPath : null,
+    spectronPath : null,
+    electronPath : null
 
   },
 
@@ -1199,6 +1266,8 @@ var Self =
     version,
     manualTermination,
     asyncErrorHandling,
+    
+    processWatchingOnSpectronZombie,
 
   }
 

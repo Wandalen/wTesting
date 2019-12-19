@@ -397,7 +397,7 @@ function _runEnd()
     if( trd.report.errorsArray[ 0 ].reason )
     trd.report.reason = trd.report.errorsArray[ 0 ].reason;
     else
-    trd.report.reason = 'thrown error';
+    trd.report.reason = 'throwing error';
   }
 
   /* last test check */
@@ -607,7 +607,7 @@ function _timeOutError( err )
 
   err = _._err
   ({
-    args : [ `Test routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms\n`, err || '' ],
+    args : [ err || '' , `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
     reason : 'time limit',
   });
@@ -2679,7 +2679,7 @@ function _shouldDo( o )
     err = _.errRestack( err, 3 );
     err = _._err
     ({
-      args : [ 'Illegal usage of should in', trd.absoluteName, '\n', err ],
+      args : [ err, '\nIllegal usage of should in', trd.absoluteName ],
     });
     err = trd.exceptionReport
     ({
@@ -2826,17 +2826,21 @@ function _shouldDo( o )
   function handleAsyncResult()
   {
 
-    // debugger;
+    debugger;
     // let stack = _.introspector.stack([ 3, Infinity ]);
     trd.checkNext();
     async = 1;
 
     result.give( function( _err, _arg )
     {
-      // debugger;
+      debugger;
 
       err = _err;
       arg = _arg;
+
+      // if( !o.ignoringError && !reported )
+      // // if( err )
+      // reportAsync();
 
       if( !o.ignoringError && !reported )
       if( err && !o.expectingAsyncError )
@@ -2844,11 +2848,15 @@ function _shouldDo( o )
       else if( !err && o.expectingAsyncError )
       reportAsync();
 
+      if( _.errIs( err ) )
+      _.errAttend( err );
+
       /* */
 
       if( !reported )
+      // if( good )
       if( !o.allowingMultipleResources )
-      _.time.out( 10, function()
+      _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
       {
 
         if( result.resourcesGet().length )
@@ -2878,7 +2886,6 @@ function _shouldDo( o )
         reportAsync();
 
         return null;
-
       });
 
     });
@@ -2902,7 +2909,6 @@ function _shouldDo( o )
     let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
     r.finally( ( err, arg ) =>
     {
-      // debugger;
       if( result.competitorHas( gotSecondResource ) )
       result.competitorsCancel( gotSecondResource );
       if( err )
@@ -3021,6 +3027,9 @@ function _shouldDo( o )
     else
     con.take( _.errAttend( arg ), undefined );
 
+    debugger;
+
+    if( !reported )
     trd._inroutineCon.take( null );
 
     reported = 1;

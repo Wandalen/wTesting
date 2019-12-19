@@ -1,8 +1,7 @@
 
 require( 'wTesting' );
-require( 'wConsequence' )
-
-var _ = _realGlobal_.wTools
+let _ = require( 'wTools' );
+_.include( 'wConsequence' );
 
 //
 
@@ -12,22 +11,22 @@ function asyncErrorHandling( test )
 
   let con = new _.Consequence().take( null )
 
-  /*
-    In first case error is handled right after creation and tester has time to perform the check.
-    This case can be commented out.
-  */
-
-  .then( () =>
-  {
-    test.case = 'catch handler before test check'
-    let ready = new _.Consequence().error( 'Test' );
-    ready.catch( ( err ) =>
-    {
-      _.errAttend( err )
-      throw err;
-    })
-    return test.shouldThrowErrorOfAnyKind( ready );
-  })
+  // /*
+  //   In first case error is handled right after creation and tester has time to perform the check.
+  //   This case can be commented out.
+  // */
+  //
+  // .then( () =>
+  // {
+  //   test.case = 'catch handler before test check'
+  //   let ready = new _.Consequence().error( 'Test' );
+  //   ready.catch( ( err ) =>
+  //   {
+  //     _.errAttend( err )
+  //     throw err;
+  //   })
+  //   return test.shouldThrowErrorOfAnyKind( ready );
+  // })
 
   /*
     In second case error is not handled right after creation and
@@ -37,8 +36,9 @@ function asyncErrorHandling( test )
 
   .then( () =>
   {
-    test.case = 'no catch handler before test check'
+    test.case = 'no catch handler before test check';
     let ready = new _.Consequence().error( 'Test' );
+    debugger;
     return test.shouldThrowErrorAsync( ready );
   })
 

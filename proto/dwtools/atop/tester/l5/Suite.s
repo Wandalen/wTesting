@@ -92,7 +92,7 @@ function init( o )
 
   if( !( o instanceof Self ) )
   if( !_.strDefined( suite.name ) )
-  suite.name = _.introspector.location( suite.suiteFileLocation ).fileNameLineCol; 
+  suite.name = _.introspector.location( suite.suiteFileLocation ).fileNameLineCol;
 
   if( !( o instanceof Self ) )
   if( !_.strDefined( suite.name ) )
@@ -652,10 +652,16 @@ xxx qqq : cover returned consequence
 
   /* */
 
-  if( _global_.process && suite.takingIntoAccount )
+  // if( _global_.process && suite.takingIntoAccount )
+  // {
+  //   suite._terminated_joined = _.routineJoin( suite, _terminated );
+  //   _global_.process.on( 'exit', suite._terminated_joined );
+  // }
+
+  if( _.process && suite.takingIntoAccount )
   {
     suite._terminated_joined = _.routineJoin( suite, _terminated );
-    _global_.process.on( 'exit', suite._terminated_joined );
+    _.process.on( 'exit', suite._terminated_joined );
   }
 
   ready.finally( ( err, arg ) =>
@@ -775,9 +781,19 @@ function _end( err )
 
   /* process exit handler */
 
-  if( _global_.process && suite._terminated_joined && suite.takingIntoAccount )
+  // if( _global_.process && suite._terminated_joined && suite.takingIntoAccount )
+  // {
+  //   _global_.process.removeListener( 'exit', suite._terminated_joined );
+  //   suite._terminated_joined = null;
+  // }
+
+  if( _.process && suite._terminated_joined && suite.takingIntoAccount )
   {
-    _global_.process.removeListener( 'exit', suite._terminated_joined );
+    // _global_.process.removeListener( 'exit', suite._terminated_joined );
+    // debugger;
+    // console.log( `_.process.off( 'exit', suite._terminated_joined )` );
+    if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
+    _.process.off( 'exit', suite._terminated_joined );
     suite._terminated_joined = null;
   }
 
@@ -861,6 +877,7 @@ function _terminated()
 {
   let suite = this;
   let err = _.process ? _.process.exitReason() : null;
+  // console.log( '_terminated', _.introspector.stack() );
   if( !err )
   {
     err = _.errBrief( 'Terminated by user' );

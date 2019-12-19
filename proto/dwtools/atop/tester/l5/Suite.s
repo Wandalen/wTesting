@@ -628,6 +628,7 @@ function _begin()
     _.process.watcherEnable();
     _.process.on( 'subprocessStartEnd', subprocessStartEnd );
     _.process.on( 'subprocessTerminationEnd', subprocessTerminationEnd );
+    suite._processWatcher = { subprocessStartEnd, subprocessTerminationEnd };
   }
 
   /* */
@@ -725,10 +726,10 @@ function _end( err )
   /* process watcher */
 
   if( suite.processWatching )
-  {
-    _.process.off( 'subprocessStartEnd' );
-    _.process.off( 'subprocessTerminationEnd' );
-    _.process.watcherEnable();
+  { 
+    _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
+    _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
+    _.process.watcherDisable();
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
     {
       let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );

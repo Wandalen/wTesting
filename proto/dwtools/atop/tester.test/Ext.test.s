@@ -49,15 +49,6 @@ function assetFor( test, asset )
   a.reflect = function reflect()
   {
 
-    function onUp( r )
-    {
-      if( !_.strHas( r.dst.relative, '.atest.' ) )
-      return;
-      let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
-      r.dst.relative = relative;
-      _.assert( _.strHas( r.dst.absolute, '.test.' ) );
-    }
-
     let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
 
     reflected.forEach( ( r ) =>
@@ -73,6 +64,16 @@ function assetFor( test, asset )
   }
 
   return a;
+
+  function onUp( r )
+  {
+    if( !_.strHas( r.dst.relative, '.atest.' ) )
+    return;
+    let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
+    r.dst.relative = relative;
+    _.assert( _.strHas( r.dst.absolute, '.test.' ) );
+  }
+
 }
 
 // --
@@ -385,7 +386,7 @@ function checkFails( test )
   {
     test.ni( got.exitCode, 0 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( thrown error ) TestSuite::Hello / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::Hello / TestRoutine::routine2' ), 1 );
     test.identical( _.strCount( got.output, /Test suite \( Hello \) ... in .* ... failed/ ), 1 );
 
     return null;
@@ -1084,20 +1085,32 @@ function version( test )
 
 function manualTermination( test )
 {
+  // let self = this;
+  // let a = self.assetFor( test, 'manualTermination' );
+  //
+  // /* - */
+  //
+  // let o =
+  // {
+  //   execPath : 'node manualTermination.test.js v:7',
+  //   currentPath : a.originalAssetPath,
+  //   mode : 'spawn',
+  //   outputCollecting : 1,
+  //   throwingExitCode : 0
+  // };
+  // a.shellNonThrowing( o )
+
   let self = this;
   let a = self.assetFor( test, 'manualTermination' );
+  a.reflect();
 
   /* - */
 
   let o =
   {
-    execPath : 'node manualTermination.test.js v:7',
-    currentPath : a.originalAssetPath,
-    mode : 'spawn',
-    outputCollecting : 1,
-    throwingExitCode : 0
+    execPath : `${a.abs( 'manualTermination.test.js' )} v:7`,
   };
-  a.shellNonThrowing( o )
+  a.jsNonThrowing( o )
 
   /* */
 
@@ -1105,8 +1118,8 @@ function manualTermination( test )
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
-    test.is( _.strHas( op.output, 'onSuiteEnd- 1' ) );
-    test.is( _.strHas( op.output, 'exitHandlerOnce- 2' ) );
+    test.is( _.strHas( op.output, 'onSuiteEnd : 1' ) );
+    test.is( _.strHas( op.output, 'onExit : 2' ) );
     return op;
   })
 
@@ -1125,31 +1138,32 @@ function asyncErrorHandling( test )
 {
   let self = this;
   let a = self.assetFor( test, 'asyncErrorHandling' );
+  a.reflect();
 
   /* - */
 
   let o =
   {
-    execPath : 'node asyncErrorHandling.test.js v:7',
-    currentPath : a.originalAssetPath,
-    mode : 'spawn',
-    outputCollecting : 1,
-    throwingExitCode : 0
+    execPath : `${a.abs( 'asyncErrorHandling.test.js' )} v:7`,
   };
-  a.shellNonThrowing( o )
-
-  /* */
+  a.jsNonThrowing( o )
 
   a.ready
   .then( ( op ) =>
   {
-    test.notIdentical( op.exitCode, 0 );
+    test.identical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Cannot find' ), 0 );
-    test.identical( _.strCount( op.output, 'error' ), 0 );
+    test.identical( _.strCount( op.output, 'error(s)' ), 0 );
     test.identical( _.strCount( op.output, 'nhandled' ), 0 );
-    test.identical( _.strCount( op.output, 'uncaught' ), 0 );
+    test.identical( _.strCount( op.output, 'ncaught' ), 0 );
+    test.identical( _.strCount( op.output, '---' ), 0 );
+    test.identical( _.strCount( op.output, 'Thrown' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Error throwen asynchronously' ), 1 );
     return op;
   })
+
+  /* */
 
   return a.ready;
 }

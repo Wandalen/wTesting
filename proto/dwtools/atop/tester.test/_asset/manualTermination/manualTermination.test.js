@@ -1,22 +1,28 @@
 
 require( 'wTesting' );
-var _ = require( 'wappbasic' )
+let _ = require( 'wTools' );
+_.include( 'wAppBasic' );
+let c = 0;
 
 //
 
-let c = 0;
-
-_.process.exitHandlerOnce( () => 
-{ 
+_.process.on( 'exit', () =>
+{
+  debugger;
   c++;
-  console.log( 'exitHandlerOnce-', c )
+  console.log( 'onExit :', c )
 })
 
+//
+
 function onSuiteEnd()
-{ 
+{
+  debugger;
   c++;
-  console.log( 'onSuiteEnd-', c )
+  console.log( 'onSuiteEnd :', c )
 }
+
+//
 
 function routine1( test )
 {

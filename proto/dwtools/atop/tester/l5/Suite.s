@@ -731,7 +731,7 @@ function _end( err )
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
-      descriptor.process.kill( 'SIGINT' )
+      _.process.kill({ pid : descriptor.process.pid, withChildren : 1 })
     })
     _.time.out( 1000, () =>
     {

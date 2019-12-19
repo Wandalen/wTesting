@@ -17,9 +17,11 @@
 | [ Screenshots creation ](feature/ScreenshotsCreation.md)                   | 1        | 2         |
 | [ Screen recording ](feature/ScreenRecording.md)                       | 0        | 0         |
 | [ Drag and drop ](feature/DragAndDrop.md)                          | X        | X         |
+| [ Drag and drop file from system into browser ](feature/DragAndDropFile.md)                          | 1        | 1         |
 | [ Access to raw Chrome Devtools Protocol ](feature/ChromeDevToolsProtocol.md) | X        | 1         |
 | [ LocalStorage support ](feature/LocalStorage.md) | 2        | 1         |
 | [ Opening the HTML page using local path without server ](feature/ServerlessTesting.md) | 1        | 1 |
+| [ Wait until element is visible ](feature/WaitForElementIsVisible.md) | 1        | 1 |
 | [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
 | [ Performance ](feature/Performance.md)                       |    0     |   1    |
 

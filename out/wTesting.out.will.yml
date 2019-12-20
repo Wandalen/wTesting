@@ -252,6 +252,10 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/package.json
           - ../proto/dwtools/atop/tester.test/_asset/puppeteer
           - ../proto/dwtools/atop/tester.test/_asset/puppeteer/index.html
+          - ../proto/dwtools/atop/tester.test/_asset/puppeteer/Puppeteer.test.s
+          - ../proto/dwtools/atop/tester.test/_asset/spectron
+          - ../proto/dwtools/atop/tester.test/_asset/spectron/index.html
+          - ../proto/dwtools/atop/tester.test/_asset/spectron/Spectron.test.s
     submodule:
       wConsequence:
         path: 'npm:///wConsequence'

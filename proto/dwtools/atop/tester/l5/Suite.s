@@ -733,7 +733,6 @@ function _end( err )
   { 
     _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
     _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
-    _.process.watcherDisable();
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
     {
       let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );

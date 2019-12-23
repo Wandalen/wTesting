@@ -35,7 +35,7 @@ function fileDrop( o )
   function fileDropPuppeteer()
   {
     ready
-    .then( () => o.page.evaluate( fileInputCreate, o.fileInputId, o.targetSelector ) )
+    .then( () => o.page.evaluate( fileInputCreate, o.fileInputId, o.targetSelector, filePath ) )
     .then( () => o.page.$(`#${ o.fileInputId }`) )
     .then( ( fileInput ) => fileInput.uploadFile.apply( fileInput, filePath ) )
   }
@@ -48,15 +48,20 @@ function fileDrop( o )
     .then( () => o.page.$(`#${o.fileInputId}`).addValue( filePath.join( '\n' ) ) )
   }
 
-  function fileInputCreate( fileInputId, targetSelector )
-  {
+  function fileInputCreate( fileInputId, targetSelector, filePaths )
+  { 
     let input = document.createElement( 'input' );
     input.id = fileInputId;
     input.type = 'file';
     input.multiple = 'multiple';
     input.onchange = ( e ) =>
-    {
+    {  
       let event = new Event( 'drop' );
+      if( filePaths )
+      filePaths.forEach( ( path, i ) => 
+      {
+        e.target.files[ i ].path = path;
+      })
       Object.assign( event, { dataTransfer: { files: e.target.files } } )
       document.querySelector( targetSelector ).dispatchEvent( event );
     }

@@ -6977,6 +6977,7 @@ function onSuiteEndTimeOut( test )
   let suite1 = wTestSuite
   ({
     onSuiteEnd,
+    onSuiteEndTimeOut : 1500,
     tests : { trivial },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
@@ -6988,9 +6989,10 @@ function onSuiteEndTimeOut( test )
   .finally( function( err, suites )
   {
     var got = _.select( suites, '*/report' )[ 0 ];
-
+    
     test.identical( got.outcome, false );
     test.identical( got.errorsArray.length, 1 );
+    test.identical( got.errorsArray[ 0 ].reason, 'time out' );
     test.identical( got.appExitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
@@ -7004,6 +7006,7 @@ function onSuiteEndTimeOut( test )
     test.is( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
+    
     return null;
   });
 
@@ -7020,11 +7023,11 @@ function onSuiteEndErrorInConsequence( test )
     t.identical( 1, 1 );
   }
   
-  let err = _.err( 'Error from onSuiteEnd' )
+  let ConError = _.err( 'Error from onSuiteEnd' )
 
   function onSuiteEnd()
   { 
-    let con = new _.Consequence().error( err );
+    let con = new _.Consequence().error( ConError );
     return con;
   }
 
@@ -7044,7 +7047,7 @@ function onSuiteEndErrorInConsequence( test )
     var got = _.select( suites, '*/report' )[ 0 ];
 
     test.identical( got.outcome, false );
-    test.identical( got.errorsArray, [ err ] );
+    test.identical( got.errorsArray, [ ConError ] );
     test.identical( got.appExitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
@@ -7118,6 +7121,62 @@ function onSuiteEndNormalConsequence( test )
   return result;
 }
 
+//
+
+function onSuiteEndDelayedConsequence( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+  
+  function onSuiteEnd()
+  { 
+    let con = _.time.out( 2000, () => 1 )
+    return con;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onSuiteEnd,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+  
+  var t1 = _.time.now();
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  { 
+    var t2 = _.time.now();
+    
+    test.ge( t2 - t1, 2000 );
+    
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, true );
+    test.identical( got.errorsArray.length, 0 );
+    test.identical( got.appExitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.isNot( _.errIs( err ) );
+    test.is( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
 
 // --
 // options
@@ -8286,6 +8345,7 @@ var Self =
     onSuiteEndTimeOut,
     onSuiteEndErrorInConsequence,
     onSuiteEndNormalConsequence,
+    onSuiteEndDelayedConsequence,
     /* qqq : please cover onRoutineBegin, onRoutineEnd */
 
     // optionRoutine

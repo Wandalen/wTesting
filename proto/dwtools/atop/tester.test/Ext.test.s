@@ -1297,6 +1297,59 @@ function processWatchingOnPuppeteerZombie( test )
   return a.ready;
 }
 
+//
+
+function onSuiteEndReturnConsequence( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'onSuiteEnd' );
+  a.reflect();
+
+  /* - */
+
+  a.jsNonThrowing({ execPath : `TimeOutInOnSuiteEnd.test.js` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Time out!' ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `ErrorMessageByConsequence.test.js` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Test error' ), 2 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `NormalMessageByConsequence.test.js` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+    test.identical( _.strCount( got.output, 'error' ), 0 );
+    test.identical( _.strCount( got.output, /Testing \.\.\. in .* \.\.\. ok/g ), 1 );
+    return null;
+  })
+  
+  a.jsNonThrowing({ execPath : `DelayedMessageByConsequence.test.js` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+    test.identical( _.strCount( got.output, 'error' ), 0 );
+    test.identical( _.strCount( got.output, /Testing \.\.\. in .* \.\.\. ok/g ), 1 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // suite
 // --
@@ -1347,7 +1400,9 @@ var Self =
     asyncErrorHandling,
     
     processWatchingOnSpectronZombie,
-    processWatchingOnPuppeteerZombie
+    processWatchingOnPuppeteerZombie,
+    
+    onSuiteEndReturnConsequence,
 
   }
 

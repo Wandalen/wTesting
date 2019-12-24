@@ -6906,6 +6906,57 @@ function onSuiteBeginThrowError( test )
 
 //
 
+function onSuiteEndReturnsNothing( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  function onSuiteEnd()
+  {
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onSuiteEnd,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, true );
+    test.identical( got.errorsArray.length, 0 );
+    test.identical( got.appExitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.isNot( _.errIs( err ) );
+    test.is( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+
+//
+
 function onSuiteEndThrowError( test )
 {
   function trivial( t )
@@ -8341,6 +8392,7 @@ var Self =
     // handler
 
     onSuiteBeginThrowError,
+    onSuiteEndReturnsNothing,
     onSuiteEndThrowError,
     onSuiteEndTimeOut,
     onSuiteEndErrorInConsequence,

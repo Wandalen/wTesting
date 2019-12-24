@@ -720,7 +720,14 @@ function _end( err )
     let timeLimitErrorCon = _.time.outError( suite.onSuiteEndTimeOut + wTester.settings.sanitareTime )
     timeLimitErrorCon.tag = '_timeLimitErrorCon'
     
-    ready = _.Consequence.From( suite.onSuiteEnd.call( suite.context, suite ) || null );
+    try
+    {
+      ready = _.Consequence.From( suite.onSuiteEnd.call( suite.context, suite ) || null );
+    }
+    catch( err )
+    {
+      ready = new _.Consequence().error( err );
+    }
     
     ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
     

@@ -1212,6 +1212,7 @@ let ApplicationArgumentsMap =
   suite : `Testing of separate test suite. Accepts name of test suite or a glob.`,
   routine : `Testing of separate test routine. Accepts name of test routine or a glob.`,
   testRoutineTimeOut : `Limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.`,
+  onSuiteEndTimeOut : `Limits the execution time for onSuiteEnd handler. Accepts time in milliseconds. Default value is 15000ms.`,
   accuracy : `Sets the numeric deviation for the comparison of numerical values. Accepts numeric values of deviation. Default value is 1e-7.`,
   sanitareTime : `Sets the delay between completing the test suite and running the next one. Accepts time in milliseconds. Default value is 2000ms.`,
   negativity : `Restricts the console output of passed routines and increases output of failed test checks. Accepts a value from 0 to 9. Default value is 1.`,
@@ -1267,6 +1268,7 @@ let SettingsNameMap =
   'routine' : 'routine',
   'r' : 'routine',
   'routineTimeOut' : 'routineTimeOut',
+  'onSuiteEndTimeOut' : 'onSuiteEndTimeOut',
   'concurrent' : 'concurrent',
 
   'v' : 'verbosity',
@@ -1331,6 +1333,7 @@ let SettingsOfSuite =
 
   routine : null,
   routineTimeOut : null,
+  onSuiteEndTimeOut : null,
   concurrent : null,
   verbosity : null,
   negativity : null,
@@ -1424,6 +1427,7 @@ let Forbids =
   rapidity : 'rapidity',
   routine : 'routine',
   routineTimeOut : 'routineTimeOut',
+  onSuiteEndTimeOut : 'onSuiteEndTimeOut',
   concurrent : 'concurrent',
   silencing : 'silencing',
   shoulding : 'shoulding',

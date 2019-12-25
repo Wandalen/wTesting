@@ -709,28 +709,58 @@ function _end( err )
 {
   let suite = this;
   let logger = suite.logger;
+  let ready;
 
   _.assert( arguments.length === 1 ); debugger;
 
   /* on suite end */
-
+  
   if( suite.onSuiteEnd )
-  {
+  { 
+    let timeLimitErrorCon = _.time.outError( suite.onSuiteEndTimeOut + wTester.settings.sanitareTime )
+    timeLimitErrorCon.tag = '_timeLimitErrorCon'
+    
     try
     {
-      suite.onSuiteEnd.call( suite.context, suite );
+      ready = _.Consequence.From( suite.onSuiteEnd.call( suite.context, suite ) || null );
     }
     catch( err )
     {
-      err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, err );
-      suite.exceptionReport({ err : err });
+      ready = new _.Consequence().error( err );
     }
+    
+    ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
+    
+    ready.finally( ( _err, got ) => 
+    { 
+      if( !timeLimitErrorCon.resourcesCount() )
+      timeLimitErrorCon.take( _.dont );
+      
+      if( _err )
+      { 
+        if( _err.reason === 'time out' )
+        _err = _._err
+        ({
+          args : [ _err || '' , `\nTimeOut set to ${suite.onSuiteEndTimeOut} + ms` ],
+          usingSourceCode : 0,
+        });
+        
+        err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, _err );
+        suite.exceptionReport({ err : err });
+      }
+      
+      return null;
+    })
   }
+  
+  if( !ready )
+  ready = new _.Consequence().take( null );
 
   /* process watcher */
 
   if( suite.processWatching )
-  {
+  ready.tap( () => 
+  { 
     _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
     _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
@@ -754,125 +784,131 @@ function _end( err )
         }
       })
     })
-  }
-
-  /* error */
-
-  if( !err )
-  // if( suite.routine !== null && !suite.tests[ suite.routine ] )
-  if( suite.routine !== null )
-  if( suite.report.testRoutineFails + suite.report.testRoutinePasses === 0 )
+  })
+  
+  ready.then( () =>
   {
-    debugger;
-    err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
-  }
+    /* error */
 
-  if( err )
-  {
-    try
-    {
-      if( suite.takingIntoAccount )
-      suite.consoleBar( 0 );
-      suite.exceptionReport({ err : err });
-    }
-    catch( err2 )
+    if( !err )
+    // if( suite.routine !== null && !suite.tests[ suite.routine ] )
+    if( suite.routine !== null )
+    if( suite.report.testRoutineFails + suite.report.testRoutinePasses === 0 )
     {
       debugger;
-      console.error( err2 );
-      console.error( err.toString() + '\n' + err.stack );
+      err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
     }
-  }
 
-  /* process exit handler */
+    if( err )
+    {
+      try
+      {
+        if( suite.takingIntoAccount )
+        suite.consoleBar( 0 );
+        suite.exceptionReport({ err : err });
+      }
+      catch( err2 )
+      {
+        debugger;
+        console.error( err2 );
+        console.error( err.toString() + '\n' + err.stack );
+      }
+    }
 
-  // if( _global_.process && suite._terminated_joined && suite.takingIntoAccount )
-  // {
-  //   _global_.process.removeListener( 'exit', suite._terminated_joined );
-  //   suite._terminated_joined = null;
-  // }
+    /* process exit handler */
 
-  if( _.process && suite._terminated_joined && suite.takingIntoAccount )
-  {
-    // _global_.process.removeListener( 'exit', suite._terminated_joined );
-    // debugger;
-    // console.log( `_.process.off( 'exit', suite._terminated_joined )` );
-    if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
-    _.process.off( 'exit', suite._terminated_joined );
-    suite._terminated_joined = null;
-  }
+    // if( _global_.process && suite._terminated_joined && suite.takingIntoAccount )
+    // {
+    //   _global_.process.removeListener( 'exit', suite._terminated_joined );
+    //   suite._terminated_joined = null;
+    // }
 
-  /* report */
+    if( _.process && suite._terminated_joined && suite.takingIntoAccount )
+    {
+      // _global_.process.removeListener( 'exit', suite._terminated_joined );
+      // debugger;
+      // console.log( `_.process.off( 'exit', suite._terminated_joined )` );
+      if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
+      _.process.off( 'exit', suite._terminated_joined );
+      suite._terminated_joined = null;
+    }
 
-  suite._reportEnd();
+    /* report */
 
-  let ok = suite._reportIsPositive();
+    suite._reportEnd();
 
-  logger.begin({ verbosity : -2 });
+    let ok = suite._reportIsPositive();
 
-  if( logger._mines[ 'suite.content' ] )
-  logger.laterFinit( 'suite.content' );
-  else
-  logger.log();
+    logger.begin({ verbosity : -2 });
 
-  if( logger )
-  logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
-  if( logger )
-  logger.begin( 'suite', 'end' );
+    if( logger._mines[ 'suite.content' ] )
+    logger.laterFinit( 'suite.content' );
+    else
+    logger.log();
 
-  let msg = suite._reportToStr();
+    if( logger )
+    logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+    if( logger )
+    logger.begin( 'suite', 'end' );
 
-  logger.log( msg );
+    let msg = suite._reportToStr();
 
-  let timingStr = '';
-  if( wTester.settings.timing )
-  {
-    suite.report.timeSpent = _.time.now() - suite._testSuiteBeginTime;
-    timingStr = ' ... in ' + _.time.spentFormat( suite.report.timeSpent );
-  }
+    logger.log( msg );
 
-  msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
+    let timingStr = '';
+    if( wTester.settings.timing )
+    {
+      suite.report.timeSpent = _.time.now() - suite._testSuiteBeginTime;
+      timingStr = ' ... in ' + _.time.spentFormat( suite.report.timeSpent );
+    }
 
-  msg = wTester.textColor( msg, ok );
+    msg = 'Test suite ( ' + suite.name + ' )' + timingStr + ' ... ' + ( ok ? 'ok' : 'failed' );
 
-  logger.begin({ verbosity : -1 });
-  logger.logDown( msg );
-  logger.end({ verbosity : -1 });
+    msg = wTester.textColor( msg, ok );
 
-  logger.begin({ verbosity : -2 });
-  logger.log();
-  logger.end({ verbosity : -2 });
+    logger.begin({ verbosity : -1 });
+    logger.logDown( msg );
+    logger.end({ verbosity : -1 });
 
-  logger.end( 'suite', 'end' );
-  logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+    logger.begin({ verbosity : -2 });
+    logger.log();
+    logger.end({ verbosity : -2 });
 
-  logger.end({ verbosity : -2 });
-  logger.end({ verbosity : -6 + suite.importanceOfDetails });
-  logger.verbosityPop();
+    logger.end( 'suite', 'end' );
+    logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
 
-  if( suite._appExitCode && !_.process.exitCode() )
-  suite._appExitCode = _.process.exitCode( suite._appExitCode );
+    logger.end({ verbosity : -2 });
+    logger.end({ verbosity : -6 + suite.importanceOfDetails });
+    logger.verbosityPop();
 
-  /* silencing */
+    if( suite._appExitCode && !_.process.exitCode() )
+    suite._appExitCode = _.process.exitCode( suite._appExitCode );
 
-  if( suite.silencing )
-  suite.consoleBar( 0 );
+    /* silencing */
 
-  /* */
+    if( suite.silencing )
+    suite.consoleBar( 0 );
 
-  if( suite.takingIntoAccount )
-  wTester._testSuiteConsider( ok );
+    /* */
 
-  /* tracking */
+    if( suite.takingIntoAccount )
+    wTester._testSuiteConsider( ok );
 
-  _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
-  _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
+    /* tracking */
 
-  /* */
+    _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
+    _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
 
-  if( !wTester.activeSuites.length && !wTester.quedSuites.length )
-  wTester._testingEndSoon();
+    /* */
 
-  return suite;
+    if( !wTester.activeSuites.length && !wTester.quedSuites.length )
+    wTester._testingEndSoon();
+
+    return suite;
+    
+  })
+  
+  return ready;
 }
 
 //
@@ -1327,6 +1363,7 @@ let Composes =
   shoulding : 1,
 
   routineTimeOut : 5000,
+  onSuiteEndTimeOut : 15000,
   concurrent : 0,
   routine : null,
   platforms : null,

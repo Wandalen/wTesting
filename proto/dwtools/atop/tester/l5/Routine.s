@@ -3027,8 +3027,6 @@ function _shouldDo( o )
     else
     con.take( _.errAttend( arg ), undefined );
 
-    debugger;
-
     if( !reported )
     trd._inroutineCon.take( null );
 

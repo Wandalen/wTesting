@@ -616,14 +616,14 @@ function _begin()
   {
     suite._processWatcherMap = Object.create( null );
     function subprocessStartEnd( o )
-    { 
+    {
       if( o.sync )
       return;
       _.assert( !suite._processWatcherMap[ o.process.pid ] )
       suite._processWatcherMap[ o.process.pid ] = o;
     }
     function subprocessTerminationEnd( o )
-    { 
+    {
       if( o.sync )
       return;
       _.assert( suite._processWatcherMap[ o.process.pid ] )
@@ -711,7 +711,7 @@ function _end( err )
   let logger = suite.logger;
   let ready;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1 ); debugger;
 
   /* on suite end */
   

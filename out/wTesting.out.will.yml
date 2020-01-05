@@ -245,6 +245,15 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/noTestCheck
           - ../proto/dwtools/atop/tester.test/_asset/noTestCheck/package.json
           - ../proto/dwtools/atop/tester.test/_asset/noTestCheck/Suite.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/DelayedMessageByConsequence.test.js
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/ErrorMessageByConsequence.test.js
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/NormalMessageByConsequence.test.js
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A1.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A2.test.js

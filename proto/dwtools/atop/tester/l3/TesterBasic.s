@@ -107,7 +107,7 @@ function form()
   if( tester.formed >= 1 )
   return tester;
 
-  _.process.exitHandlerRepair();
+  _.process._exitHandlerRepair();
 
   tester.FormSuites();
   tester.formAssociates();

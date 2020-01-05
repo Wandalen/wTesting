@@ -1134,7 +1134,7 @@ function manualTermination( test )
 manualTermination.description =
 `
   User terminates execution when second test routine is runnning.
-  onSuiteEnd handler should be executed before exitHandlerOnce
+  onSuiteEnd handler should be executed before _exitHandlerOnce
 `
 
 //

@@ -711,15 +711,15 @@ function _end( err )
   let logger = suite.logger;
   let ready;
 
-  _.assert( arguments.length === 1 ); debugger;
+  _.assert( arguments.length === 1 );
 
   /* on suite end */
-  
+
   if( suite.onSuiteEnd )
-  { 
+  {
     let timeLimitErrorCon = _.time.outError( suite.onSuiteEndTimeOut + wTester.settings.sanitareTime )
     timeLimitErrorCon.tag = '_timeLimitErrorCon'
-    
+
     try
     {
       ready = _.Consequence.From( suite.onSuiteEnd.call( suite.context, suite ) || null );
@@ -728,39 +728,39 @@ function _end( err )
     {
       ready = new _.Consequence().error( err );
     }
-    
+
     ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
-    
-    ready.finally( ( _err, got ) => 
-    { 
+
+    ready.finally( ( _err, got ) =>
+    {
       if( !timeLimitErrorCon.resourcesCount() )
       timeLimitErrorCon.take( _.dont );
-      
+
       if( _err )
-      { 
+      {
         if( _err.reason === 'time out' )
         _err = _._err
         ({
           args : [ _err || '' , `\nTimeOut set to ${suite.onSuiteEndTimeOut} + ms` ],
           usingSourceCode : 0,
         });
-        
+
         err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, _err );
         suite.exceptionReport({ err : err });
       }
-      
+
       return null;
     })
   }
-  
+
   if( !ready )
   ready = new _.Consequence().take( null );
 
   /* process watcher */
 
   if( suite.processWatching )
-  ready.tap( () => 
-  { 
+  ready.tap( () =>
+  {
     _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
     _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
@@ -785,7 +785,7 @@ function _end( err )
       })
     })
   })
-  
+
   ready.then( () =>
   {
     /* error */
@@ -905,9 +905,9 @@ function _end( err )
     wTester._testingEndSoon();
 
     return suite;
-    
+
   })
-  
+
   return ready;
 }
 
@@ -917,12 +917,10 @@ function _terminated()
 {
   let suite = this;
   let err = _.process ? _.process.exitReason() : null;
-  // console.log( '_terminated', _.introspector.stack() );
   if( !err )
   {
     err = _.errBrief( 'Terminated by user' );
     _.errReason( err, 'terminated by user' );
-    // err.reason = 'terminated by user';
   }
   wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }

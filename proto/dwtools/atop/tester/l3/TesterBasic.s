@@ -842,7 +842,7 @@ function _suitesIncludeAt( path )
       tester._includeFailConsider( err );
 
       if( tester.settings.coloring )
-      logger.error( _.color.strFormatForeground( 'Cant include ' + absolutePath, 'red' ) );
+      logger.error( _.ct.fg( 'Cant include ' + absolutePath, 'red' ) );
       else
       logger.error( 'Cant include ' + absolutePath );
 

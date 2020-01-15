@@ -3568,54 +3568,16 @@ function assetFor( a )
 
     _.routineOptions( program, o );
 
-    debugger;
     let o2 = _.program.write
     ({
       routine : o.routine,
       globals : o.globals,
       tempPath : a.abs( '.' ),
     });
-    debugger;
 
     logger.log( _.strLinesNumber( o2.sourceCode ) );
 
     return o2.programPath;
-
-//     let a = this;
-//
-//     if( !_.mapIs( o ) )
-//     o = { program : o }
-//     _.routineOptions( program, o );
-//     _.assert( _.routineIs( o.program ) );
-//     _.assert( _.strDefined( o.program.name ), 'Program should have name' )
-//     _.assert( arguments.length === 1 );
-//
-//     let programPath = a.abs( o.program.name + '.js' );
-//     if( o.globals === null )
-//     {
-//       o.globals = Object.create( null );
-//       o.globals.toolsPath = a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) );
-//     }
-//
-//     let programSourceCode = '';
-//
-//     programSourceCode += o.program.toString() + '\n\n';
-//
-//     for( let g in o.globals )
-//     {
-//       programSourceCode += `var ${g} = ${_.toJs( o.globals[ g ] )};\n`
-//     }
-//
-//     programSourceCode +=
-// `
-// ${o.program.name}();
-// `
-//
-//     logger.log( _.strLinesNumber( programSourceCode ) );
-//     a.fileProvider.fileWrite( programPath, programSourceCode );
-//
-//     return programPath;
-
   }
 
   /**/

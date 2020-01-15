@@ -1189,7 +1189,7 @@ function processWatchingOnSpectronZombie( test )
     test.case = ''
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
   .then( ( got ) =>
   {
@@ -1199,7 +1199,7 @@ function processWatchingOnSpectronZombie( test )
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Spectron.test.s r:spectronTimeOut ` })
   .then( ( got ) =>
   {
@@ -1209,7 +1209,7 @@ function processWatchingOnSpectronZombie( test )
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Spectron.test.s r:errorInTest ` })
   .then( ( got ) =>
   {
@@ -1219,7 +1219,7 @@ function processWatchingOnSpectronZombie( test )
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Spectron.test.s r:clientContinuesToWorkAfterTest ` })
   .then( ( got ) =>
   {
@@ -1251,7 +1251,7 @@ function processWatchingOnPuppeteerZombie( test )
     test.case = ''
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Puppeteer.test.s r:routineTimeOut ` })
   .then( ( got ) =>
   {
@@ -1261,7 +1261,7 @@ function processWatchingOnPuppeteerZombie( test )
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Puppeteer.test.s r:puppeteerTimeOut ` })
   .then( ( got ) =>
   {
@@ -1271,7 +1271,7 @@ function processWatchingOnPuppeteerZombie( test )
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Puppeteer.test.s r:errorInTest ` })
   .then( ( got ) =>
   {
@@ -1281,7 +1281,7 @@ function processWatchingOnPuppeteerZombie( test )
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `Puppeteer.test.s r:clientContinuesToWorkAfterTest ` })
   .then( ( got ) =>
   {
@@ -1316,7 +1316,7 @@ function onSuiteEndReturnConsequence( test )
     test.identical( _.strCount( got.output, 'Time out!' ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `ErrorMessageByConsequence.test.js` })
   .then( ( got ) =>
   {
@@ -1326,7 +1326,7 @@ function onSuiteEndReturnConsequence( test )
     test.identical( _.strCount( got.output, 'Test error' ), 2 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `NormalMessageByConsequence.test.js` })
   .then( ( got ) =>
   {
@@ -1335,7 +1335,7 @@ function onSuiteEndReturnConsequence( test )
     test.identical( _.strCount( got.output, /Testing \.\.\. in .* \.\.\. ok/g ), 1 );
     return null;
   })
-  
+
   a.jsNonThrowing({ execPath : `DelayedMessageByConsequence.test.js` })
   .then( ( got ) =>
   {
@@ -1398,10 +1398,10 @@ var Self =
     version,
     manualTermination,
     asyncErrorHandling,
-    
+
     processWatchingOnSpectronZombie,
     processWatchingOnPuppeteerZombie,
-    
+
     onSuiteEndReturnConsequence,
 
   }

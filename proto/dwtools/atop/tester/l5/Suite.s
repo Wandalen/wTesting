@@ -183,7 +183,7 @@ function inherit()
   {
     let src = arguments[ a ];
 
-    _.assert( src instanceof Self );
+    _.assert( src instanceof Self, () => `Expects test suite to inherit it, but got ${_.strType( src )}` );
 
     if( src.tests )
     _.mapSupplement( suite.tests, src.tests );
@@ -192,6 +192,7 @@ function inherit()
     _.mapSupplement( suite.context, src.context );
 
     let extend = _.mapBut( src._initialOptions, suite._initialOptions );
+    delete extend.abstract; /* qqq : add test to check test suite inheritance without explicitly defined in descendant `abstact : 0` works */
     _.mapExtend( suite, extend );
     _.mapExtend( suite._initialOptions, extend );
 

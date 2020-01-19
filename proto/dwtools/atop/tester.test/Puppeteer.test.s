@@ -23,8 +23,11 @@ function onSuiteBegin()
 {
   let self = this;
 
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetDirPath = _.path.join( __dirname, '_asset' );
+  self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
+  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+  self.puppeteerPath = require.resolve( 'puppeteer' );
 }
 
 //
@@ -32,8 +35,46 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.assert( _.strHas( self.suiteTempPath, 'Tester' ) )
+  _.path.pathDirTempClose( self.suiteTempPath );
+}
+
+//
+
+function assetFor( test, asset )
+{
+  let self = this;
+  let a = test.assetFor( asset );
+
+  a.reflect = function reflect()
+  {
+
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
+
+    reflected.forEach( ( r ) =>
+    {
+      if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
+      return;
+      var read = a.fileProvider.fileRead( r.dst.absolute );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
+      read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
+      read = _.strReplace( read, `'puppeteer'`, `'${_.strEscape( self.puppeteerPath )}'` );
+      a.fileProvider.fileWrite( r.dst.absolute, read );
+    });
+
+  }
+
+  return a;
+
+  function onUp( r )
+  {
+    if( !_.strHas( r.dst.relative, '.atest.' ) )
+    return;
+    let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
+    r.dst.relative = relative;
+    _.assert( _.strHas( r.dst.absolute, '.test.' ) );
+  }
+
 }
 
 // --
@@ -43,8 +84,8 @@ function onSuiteEnd()
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'Puppeteer' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'Puppeteer' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
 
@@ -115,7 +156,8 @@ function html( test )
       return got;
     })
     ready = _.Consequence.From( ready );
-    return ready.deasync();
+    ready.deasyncWait();
+    ready.sync();
   }
 }
 
@@ -124,8 +166,8 @@ function html( test )
 async function htmlAwait( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'puppeteer' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'puppeteer' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
@@ -160,77 +202,68 @@ async function htmlAwait( test )
 
 //
 
-function html2( test )
-{
-  let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'puppeteer' );
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+// function html2( test )
+// {
+//   let self = this;
+//   let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'puppeteer' );
+//   let routinePath = _.path.join( self.suiteTempPath, test.name );
+//   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
+//   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
 
-  let puppeteer = setup();
-  let browser = puppeteer.launch({ headless : false })
-  let page = browser.newPage();
+//   let puppeteer = setup();
+//   let browser = puppeteer.launch({ headless : false })
+//   let page = browser.newPage();
 
-  let path = 'file:///' + _.path.nativize( indexHtmlPath );
-  page.goto( path, { waitUntil : 'load' } );
+//   let path = 'file:///' + _.path.nativize( indexHtmlPath );
+//   page.goto( path, { waitUntil : 'load' } );
 
-  var got = page.$eval( '.class1 p', ( e ) => e.innerText )
-  test.identical( got, 'Text1' )
+//   var got = page.$eval( '.class1 p', ( e ) => e.innerText )
+//   test.identical( got, 'Text1' )
 
-  var got = page.$eval( '.class1 a', ( e ) => e.href )
-  test.is( _.strEnds( got,'index.html' ) );
+//   var got = page.$eval( '.class1 a', ( e ) => e.href )
+//   test.is( _.strEnds( got,'index.html' ) );
 
-  var got = page.$eval( '#input1', ( e ) => e.value )
-  test.identical( got, '123' );
+//   var got = page.$eval( '#input1', ( e ) => e.value )
+//   test.identical( got, '123' );
 
-  browser.close();
+//   browser.close();
 
-  /* */
+//   /* */
 
-  function setup()
-  {
-    let handler =
-    {
-      get( target, key, receiver )
-      {
-        let value = Reflect.get( target, key, receiver );
-        if ( !_.routineIs( value ) )
-        return value;
-        return function (...args)
-        {
-          let result = value.apply( this, args );
-          if( _.promiseIs( result ) )
-          {
-            let ready = new _.Consequence();
-            result.then( ( got ) =>
-            {
-              if( got === undefined )
-              got = true
-              ready.take( got );
-            })
-            result.catch( ( err ) => ready.error( err ) )
-            result = ready.deasync();
-          }
-          if( _.objectIs( result ) )
-          return new Proxy( result, handler )
-          return result;
-        }
-      }
-    }
+//   function setup()
+//   {
+//     let handler =
+//     {
+//       get( target, key, receiver )
+//       {
+//         let value = Reflect.get( target, key, receiver );
+//         if ( !_.routineIs( value ) )
+//         return value;
+//         return function (...args)
+//         {
+//           let result = value.apply( this, args );
+//           var con = _.Consequence.From( result );
+//           con.deasyncWait();
+//           result = con.sync();
+//           if( _.objectIs( result ) )
+//           return new Proxy( result, handler )
+//           return result;
+//         }
+//       }
+//     }
 
-    return new Proxy( Puppeteer, handler );
-  }
-}
+//     return new Proxy( Puppeteer, handler );
+//   }
+// }
 
 //
 
 function chaining( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'Puppeteer' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'Puppeteer' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
 
@@ -249,11 +282,10 @@ function chaining( test )
 
   ready.then( () =>
   {
-    return page.$eval( '.class1 p' )
-    .then( ( element ) => element.getProperty( 'innerText' ) )
+    return page.$eval( '.class1 p', ( e ) => e.innerText )
     .then( ( text ) =>
     {
-      console.log( text)
+      test.identical( text, 'Text1' )
       return null;
     })
   })
@@ -282,8 +314,70 @@ function chaining( test )
       return got;
     })
     ready = _.Consequence.From( ready );
-    return ready.deasync();
+    return ready.deasyncWait();
   }
+}
+
+//
+
+function processWatchingOnPuppeteerZombie( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'puppeteer' );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = ''
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:routineTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:puppeteerTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:errorInTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:clientContinuesToWorkAfterTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
 }
 
 // --
@@ -302,17 +396,24 @@ var Self =
   routineTimeOut : 300000,
 
   context :
-  {
-    tempDir : null,
-    assetDirPath : null,
+  { 
+    assetFor,
+    
+    suiteTempPath : null,
+    assetsOriginalSuitePath : null,
+    execJsPath : null,
+    toolsPath : null,
+    puppeteerPath : null
   },
 
   tests :
   {
     html,
     htmlAwait,
-    html2,
-    chaining
+    // html2,
+    chaining,
+    
+    processWatchingOnPuppeteerZombie
   }
 
 }

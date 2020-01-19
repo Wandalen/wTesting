@@ -25,15 +25,58 @@ var _ = _global_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetDirPath = _.path.join( __dirname, '_asset' );
+  self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
+  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+  self.spectronPath = require.resolve( 'spectron' );
+  self.electronPath = require.resolve( 'electron' );
 }
 
 function onSuiteEnd()
 {
   let self = this;
-  _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.assert( _.strHas( self.suiteTempPath, 'Tester' ) )
+  _.path.pathDirTempClose( self.suiteTempPath );
+}
+
+//
+
+function assetFor( test, asset )
+{
+  let self = this;
+  let a = test.assetFor( asset );
+
+  a.reflect = function reflect()
+  {
+
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
+
+    reflected.forEach( ( r ) =>
+    {
+      if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
+      return;
+      var read = a.fileProvider.fileRead( r.dst.absolute );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
+      read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
+      read = _.strReplace( read, `'spectron'`, `'${_.strEscape( self.spectronPath )}'` );
+      read = _.strReplace( read, `'electron'`, `'${_.strEscape( self.electronPath )}'` );
+      a.fileProvider.fileWrite( r.dst.absolute, read );
+    });
+
+  }
+
+  return a;
+
+  function onUp( r )
+  {
+    if( !_.strHas( r.dst.relative, '.atest.' ) )
+    return;
+    let relative = _.strReplace( r.dst.relative, '.atest.', '.test.' );
+    r.dst.relative = relative;
+    _.assert( _.strHas( r.dst.absolute, '.test.' ) );
+  }
+
 }
 
 // --
@@ -43,8 +86,8 @@ function onSuiteEnd()
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
@@ -112,8 +155,8 @@ function html( test )
 async function htmlAwait( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
@@ -154,8 +197,8 @@ async function htmlAwait( test )
 function consequenceFromExperiment( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
@@ -200,11 +243,11 @@ consequenceFromExperiment.experimental = 1;
 
 //
 
-function chaining()
+function chaining( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetDirPath, 'electron' );
-  let routinePath = _.path.join( self.tempDir, test.name );
+  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ originalDirPath ] : routinePath } })
@@ -221,26 +264,88 @@ function chaining()
 
   //select command is chained with .getText
 
-  .then( () => app.client.$( '.class1 p' ).getProperty( 'innerText' ) )
+  .then( () => app.client.getText( '.class1 p' ) )
 
   .then( ( text ) =>
   {
-    console.log( text )
-    return null;
+    test.identical( text, 'Text1' );
+    return app.stop();
   })
 
   return _.Consequence.From( ready );
 }
 
+//
+
+function processWatchingOnSpectronZombie( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'spectron' );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = ''
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:spectronTimeOut ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:errorInTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `Spectron.test.s r:clientContinuesToWorkAfterTest ` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 1 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // suite
 // --
-debugger
+
 var Self =
 {
 
   name : 'Tools.atop.Tester.Electron',
-  silencing : 1,
+  silencing : 0,
   enabled : 0,
 
   onSuiteBegin : onSuiteBegin,
@@ -249,8 +354,14 @@ var Self =
 
   context :
   {
-    tempDir : null,
-    assetDirPath : null,
+    assetFor,
+    
+    suiteTempPath : null,
+    assetsOriginalSuitePath : null,
+    execJsPath : null,
+    toolsPath : null,
+    spectronPath : null,
+    electronPath : null
   },
 
   tests :
@@ -258,7 +369,9 @@ var Self =
     html,
     htmlAwait,
     consequenceFromExperiment,
-    chaining
+    chaining,
+    
+    processWatchingOnSpectronZombie
   }
 
 }

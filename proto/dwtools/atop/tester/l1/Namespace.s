@@ -131,6 +131,55 @@ eventDispatch.defaults =
   library : null
 }
 
+//
+
+function waitForVisibleInViewport( o ) 
+{
+  _.assert( arguments.length === 1 );
+  _.routineOptions( waitForVisibleInViewport, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.numberIs( o.timeOut ) )
+  _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
+  _.assert( _.objectIs( o.page ) )
+  
+  let ready = _.time.outError( o.timeOut );
+  return _waitForVisibleInViewport();
+  
+  /* */
+  
+  async function _waitForVisibleInViewport() 
+  { 
+    let element = await o.page.$( o.targetSelector );
+    if( element ) 
+    {
+      let isIntersectingViewport;
+      if( o.library === 'puppeteer' )
+      isIntersectingViewport = await element.isIntersectingViewport();
+      else
+      isIntersectingViewport = await o.page.isVisibleWithinViewport( o.targetSelector );
+      
+      if( isIntersectingViewport ) 
+      {
+        ready.take( _.dont );
+        await ready;
+        ready.take( isIntersectingViewport );
+        return ready;
+      }
+    }
+    if( ready.resourcesCount() )
+    return ready;
+    return _waitForVisibleInViewport();
+  }
+}
+
+waitForVisibleInViewport.defaults = 
+{
+  targetSelector : null,
+  timeOut : 5000,
+  page : null,
+  library : null
+}
+
 let Fields =
 {
 }
@@ -138,7 +187,8 @@ let Fields =
 let Routines =
 {
   fileDrop,
-  eventDispatch
+  eventDispatch,
+  waitForVisibleInViewport
 }
 
 _.mapExtend( Self, Fields );

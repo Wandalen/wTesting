@@ -180,6 +180,75 @@ waitForVisibleInViewport.defaults =
   library : null
 }
 
+//
+
+function isVisibleWithinViewport( o ) 
+{
+  _.assert( arguments.length === 1 );
+  _.routineOptions( isVisibleWithinViewport, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.numberIs( o.timeOut ) )
+  _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
+  _.assert( _.objectIs( o.page ) )
+  
+  /* Common way to query selector */
+  
+  let con = _.Consequence.From( o.page.$( o.targetSelector ) )
+  
+  con.then( ( element ) => 
+  {
+    if( !element )
+    throw _.err( 'Failed to find element that matches the specified selector:', _.strQuote( o.targetSelector ) );
+    return element;
+  })
+  
+  /* Puppeteer */
+  
+  if( o.library === 'puppeteer' )
+  {
+    con.then( ( element ) => element.isIntersectingViewport() );
+    return con;
+  }
+  
+  /* 
+    Solution for Spectron is based on code of isIntersectingViewport from Puppeeteer.
+    Spectron has own version of this method( isVisibleWithinViewport ), but it has an issue in current version v4 of WebDriverIO 
+  */
+  
+  con.then( () => 
+  {
+    o.page.timeouts
+    ({
+      'script': o.timeOut
+    });
+    return o.page.executeAsync( ( selector, cb ) => 
+    {
+      let element = document.querySelector( selector );
+      let observer = new IntersectionObserver( entries => 
+      {
+        cb( entries[ 0 ].intersectionRatio > 0 );
+        observer.disconnect();
+      });
+      observer.observe( element );
+    }, o.targetSelector );
+  });
+  con.then( ( result ) => result.value )
+  
+  /* */
+  
+  return con;
+}
+
+isVisibleWithinViewport.defaults = 
+{
+  targetSelector : null,
+  timeOut : 25000,
+  page : null,
+  library : null
+}
+
+//
+
 let Fields =
 {
 }
@@ -188,7 +257,8 @@ let Routines =
 {
   fileDrop,
   eventDispatch,
-  waitForVisibleInViewport
+  waitForVisibleInViewport,
+  isVisibleWithinViewport
 }
 
 _.mapExtend( Self, Fields );

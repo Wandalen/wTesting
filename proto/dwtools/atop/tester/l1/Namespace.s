@@ -134,7 +134,9 @@ eventDispatch.defaults =
 //
 
 function waitForVisibleInViewport( o ) 
-{
+{ 
+  let test = this;
+  
   _.assert( arguments.length === 1 );
   _.routineOptions( waitForVisibleInViewport, o );
   _.assert( _.strIs( o.targetSelector ) )
@@ -142,8 +144,11 @@ function waitForVisibleInViewport( o )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
   
-  let ready = _.time.outError( o.timeOut );
-  return _waitForVisibleInViewport();
+  let ready = _.time.outError( o.timeOut, () => 
+  {
+    throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
+  });
+  return _.Consequence.From( _waitForVisibleInViewport() );
   
   /* */
   
@@ -151,13 +156,13 @@ function waitForVisibleInViewport( o )
   { 
     let element = await o.page.$( o.targetSelector );
     if( element ) 
-    {
-      let isIntersectingViewport;
-      if( o.library === 'puppeteer' )
-      isIntersectingViewport = await element.isIntersectingViewport();
-      else
-      isIntersectingViewport = await o.page.isVisibleWithinViewport( o.targetSelector );
-      
+    { 
+      let isIntersectingViewport = await test.isVisibleWithinViewport
+      ({ 
+        targetSelector : o.targetSelector, 
+        page : o.page, 
+        library : o.library 
+      });
       if( isIntersectingViewport ) 
       {
         ready.take( _.dont );
@@ -198,7 +203,7 @@ function isVisibleWithinViewport( o )
   con.then( ( element ) => 
   {
     if( !element )
-    throw _.err( 'Failed to find element that matches the specified selector:', _.strQuote( o.targetSelector ) );
+    throw _.err( `Failed to find element that matches the specified selector: ${_.strQuote( o.targetSelector )}` );
     return element;
   })
   

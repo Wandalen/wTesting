@@ -22,7 +22,10 @@
 | [ LocalStorage support ](feature/LocalStorage.md) | 2        | 1         |
 | [ Opening the HTML page using local path without server ](feature/ServerlessTesting.md) | 1        | 1 |
 | [ Wait until element is visible ](feature/WaitForElementIsVisible.md) | 1        | 1 |
+| [ Wait until element is visible in viewport ](feature/WaitForElementIsVisibleInViewport.md) | 1        | 1 |
+| [ Check if element is visible in viewport ](feature/IsVisibleInViewport.md) | 1        | 1 |
 | [ Get element(s) attribute value ](feature/GetElementAttribute.md) | 1        | 1 |
+| [ Wait until dialog appears ](feature/WaitForDialog.md) | 1        | 1 |
 | [ Headless testing ](feature/HeadlessTesting.md)                       | 0        | 1         |
 | [ Performance ](feature/Performance.md)                       |    0     |   1    |
 

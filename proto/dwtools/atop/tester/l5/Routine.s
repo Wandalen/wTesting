@@ -311,7 +311,7 @@ function _runBegin()
   trd._appExitCode = _.process.exitCode( 0 );
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( trd._returned === null );
 
   let msg =
@@ -363,7 +363,7 @@ function _runEnd()
   let trd = this;
   let suite = trd.suite;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
@@ -1070,7 +1070,7 @@ function checkCurrent()
   let trd = this;
   let result = Object.create( null );
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   result.groupsStack = trd._groupsStack;
   result.description = trd.description;
@@ -1118,7 +1118,7 @@ function checkStore()
   let trd = this;
   let result = trd.checkCurrent();
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   trd._checksStack.push( result );
 

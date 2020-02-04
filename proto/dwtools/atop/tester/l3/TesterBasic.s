@@ -87,7 +87,7 @@ function unform()
 {
   let tester = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( !!tester.formed );
 
   /* begin */
@@ -114,7 +114,7 @@ function form()
 
   // tester._registerExitHandler();
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( !tester.formed );
 
   tester.formed = 1;
@@ -141,7 +141,7 @@ function formAssociates()
   let tester = this;
   let logger = tester.logger;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( !tester.formed );
   _.assert( !!logger );
   _.assert( logger.verbosity === tester.verbosity );
@@ -262,7 +262,7 @@ function scenarioTest()
 
   try
   {
-    _.assert( arguments.length === 0 );
+    _.assert( arguments.length === 0, 'Expects no arguments' );
     _.assert( tester.settings.scenario === undefined );
 
     tester.suitesIncludeAt( tester.filePath );
@@ -335,7 +335,7 @@ function _testAllAct()
 {
   let tester = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   tester.appArgsRead();
   let suites = tester.suitesFilterOut();
@@ -439,7 +439,7 @@ function _testingEndSoon()
 {
   let tester = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( tester._reportIsPositive() )
   return _.time.out( tester.settings.sanitareTime, () => tester._testingEndNow() );
@@ -457,7 +457,7 @@ function _testingEndNow()
   let logger = tester.logger;
   let ok = tester._reportIsPositive();
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( tester.state === 'begin' );
 
   tester.state = 'end';
@@ -921,7 +921,7 @@ function _verbosityChange()
 {
   let tester = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( !tester.fileProvider || tester.fileProvider.logger !== tester.logger );
 
   if( tester.fileProvider )

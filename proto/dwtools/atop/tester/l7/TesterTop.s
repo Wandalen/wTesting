@@ -34,7 +34,7 @@ function exec()
   let tester = this;
 
   _.assert( _.instanceIs( tester ) );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   let logger = tester.logger;
   let fileProvider = tester.fileProvider;
@@ -72,7 +72,7 @@ function _commandsMake()
   let appArgs = _.process.args();
 
   _.assert( _.instanceIs( tester ) );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   /*
   qqq : make possible to use any convention: .suites.list, suites list, suites.list

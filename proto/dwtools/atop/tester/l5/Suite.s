@@ -387,7 +387,7 @@ function consoleBarPreserving( value )
 function run()
 {
   let suite = this;
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   suite._form();
   return suite._runSoon();
 }
@@ -405,7 +405,7 @@ function _form()
 
   _.assert( _.objectIs( suite.tests ) );
   _.assert( suite instanceof Self );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strDefined( suite.name ), 'Test suite should has {-name-}"' );
   _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
   _.assert( !suite._formed );
@@ -473,7 +473,7 @@ function _runSoon()
   let suite = this;
 
   _.assert( suite instanceof Self );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( suite._formed );
 
   if( _.arrayAppendedOnce( wTester.quedSuites, suite ) === -1 )
@@ -502,7 +502,7 @@ function _runNow()
   let logger = suite.logger || wTester.logger || _global_.logger;
 
   _.assert( suite instanceof Self );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   /* */
 

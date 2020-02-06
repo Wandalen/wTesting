@@ -221,6 +221,11 @@ module:
             ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOut/package.json
           - >-
             ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOut/Suite.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOutSilenced
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/package.json
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/Suite.test.js
           - ../proto/dwtools/atop/tester.test/_asset/double
           - ../proto/dwtools/atop/tester.test/_asset/double/Hello.js
           - ../proto/dwtools/atop/tester.test/_asset/double/Hello.test.js
@@ -265,6 +270,11 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/spectron
           - ../proto/dwtools/atop/tester.test/_asset/spectron/index.html
           - ../proto/dwtools/atop/tester.test/_asset/spectron/Spectron.test.s
+          - ../proto/dwtools/atop/tester.test/_asset/timeOutExternalMessage
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/timeOutExternalMessage/package.json
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/timeOutExternalMessage/Suite.test.js
     submodule:
       wConsequence:
         path: 'npm:///wConsequence'

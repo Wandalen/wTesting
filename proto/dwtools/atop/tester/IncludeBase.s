@@ -39,7 +39,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
   _.include( 'wFiles' );
-  _.include( 'wLogger' );
+  _.include( 'wColor' );
   _.include( 'wStringsExtra' );
   _.include( 'wCommandsAggregator' );
 

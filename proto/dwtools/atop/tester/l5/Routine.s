@@ -3554,6 +3554,9 @@ function assetFor( a )
   function reflect()
   {
     a.fileProvider.filesDelete( a.routinePath );
+    if( a.originalAssetPath === false )
+    a.fileProvider.dirMake( a.routinePath );
+    else
     a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });
   }
 

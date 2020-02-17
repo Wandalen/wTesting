@@ -27,6 +27,7 @@ function onSuiteBegin()
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
   self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+
 }
 
 //

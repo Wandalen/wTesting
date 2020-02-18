@@ -3383,7 +3383,20 @@ function assetFor( a )
   if( a.process === null )
   a.process = _testerGlobal_.wTools.process;
   if( a.fileProvider === null )
-  a.fileProvider = _testerGlobal_.wTools.fileProvider;
+  {
+    // a.fileProvider = _testerGlobal_.wTools.fileProvider;
+
+    a.fileProvider = _.FileProvider.System({ providers : [] });
+
+    _.FileProvider.Git().providerRegisterTo( a.fileProvider );
+    _.FileProvider.Npm().providerRegisterTo( a.fileProvider );
+    _.FileProvider.Http().providerRegisterTo( a.fileProvider );
+
+    let defaultProvider = _.FileProvider.Default();
+    defaultProvider.providerRegisterTo( a.fileProvider );
+    a.fileProvider.defaultProvider = defaultProvider;
+
+  }
   if( a.path === null )
   a.path = a.fileProvider.path || _testerGlobal_.wTools.uri;
   if( a.uri === null )
@@ -3553,6 +3566,7 @@ function assetFor( a )
 
   function reflect()
   {
+    _.assert( arguments.length === 0 );
     a.fileProvider.filesDelete( a.routinePath );
     if( a.originalAssetPath === false )
     a.fileProvider.dirMake( a.routinePath );

@@ -90,6 +90,8 @@ if( typeof module !== 'undefined' )
 
 - implement running option additive:0
 
+- reimplement options routine with multiple test suite. should pass test suites which does not have such test routine
+
 */
 
 /*

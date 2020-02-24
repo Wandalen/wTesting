@@ -92,6 +92,10 @@ if( typeof module !== 'undefined' )
 
 - reimplement options routine with multiple test suite. should pass test suites which does not have such test routine
 
+- extend final report
+  if verbosity is high user should be able to copy paste final report with no need to copy paste from aother sources
+  should have name, path.. etc
+
 */
 
 /*

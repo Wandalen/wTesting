@@ -237,8 +237,6 @@ function _accuracySet( accuracy )
   suite[ accuracySymbol ] = accuracy;
 
   if( suite._formed )
-  debugger;
-  if( suite._formed )
   suite.routineEach( ( trd ) => trd._accuracyChange() );
 
   return accuracy;

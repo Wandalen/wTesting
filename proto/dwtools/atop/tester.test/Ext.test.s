@@ -524,6 +524,82 @@ function optionSuite( test )
 
 //
 
+function optionAccuracy( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+
+  a.reflect(); /* xxx */
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:5 s:0'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${test.accuracy*test.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : ${test.accuracy*1e-1}` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${test.accuracy*10}` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+optionAccuracy.description =
+`
+- option accuracy of test routine change accuracy of test routine
+- option accuracy of test routine could be range
+`
+
+//
+
+function requireTesting( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+
+  a.reflect(); /* xxx */
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:5 s:0'
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+requireTesting.description =
+`
+- require( 'wTesting' ) returns proper namespace
+`
+
+//
+
 function noTestCheck( test )
 {
   let self = this;
@@ -1255,6 +1331,8 @@ var Self =
     checkFails,
     double,
     optionSuite,
+    optionAccuracy,
+    requireTesting,
     noTestCheck,
     asyncTimeOut,
     checksAfterTimeOut,

@@ -14,3 +14,6 @@ let o =
 }
 _.process._exitHandlerRepair();
 _.process.startNodePassingThrough( o );
+
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = _testerGlobal_.wTools;

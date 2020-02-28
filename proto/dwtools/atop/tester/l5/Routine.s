@@ -80,7 +80,7 @@ function form()
   let suite = trd.suite;
 
   trd._returnCon = null;
-  trd._adoptRoutineFields();
+  trd._fieldsForm();
   trd._accuracyChange();
   trd._reportBegin();
 
@@ -106,7 +106,7 @@ function form()
 
 //
 
-function _adoptRoutineFields()
+function _fieldsForm()
 {
   let trd = this;
   let routine = trd.routine;
@@ -176,6 +176,8 @@ function _accuracyChange()
   if( _.arrayIs( trd[ accuracySymbol ] ) )
   result = _.numberClamp( result, trd[ accuracySymbol ] );
 
+  _.assert( _.numberDefined( result ) );
+
   trd[ accuracyEffectiveSymbol ] = result;
 
   return result;
@@ -219,6 +221,10 @@ function _rapiditySet( rapidity )
 {
   let trd = this;
   _.assert( _.numberIs( rapidity ) );
+  if( rapidity > 9 )
+  rapidity = 9;
+  if( rapidity < -9 )
+  rapidity = -9;
   trd[ rapiditySymbol ] = rapidity;
   return rapidity;
 }
@@ -3775,7 +3781,7 @@ let Extend =
 
   init,
   form,
-  _adoptRoutineFields,
+  _fieldsForm,
 
   // accessor
 

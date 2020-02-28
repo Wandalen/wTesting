@@ -68,4 +68,7 @@ if( typeof module !== 'undefined' )
 
 }
 
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = _testerGlobal_.wTools;
+
 })();

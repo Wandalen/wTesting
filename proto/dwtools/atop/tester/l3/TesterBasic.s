@@ -199,6 +199,7 @@ function appArgsRead()
     only : 1,
   }
 
+  // debugger;
   _.process.argsReadTo( readOptions );
   if( appArgs.err )
   throw _.errBrief( appArgs.err );
@@ -207,6 +208,8 @@ function appArgsRead()
 
   if( !appArgs.map )
   appArgs.map = Object.create( null );
+
+  // debugger; /* qqq xxx : cover rapidity */
 
   _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 

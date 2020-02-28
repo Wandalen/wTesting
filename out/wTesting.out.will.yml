@@ -196,7 +196,6 @@ module:
           - ../proto/dwtools/atop/tester/l5/Suite.s
           - ../proto/dwtools/atop/tester/l7
           - ../proto/dwtools/atop/tester/l7/TesterTop.s
-          - ../proto/dwtools/atop/tester/l8
           - ../proto/dwtools/atop/tester.test
           - ../proto/dwtools/atop/tester.test/AsyncTimeout.test.s
           - ../proto/dwtools/atop/tester.test/Electron.test.s
@@ -259,6 +258,9 @@ module:
             ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/NormalMessageByConsequence.test.js
           - >-
             ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionAccuracy
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/optionAccuracy/OptionAccuracy1.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A1.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A2.test.js
@@ -267,6 +269,9 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/puppeteer
           - ../proto/dwtools/atop/tester.test/_asset/puppeteer/index.html
           - ../proto/dwtools/atop/tester.test/_asset/puppeteer/Puppeteer.test.s
+          - ../proto/dwtools/atop/tester.test/_asset/requireTesting
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/requireTesting/Suite.test.js
           - ../proto/dwtools/atop/tester.test/_asset/spectron
           - ../proto/dwtools/atop/tester.test/_asset/spectron/index.html
           - ../proto/dwtools/atop/tester.test/_asset/spectron/Spectron.test.s

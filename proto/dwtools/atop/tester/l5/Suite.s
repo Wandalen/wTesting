@@ -63,6 +63,8 @@ function init( o )
 
   _.workpiece.initFields( suite );
 
+  suite.accuracyExplicitly = null;
+
   Object.preventExtensions( suite );
 
   if( _.routineIs( o.inherit ) )
@@ -231,9 +233,17 @@ function _accuracySet( accuracy )
   let suite = this;
 
   if( accuracy === null )
-  accuracy = _.accuracy;
+  {
+    accuracy = _.accuracy;
+    suite.accuracyExplicitly = null;
+  }
+  else
+  {
+    accuracy = _.make( accuracy );
+    suite.accuracyExplicitly = accuracy;
+  }
 
-  _.assert( _.numberIs( accuracy ), 'Expects number {-accuracy-}' );
+  _.assert( _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'Expects number {-accuracy-}' );
   suite[ accuracySymbol ] = accuracy;
 
   if( suite._formed )
@@ -1379,6 +1389,8 @@ let Composes =
   usingSourceCode : 1,
   ignoringTesterOptions : 0,
 
+  // accuracyRange : null,
+  accuracyExplicitly : null,
   accuracy : 1e-7,
   report : null,
 

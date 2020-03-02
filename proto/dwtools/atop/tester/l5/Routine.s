@@ -14,7 +14,6 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.processIsDebugged();
-// debugged = 0;
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -169,17 +168,33 @@ function _accuracyChange()
   return null;
 
   if( _.numberIs( trd[ accuracySymbol ] ) )
-  result = trd[ accuracySymbol ];
+  {
+    result = trd[ accuracySymbol ];
+  }
   else
-  result = trd.suite.accuracy;
-
-  if( _.arrayIs( trd[ accuracySymbol ] ) )
-  result = _.numberClamp( result, trd[ accuracySymbol ] );
+  {
+    if( _.rangeIs( trd[ accuracySymbol ] ) )
+    {
+      _.assert( _.rangeIs( trd[ accuracySymbol ] ) );
+      if( trd.suite.accuracyExplicitly !== null )
+      result = trd.suite.accuracyExplicitly
+      else
+      result = trd[ accuracySymbol ][ 0 ];
+      if( _.rangeIs( result ) )
+      result = result[ 0 ];
+      result = _.numberClamp( result, trd[ accuracySymbol ] );
+    }
+    else
+    {
+      result = trd.suite.accuracy;
+      if( _.rangeIs( result ) )
+      result = result[ 0 ];
+    }
+  }
 
   _.assert( _.numberDefined( result ) );
 
   trd[ accuracyEffectiveSymbol ] = result;
-
   return result;
 }
 
@@ -234,10 +249,16 @@ function _rapiditySet( rapidity )
 function _usingSourceCodeGet()
 {
   let trd = this;
+
   if( trd[ usingSourceCodeSymbol ] !== null )
   return trd[ usingSourceCodeSymbol ];
+
+  if( trd.rapidity < 0 && trd.suite.routine !== trd.name )
+  return false;
+
   if( trd.suite.usingSourceCode !== null )
   return trd.suite.usingSourceCode;
+
   _.assert( 0 );
 }
 
@@ -1297,6 +1318,7 @@ function _outcomeReport( o )
     if( trd.usingSourceCode && o.usingSourceCode )
     {
       let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 4 });
+      debugger;
       let _code = _.introspector.code
       ({
         location : _location,

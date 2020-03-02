@@ -524,7 +524,7 @@ function optionSuite( test )
 
 //
 
-function optionAccuracy( test )
+function optionAccuracyExplicitly( test )
 {
   let self = this;
   let a = self.assetFor( test );
@@ -536,7 +536,7 @@ function optionAccuracy( test )
   a.ready
   .then( () =>
   {
-    test.case = 'tst .run ** v:5 s:0'
+    test.case = 'tst .run **';
     return null;
   })
 
@@ -545,9 +545,140 @@ function optionAccuracy( test )
   {
     test.identical( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, `routine1.accuracy : ${test.accuracy*test.accuracy}` ), 1 );
-    test.identical( _.strCount( got.output, `routine2.accuracy : ${test.accuracy*1e-1}` ), 1 );
-    test.identical( _.strCount( got.output, `routine3.accuracy : ${test.accuracy*10}` ), 1 );
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : ${_.accuracy*1e-1}` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${Math.sqrt( _.accuracy )}` ), 1 );
+    test.identical( _.strCount( got.output, `routine4.accuracy : 10` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** accuracy:1e-10';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** accuracy:1e-10` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : 1e-10` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${_.accuracy*10}` ), 1 );
+    test.identical( _.strCount( got.output, `routine4.accuracy : 1e-10` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** accuracy:0.01';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** accuracy:0.01` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : ${_.accuracy*1e-1}` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${Math.sqrt( _.accuracy )}` ), 1 );
+    test.identical( _.strCount( got.output, `routine4.accuracy : 0.01` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+optionAccuracyExplicitly.description =
+`
+- option accuracy of test routine change accuracy of test routine
+- option accuracy of test routine could be range
+`
+
+//
+
+function optionAccuracy( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run **';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${_.accuracy*10}` ), 1 );
+    test.identical( _.strCount( got.output, `routine4.accuracy : ${_.accuracy}` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** accuracy:1e-10';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** accuracy:1e-10` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : 1e-10` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${_.accuracy*10}` ), 1 );
+    test.identical( _.strCount( got.output, `routine4.accuracy : 1e-10` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** accuracy:0.01';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** accuracy:0.01` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `routine1.accuracy : ${_.accuracy*_.accuracy}` ), 1 );
+    test.identical( _.strCount( got.output, `routine2.accuracy : ${_.accuracy*1e-1}` ), 1 );
+    test.identical( _.strCount( got.output, `routine3.accuracy : ${Math.sqrt( _.accuracy )}` ), 1 );
+    test.identical( _.strCount( got.output, `routine4.accuracy : 0.01` ), 1 );
 
     return null;
   })
@@ -561,6 +692,76 @@ optionAccuracy.description =
 `
 - option accuracy of test routine change accuracy of test routine
 - option accuracy of test routine could be range
+`
+
+//
+
+function optionRapidityAndSourceCode( test )
+{
+  let self = this;
+  let a = self.assetFor( test );
+
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:8 rapidity:-9';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-9` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `Passed TestSuite::optionRapidityAndSourceCode / TestRoutine::routine1` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::optionRapidityAndSourceCode / TestRoutine::routine2` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::optionRapidityAndSourceCode / TestRoutine::routine3` ), 1 );
+
+    test.identical( _.strCount( got.output, `function routine1( test )` ), 1 );
+    test.identical( _.strCount( got.output, `function routine2( test )` ), 0 );
+    test.identical( _.strCount( got.output, `function routine3( test )` ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:8 rapidity:-9 r:routine2';
+    return null;
+  })
+
+  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-9 r:routine2` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `Passed TestSuite::optionRapidityAndSourceCode / TestRoutine::routine1` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::optionRapidityAndSourceCode / TestRoutine::routine2` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::optionRapidityAndSourceCode / TestRoutine::routine3` ), 0 );
+
+    test.identical( _.strCount( got.output, `function routine1( test )` ), 0 );
+    test.identical( _.strCount( got.output, `function routine2( test )` ), 1 );
+    test.identical( _.strCount( got.output, `function routine3( test )` ), 0 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+optionRapidityAndSourceCode.description =
+`
+- rapidity below zero switch off usingSourceCode
+- but if option routine used then rapidity does not swtich off usingSourceCode
 `
 
 //
@@ -1331,7 +1532,9 @@ var Self =
     checkFails,
     double,
     optionSuite,
+    optionAccuracyExplicitly,
     optionAccuracy,
+    optionRapidityAndSourceCode,
     requireTesting,
     noTestCheck,
     asyncTimeOut,

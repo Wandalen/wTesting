@@ -38,6 +38,14 @@ routine3.accuracy = [ accuracy3, accuracy4 ];
 
 //
 
+function routine4( test )
+{
+  test.identical( 1, 1 );
+  console.log( `${test.name}.accuracy : ${test.accuracy}` );
+}
+
+//
+
 var Self1 =
 {
   name : 'OptionAccuracy1',
@@ -47,6 +55,7 @@ var Self1 =
     routine1,
     routine2,
     routine3,
+    routine4,
 
   }
 }

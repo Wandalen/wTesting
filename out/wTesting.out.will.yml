@@ -260,7 +260,13 @@ module:
             ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionAccuracy
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/optionAccuracy/OptionAccuracy1.test.js
+            ../proto/dwtools/atop/tester.test/_asset/optionAccuracy/Suite.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionAccuracyExplicitly
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/optionAccuracyExplicitly/Suite.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionRapidityAndSourceCode
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/optionRapidityAndSourceCode/Suite.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A1.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A2.test.js

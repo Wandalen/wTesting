@@ -1318,7 +1318,6 @@ function _outcomeReport( o )
     if( trd.usingSourceCode && o.usingSourceCode )
     {
       let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 4 });
-      debugger;
       let _code = _.introspector.code
       ({
         location : _location,

@@ -7020,7 +7020,7 @@ function onSuiteEndTimeOut( test )
   }
 
   function onSuiteEnd()
-  { 
+  {
     let con = new _.Consequence();
     return con;
   }
@@ -7040,7 +7040,7 @@ function onSuiteEndTimeOut( test )
   .finally( function( err, suites )
   {
     var got = _.select( suites, '*/report' )[ 0 ];
-    
+
     test.identical( got.outcome, false );
     test.identical( got.errorsArray.length, 1 );
     test.identical( got.errorsArray[ 0 ].reason, 'time out' );
@@ -7057,7 +7057,7 @@ function onSuiteEndTimeOut( test )
     test.is( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
-    
+
     return null;
   });
 
@@ -7073,11 +7073,11 @@ function onSuiteEndErrorInConsequence( test )
     t.case = 'trivial'
     t.identical( 1, 1 );
   }
-  
+
   let ConError = _.err( 'Error from onSuiteEnd' )
 
   function onSuiteEnd()
-  { 
+  {
     let con = new _.Consequence().error( ConError );
     return con;
   }
@@ -7129,9 +7129,9 @@ function onSuiteEndNormalConsequence( test )
     t.case = 'trivial'
     t.identical( 1, 1 );
   }
-  
+
   function onSuiteEnd()
-  { 
+  {
     let con = new _.Consequence().take( 1 );
     return con;
   }
@@ -7181,9 +7181,9 @@ function onSuiteEndDelayedConsequence( test )
     t.case = 'trivial'
     t.identical( 1, 1 );
   }
-  
+
   function onSuiteEnd()
-  { 
+  {
     let con = _.time.out( 2000, () => 1 )
     return con;
   }
@@ -7197,15 +7197,15 @@ function onSuiteEndDelayedConsequence( test )
   });
 
   /* */
-  
+
   var t1 = _.time.now();
   var result = wTester.test([ suite1 ])
   .finally( function( err, suites )
-  { 
+  {
     var t2 = _.time.now();
-    
+
     test.ge( t2 - t1, 2000 );
-    
+
     var got = _.select( suites, '*/report' )[ 0 ];
 
     test.identical( got.outcome, true );
@@ -7829,7 +7829,7 @@ function processWatchingOnDefault( test )
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
     _.each( suite._processWatcherMap, ( o ) =>
     {
-      test.is( _.process.isRunning( o.process.pid ) )
+      test.is( _.process.isAlive( o.process.pid ) )
     })
 
     test.is( err === undefined );
@@ -7844,7 +7844,7 @@ function processWatchingOnDefault( test )
       test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
       _.each( suite._processWatcherMap, ( o ) =>
       {
-        test.is( !_.process.isRunning( o.process.pid ) )
+        test.is( !_.process.isAlive( o.process.pid ) )
       })
       return null;
     })
@@ -7903,7 +7903,7 @@ function processWatchingOnExplicit( test )
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
     _.each( suite._processWatcherMap, ( o ) =>
     {
-      test.is( _.process.isRunning( o.process.pid ) )
+      test.is( _.process.isAlive( o.process.pid ) )
     })
 
     test.is( err === undefined );
@@ -7918,7 +7918,7 @@ function processWatchingOnExplicit( test )
       test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
       _.each( suite._processWatcherMap, ( o ) =>
       {
-        test.is( !_.process.isRunning( o.process.pid ) )
+        test.is( !_.process.isAlive( o.process.pid ) )
       })
       return null;
     })
@@ -7970,7 +7970,7 @@ function processWatchingOff( test )
     test.identical( suite.report.errorsArray.length, 0 );
     test.identical( suite.report.testCheckFails, 0 );
     test.identical( suite._processWatcherMap, null );
-    test.is( _.process.isRunning( o.process.pid ) )
+    test.is( _.process.isAlive( o.process.pid ) )
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -7984,7 +7984,7 @@ function processWatchingOff( test )
 
     return _.time.out( 1000, () =>
     {
-      test.is( !_.process.isRunning( o.process.pid ) )
+      test.is( !_.process.isAlive( o.process.pid ) )
       return null;
     })
   });
@@ -8040,7 +8040,7 @@ function processWatchingRoutineTimeOut( test )
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
     _.each( suite._processWatcherMap, ( o ) =>
     {
-      test.is( _.process.isRunning( o.process.pid ) )
+      test.is( _.process.isAlive( o.process.pid ) )
     })
 
     test.is( err === undefined );
@@ -8055,7 +8055,7 @@ function processWatchingRoutineTimeOut( test )
       test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
       _.each( suite._processWatcherMap, ( o ) =>
       {
-        test.is( !_.process.isRunning( o.process.pid ) )
+        test.is( !_.process.isAlive( o.process.pid ) )
       })
       return null;
     })
@@ -8113,7 +8113,7 @@ function processWatchingErrorInTestRoutine( test )
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
     _.each( suite._processWatcherMap, ( o ) =>
     {
-      test.is( _.process.isRunning( o.process.pid ) )
+      test.is( _.process.isAlive( o.process.pid ) )
     })
 
     test.is( err === undefined );
@@ -8128,7 +8128,7 @@ function processWatchingErrorInTestRoutine( test )
       test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
       _.each( suite._processWatcherMap, ( o ) =>
       {
-        test.is( !_.process.isRunning( o.process.pid ) )
+        test.is( !_.process.isAlive( o.process.pid ) )
       })
       return null;
     })
@@ -8189,7 +8189,7 @@ function processWatchingOnSuiteBegin( test )
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
     _.each( suite._processWatcherMap, ( o ) =>
     {
-      test.is( _.process.isRunning( o.process.pid ) )
+      test.is( _.process.isAlive( o.process.pid ) )
     })
 
     test.is( err === undefined );
@@ -8204,7 +8204,7 @@ function processWatchingOnSuiteBegin( test )
       test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
       _.each( suite._processWatcherMap, ( o ) =>
       {
-        test.is( !_.process.isRunning( o.process.pid ) )
+        test.is( !_.process.isAlive( o.process.pid ) )
       })
       return null;
     })
@@ -8265,7 +8265,7 @@ function processWatchingOnSuiteEnd( test )
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
     _.each( suite._processWatcherMap, ( o ) =>
     {
-      test.is( _.process.isRunning( o.process.pid ) )
+      test.is( _.process.isAlive( o.process.pid ) )
     })
 
     test.is( err === undefined );
@@ -8280,7 +8280,7 @@ function processWatchingOnSuiteEnd( test )
       test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
       _.each( suite._processWatcherMap, ( o ) =>
       {
-        test.is( !_.process.isRunning( o.process.pid ) )
+        test.is( !_.process.isAlive( o.process.pid ) )
       })
       return null;
     })

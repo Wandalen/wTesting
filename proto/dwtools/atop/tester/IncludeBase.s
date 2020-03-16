@@ -35,7 +35,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wRoutineBasic' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
-  _.includeAny( 'wEventHandler','' );
+  _.includeFirst( 'wEventHandler', _.optional );
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
   _.include( 'wFiles' );
@@ -43,7 +43,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wStringsExtra' );
   _.include( 'wCommandsAggregator' );
 
-  // _.includeAny( 'wScriptLauncher' );
+  // _.includeFirst( 'wScriptLauncher' );
 
   _.assert( !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_, 'wTester is already included' );
 

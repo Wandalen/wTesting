@@ -156,6 +156,13 @@
 </details>
 
 <details>
+  <summary><a href="./tutorial/TestRoutineStepByStep.md">
+    Покрокове написання тест рутини
+  </a></summary>
+    Написання тестового покриття до рутини <code>numberIs</code>. 
+</details>
+
+<details>
   <summary><a href="./tutorial/Report.md">
     Як читати звіт та групувати перевірки
   </a></summary>

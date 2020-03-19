@@ -826,17 +826,8 @@ function _end( err )
 
     /* process exit handler */
 
-    // if( _global_.process && suite._terminated_joined && suite.takingIntoAccount )
-    // {
-    //   _global_.process.removeListener( 'exit', suite._terminated_joined );
-    //   suite._terminated_joined = null;
-    // }
-
     if( _.process && suite._terminated_joined && suite.takingIntoAccount )
     {
-      // _global_.process.removeListener( 'exit', suite._terminated_joined );
-      // debugger;
-      // console.log( `_.process.off( 'exit', suite._terminated_joined )` );
       if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
       _.process.off( 'exit', suite._terminated_joined );
       suite._terminated_joined = null;

@@ -3547,7 +3547,7 @@ function assetFor( a )
   program.defaults =
   {
     routine : null,
-    globals : null,
+    locals : null,
   }
 
   return a;
@@ -3615,7 +3615,7 @@ function assetFor( a )
     let o2 = _.program.write
     ({
       routine : o.routine,
-      globals : o.globals,
+      locals : o.locals,
       tempPath : a.abs( '.' ),
     });
 

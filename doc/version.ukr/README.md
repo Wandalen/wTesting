@@ -170,6 +170,13 @@
 </details>
 
 <details>
+  <summary><a href="./tutorial/TestRoutineAdvancedTechnics.md">
+    Розширені техніки
+  </a></summary>
+    Описано прийоми і техніки, що роблять тест рутину зручною для читання і підтримки.
+</details>
+
+<details>
   <summary><a href="./tutorial/Report.md">
     Як читати звіт та групувати перевірки
   </a></summary>

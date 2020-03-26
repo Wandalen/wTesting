@@ -177,10 +177,10 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestRoutine.md">
-    Як писати тест рутину
+  <summary><a href="./tutorial/TestSuiteStructure.md">
+    Огляд структурних одиниць тест сюіта
   </a></summary>
-    Основні правила написання тест рутин.
+    Особливості структурних одиниць тест сюіта, підхід в використанні.
 </details>
 
 <details>

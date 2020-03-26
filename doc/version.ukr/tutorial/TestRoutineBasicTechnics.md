@@ -65,13 +65,13 @@ strSplitInlinedOptionStripping,
 ```js
 test.case = 'src is positive integer';
 var src = 5;
-var got = num.numberIs( src );
+var got = _.numberIs( src );
 var expected = true;
 test.identical( got, expected );
 
 test.case = 'src is negative integer';
 var src = -1 * src;
-var got = num.numberIs( src );
+var got = _.numberIs( src );
 test.identical( got, expected );
 ```
 

@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   if( !_global_.wBase || _global_.__GLOBAL_WHICH__ !== 'real' )
   {
-    let toolsPath = '../../../dwtools/Base.s';
+    let toolsPath = '../../../dwtools/Tools.s';
     let _externalTools = 0;
     try
     {

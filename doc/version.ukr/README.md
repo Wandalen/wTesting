@@ -87,7 +87,7 @@
   <summary><a href="./concept/TestingStatus.md#Провалене-тестування">
     Провалене тестування
   </a></summary>
-    Результат виконання тестування, котрий містить принаймні одну помилку тестування.  
+    Результат виконання тестування, котрий містить принаймні одну помилку тестування.
 </details>
 
 <details>
@@ -159,7 +159,14 @@
   <summary><a href="./tutorial/TestRoutineStepByStep.md">
     Покрокове написання тест рутини
   </a></summary>
-    Написання тестового покриття до рутини <code>numberIs</code>. 
+    Написання тестового покриття до рутини <code>numberIs</code>.
+</details>
+
+<details>
+  <summary><a href="./tutorial/TestRoutineBasicTechnics.md">
+    Базові техніки
+  </a></summary>
+    Описано базові навички написання тест рутин та найпоширеніші помилки.
 </details>
 
 <details>

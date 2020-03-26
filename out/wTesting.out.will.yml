@@ -264,6 +264,9 @@ module:
           - ../proto/dwtools/atop/tester.test/_asset/optionAccuracyExplicitly
           - >-
             ../proto/dwtools/atop/tester.test/_asset/optionAccuracyExplicitly/Suite.test.js
+          - ../proto/dwtools/atop/tester.test/_asset/optionRapidity
+          - >-
+            ../proto/dwtools/atop/tester.test/_asset/optionRapidity/OptionRapidity.test.js
           - ../proto/dwtools/atop/tester.test/_asset/optionRapidityAndSourceCode
           - >-
             ../proto/dwtools/atop/tester.test/_asset/optionRapidityAndSourceCode/Suite.test.js

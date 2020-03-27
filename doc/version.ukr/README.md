@@ -164,7 +164,7 @@
 
 <details>
   <summary><a href="./tutorial/TestRoutineBasicTechnics.md">
-    Базові техніки
+    Техніка розробки тестів
   </a></summary>
     Описано базові навички написання тест рутин та найпоширеніші помилки.
 </details>
@@ -184,10 +184,10 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestSuiteStructure.md">
-    Огляд структурних одиниць тест сюіта
+  <summary><a href="./tutorial/TestSuiteDesign.md">
+    Оформлення тест сюіта
   </a></summary>
-    Особливості структурних одиниць тест сюіта, підхід в використанні.
+    Описано структуру тест сюіта, підхід в використанні елементів.
 </details>
 
 <details>

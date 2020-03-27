@@ -84,7 +84,7 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 </details>
 
 <details>
-  <summary><a href="./concept/TestOption.md#Опція-тест-рутини">
+  <summary><a href="./concept/TestOption.md#Test-routine-option">
     Test routine option
   </a></summary>
     The control parameter of the testing that is specified in a separate test routine.

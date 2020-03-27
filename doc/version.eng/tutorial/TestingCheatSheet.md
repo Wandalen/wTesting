@@ -269,7 +269,7 @@ Passes if the routine does not throws an error either synchronously or asynchron
 test.shouldReturnSingleResource( routine arg );
 ```
 
-Passes if the routine ends synchronously or the concequence returns only one resource.
+Passes if the routine ends synchronously or the consequence returns only one resource.
 
 ```
 test.shouldThrowErrorSync( routine arg );

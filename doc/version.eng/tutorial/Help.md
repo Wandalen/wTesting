@@ -5,7 +5,7 @@ How to get help.
 All commands of the utility start with `tst .`, so enter the command in the console and compare.
 
 <details>
-  <summary><u>Вивід команди <code>tst .</code></u></summary>
+  <summary><u>Command output <code>tst .</code></u></summary>
 
 ```
 [user@user ~]$ tst .
@@ -44,7 +44,7 @@ Tester options
   beeping : Make diagnosticBeep sound after testing to let developer know it's done.
   coloring : Switch on/off coloring.
   timing : Switch on/off measuing of time.
-  rapidity : How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3.
+  rapidity : How rapid testing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing 0 or 1 should be used. 5 for the fastest. Default is 3.
   routineTimeOut : Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.
   concurrent : Runs test suite in parallel with other test suites.
   verbosity : Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"
@@ -209,7 +209,7 @@ The `tst .imply testRoutineTimeOut:60000 .run path/to/dir` command gives each te
 
 ##### Run option `concurrent`
 
-Desined to enable parallel execution of test suites.
+Designed to enable parallel execution of test suites.
 
 The utility can run more than one test suite at the same time if there are several test suites in the specified directory.
 

@@ -8,7 +8,7 @@
 ```
 testHello
     ├── Join.js
-    ├── Join.test.js    
+    ├── Join.test.js
     └── package.json
 ```
 
@@ -21,7 +21,7 @@ testHello
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -41,7 +41,7 @@ module.exports.join = function( a, b )
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
-```JavaScript    
+```JavaScript
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -110,7 +110,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>package.json</code></u></summary>
 
-```json    
+```json
 {
   "dependencies": {
     "wTesting": ""
@@ -145,7 +145,7 @@ wTester.test( Self.name );
 ### Cекція запуску тест сюіта
 
 Рядки 39-41 містять функції для запуску тестування.
-В 39-ому рядку відбувається створення тест сюіта. А в рядках 40-41 відбувається його запуска. Без рядків 40-41 тест файл не можливо буде запустити напряму `node Join.test.js`.
+В 39-ому рядку відбувається створення тест сюіта. А в рядках 40-41 відбувається його запуск. Без рядків 40-41 тест файл не можливо буде запустити напряму `node Join.test.js`.
 
 ### Підсумок
 

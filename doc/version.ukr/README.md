@@ -87,7 +87,7 @@
   <summary><a href="./concept/TestingStatus.md#Провалене-тестування">
     Провалене тестування
   </a></summary>
-    Результат виконання тестування, котрий містить принаймні одну помилку тестування.  
+    Результат виконання тестування, котрий містить принаймні одну помилку тестування.
 </details>
 
 <details>
@@ -159,7 +159,21 @@
   <summary><a href="./tutorial/TestRoutineStepByStep.md">
     Покрокове написання тест рутини
   </a></summary>
-    Написання тестового покриття до рутини <code>numberIs</code>. 
+    Написання тестового покриття до рутини <code>numberIs</code>.
+</details>
+
+<details>
+  <summary><a href="./tutorial/TestRoutineBasicTechnics.md">
+    Базові техніки
+  </a></summary>
+    Описано базові навички написання тест рутин та найпоширеніші помилки.
+</details>
+
+<details>
+  <summary><a href="./tutorial/TestRoutineAdvancedTechnics.md">
+    Розширені техніки
+  </a></summary>
+    Описано прийоми і техніки, що роблять тест рутину зручною для читання і підтримки.
 </details>
 
 <details>
@@ -170,10 +184,10 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestRoutine.md">
-    Як писати тест рутину
+  <summary><a href="./tutorial/TestSuiteStructure.md">
+    Огляд структурних одиниць тест сюіта
   </a></summary>
-    Основні правила написання тест рутин.
+    Особливості структурних одиниць тест сюіта, підхід в використанні.
 </details>
 
 <details>

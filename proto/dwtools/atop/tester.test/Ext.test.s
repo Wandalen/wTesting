@@ -4,7 +4,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../Tools.s' );
+  let _ = require( '../../../dwtools/Tools.s' );
 
   require( '../tester/MainTop.s' );
   _.include( 'wAppBasic' );
@@ -26,7 +26,7 @@ function onSuiteBegin()
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
   self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
-  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../../dwtools/Tools.s' ) );
 
 }
 

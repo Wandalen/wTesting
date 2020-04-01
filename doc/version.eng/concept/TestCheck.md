@@ -336,7 +336,7 @@ test.shouldThrowErrorAsync( function()
 
 The `test.shouldThrowErrorAsync` check will be passed as the specified routine throws asynchronous error. The routine `timeOut` returns consequence with `_.err( 'test' )` error.
 
-##### Тест перевірка `shouldThrowErrorOfAnyKind`
+##### Test check `shouldThrowErrorOfAnyKind`
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
@@ -398,7 +398,7 @@ The `test.mustNotThrowError` check will be passed as the asynchronous routine `r
 
 Expects one argument in the form of a routine, which runs without arguments to test its work.
 
-The check passes if the routine ends synchronously or the concequence returns only one resource.
+The check passes if the routine ends synchronously or the consequence returns only one resource.
 
 The check fails if its consequence receives several messages.
 

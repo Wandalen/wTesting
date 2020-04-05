@@ -8,7 +8,7 @@ To install `Testing` you need an installed Node.js®. If you do not have it then
 
 ### Installation of `Testing`
 
-After you have installed Nodejs, open a operating system console and run the following command:
+After you have installed NodeJS, open a operating system console and run the following command:
 
 ```
 npm install -g wTesting
@@ -43,6 +43,6 @@ node dir/TestSuite2.test.js
 
 - `wTesting` can be installed by NPM.
 - `wTesting` can be installed locally and globally.
-- Nodejs is required for `wTesting`.
+- NodeJS is required for `wTesting`.
 
 [Back to content](../README.md#Tutorials)

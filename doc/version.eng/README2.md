@@ -7,9 +7,9 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 ## Concepts
 
 - [Test unit](./concept/TestObject.md)
-- [Test suite](./concept/TestSuite.md)    
-- [Test routine](./concept/TestRoutine.md)   
-- [Test check](./concept/TestCheck.md)     
+- [Test suite](./concept/TestSuite.md)
+- [Test routine](./concept/TestRoutine.md)
+- [Test check](./concept/TestCheck.md)
 - [Test case](./concept/TestCase.md)
 - [Group of test checks](./concept/TestCase.md)
 - [Test coverage](./concept/TestCoverage.md)

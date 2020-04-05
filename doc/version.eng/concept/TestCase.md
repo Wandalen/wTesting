@@ -20,7 +20,7 @@ The test routine `routine2` has the same structure as test routine `routine1`. I
 
 ![test.case.open2](../../images/test.case.open2.png)
 
-The test routine `routine3` has two test groups called `string` and `number`. They are grouped according to the type of arguments passed to the funtion `Join.join` being tested. The `string` group is described in lines 22-30, the` number` group is described in lines 31-39. The `string` group contains 2 test cases:` trivial` and `empty`, each of which has one check. The `number` group has a test case` trivial` and `zeroes` with one check in each. A report for the test routine can be seen in the tutorial about [how to read a report](Report.md).
+The test routine `routine3` has two test groups called `string` and `number`. They are grouped according to the type of arguments passed to the function `Join.join` being tested. The `string` group is described in lines 22-30, the` number` group is described in lines 31-39. The `string` group contains 2 test cases:` trivial` and `empty`, each of which has one check. The `number` group has a test case` trivial` and `zeroes` with one check in each. A report for the test routine can be seen in the tutorial about [how to read a report](Report.md).
 
 The structure of the routine test can be complex and have many levels of nesting.
 

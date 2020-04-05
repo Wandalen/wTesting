@@ -25,7 +25,7 @@ function onSuiteBegin()
 
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
-  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../../dwtools/Tools.s' ) );
 
 }
@@ -56,7 +56,7 @@ function assetFor( test, asset )
       if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
       return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
-      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.appJsPath )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
@@ -123,7 +123,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
+  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
@@ -147,7 +147,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
+  a.appStartNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
@@ -171,7 +171,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
@@ -195,7 +195,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
+  a.appStartNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -219,7 +219,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
+  a.appStartNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -243,7 +243,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
+  a.appStartNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -267,7 +267,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
+  a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -291,7 +291,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
+  a.appStartNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -315,7 +315,7 @@ function run( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
+  a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -357,7 +357,7 @@ function checkFails( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
+  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -381,7 +381,7 @@ function checkFails( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
+  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -454,7 +454,7 @@ function optionSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -478,7 +478,7 @@ function optionSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** suite:OptionSuiteA1` })
+  a.appStartNonThrowing({ execPath : `.run ** suite:OptionSuiteA1` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -502,7 +502,7 @@ function optionSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** suite:*A*` })
+  a.appStartNonThrowing({ execPath : `.run ** suite:*A*` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -540,7 +540,7 @@ function optionAccuracyExplicitly( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -562,7 +562,7 @@ function optionAccuracyExplicitly( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** accuracy:1e-10` })
+  a.appStartNonThrowing({ execPath : `.run ** accuracy:1e-10` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -584,7 +584,7 @@ function optionAccuracyExplicitly( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** accuracy:0.01` })
+  a.appStartNonThrowing({ execPath : `.run ** accuracy:0.01` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -626,7 +626,7 @@ function optionAccuracy( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -648,7 +648,7 @@ function optionAccuracy( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** accuracy:1e-10` })
+  a.appStartNonThrowing({ execPath : `.run ** accuracy:1e-10` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -670,7 +670,7 @@ function optionAccuracy( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** accuracy:0.01` })
+  a.appStartNonThrowing({ execPath : `.run ** accuracy:0.01` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -712,7 +712,7 @@ function optionRapidityAndSourceCode( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-9` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-9` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -737,7 +737,7 @@ function optionRapidityAndSourceCode( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-9 r:routine2` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-9 r:routine2` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -782,7 +782,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-9` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-9` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -820,7 +820,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-8` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-8` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -859,7 +859,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-5` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-5` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -898,7 +898,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-3` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-3` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -937,7 +937,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-1` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-1` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -976,7 +976,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:0` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:0` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1015,7 +1015,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1054,7 +1054,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:1` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:1` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1093,7 +1093,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:3` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:3` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1132,7 +1132,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:5` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:5` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1171,7 +1171,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:8` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:8` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1210,7 +1210,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:9` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:9` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1249,7 +1249,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:-11` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:-11` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1288,7 +1288,7 @@ function optionRapidity( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:8 rapidity:11` })
+  a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:11` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -1343,7 +1343,7 @@ function requireTesting( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -1377,7 +1377,7 @@ function noTestCheck( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -1413,7 +1413,7 @@ function asyncTimeOut( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -1449,7 +1449,7 @@ function checksAfterTimeOut( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:5` })
+  a.appStartNonThrowing({ execPath : `.run ** v:5` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -1499,7 +1499,7 @@ function checksAfterTimeOutSilenced( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `.run ** v:5` })
+  a.appStartNonThrowing({ execPath : `.run ** v:5` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -1548,7 +1548,7 @@ function timeOutExternalMessage( test )
     return null;
   })
 
-  a.js({ execPath : `.run ** v:5` })
+  a.appStart{ execPath : `.run ** v:5` })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -1645,7 +1645,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : 'proto' })
+  a.appStartNonThrowing({ args : 'proto' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1665,7 +1665,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : 'proto/dwtools' })
+  a.appStartNonThrowing({ args : 'proto/dwtools' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1684,7 +1684,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : 'proto/**' })
+  a.appStartNonThrowing({ args : 'proto/**' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1703,7 +1703,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : a.path.nativize( a.abs( '.' ) ) })
+  a.appStartNonThrowing({ args : a.path.nativize( a.abs( '.' ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1722,7 +1722,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : a.path.nativize( a.abs( '**' ) ) })
+  a.appStartNonThrowing({ args : a.path.nativize( a.abs( '**' ) ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1741,7 +1741,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : a.abs( '.' ) })
+  a.appStartNonThrowing({ args : a.abs( '.' ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1760,7 +1760,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : '.run ' + a.abs( '.' ) })
+  a.appStartNonThrowing({ args : '.run ' + a.abs( '.' ) })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1779,7 +1779,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : 'n:1' })
+  a.appStartNonThrowing({ args : 'n:1' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1798,7 +1798,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.jsNonThrowing({ args : '.run n:1' })
+  a.appStartNonThrowing({ args : '.run n:1' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1833,7 +1833,7 @@ function help( test )
     return null;
   })
 
-  a.jsNonThrowing( '' )
+  a.appStartNonThrowing( '' )
 
   .then( ( got ) =>
   {
@@ -1854,7 +1854,7 @@ function help( test )
     return null;
   })
 
-  a.jsNonThrowing( '.' )
+  a.appStartNonThrowing( '.' )
 
   .then( ( got ) =>
   {
@@ -1866,7 +1866,7 @@ function help( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : '.help' })
+  a.appStartNonThrowing({ execPath : '.help' })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -1876,7 +1876,7 @@ function help( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : '.' })
+  a.appStartNonThrowing({ execPath : '.' })
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
@@ -1886,7 +1886,7 @@ function help( test )
 
   /* */
 
-  a.jsNonThrowing({ args : [] })
+  a.appStartNonThrowing({ args : [] })
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
@@ -1907,7 +1907,7 @@ function version( test )
 
   /* */
 
-  a.jsNonThrowing( '.version' )
+  a.appStartNonThrowing( '.version' )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -1948,7 +1948,7 @@ function manualTermination( test )
   {
     execPath : `${a.abs( 'manualTermination.test.js' )} v:7`,
   };
-  a.jsNonThrowing( o )
+  a.appStartNonThrowing( o )
 
   /* */
 
@@ -1984,7 +1984,7 @@ function asyncErrorHandling( test )
   {
     execPath : `${a.abs( 'asyncErrorHandling.test.js' )} v:7`,
   };
-  a.jsNonThrowing( o )
+  a.appStartNonThrowing( o )
 
   a.ready
   .then( ( op ) =>
@@ -2016,7 +2016,7 @@ function onSuiteEndReturnConsequence( test )
 
   /* - */
 
-  a.jsNonThrowing({ execPath : `TimeOutInOnSuiteEnd.test.js` })
+  a.appStartNonThrowing({ execPath : `TimeOutInOnSuiteEnd.test.js` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -2026,7 +2026,7 @@ function onSuiteEndReturnConsequence( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `ErrorMessageByConsequence.test.js` })
+  a.appStartNonThrowing({ execPath : `ErrorMessageByConsequence.test.js` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -2036,7 +2036,7 @@ function onSuiteEndReturnConsequence( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `NormalMessageByConsequence.test.js` })
+  a.appStartNonThrowing({ execPath : `NormalMessageByConsequence.test.js` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -2045,7 +2045,7 @@ function onSuiteEndReturnConsequence( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `DelayedMessageByConsequence.test.js` })
+  a.appStartNonThrowing({ execPath : `DelayedMessageByConsequence.test.js` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -2081,7 +2081,7 @@ var Self =
 
     suiteTempPath : null,
     assetsOriginalSuitePath : null,
-    execJsPath : null,
+    appJsPath : null,
     toolsPath : null,
 
   },

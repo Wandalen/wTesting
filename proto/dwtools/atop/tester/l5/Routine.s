@@ -3403,7 +3403,7 @@ function assetFor( a )
   _.sure( _.strDefined( a.assetName ) );
   _.sure( _.strDefined( context.suiteTempPath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
   _.sure( context.assetsOriginalSuitePath === null || _.strDefined( context.assetsOriginalSuitePath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
-  _.sure( context.execJsPath === null || _.strDefined( context.execJsPath ), `Test suite's context should have defined path to default JS file {- execJsPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( context.appJsPath === null || _.strDefined( context.appJsPath ), `Test suite's context should have defined path to default JS file {- appJsPath -}. But test suite ${suite.name} does not have.` );
 
   Object.setPrototypeOf( a, context );
 
@@ -3476,10 +3476,10 @@ function assetFor( a )
     mode : 'shell',
   })
 
-  if( a.js === null )
-  a.js = a.process.starter
+  if( a.appStart === null )
+  a.appStart = a.process.starter
   ({
-    execPath : context.execJsPath || null,
+    execPath : context.appJsPath || null,
     currentPath : a.routinePath,
     outputCollecting : 1,
     throwingExitCode : 1,
@@ -3488,10 +3488,32 @@ function assetFor( a )
     mode : 'fork',
   })
 
-  if( a.jsNonThrowing === null )
-  a.jsNonThrowing = a.process.starter
+  if( a.appStartNonThrowing === null )
+  a.appStartNonThrowing = a.process.starter
   ({
-    execPath : context.execJsPath || null,
+    execPath : context.appJsPath || null,
+    currentPath : a.routinePath,
+    outputCollecting : 1,
+    outputGraying : 1,
+    throwingExitCode : 0,
+    ready : a.ready,
+    mode : 'fork',
+  })
+
+  if( a.anotherStart === null )
+  a.anotherStart = a.process.starter
+  ({
+    currentPath : a.routinePath,
+    outputCollecting : 1,
+    throwingExitCode : 1,
+    outputGraying : 1,
+    ready : a.ready,
+    mode : 'fork',
+  })
+
+  if( a.anotherStartNonThrowing === null )
+  a.anotherStartNonThrowing = a.process.starter
+  ({
     currentPath : a.routinePath,
     outputCollecting : 1,
     outputGraying : 1,
@@ -3649,8 +3671,10 @@ assetFor.defaults =
   program : null,
   shell : null,
   shellNonThrowing : null,
-  js : null,
-  jsNonThrowing : null,
+  appStart : null,
+  appStartNonThrowing : null,
+  anotherStart : null,
+  anotherStartThrowing : null,
   find : null,
   findAll : null,
 

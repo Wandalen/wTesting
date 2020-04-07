@@ -135,7 +135,7 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/Help.md">
+  <summary><a href="./tutorial/Options.md">
     Опції запуску та опції сюіта
   </a></summary>
     Опції для управління процесом тестування.

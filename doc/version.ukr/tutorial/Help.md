@@ -12,7 +12,8 @@
 Command "."
 Ambiguity. Did you mean?
   .help - Get help.
-  .imply - Change state or imply variable value.
+  .version - Get current version.
+  .imply - Change state or imply value of a variable.
   .run - Run test suites found at a specified path.
   .suites.list - Find test suites at a specified path.
 ```
@@ -33,24 +34,28 @@ tst .help
 Command ".help"
 Known commands
   .help - Get help.
-  .imply - Change state or imply variable value.
+  .version - Get current version.
+  .imply - Change state or imply value of a variable.
   .run - Run test suites found at a specified path.
   .suites.list - Find test suites at a specified path.
 Tester options
-  scenario : Name of scenario to launch. To get scenarios list use scenario : "scenarios.list". Try: "node Some.test.js scenario:scenarios.list"
-  sanitareTime : Delay between runs of test suites and after the last to get sure nothing throwen asynchronously later.
-  fails : Maximum number of fails allowed before shutting down testing.
-  beeping : Make diagnosticBeep sound after testing to let developer know it's done.
-  coloring : Switch on/off coloring.
-  timing : Switch on/off measuing of time.
-  rapidity : How rapid teststing should be done. Increasing of the option decrase number of test routine to be executed. For rigorous testing -9 .. -5 should be used. +9 for the fastest testing. Default is 0.
-  routineTimeOut : Limits the time that each test routine can use. If execution of routine takes too long time then fail will be reaported and error throwen. Default is 5000 ms.
-  concurrent : Runs test suite in parallel with other test suites.
-  verbosity : Level of details of report. Zero for nothing, one for single line report, nine for maximum verbosity. Default is 5. Short-cut: "v". Try: "node Some.test.js v:2"
-  negativity : Increase verbosity of test checks which fails. It helps to see only fails and hide passes. Default is 9. Short-cut: "n".
-  silencing : Hooking and silencing of object's of testing console output to make clean report of testing.
-  shoulding : Switch on/off all should* tests checks.
-  accuracy : Change default accuracy. Each test routine could have own accuracy, which cant be overwritten by this option.
+  verbosity : Sets the verbosity of report. Accepts a value from 0 to 9. Default value is 4.
+  suite : Testing of separate test suite. Accepts name of test suite or a glob.
+  routine : Testing of separate test routine. Accepts name of test routine or a glob.
+  testRoutineTimeOut : Limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.
+  onSuiteEndTimeOut : Limits the execution time for onSuiteEnd handler. Accepts time in milliseconds. Default value is 15000ms.
+  accuracy : Sets the numeric deviation for the comparison of numerical values. Accepts numeric values of deviation. Default value is 1e-7.
+  sanitareTime : Sets the delay between completing the test suite and running the next one. Accepts time in milliseconds. Default value is 2000ms.
+  negativity : Restricts the console output of passed routines and increases output of failed test checks. Accepts a value from 0 to 9. Default value is 1.
+  silencing : Enables hiding the console output from the test unit. Accepts 0 or 1. Default value is 0.
+  shoulding : Disables negative testing. Accepts 0 or 1. Default value is 0.
+  fails : Sets the number of errors received to interrupt the test. Accepts number of fails. By default is unlimited.
+  beeping : Disables the beep after test completion. Accepts 0 or 1. Default value is 1.
+  coloring : Makes report colourful. Accepts 0 or 1. Default value is 1.
+  timing : Disables measurement of time spent on testing. Accepts 0 or 1. Default value is 1.
+  debug : Sets value of Config.debug. Accepts 0 or 1. Default value is null, utility does not change debug mode of test unit.
+  rapidity : Controls the amount of time spent on testing. Accepts values from -9 to +9. Default value is 0.
+  concurrent : Enables parallel execution of test suites. Accepts 0 or 1. Default value is 0.
 ```
 
 </details>
@@ -58,218 +63,12 @@ Tester options
 Виводиться довідка як про команди, так і про опції процесу тестування. Наприклад, команда `.suites.list` виводить перелік доступних сюітів без виконання фактичного тестування, а опція `verbosity` дає можливість керувати рівнем вербальності звітів.
 
 Також, для окремої команди можна отримати довідку. Для цього після вводу `tst .help` потрібно вказати назву команди, наприклад, `tst .help .suites.list`.
-<!--
-### Сценарії утиліти `Testing`
-
-Сценарій - опція, яка визначає поведінку утиліти при виконанні команди над файлами. Секція `Scenarios` довідки налічує п'ять сценаріїв.
-
-##### Сценарій `test`
-
-Встановлений за замовчуванням якщо при виклику передано шлях до тестів. Запускає тестування тест сюітів у вказаній директорії.
-
-Команда `tst path/to/dir scenario:test` знайде і запустить на виконання всі тест сюіти в директорії `path/to/dir`, що аналогічно команді `tst path/to/dir`
-
-##### Сценарій `help`
-
-Встановлений за замовчуванням якщо при виклику не передано шляху до тестів. Виводить перелік сценаріїв та опцій. Не робить читання або запис файлів.
-
-Команда `tst scenario:help` дасть повну довідку, що аналогічно виклику `tst` без жодних аргументів.
-
-##### Сценарій `options.list`
-
-Виводить довідку по опціям утиліти. Не робить читання або запис файлів.
-
-Команда `tst scenario:options.list` перерахує всі опції відомі утиліті `Testing`.
-
-##### Сценарій `scenarios.list`
-
-Виводить довідку по сценаріям утиліти. Не робить читання або запис файлів.
-
-Комадна `tst scenario:scenarios.list` видасть перелік сценаріїв відомі утиліті `Testing`.
-
-##### Сценарій `suites.list`
-
-Знаходить і перераховує всі тест сюіти у вказаній директорії. Запуск тестування не здійснюється.
-
-Команда `tst path/to/dir scenario:suites.list` перерахує всі тест сюіти в директорії `path/to/dir`.
--->
-
-### Опції запуску та опції сюіта
-
-Утиліта має опції призначені для управлінням процесом тестування.
-
-Опції запуску задаються при запуску через інтерфейс командного рядка:
-
-```
-tst .imply verbosity:7 .run
-```
-
-Рівень вербальноссті встановлений на рівень `7`.
-
-Тоді, як опції тест сюіта задаються в тестовому файлі:
-
-```js
-var Self =
-{
-
-  name : 'TestSuiteName',
-  verbosity : 9,
-
-  tests :
-  {
-    routine1,
-    routine2,
-  }
-
-}
-
-wTestSuite( Self );
-```
-
-Рівень вербальноссті встановлений на рівень `9`. Більшість опцій запуску має пріорітет над опціями тест сюіта. По цій причині, в прикладі рівень вербальності буде `7`, а не `9`.
-
-<!--
-##### Опція запуска `scenario`
-
-Здійснює запуск обраного сценарія утиліти. Перелік і опис сценаріїв приведено вище.
-
-Приклад виклику: `tst .imply scenario:suites.list .run path/to/dir`.
--->
-
-##### Опція запуска `sanitareTime`
-
-Встановлює затримку між завершенням тест сюіта і запуском наступного.
-
-Опція призначена для завершення виконання перевірок з асинхронними функціями. Вказується в мілісекундах. За замовчуванням встановлено 2000мс.
-
-Команда `tst .imply sanitareTime:1000 .run path/to/dir` здійснить тестування в указаній директорії, затримка перед запуском наступного тест сюіта встановлена в одну секунду.
-
-##### Опція запуска `fails`
-
-Встановлює кількість отриманих помилок для дострокового завершення тестування.
-
-При досягненні указаного числа помилок утиліта завершує тестування. За замовчуванням кількість помилок не обмежена.
-
-Команда `tst .imply fails:5 .run path/to/dir` здійснить тестування в указаній директорії, якщо при тестуванні буде провалено п'ять перевірок, то тестування завершиться.
-
-##### Опція запуска `beeping`
-
-Призначена для ввімкнення звукового оповіщення по завершенню тестування.
-
-Опція має два значення: 1 - ввімкнене, 0 - вимкнене. За замовчуванням - 1.
-
-Команда `tst .imply beeping:0 .run path/to/dir` завершить тестування тихо, не просигналізувавши звуковим сигналом.
-
-##### Опція запуска `coloring`
-
-Призначена для ввімкнення кольорового маркування звіту тестування.
-
-Опція має два значення: 1 - ввімкнене, 0 - вимкнене. За замовчуванням - 1.
-
-Приклад: `tst .imply coloring:0 .run path/to/dir`. Вивід звіту тестування буде простим, без кольорового маркування результатів.
-
-##### Опція запуска `timing`
-
-Призначена для ввімкнення замірів часу витраченого на тестування.
-
-Опція має два значення: 1 - ввімкнене, 0 - вимкнене. За замовчуванням - 1.
-
-Приклад: `tst .imply timing:0 .run path/to/dir`. Після завершення тестування у звіті буде відсутні дані про час тестування.
-
-##### Опція запуска `debug`
-
-Призначена для зміни дефолтного значення `Config.debug` для вимкнення асертів.
-
-Опція має два значення: 1 - ввімкнене, 0 - вимкнене. За замовчуванням - null, тому утиліта не змінює налаштувань `debug` об'єкта тестування.
-
-Приклад: `tst .imply debug:0 .run path/to/dir`. При тестуванні асерти будуть ігноруватись.
-
-##### Опція запуска `rapidity`
-
-Опція регулює час затрачений на тестування. Кожна тест рутина може мати власну опцію `rapidity` від `-9` до `+9`. За замовчуванням опція тест `rapidity` має значення `0`. При виконанні тестування із `rapidity` вищим за `rapidity` рутини? така рутина просто не виконується.
-
-Приймає значення від -9 до 9, де -9 - найповільніше тестування, +9 - найшвидше. За замовчуванням - 0.
-
-Команда `tst .imply rapidity:-9 .run path/to/dir` здійснить тестування кожної тест рутини.
-
-Команда `tst .imply rapidity:4 .run path/to/dir` пропустить всі тест рутини для яких `rapidity` не вказано `4` або вище.
-
-##### Опція запуска `testRoutineTimeOut`
-
-Опція обмежує час, за який кожна тест рутина має пройти тестування. Кожна тест рутина може мати власний `timeOut`. Якщо тест рутина має власний `timeOut` то значення опції запуску `testRoutineTimeOut` не впливає на неї.
-
-Якщо рутина не була протестована за вказаний час, то вона позначається як провалена ( червоним ).
-
-Вказується в мілісекундах. За замовчуванням встановлено 5000мс.
-
-Команда `tst .imply testRoutineTimeOut:60000 .run path/to/dir` дасть кожній тест рутині без явно встановленого `timeOut` хвилину на її виконання.
-
-##### Опція запуска `concurrent`
-
-Призначена для ввімкнення паралельного виконання тест сюітів.
-
-При наявності в одній директорії декількох тест сюітів, утиліта може виконувати їх одночасно.
-
-Має два значення: 1 - ввімкнене, 0 - вимкнене, тестування проходить по черзі. За замовчуванням - 0.
-
-Команда `tst .imply concurrent:1 .run path/to/dir` запустить паралелньо тест сюіти в директорії `path/to/dir`.
-
-##### Опція запуска `verbosity`
-
-Виставляє рівень вербальності звіта тестування, тобто, кількістю виведеної інформації.
-
-Приймає значення від 0 до 9. При встановленому значенні 0 не виводить жодного рядка. При значенні 9 звіт максимально повний. За замовчуванням - 4.
-
-Тест сюіт може мати опцію `verobisty`. В цьому випадку значення встановлена в тест сюіті має пріорітет над опцією запуску.
-
-Команда `tst .imply verbosity:5 .run path/to/dir` дасть більш детальний звіт про тестування виводячи інформацію про кожну перевірку. За замовчуванням окрема інформація по пройденій успішно перевірці не виводиться.
-
-##### Опція запуска `negativity`
-
-Призначена для обмеження виводу інформації по рутинам зі статусом `ok` / `pass` і збільшення об'єму інформації про перевірки зі статусом `failed`.
-
-Приймає значення від 0 до 9. За замовчуванням - 1.
-
-Команда `tst .imply negativity:0 .run path/to/dir` виведе звіт без деталізації інформації про перевірки, що провалилися.
-
-##### Опція запуска `silencing`
-
-Дозволяє приховати власний вивід об'єкта, що тестується в консоль. Об'єкт тестування та код тест рутини може мати власний вивід. Цей вивід може погіршити читабельність звіту про тестування.
-
-Опція запуску `silencing` має пріоритет над опцією тест сюіта.
-
-Опція має два значення: 1 - ввімкнене, 0 - вимкнене. За замовчуванням - 0.
-
-Команда `tst .imply silencing:1 .run path/to/dir` дасть чистий звіт без додаткового виводу об'єкта, що тестується.
-
-##### Опція запуска `shoulding`
-
-Призначена для вимкнення негативного тестування. Тест перевірки, що починаються з `should*` можуть бути вимкнені цією опцією.
-
-Опція має два значення: 1 - ввімкнене, 0 - вимкнене. За замовчуванням - 1.
-
-Команда `tst .imply shoulding:0 .run path/to/dir` виконає тестування пропускаючи всі `should*` перервіки.
-
-##### Опція запуска `accuracy`
-
-Опція встановлює допустиме числове відхилення при порівнянні числових значень.
-
-За замовчуванням встановлено `1е-7`.
-
-Команда `tst .imply accuracy:1e-4 .run path/to/dir` змінить результат такої тестової перевірки:
-
-```js
-test.equivalent( 1, 1.00001 );
-```
-
-За замовчуванням ця тестова перевірка провалюється. Проте опція запуску `accuracy:1e-4` змінює допустиму похибку тому така перевірка проходиться.
 
 ### Підсумок
 
 - Всі команди тестера починаються з вводу `tst .`.
-- Для отримання довідки використовуються команди `tst .` або `tst .help`. Для отримання довідки про окрему команду використовується синтаксис `tst .help [command]`.
+- Для отримання довідки використовуються команди `tst .` або `tst .help`.
+- Для отримання довідки про окрему команду використовується синтаксис `tst .help [command]`.
 - Для отримання списку тест сюітів використовується команда `.suites.list`.
-- Опції запуску та опції сюіта керують процесом тестування.
-- Опції запуску мають пріорітет над опціями тест сюіта.
 
 [Повернутись до змісту](../README.md#tutorials)

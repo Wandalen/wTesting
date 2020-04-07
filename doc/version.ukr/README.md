@@ -135,6 +135,13 @@
 </details>
 
 <details>
+  <summary><a href="./tutorial/Help.md">
+    Опції запуску та опції сюіта
+  </a></summary>
+    Опції для управління процесом тестування.
+</details>
+
+<details>
   <summary><a href="./tutorial/HelpSuitesList.md">
     Як отримати список тест сюітів
   </a></summary>

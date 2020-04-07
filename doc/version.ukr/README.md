@@ -156,6 +156,13 @@
 </details>
 
 <details>
+  <summary><a href="./tutorial/TestSuiteStructure.md">
+    Огляд структурних одиниць
+  </a></summary>
+    Загальний опис структурних одиниць тест сюіта.
+</details>
+
+<details>
   <summary><a href="./tutorial/HelloWorld.md">
     Тест сюіт "Hello World!"
   </a></summary>

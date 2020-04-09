@@ -4,7 +4,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
-let debugged = _.processIsDebugged();
+let debugged = _.process.isDebugged();
 // debugged = 0;
 
 //

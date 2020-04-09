@@ -13,7 +13,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
-let debugged = _.processIsDebugged();
+let debugged = _.process.isDebugged();
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -3133,7 +3133,7 @@ function _shouldDo( o )
       });
 
       if( o.expectingAsyncError )
-      end( !o.expectingAsyncError, _._err({ args : [ msg ], caughtCallsStack : stack }) );
+      end( !o.expectingAsyncError, _._err({ args : [ msg ], catchCallsStack : stack }) );
       else
       end( !o.expectingAsyncError, arg );
 

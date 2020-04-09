@@ -13,8 +13,8 @@ let debugged = _.process.isDebugged();
  * @classdesc Class to define test suite.
  * Test suite is a set of test routines and test data that are used for complete testing of individual parts of the task.
  * @class wTestSuite
- * @param {Object} o Test suite option map. {@link module:Tools/Tester.wTestSuite.TestSuiteFields More about options}
- * @memberof module:Tools/Tester
+ * @param {Object} o Test suite option map. {@link module:Tools/atop/Tester.wTestSuite.TestSuiteFields More about options}
+ * @module Tools/atop/Tester
  */
 
 let logger = null;
@@ -173,8 +173,9 @@ the test routine checks that error caused by unknown field in test suite definit
 /**
  * @summary Inherits tests, context and options of provides test suite(s).
  * @param {...Object} arguments Accepts one or several test suites.
- * @function inherit
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method inherit
+ * @class wTestSuite
+ * @module Tools/atop/Tester
  */
 
 function inherit()
@@ -360,8 +361,9 @@ _consoleBar.defaults =
  * receive messages from console, logger of the tester prints messages through original console methods. All this allows to hide/show/style
  * console output if necessary.
  * @param {Boolean} value Controls barring/unbarring of the console.
- * @function consoleBar
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method consoleBar
+ * @class wTestSuite
+ * @module Tools/atop/Tester
  */
 
 function consoleBar( value )
@@ -388,8 +390,9 @@ function consoleBarPreserving( value )
  * name of test case, description of test case, result of test checks with got and expected values, erors, etc.
  * Level of output can be controled by options.
  * Prints summary at the end of execution.
- * @function run
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method run
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function run()
@@ -929,9 +932,10 @@ function _terminated()
 
 /**
  * @summary Handler called before execution of each test routine
- * @param {Object} t Instance of {@link module:Tools/Tester.wTestRoutineDescriptor}
- * @function onRoutineBegin
- * @memberof module:Tools/Tester.wTestSuite#
+ * @param {Object} t Instance of {@link module:Tools/atop/Tester.wTestRoutineDescriptor}
+ * @method onRoutineBegin
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function onRoutineBegin( t )
@@ -942,9 +946,10 @@ function onRoutineBegin( t )
 
 /**
  * @summary Handler called after execution of each test routine
- * @param {Object} t Instance of {@link module:Tools/Tester.wTestRoutineDescriptor}
- * @function onRoutineBegin
- * @memberof module:Tools/Tester.wTestSuite#
+ * @param {Object} t Instance of {@link module:Tools/atop/Tester.wTestRoutineDescriptor}
+ * @method onRoutineBegin
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function onRoutineEnd( t )
@@ -956,8 +961,9 @@ function onRoutineEnd( t )
 /**
  * @summary Handler called before execution of current test suite
  * @param {Object} t Current test suite instance.
- * @function onSuiteBegin
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method onSuiteBegin
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function onSuiteBegin( t )
@@ -969,8 +975,9 @@ function onSuiteBegin( t )
 /**
  * @summary Handler called after execution of current test suite
  * @param {Object} t Current test suite instance.
- * @function onSuiteEnd
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method onSuiteEnd
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function onSuiteEnd( t )
@@ -1010,8 +1017,9 @@ function _testRoutineRun( trd )
  * @summary Calls `onEach` handler for each test routine defined in current suite.
  * @description Function onEach should accept single argument - descriptor of test routine.
  * @param {Function} onEach Function to call for each routine.
- * @function routineEach
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method routineEach
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function routineEach( onEach )
@@ -1220,8 +1228,9 @@ function _exceptionConsider( err )
  * @param {Object} o Options map.
  * @param {String|Error} o.err Exception message or error object.
  * @param {Boolean} [o.considering=true] If true test suite will take care about this error, otherwise it will by only printed by logger .
- * @function exceptionReport
- * @memberof module:Tools/Tester.wTestSuite#
+ * @method exceptionReport
+ * @class wTestSuite
+ * @module Tools/atop/Tester
 */
 
 function exceptionReport( o )
@@ -1339,7 +1348,8 @@ let routineSymbol = Symbol.for( 'routine' );
  * @property {Function} onRoutineEnd
  * @property {Function} onSuiteBegin
  * @property {Function} onSuiteEnd
- * @memberof module:Tools/Tester.wTestSuite
+ * @class wTestSuite
+ * @module Tools/atop/Tester
  */
 
 // --

@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../dwtools/Tools.s' );
 
-  require( '../tester/MainTop.s' );
+  require( '../tester/Main.s' );
   _.include( 'wAppBasic' );
   _.include( 'wFiles' );
 
@@ -786,7 +786,7 @@ function optionRapidity( test )
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
-    
+
     test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 1 );
     test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 1 );
     test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 1 );
@@ -1548,7 +1548,7 @@ function timeOutExternalMessage( test )
     return null;
   })
 
-  a.appStart{ execPath : `.run ** v:5` })
+  a.appStart({ execPath : `.run ** v:5` })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );

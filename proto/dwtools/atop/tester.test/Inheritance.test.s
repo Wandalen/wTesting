@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../../dwtools/Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../tester/MainTop.s' );
+  require( '../tester/Main.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );

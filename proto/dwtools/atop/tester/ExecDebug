@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 let _ = _global_.wTools;
 let shell = _.process.startPassingThrough
 ({
-  execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'MainTop.s' ) ),
+  execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'Main.s' ) ),
 });
 
 if( typeof module !== 'undefined' && module !== null )

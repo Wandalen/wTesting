@@ -184,9 +184,10 @@ module:
           - ../proto/dwtools/atop/tester/Exec
           - ../proto/dwtools/atop/tester/ExecDebug
           - ../proto/dwtools/atop/tester/ExecUnrestricted
-          - ../proto/dwtools/atop/tester/IncludeBase.s
-          - ../proto/dwtools/atop/tester/IncludeTop.s
-          - ../proto/dwtools/atop/tester/MainTop.s
+          - ../proto/dwtools/atop/tester/Main.s
+          - ../proto/dwtools/atop/tester/include
+          - ../proto/dwtools/atop/tester/include/Base.s
+          - ../proto/dwtools/atop/tester/include/Top.s
           - ../proto/dwtools/atop/tester/l1
           - ../proto/dwtools/atop/tester/l1/Namespace.s
           - ../proto/dwtools/atop/tester/l3

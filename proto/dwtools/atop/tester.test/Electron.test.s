@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../Tools.s' );
 
-  require( '../tester/MainTop.s' );
+  require( '../tester/Main.s' );
 
   _.include( 'wFiles' );
 

@@ -1,6 +1,6 @@
 {
   "name" : "wTesting", 
-  "version" : "1.0.293", 
+  "version" : "1.0.294", 
   "engine" : "node >= 8.0.0", 
   "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
@@ -11,7 +11,7 @@
     { "name" : "Dmytro Kryvoruchko", "email" : "dm.vict.kr@gmail.com" }
   ], 
   "license" : "MIT", 
-  "main" : "proto/dwtools/atop/tester/MainTop.s", 
+  "main" : "proto/dwtools/atop/tester/Main.s", 
   "files" : [ "proto/dwtools/atop/tester", "proto/dwtools/Tools.s", "out" ], 
   "scripts" : 
   {

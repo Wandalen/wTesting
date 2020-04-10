@@ -11,7 +11,7 @@
     { "name" : "Dmytro Kryvoruchko", "email" : "dm.vict.kr@gmail.com" }
   ], 
   "license" : "MIT", 
-  "main" : "proto/dwtools/atop/tester/MainTop.s", 
+  "main" : "proto/dwtools/atop/tester/Main.s", 
   "files" : [ "proto/dwtools/atop/tester", "proto/dwtools/Tools.s", "out" ], 
   "scripts" : 
   {

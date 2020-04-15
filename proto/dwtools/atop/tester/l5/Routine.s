@@ -1766,7 +1766,7 @@ function isNot( outcome )
 //  * @summary Checks if provided argument is not an Error object.
 //  * @description Check passes if result if positive, otherwise fails. After check function reports result of test
 //  * to the testing system. If test is failed function also outputs additional information.
-//  * @param {} maybeError Entity to check.
+//  * @param {*} maybeError Entity to check.
 //  * @method isNotError
 //  * @class wTestRoutineDescriptor
 //  * @module Tools/atop/Tester

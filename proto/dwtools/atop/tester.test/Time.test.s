@@ -20,7 +20,7 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( '../tester/MainTop.s' );
+    require( '../tester/Main.s' );
   }
   catch( err )
   {

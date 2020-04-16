@@ -3,14 +3,14 @@ root:
   - wTesting.out
 consistency:
   wTesting.out.will.yml: &ref_0
-    hash: 310ec76b5b76f60fbef9f5a6e6196870
-    size: 48454
+    hash: 8803ec4536d127cedf0c6ec8bc649393
+    size: 49320
   ../.ex.will.yml: &ref_1
     hash: fc47038001de4dfcffe47a0cf38aa58e
     size: 2723
   ../.im.will.yml: &ref_2
-    hash: e252810e5e637201ac59023e7ccb4a1a
-    size: 6281
+    hash: 5d4a0f756488030bcad7af740e79e659
+    size: 6275
 module:
   wTesting.out:
     about:
@@ -133,7 +133,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/atop/tester/MainTop.s
+        path: ../proto/dwtools/atop/tester/Main.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -143,13 +143,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/MainTop.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/MainTop.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -184,9 +184,10 @@ module:
           - ../proto/dwtools/atop/tester/Exec
           - ../proto/dwtools/atop/tester/ExecDebug
           - ../proto/dwtools/atop/tester/ExecUnrestricted
-          - ../proto/dwtools/atop/tester/IncludeBase.s
-          - ../proto/dwtools/atop/tester/IncludeTop.s
-          - ../proto/dwtools/atop/tester/MainTop.s
+          - ../proto/dwtools/atop/tester/Main.s
+          - ../proto/dwtools/atop/tester/include
+          - ../proto/dwtools/atop/tester/include/Base.s
+          - ../proto/dwtools/atop/tester/include/Top.s
           - ../proto/dwtools/atop/tester/l1
           - ../proto/dwtools/atop/tester/l1/Namespace.s
           - ../proto/dwtools/atop/tester/l3
@@ -1123,7 +1124,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/atop/tester/MainTop.s
+        path: proto/dwtools/atop/tester/Main.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1133,13 +1134,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/MainTop.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/MainTop.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1785,6 +1786,8 @@ module:
         hash: fc47038001de4dfcffe47a0cf38aa58e
         size: 2723
       ../.im.will.yml:
-        hash: e252810e5e637201ac59023e7ccb4a1a
-        size: 6281
-      wTesting.out.will.yml: *ref_0
+        hash: 5d4a0f756488030bcad7af740e79e659
+        size: 6275
+      wTesting.out.will.yml:
+        hash: 8803ec4536d127cedf0c6ec8bc649393
+        size: 49320

@@ -4,7 +4,7 @@
 
 /**
  * Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated..
-  @module Tools/Tester
+  @module Tools/atop/Tester
 */
 
 /**
@@ -41,6 +41,11 @@ _.assert( _.numberIs( _.accuracy ), 'wTesting needs _.accuracy' );
 _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
 
 //
+
+/**
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ */
 
 let Parent = null;
 let Self = function wTesterBasic( o )
@@ -167,8 +172,10 @@ function formAssociates()
 /**
  * @summary Parses arguments provided to tester. Resolves path provided to the tester.
  * @description List of possible arguments( options ) can be found {@link module:Tools/Tester.wTester.SettingsNameMap here}.
- * @function appArgsRead
- * @memberof module:Tools/Tester.wTester
+ * @method appArgsRead
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function appArgsRead()
@@ -252,10 +259,12 @@ appArgsRead.defaults =
  * Path can be relative or absolute. Path can lead to single test suite or to directory with test suites.
  * Option is a combination of `key` and `value` splitted by delimeter `:`. Options should have at least one space between each other.
  * Spaces between `key` and `value` are supported: `v:5` and `v  :  5` are treated in same way.
- * @function scenarioTest
+ * @method scenarioTest
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
  * @example
  *  wtest .run proto/** v : 5
- * @memberof module:Tools/Tester.wTester
+ *
  */
 
 function scenarioTest()
@@ -288,8 +297,10 @@ function scenarioTest()
 
 /**
  * @summary Prints list of available options.
- * @function scenarioOptionsList
- * @memberof module:Tools/Tester.wTester
+ * @method scenarioOptionsList
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function scenarioOptionsList()
@@ -313,8 +324,10 @@ function scenarioOptionsList()
 
 /**
  * @summary Prints list of found tests suites.
- * @function scenarioSuitesList
- * @memberof module:Tools/Tester.wTester
+ * @method scenarioSuitesList
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function scenarioSuitesList()
@@ -350,8 +363,10 @@ function _testAllAct()
 /**
  * @summary Executes all found test suites.
  * @description Tests suites are executed one by one. After execution tester prints summary info.
- * @function testAll
- * @memberof module:Tools/Tester.wTester
+ * @method testAll
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 let testAll = _.time.readyJoin( undefined, _testAllAct );
@@ -378,8 +393,10 @@ function _test()
  * @description Names of desirable test suites can be provided through argument `suites`.
  * Runs all found test suite if no arguent provided.
  * @param {Array} suites Names of test suites to run.
- * @function test
- * @memberof module:Tools/Tester.wTester
+ * @method test
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 let test = _.time.readyJoin( undefined, _test );
@@ -554,8 +571,10 @@ function _canContinue()
  * @description There are several reasons to stop the execution:
  * 1. Exectuion can be terminated by a used, for example, by CTRL+C combination.
  * 2. Execution of test suite throws uncaught error.
- * @function cancel
- * @memberof module:Tools/Tester.wTester
+ * @method cancel
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function cancel()
@@ -695,8 +714,10 @@ function _suitesRun( suites )
  * @summary Selects desirable test suites using list from argument `suites`. Returns map with instances of {@link module:Tools/Tester.wTestSuite}
  * @param {Array} suites Names of test suites to run.
  * @throws {Error} If test suite doesn't exist.
- * @function suitesFilterOut
- * @memberof module:Tools/Tester.wTester
+ * @method suitesFilterOut
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function suitesFilterOut( suites )
@@ -753,8 +774,10 @@ function suitesFilterOut( suites )
  * @summary Prints information about provided test `suites`.
  * @description Prints info about all test suites if they are not provided explicitly.
  * @param {Array|Object} suites Entity with instances of {@link module:Tools/Tester.wTestSuite}
- * @function suitesListPrint
- * @memberof module:Tools/Tester.wTester
+ * @method suitesListPrint
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function suitesListPrint( suites )
@@ -862,8 +885,10 @@ function _suitesIncludeAt( path )
 /**
  * @summary Includes test suite from provided `path`.
  * @param {String} path Path can be relative or absolute. Path can lead to single suite or to directory with several test suites.
- * @function suitesIncludeAt
- * @memberof module:Tools/Tester.wTester
+ * @method suitesIncludeAt
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function suitesIncludeAt( path )
@@ -1057,8 +1082,10 @@ function _reportIsPositive()
  * List of possible formats can be found {@link @module:Tools/mid/Color.Style}
  * @param {String} srcStr Text string
  * @param {String} format Desirable format.
- * @function textColor
- * @memberof module:Tools/Tester.wTester
+ * @method textColor
+ * @class wTesterBasic
+ * @module Tools/atop/Tester
+ *
  */
 
 function textColor( srcStr, format )
@@ -1205,7 +1232,7 @@ function _includeFailConsider( err )
 
 /**
  * @enum {String} ApplicationArgumentsMap
- * @memberof module:Tools/Tester.wTester
+ * @module Tools/atop/Tester
 */
 
 let ApplicationArgumentsMap =
@@ -1250,7 +1277,7 @@ let ApplicationArgumentsMap =
 
 /**
  * @enum {String} SettingsNameMap
- * @memberof module:Tools/Tester.wTester
+ * @module Tools/atop/Tester
 */
 
 let SettingsNameMap =
@@ -1299,7 +1326,8 @@ let SettingsNameMap =
  * @property {Number} [rapidity=0]
  * @property {String} [routine=null]
  * @property {Number} [negativity=null]
- * @memberof module:Tools/Tester.wTester
+ * @module Tools/atop/Tester
+ *
 */
 
 let SettingsOfTester =
@@ -1328,7 +1356,8 @@ let SettingsOfTester =
  * @property {Boolean} silencing
  * @property {Boolean} shoulding
  * @property {Number} accuracy
- * @memberof module:Tools/Tester.wTester
+ * @module Tools/atop/Tester
+ *
 */
 
 let SettingsOfSuite =

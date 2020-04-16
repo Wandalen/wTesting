@@ -7,13 +7,13 @@
 /**
  * @classdesc Provides interface for creating of test routines. Interface is a collection of routines to create cases, groups of cases, perform different type of checks.
  * @class wTestRoutineDescriptor
- * @param {Object} o Test suite option map. {@link module:Tools/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
- * @memberof module:Tools/Tester
+ * @param {Object} o Test suite option map. {@link module:Tools/atop/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
+ * @module Tools/atop/Tester
  */
 
 let _global = _global_;
 let _ = _global_.wTools;
-let debugged = _.processIsDebugged();
+let debugged = _.process.isDebugged();
 
 let Parent = null;
 let Self = function wTestRoutineDescriptor( o )
@@ -67,8 +67,9 @@ function init( o )
 
 /**
  * @summary Ensures that instance has all required properties defined.
- * @function form
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method form
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function form()
@@ -769,8 +770,9 @@ function _groupGet()
 
 /**
  * @summary Creates tests group with name `groupName`.
- * @function open
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method open
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function groupOpen( groupName )
@@ -809,8 +811,9 @@ function groupOpen( groupName )
 
 /**
  * @summary Closes tests group with name `groupName`.
- * @function close
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method close
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function groupClose( groupName )
@@ -1088,8 +1091,9 @@ function decoratedAbsoluteNameGet()
 
 /**
  * @summary Returns information about current test check.
- * @function checkCurrent
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method checkCurrent
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function checkCurrent()
@@ -1110,8 +1114,9 @@ function checkCurrent()
 
 /**
  * @summary Returns information about next test check.
- * @function checkCurrent
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method checkCurrent
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function checkNext( description )
@@ -1136,8 +1141,9 @@ function checkNext( description )
 
 /**
  * @summary Saves information current test check into a inner container.
- * @function checkCurrent
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method checkCurrent
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function checkStore()
@@ -1157,8 +1163,9 @@ function checkStore()
 /**
  * @descriptionNeeded
  * @param {Object} acheck
- * @function checkRestore
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method checkRestore
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function checkRestore( acheck )
@@ -1682,8 +1689,9 @@ _reportTextForTestCheck.defaults =
  * @description Check passes if result if positive, otherwise fails. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * @param {Boolean} outcome Result of some condition.
- * @function is
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @method is
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function is( outcome )
@@ -1758,9 +1766,10 @@ function isNot( outcome )
 //  * @summary Checks if provided argument is not an Error object.
 //  * @description Check passes if result if positive, otherwise fails. After check function reports result of test
 //  * to the testing system. If test is failed function also outputs additional information.
-//  * @param {} maybeError Entity to check.
-//  * @function isNotError
-//  * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+//  * @param {*} maybeError Entity to check.
+//  * @method isNotError
+//  * @class wTestRoutineDescriptor
+//  * @module Tools/atop/Tester
 //  */
 //
 // function isNotError( maybeError )
@@ -1823,7 +1832,8 @@ function isNot( outcome )
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function identical( got, expected )
@@ -1925,7 +1935,8 @@ function identical( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method notIdentical
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function notIdentical( got, expected )
@@ -2029,7 +2040,8 @@ function notIdentical( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function equivalent( got, expected, options )
@@ -2140,7 +2152,8 @@ function equivalent( got, expected, options )
  *
  * @throws {Exception} If no arguments provided.
  * @method notEquivalent
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function notEquivalent( got, expected, options )
@@ -2250,7 +2263,8 @@ function notEquivalent( got, expected, options )
  *
  * @throws {Exception} If no arguments provided.
  * @method contains
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function contains( got, expected )
@@ -2398,7 +2412,8 @@ function contains( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method gt
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function gt( got, than )
@@ -2470,7 +2485,8 @@ function gt( got, than )
  *
  * @throws {Exception} If no arguments provided.
  * @method ge
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function ge( got, than )
@@ -2545,7 +2561,8 @@ function ge( got, than )
  *
  * @throws {Exception} If no arguments provided.
  * @method lt
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function lt( got, than )
@@ -2620,7 +2637,8 @@ function lt( got, than )
  *
  * @throws {Exception} If no arguments provided.
  * @method le
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function le( got, than )
@@ -3133,7 +3151,7 @@ function _shouldDo( o )
       });
 
       if( o.expectingAsyncError )
-      end( !o.expectingAsyncError, _._err({ args : [ msg ], caughtCallsStack : stack }) );
+      end( !o.expectingAsyncError, _._err({ args : [ msg ], catchCallsStack : stack }) );
       else
       end( !o.expectingAsyncError, arg );
 
@@ -3174,7 +3192,8 @@ _shouldDo.defaults =
  *
  * @throws {Exception} If no arguments provided.
  * @method shouldThrowErrorAsync
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function shouldThrowErrorAsync( routine )
@@ -3211,7 +3230,8 @@ function shouldThrowErrorAsync( routine )
  *
  * @throws {Exception} If no arguments provided.
  * @method shouldThrowErrorSync
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function shouldThrowErrorSync( routine )
@@ -3276,7 +3296,8 @@ function shouldThrowErrorSync( routine )
  * @throws {Exception} If no arguments provided.
  * @throws {Exception} If passed argument is not a Routine.
  * @method shouldThrowErrorSync
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function shouldThrowErrorOfAnyKind( routine )
@@ -3315,7 +3336,8 @@ function shouldThrowErrorOfAnyKind( routine )
  *
  * @throws {Exception} If no arguments provided.
  * @method mustNotThrowError
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function mustNotThrowError( routine )
@@ -3353,7 +3375,8 @@ function mustNotThrowError( routine )
  *
  * @throws {Exception} If no arguments provided.
  * @method returnsSingleResource
- * @memberof module:Tools/Tester.wTestRoutineDescriptor#
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 function returnsSingleResource( routine )
@@ -3699,7 +3722,8 @@ let usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
  * @property {Number} accuracy
  * @property {Number} rapidity
  * @property {Boolean} usingSourceCode
- * @memberof module:Tools/Tester.wTestRoutineDescriptor
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 let RoutineFields =
@@ -3722,7 +3746,8 @@ let RoutineFields =
  * @property {Number} timeOut
  * @property {Boolean} experimental
  * @property {Boolean} usingSourceCode
- * @memberof module:Tools/Tester.wTestRoutineDescriptor
+ * @class wTestRoutineDescriptor
+ * @module Tools/atop/Tester
  */
 
 // --

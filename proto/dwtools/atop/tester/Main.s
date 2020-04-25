@@ -5,6 +5,13 @@
 if( typeof module !== 'undefined' )
 {
 
+
+  if( Config.interpreter !== 'njs' ) /* xxx : remove after fixing starter */
+  {
+    debugger;
+    return;
+  }
+
   require( './include/Top.s' );
 
 }

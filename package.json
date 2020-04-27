@@ -1,6 +1,6 @@
 {
   "name" : "wTesting",
-  "version" : "1.0.304",
+  "version" : "1.0.305",
   "engine" : "node >= 8.0.0",
   "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -39,21 +39,21 @@
   },
   "dependencies" :
   {
-    "wConsequence" : "gamma",
-    "wCopyable" : "gamma",
-    "wFiles" : "gamma",
-    "wLogger" : "gamma",
-    "wProto" : "gamma",
-    "wTools" : "gamma",
-    "wequaler" : "gamma",
-    "wappbasic" : "gamma",
-    "wcommandsaggregator" : "gamma",
-    "winstancing" : "gamma",
-    "wlooker" : "gamma",
-    "wselector" : "gamma",
-    "wprocesswatcher" : "gamma"
+    "wConsequence" : "beta",
+    "wCopyable" : "beta",
+    "wFiles" : "beta",
+    "wLogger" : "beta",
+    "wProto" : "beta",
+    "wTools" : "beta",
+    "wequaler" : "beta",
+    "wappbasic" : "beta",
+    "wcommandsaggregator" : "beta",
+    "winstancing" : "beta",
+    "wlooker" : "beta",
+    "wselector" : "beta",
+    "wprocesswatcher" : "beta"
   },
-  "optionalDependencies" : { "wEventHandler" : "gamma" },
+  "optionalDependencies" : { "wEventHandler" : "beta" },
   "devDependencies" :
   {
     "wTesting" : "file:.",

@@ -1,66 +1,66 @@
 {
-  "name" : "wTesting", 
-  "version" : "1.0.303", 
-  "engine" : "node >= 8.0.0", 
-  "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.", 
-  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
-  "contributors" : 
+  "name" : "wTesting",
+  "version" : "1.0.304",
+  "engine" : "node >= 8.0.0",
+  "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "contributors" :
   [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" }, 
-    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }, 
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" },
+    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" },
     { "name" : "Dmytro Kryvoruchko", "email" : "dm.vict.kr@gmail.com" }
-  ], 
-  "license" : "MIT", 
-  "main" : "proto/dwtools/atop/tester/Main.s", 
-  "files" : [ "proto/dwtools/atop/tester", "proto/dwtools/Tools.s", "out" ], 
-  "scripts" : 
+  ],
+  "license" : "MIT",
+  "main" : "proto/dwtools/atop/tester/Main.s",
+  "files" : [ "proto/dwtools/atop/tester", "proto/dwtools/Tools.s", "out" ],
+  "scripts" :
   {
-    "wtest" : "node proto/dwtools/atop/tester/ExecUnrestricted", 
-    "single-process-wtest" : "node proto/dwtools/atop/tester/Exec", 
-    "debug-wtest" : "node proto/dwtools/atop/tester/ExecDebug", 
-    "tst" : "node proto/dwtools/atop/tester/ExecUnrestricted", 
-    "single-process-tst" : "node proto/dwtools/atop/tester/Exec", 
-    "debug-tst" : "node proto/dwtools/atop/tester/ExecDebug", 
+    "wtest" : "node proto/dwtools/atop/tester/ExecUnrestricted",
+    "single-process-wtest" : "node proto/dwtools/atop/tester/Exec",
+    "debug-wtest" : "node proto/dwtools/atop/tester/ExecDebug",
+    "tst" : "node proto/dwtools/atop/tester/ExecUnrestricted",
+    "single-process-tst" : "node proto/dwtools/atop/tester/Exec",
+    "debug-tst" : "node proto/dwtools/atop/tester/ExecDebug",
     "test" : "wtest .run proto/**"
-  }, 
-  "bin" : 
+  },
+  "bin" :
   {
-    "wtest" : "proto/dwtools/atop/tester/ExecUnrestricted", 
-    "single-process-wtest" : "proto/dwtools/atop/tester/Exec", 
-    "debug-wtest" : "proto/dwtools/atop/tester/ExecDebug", 
-    "tst" : "proto/dwtools/atop/tester/ExecUnrestricted", 
-    "single-process-tst" : "proto/dwtools/atop/tester/Exec", 
+    "wtest" : "proto/dwtools/atop/tester/ExecUnrestricted",
+    "single-process-wtest" : "proto/dwtools/atop/tester/Exec",
+    "debug-wtest" : "proto/dwtools/atop/tester/ExecDebug",
+    "tst" : "proto/dwtools/atop/tester/ExecUnrestricted",
+    "single-process-tst" : "proto/dwtools/atop/tester/Exec",
     "debug-tst" : "proto/dwtools/atop/tester/ExecDebug"
-  }, 
-  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wTesting.git" }, 
-  "bugs" : 
+  },
+  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wTesting.git" },
+  "bugs" :
   {
     "url" : "https://github.com/Wandalen/wTesting/issues"
-  }, 
-  "dependencies" : 
+  },
+  "dependencies" :
   {
-    "wConsequence" : "", 
-    "wCopyable" : "", 
-    "wFiles" : "", 
-    "wLogger" : "", 
-    "wProto" : "", 
-    "wTools" : "", 
-    "wequaler" : "", 
-    "wappbasic" : "", 
-    "wcommandsaggregator" : "", 
-    "winstancing" : "", 
-    "wlooker" : "", 
-    "wselector" : "", 
+    "wConsequence" : "",
+    "wCopyable" : "",
+    "wFiles" : "",
+    "wLogger" : "",
+    "wProto" : "",
+    "wTools" : "",
+    "wequaler" : "",
+    "wappbasic" : "",
+    "wcommandsaggregator" : "",
+    "winstancing" : "",
+    "wlooker" : "",
+    "wselector" : "",
     "wprocesswatcher" : ""
-  }, 
-  "optionalDependencies" : { "wEventHandler" : "" }, 
-  "devDependencies" : 
+  },
+  "optionalDependencies" : { "wEventHandler" : "" },
+  "devDependencies" :
   {
-    "wTesting" : "file:.", 
-    "wait-sync" : "", 
-    "electron" : "^5.0.0", 
-    "spectron" : "^7.0.0", 
+    "wTesting" : "file:.",
+    "wait-sync" : "",
+    "electron" : "^5.0.0",
+    "spectron" : "^7.0.0",
     "puppeteer" : "2.0.0"
-  }, 
+  },
   "keywords" : [ "testing", "unit test", "functional test", "wTools" ]
 }

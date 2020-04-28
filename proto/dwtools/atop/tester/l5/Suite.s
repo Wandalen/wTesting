@@ -1467,7 +1467,7 @@ let Accessors =
   absoluteName : { readOnly : 1 },
   decoratedAbsoluteName : { readOnly : 1 },
 
-  // logger : { setter : function( src )
+  // logger : { set : function( src )
   // {
   //   if( src && !src.name )
   //   debugger;

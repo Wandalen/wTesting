@@ -7597,7 +7597,7 @@ function syncTimeout1( test )
     trd = t;
     t.description = 'description1';
     t.identical( 0, 1 );
-    _.time.out( 500 ).deasyncWait();
+    _.time.out( 500 ).deasync();
     t.description = 'description2';
     testRoutineDone = 1;
   }
@@ -7663,7 +7663,7 @@ function syncTimeout2( test )
     trd = t;
     t.description = 'description1';
     t.identical( 0, 1 );
-    _.time.out( 500 ).deasyncWait();
+    _.time.out( 500 ).deasync();
     t.identical( 1, 1 );
     testRoutineDone = 1;
   }

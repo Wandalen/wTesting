@@ -23,7 +23,7 @@ async function routineTimeOut( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  _.time.out( 5000 ).deasyncWait();
+  _.time.out( 5000 ).deasync();
 
   await browser.close();
 

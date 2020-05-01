@@ -156,7 +156,7 @@ function html( test )
       return got;
     })
     ready = _.Consequence.From( ready );
-    ready.deasyncWait();
+    ready.deasync();
     ready.sync();
   }
 }
@@ -244,7 +244,7 @@ async function htmlAwait( test )
 //         {
 //           let result = value.apply( this, args );
 //           var con = _.Consequence.From( result );
-//           con.deasyncWait();
+//           con.deasync();
 //           result = con.sync();
 //           if( _.objectIs( result ) )
 //           return new Proxy( result, handler )
@@ -314,7 +314,7 @@ function chaining( test )
       return got;
     })
     ready = _.Consequence.From( ready );
-    return ready.deasyncWait();
+    return ready.deasync();
   }
 }
 

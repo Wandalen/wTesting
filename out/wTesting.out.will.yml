@@ -3,11 +3,11 @@ root:
   - wTesting.out
 consistency:
   ../.ex.will.yml: &ref_0
-    hash: 757975dedf0c4580e9b55d2ee00c9c7c
-    size: 2723
+    hash: c6362aa31c9e1d637ccb8f65fc9fff1c
+    size: 2747
   ../.im.will.yml: &ref_1
-    hash: 5d4a0f756488030bcad7af740e79e659
-    size: 6275
+    hash: 8333b04a19998cde9db3d4a80613c5ca
+    size: 6287
 module:
   wTesting.out:
     about:
@@ -178,9 +178,10 @@ module:
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
           - ../proto/dwtools/atop/tester
+          - ../proto/dwtools/atop/tester/entry
           - ../proto/dwtools/atop/tester/entry/Exec
-          - ../proto/dwtools/atop/tester/ExecDebug
-          - ../proto/dwtools/atop/tester/ExecUnrestricted
+          - ../proto/dwtools/atop/tester/entry/ExecDebug
+          - ../proto/dwtools/atop/tester/entry/ExecUnrestricted
           - ../proto/dwtools/atop/tester/entry/Main.s
           - ../proto/dwtools/atop/tester/include
           - ../proto/dwtools/atop/tester/include/Base.s
@@ -1758,8 +1759,8 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 757975dedf0c4580e9b55d2ee00c9c7c
-        size: 2723
+        hash: c6362aa31c9e1d637ccb8f65fc9fff1c
+        size: 2747
       ../.im.will.yml:
-        hash: 5d4a0f756488030bcad7af740e79e659
-        size: 6275
+        hash: 8333b04a19998cde9db3d4a80613c5ca
+        size: 6287

@@ -2,13 +2,10 @@ format: outwillfile-2.0
 root:
   - wTesting.out
 consistency:
-  wTesting.out.will.yml: &ref_0
-    hash: 8803ec4536d127cedf0c6ec8bc649393
-    size: 49320
-  ../.ex.will.yml: &ref_1
-    hash: fc47038001de4dfcffe47a0cf38aa58e
+  ../.ex.will.yml: &ref_0
+    hash: 757975dedf0c4580e9b55d2ee00c9c7c
     size: 2723
-  ../.im.will.yml: &ref_2
+  ../.im.will.yml: &ref_1
     hash: 5d4a0f756488030bcad7af740e79e659
     size: 6275
 module:
@@ -23,23 +20,23 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - testing
         - unit test
         - functional test
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       npm.name: wTesting
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         wtest: node proto/dwtools/atop/tester/ExecUnrestricted
         single-process-wtest: node proto/dwtools/atop/tester/Exec
@@ -47,7 +44,7 @@ module:
         tst: node proto/dwtools/atop/tester/ExecUnrestricted
         single-process-tst: node proto/dwtools/atop/tester/Exec
         debug-tst: node proto/dwtools/atop/tester/ExecDebug
-      npm.bin:
+      npm.bin: &ref_6
         wtest: proto/dwtools/atop/tester/ExecUnrestricted
         single-process-wtest: proto/dwtools/atop/tester/Exec
         debug-wtest: proto/dwtools/atop/tester/ExecDebug
@@ -905,24 +902,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          reflector: 'reflector::exported.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          reflector: 'reflector::exported.files.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -1011,9 +990,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wTesting.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wTesting
@@ -1025,37 +1003,14 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
-        - njs >= 8.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - testing
-        - unit test
-        - functional test
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
-        - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
+      contributors: *ref_4
       npm.name: wTesting
-      npm.scripts:
-        test: wtest .run proto/**
-        wtest: node proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-wtest: node proto/dwtools/atop/tester/Exec
-        debug-wtest: node proto/dwtools/atop/tester/ExecDebug
-        tst: node proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-tst: node proto/dwtools/atop/tester/Exec
-        debug-tst: node proto/dwtools/atop/tester/ExecDebug
-      npm.bin:
-        wtest: proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-wtest: proto/dwtools/atop/tester/Exec
-        debug-wtest: proto/dwtools/atop/tester/ExecDebug
-        tst: proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-tst: proto/dwtools/atop/tester/Exec
-        debug-tst: proto/dwtools/atop/tester/ExecDebug
+      npm.scripts: *ref_5
+      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
@@ -1803,9 +1758,8 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: fc47038001de4dfcffe47a0cf38aa58e
+        hash: 757975dedf0c4580e9b55d2ee00c9c7c
         size: 2723
       ../.im.will.yml:
         hash: 5d4a0f756488030bcad7af740e79e659
         size: 6275
-      wTesting.out.will.yml: *ref_0

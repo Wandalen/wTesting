@@ -15,22 +15,22 @@
   "files" : [ "proto/dwtools/atop/tester", "proto/dwtools/Tools.s", "out" ],
   "scripts" :
   {
-    "wtest" : "node proto/dwtools/atop/tester/ExecUnrestricted",
+    "wtest" : "node proto/dwtools/atop/tester/entry/ExecUnrestricted",
     "single-process-wtest" : "node proto/dwtools/atop/tester/entry/Exec",
-    "debug-wtest" : "node proto/dwtools/atop/tester/ExecDebug",
-    "tst" : "node proto/dwtools/atop/tester/ExecUnrestricted",
+    "debug-wtest" : "node proto/dwtools/atop/tester/entry/ExecDebug",
+    "tst" : "node proto/dwtools/atop/tester/entry/ExecUnrestricted",
     "single-process-tst" : "node proto/dwtools/atop/tester/entry/Exec",
-    "debug-tst" : "node proto/dwtools/atop/tester/ExecDebug",
+    "debug-tst" : "node proto/dwtools/atop/tester/entry/ExecDebug",
     "test" : "wtest .run proto/**"
   },
   "bin" :
   {
-    "wtest" : "proto/dwtools/atop/tester/ExecUnrestricted",
+    "wtest" : "proto/dwtools/atop/tester/entry/ExecUnrestricted",
     "single-process-wtest" : "proto/dwtools/atop/tester/entry/Exec",
-    "debug-wtest" : "proto/dwtools/atop/tester/ExecDebug",
-    "tst" : "proto/dwtools/atop/tester/ExecUnrestricted",
+    "debug-wtest" : "proto/dwtools/atop/tester/entry/ExecDebug",
+    "tst" : "proto/dwtools/atop/tester/entry/ExecUnrestricted",
     "single-process-tst" : "proto/dwtools/atop/tester/entry/Exec",
-    "debug-tst" : "proto/dwtools/atop/tester/ExecDebug"
+    "debug-tst" : "proto/dwtools/atop/tester/entry/ExecDebug"
   },
   "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wTesting.git" },
   "bugs" :

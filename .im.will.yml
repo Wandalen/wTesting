@@ -111,7 +111,7 @@ path :
       content : prime
 
   entry.proto.no.tests :
-    path : proto/dwtools/atop/tester/Main.s
+    path : proto/dwtools/atop/tester/entry/Main.s
     criterion :
       tests : 'no.tests'
   entry.proto.only.tests :
@@ -123,7 +123,7 @@ path :
   # npm.files : proto
 
   entry.out.raw.debug :
-    path : '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
+    path : '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
     criterion :
       debug : [ debug, release ]
       raw : raw

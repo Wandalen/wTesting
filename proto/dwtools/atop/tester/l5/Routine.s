@@ -3424,7 +3424,7 @@ function assetFor( a )
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
-  _.sure( _.strDefined( context.suiteTempPath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( context.suiteTempPath ) || _.strDefined( a.routinePath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
   _.sure( context.assetsOriginalSuitePath === null || _.strDefined( context.assetsOriginalSuitePath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
   _.sure( context.appJsPath === null || _.strDefined( context.appJsPath ), `Test suite's context should have defined path to default JS file {- appJsPath -}. But test suite ${suite.name} does not have.` );
 
@@ -3434,25 +3434,18 @@ function assetFor( a )
   a.process = _testerGlobal_.wTools.process;
   if( a.fileProvider === null )
   {
-    // a.fileProvider = _testerGlobal_.wTools.fileProvider;
-
     a.fileProvider = _.FileProvider.System({ providers : [] });
-
     _.FileProvider.Git().providerRegisterTo( a.fileProvider );
     _.FileProvider.Npm().providerRegisterTo( a.fileProvider );
     _.FileProvider.Http().providerRegisterTo( a.fileProvider );
-
     let defaultProvider = _.FileProvider.Default();
     defaultProvider.providerRegisterTo( a.fileProvider );
     a.fileProvider.defaultProvider = defaultProvider;
-
   }
   if( a.path === null )
   a.path = a.fileProvider.path || _testerGlobal_.wTools.uri;
   if( a.uri === null )
   a.uri = _testerGlobal_.wTools.uri || a.fileProvider.path;
-  // if( a.Consequence === null )
-  // a.Consequence = _testerGlobal_.wTools.Consequence;
   if( a.ready === null )
   a.ready = _.Consequence().take( null );
 

@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../Tools.s' );
 
-  require( '../tester/Main.s' );
+  require( '../tester/entry/Main.s' );
 
   _.include( 'wFiles' );
 
@@ -27,7 +27,7 @@ function onSuiteBegin()
   let self = this;
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
-  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/Exec' ) );
+  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.spectronPath = require.resolve( 'spectron' );
   self.electronPath = require.resolve( 'electron' );

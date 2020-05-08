@@ -39,17 +39,17 @@ module:
       npm.scripts: &ref_5
         test: wtest .run proto/**
         wtest: node proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-wtest: node proto/dwtools/atop/tester/Exec
+        single-process-wtest: node proto/dwtools/atop/tester/entry/Exec
         debug-wtest: node proto/dwtools/atop/tester/ExecDebug
         tst: node proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-tst: node proto/dwtools/atop/tester/Exec
+        single-process-tst: node proto/dwtools/atop/tester/entry/Exec
         debug-tst: node proto/dwtools/atop/tester/ExecDebug
       npm.bin: &ref_6
         wtest: proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-wtest: proto/dwtools/atop/tester/Exec
+        single-process-wtest: proto/dwtools/atop/tester/entry/Exec
         debug-wtest: proto/dwtools/atop/tester/ExecDebug
         tst: proto/dwtools/atop/tester/ExecUnrestricted
-        single-process-tst: proto/dwtools/atop/tester/Exec
+        single-process-tst: proto/dwtools/atop/tester/entry/Exec
         debug-tst: proto/dwtools/atop/tester/ExecDebug
     path:
       module.willfiles:
@@ -130,7 +130,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/atop/tester/Main.s
+        path: ../proto/dwtools/atop/tester/entry/Main.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -140,13 +140,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -178,10 +178,10 @@ module:
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
           - ../proto/dwtools/atop/tester
-          - ../proto/dwtools/atop/tester/Exec
+          - ../proto/dwtools/atop/tester/entry/Exec
           - ../proto/dwtools/atop/tester/ExecDebug
           - ../proto/dwtools/atop/tester/ExecUnrestricted
-          - ../proto/dwtools/atop/tester/Main.s
+          - ../proto/dwtools/atop/tester/entry/Main.s
           - ../proto/dwtools/atop/tester/include
           - ../proto/dwtools/atop/tester/include/Base.s
           - ../proto/dwtools/atop/tester/include/Top.s
@@ -1090,7 +1090,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/atop/tester/Main.s
+        path: proto/dwtools/atop/tester/entry/Main.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1100,13 +1100,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/Main.s'
+        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug

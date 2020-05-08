@@ -24,17 +24,17 @@ about :
   npm.scripts :
     test : 'wtest .run proto/**'
     wtest : 'node proto/dwtools/atop/tester/ExecUnrestricted'
-    single-process-wtest : 'node proto/dwtools/atop/tester/Exec'
+    single-process-wtest : 'node proto/dwtools/atop/tester/entry/Exec'
     debug-wtest : 'node proto/dwtools/atop/tester/ExecDebug'
     tst : 'node proto/dwtools/atop/tester/ExecUnrestricted'
-    single-process-tst : 'node proto/dwtools/atop/tester/Exec'
+    single-process-tst : 'node proto/dwtools/atop/tester/entry/Exec'
     debug-tst : 'node proto/dwtools/atop/tester/ExecDebug'
   npm.bin :
     wtest : 'proto/dwtools/atop/tester/ExecUnrestricted'
-    single-process-wtest : 'proto/dwtools/atop/tester/Exec'
+    single-process-wtest : 'proto/dwtools/atop/tester/entry/Exec'
     debug-wtest : 'proto/dwtools/atop/tester/ExecDebug'
     tst : 'proto/dwtools/atop/tester/ExecUnrestricted'
-    single-process-tst : 'proto/dwtools/atop/tester/Exec'
+    single-process-tst : 'proto/dwtools/atop/tester/entry/Exec'
     debug-tst : 'proto/dwtools/atop/tester/ExecDebug'
 
 path :

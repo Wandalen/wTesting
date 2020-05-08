@@ -1,0 +1,13 @@
+#! /usr/bin/env node
+
+if( typeof module !== 'undefined' )
+{
+
+  require( './Main.s' );
+
+  if( typeof module !== 'undefined' && module !== null )
+  module[ 'exports' ] = _testerGlobal_.wTools;
+
+  wTester.exec();
+
+}

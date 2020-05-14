@@ -4,13 +4,15 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../../dwtools/Tools.s' );
   _.include( 'wAppBasic' );
+  _.include( 'wFiles' );
 }
 
 let _ = _global_.wTools;
 let shell = _.process.startPassingThrough
 ({
-  execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'Main.s' ) ),
+  execPath : 'debugnode',
+  args : [ _.path.nativize( _.path.join( __dirname, 'Main.s' ) ) ]
 });
 
 if( typeof module !== 'undefined' && module !== null )
-module[ 'exports' ] = _testerGlobal_.wTools;
+module[ 'exports' ] = _global_.wTools;

@@ -1572,7 +1572,7 @@ _.Verbal.mixin( Self );
 
 _realGlobal_[ Self.name ] = _global[ Self.name ] = Self;
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();

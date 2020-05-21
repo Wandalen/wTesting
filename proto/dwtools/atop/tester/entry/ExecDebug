@@ -12,5 +12,5 @@ let shell = _.process.startPassingThrough
   execPath : 'debugnode ' + _.path.nativize( _.path.join( __dirname, 'Main.s' ) ),
 });
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = _testerGlobal_.wTools;

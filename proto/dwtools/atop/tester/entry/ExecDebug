@@ -14,5 +14,5 @@ let shell = _.process.startPassingThrough
   args : [ _.path.nativize( _.path.join( __dirname, 'Main.s' ) ) ]
 });
 
-if( typeof module !== 'undefined' && module !== null )
-module[ 'exports' ] = _global_.wTools;
+if( typeof module !== 'undefined' )
+module[ 'exports' ] = _testerGlobal_.wTools;

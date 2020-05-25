@@ -307,7 +307,7 @@ _.classDeclare
 //
 
 _realGlobal_[ Self.name ] = _global[ Self.name ] = Self;
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 if( !_.instanceIs( _realGlobal_.wTester ) && !_.symbolIs( _realGlobal_.wTester ) )

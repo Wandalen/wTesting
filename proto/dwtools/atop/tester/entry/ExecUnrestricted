@@ -10,7 +10,6 @@ let _ = _global_.wTools;
 let o =
 {
   execPath : _.strQuote( _.path.join( __dirname, 'Main.s' ) ),
-  // mode : 'shell',
 }
 _.process._exitHandlerRepair();
 _.process.startNodePassingThrough( o );

@@ -1426,6 +1426,7 @@ function _outcomeReportCompare( o )
       srcs : [ o.got, o.expected ],
       path : o.path,
       accuracy : o.accuracy,
+      strictString : o.strictString,
     });
   }
 
@@ -1442,8 +1443,6 @@ function _outcomeReportCompare( o )
   if( !o.outcome )
   if( trd.debug )
   debugger;
-
-  // trd._runInterruptMaybe( 1 );
 
   /**/
 
@@ -1468,6 +1467,7 @@ _outcomeReportCompare.defaults =
   path : null,
   usingExtraDetails : 1,
   interruptible : 0,
+  strictString : 1,
   accuracy : null,
 }
 
@@ -2114,6 +2114,7 @@ function equivalent( got, expected, options )
     usingExtraDetails : 1,
     accuracy : accuracy,
     interruptible : 1,
+    strictString : 0,
   });
 
   return outcome;
@@ -2228,6 +2229,7 @@ function notEquivalent( got, expected, options )
     usingExtraDetails : 1,
     accuracy : accuracy,
     interruptible : 1,
+    strictString : 0,
   });
 
   return outcome;
@@ -2330,6 +2332,7 @@ function contains( got, expected )
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
+    strictString : 0,
   });
 
   /* */

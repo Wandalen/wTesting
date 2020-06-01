@@ -84,6 +84,7 @@ function run( test )
 {
   let self = this;
   let a = self.assetFor( test, 'hello' );
+  // let a = test.assetFor( 'hello' );
 
   a.reflect();
   test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );

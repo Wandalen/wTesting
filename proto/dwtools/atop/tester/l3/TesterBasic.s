@@ -229,8 +229,7 @@ function appArgsRead()
   settings.beeping = !!settings.verbosity;
 
   tester._appArgs = appArgs;
-
-  tester.filePath = appArgs.subject || _.path.current();
+  tester.filePath = _.strUnquote( appArgs.subject ) || _.path.current();
   tester.filePath = _.path.join( _.path.current(), tester.filePath );
 
   if( settings.negativity !== undefined && settings.negativity !== null )

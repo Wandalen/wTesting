@@ -331,8 +331,22 @@ function run( test )
     return null;
   })
 
+  // shell( 'npm rm -g wTesting' );
+  return a.ready;
+}
+
+//
+
+function runWithQuotedPath( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'hello' );
+
+  a.reflect();
+  test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
+
   /* - */
-  
+
   a.ready
   .then( () =>
   {
@@ -354,14 +368,14 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
-  
+
   a.ready
   .then( () =>
   {
     test.case = 'tst .run glob quoted by double quote'
-    
+
     return null;
   })
 
@@ -379,9 +393,9 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
-  
+
   a.ready
   .then( () =>
   {
@@ -404,9 +418,9 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
-  
+
   a.ready
   .then( () =>
   {
@@ -428,14 +442,14 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
-  
+
   a.ready
   .then( () =>
   {
     test.case = 'glob quoted by double quote'
-    
+
     return null;
   })
 
@@ -453,9 +467,9 @@ function run( test )
 
     return null;
   })
-  
+
   /* - */
-  
+
   a.ready
   .then( () =>
   {
@@ -478,9 +492,7 @@ function run( test )
 
     return null;
   })
-  
 
-  // shell( 'npm rm -g wTesting' );
   return a.ready;
 }
 
@@ -2238,6 +2250,7 @@ var Self =
   {
 
     run,
+    runWithQuotedPath,
     checkFails,
     double,
     optionSuite,

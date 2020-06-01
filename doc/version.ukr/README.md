@@ -135,6 +135,13 @@
 </details>
 
 <details>
+  <summary><a href="./tutorial/Options.md">
+    Опції запуску та опції сюіта
+  </a></summary>
+    Опції для управління процесом тестування.
+</details>
+
+<details>
   <summary><a href="./tutorial/HelpSuitesList.md">
     Як отримати список тест сюітів
   </a></summary>
@@ -146,6 +153,13 @@
     Запуск тестів
   </a></summary>
     Як запускати тестування окремих тест сюітів та тестування скопом.
+</details>
+
+<details>
+  <summary><a href="./tutorial/TestSuiteStructure.md">
+    Огляд структурних одиниць
+  </a></summary>
+    Загальний опис структурних одиниць тест сюіта.
 </details>
 
 <details>

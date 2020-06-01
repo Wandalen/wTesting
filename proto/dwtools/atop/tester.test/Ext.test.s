@@ -332,6 +332,153 @@ function run( test )
   })
 
   /* - */
+  
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run glob quoted by single quote'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run "'${a.path.nativize( a.abs( './**' ) )}'" beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+  
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run glob quoted by double quote'
+    
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run '"${a.path.nativize( a.abs( './**' ) )}"' beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+  
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run glob quoted by backtick'
+
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run "\`${a.path.nativize( a.abs( './**' ) )}\`" beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+  
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst glob quoted by single quote'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `"'${a.path.nativize( a.abs( './**' ) )}'" beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+  
+  a.ready
+  .then( () =>
+  {
+    test.case = 'glob quoted by double quote'
+    
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `'"${a.path.nativize( a.abs( './**' ) )}"' beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
+  /* - */
+  
+  a.ready
+  .then( () =>
+  {
+    test.case = 'glob quoted by backtick'
+
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `"\`${a.path.nativize( a.abs( './**' ) )}\`" beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+  
 
   // shell( 'npm rm -g wTesting' );
   return a.ready;

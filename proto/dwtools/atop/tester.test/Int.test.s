@@ -3641,8 +3641,8 @@ function equivalentReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 15 );
-    test.identical( suite.report.testCheckFails, 14 );
+    test.identical( suite.report.testCheckPasses, 13 );
+    test.identical( suite.report.testCheckFails, 16 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -3666,13 +3666,13 @@ function equivalentReturn( test )
     /* */
 
     var got = t.equivalent( 1, '1' );
-    test.identical( got, true );
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     var got = t.equivalent( '1', 1 );
-    test.identical( got, true );
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
@@ -3827,27 +3827,10 @@ function equivalentReturn( test )
 
     test.case = 'extra arguments';
 
-    var got = t.equivalent( { a : 1 }, { a : 1 }, { a : 1 } );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.equivalent( 1.05, 1, null )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.equivalent( 1.05, 1, 'x' )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.equivalent( 1.05, 1, [] )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
+    t.equivalent( { a : 1 }, { a : 1 }, { a : 1 } );
+    t.equivalent( 1.05, 1, null )
+    t.equivalent( 1.05, 1, 'x' )
+    t.equivalent( 1.05, 1, [] )
 
   }
 
@@ -3875,8 +3858,8 @@ function notEquivalentReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
-    test.identical( suite.report.testCheckFails, 20 );
+    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( suite.report.testCheckFails, 18 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -3900,13 +3883,13 @@ function notEquivalentReturn( test )
     /* */
 
     var got = t.notEquivalent( 1, '1' );
-    test.identical( got, false );
+    test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     var got = t.notEquivalent( '1', 1 );
-    test.identical( got, false );
+    test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
@@ -4055,27 +4038,10 @@ function notEquivalentReturn( test )
 
     test.case = 'extra arguments';
 
-    var got = t.notEquivalent( { a : 1 }, { a : 1 }, { a : 1 } );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.notEquivalent( 1.05, 1, null )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.notEquivalent( 1.05, 1, 'x' )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.notEquivalent( 1.05, 1, [] )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
+    t.notEquivalent( { a : 1 }, { a : 1 }, { a : 1 } );
+    t.notEquivalent( 1.05, 1, null )
+    t.notEquivalent( 1.05, 1, 'x' )
+    t.notEquivalent( 1.05, 1, [] )
 
   }
 
@@ -4481,7 +4447,6 @@ function niReturn( test )
 
 function etReturn( test )
 {
-
   var suite = wTestSuite
   ({
     tests : { returnTest : returnTest },
@@ -4497,8 +4462,8 @@ function etReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 15 );
-    test.identical( suite.report.testCheckFails, 14 );
+    test.identical( suite.report.testCheckPasses, 13 );
+    test.identical( suite.report.testCheckFails, 16 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -4522,13 +4487,13 @@ function etReturn( test )
     /* */
 
     var got = t.et( 1, '1' );
-    test.identical( got, true );
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     var got = t.et( '1', 1 );
-    test.identical( got, true );
+    test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
@@ -4681,27 +4646,10 @@ function etReturn( test )
 
     test.case = 'extra arguments';
 
-    var got = t.et( { a : 1 }, { a : 1 }, { a : 1 } );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.et( 1.05, 1, null )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.et( 1.05, 1, 'x' )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.et( 1.05, 1, [] )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
+    t.et( { a : 1 }, { a : 1 }, { a : 1 } );
+    t.et( 1.05, 1, null )
+    t.et( 1.05, 1, 'x' )
+    t.et( 1.05, 1, [] )
 
   }
 
@@ -4727,8 +4675,8 @@ function neReturn( test )
 
   function onSuiteEnd( t )
   {
-    test.identical( suite.report.testCheckPasses, 8 );
-    test.identical( suite.report.testCheckFails, 20 );
+    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( suite.report.testCheckFails, 18 );
     test.identical( suite.report.errorsArray.length, 5 );
     if( suite.report.errorsArray.length )
     logger.log( suite.report.errorsArray[ 0 ] );
@@ -4752,13 +4700,13 @@ function neReturn( test )
     /* */
 
     var got = t.ne( 1, '1' );
-    test.identical( got, false );
+    test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     var got = t.ne( '1', 1 );
-    test.identical( got, false );
+    test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
@@ -4907,27 +4855,13 @@ function neReturn( test )
 
     test.case = 'extra arguments';
 
-    var got = t.ne( { a : 1 }, { a : 1 }, { a : 1 } );
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
+    t.ne( { a : 1 }, { a : 1 }, { a : 1 } );
 
-    test.case = 'extra arguments';
+    t.ne( 1.05, 1, null )
 
-    var got = t.ne( 1.05, 1, null )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
+    t.ne( 1.05, 1, 'x' )
 
-    test.case = 'extra arguments';
-
-    var got = t.ne( 1.05, 1, 'x' )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
-
-    test.case = 'extra arguments';
-
-    var got = t.ne( 1.05, 1, [] )
-    test.identical( got, false );
-    test.identical( _.boolIs( got ), true );
+    t.ne( 1.05, 1, [] )
 
   }
 

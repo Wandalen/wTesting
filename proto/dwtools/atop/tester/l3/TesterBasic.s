@@ -758,7 +758,7 @@ function suitesFilterOut( suites )
     if( tester.settings.suite )
     {
       debugger;
-      if( !_.path.globFit( suite.name, tester.settings.suite ) )
+      if( !_.path.globShortFit( suite.name, tester.settings.suite ) )
       return;
     }
     return suite;

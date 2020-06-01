@@ -612,7 +612,7 @@ function _runnableGet()
 
   if( suite.routine )
   {
-    return _.path.globFit( trd.name, suite.routine );
+    return _.path.globShortFit( trd.name, suite.routine );
   }
 
   if( trd.experimental )

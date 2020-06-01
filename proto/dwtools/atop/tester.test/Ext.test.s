@@ -1998,7 +1998,7 @@ function help( test )
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
-    test.is( got.output.length );
+    test.is( got.output.length > 0 );
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     return null;
   })
@@ -2019,7 +2019,7 @@ function help( test )
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
-    test.is( got.output.length );
+    test.is( got.output.length > 0 );
     test.ge( _.strLinesCount( got.output ), 8 );
     return null;
   })

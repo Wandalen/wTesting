@@ -1,5 +1,5 @@
 
-# wTesting [![Build Status](https://travis-ci.org/Wandalen/wTesting.svg?branch=master)](https://travis-ci.org/Wandalen/wTesting)
+# wTesting [![Build Status](https://travis-ci.org/Wandalen/wTesting.svg?branch=master)](https://travis-ci.org/Wandalen/wTesting) [![Build Status](https://github.com/Wandalen/wTesting/workflows/Test/badge.svg)](https://github.com/Wandalen/wTesting/actions?query=workflow%3ATest)
 
 Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
 
@@ -43,7 +43,7 @@ Name of test file should has the suffix `.test` so that the testing utility coul
 require( 'wTesting' );
 
 function myTest( test )
-{  
+{
   /* describe what is going to happen */
   test.case = 'info about test case';
 
@@ -181,7 +181,7 @@ node path/to/suit verbosity:5 routine:myTest
 
 ```javascript
 function myTest( test )
-{  
+{
   /* describe what is going to happen */
   test.description = 'info about test feature';
 

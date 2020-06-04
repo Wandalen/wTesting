@@ -24,7 +24,7 @@ function onSuiteBegin()
   let self = this;
 
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
+  self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.puppeteerPath = require.resolve( 'puppeteer' );
@@ -84,7 +84,7 @@ function assetFor( test, asset )
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'Puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'Puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
@@ -166,7 +166,7 @@ function html( test )
 async function htmlAwait( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
@@ -205,7 +205,7 @@ async function htmlAwait( test )
 // function html2( test )
 // {
 //   let self = this;
-//   let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'puppeteer' );
+//   let originalDirPath = _.path.join( self.assetsOriginalPath, 'puppeteer' );
 //   let routinePath = _.path.join( self.suiteTempPath, test.name );
 //   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
@@ -262,7 +262,7 @@ async function htmlAwait( test )
 function chaining( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'Puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'Puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
@@ -400,7 +400,7 @@ var Self =
     assetFor,
     
     suiteTempPath : null,
-    assetsOriginalSuitePath : null,
+    assetsOriginalPath : null,
     execJsPath : null,
     toolsPath : null,
     puppeteerPath : null

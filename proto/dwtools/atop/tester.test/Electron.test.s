@@ -26,7 +26,7 @@ function onSuiteBegin()
 {
   let self = this;
   self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetsOriginalSuitePath = _.path.join( __dirname, '_asset' );
+  self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.spectronPath = require.resolve( 'spectron' );
@@ -86,7 +86,7 @@ function assetFor( test, asset )
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'electron' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
@@ -155,7 +155,7 @@ function html( test )
 async function htmlAwait( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'electron' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
@@ -197,7 +197,7 @@ async function htmlAwait( test )
 function consequenceFromExperiment( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'electron' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
@@ -246,7 +246,7 @@ consequenceFromExperiment.experimental = 1;
 function chaining( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalSuitePath, 'electron' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'electron' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
@@ -357,7 +357,7 @@ var Self =
     assetFor,
     
     suiteTempPath : null,
-    assetsOriginalSuitePath : null,
+    assetsOriginalPath : null,
     execJsPath : null,
     toolsPath : null,
     spectronPath : null,

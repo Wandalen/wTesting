@@ -3428,7 +3428,7 @@ function assetFor( a )
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
   _.sure( _.strDefined( context.suiteTempPath ) || _.strDefined( a.routinePath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
-  _.sure( context.assetsOriginalSuitePath === null || _.strDefined( context.assetsOriginalSuitePath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalSuitePath -}. But test suite ${suite.name} does not have.` );
+  _.sure( context.assetsOriginalPath === null || _.strDefined( context.assetsOriginalPath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalPath -}. But test suite ${suite.name} does not have.` );
   _.sure( context.appJsPath === null || _.strDefined( context.appJsPath ), `Test suite's context should have defined path to default JS file {- appJsPath -}. But test suite ${suite.name} does not have.` );
 
   Object.setPrototypeOf( a, context );
@@ -3454,8 +3454,8 @@ function assetFor( a )
 
   if( _.boolLike( a.originalAssetPath ) && a.originalAssetPath )
   a.originalAssetPath = null
-  if( a.originalAssetPath === null && context.assetsOriginalSuitePath )
-  a.originalAssetPath = a.path.join( context.assetsOriginalSuitePath, a.assetName );
+  if( a.originalAssetPath === null && context.assetsOriginalPath )
+  a.originalAssetPath = a.path.join( context.assetsOriginalPath, a.assetName );
   if( a.routinePath === null )
   a.routinePath = a.path.join( context.suiteTempPath, a.routine.name );
 
@@ -3577,7 +3577,7 @@ function assetFor( a )
   });
 
   if( a.originalAssetPath )
-  _.sure( a.fileProvider.isDir( a.originalAssetPath ), `Expects directory ${a.originalAssetPath} exists. Make one or change {- assetsOriginalSuitePath -}` );
+  _.sure( a.fileProvider.isDir( a.originalAssetPath ), `Expects directory ${a.originalAssetPath} exists. Make one or change {- assetsOriginalPath -}` );
 
   // if( !_.mapHasAll( context, a ) )
   // {

@@ -19,7 +19,8 @@ let debugged = _.process.isDebugged();
 
 let logger = null;
 let Parent = null;
-let Self = function wTestSuite( o )
+let Self = wTestSuite;
+function wTestSuite( o )
 {
 
   _.assert( arguments.length === 1, 'Expects single argument' );

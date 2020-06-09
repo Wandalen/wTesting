@@ -10,7 +10,8 @@ _.assert( _.mapIs( _realGlobal_.wTester ) );
 //
 
 let Parent = _realGlobal_.wTesterBasic;
-let Self = function wTesterCli( o )
+let Self = wTesterCli;
+function wTesterCli( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

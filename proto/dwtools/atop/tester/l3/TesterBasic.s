@@ -48,7 +48,8 @@ _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
  */
 
 let Parent = null;
-let Self = function wTesterBasic( o )
+let Self = wTesterBasic;
+function wTesterBasic( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

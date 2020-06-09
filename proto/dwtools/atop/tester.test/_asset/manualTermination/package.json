@@ -1,6 +1,6 @@
 { 
   "dependencies": {
     "wTesting": "alpha",
-    "wappbasic": "alpha"
+    "wprocess": "alpha"
   }
 }

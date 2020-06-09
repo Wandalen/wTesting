@@ -3,7 +3,7 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../../dwtools/Tools.s' );
-  _.include( 'wAppBasic' );
+  _.include( 'wProcess' );
 }
 
 let _ = _global_.wTools;

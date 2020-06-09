@@ -1,7 +1,7 @@
 
 require( 'wTesting' );
 let _ = require( 'wTools' );
-_.include( 'wAppBasic' );
+_.include( 'wProcess' );
 let c = 0;
 
 //

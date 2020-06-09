@@ -16,7 +16,8 @@ let _ = _global_.wTools;
 let debugged = _.process.isDebugged();
 
 let Parent = null;
-let Self = function wTestRoutineDescriptor( o )
+let Self = wTestRoutineDescriptor;
+function wTestRoutineDescriptor( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

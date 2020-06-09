@@ -31,7 +31,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wSelector' );
   _.include( 'wEqualer' );
   _.include( 'wProcessWatcher' );
-  _.include( 'wAppBasic' );
+  _.include( 'wProcess' );
   _.include( 'wRoutineBasic' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );

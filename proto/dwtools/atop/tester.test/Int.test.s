@@ -7725,21 +7725,6 @@ asyncTimeout1.description =
 function processWatchingOnDefault( test )
 {
   let trd;
-  function testRoutine( t )
-  {
-    trd = t;
-    t.description = 'create three zombie processes';
-    var o =
-    {
-      execPath : 'node -e "setTimeout(()=>{},10000)"',
-      inputMirroring : 0,
-      throwingExitCode : 0,
-      mode : 'spawn'
-    }
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
-  }
 
   var suite = wTestSuite
   ({
@@ -7785,6 +7770,23 @@ function processWatchingOnDefault( test )
   });
 
   return result;
+
+  function testRoutine( t )
+  {
+    trd = t;
+    t.description = 'create three zombie processes';
+    var o =
+    {
+      execPath : 'node -e "setTimeout(()=>{},10000)"',
+      inputMirroring : 0,
+      throwingExitCode : 0,
+      mode : 'spawn'
+    }
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.mapExtend( null, o ) );
+  }
+
 }
 
 processWatchingOnDefault.description =

@@ -7,10 +7,6 @@
   @module Tools/atop/Tester
 */
 
-/**
- * @file Main.bse.s
- */
-
 //
 
 let _global = _global_;

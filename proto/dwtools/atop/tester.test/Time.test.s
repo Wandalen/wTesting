@@ -1782,7 +1782,7 @@ var Self =
   context :
   {
     timeAccuracy : 1,
-    delay : 200,
+    delay : 400,
   },
 
   tests :

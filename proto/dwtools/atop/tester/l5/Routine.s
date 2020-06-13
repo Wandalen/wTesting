@@ -3580,12 +3580,6 @@ function assetFor( a )
   if( a.originalAssetPath )
   _.sure( a.fileProvider.isDir( a.originalAssetPath ), `Expects directory ${a.originalAssetPath} exists. Make one or change {- assetsOriginalPath -}` );
 
-  // if( !_.mapHasAll( context, a ) )
-  // {
-  //   let fields = _.mapBut( a, context );
-  //   throw _.err( `Context of test suite which use routine \`assetFor\` should have such fields : \n${_.mapKeys( fields ).join( ', ' )}` );
-  // }
-
   program.defaults =
   {
     routine : null,
@@ -3594,7 +3588,7 @@ function assetFor( a )
 
   return a;
 
-  /**/
+  /* */
 
   function abs_functor( routinePath )
   {
@@ -3606,11 +3600,13 @@ function assetFor( a )
       return filePath;
       let args = _.longSlice( arguments );
       args.unshift( routinePath );
+      if( _.arrayIs( filePath ) || _.mapIs( filePath ) )
+      return _.filter_( null, filePath, ( filePath ) => abs( filePath, ... args.slice( 2, args.length ) ) );
       return a.uri.s.join.apply( a.uri.s, args );
     }
   }
 
-  /**/
+  /* */
 
   function rel_functor( routinePath )
   {
@@ -3622,9 +3618,7 @@ function assetFor( a )
       if( filePath === null )
       return filePath;
       if( _.arrayIs( filePath ) || _.mapIs( filePath ) )
-      {
-        return _.filter( filePath, ( filePath ) => rel( filePath ) );
-      }
+      return _.filter_( null, filePath, ( filePath ) => rel( filePath ) );
       if( a.uri.isRelative( filePath ) && !a.uri.isRelative( routinePath ) )
       return filePath;
       return a.uri.s.relative.apply( a.uri.s, [ routinePath, filePath ] );

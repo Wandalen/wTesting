@@ -3565,6 +3565,29 @@ function assetFor( a )
     },
   });
 
+  if( a.findDirs === null )
+  a.findDirs = a.fileProvider.filesFinder
+  ({
+    withTerminals : 0,
+    withDirs : 1,
+    withStem : 1,
+    allowingMissed : 1,
+    maskPreset : 0,
+    outputFormat : 'relative',
+    filter :
+    {
+      recursive : 2,
+      maskAll :
+      {
+        excludeAny : [ /(^|\/)\.git($|\/)/, /(^|\/)\+/ ],
+      },
+      maskTransientAll :
+      {
+        excludeAny : [ /(^|\/)\.git($|\/)/, /(^|\/)\+/ ],
+      },
+    },
+  });
+
   if( a.findAll === null )
   a.findAll = a.fileProvider.filesFinder
   ({
@@ -3575,6 +3598,10 @@ function assetFor( a )
     allowingMissed : 1,
     maskPreset : 0,
     outputFormat : 'relative',
+    filter :
+    {
+      recursive : 2,
+    }
   });
 
   if( a.originalAssetPath )
@@ -3635,6 +3662,7 @@ function assetFor( a )
     a.fileProvider.dirMake( a.routinePath );
     else
     a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });
+    return null; /* qqq : cover a.reflect. make sure returned value is covered */
   }
 
   /**/
@@ -3691,6 +3719,7 @@ assetFor.defaults =
   anotherStartThrowing : null,
   find : null,
   findAll : null,
+  findDirs : null,
 
 }
 

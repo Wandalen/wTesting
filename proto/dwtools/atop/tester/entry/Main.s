@@ -111,6 +111,8 @@ _realGlobal_.wTester.exec();
   if verbosity is high user should be able to copy paste final report with no need to copy paste from aother sources
   should have name, path.. etc
 
+- integrate with github ( special path format ) workflow to let github print annotation
+
 */
 
 /*

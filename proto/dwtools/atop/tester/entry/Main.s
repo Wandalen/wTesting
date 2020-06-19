@@ -113,6 +113,9 @@ _realGlobal_.wTester.exec();
 
 - integrate with github ( special path format ) workflow to let github print annotation
 
+- node Some.test.js . -- should give help
+- node Some.test.js .routines.list -- should list routines
+
 */
 
 /*

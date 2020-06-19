@@ -127,7 +127,7 @@ function commandHelp( e )
 
 //
 
-function commandVersion( e )
+function commandVersion( e ) /* xxx qqq : move to NpmTools */
 {
   let tester = this.form();
   let fileProvider = tester.fileProvider;

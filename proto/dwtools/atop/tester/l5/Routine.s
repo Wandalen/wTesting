@@ -1330,7 +1330,7 @@ function _outcomeReport( o )
       ({
         location : _location,
         selectMode : o.selectMode,
-        numberOfLines : 5,
+        nearestLines : 5,
       });
       if( _code )
       code = '\n' + _code + '\n';

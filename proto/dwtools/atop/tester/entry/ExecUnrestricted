@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 let _ = _global_.wTools;
 let o =
 {
-  execPath : _.strQuote( _.path.join( __dirname, 'Main.s' ) ),
+  execPath : _.strQuote( _.path.join( __dirname, 'Exec' ) ),
 }
 _.process._exitHandlerRepair();
 _.process.startNodePassingThrough( o );

@@ -3418,6 +3418,13 @@ function assetFor( a )
   _.assert( a.routine === undefined );
   _.routineOptions( assetFor, a );
 
+  if( a.suiteTempPath === null && context.suiteTempPath !== undefined )
+  a.suiteTempPath = context.suiteTempPath;
+  if( a.assetsOriginalPath === null && context.assetsOriginalPath !== undefined )
+  a.assetsOriginalPath = context.assetsOriginalPath;
+  if( a.appJsPath === null && context.appJsPath !== undefined )
+  a.appJsPath = context.appJsPath;
+
   a.trd = trd;
   a.suite = suite;
   a.routine = trd.routine;
@@ -3428,9 +3435,9 @@ function assetFor( a )
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
-  _.sure( _.strDefined( context.suiteTempPath ) || _.strDefined( a.routinePath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
-  _.sure( context.assetsOriginalPath === null || _.strDefined( context.assetsOriginalPath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalPath -}. But test suite ${suite.name} does not have.` );
-  _.sure( context.appJsPath === null || _.strDefined( context.appJsPath ), `Test suite's context should have defined path to default JS file {- appJsPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( _.strDefined( a.suiteTempPath ) || _.strDefined( a.routinePath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( a.assetsOriginalPath === null || _.strDefined( a.assetsOriginalPath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalPath -}. But test suite ${suite.name} does not have.` );
+  _.sure( a.appJsPath === null || _.strDefined( a.appJsPath ), `Test suite's context should have defined path to default JS file {- appJsPath -}. But test suite ${suite.name} does not have.` );
 
   Object.setPrototypeOf( a, context );
 
@@ -3455,10 +3462,10 @@ function assetFor( a )
 
   if( _.boolLike( a.originalAssetPath ) && a.originalAssetPath )
   a.originalAssetPath = null
-  if( a.originalAssetPath === null && context.assetsOriginalPath )
-  a.originalAssetPath = a.path.join( context.assetsOriginalPath, a.assetName );
+  if( a.originalAssetPath === null && a.assetsOriginalPath )
+  a.originalAssetPath = a.path.join( a.assetsOriginalPath, a.assetName );
   if( a.routinePath === null )
-  a.routinePath = a.path.join( context.suiteTempPath, a.routine.name );
+  a.routinePath = a.path.join( a.suiteTempPath, a.routine.name );
 
   if( a.abs === null )
   a.abs = abs_functor( a.routinePath );
@@ -3499,7 +3506,7 @@ function assetFor( a )
   if( a.appStart === null )
   a.appStart = a.process.starter
   ({
-    execPath : context.appJsPath || null,
+    execPath : a.appJsPath || null,
     currentPath : a.routinePath,
     outputCollecting : 1,
     throwingExitCode : 1,
@@ -3511,7 +3518,7 @@ function assetFor( a )
   if( a.appStartNonThrowing === null )
   a.appStartNonThrowing = a.process.starter
   ({
-    execPath : context.appJsPath || null,
+    execPath : a.appJsPath || null,
     currentPath : a.routinePath,
     outputCollecting : 1,
     outputGraying : 1,
@@ -3702,6 +3709,10 @@ assetFor.defaults =
   path : null,
   uri : null,
   ready : null,
+
+  suiteTempPath : null,
+  assetsOriginalPath : null,
+  appJsPath : null,
 
   originalAssetPath : null,
   originalAbs : null,

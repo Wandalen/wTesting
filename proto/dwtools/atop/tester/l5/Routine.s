@@ -3558,6 +3558,8 @@ function assetFor( a )
     allowingMissed : 1,
     maskPreset : 0,
     outputFormat : 'relative',
+    resolvingSoftLink : 1,
+    resolvingTextLink : 1,
     filter :
     {
       recursive : 2,
@@ -3580,6 +3582,8 @@ function assetFor( a )
     withStem : 1,
     allowingMissed : 1,
     maskPreset : 0,
+    resolvingSoftLink : 1,
+    resolvingTextLink : 1,
     outputFormat : 'relative',
     filter :
     {
@@ -3603,6 +3607,8 @@ function assetFor( a )
     withStem : 1,
     withTransient : 1,
     allowingMissed : 1,
+    resolvingSoftLink : 1,
+    resolvingTextLink : 1,
     maskPreset : 0,
     outputFormat : 'relative',
     filter :

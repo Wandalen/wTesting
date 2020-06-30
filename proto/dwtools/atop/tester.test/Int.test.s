@@ -128,6 +128,45 @@ function identical( test )
 
   return result;
 }
+//
+
+function identicalConsequence( test )
+{
+  var testRoutine;
+
+  function r1( t )
+  {
+    testRoutine = t;
+
+    let con = _.Consequence().take( null );
+    t.identical( con, null );
+
+    return null;
+  }
+
+  var suite = wTestSuite
+  ({
+    tests : { r1 : r1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  var result = suite.run()
+  .finally( function( err, data )
+  {
+    var acheck = testRoutine.checkCurrent();
+    test.identical( acheck.checkIndex, 2 );
+    test.identical( suite.report.errorsArray.length, 0 );
+    test.identical( suite.report.testCheckPasses, 0 );
+    test.identical( suite.report.testCheckFails, 1 );
+
+    if( err )
+    throw err;
+    return null;
+  });
+
+  return result;
+}
 
 // --
 // should
@@ -8263,6 +8302,7 @@ var Self =
 
     trivial,
     identical,
+    identicalConsequence,
 
     // should
 

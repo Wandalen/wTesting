@@ -184,7 +184,7 @@ function commandImply( e )
   let ca = e.ca;
   let logger = tester.logger;
 
-  let request = _.strRequestParse( e.argument );
+  let request = _.strRequestParse( e.commandArgument );
   tester.appArgsRead({ subject : request.subject, propertiesMap : request.map });
 
   // let namesMap =
@@ -194,7 +194,7 @@ function commandImply( e )
   //   beeping : 'beeping',
   // }
   //
-  // let request = tester.Resolver.strRequestParse( e.argument );
+  // let request = tester.Resolver.strRequestParse( e.commandArgument );
   //
   // _.process.argsReadTo
   // ({
@@ -215,7 +215,7 @@ function commandRun( e )
   let path = tester.fileProvider.path;
   let logger = tester.logger;
 
-  let request = _.strCommandParse({ src : e.argument, commandFormat : 'subject options?' });
+  let request = _.strCommandParse({ src : e.commandArgument, commandFormat : 'subject options?' });
   tester.appArgsRead({ subject : request.subject, propertiesMap : request.map });
   tester.scenarioTest();
 
@@ -231,7 +231,7 @@ function commandSuitesList( e )
   let fileProvider = tester.fileProvider;
   let path = tester.fileProvider.path;
   let logger = tester.logger;
-  let request = _.strRequestParse( e.argument );
+  let request = _.strRequestParse( e.commandArgument );
 
   tester.appArgsRead({ subject : request.subject, propertiesMap : request.map });
   tester.scenarioSuitesList();

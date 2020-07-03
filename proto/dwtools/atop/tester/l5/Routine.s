@@ -2720,8 +2720,9 @@ function _shouldDo( o )
   {
     _.routineOptions( _shouldDo, o );
     _.assert( arguments.length === 1, 'Expects single argument' );
-    _.assert( o.args.length === 1 );
-    _.assert( _.routineIs( o.args[ 0 ] ) );
+    _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
+    _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
+    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handler error should be routine' );
   }
   catch( err )
   {
@@ -2783,9 +2784,21 @@ function _shouldDo( o )
   function handleError( _err )
   {
 
-    err = _err;
+    err = _.err( _err );
+
+    try
+    {
+      debugger;
+      if( o.args[ 1 ] )
+      o.args[ 1 ]( err, o );
+    }
+    catch( err2 )
+    {
+      console.error( err2 );
+    }
 
     _.errAttend( err );
+
 
     if( o.ignoringError )
     {
@@ -2875,21 +2888,14 @@ function _shouldDo( o )
   function handleAsyncResult()
   {
 
-    debugger;
-    // let stack = _.introspector.stack([ 3, Infinity ]);
     trd.checkNext();
     async = 1;
 
     result.give( function( _err, _arg )
     {
-      debugger;
 
       err = _err;
       arg = _arg;
-
-      // if( !o.ignoringError && !reported )
-      // // if( err )
-      // reportAsync();
 
       if( !o.ignoringError && !reported )
       if( err && !o.expectingAsyncError )
@@ -2898,12 +2904,22 @@ function _shouldDo( o )
       reportAsync();
 
       if( _.errIs( err ) )
-      _.errAttend( err );
+      {
+        try
+        {
+          if( o.args[ 1 ] )
+          o.args[ 1 ]( err, o );
+        }
+        catch( err2 )
+        {
+          console.error( err2 );
+        }
+        _.errAttend( err );
+      }
 
       /* */
 
       if( !reported )
-      // if( good )
       if( !o.allowingMultipleResources )
       _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
       {
@@ -3167,7 +3183,7 @@ function _shouldDo( o )
 
 _shouldDo.defaults =
 {
-  args : null,
+  args : null, /* qqq : cover 2-arguments calls for each should* check */
   expectingSyncError : 1,
   expectingAsyncError : 1,
   ignoringError : 0,

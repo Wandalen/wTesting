@@ -25,7 +25,7 @@ var _ = _global_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.suiteTempPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
@@ -37,7 +37,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.suiteTempPath, 'Tester' ) )
-  _.path.pathDirTempClose( self.suiteTempPath );
+  _.path.tempClose( self.suiteTempPath );
 }
 
 //

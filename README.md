@@ -1,10 +1,10 @@
 
-# wTesting [![Status](https://github.com/Wandalen/wTesting/workflows/Test/badge.svg)](https://github.com/Wandalen/wTesting/actions?query=workflow%3ATest)
+# utility::Testing [![Status](https://circleci.com/gh/Wandalen/wTesting.svg?style=shield)](https://img.shields.io/circleci/build/github/Wandalen/wTesting?label=Test&logo=Test) [![Status](https://github.com/Wandalen/wTesting/workflows/Test/badge.svg)](https://github.com/Wandalen/wTesting/actions?query=workflow%3ATest) [![stable](https://img.shields.io/badge/stability-stable-green.svg)](https://github.com/emersion/stability-badges#stable)
 
 Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
 
 <div align="center">
-		<img src="./doc/images/tester.gif" alt="tester.gif">
+  <img src="./doc/images/tester.gif" alt="tester.gif">
 </div>
 
 ### Cheat sheet

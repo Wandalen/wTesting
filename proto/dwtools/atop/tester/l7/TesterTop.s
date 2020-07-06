@@ -59,7 +59,7 @@ function _commandHandleSyntaxError( o )
 {
   let tester = this;
   let ca = tester.ca;
-  return ca.commandPerform({ command : '.run ' + o.command }); 
+  return ca.commandPerform({ command : '.run ' + o.command });
   // return _.CommandsAggregator.prototype.onSyntaxError.call( ca, o );
 }
 

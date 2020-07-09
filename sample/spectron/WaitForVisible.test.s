@@ -30,7 +30,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --

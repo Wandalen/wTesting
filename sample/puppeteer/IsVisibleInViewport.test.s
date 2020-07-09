@@ -6,7 +6,6 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
-  _.include( 'wFiles' );
 
   var Puppeteer = require( 'puppeteer' );
 }
@@ -32,7 +31,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --

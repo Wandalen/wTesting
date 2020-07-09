@@ -1,7 +1,7 @@
 
 if( typeof module !== 'undefined' )
 require( 'wTesting' );
-var _ = _global_.wTools;
+let _ = _testerGlobal_.wTools;
 
 /*
 
@@ -253,4 +253,4 @@ var Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
+wTester.test( Self.name );

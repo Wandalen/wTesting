@@ -4,8 +4,8 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../..' );
-  require( 'wFiles' )
+  let _ = require( 'wTools' );
+  _.include( 'wTesting' );
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );
@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _global = _global_;
-var _ = _testerGlobal_.wTools;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context

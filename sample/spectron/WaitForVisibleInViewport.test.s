@@ -4,8 +4,8 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../..' );
-  require( 'wFiles' )
+  let _ = require( 'wTools' );
+  _.include( 'wTesting' );
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );

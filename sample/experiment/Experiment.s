@@ -125,7 +125,7 @@ var Proto =
 
 //
 
-// ---ORIGINAL VERSION
+// ---ORIGINAL
 // _.mapExtend( Self, Proto );
 
 // if( typeof module !== 'undefined' && !module.parent )

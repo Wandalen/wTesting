@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wTesting.out
 consistency:
-  wTesting.out.will.yml: &ref_0
-    hash: 6f659a95f627eefa4328707f84750d1a
-    size: 49213
-  ../.ex.will.yml: &ref_1
-    hash: 58d6049eeae86b6c32e5e0fe2ce1c4ef
-    size: 2796
-  ../.im.will.yml: &ref_2
-    hash: 8333b04a19998cde9db3d4a80613c5ca
-    size: 6287
+  ../.ex.will.yml: &ref_0
+    hash: b259909518ce877bcdeca298a613d7de
+    size: 2784
+  ../.im.will.yml: &ref_1
+    hash: 468e0d493693c3599d8a35a0efbf59b5
+    size: 6284
 module:
   wTesting.out:
     about:
@@ -23,23 +20,23 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - testing
         - unit test
         - functional test
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       npm.name: wTesting
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         wtest: node proto/wtools/atop/tester/entry/ExecUnrestricted
         single-process-wtest: node proto/wtools/atop/tester/entry/Exec
@@ -47,7 +44,7 @@ module:
         tst: node proto/wtools/atop/tester/entry/ExecUnrestricted
         single-process-tst: node proto/wtools/atop/tester/entry/Exec
         debug-tst: node proto/wtools/atop/tester/entry/ExecDebug
-      npm.bin:
+      npm.bin: &ref_6
         wtest: proto/wtools/atop/tester/entry/ExecUnrestricted
         single-process-wtest: proto/wtools/atop/tester/entry/Exec
         debug-wtest: proto/wtools/atop/tester/entry/ExecDebug
@@ -263,8 +260,7 @@ module:
           - >-
             ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
           - ../proto/wtools/atop/tester.test/_asset/optionAccuracy
-          - >-
-            ../proto/wtools/atop/tester.test/_asset/optionAccuracy/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionAccuracy/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/optionAccuracyExplicitly
           - >-
             ../proto/wtools/atop/tester.test/_asset/optionAccuracyExplicitly/Suite.test.js
@@ -283,8 +279,7 @@ module:
           - ../proto/wtools/atop/tester.test/_asset/puppeteer/index.html
           - ../proto/wtools/atop/tester.test/_asset/puppeteer/Puppeteer.test.s
           - ../proto/wtools/atop/tester.test/_asset/requireTesting
-          - >-
-            ../proto/wtools/atop/tester.test/_asset/requireTesting/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/requireTesting/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/spectron
           - ../proto/wtools/atop/tester.test/_asset/spectron/index.html
           - ../proto/wtools/atop/tester.test/_asset/spectron/Spectron.test.s
@@ -795,7 +790,7 @@ module:
           debug: release
       reflect.proto.debug.raw:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.raw'
         criterion:
           tests: no.tests
           debug: debug
@@ -805,7 +800,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.raw'
         criterion:
           tests: no.tests
           debug: release
@@ -815,7 +810,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.compiled'
         criterion:
           tests: no.tests
           debug: debug
@@ -825,7 +820,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.compiled'
         criterion:
           tests: no.tests
           debug: release
@@ -836,7 +831,7 @@ module:
       transpile.proto.raw:
         opts:
           entry: 'path::entry.proto.no.tests'
-          filePath: 'reflector::transpile.proto.raw*'
+          filePath: 'reflector::transpile.proto.raw'
         criterion:
           raw: raw
           debug: release
@@ -846,7 +841,7 @@ module:
       transpile.proto.no.tests.compiled.debug:
         opts:
           entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
         criterion:
           tests: no.tests
           raw: compiled
@@ -857,7 +852,7 @@ module:
       transpile.proto.no.tests.compiled.release:
         opts:
           entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
         criterion:
           tests: no.tests
           raw: compiled
@@ -869,7 +864,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
         criterion:
           tests: only.tests
           raw: compiled
@@ -881,7 +876,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
         criterion:
           tests: only.tests
           raw: compiled
@@ -889,24 +884,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -995,9 +972,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wTesting.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wTesting
@@ -1009,37 +985,14 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - testing
-        - unit test
-        - functional test
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
-        - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
+      contributors: *ref_4
       npm.name: wTesting
-      npm.scripts:
-        test: wtest .run proto/**
-        wtest: node proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: node proto/wtools/atop/tester/entry/Exec
-        debug-wtest: node proto/wtools/atop/tester/entry/ExecDebug
-        tst: node proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: node proto/wtools/atop/tester/entry/Exec
-        debug-tst: node proto/wtools/atop/tester/entry/ExecDebug
-      npm.bin:
-        wtest: proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: proto/wtools/atop/tester/entry/Exec
-        debug-wtest: proto/wtools/atop/tester/entry/ExecDebug
-        tst: proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: proto/wtools/atop/tester/entry/Exec
-        debug-tst: proto/wtools/atop/tester/entry/ExecDebug
+      npm.scripts: *ref_5
+      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
@@ -1769,9 +1722,8 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 58d6049eeae86b6c32e5e0fe2ce1c4ef
-        size: 2796
+        hash: b259909518ce877bcdeca298a613d7de
+        size: 2784
       ../.im.will.yml:
-        hash: 8333b04a19998cde9db3d4a80613c5ca
-        size: 6287
-      wTesting.out.will.yml: *ref_0
+        hash: 468e0d493693c3599d8a35a0efbf59b5
+        size: 6284

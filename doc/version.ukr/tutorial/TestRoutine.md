@@ -226,7 +226,7 @@ function arrayIs( test )
 
 </details>
 
-Код тест рутини `arrayIs` модуля [`Tools`](https://github.com/Wandalen/wTools). Оригінал тест рутини знаходиться в файлі [`Long.test.s`](https://github.com/Wandalen/wTools/blob/master/proto/dwtools/abase/l1.test/Long.test.s).
+Код тест рутини `arrayIs` модуля [`Tools`](https://github.com/Wandalen/wTools). Оригінал тест рутини знаходиться в файлі [`Long.test.s`](https://github.com/Wandalen/wTools/blob/master/proto/wtools/abase/l1.test/Long.test.s).
 
 Тест рутина `arrayIs` містить лише секцію з тестуванням штатної поведінки рутини `arrayIs` оскільки рутина не викидає помилок. При зміні тестових випадків в рутину передавались різні типи аргументів, що відображено в описі тест кейсів. Тест кейси відділені одним порожнім рядком тому, що сам тест кейс короткий - чотири рядки. В такому разі тест кейси зручно проглядати.
 
@@ -302,7 +302,7 @@ function arrayFromRange( test )
 
 </details>
 
-Код тест рутини `arrayFromRange` модуля [`Tools`](https://github.com/Wandalen/wTools). Оригінал тест рутини знаходиться в файлі [`Long.test.s`](https://github.com/Wandalen/wTools/blob/master/proto/dwtools/abase/l1.test/Long.test.s).
+Код тест рутини `arrayFromRange` модуля [`Tools`](https://github.com/Wandalen/wTools). Оригінал тест рутини знаходиться в файлі [`Long.test.s`](https://github.com/Wandalen/wTools/blob/master/proto/wtools/abase/l1.test/Long.test.s).
 
 Тест рутина `arrayFromRange` включає як позитивне тестування, так і тестування при передачі помилкових вхідних даних. В тест кейсах змінюються дані в аргументі `range`, що по-різному відображається в результаті. Відповідно, опис до тест кейсів містить позначення як результату, так і на діапазону вхідних даних. Згідно приведеного коду очевидно, що на один загальний тестовий випадок - указанням діапазону для масиву - є по декілька тест кейсів. Для тестування при вводі помилкових даних обрано лише по одному тестовому випадку.
 
@@ -434,7 +434,7 @@ function strCount( test )
 
 </details>
 
-Код тест рутини `strCount` модуля [`Tools`](https://github.com/Wandalen/wTools). Оригінал тест рутини знаходиться в файлі [`StringTools.test.s`](https://github.com/Wandalen/wTools/blob/master/proto/dwtools/abase/l2.test/StringTools.test.s).
+Код тест рутини `strCount` модуля [`Tools`](https://github.com/Wandalen/wTools). Оригінал тест рутини знаходиться в файлі [`StringTools.test.s`](https://github.com/Wandalen/wTools/blob/master/proto/wtools/abase/l2.test/StringTools.test.s).
 
 Тест групи в указаній тест рутині формуються за типом аргументу для пошуку в рядку. Перша група - `string` - використовує аргумент типу `String`, а `regexp`, відповідно, `RegExp`.
 

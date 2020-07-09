@@ -9,11 +9,11 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    var _ = require( '../../../../dwtools/Tools.s' );
+    var _ = require( '../../../../wtools/Tools.s' );
   }
   catch( err )
   {
-    var _ = require( '../../../dwtools/Tools.s' );
+    var _ = require( '../../../wtools/Tools.s' );
   }
 
   var _ = _global_.wTools;

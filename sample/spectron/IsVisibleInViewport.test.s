@@ -22,7 +22,7 @@ var _ = _testerGlobal_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 

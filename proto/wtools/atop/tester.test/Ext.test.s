@@ -4,7 +4,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../dwtools/Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   require( '../tester/entry/Main.s' );
   _.include( 'wProcess' );
@@ -26,7 +26,7 @@ function onSuiteBegin()
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
-  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../../dwtools/Tools.s' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../../wtools/Tools.s' ) );
 
 }
 
@@ -1825,7 +1825,7 @@ function noTestSuite( test )
     return null;
   })
 
-  a.appStartNonThrowing({ args : 'proto/dwtools' })
+  a.appStartNonThrowing({ args : 'proto/wtools' })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );

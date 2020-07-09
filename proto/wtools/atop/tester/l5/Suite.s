@@ -1256,7 +1256,7 @@ function exceptionReport( o )
     suite._exceptionConsider( err );
 
     logger.begin({ verbosity : 9 });
-    logger.log( _.errOnce( err ) );
+    logger.error( _.errOnce( err ) );
     logger.end({ verbosity : 9 });
 
     if( o.unbarring )

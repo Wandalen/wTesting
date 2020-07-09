@@ -5,7 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../dwtools/Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../tester/entry/Main.s' );
@@ -1033,7 +1033,7 @@ function shouldThrowErrorSync( test )
         test.is( _.errIs( err ) );
         test.is( !arg );
         // _.errAttend( err );
-        // logger.log( _.errOnce( err ) );
+        // logger.error( _.errOnce( err ) );
       });
       return null;
     });

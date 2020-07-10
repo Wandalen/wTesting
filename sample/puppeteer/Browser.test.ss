@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _Browser_test_s_( ) {
 
 'use strict';
 
@@ -7,9 +7,7 @@ if( typeof module !== 'undefined' )
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
-
+  var Puppeteer = require( 'puppeteer' );
 }
 
 var _global = _global_;
@@ -22,9 +20,12 @@ let _ = _testerGlobal_.wTools;
 function onSuiteBegin()
 {
   let self = this;
+
   self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
+
+//
 
 function onSuiteEnd()
 {
@@ -37,28 +38,23 @@ function onSuiteEnd()
 // tests
 // --
 
-//
-
-async function electron( test )
+async function browser( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let app = new Spectron.Application
-  ({
-    path : ElectronPath,
-    args : [ mainPath ]
-  })
+  let browser = await Puppeteer.launch({ headless : true });
 
-  await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  var version = await browser.version();
+  test.is( _.strHas( version, '79.0' ) );
 
-  let title = await app.browserWindow.getTitle();
-  test.identical( title, 'Test' );
-  await app.stop();
+  var agent = await browser.userAgent();
+  test.is( _.strHas( agent, '79.0' ) );
+
+  await browser.close();
 
   return null;
 }
@@ -70,9 +66,8 @@ async function electron( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.ElectronAPI',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Puppeteer.Browser',
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -86,7 +81,7 @@ var Self =
 
   tests :
   {
-    electron,
+    browser
   }
 
 }

@@ -1,4 +1,4 @@
-( function _WaitForVisibleInViewport_test_s_( ) {
+( function _SubmitForm_test_s_( ) {
 
 'use strict';
 
@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _global = _global_;
-var _ = _testerGlobal_.wTools;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context
@@ -39,35 +39,37 @@ function onSuiteEnd()
 
 //
 
-async function waitForVisibleInViewport( test )
+async function submitForm( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+  // Prepare path to electron app script( main.js )
+  let indexHtml = _.path.nativize( _.path.join( __dirname, 'asset/form/index.html' ) );
 
+  // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ indexHtml ]//use path to index html as arg for electron app
   })
 
+  // Start the electron app
   await app.start()
-  await _.test.waitForVisibleInViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
-  });
+  // Waint until page will be loaded
+  await app.client.waitUntilTextExists( 'p', 'Result', 5000 );
 
-  var got = await app.client.$( 'p' ).isVisible();
-  test.identical( got, true );
+  // Set input field value
+  await app.client.$( '#input1' ).setValue( '321' );
 
-  await app.stop();
+  //Click submit button
+  await app.client.$( '#submit' ).click();
 
-  return null;
+  // Check text result
+  var result = await app.client.$( '#result' ).getText();
+  test.identical( result, 'Result:321' )
+
+  //Stop the electron app
+  return app.stop();
 }
 
 // --
@@ -77,10 +79,8 @@ async function waitForVisibleInViewport( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.WaitForVisibleInViewport',
-  silencing : 1,
-  enabled : 1,
-
+  name : 'Visual.Spectron.SubmitForm',
+  
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -93,7 +93,7 @@ var Self =
 
   tests :
   {
-    waitForVisibleInViewport,
+    submitForm,
   }
 
 }

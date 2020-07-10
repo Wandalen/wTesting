@@ -1,4 +1,4 @@
-( function _Page_test_s_( ) {
+( function _Device_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function page( test )
+async function emulateDevice( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,11 +54,23 @@ async function page( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  test.case = 'Check Page html'
-  var html = await app.client.execute( () => document.documentElement.outerHTML );
-  test.is( _.strHas( html.value, '<p>Hello world</p>' ) );
+  var originalSize = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+
+  test.case = 'emulate mobile screen'
+  await app.webContents.enableDeviceEmulation
+  ({
+    screenPosition : 'mobile',
+    screenSize : { width : 400, height : 600 }
+  })
+  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  test.identical( size.value, { width : 400, height : 600 } )
+
+  test.case = 'disable emulation'
+  await app.webContents.disableDeviceEmulation()
+  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  test.identical( size.value, originalSize.size )
 
   await app.stop();
 
@@ -72,9 +84,9 @@ async function page( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Page',
-  
-  
+  name : 'Visual.Spectron.Device',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -88,7 +100,7 @@ var Self =
 
   tests :
   {
-    page,
+    emulateDevice,
   }
 
 }

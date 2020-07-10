@@ -1,4 +1,4 @@
-( function _SubmitForm_test_s_( ) {
+( function _WaitForVisible_test_s_( ) {
 
 'use strict';
 
@@ -39,37 +39,29 @@ function onSuiteEnd()
 
 //
 
-async function submitForm( test )
+async function waitForVisible( test )
 {
   let self = this;
-  
-  // Prepare path to electron app script( main.js )
-  let indexHtml = _.path.nativize( _.path.join( __dirname, 'asset/form/index.html' ) );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
-  // Create app instance using path to main.js and electron binary
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtml ]//use path to index html as arg for electron app
+    args : [ mainPath ]
   })
 
-  // Start the electron app
   await app.start()
-  // Waint until page will be loaded
-  await app.client.waitUntilTextExists( 'p', 'Result', 5000 );
-  
-  // Set input field value
-  await app.client.$( '#input1' ).setValue( '321' );
-  
-  //Click submit button
-  await app.client.$( '#submit' ).click();
-  
-  // Check text result
-  var result = await app.client.$( '#result' ).getText();
-  test.identical( result, 'Result:321' )
+  await app.client.waitForVisible( 'p', 5000 )
 
-  //Stop the electron app
-  return app.stop();
+  var got = await app.client.$( 'p' ).isVisible();
+  test.identical( got, true );
+
+  await app.stop();
+
+  return null;
 }
 
 // --
@@ -79,8 +71,10 @@ async function submitForm( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.SubmitForm',
-  
+  name : 'Visual.Spectron.WaitForVisible',
+  silencing : 1,
+  enabled : 1,
+
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -93,7 +87,7 @@ var Self =
 
   tests :
   {
-    submitForm,
+    waitForVisible,
   }
 
 }

@@ -1,4 +1,4 @@
-( function _Screenshots_test_s_( ) {
+( function _WaitForCondition_test_s_( ) {
 
 'use strict';
 
@@ -39,29 +39,47 @@ function onSuiteEnd()
 
 //
 
-async function screenshots( test )
+async function waitForCondition( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  
+  // Prepare path to electron app script( main.js )
+  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-
+  // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainJsPath ]
   })
 
+  // Start the electron app
   await app.start()
+  // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+
+  //Change text property after delay
+  _.time.out( 1500, () =>
+  {
+    app.client.execute( () =>
+    {
+      let element = document.querySelector( 'p' );
+      element.innerText = 'Hello from test'
+    })
+  })
+
+  //Wait until text will be changed
+  await app.client.waitUntil( async () => 
+  {
+    return await app.client.$( 'p' ).getText() === 'Hello from test';
+  })
   
-  var screenshot = await app.browserWindow.capturePage();
-  test.is( _.bufferNodeIs( screenshot ) )
+  //Check text property
+  var got = await app.client.$( 'p' ).getText();
+  test.identical( got, 'Hello from test' );
 
-  await app.stop();
-
-  return null;
+  //Stop the electron app
+  return app.stop();
 }
 
 // --
@@ -71,10 +89,8 @@ async function screenshots( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Screenshots',
+  name : 'Visual.Spectron.WaitForCondition',
   
-  
-
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -87,7 +103,7 @@ var Self =
 
   tests :
   {
-    screenshots,
+    waitForCondition,
   }
 
 }

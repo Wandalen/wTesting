@@ -1,4 +1,4 @@
-( function _Serverless_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -39,27 +39,39 @@ function onSuiteEnd()
 
 //
 
-async function loadLocalHtmlFile( test )
+async function htmlAwait( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.nativize( _.path.join( routinePath, 'serverless/index.html' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainPath ]
   })
-  await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  var got = await app.client.execute( () => window.scriptLoaded )
-  test.identical( got.value, true );
-  
-  var got = await app.client.getCssProperty( 'p', 'color' )
-  test.identical( got.value, 'rgba(192,192,192,1)' );
+  await app.start()
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+
+  test.case = 'Check element text'
+  var got = await app.client.$( '.class1 p' ).getText();
+  test.identical( got, 'Text1' )
+
+  test.case = 'Check href attribute'
+  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
+  test.is( _.strEnds( got, '/index.html' ) )
+
+  test.case = 'Check input field value'
+  var got = await app.client.getValue( '#input1' );
+  test.identical( got, '123' )
+
+  test.case = 'Change input field value and check it'
+  await app.client.$( '#input1' ).setValue( '321' )
+  var got = await app.client.getValue( '#input1' )
+  test.identical( got, '321' )
 
   await app.stop();
 
@@ -73,9 +85,9 @@ async function loadLocalHtmlFile( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Serverless',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Html.Await',
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -89,7 +101,7 @@ var Self =
 
   tests :
   {
-    loadLocalHtmlFile,
+    htmlAwait,
   }
 
 }

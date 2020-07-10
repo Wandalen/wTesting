@@ -1,4 +1,4 @@
-( function _Navigation_test_s_( ) {
+( function _LocalStorage_test_s_( ) {
 
 'use strict';
 
@@ -39,45 +39,42 @@ function onSuiteEnd()
 
 //
 
-async function navigation( test )
+async function localStorage( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
+  let userDataDirPath = _.path.nativize( _.path.join( routinePath, 'user-dir' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  // Init application
-  let app = new Spectron.Application
+  /* Use custom user-data-dir to persist localStorage between launches */
+  
+  test.case = 'create new item'
+  var app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainPath ],
+    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
   })
-
-  // Start app and wait until page will be loaded
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-
-  // Open first url
-  await app.client.url( 'https://www.npmjs.com/' );
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
+  await app.client.localStorage( 'POST', { key : 'itemKey', value : 'itemValue' })
+  await app.stop();
   
-  // Open second url
-  await app.client.url( 'https://www.npmjs.com/wTesting' );
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  //
   
-  // Move backward in history
-  await app.client.back();
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
-  
-  // Move forward in history
-  await app.client.forward();
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/package/wTesting' );
-  
+  test.case = 'open browser again and get item value'
+  var app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ],
+    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
+  })
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  var got = await app.client.localStorage( 'GET', 'itemKey' );
+  test.identical( got.value, 'itemValue' );
   await app.stop();
 
   return null;
@@ -90,7 +87,7 @@ async function navigation( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Navigation',
+  name : 'Visual.Spectron.LocalStorage',
   silencing : 1,
   enabled : 1,
 
@@ -106,7 +103,7 @@ var Self =
 
   tests :
   {
-    navigation,
+    localStorage,
   }
 
 }

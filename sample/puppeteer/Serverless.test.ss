@@ -1,4 +1,4 @@
-( function _Browser_test_s_( ) {
+( function _Serverless_test_s_( ) {
 
 'use strict';
 
@@ -38,21 +38,31 @@ function onSuiteEnd()
 // tests
 // --
 
-async function browser( test )
+async function loadLocalHtmlFile( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+  let indexHtmlPath = _.path.join( routinePath, 'serverless/index.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let browser = await Puppeteer.launch({ headless : true });
+  let page = await browser.newPage();
 
-  var version = await browser.version();
-  test.is( _.strHas( version, '79.0' ) );
+  await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  var agent = await browser.userAgent();
-  test.is( _.strHas( agent, '79.0' ) );
+  test.case = 'script and style files are loaded'
+
+  var got = await page.evaluate( () => window.scriptLoaded )
+  test.identical( got, true );
+
+  var got = await page.evaluate( () =>
+  {
+    let p = document.querySelector( 'p' );
+    let styles = window.getComputedStyle( p );
+    return styles.getPropertyValue( 'color' )
+  })
+  test.identical( got, 'rgb(192, 192, 192)' );
 
   await browser.close();
 
@@ -66,9 +76,7 @@ async function browser( test )
 var Self =
 {
 
-  name : 'Visual.Puppeteer.Browser',
-  
-  
+  name : 'Visual.Puppeteer.Serverless',
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -82,7 +90,7 @@ var Self =
 
   tests :
   {
-    browser
+    loadLocalHtmlFile
   }
 
 }

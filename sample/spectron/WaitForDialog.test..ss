@@ -1,4 +1,4 @@
-( function _WaitForVisible_test_s_( ) {
+( function _WaitForDialog_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function waitForVisible( test )
+async function WaitForDialog( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -55,10 +55,9 @@ async function waitForVisible( test )
 
   await app.start()
   await app.client.waitForVisible( 'p', 5000 )
-
-  var got = await app.client.$( 'p' ).isVisible();
-  test.identical( got, true );
-
+  await app.client.execute( () => alert( 'test message') );
+  test.identical( await app.client.alertText(), 'test message' );
+  await app.client.alertAccept();
   await app.stop();
 
   return null;
@@ -71,7 +70,7 @@ async function waitForVisible( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.WaitForVisible',
+  name : 'Visual.Spectron.WaitForDialog',
   silencing : 1,
   enabled : 1,
 
@@ -87,7 +86,7 @@ var Self =
 
   tests :
   {
-    waitForVisible,
+    WaitForDialog,
   }
 
 }

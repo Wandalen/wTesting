@@ -1,4 +1,4 @@
-( function _Input_test_s_( ) {
+( function _Navigation_test_s_( ) {
 
 'use strict';
 
@@ -39,28 +39,45 @@ function onSuiteEnd()
 
 //
 
-async function input( test )
+async function navigation( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
+  // Init application
   let app = new Spectron.Application
   ({
     path : ElectronPath,
     args : [ mainPath ]
   })
 
+  // Start app and wait until page will be loaded
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  test.case = 'keyboard';
-  await app.client.$( '#input1' ).setValue( '0123' );
-  var got = await app.client.getValue( '#input1' );
-  test.identical( got, '0123' );
-
+  // Open first url
+  await app.client.url( 'https://www.npmjs.com/' );
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/' );
+  
+  // Open second url
+  await app.client.url( 'https://www.npmjs.com/wTesting' );
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  
+  // Move backward in history
+  await app.client.back();
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/' );
+  
+  // Move forward in history
+  await app.client.forward();
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  
   await app.stop();
 
   return null;
@@ -73,7 +90,7 @@ async function input( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Input',
+  name : 'Visual.Spectron.Navigation',
   silencing : 1,
   enabled : 1,
 
@@ -89,7 +106,7 @@ var Self =
 
   tests :
   {
-    input,
+    navigation,
   }
 
 }

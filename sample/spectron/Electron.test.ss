@@ -37,11 +37,13 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function electron( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -52,14 +54,12 @@ async function chaining( test )
   })
 
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+  let title = await app.browserWindow.getTitle();
+  test.identical( title, 'Test' );
   await app.stop();
-  
+
   return null;
 }
 
@@ -70,9 +70,9 @@ async function chaining( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
-  
-  
+  name : 'Visual.Spectron.ElectronAPI',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -86,7 +86,7 @@ var Self =
 
   tests :
   {
-    chaining
+    electron,
   }
 
 }

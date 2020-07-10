@@ -1,4 +1,4 @@
-( function _Serverless_test_s_( ) {
+( function _Page_test_s_( ) {
 
 'use strict';
 
@@ -7,7 +7,9 @@ if( typeof module !== 'undefined' )
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var Puppeteer = require( 'puppeteer' );
+  var ElectronPath = require( 'electron' );
+  var Spectron = require( 'spectron' );
+
 }
 
 var _global = _global_;
@@ -20,12 +22,9 @@ let _ = _testerGlobal_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-
   self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
-
-//
 
 function onSuiteEnd()
 {
@@ -38,34 +37,30 @@ function onSuiteEnd()
 // tests
 // --
 
-async function loadLocalHtmlFile( test )
+//
+
+async function page( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.join( routinePath, 'serverless/index.html' );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let browser = await Puppeteer.launch({ headless : true });
-  let page = await browser.newPage();
-
-  // await page.goto( 'file:///D:/work/wTesting/sample/puppeteer/asset/serverless/index.html', { waitUntil : 'load' } );
-  await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
-
-  test.case = 'script and style files are loaded'
-
-  var got = await page.evaluate( () => window.scriptLoaded )
-  test.identical( got, true );
-
-  var got = await page.evaluate( () =>
-  {
-    let p = document.querySelector( 'p' );
-    let styles = window.getComputedStyle( p );
-    return styles.getPropertyValue( 'color' )
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ mainPath ]
   })
-  test.identical( got, 'rgb(192, 192, 192)' );
 
-  await browser.close();
+  await app.start()
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+
+  test.case = 'Check Page html'
+  var html = await app.client.execute( () => document.documentElement.outerHTML );
+  test.is( _.strHas( html.value, '<p>Hello world</p>' ) );
+
+  await app.stop();
 
   return null;
 }
@@ -77,7 +72,7 @@ async function loadLocalHtmlFile( test )
 var Self =
 {
 
-  name : 'Visual.Puppeteer.Serverless',
+  name : 'Visual.Spectron.Page',
   
   
 
@@ -93,7 +88,7 @@ var Self =
 
   tests :
   {
-    loadLocalHtmlFile
+    page,
   }
 
 }

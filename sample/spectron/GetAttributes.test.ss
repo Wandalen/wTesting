@@ -1,4 +1,4 @@
-( function _InjectScript_test_s_( ) {
+( function _GetAttributes_test_s_( ) {
 
 'use strict';
 
@@ -22,7 +22,7 @@ let _ = _testerGlobal_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 
@@ -39,36 +39,29 @@ function onSuiteEnd()
 
 //
 
-async function injectScript( test )
+async function elementsAttributeGet( test )
 {
   let self = this;
-  
-  // Prepare path to electron app script( main.js )
-  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.js' ) );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let indexPath = _.path.nativize( _.path.join( routinePath, 'index.html' ) );
 
-  // Create app instance using path to main.js and electron binary
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainJsPath ]
+    args : [ indexPath ]
   })
 
-  // Start the electron app
   await app.start()
-  // Waint until page will be loaded( Text appears on page )
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  //Inject script that changes text property of DOM element and return it as value
-  let got = await app.client.execute( () => 
-  {
-    let element = document.querySelector( 'p' );
-    element.innerText = 'Hello from test';
-    return element.innerText;
-  })
-  test.identical( got.value, 'Hello from test' );
+  var got = await app.client.getAttribute( 'div[attr]', 'attr' );
+  test.identical( got, [ '1', '2', '3' ] )
+  
+  await app.stop();
 
-  //Stop the electron app
-  return app.stop();
+  return null;
 }
 
 // --
@@ -78,8 +71,10 @@ async function injectScript( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.InjectScript',
-  
+  name : 'Visual.Spectron.GetAttributes',
+  silencing : 1,
+  enabled : 1,
+
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -92,7 +87,7 @@ var Self =
 
   tests :
   {
-    injectScript,
+    elementsAttributeGet,
   }
 
 }

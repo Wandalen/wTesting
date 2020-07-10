@@ -1,4 +1,4 @@
-( function _Headless_test_s_( ) {
+( function _Input_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function headless( test )
+async function input( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'headless.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,11 +54,13 @@ async function headless( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
-  var title = await app.client.getTitle();
-  test.identical( title, 'Test' );
-    
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+  test.case = 'keyboard';
+  await app.client.$( '#input1' ).setValue( '0123' );
+  var got = await app.client.getValue( '#input1' );
+  test.identical( got, '0123' );
+
   await app.stop();
 
   return null;
@@ -71,9 +73,9 @@ async function headless( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Headless',
-  
-  
+  name : 'Visual.Spectron.Input',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -87,7 +89,7 @@ var Self =
 
   tests :
   {
-    headless,
+    input,
   }
 
 }

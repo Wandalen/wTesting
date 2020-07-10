@@ -1,4 +1,4 @@
-( function _IsVisibleWithinViewport_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -37,13 +37,11 @@ function onSuiteEnd()
 // tests
 // --
 
-//
-
-async function isVisibleWithinViewport( test )
+function html( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -53,27 +51,56 @@ async function isVisibleWithinViewport( test )
     args : [ mainPath ]
   })
 
-  await app.start()
-  await _.test.waitForVisibleInViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
-  });
+  let ready = app.start()
 
-  var got = await _.test.isVisibleWithinViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
-  });
-  test.identical( got, true );
+  .then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
 
-  await app.stop();
+  .then( () =>
+  {
+    test.case = 'Check element text'
+    return app.client.$( '.class1 p' ).getText()
+    .then( ( got ) =>
+    {
+      test.identical( got, 'Text1' )
+    })
+  })
 
-  return null;
+  .then( () =>
+  {
+    test.case = 'Check href attribute'
+    return app.client.$( '.class1 a' ).getAttribute( 'href')
+    .then( ( got ) =>
+    {
+      test.is( _.strEnds( got, '/index.html' ) )
+    })
+  })
+
+  .then( () =>
+  {
+    test.case = 'Check input field value'
+    return app.client.getValue( '#input1' )
+    .then( ( got ) =>
+    {
+      test.identical( got, '123' )
+    })
+  })
+
+  .then( () =>
+  {
+    test.case = 'Change input field value and check it'
+    return app.client
+    .$( '#input1' )
+    .setValue( '321' )
+    .getValue( '#input1' )
+    .then( ( got ) =>
+    {
+      test.identical( got, '321' )
+    })
+  })
+
+  .then( () => app.stop() )
+
+  return _.Consequence.From( ready );
 }
 
 // --
@@ -83,9 +110,9 @@ async function isVisibleWithinViewport( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.IsVisibleWithinViewport',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Html.Thenable',
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -99,7 +126,7 @@ var Self =
 
   tests :
   {
-    isVisibleWithinViewport,
+    html
   }
 
 }

@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _IsVisibleWithinViewport_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function htmlAwait( test )
+async function isVisibleWithinViewport( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,24 +54,22 @@ async function htmlAwait( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await _.test.waitForVisibleInViewport
+  ({ 
+    library : 'spectron', 
+    page : app.client, 
+    timeOut : 5000, 
+    targetSelector : 'p' 
+  });
 
-  test.case = 'Check element text'
-  var got = await app.client.$( '.class1 p' ).getText();
-  test.identical( got, 'Text1' )
-
-  test.case = 'Check href attribute'
-  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
-  test.is( _.strEnds( got, '/index.html' ) )
-
-  test.case = 'Check input field value'
-  var got = await app.client.getValue( '#input1' );
-  test.identical( got, '123' )
-
-  test.case = 'Change input field value and check it'
-  await app.client.$( '#input1' ).setValue( '321' )
-  var got = await app.client.getValue( '#input1' )
-  test.identical( got, '321' )
+  var got = await _.test.isVisibleWithinViewport
+  ({ 
+    library : 'spectron', 
+    page : app.client, 
+    timeOut : 5000, 
+    targetSelector : 'p' 
+  });
+  test.identical( got, true );
 
   await app.stop();
 
@@ -85,9 +83,9 @@ async function htmlAwait( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Html.Await',
-
-
+  name : 'Visual.Spectron.IsVisibleWithinViewport',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -101,7 +99,7 @@ var Self =
 
   tests :
   {
-    htmlAwait,
+    isVisibleWithinViewport,
   }
 
 }

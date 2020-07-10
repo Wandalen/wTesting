@@ -1,4 +1,4 @@
-( function _LocalStorage_test_s_( ) {
+( function _WaitForVisibleInViewport_test_s_( ) {
 
 'use strict';
 
@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _global = _global_;
-let _ = _testerGlobal_.wTools;
+var _ = _testerGlobal_.wTools;
 
 // --
 // context
@@ -39,42 +39,32 @@ function onSuiteEnd()
 
 //
 
-async function localStorage( test )
+async function waitForVisibleInViewport( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
-  let userDataDirPath = _.path.nativize( _.path.join( routinePath, 'user-dir' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  /* Use custom user-data-dir to persist localStorage between launches */
-  
-  test.case = 'create new item'
-  var app = new Spectron.Application
+  let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ],
-    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
+    args : [ mainPath ]
   })
+
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  await app.client.localStorage( 'POST', { key : 'itemKey', value : 'itemValue' })
-  await app.stop();
-  
-  //
-  
-  test.case = 'open browser again and get item value'
-  var app = new Spectron.Application
-  ({
-    path : ElectronPath,
-    args : [ mainPath ],
-    chromeDriverArgs: [ `--user-data-dir=${userDataDirPath}` ]
-  })
-  await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  var got = await app.client.localStorage( 'GET', 'itemKey' );
-  test.identical( got.value, 'itemValue' );
+  await _.test.waitForVisibleInViewport
+  ({ 
+    library : 'spectron', 
+    page : app.client, 
+    timeOut : 5000, 
+    targetSelector : 'p' 
+  });
+
+  var got = await app.client.$( 'p' ).isVisible();
+  test.identical( got, true );
+
   await app.stop();
 
   return null;
@@ -87,7 +77,7 @@ async function localStorage( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.LocalStorage',
+  name : 'Visual.Spectron.WaitForVisibleInViewport',
   silencing : 1,
   enabled : 1,
 
@@ -103,7 +93,7 @@ var Self =
 
   tests :
   {
-    localStorage,
+    waitForVisibleInViewport,
   }
 
 }

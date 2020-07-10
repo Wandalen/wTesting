@@ -1,4 +1,4 @@
-( function _Element_test_s_( ) {
+( function _Browser_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function element( test )
+async function browser( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -56,9 +56,13 @@ async function element( test )
   await app.start()
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
-  test.case = 'Check element html'
-  var got = await app.client.$( '.class1 p' ).getHTML();
-  test.identical( got, '<p>Text1</p>' )
+  test.case = 'check browser window size'
+  var size = await app.browserWindow.getSize();
+  test.identical( size, [ 800,600 ] )
+
+  test.case = 'check userAgent'
+  var userAgent = await app.webContents.getUserAgent();
+  test.is( _.strHas( userAgent, 'Electron' ) );
 
   await app.stop();
 
@@ -72,9 +76,9 @@ async function element( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Element',
-  
-  
+  name : 'Visual.Spectron.Browser',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -88,7 +92,7 @@ var Self =
 
   tests :
   {
-    element,
+    browser,
   }
 
 }

@@ -1,4 +1,4 @@
-( function _GetAttributes_test_s_( ) {
+( function _Headless_test_s_( ) {
 
 'use strict';
 
@@ -39,26 +39,26 @@ function onSuiteEnd()
 
 //
 
-async function elementsAttributeGet( test )
+async function headless( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexPath = _.path.nativize( _.path.join( routinePath, 'index.html' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'headless.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexPath ]
+    args : [ mainPath ]
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-
-  var got = await app.client.getAttribute( 'div[attr]', 'attr' );
-  test.identical( got, [ '1', '2', '3' ] )
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
+  var title = await app.client.getTitle();
+  test.identical( title, 'Test' );
+    
   await app.stop();
 
   return null;
@@ -71,9 +71,9 @@ async function elementsAttributeGet( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.GetAttributes',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Headless',
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -87,7 +87,7 @@ var Self =
 
   tests :
   {
-    elementsAttributeGet,
+    headless,
   }
 
 }

@@ -9,8 +9,9 @@ let Parent1 = wTests[ 'Positive' ];
 
 //
 
-function shouldBeFailed( test )
+function shouldBeThrowing( test )
 {
+  test.case = 'throwing'
   test.il( 1, true );
 }
 
@@ -20,7 +21,7 @@ var Proto =
   abstract : 0,
   tests :
   {
-    shouldBeFailed,
+    shouldBeThrowing,
   }
 }
 

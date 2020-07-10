@@ -1,4 +1,4 @@
-( function _ElementProperties_test_s_( ) {
+( function _InjectScript_test_s_( ) {
 
 'use strict';
 
@@ -39,12 +39,12 @@ function onSuiteEnd()
 
 //
 
-async function domElementProperties( test )
+async function injectScript( test )
 {
   let self = this;
   
   // Prepare path to electron app script( main.js )
-  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.js' ) );
+  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
   // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
@@ -58,16 +58,14 @@ async function domElementProperties( test )
   // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
-  //innerText
-  var text = await app.client.$( 'p' ).getText();
-  test.identical( text, 'Hello world' );
-  //outerHtml 
-  var html = await app.client.$( 'p' ).getHTML();
-  test.identical( html, '<p>Hello world</p>' );
-  //Elements position on page
-  var location = await app.client.$( 'p' ).getLocation();
-  test.gt( location.x, 0 );
-  test.gt( location.y, 0 );
+  //Inject script that changes text property of DOM element and return it as value
+  let got = await app.client.execute( () => 
+  {
+    let element = document.querySelector( 'p' );
+    element.innerText = 'Hello from test';
+    return element.innerText;
+  })
+  test.identical( got.value, 'Hello from test' );
 
   //Stop the electron app
   return app.stop();
@@ -80,10 +78,8 @@ async function domElementProperties( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.ElementProperties',
+  name : 'Visual.Spectron.InjectScript',
   
-  
-
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -96,7 +92,7 @@ var Self =
 
   tests :
   {
-    domElementProperties,
+    injectScript,
   }
 
 }

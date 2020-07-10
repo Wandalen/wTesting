@@ -1,4 +1,4 @@
-( function _Device_test_s_( ) {
+( function _Serverless_test_s_( ) {
 
 'use strict';
 
@@ -39,38 +39,27 @@ function onSuiteEnd()
 
 //
 
-async function emulateDevice( test )
+async function loadLocalHtmlFile( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let indexHtmlPath = _.path.nativize( _.path.join( routinePath, 'serverless/index.html' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ indexHtmlPath ]
   })
-
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  var originalSize = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  
-  test.case = 'emulate mobile screen'
-  await app.webContents.enableDeviceEmulation
-  ({ 
-    screenPosition : 'mobile',
-    screenSize : { width : 400, height: 600 } 
-  })
-  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value , { width : 400, height: 600 } )
-  
-  test.case = 'disable emulation'
-  await app.webContents.disableDeviceEmulation()
-  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value , originalSize.size )
+  var got = await app.client.execute( () => window.scriptLoaded )
+  test.identical( got.value, true );
+
+  var got = await app.client.getCssProperty( 'p', 'color' )
+  test.identical( got.value, 'rgba(192,192,192,1)' );
 
   await app.stop();
 
@@ -84,7 +73,7 @@ async function emulateDevice( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.Device',
+  name : 'Visual.Spectron.Serverless',
   silencing : 1,
   enabled : 1,
 
@@ -100,7 +89,7 @@ var Self =
 
   tests :
   {
-    emulateDevice,
+    loadLocalHtmlFile,
   }
 
 }

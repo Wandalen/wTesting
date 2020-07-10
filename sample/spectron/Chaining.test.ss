@@ -1,4 +1,4 @@
-( function _WaitForDialog_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -37,13 +37,11 @@ function onSuiteEnd()
 // tests
 // --
 
-//
-
-async function WaitForDialog( test )
+async function chaining( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,12 +52,14 @@ async function WaitForDialog( test )
   })
 
   await app.start()
-  await app.client.waitForVisible( 'p', 5000 )
-  await app.client.execute( () => alert( 'test message') );
-  test.identical( await app.client.alertText(), 'test message' );
-  await app.client.alertAccept();
+  test.case = 'wait for load then check innerText property'
+  var text = await app.client
+  .waitUntilTextExists( 'p','Hello world', 5000 )
+  .$( '.class1 p' )
+  .getText()
+  test.identical( text, 'Text1' );
   await app.stop();
-
+  
   return null;
 }
 
@@ -70,9 +70,9 @@ async function WaitForDialog( test )
 var Self =
 {
 
-  name : 'Visual.Spectron.WaitForDialog',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Html.Chaining',
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -86,7 +86,7 @@ var Self =
 
   tests :
   {
-    WaitForDialog,
+    chaining
   }
 
 }

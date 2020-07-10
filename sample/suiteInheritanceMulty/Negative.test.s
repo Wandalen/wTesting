@@ -1,17 +1,18 @@
-let Math = require( './Math.js' );
+let _ = require( 'wTesting' );
+let Math = require( './Math.s' );
 
 //
 
 function sumThrowError( test )
 {
-  test.shouldThrowError( () => Math.sum( a, 1 ) );
+  test.shouldThrowErrorSync( () => Math.sum( a, 1 ) );
 }
 
 //
 
 function mulThrowError( test )
 {
-  test.shouldThrowError( () => Math.mul( a, 1 ) );
+  test.shouldThrowErrorSync( () => Math.mul( a, 1 ) );
 }
 
 //

@@ -5,14 +5,14 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
-  require( '../..' );
-  _.include( 'wFiles' );
+  _.include( 'wTesting' );
 
   var Puppeteer = require( 'puppeteer' );
 }
 
 var _global = _global_;
-var _ = _global_.wTools;
+// var _ = _global_.wTools;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context

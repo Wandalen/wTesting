@@ -2,13 +2,24 @@
 
 'use strict';
 
+//----ORIGINAL
+// if( typeof module !== 'undefined' )
+// require( 'wTesting' );
+
+// var _ = wTools;
+// var Self = {};
+// -------
+
 if( typeof module !== 'undefined' )
-require( 'wTesting' );
+{
+  let _ = require( 'wTools' );
+  _.include( 'wTesting' );
 
-var _ = wTools;
+}
+
+var _global = _global_;
+let _ = _testerGlobal_.wTools;
 var Self = {};
-
-//
 
 var singleMessage = function( test )
 {
@@ -100,7 +111,8 @@ var Proto =
 {
 
   name : 'Experiment',
-  verbose : 1,
+  // abstract : 0,
+  // verbose : 1,
 
   tests :
   {
@@ -113,9 +125,16 @@ var Proto =
 
 //
 
-_.mapExtend( Self,Proto );
+// ---ORIGINAL
+// _.mapExtend( Self, Proto );
 
+// if( typeof module !== 'undefined' && !module.parent )
+// _.Tester.test( Self );
+// -------
+
+Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self );
+wTester.test( Self.name );
+
 
 } )( );

@@ -1,4 +1,5 @@
-let Math = require( './Math.js' );
+let _ = require( 'wTesting' );
+let Math = require( './Math.s' );
 
 //
 

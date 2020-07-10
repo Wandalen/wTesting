@@ -1,6 +1,6 @@
 let _ = require( 'wTesting' );
-require( './Positive.test.js' );
-require( './Negative.test.js' );
+require( './Positive.test.s' );
+require( './Negative.test.s' );
 
 //
 
@@ -26,6 +26,8 @@ var Proto =
 
 //
 
-Self = wTestSuite( Proto ).inherit( Parent ).inherit( Parent1 );
+var Self = wTestSuite( Proto )
+.inherit( Parent )
+.inherit( Parent1 );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

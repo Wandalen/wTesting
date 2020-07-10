@@ -1,5 +1,5 @@
 let _ = require( 'wTesting' );
-let Sum = require( './Sum.js' );
+let Sum = require( './Sum.s' );
 
 //
 

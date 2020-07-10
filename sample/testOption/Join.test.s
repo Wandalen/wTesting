@@ -1,5 +1,5 @@
 let _ = require( 'wTesting' );
-let Join = require( './Join.js' );
+let Join = require( './Join.s' );
 
 //
 

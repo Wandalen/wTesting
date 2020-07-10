@@ -1,5 +1,5 @@
 require( 'wTesting' );
-let num = require( './Number.js' );
+let num = require( './Number.s' );
 
 //
 

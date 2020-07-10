@@ -6,13 +6,12 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
-  _.include( 'wFiles' );
 
   var Puppeteer = require( 'puppeteer' );
 }
 
 var _global = _global_;
-var _ = _global_.wTools;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context
@@ -32,7 +31,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --
@@ -53,16 +52,16 @@ async function waitForTextChange( test )
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
   //Change text property after delay
-  _.timeOut( 1500, () => 
+  _.time.out( 1500, () =>
   {
-    page.$eval( 'p', ( e ) => 
-    {  
+    page.$eval( 'p', ( e ) =>
+    {
       e.innerText = 'Hello from test'
     })
   })
 
   //Wait until text will be changed
-  await page.waitFor( () => 
+  await page.waitFor( () =>
   {
     return document.querySelector( 'p' ).innerText === 'Hello from test';
   })

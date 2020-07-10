@@ -4,8 +4,8 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../..' );
-  require( 'wFiles' )
+  let _ = require( 'wTools' );
+  _.include( 'wTesting' );
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );
@@ -30,7 +30,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --

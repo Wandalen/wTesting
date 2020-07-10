@@ -61,7 +61,6 @@ async function accessChromeDevToolsProtocol( test )
   await app.webContents.debugger.attach( '1.1' );
   await app.webContents.debugger.sendCommand( 'Page.enable' );
   await app.webContents.debugger.sendCommand( 'Page.navigate', { url : 'https://www.npmjs.com/' });
-  
   var url = await app.client.getUrl();
   test.identical( url,'https://www.npmjs.com/' );
   

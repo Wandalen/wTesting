@@ -70,7 +70,7 @@ async function emulateDevice( test )
   test.case = 'disable emulation'
   await app.webContents.disableDeviceEmulation()
   var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value, originalSize.size )
+  test.identical( size.value, originalSize.value )
 
   await app.stop();
 

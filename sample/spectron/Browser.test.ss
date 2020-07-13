@@ -54,11 +54,11 @@ async function browser( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   test.case = 'check browser window size'
   var size = await app.browserWindow.getSize();
-  test.identical( size, [ 800,600 ] )
+  test.identical( size, [ 800, 600 ] )
 
   test.case = 'check userAgent'
   var userAgent = await app.webContents.getUserAgent();

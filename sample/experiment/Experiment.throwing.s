@@ -30,7 +30,8 @@ var singleMessage = function( test )
     test.description = 'single message';
     var con = new wConsequence().take( 'data' );
     return test.returnsSingleResource( con )
-  //  return test.shouldMessageOnlyOnce( con );
+    // return test.shouldMessageOnlyOnce( con );
+    // return test.shouldMessageOnlyOnceReturn( con )
  })
  .ifNoErrorThen( function ( data )
  {
@@ -57,6 +58,7 @@ var multipleMessages = function( test )
     .take( null, 'data' )
     .take( null, 'data' );
     return test.returnsSingleResource( con );
+    // return test.shouldMessageOnlyOnceReturn( con )
   })
   .ifNoErrorThen( function( data )
   {
@@ -75,7 +77,7 @@ var multipleMessages = function( test )
 
 var multipleMessagesAsync = function( test )
 {
-  var consequence = new wConsequence().give();
+  var consequence = new wConsequence().take( null );
 
   consequence
   .ifNoErrorThen( function()
@@ -87,11 +89,12 @@ var multipleMessagesAsync = function( test )
     test.description = 'two messages';
     var con = new wConsequence({ capacity : 0 });
     con.take( null, 'data' );
-    _.timeOut( 1000,function()
+    _.time.out( 1000,function()
     {
       con.take( null, 'data' );
     });
     return test.returnsSingleResource( con );
+    // return test.shouldMessageOnlyOnceReturn( con )
   })
   .ifNoErrorThen( function( data )
   {
@@ -117,9 +120,9 @@ var Proto =
 
   tests :
   {
-    singleMessage : singleMessage,
-    multipleMessages : multipleMessages,
-    multipleMessagesAsync : multipleMessagesAsync,
+    singleMessage,
+    multipleMessages,
+    multipleMessagesAsync,
   }
 
 }

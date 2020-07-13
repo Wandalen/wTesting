@@ -54,16 +54,18 @@ async function accessChromeDevToolsProtocol( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
-  /* Does not work on Spectron v7.0.0 */
-  
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+  /* Does not work on Spectron v7.0.0 & v11.0.0 */
+
   await app.webContents.debugger.attach( '1.1' );
   await app.webContents.debugger.sendCommand( 'Page.enable' );
   await app.webContents.debugger.sendCommand( 'Page.navigate', { url : 'https://www.npmjs.com/' });
+  // await app.client.switchWindow( 'https://www.npmjs.com/' );
+
   var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
-  
+  test.identical( url, 'https://www.npmjs.com/' );
+
   await app.stop();
 
   return null;
@@ -77,8 +79,7 @@ var Self =
 {
 
   name : 'Visual.Spectron.CDP',
-  
-  
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

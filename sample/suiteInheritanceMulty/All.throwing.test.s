@@ -1,6 +1,6 @@
 let _ = require( 'wTesting' );
-require( './Positive.throwing.test.s' );
-require( './Negative.throwing.test.s' );
+require( './Positive.test.s' );
+require( './Negative.test.s' );
 
 //
 

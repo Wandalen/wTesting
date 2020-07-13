@@ -11,7 +11,6 @@ if( typeof module !== 'undefined' )
 }
 
 var _global = _global_;
-// var _ = _global_.wTools;
 let _ = _testerGlobal_.wTools;
 
 // --

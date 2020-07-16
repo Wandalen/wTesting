@@ -16,8 +16,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 //
 
@@ -171,7 +171,7 @@ var Proto =
 
 //
 
-var Self = new wTestSuite( Proto );
+let Self = new wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self );
 

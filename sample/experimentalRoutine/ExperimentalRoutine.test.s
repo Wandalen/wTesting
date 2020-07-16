@@ -19,7 +19,7 @@ experiment.experimental = true;
 
 //
 
-var Self =
+let Self =
 {
   name : 'Experiment',
   tests :

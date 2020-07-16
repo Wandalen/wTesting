@@ -12,8 +12,8 @@ if( typeof module !== 'undefined' )
   var Puppeteer = require( 'puppeteer' );
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 // --
 // context
@@ -384,7 +384,7 @@ function processWatchingOnPuppeteerZombie( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.atop.Tester.Puppeteer',

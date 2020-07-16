@@ -10,8 +10,8 @@ if( typeof module !== 'undefined' )
   var Puppeteer = require( 'puppeteer' );
 }
 
-var _global = _global_;
-// var _ = _global_.wTools;
+let _global = _global_;
+// let _ = _global_.wTools;
 let _ = _testerGlobal_.wTools;
 
 // --
@@ -113,7 +113,7 @@ async function fileDragAndDropWithHelper( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Puppeteer.DragAndDropFile',

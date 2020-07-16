@@ -72,7 +72,7 @@ function arrayFromRange( test )
 
 //
 
-var Self =
+let Self =
 {
 
   name : 'Sample/Trivial',

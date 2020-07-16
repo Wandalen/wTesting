@@ -50,7 +50,7 @@ function asyncErrorHandling( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'AsyncErrorHandling',
   tests :

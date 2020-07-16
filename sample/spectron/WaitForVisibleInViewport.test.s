@@ -12,8 +12,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _testerGlobal_.wTools;
+let _global = _global_;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context

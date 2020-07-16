@@ -141,7 +141,7 @@ function numberIs( test )
   test.shouldThrowErrorSync( () => num.numberIs( 1, 'extra' ) );
 }
 
-var Self =
+let Self =
 {
 
   name : 'Number',

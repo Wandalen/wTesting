@@ -66,7 +66,7 @@ function routine2( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Sum',
   tests :

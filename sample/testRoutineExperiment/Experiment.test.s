@@ -30,7 +30,7 @@ sumTestExperiment.experimental = 1;
 
 //
 
-var Self =
+let Self =
 {
   name : 'Experiment',
   tests :

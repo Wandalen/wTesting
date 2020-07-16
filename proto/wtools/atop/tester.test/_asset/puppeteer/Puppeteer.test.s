@@ -2,10 +2,10 @@
 
 'use strict';
 
-var _ = require( 'wTesting' );
+let _ = require( 'wTesting' );
 var Puppeteer = require( 'puppeteer' );
 
-var _ = _realGlobal_._testerGlobal_.wTools
+let _ = _realGlobal_._testerGlobal_.wTools
 
 // --
 // tests
@@ -83,7 +83,7 @@ async function clientContinuesToWorkAfterTest( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Puppeteer.Zombie',

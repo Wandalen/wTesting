@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
+let _global = _global_;
 let _ = _testerGlobal_.wTools;
 
 // --
@@ -69,7 +69,7 @@ async function page( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Spectron.Page',

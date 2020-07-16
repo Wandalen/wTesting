@@ -14,7 +14,7 @@ routine1.timeOut = 200
 
 //
 
-var Self =
+let Self =
 {
   name : 'Multiply',
   tests :

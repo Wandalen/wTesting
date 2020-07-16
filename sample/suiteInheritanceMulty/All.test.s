@@ -26,7 +26,7 @@ var Proto =
 
 //
 
-var Self = wTestSuite( Proto )
+let Self = wTestSuite( Proto )
 .inherit( Parent )
 .inherit( Parent1 );
 if( typeof module !== 'undefined' && !module.parent )

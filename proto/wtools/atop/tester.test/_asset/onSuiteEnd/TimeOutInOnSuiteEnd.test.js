@@ -1,6 +1,6 @@
 
-var _ = require( 'wTesting' );
-var _ = _realGlobal_._testerGlobal_.wTools
+let _ = require( 'wTesting' );
+let _ = _realGlobal_._testerGlobal_.wTools
 
 //
 
@@ -19,7 +19,7 @@ function onSuiteEnd()
 
 //
 
-var Self =
+let Self =
 {
   name : 'TimeOutInOnSuiteEnd',
   onSuiteEnd,

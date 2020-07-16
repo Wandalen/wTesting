@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
+let _global = _global_;
 let _ = _testerGlobal_.wTools;
 
 // --

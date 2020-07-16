@@ -79,8 +79,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 //
 
@@ -108,7 +108,7 @@ async function trivial( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
   name : 'Spectron.Sample',
   tests :

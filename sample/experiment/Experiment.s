@@ -6,8 +6,8 @@
 // if( typeof module !== 'undefined' )
 // require( 'wTesting' );
 
-// var _ = wTools;
-// var Self = {};
+// let _ = wTools;
+// let Self = {};
 // -------
 
 if( typeof module !== 'undefined' )
@@ -17,9 +17,9 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
+let _global = _global_;
 let _ = _testerGlobal_.wTools;
-var Self = {};
+let Self = {};
 
 var singleMessage = function( test )
 {

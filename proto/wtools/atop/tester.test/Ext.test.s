@@ -689,7 +689,7 @@ function optionAccuracyExplicitly( test )
   let self = this;
   let a = self.assetFor( test );
 
-  a.reflect(); /* xxx */
+  a.reflect();
 
   /* - */
 
@@ -1492,7 +1492,7 @@ function requireTesting( test )
   let self = this;
   let a = self.assetFor( test );
 
-  a.reflect(); /* xxx */
+  a.reflect();
 
   /* - */
 

@@ -346,7 +346,7 @@ let Self =
 
   name : 'Tools.atop.Tester.Electron',
   silencing : 0,
-  enabled : 0,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -355,7 +355,7 @@ let Self =
   context :
   {
     assetFor,
-    
+
     suiteTempPath : null,
     assetsOriginalPath : null,
     execJsPath : null,
@@ -370,7 +370,7 @@ let Self =
     htmlAwait,
     consequenceFromExperiment,
     chaining,
-    
+
     processWatchingOnSpectronZombie
   }
 

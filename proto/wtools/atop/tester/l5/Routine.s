@@ -2967,6 +2967,8 @@ function _shouldDo( o )
 
   /* */
 
+  // debugger;
+
   if( _.consequenceIs( result ) )
   handleAsyncResult()
   else
@@ -4219,9 +4221,9 @@ let Extend =
 
   _shouldDo,
 
-  shouldThrowErrorSync,
-  shouldThrowErrorAsync,
-  shouldThrowErrorOfAnyKind,
+  shouldThrowErrorSync, /* qqq : cover second argument */
+  shouldThrowErrorAsync, /* qqq : cover second argument */
+  shouldThrowErrorOfAnyKind, /* qqq : cover second argument */
   mustNotThrowError,
   returnsSingleResource,
 

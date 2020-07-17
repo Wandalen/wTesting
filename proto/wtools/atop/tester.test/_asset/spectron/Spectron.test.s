@@ -2,7 +2,7 @@
 
 'use strict';
 
-let _ = require( 'wTesting' );
+require( 'wTesting' );
 var ElectronPath = require( 'electron' );
 var Spectron = require( 'spectron' );
 

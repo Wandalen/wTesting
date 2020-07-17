@@ -1,4 +1,4 @@
-( function _WaitForCondition_test_s_( ) {
+( function _Element_test_s_( ) {
 
 'use strict';
 
@@ -39,58 +39,43 @@ function onSuiteEnd()
 
 //
 
-async function waitForCondition( test )
+async function element( test )
 {
   let self = this;
-  
-  // Prepare path to electron app script( main.js )
-  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.js' ) );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
-  // Create app instance using path to main.js and electron binary
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainJsPath ]
+    args : [ mainPath ]
   })
 
-  // Start the electron app
   await app.start()
-  // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
-  //Change text property after delay
-  _.timeOut( 1500, () => 
-  {
-     app.client.execute( () => 
-     {  
-      let element = document.querySelector( 'p' );
-      element.innerText = 'Hello from test'
-     })
-  })
-  
-  //Wait until text will be changed
-  await app.client.waitUntil( async () => 
-  {
-    return await app.client.$( 'p' ).getText() === 'Hello from test';
-  })
-  
-  //Check text property
-  var got = await app.client.$( 'p' ).getText();
-  test.identical( got, 'Hello from test' );
+  test.case = 'Check element html'
+  var got = await app.client.$( '.class1 p' ).getHTML();
+  test.identical( got, '<p>Text1</p>' )
 
-  //Stop the electron app
-  return app.stop();
+  await app.stop();
+
+  return null;
 }
 
 // --
 // suite
 // --
 
-var Self =
+let Self =
 {
 
-  name : 'Visual.Spectron.WaitForCondition',
+  name : 'Visual.Spectron.Element',
   
+  
+
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -103,7 +88,7 @@ var Self =
 
   tests :
   {
-    waitForCondition,
+    element,
   }
 
 }

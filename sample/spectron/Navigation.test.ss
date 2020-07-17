@@ -1,4 +1,4 @@
-( function _Serverless_test_s_( ) {
+( function _Navigation_test_s_( ) {
 
 'use strict';
 
@@ -39,28 +39,45 @@ function onSuiteEnd()
 
 //
 
-async function loadLocalHtmlFile( test )
+async function navigation( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.nativize( _.path.join( routinePath, 'serverless/index.html' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
+  // Init application
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainPath ]
   })
+
+  // Start app and wait until page will be loaded
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  var got = await app.client.execute( () => window.scriptLoaded )
-  test.identical( got.value, true );
+  // Open first url
+  await app.client.url( 'https://www.npmjs.com/' );
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/' );
   
-  var got = await app.client.getCssProperty( 'p', 'color' )
-  test.identical( got.value, 'rgba(192,192,192,1)' );
-
+  // Open second url
+  await app.client.url( 'https://www.npmjs.com/wTesting' );
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  
+  // Move backward in history
+  await app.client.back();
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/' );
+  
+  // Move forward in history
+  await app.client.forward();
+  var url = await app.client.getUrl();
+  test.identical( url,'https://www.npmjs.com/package/wTesting' );
+  
   await app.stop();
 
   return null;
@@ -73,7 +90,7 @@ async function loadLocalHtmlFile( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Serverless',
+  name : 'Visual.Spectron.Navigation',
   silencing : 1,
   enabled : 1,
 
@@ -89,7 +106,7 @@ let Self =
 
   tests :
   {
-    loadLocalHtmlFile,
+    navigation,
   }
 
 }

@@ -1,4 +1,4 @@
-( function _Screenshots_test_s_( ) {
+( function _InjectScript_test_s_( ) {
 
 'use strict';
 
@@ -39,29 +39,36 @@ function onSuiteEnd()
 
 //
 
-async function screenshots( test )
+async function injectScript( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  
+  // Prepare path to electron app script( main.js )
+  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-
+  // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainJsPath ]
   })
 
+  // Start the electron app
   await app.start()
+  // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
-  var screenshot = await app.browserWindow.capturePage();
-  test.is( _.bufferNodeIs( screenshot ) )
 
-  await app.stop();
+  //Inject script that changes text property of DOM element and return it as value
+  let got = await app.client.execute( () => 
+  {
+    let element = document.querySelector( 'p' );
+    element.innerText = 'Hello from test';
+    return element.innerText;
+  })
+  test.identical( got.value, 'Hello from test' );
 
-  return null;
+  //Stop the electron app
+  return app.stop();
 }
 
 // --
@@ -71,10 +78,8 @@ async function screenshots( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Screenshots',
+  name : 'Visual.Spectron.InjectScript',
   
-  
-
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -87,7 +92,7 @@ let Self =
 
   tests :
   {
-    screenshots,
+    injectScript,
   }
 
 }

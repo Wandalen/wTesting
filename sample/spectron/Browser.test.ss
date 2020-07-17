@@ -1,4 +1,4 @@
-( function _CDP_test_s_( ) {
+( function _Browser_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function accessChromeDevToolsProtocol( test )
+async function browser( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,17 +54,16 @@ async function accessChromeDevToolsProtocol( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
-  /* Does not work on Spectron v7.0.0 */
-  
-  await app.webContents.debugger.attach( '1.1' );
-  await app.webContents.debugger.sendCommand( 'Page.enable' );
-  await app.webContents.debugger.sendCommand( 'Page.navigate', { url : 'https://www.npmjs.com/' });
-  
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
-  
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
+  test.case = 'check browser window size'
+  var size = await app.browserWindow.getSize();
+  test.identical( size, [ 800, 600 ] )
+
+  test.case = 'check userAgent'
+  var userAgent = await app.webContents.getUserAgent();
+  test.is( _.strHas( userAgent, 'Electron' ) );
+
   await app.stop();
 
   return null;
@@ -77,9 +76,9 @@ async function accessChromeDevToolsProtocol( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.CDP',
-  
-  
+  name : 'Visual.Spectron.Browser',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -93,7 +92,7 @@ let Self =
 
   tests :
   {
-    accessChromeDevToolsProtocol,
+    browser,
   }
 
 }

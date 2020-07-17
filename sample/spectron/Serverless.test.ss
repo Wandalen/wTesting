@@ -1,4 +1,4 @@
-( function _Browser_test_s_( ) {
+( function _Serverless_test_s_( ) {
 
 'use strict';
 
@@ -7,7 +7,9 @@ if( typeof module !== 'undefined' )
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var Puppeteer = require( 'puppeteer' );
+  var ElectronPath = require( 'electron' );
+  var Spectron = require( 'spectron' );
+
 }
 
 let _global = _global_;
@@ -20,12 +22,9 @@ let _ = _testerGlobal_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-
   self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
-
-//
 
 function onSuiteEnd()
 {
@@ -38,23 +37,31 @@ function onSuiteEnd()
 // tests
 // --
 
-async function browser( test )
+//
+
+async function loadLocalHtmlFile( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.join( routinePath, 'index.html' );
+  let indexHtmlPath = _.path.nativize( _.path.join( routinePath, 'serverless/index.html' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let browser = await Puppeteer.launch({ headless : true });
+  let app = new Spectron.Application
+  ({
+    path : ElectronPath,
+    args : [ indexHtmlPath ]
+  })
+  await app.start()
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  var version = await browser.version();
-  test.is( _.strHas( version, '79.0' ) );
+  var got = await app.client.execute( () => window.scriptLoaded )
+  test.identical( got.value, true );
 
-  var agent = await browser.userAgent();
-  test.is( _.strHas( agent, '79.0' ) );
+  var got = await app.client.getCssProperty( 'p', 'color' )
+  test.identical( got.value, 'rgba(192,192,192,1)' );
 
-  await browser.close();
+  await app.stop();
 
   return null;
 }
@@ -66,9 +73,9 @@ async function browser( test )
 let Self =
 {
 
-  name : 'Visual.Puppeteer.Browser',
-  
-  
+  name : 'Visual.Spectron.Serverless',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -82,7 +89,7 @@ let Self =
 
   tests :
   {
-    browser
+    loadLocalHtmlFile,
   }
 
 }

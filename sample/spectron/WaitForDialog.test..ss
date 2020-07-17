@@ -1,4 +1,4 @@
-( function _InjectScript_test_s_( ) {
+( function _WaitForDialog_test_s_( ) {
 
 'use strict';
 
@@ -39,47 +39,41 @@ function onSuiteEnd()
 
 //
 
-async function injectScript( test )
+async function WaitForDialog( test )
 {
   let self = this;
-  
-  // Prepare path to electron app script( main.js )
-  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.js' ) );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
-  // Create app instance using path to main.js and electron binary
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainJsPath ]
+    args : [ mainPath ]
   })
 
-  // Start the electron app
   await app.start()
-  // Waint until page will be loaded( Text appears on page )
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitForVisible( 'p', 5000 )
+  await app.client.execute( () => alert( 'test message') );
+  test.identical( await app.client.alertText(), 'test message' );
+  await app.client.alertAccept();
+  await app.stop();
 
-  //Inject script that changes text property of DOM element and return it as value
-  let got = await app.client.execute( () => 
-  {
-    let element = document.querySelector( 'p' );
-    element.innerText = 'Hello from test';
-    return element.innerText;
-  })
-  test.identical( got.value, 'Hello from test' );
-
-  //Stop the electron app
-  return app.stop();
+  return null;
 }
 
 // --
 // suite
 // --
 
-let Self =
+var Self =
 {
 
-  name : 'Visual.Spectron.InjectScript',
-  
+  name : 'Visual.Spectron.WaitForDialog',
+  silencing : 1,
+  enabled : 1,
+
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
@@ -92,7 +86,7 @@ let Self =
 
   tests :
   {
-    injectScript,
+    WaitForDialog,
   }
 
 }

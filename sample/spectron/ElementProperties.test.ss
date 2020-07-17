@@ -1,4 +1,4 @@
-( function _WaitForDialog_test_s_( ) {
+( function _ElementProperties_test_s_( ) {
 
 'use strict';
 
@@ -39,40 +39,50 @@ function onSuiteEnd()
 
 //
 
-async function WaitForDialog( test )
+async function domElementProperties( test )
 {
   let self = this;
-  let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  
+  // Prepare path to electron app script( main.js )
+  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
-  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-
+  // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ mainJsPath ]
   })
 
+  // Start the electron app
   await app.start()
-  await app.client.waitForVisible( 'p', 5000 )
-  await app.client.execute( () => alert( 'test message') );
-  test.identical( await app.client.alertText(), 'test message' );
-  await app.client.alertAccept();
-  await app.stop();
+  // Waint until page will be loaded( Text appears on page )
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
-  return null;
+  //innerText
+  var text = await app.client.$( 'p' ).getText();
+  test.identical( text, 'Hello world' );
+  //outerHtml 
+  var html = await app.client.$( 'p' ).getHTML();
+  test.identical( html, '<p>Hello world</p>' );
+  //Elements position on page
+  var location = await app.client.$( 'p' ).getLocation();
+  test.gt( location.x, 0 );
+  test.gt( location.y, 0 );
+
+  //Stop the electron app
+  return app.stop();
 }
 
 // --
 // suite
 // --
 
-var Self =
+let Self =
 {
 
-  name : 'Visual.Spectron.WaitForDialog',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.ElementProperties',
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -86,7 +96,7 @@ var Self =
 
   tests :
   {
-    WaitForDialog,
+    domElementProperties,
   }
 
 }

@@ -1,4 +1,4 @@
-( function _ElementProperties_test_s_( ) {
+( function _Screenshots_test_s_( ) {
 
 'use strict';
 
@@ -39,38 +39,29 @@ function onSuiteEnd()
 
 //
 
-async function domElementProperties( test )
+async function screenshots( test )
 {
   let self = this;
-  
-  // Prepare path to electron app script( main.js )
-  let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.js' ) );
+  let routinePath = _.path.join( self.tempDir, test.name );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
-  // Create app instance using path to main.js and electron binary
+  _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
+
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainJsPath ]
+    args : [ mainPath ]
   })
 
-  // Start the electron app
   await app.start()
-  // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  
+  var screenshot = await app.browserWindow.capturePage();
+  test.is( _.bufferNodeIs( screenshot ) )
 
-  //innerText
-  var text = await app.client.$( 'p' ).getText();
-  test.identical( text, 'Hello world' );
-  //outerHtml 
-  var html = await app.client.$( 'p' ).getHTML();
-  test.identical( html, '<p>Hello world</p>' );
-  //Elements position on page
-  var location = await app.client.$( 'p' ).getLocation();
-  test.gt( location.x, 0 );
-  test.gt( location.y, 0 );
+  await app.stop();
 
-  //Stop the electron app
-  return app.stop();
+  return null;
 }
 
 // --
@@ -80,7 +71,7 @@ async function domElementProperties( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.ElementProperties',
+  name : 'Visual.Spectron.Screenshots',
   
   
 
@@ -96,7 +87,7 @@ let Self =
 
   tests :
   {
-    domElementProperties,
+    screenshots,
   }
 
 }

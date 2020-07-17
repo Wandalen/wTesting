@@ -1,4 +1,4 @@
-( function _Page_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function page( test )
+async function electron( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,12 +54,10 @@ async function page( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  test.case = 'Check Page html'
-  var html = await app.client.execute( () => document.documentElement.outerHTML );
-  test.is( _.strHas( html.value, '<p>Hello world</p>' ) );
-
+  let title = await app.browserWindow.getTitle();
+  test.identical( title, 'Test' );
   await app.stop();
 
   return null;
@@ -72,9 +70,9 @@ async function page( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Page',
-  
-  
+  name : 'Visual.Spectron.ElectronAPI',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -88,7 +86,7 @@ let Self =
 
   tests :
   {
-    page,
+    electron,
   }
 
 }

@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _Device_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function htmlAwait( test )
+async function emulateDevice( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,24 +54,23 @@ async function htmlAwait( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  test.case = 'Check element text'
-  var got = await app.client.$( '.class1 p' ).getText();
-  test.identical( got, 'Text1' )
+  var originalSize = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
 
-  test.case = 'Check href attribute'
-  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
-  test.is( _.strEnds( got, '/index.html' ) )
+  test.case = 'emulate mobile screen'
+  await app.webContents.enableDeviceEmulation
+  ({
+    screenPosition : 'mobile',
+    screenSize : { width : 400, height : 600 }
+  })
+  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  test.identical( size.value, { width : 400, height : 600 } )
 
-  test.case = 'Check input field value'
-  var got = await app.client.getValue( '#input1' );
-  test.identical( got, '123' )
-
-  test.case = 'Change input field value and check it'
-  await app.client.$( '#input1' ).setValue( '321' )
-  var got = await app.client.getValue( '#input1' )
-  test.identical( got, '321' )
+  test.case = 'disable emulation'
+  await app.webContents.disableDeviceEmulation()
+  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
+  test.identical( size.value, originalSize.value )
 
   await app.stop();
 
@@ -85,9 +84,9 @@ async function htmlAwait( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Html.Await',
-
-
+  name : 'Visual.Spectron.Device',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -101,7 +100,7 @@ let Self =
 
   tests :
   {
-    htmlAwait,
+    emulateDevice,
   }
 
 }

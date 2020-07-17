@@ -1,4 +1,4 @@
-( function _Navigation_test_s_( ) {
+( function _Headless_test_s_( ) {
 
 'use strict';
 
@@ -39,45 +39,26 @@ function onSuiteEnd()
 
 //
 
-async function navigation( test )
+async function headless( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'headless.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  // Init application
   let app = new Spectron.Application
   ({
     path : ElectronPath,
     args : [ mainPath ]
   })
 
-  // Start app and wait until page will be loaded
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-
-  // Open first url
-  await app.client.url( 'https://www.npmjs.com/' );
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
-  // Open second url
-  await app.client.url( 'https://www.npmjs.com/wTesting' );
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/package/wTesting' );
-  
-  // Move backward in history
-  await app.client.back();
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/' );
-  
-  // Move forward in history
-  await app.client.forward();
-  var url = await app.client.getUrl();
-  test.identical( url,'https://www.npmjs.com/package/wTesting' );
-  
+  var title = await app.client.getTitle();
+  test.identical( title, 'Test' );
+    
   await app.stop();
 
   return null;
@@ -90,9 +71,9 @@ async function navigation( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Navigation',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Headless',
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -106,7 +87,7 @@ let Self =
 
   tests :
   {
-    navigation,
+    headless,
   }
 
 }

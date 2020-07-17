@@ -261,7 +261,7 @@ function _routineSet( src )
   let suite = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( src === null || _.routineIs( src ) || _.strIs( src ) );
+  _.assert( src === null || _.routineIs( src ) || _.strIs( src ), 'Expects routine or string' );
 
   if( _.routineIs( src ) )
   debugger;

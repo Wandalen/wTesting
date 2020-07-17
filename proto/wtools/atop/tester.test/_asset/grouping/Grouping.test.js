@@ -30,7 +30,7 @@ function routine1( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Hello',
   tests :

@@ -18,8 +18,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
 // --
@@ -104,7 +104,7 @@ must be only test routine in the test suite!
 // declare
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.Tester.AsyncTimeout',

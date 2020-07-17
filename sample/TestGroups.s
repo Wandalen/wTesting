@@ -233,7 +233,7 @@ Passed test routine ( Sample/TestGroups / mapExtend ) in 0.131s
 
 //
 
-var Self =
+let Self =
 {
 
   name : 'Sample/TestGroups',

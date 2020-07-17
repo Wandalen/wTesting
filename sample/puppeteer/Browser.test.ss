@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
   var Puppeteer = require( 'puppeteer' );
 }
 
-var _global = _global_;
+let _global = _global_;
 let _ = _testerGlobal_.wTools;
 
 // --
@@ -63,7 +63,7 @@ async function browser( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Puppeteer.Browser',

@@ -15,7 +15,7 @@ The verbosity of report is set to the level `7`.
 At the same time, the test suite options are specified in the test file, they are written as the run options:
 
 ```js
-var Self =
+let Self =
 {
 
   name : 'TestSuiteName',

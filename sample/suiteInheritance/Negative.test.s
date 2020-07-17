@@ -25,7 +25,7 @@ function shouldBeFailed( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Negative',
   abstract : 0,

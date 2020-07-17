@@ -9,14 +9,14 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    var _ = require( '../../../../wtools/Tools.s' );
+    let _ = require( '../../../../wtools/Tools.s' );
   }
   catch( err )
   {
-    var _ = require( '../../../wtools/Tools.s' );
+    let _ = require( '../../../wtools/Tools.s' );
   }
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   try
   {
@@ -31,8 +31,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 // --
 // tests
@@ -1772,7 +1772,7 @@ function asyncStackTimeOut( test )
 // test suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools/Time/' + Math.floor( Math.random()*100000 ),

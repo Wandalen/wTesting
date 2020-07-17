@@ -18,8 +18,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 // --
 // tools
@@ -8243,7 +8243,7 @@ processWatchingOnSuiteEnd.description =
 // var notTakingIntoAccount = { concurrent : 1, takingIntoAccount : 0 };
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-var Self =
+let Self =
 {
 
   name : 'Tools.Tester.Int',

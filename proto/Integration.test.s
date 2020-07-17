@@ -88,7 +88,7 @@ function samples( test )
         return null;
         test.description = 'have no uncaught errors';
         test.identical( _.strCount( op.output, 'ncaught' ), 0 );
-        test.identical( _.strCount( op.output, 'rror' ), 0 );
+        test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
         test.description = 'have some output';
         test.ge( op.output.split( '\n' ).length, 1 );
         test.ge( op.output.length, 3 );
@@ -101,6 +101,8 @@ function samples( test )
 
   return ready;
 }
+
+samples.rapidity = -1;
 
 //
 
@@ -162,13 +164,13 @@ function eslint( test )
   return ready;
 }
 
-eslint.rapidity = -1;
+eslint.rapidity = -2;
 
 // --
 // declare
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Integration',

@@ -2,11 +2,11 @@
 
 'use strict';
 
-var _ = require( 'wTesting' );
+let _ = require( 'wTesting' );
 var ElectronPath = require( 'electron' );
 var Spectron = require( 'spectron' );
 
-var _ = _realGlobal_._testerGlobal_.wTools
+let _ = _realGlobal_._testerGlobal_.wTools
 
 // --
 // tests
@@ -96,7 +96,7 @@ async function clientContinuesToWorkAfterTest( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Spectron.Zombie',

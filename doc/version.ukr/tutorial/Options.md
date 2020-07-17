@@ -15,7 +15,7 @@ tst .imply verbosity:7 .run
 Опції тест сюіта задаються в тестовому файлі, вони мають таке ж формулювання як і опції запуску:
 
 ```js
-var Self =
+let Self =
 {
 
   name : 'TestSuiteName',

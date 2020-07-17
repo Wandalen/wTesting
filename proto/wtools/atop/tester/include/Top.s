@@ -47,7 +47,7 @@ if( typeof module !== 'undefined' )
 
   //
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.assert( _global_ !== _realGlobal_ );
   _.assert( _global_.wTools !== _realGlobal_.wTools );

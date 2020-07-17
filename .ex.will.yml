@@ -23,19 +23,19 @@ about :
   npm.name : 'wTesting'
   npm.scripts :
     test : 'wtest .run proto/**'
-    wtest : 'node proto/dwtools/atop/tester/entry/ExecUnrestricted'
-    single-process-wtest : 'node proto/dwtools/atop/tester/entry/Exec'
-    debug-wtest : 'node proto/dwtools/atop/tester/entry/ExecDebug'
-    tst : 'node proto/dwtools/atop/tester/entry/ExecUnrestricted'
-    single-process-tst : 'node proto/dwtools/atop/tester/entry/Exec'
-    debug-tst : 'node proto/dwtools/atop/tester/entry/ExecDebug'
+    wtest : 'node proto/wtools/atop/tester/entry/ExecUnrestricted'
+    single-process-wtest : 'node proto/wtools/atop/tester/entry/Exec'
+    debug-wtest : 'node proto/wtools/atop/tester/entry/ExecDebug'
+    tst : 'node proto/wtools/atop/tester/entry/ExecUnrestricted'
+    single-process-tst : 'node proto/wtools/atop/tester/entry/Exec'
+    debug-tst : 'node proto/wtools/atop/tester/entry/ExecDebug'
   npm.bin :
-    wtest : 'proto/dwtools/atop/tester/entry/ExecUnrestricted'
-    single-process-wtest : 'proto/dwtools/atop/tester/entry/Exec'
-    debug-wtest : 'proto/dwtools/atop/tester/entry/ExecDebug'
-    tst : 'proto/dwtools/atop/tester/entry/ExecUnrestricted'
-    single-process-tst : 'proto/dwtools/atop/tester/entry/Exec'
-    debug-tst : 'proto/dwtools/atop/tester/entry/ExecDebug'
+    wtest : 'proto/wtools/atop/tester/entry/ExecUnrestricted'
+    single-process-wtest : 'proto/wtools/atop/tester/entry/Exec'
+    debug-wtest : 'proto/wtools/atop/tester/entry/ExecDebug'
+    tst : 'proto/wtools/atop/tester/entry/ExecUnrestricted'
+    single-process-tst : 'proto/wtools/atop/tester/entry/Exec'
+    debug-tst : 'proto/wtools/atop/tester/entry/ExecDebug'
 
 path :
 

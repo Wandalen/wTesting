@@ -58,7 +58,7 @@ function routine1( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Join',
   tests :
@@ -179,7 +179,7 @@ routine1.timeOut = 6000;
 
 //
 
-var Self =
+let Self =
 {
   name : 'Join',
   tests :

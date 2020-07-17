@@ -55,7 +55,7 @@ tst .run proto
 [user@user ~]$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
-      at  /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:2036
+      at  /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:2036
 
       Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.103s
       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.070s
@@ -67,7 +67,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Diagnostics ) ... in 2.949s ... ok
 
     Running test suite ( Tools/base/l1/Entity ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:3276
+    at  /.../wTools/proto/wtools/abase/l1.test/Entity.test.s:3276
 
       Passed test routine ( Tools/base/l1/Entity / eachSample ) in 0.472s
       Passed test routine ( Tools/base/l1/Entity / entityEach ) in 0.273s
@@ -80,7 +80,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Entity ) ... in 4.334s ... ok
 
     Running test suite ( Tools/base/l1/Long ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:22325
+    at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:22325
 
       Passed test routine ( Tools/base/l1/Long / bufferRawIs ) in 0.145s
       Passed test routine ( Tools/base/l1/Long / bufferTypedIs ) in 0.146s
@@ -93,7 +93,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Long ) ... in 77.531s ... ok
 
     Running test suite ( Tools/base/l1/Map ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
+    at  /.../wTools/proto/wtools/abase/l1.test/Map.test.s:4034
 
       Passed test routine ( Tools/base/l1/Map / mapIs ) in 0.062s
       Passed test routine ( Tools/base/l1/Map / mapCloneAssigning ) in 0.081s
@@ -106,7 +106,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Map ) ... in 6.329s ... ok
 
     Running test suite ( Tools/base/l1/Regexp ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749
+    at  /.../wTools/proto/wtools/abase/l1.test/Regexp.test.s:1749
 
       Passed test routine ( Tools/base/l1/Regexp / regexpIdentical ) in 0.069s
       Passed test routine ( Tools/base/l1/Regexp / regexpsSources ) in 0.143s
@@ -119,7 +119,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Regexp ) ... in 4.755s ... ok
 
     Running test suite ( Tools/base/l1/Routine ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558
+    at  /.../wTools/proto/wtools/abase/l1.test/Routine.test.s:1558
 
       Passed test routine ( Tools/base/l1/Routine / _routineJoin ) in 0.084s
       Passed test routine ( Tools/base/l1/Routine / constructorJoin ) in 0.165s
@@ -132,7 +132,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Routine ) ... in 2.290s ... ok
 
     Running test suite ( Tools/base/l1/String ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/String.test.s:3887
+    at  /.../wTools/proto/wtools/abase/l1.test/String.test.s:3887
 
       Passed test routine ( Tools/base/l1/String / strLeft ) in 0.500s
       Passed test routine ( Tools/base/l1/String / strRight ) in 0.552s
@@ -145,7 +145,7 @@ tst .run proto
     Test suite ( Tools/base/l1/String ) ... in 6.814s ... ok
 
     Running test suite ( Tools/base/l1/Typing ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97
+    at  /.../wTools/proto/wtools/abase/l1.test/Typing.test.s:97
 
       Passed test routine ( Tools/base/l1/Typing / objectLike ) in 0.074s
       Passed test routine ( Tools/base/l1/Typing / promiseIs ) in 0.042s
@@ -157,7 +157,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Typing ) ... in 0.756s ... ok
 
     Running test suite ( Tools/base/l2/String ) ..
-    at  /.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462
+    at  /.../wTools/proto/wtools/abase/l2.test/StringTools.test.s:10462
 
       Passed test routine ( Tools/base/l2/String / strRemoveBegin ) in 0.216s
       Passed test routine ( Tools/base/l2/String / strRemoveEnd ) in 0.226s
@@ -178,8 +178,8 @@ tst .run proto
 
 Згідно виводу утиліта проводила тестування по черзі від одного тест сюіту до іншого. В один момент часу проводились перевірки лише одного тест сюіту, після його завершення здійснювався запуск наступного.
 
-Першим запущено і виконано тестування в тест сюіті `Tools/base/l1/Diagnostics`. Він знаходиться за шляхом `/.../wTools/proto/dwtools/abase/l1.test/` в файлі `Diagnostics.test.s`. Тест сюіт налічує 2036 рядків.
-Останнім було протестовано тест сюіт `Tools/base/l2/String` в директорії `wTools/proto/dwtools/abase/l2.test`. Тест файл має назву `StringTools.test.s` і включає 10462 рядка.
+Першим запущено і виконано тестування в тест сюіті `Tools/base/l1/Diagnostics`. Він знаходиться за шляхом `/.../wTools/proto/wtools/abase/l1.test/` в файлі `Diagnostics.test.s`. Тест сюіт налічує 2036 рядків.
+Останнім було протестовано тест сюіт `Tools/base/l2/String` в директорії `wTools/proto/wtools/abase/l2.test`. Тест файл має назву `StringTools.test.s` і включає 10462 рядка.
 
 Проведене тестування успішне.
 
@@ -190,39 +190,39 @@ tst .run proto
 [user@user ~]$ tst .imply concurrent:1 .run proto
 
   Running test suite ( Tools/base/l1/Diagnostics ) ..
-  at  /.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+  at  /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309
 
     Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.125s
     Running test suite ( Tools/base/l1/Entity ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:808
+    at  /.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808
 
       Passed test routine ( Tools/base/l1/Entity / eachSample ) in 0.070s
       Running test suite ( Tools/base/l1/Long ) ..
-        at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+        at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
 
           Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.232s
           Running test suite ( Tools/base/l1/Map ) ..
-          at  /.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
+          at  /.../wTools/proto/wtools/abase/l1.test/Map.test.s:4034
 
             Passed test routine ( Tools/base/l1/Map / mapIs ) in 0.068s
             Running test suite ( Tools/base/l1/Regexp ) ..
-            at  /.../wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749
+            at  /.../wTools/proto/wtools/abase/l1.test/Regexp.test.s:1749
 
               Passed test routine ( Tools/base/l1/Regexp / regexpIdentical ) in 0.078s
               Running test suite ( Tools/base/l1/Routine ) ..
-              at  /.../wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558
+              at  /.../wTools/proto/wtools/abase/l1.test/Routine.test.s:1558
 
                 Passed test routine ( Tools/base/l1/Routine / _routineJoin ) in 0.103s
                 Running test suite ( Tools/base/l1/String ) ..
-                at  /.../wTools/proto/dwtools/abase/l1.test/String.test.s:3887
+                at  /.../wTools/proto/wtools/abase/l1.test/String.test.s:3887
 
                   Passed test routine ( Tools/base/l1/String / strLeft ) in 0.614s
                   Running test suite ( Tools/base/l1/Typing ) ..
-                  at  /.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97
+                  at  /.../wTools/proto/wtools/abase/l1.test/Typing.test.s:97
 
                     Passed test routine ( Tools/base/l1/Typing / objectLike ) in 0.081s
                     Running test suite ( Tools/base/l2/String ) ..
-                    at  /.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10502
+                    at  /.../wTools/proto/wtools/abase/l2.test/StringTools.test.s:10502
 
                       Passed test routine ( Tools/base/l2/String / strRemoveBegin ) in 0.265s
                       Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.074s
@@ -503,7 +503,7 @@ Passed test routine ( Tools/base/l2/String / strSplitFastRegexp ) in 0.579s
 Passed test routine ( Tools/base/l1/Long / unrollFrom ) in 0.349s
 ```
 
-Перша тест рутна `strIsolateLeftOrNone` поміщена в файлі `String.test.s`, що знаходиться за шляхом `wTools/proto/dwtools/abase/l1.test`. Друга, `strSplitFastRegexp` - в файлі `String.test.s` за шляхом `wTools/proto/dwtools/abase/l2.test`. А третя тест рутина `unrollFrom` в файлі `Long.test.s` за шляхом `wTools/proto/dwtools/abase/l1.test`.
+Перша тест рутна `strIsolateLeftOrNone` поміщена в файлі `String.test.s`, що знаходиться за шляхом `wTools/proto/wtools/abase/l1.test`. Друга, `strSplitFastRegexp` - в файлі `String.test.s` за шляхом `wTools/proto/wtools/abase/l2.test`. А третя тест рутина `unrollFrom` в файлі `Long.test.s` за шляхом `wTools/proto/wtools/abase/l1.test`.
 
 ### Підсумок
 

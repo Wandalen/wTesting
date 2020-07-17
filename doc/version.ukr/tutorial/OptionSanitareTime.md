@@ -91,7 +91,7 @@ function routine1( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Join',
   tests :
@@ -129,7 +129,7 @@ function routine1( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Multiply',
   tests :
@@ -167,7 +167,7 @@ function routine1( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Sum',
   tests :

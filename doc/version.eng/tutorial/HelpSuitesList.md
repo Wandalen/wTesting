@@ -42,27 +42,27 @@ The utility should scan the `proto` directory and displays a list of test suites
 ```
 [user@user ~]$ tst .suites.list ./proto
 
-/.../wTools/proto/dwtools/abase/l1.test/Array.test.s:19500 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/String.test.s:3887 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
-/.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Array.test.s:19500 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Map.test.s:4034 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Regexp.test.s:1749 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Routine.test.s:1558 - enabled
+/.../wTools/proto/wtools/abase/l1.test/String.test.s:3887 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Typing.test.s:97 - enabled
+/.../wTools/proto/wtools/abase/l2.test/StringTools.test.s:10462 - enabled
 9 test suites
 ```
 
 </details>
 
-The output shows that the `Tools` module has 9 suites tests. Each test suite is a separate file. Eight of them are in `proto/dwtools/abase/l1.test` directory and one in `proto/dwtools/abase/l2.test`.
+The output shows that the `Tools` module has 9 suites tests. Each test suite is a separate file. Eight of them are in `proto/wtools/abase/l1.test` directory and one in `proto/wtools/abase/l2.test`.
 
 Information about the test suite includes the path to the test file, its name, and the ability to run it.
 
 In the `Tools` module, all test suites are enabled, so they can be run (`enabled:1` output). Test files that are disconnected from testing have the status `enabled:0`.
 
-If you run the command `tst .suites.list ./proto/dwtools/abase/l1.test`, the utility should list the test files in this directory `./proto/dwtools/abase/l1.test`. There are eight test files in it.
+If you run the command `tst .suites.list ./proto/wtools/abase/l1.test`, the utility should list the test files in this directory `./proto/wtools/abase/l1.test`. There are eight test files in it.
 
 ### Summary
 

@@ -6,13 +6,12 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
-  _.include( 'wFiles' );
 
   var Puppeteer = require( 'puppeteer' );
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context
@@ -22,7 +21,7 @@ function onSuiteBegin()
 {
   let self = this;
 
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 
@@ -32,7 +31,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --
@@ -69,7 +68,7 @@ async function request( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Puppeteer.Request',

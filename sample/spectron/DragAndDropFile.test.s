@@ -5,16 +5,15 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
-  require( '../..' );
-  require( 'wFiles' )
+  _.include( 'wTesting' );
 
   var ElectronPath = require( 'electron' );
   var Spectron = require( 'spectron' );
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context
@@ -23,7 +22,7 @@ var _ = _global_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 
@@ -31,7 +30,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --
@@ -126,7 +125,7 @@ async function dragAndDropFileWithHelper( test )
 // suite
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Visual.Spectron.DragAndDropFile',

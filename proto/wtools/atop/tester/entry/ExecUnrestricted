@@ -1,0 +1,15 @@
+#! /usr/bin/env node
+
+if( typeof module !== 'undefined' )
+{
+  let _ = require( '../../../../wtools/Tools.s' );
+  _.include( 'wProcess' );
+}
+
+let _ = _global_.wTools;
+let o =
+{
+  execPath : _.strQuote( _.path.join( __dirname, 'Exec' ) ),
+}
+_.process._exitHandlerRepair();
+_.process.startNodePassingThrough( o );

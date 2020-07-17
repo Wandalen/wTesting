@@ -304,7 +304,7 @@ Tester Settings :
             ...
 
          = Catches stack
-            caught at Proxy.exceptionReport @ /usr/lib/node_modules/wTesting/proto/dwtools/atop/tester/l5/Routine.s:2560
+            caught at Proxy.exceptionReport @ /usr/lib/node_modules/wTesting/proto/wtools/atop/tester/l5/Routine.s:2560
 
          = Source code from /.../suiteInheritanceMulty/Negative.test.js:7
             6 : {
@@ -334,7 +334,7 @@ Tester Settings :
             ...
 
          = Catches stack
-            caught at Proxy.exceptionReport @ /usr/lib/node_modules/wTesting/proto/dwtools/atop/tester/l5/Routine.s:2560
+            caught at Proxy.exceptionReport @ /usr/lib/node_modules/wTesting/proto/wtools/atop/tester/l5/Routine.s:2560
 
          = Source code from /.../suiteInheritanceMulty/Negative.test.js:14
             13 : {

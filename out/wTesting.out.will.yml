@@ -3,14 +3,14 @@ root:
   - wTesting.out
 consistency:
   wTesting.out.will.yml: &ref_0
-    hash: 6f659a95f627eefa4328707f84750d1a
-    size: 49213
+    hash: fc135a385f6b940fca588a51036d92e6
+    size: 49252
   ../.ex.will.yml: &ref_1
-    hash: 58d6049eeae86b6c32e5e0fe2ce1c4ef
-    size: 2796
+    hash: b259909518ce877bcdeca298a613d7de
+    size: 2784
   ../.im.will.yml: &ref_2
-    hash: 8333b04a19998cde9db3d4a80613c5ca
-    size: 6287
+    hash: 468e0d493693c3599d8a35a0efbf59b5
+    size: 6284
 module:
   wTesting.out:
     about:
@@ -41,19 +41,19 @@ module:
       npm.name: wTesting
       npm.scripts:
         test: wtest .run proto/**
-        wtest: node proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: node proto/dwtools/atop/tester/entry/Exec
-        debug-wtest: node proto/dwtools/atop/tester/entry/ExecDebug
-        tst: node proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: node proto/dwtools/atop/tester/entry/Exec
-        debug-tst: node proto/dwtools/atop/tester/entry/ExecDebug
+        wtest: node proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-wtest: node proto/wtools/atop/tester/entry/Exec
+        debug-wtest: node proto/wtools/atop/tester/entry/ExecDebug
+        tst: node proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-tst: node proto/wtools/atop/tester/entry/Exec
+        debug-tst: node proto/wtools/atop/tester/entry/ExecDebug
       npm.bin:
-        wtest: proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: proto/dwtools/atop/tester/entry/Exec
-        debug-wtest: proto/dwtools/atop/tester/entry/ExecDebug
-        tst: proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: proto/dwtools/atop/tester/entry/Exec
-        debug-tst: proto/dwtools/atop/tester/entry/ExecDebug
+        wtest: proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-wtest: proto/wtools/atop/tester/entry/Exec
+        debug-wtest: proto/wtools/atop/tester/entry/ExecDebug
+        tst: proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-tst: proto/wtools/atop/tester/entry/Exec
+        debug-tst: proto/wtools/atop/tester/entry/ExecDebug
     path:
       module.willfiles:
         criterion:
@@ -133,7 +133,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/atop/tester/entry/Main.s
+        path: ../proto/wtools/atop/tester/entry/Main.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -143,13 +143,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/tester/entry/Main.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/tester/entry/Main.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -175,123 +175,122 @@ module:
           export: 1
         path:
           - ../proto
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/atop
-          - ../proto/dwtools/atop/tester
-          - ../proto/dwtools/atop/tester/entry
-          - ../proto/dwtools/atop/tester/entry/Exec
-          - ../proto/dwtools/atop/tester/entry/ExecDebug
-          - ../proto/dwtools/atop/tester/entry/ExecUnrestricted
-          - ../proto/dwtools/atop/tester/entry/Main.s
-          - ../proto/dwtools/atop/tester/include
-          - ../proto/dwtools/atop/tester/include/Base.s
-          - ../proto/dwtools/atop/tester/include/Top.s
-          - ../proto/dwtools/atop/tester/l1
-          - ../proto/dwtools/atop/tester/l1/Namespace.s
-          - ../proto/dwtools/atop/tester/l3
-          - ../proto/dwtools/atop/tester/l3/TesterBasic.s
-          - ../proto/dwtools/atop/tester/l5
-          - ../proto/dwtools/atop/tester/l5/Routine.s
-          - ../proto/dwtools/atop/tester/l5/Suite.s
-          - ../proto/dwtools/atop/tester/l7
-          - ../proto/dwtools/atop/tester/l7/TesterTop.s
-          - ../proto/dwtools/atop/tester.test
-          - ../proto/dwtools/atop/tester.test/AsyncTimeout.test.s
-          - ../proto/dwtools/atop/tester.test/Electron.test.s
-          - ../proto/dwtools/atop/tester.test/Ext.test.s
-          - ../proto/dwtools/atop/tester.test/Inheritance.test.s
-          - ../proto/dwtools/atop/tester.test/Int.test.s
-          - ../proto/dwtools/atop/tester.test/Process.test.s
-          - ../proto/dwtools/atop/tester.test/Puppeteer.test.s
-          - ../proto/dwtools/atop/tester.test/Time.test.s
-          - ../proto/dwtools/atop/tester.test/_asset
-          - ../proto/dwtools/atop/tester.test/_asset/asyncErrorHandling
+          - ../proto/Integration.test.s
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/amid
+          - ../proto/wtools/atop
+          - ../proto/wtools/atop/tester
+          - ../proto/wtools/atop/tester/entry
+          - ../proto/wtools/atop/tester/entry/Exec
+          - ../proto/wtools/atop/tester/entry/ExecDebug
+          - ../proto/wtools/atop/tester/entry/ExecUnrestricted
+          - ../proto/wtools/atop/tester/entry/Main.s
+          - ../proto/wtools/atop/tester/include
+          - ../proto/wtools/atop/tester/include/Base.s
+          - ../proto/wtools/atop/tester/include/Top.s
+          - ../proto/wtools/atop/tester/l1
+          - ../proto/wtools/atop/tester/l1/Namespace.s
+          - ../proto/wtools/atop/tester/l3
+          - ../proto/wtools/atop/tester/l3/TesterBasic.s
+          - ../proto/wtools/atop/tester/l5
+          - ../proto/wtools/atop/tester/l5/Routine.s
+          - ../proto/wtools/atop/tester/l5/Suite.s
+          - ../proto/wtools/atop/tester/l7
+          - ../proto/wtools/atop/tester/l7/TesterTop.s
+          - ../proto/wtools/atop/tester.test
+          - ../proto/wtools/atop/tester.test/AsyncTimeout.test.s
+          - ../proto/wtools/atop/tester.test/Electron.test.s
+          - ../proto/wtools/atop/tester.test/Ext.test.s
+          - ../proto/wtools/atop/tester.test/Inheritance.test.s
+          - ../proto/wtools/atop/tester.test/Int.test.s
+          - ../proto/wtools/atop/tester.test/Process.test.s
+          - ../proto/wtools/atop/tester.test/Puppeteer.test.s
+          - ../proto/wtools/atop/tester.test/Time.test.s
+          - ../proto/wtools/atop/tester.test/_asset
+          - ../proto/wtools/atop/tester.test/_asset/asyncErrorHandling
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/asyncErrorHandling/asyncErrorHandling.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/asyncTimeOut
-          - ../proto/dwtools/atop/tester.test/_asset/asyncTimeOut/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/asyncTimeOut/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/checkFails
-          - ../proto/dwtools/atop/tester.test/_asset/checkFails/Hello.js
-          - ../proto/dwtools/atop/tester.test/_asset/checkFails/Hello.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/checkFails/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOut
+            ../proto/wtools/atop/tester.test/_asset/asyncErrorHandling/asyncErrorHandling.test.js
+          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut
+          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut/package.json
+          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/checkFails
+          - ../proto/wtools/atop/tester.test/_asset/checkFails/Hello.js
+          - ../proto/wtools/atop/tester.test/_asset/checkFails/Hello.test.js
+          - ../proto/wtools/atop/tester.test/_asset/checkFails/package.json
+          - ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOut
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOut/package.json
+            ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOut/package.json
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOut/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOutSilenced
+            ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOut/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOutSilenced
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/package.json
+            ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/package.json
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/double
-          - ../proto/dwtools/atop/tester.test/_asset/double/Hello.js
-          - ../proto/dwtools/atop/tester.test/_asset/double/Hello.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/double/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/electron
-          - ../proto/dwtools/atop/tester.test/_asset/electron/index.html
-          - ../proto/dwtools/atop/tester.test/_asset/electron/main.js
-          - ../proto/dwtools/atop/tester.test/_asset/grouping
-          - ../proto/dwtools/atop/tester.test/_asset/grouping/Grouping.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/grouping/Hello.js
-          - ../proto/dwtools/atop/tester.test/_asset/grouping/package-lock.json
-          - ../proto/dwtools/atop/tester.test/_asset/grouping/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/hello
-          - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.js
-          - ../proto/dwtools/atop/tester.test/_asset/hello/Hello.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/hello/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/manualTermination
+            ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/double
+          - ../proto/wtools/atop/tester.test/_asset/double/Hello.js
+          - ../proto/wtools/atop/tester.test/_asset/double/Hello.test.js
+          - ../proto/wtools/atop/tester.test/_asset/double/package.json
+          - ../proto/wtools/atop/tester.test/_asset/electron
+          - ../proto/wtools/atop/tester.test/_asset/electron/index.html
+          - ../proto/wtools/atop/tester.test/_asset/electron/main.js
+          - ../proto/wtools/atop/tester.test/_asset/grouping
+          - ../proto/wtools/atop/tester.test/_asset/grouping/Grouping.test.js
+          - ../proto/wtools/atop/tester.test/_asset/grouping/Hello.js
+          - ../proto/wtools/atop/tester.test/_asset/grouping/package-lock.json
+          - ../proto/wtools/atop/tester.test/_asset/grouping/package.json
+          - ../proto/wtools/atop/tester.test/_asset/hello
+          - ../proto/wtools/atop/tester.test/_asset/hello/Hello.js
+          - ../proto/wtools/atop/tester.test/_asset/hello/Hello.test.js
+          - ../proto/wtools/atop/tester.test/_asset/hello/package.json
+          - ../proto/wtools/atop/tester.test/_asset/manualTermination
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/manualTermination/manualTermination.test.js
+            ../proto/wtools/atop/tester.test/_asset/manualTermination/manualTermination.test.js
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/manualTermination/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/noTestCheck
-          - ../proto/dwtools/atop/tester.test/_asset/noTestCheck/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/noTestCheck/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd
+            ../proto/wtools/atop/tester.test/_asset/manualTermination/package.json
+          - ../proto/wtools/atop/tester.test/_asset/noTestCheck
+          - ../proto/wtools/atop/tester.test/_asset/noTestCheck/package.json
+          - ../proto/wtools/atop/tester.test/_asset/noTestCheck/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/onSuiteEnd
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/DelayedMessageByConsequence.test.js
+            ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/DelayedMessageByConsequence.test.js
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/ErrorMessageByConsequence.test.js
+            ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/ErrorMessageByConsequence.test.js
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/NormalMessageByConsequence.test.js
+            ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/NormalMessageByConsequence.test.js
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionAccuracy
+            ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionAccuracy
+          - ../proto/wtools/atop/tester.test/_asset/optionAccuracy/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionAccuracyExplicitly
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/optionAccuracy/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionAccuracyExplicitly
+            ../proto/wtools/atop/tester.test/_asset/optionAccuracyExplicitly/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionRapidity
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/optionAccuracyExplicitly/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionRapidity
+            ../proto/wtools/atop/tester.test/_asset/optionRapidity/OptionRapidity.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionRapidityAndSourceCode
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/optionRapidity/OptionRapidity.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionRapidityAndSourceCode
+            ../proto/wtools/atop/tester.test/_asset/optionRapidityAndSourceCode/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionSuite
+          - ../proto/wtools/atop/tester.test/_asset/optionSuite/A1.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionSuite/A2.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionSuite/B1.test.js
+          - ../proto/wtools/atop/tester.test/_asset/optionSuite/package.json
+          - ../proto/wtools/atop/tester.test/_asset/puppeteer
+          - ../proto/wtools/atop/tester.test/_asset/puppeteer/index.html
+          - ../proto/wtools/atop/tester.test/_asset/puppeteer/Puppeteer.test.s
+          - ../proto/wtools/atop/tester.test/_asset/requireTesting
+          - ../proto/wtools/atop/tester.test/_asset/requireTesting/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/spectron
+          - ../proto/wtools/atop/tester.test/_asset/spectron/index.html
+          - ../proto/wtools/atop/tester.test/_asset/spectron/Spectron.test.s
+          - ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/optionRapidityAndSourceCode/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionSuite
-          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A1.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/A2.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/B1.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/optionSuite/package.json
-          - ../proto/dwtools/atop/tester.test/_asset/puppeteer
-          - ../proto/dwtools/atop/tester.test/_asset/puppeteer/index.html
-          - ../proto/dwtools/atop/tester.test/_asset/puppeteer/Puppeteer.test.s
-          - ../proto/dwtools/atop/tester.test/_asset/requireTesting
+            ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage/package.json
           - >-
-            ../proto/dwtools/atop/tester.test/_asset/requireTesting/Suite.test.js
-          - ../proto/dwtools/atop/tester.test/_asset/spectron
-          - ../proto/dwtools/atop/tester.test/_asset/spectron/index.html
-          - ../proto/dwtools/atop/tester.test/_asset/spectron/Spectron.test.s
-          - ../proto/dwtools/atop/tester.test/_asset/timeOutExternalMessage
-          - >-
-            ../proto/dwtools/atop/tester.test/_asset/timeOutExternalMessage/package.json
-          - >-
-            ../proto/dwtools/atop/tester.test/_asset/timeOutExternalMessage/Suite.test.js
+            ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage/Suite.test.js
     submodule:
       wConsequence:
         path: 'npm:///wConsequence'
@@ -794,7 +793,7 @@ module:
           debug: release
       reflect.proto.debug.raw:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.raw'
         criterion:
           tests: no.tests
           debug: debug
@@ -804,7 +803,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.raw'
         criterion:
           tests: no.tests
           debug: release
@@ -814,7 +813,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.compiled'
         criterion:
           tests: no.tests
           debug: debug
@@ -824,7 +823,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.compiled'
         criterion:
           tests: no.tests
           debug: release
@@ -835,7 +834,7 @@ module:
       transpile.proto.raw:
         opts:
           entry: 'path::entry.proto.no.tests'
-          filePath: 'reflector::transpile.proto.raw*'
+          filePath: 'reflector::transpile.proto.raw'
         criterion:
           raw: raw
           debug: release
@@ -845,7 +844,7 @@ module:
       transpile.proto.no.tests.compiled.debug:
         opts:
           entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
         criterion:
           tests: no.tests
           raw: compiled
@@ -856,7 +855,7 @@ module:
       transpile.proto.no.tests.compiled.release:
         opts:
           entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
         criterion:
           tests: no.tests
           raw: compiled
@@ -868,7 +867,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
         criterion:
           tests: only.tests
           raw: compiled
@@ -880,7 +879,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
         criterion:
           tests: only.tests
           raw: compiled
@@ -890,7 +889,7 @@ module:
           - files.transpile
       exported.proto.export:
         opts:
-          filePath: 'reflector::exported.proto.export*'
+          filePath: 'reflector::exported.proto.export'
         criterion:
           generated: 1
           content: proto
@@ -899,7 +898,7 @@ module:
           - files.reflect
       exported.files.proto.export:
         opts:
-          filePath: 'reflector::exported.files.proto.export*'
+          filePath: 'reflector::exported.files.proto.export'
         criterion:
           generated: 1
           content: proto
@@ -1026,19 +1025,19 @@ module:
       npm.name: wTesting
       npm.scripts:
         test: wtest .run proto/**
-        wtest: node proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: node proto/dwtools/atop/tester/entry/Exec
-        debug-wtest: node proto/dwtools/atop/tester/entry/ExecDebug
-        tst: node proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: node proto/dwtools/atop/tester/entry/Exec
-        debug-tst: node proto/dwtools/atop/tester/entry/ExecDebug
+        wtest: node proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-wtest: node proto/wtools/atop/tester/entry/Exec
+        debug-wtest: node proto/wtools/atop/tester/entry/ExecDebug
+        tst: node proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-tst: node proto/wtools/atop/tester/entry/Exec
+        debug-tst: node proto/wtools/atop/tester/entry/ExecDebug
       npm.bin:
-        wtest: proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: proto/dwtools/atop/tester/entry/Exec
-        debug-wtest: proto/dwtools/atop/tester/entry/ExecDebug
-        tst: proto/dwtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: proto/dwtools/atop/tester/entry/Exec
-        debug-tst: proto/dwtools/atop/tester/entry/ExecDebug
+        wtest: proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-wtest: proto/wtools/atop/tester/entry/Exec
+        debug-wtest: proto/wtools/atop/tester/entry/ExecDebug
+        tst: proto/wtools/atop/tester/entry/ExecUnrestricted
+        single-process-tst: proto/wtools/atop/tester/entry/Exec
+        debug-tst: proto/wtools/atop/tester/entry/ExecDebug
     path:
       module.willfiles:
         criterion:
@@ -1118,7 +1117,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/atop/tester/entry/Main.s
+        path: proto/wtools/atop/tester/entry/Main.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1128,13 +1127,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/tester/entry/Main.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/atop/tester/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/tester/entry/Main.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1768,9 +1767,9 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 58d6049eeae86b6c32e5e0fe2ce1c4ef
-        size: 2796
+        hash: b259909518ce877bcdeca298a613d7de
+        size: 2784
       ../.im.will.yml:
-        hash: 8333b04a19998cde9db3d4a80613c5ca
-        size: 6287
+        hash: 468e0d493693c3599d8a35a0efbf59b5
+        size: 6284
       wTesting.out.will.yml: *ref_0

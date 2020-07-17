@@ -6,13 +6,12 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
-  _.include( 'wFiles' );
 
   var Puppeteer = require( 'puppeteer' );
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _testerGlobal_.wTools;
 
 // --
 // context
@@ -22,7 +21,7 @@ function onSuiteBegin()
 {
   let self = this;
 
-  self.tempDir = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 
@@ -32,7 +31,7 @@ function onSuiteEnd()
 {
   let self = this;
   _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.pathDirTempClose( self.tempDir );
+  _.path.tempClose( self.tempDir );
 }
 
 // --
@@ -50,21 +49,22 @@ async function loadLocalHtmlFile( test )
   let browser = await Puppeteer.launch({ headless : true });
   let page = await browser.newPage();
 
-  await page.goto( 'file:///D:/work/wTesting/sample/puppeteer/asset/serverless/index.html', { waitUntil : 'load' } );
-    
+  // await page.goto( 'file:///D:/work/wTesting/sample/puppeteer/asset/serverless/index.html', { waitUntil : 'load' } );
+  await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
+
   test.case = 'script and style files are loaded'
-  
+
   var got = await page.evaluate( () => window.scriptLoaded )
   test.identical( got, true );
-  
-  var got = await page.evaluate( () => 
+
+  var got = await page.evaluate( () =>
   {
     let p = document.querySelector( 'p' );
     let styles = window.getComputedStyle( p );
     return styles.getPropertyValue( 'color' )
   })
   test.identical( got, 'rgb(192, 192, 192)' );
-  
+
   await browser.close();
 
   return null;

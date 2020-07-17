@@ -60,7 +60,7 @@ function routine1( test )
 
 //
 
-var Self =
+let Self =
 {
   name : 'Join',
   tests :

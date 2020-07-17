@@ -46,22 +46,22 @@ tst .suites.list
 ```
 [user@user ~]$ tst .suites.list
 
-/.../wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Entity.test.s:808 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Map.test.s:4034 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/String.test.s:3887 - enabled
-/.../wTools/proto/dwtools/abase/l1.test/Typing.test.s:97 - enabled
-/.../wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Map.test.s:4034 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Regexp.test.s:1749 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Routine.test.s:1558 - enabled
+/.../wTools/proto/wtools/abase/l1.test/String.test.s:3887 - enabled
+/.../wTools/proto/wtools/abase/l1.test/Typing.test.s:97 - enabled
+/.../wTools/proto/wtools/abase/l2.test/StringTools.test.s:10462 - enabled
 /.../wTools/sample/Sample.test.s:92 - enabled
 10 test suites
 ```
 
 </details>
 
-Згідно виводу модуль `Tools` має 10 тест сюітів. Іншими словами, 10 тест файлів так як під кожен тест сюіт відведено окремий файл. Вісім із них знаходяться в `proto/dwtools/abase/l1.test`, один в `proto/dwtools/abase/l2.test` i один в `sample`.
+Згідно виводу модуль `Tools` має 10 тест сюітів. Іншими словами, 10 тест файлів так як під кожен тест сюіт відведено окремий файл. Вісім із них знаходяться в `proto/wtools/abase/l1.test`, один в `proto/wtools/abase/l2.test` i один в `sample`.
 
 ### Тестування окремого тест сюіта
 
@@ -70,19 +70,19 @@ tst .suites.list
 Введіть команду:
 
 ```
-node proto/dwtools/abase/l1.test/Long.test.s
+node proto/wtools/abase/l1.test/Long.test.s
 ```
 
 В результаті виконання буде виконано тестування і виведено звіт.
 
 <details>
-  <summary><u>Вивід команди <code>node proto/dwtools/abase/l1.test/Long.test.s</code></u></summary>
+  <summary><u>Вивід команди <code>node proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ node proto/dwtools/abase/l1.test/Long.test.s
+[user@user ~]$ node proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+    at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
 
       Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.358s
       Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.091s
@@ -116,17 +116,17 @@ Testing ... in 41.851s ... ok
 Другим способом є використання команди `tst`. Введіть команду
 
 ```
-tst .run proto/dwtools/abase/l1.test/Long.test.s
+tst .run proto/wtools/abase/l1.test/Long.test.s
 ```
 
 <details>
-  <summary><u>Вивід команди <code>tst .run proto/dwtools/abase/l1.test/Long.test.s</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto/dwtools/abase/l1.test/Long.test.s
+[user@user ~]$ tst .run proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+    at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
 
      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.358s
       Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.091s
@@ -153,7 +153,7 @@ Testing ... in 41.124s ... ok
 
 </details>
 
-Читайти команду як: Знайти і запустити всі тести в директорій `proto/dwtools/abase/l1.test/Long.test.s`. Порівняйте отриманий вивід з попереднім. Звіт тестування при виконанні тесту схожий. Відмінність в часі, який може варіюватися від запуску до запуску.
+Читайти команду як: Знайти і запустити всі тести в директорій `proto/wtools/abase/l1.test/Long.test.s`. Порівняйте отриманий вивід з попереднім. Звіт тестування при виконанні тесту схожий. Відмінність в часі, який може варіюватися від запуску до запуску.
 
 ### Порівняння викликів
 
@@ -189,17 +189,17 @@ tst .imply routine:someRoutine path/to/TestSuite.js
 Запустіть тест рутину `bufferFrom` сюіта `Long.test.s`. Для запуску тестування введіть команду
 
 ```
-tst proto/dwtools/abase/l1.test/Long.test.s routine:bufferFrom
+tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
 ```
 
 <details>
-  <summary><u>Вивід команди <code>tst proto/dwtools/abase/l1.test/Long.test.s routine:bufferFrom</code></u></summary>
+  <summary><u>Вивід команди <code>tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom</code></u></summary>
 
 ```
-[user@user ~]$ tst proto/dwtools/abase/l1.test/Long.test.s routine:bufferFrom
+[user@user ~]$ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
 
 Running test suite ( Tools/base/l1/Long ) ..
-    at  /.../wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+    at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
 
       Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.220s
 
@@ -233,7 +233,7 @@ tst .run proto
 [user@user ~]$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Diagnostics.test.s:309
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309
 
       Passed test routine ( Tools/base/l1/Diagnostics / _err ) in 0.174s
       Passed test routine ( Tools/base/l1/Diagnostics / err ) in 0.061s
@@ -247,7 +247,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Diagnostics ) ... in 1.030s ... ok
 
     Running test suite ( Tools/base/l1/Entity ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Entity.test.s:808
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Entity.test.s:808
 
       Passed test routine ( Tools/base/l1/Entity / eachSample ) in 0.070s
       Passed test routine ( Tools/base/l1/Entity / entityMap ) in 0.094s
@@ -260,7 +260,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Entity ) ... in 1.089s ... ok
 
     Running test suite ( Tools/base/l1/Long ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Long.test.s:19500
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Long.test.s:19500
 
       Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.145s
       Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.073s
@@ -273,7 +273,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Long ) ... in 44.598s ... ok
 
     Running test suite ( Tools/base/l1/Map ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Map.test.s:4034
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Map.test.s:4034
 
       Passed test routine ( Tools/base/l1/Map / mapIs ) in 0.062s
       Passed test routine ( Tools/base/l1/Map / mapCloneAssigning ) in 0.081s
@@ -286,7 +286,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Map ) ... in 6.329s ... ok
 
     Running test suite ( Tools/base/l1/Regexp ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Regexp.test.s:1749
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Regexp.test.s:1749
 
       Passed test routine ( Tools/base/l1/Regexp / regexpIdentical ) in 0.069s
       Passed test routine ( Tools/base/l1/Regexp / regexpsSources ) in 0.143s
@@ -299,7 +299,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Regexp ) ... in 2.755s ... ok
 
     Running test suite ( Tools/base/l1/Routine ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Routine.test.s:1558
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Routine.test.s:1558
 
       Passed test routine ( Tools/base/l1/Routine / _routineJoin ) in 0.084s
       Passed test routine ( Tools/base/l1/Routine / constructorJoin ) in 0.165s
@@ -312,7 +312,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Routine ) ... in 2.290s ... ok
 
     Running test suite ( Tools/base/l1/String ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/String.test.s:3887
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/String.test.s:3887
 
       Passed test routine ( Tools/base/l1/String / strLeft ) in 0.500s
       Passed test routine ( Tools/base/l1/String / strRight ) in 0.552s
@@ -325,7 +325,7 @@ tst .run proto
     Test suite ( Tools/base/l1/String ) ... in 4.814s ... ok
 
     Running test suite ( Tools/base/l1/Typing ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l1.test/Typing.test.s:97
+    at  /.../sources/wTools/proto/wtools/abase/l1.test/Typing.test.s:97
 
       Passed test routine ( Tools/base/l1/Typing / objectLike ) in 0.074s
       Passed test routine ( Tools/base/l1/Typing / promiseIs ) in 0.042s
@@ -337,7 +337,7 @@ tst .run proto
     Test suite ( Tools/base/l1/Typing ) ... in 0.756s ... ok
 
     Running test suite ( Tools/base/l2/String ) ..
-    at  /.../sources/wTools/proto/dwtools/abase/l2.test/StringTools.test.s:10462
+    at  /.../sources/wTools/proto/wtools/abase/l2.test/StringTools.test.s:10462
 
       Passed test routine ( Tools/base/l2/String / strRemoveBegin ) in 0.216s
       Passed test routine ( Tools/base/l2/String / strRemoveEnd ) in 0.226s

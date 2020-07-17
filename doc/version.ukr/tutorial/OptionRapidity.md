@@ -88,7 +88,7 @@ routine5.rapidity = 5
 
 //
 
-var Self =
+let Self =
 {
   name : 'Sum',
   tests :

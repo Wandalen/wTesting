@@ -146,85 +146,85 @@ function returnsSingleResource( test )
 
     /* */
 
-    // t.identical( 0, 0 );
-    // test.case = 'does not throw error';
-    // var c1 = t.returnsSingleResource( function()
-    // {
-    // });
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c1.resourcesGet().length, 1 );
-    //   c1.give( function( err, arg )
-    //   {
-    //     test.is( err === undefined );
-    //     test.is( arg === null );
-    //   });
-    //   return null;
-    // });
-    //
-    // /* */
-    //
-    // t.identical( 0, 0 );
-    // test.case = 'does not throw error, string sync message';
-    // var c2 = t.returnsSingleResource( function()
-    // {
-    //   return 'msg'
-    // });
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c2.resourcesGet().length, 1 );
-    //   c2.give( function( err, arg )
-    //   {
-    //     test.is( err === undefined );
-    //     test.is( arg === 'msg' );
-    //   });
-    //   return null;
-    // });
-    //
-    // /* */
-    //
-    // t.identical( 0, 0 );
-    //
-    // test.case = 'throw unexpected error, synchronously';
-    // var c3 = t.returnsSingleResource( function()
-    // {
-    //   throw _.errAttend( 'error1' );
-    // });
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c3.resourcesGet().length, 1 );
-    //   c3.give( function( err, arg )
-    //   {
-    //     test.is( err === undefined );
-    //     test.is( _.errIs( arg ) );
-    //     test.is( _.strHas( arg.message, 'error1' ) );
-    //   });
-    //   return null;
-    // });
+    t.identical( 0, 0 );
+    test.case = 'does does not throw error';
+    var c1 = t.returnsSingleResource( function()
+    {
+    });
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c1.resourcesGet().length, 1 );
+      c1.give( function( err, arg )
+      {
+        test.is( err === undefined );
+        test.is( arg === null );
+      });
+      return null;
+    });
+
+    /* */
+
+    t.identical( 0, 0 );
+    test.case = 'does not throw error, string sync message';
+    var c2 = t.returnsSingleResource( function()
+    {
+      return 'msg'
+    });
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c2.resourcesGet().length, 1 );
+      c2.give( function( err, arg )
+      {
+        test.is( err === undefined );
+        test.is( arg === 'msg' );
+      });
+      return null;
+    });
+
+    /* */
+
+    t.identical( 0, 0 );
+
+    test.case = 'throw unexpected error, synchronously';
+    var c3 = t.returnsSingleResource( function()
+    {
+      throw _.errAttend( 'error1' );
+    });
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c3.resourcesGet().length, 1 );
+      c3.give( function( err, arg )
+      {
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
+        test.is( _.strHas( arg.message, 'error1' ) );
+      });
+      return null;
+    });
 
     /* */
 
@@ -238,6 +238,7 @@ function returnsSingleResource( test )
         throw _.errAttend( 'error1' );
       });
     });
+    console.log( c4 );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -248,9 +249,12 @@ function returnsSingleResource( test )
 
     _.time.out( 500, function()
     {
-      // test.identical( c4.resourcesGet().length, 1 ); /* xxx : replace */
+      // console.log( c4 );
+      // console.log( c4.argumentsGet() );
+      // debugger;
+      // test.identical( c4.resourcesCount(), 1 );
       test.identical( c4.argumentsCount(), 1 );
-      test.identical( c4.errorsCount(), 0 );
+      // test.identical( c4.errorsCount(), 0 );
       test.identical( c4.competitorsCount(), 0 );
       c4.give( function( err, arg )
       {
@@ -263,159 +267,158 @@ function returnsSingleResource( test )
 
     /* */
 
-    // t.identical( 0, 0 );
-    //
-    // test.case = 'single async message, no error';
-    // var c5 = t.returnsSingleResource( function()
-    // {
-    //   return _.time.out( 150 );
-    // });
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c5.resourcesGet().length, 1 );
-    //   c5.give( function( err, arg )
-    //   {
-    //     test.is( err === undefined );
-    //     test.is( arg === _.time.out );
-    //   });
-    //   return null;
-    // });
-    //
-    // /* */
-    //
-    // t.identical( 0, 0 );
-    //
-    // test.case = 'not expected second message';
-    // var c6 = t.returnsSingleResource( function()
-    // {
-    //   var con = _.Consequence();
-    //
-    //   _.time.out( 150, function()
-    //   {
-    //     con.take( 'msg1' );
-    //     con.take( 'msg2' );
-    //     return null;
-    //   });
-    //
-    //   return con;
-    // });
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c6.resourcesGet().length, 1 );
-    //   c6.give( function( err, arg )
-    //   {
-    //     test.is( _.errIs( err ) );
-    //     test.is( _.strHas( err.message, 'Got more than one message' ) );
-    //     test.is( !arg );
-    //   });
-    //   return null;
-    // });
-    //
-    // /* */
-    //
-    // t.identical( 0, 0 );
-    //
-    // test.case = 'not expected second error';
-    // var c7 = t.returnsSingleResource( function()
-    // {
-    //   var con = _.Consequence();
-    //
-    //   _.time.out( 150, function()
-    //   {
-    //     con.error( _.errAttend( 'error1' ) );
-    //     con.error( _.errAttend( 'error2' ) );
-    //     return null;
-    //   });
-    //
-    //   return con;
-    // });
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c7.resourcesGet().length, 1 );
-    //   c7.give( function( err, arg )
-    //   {
-    //     test.is( _.errIs( err ) );
-    //     test.is( _.strHas( err.message, 'Got more than one message' ) );
-    //     test.is( !arg );
-    //   });
-    //   return null;
-    // });
-    //
-    // /* */
-    //
-    // t.identical( 0, 0 );
-    //
-    // test.case = 'consequence with argument';
-    // var c8 = t.returnsSingleResource( _.Consequence().take( 'arg' ) );
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c8.resourcesGet().length, 1 );
-    //   c8.give( function( err, arg )
-    //   {
-    //     test.is( err === undefined );
-    //     test.is( arg === 'arg' );
-    //   });
-    //   return null;
-    // });
-    //
-    // /* */
-    //
-    // t.identical( 0, 0 );
-    //
-    // test.case = 'consequence with error';
-    // var c9 = t.returnsSingleResource( _.Consequence().error( _.errAttend( 'error1' ) ) );
-    //
-    // counter.acheck = t.checkCurrent();
-    // test.identical( counter.acheck.description, 'a' );
-    // test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-    // test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    // test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-    // counter.next();
-    //
-    // _.time.out( 500, function()
-    // {
-    //   test.identical( c9.resourcesGet().length, 1 );
-    //   c9.give( function( err, arg )
-    //   {
-    //     test.is( err === undefined );
-    //     test.is( _.errIs( arg ) );
-    //     test.is( _.strHas( arg.message, 'error1' ) );
-    //   });
-    //   return null;
-    // });
-    // xxx
+    t.identical( 0, 0 );
+
+    test.case = 'single async message, no error';
+    var c5 = t.returnsSingleResource( function()
+    {
+      return _.time.out( 150 );
+    });
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c5.resourcesGet().length, 1 );
+      c5.give( function( err, arg )
+      {
+        test.is( err === undefined );
+        test.is( arg === _.time.out );
+      });
+      return null;
+    });
+
+    /* */
+
+    t.identical( 0, 0 );
+
+    test.case = 'not expected second message';
+    var c6 = t.returnsSingleResource( function()
+    {
+      var con = _.Consequence();
+
+      _.time.out( 150, function()
+      {
+        con.take( 'msg1' );
+        con.take( 'msg2' );
+        return null;
+      });
+
+      return con;
+    });
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c6.resourcesGet().length, 1 );
+      c6.give( function( err, arg )
+      {
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message, 'Got more than one message' ) );
+        test.is( !arg );
+      });
+      return null;
+    });
+
+    /* */
+
+    t.identical( 0, 0 );
+
+    test.case = 'not expected second error';
+    var c7 = t.returnsSingleResource( function()
+    {
+      var con = _.Consequence();
+
+      _.time.out( 150, function()
+      {
+        con.error( _.errAttend( 'error1' ) );
+        con.error( _.errAttend( 'error2' ) );
+        return null;
+      });
+
+      return con;
+    });
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c7.resourcesGet().length, 1 );
+      c7.give( function( err, arg )
+      {
+        test.is( _.errIs( err ) );
+        test.is( _.strHas( err.message, 'Got more than one message' ) );
+        test.is( !arg );
+      });
+      return null;
+    });
+
+    /* */
+
+    t.identical( 0, 0 );
+
+    test.case = 'consequence with argument';
+    var c8 = t.returnsSingleResource( _.Consequence().take( 'arg' ) );
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c8.resourcesGet().length, 1 );
+      c8.give( function( err, arg )
+      {
+        test.is( err === undefined );
+        test.is( arg === 'arg' );
+      });
+      return null;
+    });
+
+    /* */
+
+    t.identical( 0, 0 );
+
+    test.case = 'consequence with error';
+    var c9 = t.returnsSingleResource( _.Consequence().error( _.errAttend( 'error1' ) ) );
+
+    counter.acheck = t.checkCurrent();
+    test.identical( counter.acheck.description, 'a' );
+    test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+    test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+    counter.next();
+
+    _.time.out( 500, function()
+    {
+      test.identical( c9.resourcesGet().length, 1 );
+      c9.give( function( err, arg )
+      {
+        test.is( err === undefined );
+        test.is( _.errIs( arg ) );
+        test.is( _.strHas( arg.message, 'error1' ) );
+      });
+      return null;
+    });
 
     /* */
 
@@ -437,13 +440,12 @@ function returnsSingleResource( test )
   .finally( function( err, arg )
   {
 
-    // xxx
-    // counter.acheck = counter.testRoutine.checkCurrent();
-    // test.identical( counter.acheck.description, '' );
-    // test.identical( counter.acheck.checkIndex, 19 );
-    // test.identical( suite.report.testCheckPasses, 16 );
-    // test.identical( suite.report.testCheckFails, 2 );
-    // test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses + suite.report.testCheckFails + 1 );
+    counter.acheck = counter.testRoutine.checkCurrent();
+    test.identical( counter.acheck.description, '' );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 16 );
+    test.identical( suite.report.testCheckFails, 2 );
+    test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses + suite.report.testCheckFails + 1 );
 
     if( err )
     throw err;
@@ -3251,121 +3253,6 @@ function isNotReturn( test )
   }
 
 }
-
-// xxx : remove later
-// //
-//
-// function isNotErrorReturn( test )
-// {
-//
-//   var suite = wTestSuite
-//   ({
-//     tests : { returnTest : returnTest },
-//     override : this.notTakingIntoAccount,
-//     ignoringTesterOptions : 1,
-//     name : test.name,
-//     onSuiteEnd : onSuiteEnd,
-//   });
-//
-//   return suite.run();
-//
-//   /* */
-//
-//   function onSuiteEnd( t )
-//   {
-//     test.identical( suite.report.testCheckPasses, 8 );
-//     test.identical( suite.report.testCheckFails, 5 );
-//     test.identical( suite.report.errorsArray.length, 3 );
-//     if( suite.report.errorsArray.length )
-//     logger.log( suite.report.errorsArray[ 0 ] );
-//   }
-//
-//   /* */
-//
-//   function returnTest( t )
-//   {
-//
-//     var got = t.isNotError( 1 );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( 0 );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( '1' );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( true );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( false );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( {} );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( [] );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( t.is );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( _.err( 'msg' ) );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( new Error( 'msg' ) );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     test.case = 'no arguments';
-//
-//     var got = t.isNotError();
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     test.case = 'extra arguments';
-//
-//     var got = t.isNotError( { a : 1 }, { a : 1 } );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     test.case = 'extra arguments';
-//
-//     var got = t.isNotError( true, false );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//   }
-//
-// }
 
 //
 

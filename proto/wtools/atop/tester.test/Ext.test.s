@@ -2123,8 +2123,8 @@ function version( test )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.is( _.strHas( op.output, /Current version:.*\..*\..*/ ) );
-    test.is( _.strHas( op.output, /Available version:.*\..*\..*/ ) );
+    test.is( _.strHas( op.output, /Current version : .*\..*\..*/ ) );
+    test.is( _.strHas( op.output, /Latest version of wTesting!alpha : .*\..*\..*/ ) );
     return op;
   })
 

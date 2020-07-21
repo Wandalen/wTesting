@@ -130,10 +130,12 @@ function commandHelp( e )
 function commandVersion( e )
 {
   let cui = this;
+  cui.form();
   return _.npm.versionLog
   ({
     localPath : _.path.join( __dirname, '../../../../..' ),
     remotePath : 'wTesting!alpha',
+    logger : cui.logger
   });
 }
 

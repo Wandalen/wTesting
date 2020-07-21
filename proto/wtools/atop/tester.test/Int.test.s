@@ -7672,11 +7672,7 @@ function processWatchingOnDefault( test )
     test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
-    _.each( suite._processWatcherMap, ( o ) =>
-    {
-      test.is( _.process.isAlive( o.process.pid ) )
-    })
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -7685,15 +7681,7 @@ function processWatchingOnDefault( test )
     if( err )
     throw err;
 
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+    return null;
   });
 
   return result;
@@ -7763,11 +7751,7 @@ function processWatchingOnExplicit( test )
     test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
-    _.each( suite._processWatcherMap, ( o ) =>
-    {
-      test.is( _.process.isAlive( o.process.pid ) )
-    })
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -7776,15 +7760,7 @@ function processWatchingOnExplicit( test )
     if( err )
     throw err;
 
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 3 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+    return null;
   });
 
   return result;
@@ -7900,11 +7876,7 @@ function processWatchingRoutineTimeOut( test )
     test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-    _.each( suite._processWatcherMap, ( o ) =>
-    {
-      test.is( _.process.isAlive( o.process.pid ) )
-    })
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -7913,15 +7885,7 @@ function processWatchingRoutineTimeOut( test )
     if( err )
     throw err;
 
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+    return null;
   });
 
   return result;
@@ -7973,11 +7937,7 @@ function processWatchingErrorInTestRoutine( test )
     test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-    _.each( suite._processWatcherMap, ( o ) =>
-    {
-      test.is( _.process.isAlive( o.process.pid ) )
-    })
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -7986,15 +7946,7 @@ function processWatchingErrorInTestRoutine( test )
     if( err )
     throw err;
 
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+    return null;
   });
 
   return result;
@@ -8049,11 +8001,7 @@ function processWatchingOnSuiteBegin( test )
     test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-    _.each( suite._processWatcherMap, ( o ) =>
-    {
-      test.is( _.process.isAlive( o.process.pid ) )
-    })
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -8062,15 +8010,7 @@ function processWatchingOnSuiteBegin( test )
     if( err )
     throw err;
 
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+    return null;
   });
 
   return result;
@@ -8125,11 +8065,7 @@ function processWatchingOnSuiteEnd( test )
     test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-    _.each( suite._processWatcherMap, ( o ) =>
-    {
-      test.is( _.process.isAlive( o.process.pid ) )
-    })
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
     test.is( err === undefined );
     test.is( arg === suite );
@@ -8138,15 +8074,7 @@ function processWatchingOnSuiteEnd( test )
     if( err )
     throw err;
 
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+    return null;
   });
 
   return result;

@@ -1,4 +1,4 @@
-( function _IsVisibleWithinViewport_test_s_( ) {
+( function _GetAttributes_test_s_( ) {
 
 'use strict';
 
@@ -22,7 +22,7 @@ let _ = _testerGlobal_.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 
@@ -39,38 +39,26 @@ function onSuiteEnd()
 
 //
 
-async function isVisibleWithinViewport( test )
+async function elementsAttributeGet( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let indexPath = _.path.nativize( _.path.join( routinePath, 'index.html' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ mainPath ]
+    args : [ indexPath ]
   })
 
   await app.start()
-  await _.test.waitForVisibleInViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
-  });
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  var got = await _.test.isVisibleWithinViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
-  });
-  test.identical( got, true );
-
+  var got = await app.client.getAttribute( 'div[attr]', 'attr' );
+  test.identical( got, [ '1', '2', '3' ] )
+  
   await app.stop();
 
   return null;
@@ -83,7 +71,7 @@ async function isVisibleWithinViewport( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.IsVisibleWithinViewport',
+  name : 'Visual.Spectron.GetAttributes',
   silencing : 1,
   enabled : 1,
 
@@ -99,7 +87,7 @@ let Self =
 
   tests :
   {
-    isVisibleWithinViewport,
+    elementsAttributeGet,
   }
 
 }

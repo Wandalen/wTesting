@@ -1,4 +1,4 @@
-( function _Device_test_s_( ) {
+( function _WaitForVisible_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function emulateDevice( test )
+async function waitForVisible( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,23 +54,10 @@ async function emulateDevice( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  await app.client.waitForVisible( 'p', 5000 )
 
-  var originalSize = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  
-  test.case = 'emulate mobile screen'
-  await app.webContents.enableDeviceEmulation
-  ({ 
-    screenPosition : 'mobile',
-    screenSize : { width : 400, height: 600 } 
-  })
-  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value , { width : 400, height: 600 } )
-  
-  test.case = 'disable emulation'
-  await app.webContents.disableDeviceEmulation()
-  var size = await app.client.execute( () => { return { height : screen.height, width : screen.width } } )
-  test.identical( size.value , originalSize.size )
+  var got = await app.client.$( 'p' ).isVisible();
+  test.identical( got, true );
 
   await app.stop();
 
@@ -81,10 +68,10 @@ async function emulateDevice( test )
 // suite
 // --
 
-let Self =
+var Self =
 {
 
-  name : 'Visual.Spectron.Device',
+  name : 'Visual.Spectron.WaitForVisible',
   silencing : 1,
   enabled : 1,
 
@@ -100,7 +87,7 @@ let Self =
 
   tests :
   {
-    emulateDevice,
+    waitForVisible,
   }
 
 }

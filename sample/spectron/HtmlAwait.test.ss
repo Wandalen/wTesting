@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function electron( test )
+async function htmlAwait( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,10 +54,25 @@ async function electron( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
-  let title = await app.browserWindow.getTitle();
-  test.identical( title, 'Test' );
+  test.case = 'Check element text'
+  var got = await app.client.$( '.class1 p' ).getText();
+  test.identical( got, 'Text1' )
+
+  test.case = 'Check href attribute'
+  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
+  test.is( _.strEnds( got, '/index.html' ) )
+
+  test.case = 'Check input field value'
+  var got = await app.client.getValue( '#input1' );
+  test.identical( got, '123' )
+
+  test.case = 'Change input field value and check it'
+  await app.client.$( '#input1' ).setValue( '321' )
+  var got = await app.client.getValue( '#input1' )
+  test.identical( got, '321' )
+
   await app.stop();
 
   return null;
@@ -70,9 +85,9 @@ async function electron( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.ElectronAPI',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Html.Await',
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -86,7 +101,7 @@ let Self =
 
   tests :
   {
-    electron,
+    htmlAwait,
   }
 
 }

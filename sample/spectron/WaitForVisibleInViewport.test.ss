@@ -1,4 +1,4 @@
-( function _Electron_test_s_( ) {
+( function _WaitForVisibleInViewport_test_s_( ) {
 
 'use strict';
 
@@ -37,11 +37,13 @@ function onSuiteEnd()
 // tests
 // --
 
-async function chaining( test )
+//
+
+async function waitForVisibleInViewport( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -52,14 +54,19 @@ async function chaining( test )
   })
 
   await app.start()
-  test.case = 'wait for load then check innerText property'
-  var text = await app.client
-  .waitUntilTextExists( 'p','Hello world', 5000 )
-  .$( '.class1 p' )
-  .getText()
-  test.identical( text, 'Text1' );
+  await _.test.waitForVisibleInViewport
+  ({ 
+    library : 'spectron', 
+    page : app.client, 
+    timeOut : 5000, 
+    targetSelector : 'p' 
+  });
+
+  var got = await app.client.$( 'p' ).isVisible();
+  test.identical( got, true );
+
   await app.stop();
-  
+
   return null;
 }
 
@@ -67,12 +74,12 @@ async function chaining( test )
 // suite
 // --
 
-let Self =
+var Self =
 {
 
-  name : 'Visual.Spectron.Html.Chaining',
-  
-  
+  name : 'Visual.Spectron.WaitForVisibleInViewport',
+  silencing : 1,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -86,7 +93,7 @@ let Self =
 
   tests :
   {
-    chaining
+    waitForVisibleInViewport,
   }
 
 }

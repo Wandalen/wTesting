@@ -1,4 +1,4 @@
-( function _Element_test_s_( ) {
+( function _CDP_test_s_( ) {
 
 'use strict';
 
@@ -39,11 +39,11 @@ function onSuiteEnd()
 
 //
 
-async function element( test )
+async function accessChromeDevToolsProtocol( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,11 +54,17 @@ async function element( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  test.case = 'Check element html'
-  var got = await app.client.$( '.class1 p' ).getHTML();
-  test.identical( got, '<p>Text1</p>' )
+  /* Does not work on Spectron v7.0.0 & v11.0.0 */
+
+  await app.webContents.debugger.attach( '1.1' );
+  await app.webContents.debugger.sendCommand( 'Page.enable' );
+  await app.webContents.debugger.sendCommand( 'Page.navigate', { url : 'https://www.npmjs.com/' });
+  // await app.client.switchWindow( 'https://www.npmjs.com/' );
+
+  var url = await app.client.getUrl();
+  test.identical( url, 'https://www.npmjs.com/' );
 
   await app.stop();
 
@@ -72,9 +78,8 @@ async function element( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Element',
-  
-  
+  name : 'Visual.Spectron.CDP',
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -88,7 +93,7 @@ let Self =
 
   tests :
   {
-    element,
+    accessChromeDevToolsProtocol,
   }
 
 }

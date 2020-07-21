@@ -1,4 +1,4 @@
-( function _Browser_test_s_( ) {
+( function _Electron_test_s_( ) {
 
 'use strict';
 
@@ -37,13 +37,11 @@ function onSuiteEnd()
 // tests
 // --
 
-//
-
-async function browser( test )
+async function chaining( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.js' ) );
+  let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
@@ -54,18 +52,14 @@ async function browser( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-
-  test.case = 'check browser window size'
-  var size = await app.browserWindow.getSize();
-  test.identical( size, [ 800,600 ] )
-
-  test.case = 'check userAgent'
-  var userAgent = await app.webContents.getUserAgent();
-  test.is( _.strHas( userAgent, 'Electron' ) );
-
+  test.case = 'wait for load then check innerText property'
+  var text = await app.client
+  .waitUntilTextExists( 'p','Hello world', 5000 )
+  .$( '.class1 p' )
+  .getText()
+  test.identical( text, 'Text1' );
   await app.stop();
-
+  
   return null;
 }
 
@@ -76,9 +70,9 @@ async function browser( test )
 let Self =
 {
 
-  name : 'Visual.Spectron.Browser',
-  silencing : 1,
-  enabled : 1,
+  name : 'Visual.Spectron.Html.Chaining',
+  
+  
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
@@ -92,7 +86,7 @@ let Self =
 
   tests :
   {
-    browser,
+    chaining
   }
 
 }

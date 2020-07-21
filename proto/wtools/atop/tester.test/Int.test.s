@@ -186,7 +186,7 @@ function returnsSingleResource( test )
     /* */
 
     t.identical( 0, 0 );
-    test.case = 'does not throw error';
+    test.case = 'does does not throw error';
     var c1 = t.returnsSingleResource( function()
     {
     });
@@ -277,6 +277,7 @@ function returnsSingleResource( test )
         throw _.errAttend( 'error1' );
       });
     });
+    console.log( c4 );
 
     counter.acheck = t.checkCurrent();
     test.identical( counter.acheck.description, 'a' );
@@ -287,9 +288,12 @@ function returnsSingleResource( test )
 
     _.time.out( 500, function()
     {
-      // test.identical( c4.resourcesGet().length, 1 ); /* xxx : replace */
+      // console.log( c4 );
+      // console.log( c4.argumentsGet() );
+      // debugger;
+      // test.identical( c4.resourcesCount(), 1 );
       test.identical( c4.argumentsCount(), 1 );
-      test.identical( c4.errorsCount(), 0 );
+      // test.identical( c4.errorsCount(), 0 );
       test.identical( c4.competitorsCount(), 0 );
       c4.give( function( err, arg )
       {
@@ -457,7 +461,7 @@ function returnsSingleResource( test )
 
     /* */
 
-    return _.time.out( 950 );
+    return _.time.out( 1950 );
   }
 
   /* */
@@ -476,7 +480,6 @@ function returnsSingleResource( test )
   {
 
     counter.acheck = counter.testRoutine.checkCurrent();
-
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck.checkIndex, 19 );
     test.identical( suite.report.testCheckPasses, 16 );
@@ -2151,7 +2154,7 @@ function shouldThrowErrorSyncReturn( test )
   {
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 5 );
-    test.identical( suite.report.errorsArray.length, 3 );
+    test.identical( suite.report.errorsArray.length, 3 ); debugger;
   }
 
   /* */
@@ -2188,7 +2191,7 @@ function shouldThrowErrorSyncReturn( test )
     test.identical( _.boolIs( got ), true );
 
     test.case = 'several functions';
-    var got = t.shouldThrowErrorSync( function(){}, function(){} )
+    var got = t.shouldThrowErrorSync( function(){}, 13 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -2324,7 +2327,7 @@ function shouldThrowErrorAsyncReturn( test )
     .then( ( arg ) =>
     {
       test.case = 'several functions';
-      return t.shouldThrowErrorAsync( function(){}, function(){} )
+      return t.shouldThrowErrorAsync( function(){}, 13 )
       .finally( ( err, got ) =>
       {
         test.identical( _.errIs( err ), true );
@@ -2453,7 +2456,7 @@ function shouldThrowErrorReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.shouldThrowErrorOfAnyKind( function(){}, function(){} )
+      return t.shouldThrowErrorOfAnyKind( function(){}, 13 )
       .finally( ( err, got ) =>
       {
         test.case = 'several functions';
@@ -2583,7 +2586,7 @@ function mustNotThrowErrorReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.mustNotThrowError( function(){}, function(){} )
+      return t.mustNotThrowError( function(){}, 13 )
       .finally( ( err, got ) =>
       {
         test.case = 'several functions';
@@ -2800,7 +2803,7 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      return t.returnsSingleResource( function(){}, function(){} )
+      return t.returnsSingleResource( function(){}, 13 )
       .finally( ( err, got ) =>
       {
         test.case = 'several functions';
@@ -3289,121 +3292,6 @@ function isNotReturn( test )
   }
 
 }
-
-// xxx : remove later
-// //
-//
-// function isNotErrorReturn( test )
-// {
-//
-//   var suite = wTestSuite
-//   ({
-//     tests : { returnTest : returnTest },
-//     override : this.notTakingIntoAccount,
-//     ignoringTesterOptions : 1,
-//     name : test.name,
-//     onSuiteEnd : onSuiteEnd,
-//   });
-//
-//   return suite.run();
-//
-//   /* */
-//
-//   function onSuiteEnd( t )
-//   {
-//     test.identical( suite.report.testCheckPasses, 8 );
-//     test.identical( suite.report.testCheckFails, 5 );
-//     test.identical( suite.report.errorsArray.length, 3 );
-//     if( suite.report.errorsArray.length )
-//     logger.log( suite.report.errorsArray[ 0 ] );
-//   }
-//
-//   /* */
-//
-//   function returnTest( t )
-//   {
-//
-//     var got = t.isNotError( 1 );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( 0 );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( '1' );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( true );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( false );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( {} );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( [] );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( t.is );
-//     test.identical( got, true );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( _.err( 'msg' ) );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     var got = t.isNotError( new Error( 'msg' ) );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     /* */
-//
-//     test.case = 'no arguments';
-//
-//     var got = t.isNotError();
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     test.case = 'extra arguments';
-//
-//     var got = t.isNotError( { a : 1 }, { a : 1 } );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//     test.case = 'extra arguments';
-//
-//     var got = t.isNotError( true, false );
-//     test.identical( got, false );
-//     test.identical( _.boolIs( got ), true );
-//
-//   }
-//
-// }
 
 //
 

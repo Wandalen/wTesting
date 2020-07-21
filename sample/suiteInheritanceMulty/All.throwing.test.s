@@ -11,6 +11,7 @@ let Parent1 = wTests[ 'Positive' ];
 
 function shouldBeFailed( test )
 {
+  test.case = 'throwing'
   test.il( 1, true );
 }
 

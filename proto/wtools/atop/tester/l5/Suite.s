@@ -639,7 +639,7 @@ function _begin()
     {
       if( o.sync )
       return;
-      _.assert( suite._processWatcherMap[ o.process.pid ] )
+      _.assert( suite._processWatcherMap[ o.process.pid ] );
       delete suite._processWatcherMap[ o.process.pid ];
     }
     _.process.watcherEnable();

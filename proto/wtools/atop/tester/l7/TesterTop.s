@@ -278,7 +278,7 @@ let Accessors =
 // declare
 // --
 
-let Extend =
+let Extension =
 {
 
   // exec
@@ -314,7 +314,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Extend,
+  extend : Extension,
 });
 
 //

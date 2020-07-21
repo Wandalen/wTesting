@@ -1,5 +1,5 @@
 
-let _ = require( 'wTesting' );
+require( 'wTesting' );
 let _ = _realGlobal_._testerGlobal_.wTools
 
 //

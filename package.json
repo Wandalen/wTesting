@@ -71,7 +71,7 @@
     "wTesting" : "file:.",
     "wait-sync" : "1.0.1",
     "electron" : "8.2.5",
-    "spectron" : "10.0.1",
+    "spectron" : "11.0.0",
     "puppeteer" : "5.2.1",
     "eslint" : "7.1.0"
   },

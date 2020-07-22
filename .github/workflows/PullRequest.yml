@@ -39,7 +39,7 @@ jobs :
         node-version : ${{ matrix.node-version }}
     - run : npm i
     # - run : npm test
-    - run : node proto/wtools/atop/tester.test/AsyncTimeout.test.s v:10
+    - run : node proto/wtools/atop/tester.test/Electron.test.s v:10
 
   # Full :
   #   # if : "startsWith( github.event.head_commit.message, 'version' )"

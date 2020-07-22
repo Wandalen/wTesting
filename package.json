@@ -1,66 +1,84 @@
 {
-  "name" : "wTesting",
-  "version" : "1.0.350",
-  "engine" : "node >= 10.0.0",
-  "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors" :
-  [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
-    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" },
-    { "name" : "Dmytro Kryvoruchko", "email" : "dm.vict.kr@gmail.com" }
+  "name": "wTesting",
+  "version": "1.0.350",
+  "engine": "node >= 10.0.0",
+  "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wanalen@01.school"
+    },
+    {
+      "name": "Volodymyr M.",
+      "email": "volodymyr.migdal@gmail.com"
+    },
+    {
+      "name": "Dmytro Kryvoruchko",
+      "email": "dm.vict.kr@gmail.com"
+    }
   ],
-  "license" : "MIT",
-  "main" : "proto/wtools/atop/tester/entry/Main.s",
-  "files" : [ "proto/wtools/atop/tester", "proto/wtools/Tools.s", "out" ],
-  "scripts" :
-  {
-    "wtest" : "node proto/wtools/atop/tester/entry/ExecUnrestricted",
-    "single-process-wtest" : "node proto/wtools/atop/tester/entry/Exec",
-    "debug-wtest" : "node proto/wtools/atop/tester/entry/ExecDebug",
-    "tst" : "node proto/wtools/atop/tester/entry/ExecUnrestricted",
-    "single-process-tst" : "node proto/wtools/atop/tester/entry/Exec",
-    "debug-tst" : "node proto/wtools/atop/tester/entry/ExecDebug",
-    "test" : "wtest .run 'proto/**'"
+  "license": "MIT",
+  "main": "proto/wtools/atop/tester/entry/Main.s",
+  "files": [
+    "proto/wtools/atop/tester",
+    "proto/wtools/Tools.s",
+    "out"
+  ],
+  "scripts": {
+    "wtest": "node proto/wtools/atop/tester/entry/ExecUnrestricted",
+    "single-process-wtest": "node proto/wtools/atop/tester/entry/Exec",
+    "debug-wtest": "node proto/wtools/atop/tester/entry/ExecDebug",
+    "tst": "node proto/wtools/atop/tester/entry/ExecUnrestricted",
+    "single-process-tst": "node proto/wtools/atop/tester/entry/Exec",
+    "debug-tst": "node proto/wtools/atop/tester/entry/ExecDebug",
+    "test": "wtest .run 'proto/**'"
   },
-  "bin" :
-  {
-    "wtest" : "proto/wtools/atop/tester/entry/ExecUnrestricted",
-    "single-process-wtest" : "proto/wtools/atop/tester/entry/Exec",
-    "debug-wtest" : "proto/wtools/atop/tester/entry/ExecDebug",
-    "tst" : "proto/wtools/atop/tester/entry/ExecUnrestricted",
-    "single-process-tst" : "proto/wtools/atop/tester/entry/Exec",
-    "debug-tst" : "proto/wtools/atop/tester/entry/ExecDebug"
+  "bin": {
+    "wtest": "proto/wtools/atop/tester/entry/ExecUnrestricted",
+    "single-process-wtest": "proto/wtools/atop/tester/entry/Exec",
+    "debug-wtest": "proto/wtools/atop/tester/entry/ExecDebug",
+    "tst": "proto/wtools/atop/tester/entry/ExecUnrestricted",
+    "single-process-tst": "proto/wtools/atop/tester/entry/Exec",
+    "debug-tst": "proto/wtools/atop/tester/entry/ExecDebug"
   },
-  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wTesting.git" },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wTesting/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wTesting.git"
   },
-  "dependencies" :
-  {
-    "wConsequence" : "alpha",
-    "wCopyable" : "alpha",
-    "wFiles" : "alpha",
-    "wLogger" : "alpha",
-    "wProto" : "alpha",
-    "wTools" : "alpha",
-    "wequaler" : "alpha",
-    "wprocess" : "alpha",
-    "wcommandsaggregator" : "alpha",
-    "winstancing" : "alpha",
-    "wlooker" : "alpha",
-    "wselector" : "alpha",
-    "wprocesswatcher" : "alpha"
+  "bugs": {
+    "url": "https://github.com/Wandalen/wTesting/issues"
   },
-  "optionalDependencies" : { "wEventHandler" : "alpha" },
-  "devDependencies" :
-  {
+  "dependencies": {
+    "wConsequence": "alpha",
+    "wCopyable": "alpha",
+    "wFiles": "alpha",
+    "wLogger": "alpha",
+    "wProto": "alpha",
+    "wTools": "alpha",
+    "wequaler": "alpha",
+    "wprocess": "alpha",
+    "wcommandsaggregator": "alpha",
+    "winstancing": "alpha",
+    "wlooker": "alpha",
+    "wselector": "alpha",
+    "wprocesswatcher": "alpha"
+  },
+  "optionalDependencies": {
+    "wEventHandler": "alpha"
+  },
+  "devDependencies": {
     "wTesting" : "file:.",
-    "electron" : "^5.0.0",
-    "spectron" : "^7.0.0",
-    "puppeteer" : "2.0.0",
-    "wait-sync" : "1.0.1"
+    "wait-sync" : "1.0.1",
+    "electron" : "8.2.5",
+    "spectron" : "10.0.1",
+    "puppeteer" : "5.2.1",
+    "eslint" : "7.1.0"
   },
-  "keywords" : [ "testing", "unit test", "functional test", "wTools" ]
+  "keywords": [
+    "testing",
+    "unit test",
+    "functional test",
+    "wTools"
+  ]
 }

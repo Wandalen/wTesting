@@ -49,16 +49,16 @@ function fileDrop( o )
   }
 
   function fileInputCreate( fileInputId, targetSelector, filePaths )
-  { 
+  {
     let input = document.createElement( 'input' );
     input.id = fileInputId;
     input.type = 'file';
     input.multiple = 'multiple';
     input.onchange = ( e ) =>
-    {  
+    {
       let event = new Event( 'drop' );
       if( filePaths )
-      filePaths.forEach( ( path, i ) => 
+      filePaths.forEach( ( path, i ) =>
       {
         e.target.files[ i ].path = path;
       })
@@ -133,37 +133,45 @@ eventDispatch.defaults =
 
 //
 
-function waitForVisibleInViewport( o ) 
-{ 
+function waitForVisibleInViewport( o )
+{
   let test = this;
-  
+
   _.assert( arguments.length === 1 );
   _.routineOptions( waitForVisibleInViewport, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
-  
-  let ready = _.time.outError( o.timeOut, () => 
+
+  let ready = _.time.outError( o.timeOut, () =>
   {
     throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
   });
   return _.Consequence.From( _waitForVisibleInViewport() );
-  
+
   /* */
-  
-  async function _waitForVisibleInViewport() 
-  { 
-    let element = await o.page.$( o.targetSelector );
-    if( element ) 
-    { 
+
+  async function _waitForVisibleInViewport()
+  {
+    let element = null;
+    let exists = true;
+
+    if( o.library === 'spectron' )
+    exists = await o.page.isExisting( o.targetSelector );
+
+    if( exists )
+    element = await o.page.$( o.targetSelector );
+
+    if( element )
+    {
       let isIntersectingViewport = await test.isVisibleWithinViewport
-      ({ 
-        targetSelector : o.targetSelector, 
-        page : o.page, 
-        library : o.library 
+      ({
+        targetSelector : o.targetSelector,
+        page : o.page,
+        library : o.library
       });
-      if( isIntersectingViewport ) 
+      if( isIntersectingViewport )
       {
         ready.take( _.dont );
         await ready;
@@ -177,7 +185,7 @@ function waitForVisibleInViewport( o )
   }
 }
 
-waitForVisibleInViewport.defaults = 
+waitForVisibleInViewport.defaults =
 {
   targetSelector : null,
   timeOut : 5000,
@@ -187,7 +195,7 @@ waitForVisibleInViewport.defaults =
 
 //
 
-function isVisibleWithinViewport( o ) 
+function isVisibleWithinViewport( o )
 {
   _.assert( arguments.length === 1 );
   _.routineOptions( isVisibleWithinViewport, o );
@@ -195,41 +203,53 @@ function isVisibleWithinViewport( o )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
-  
+
   /* Common way to query selector */
-  
-  let con = _.Consequence.From( o.page.$( o.targetSelector ) )
-  
-  con.then( ( element ) => 
+
+  let con = _.Consequence().take( true );
+
+  if( o.library === 'spectron' )
+  con.then( () => o.page.isExisting( o.targetSelector ) )
+
+  con.then( ( exists ) =>
+  {
+    if( o.library === 'spectron' )
+    if( !exists )
+    return null;
+
+    return o.page.$( o.targetSelector );
+  })
+
+  con.then( ( element ) =>
   {
     if( !element )
     throw _.err( `Failed to find element that matches the specified selector: ${_.strQuote( o.targetSelector )}` );
     return element;
   })
-  
+
   /* Puppeteer */
-  
+
   if( o.library === 'puppeteer' )
   {
     con.then( ( element ) => element.isIntersectingViewport() );
     return con;
   }
-  
-  /* 
+
+  /*
     Solution for Spectron is based on code of isIntersectingViewport from Puppeeteer.
-    Spectron has own version of this method( isVisibleWithinViewport ), but it has an issue in current version v4 of WebDriverIO 
+    Spectron has own version of this method( isVisibleWithinViewport ), but it has an issue in current version v4 of WebDriverIO
   */
-  
-  con.then( () => 
+
+  con.then( () =>
   {
     o.page.timeouts
     ({
       'script': o.timeOut
     });
-    return o.page.executeAsync( ( selector, cb ) => 
+    return o.page.executeAsync( ( selector, cb ) =>
     {
       let element = document.querySelector( selector );
-      let observer = new IntersectionObserver( entries => 
+      let observer = new IntersectionObserver( entries =>
       {
         cb( entries[ 0 ].intersectionRatio > 0 );
         observer.disconnect();
@@ -238,13 +258,13 @@ function isVisibleWithinViewport( o )
     }, o.targetSelector );
   });
   con.then( ( result ) => result.value )
-  
+
   /* */
-  
+
   return con;
 }
 
-isVisibleWithinViewport.defaults = 
+isVisibleWithinViewport.defaults =
 {
   targetSelector : null,
   timeOut : 25000,

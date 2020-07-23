@@ -84,7 +84,7 @@ function assetFor( test, asset )
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalPath, 'Puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
@@ -262,7 +262,7 @@ async function htmlAwait( test )
 function chaining( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalPath, 'Puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )

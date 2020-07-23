@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wTesting.out
 consistency:
-  wTesting.out.will.yml: &ref_0
-    hash: fc135a385f6b940fca588a51036d92e6
-    size: 49252
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: b259909518ce877bcdeca298a613d7de
     size: 2784
-  ../.im.will.yml: &ref_2
-    hash: 468e0d493693c3599d8a35a0efbf59b5
-    size: 6284
+  ../.im.will.yml: &ref_1
+    hash: 23818c9e2beda7b688fab1814de2e5db
+    size: 6397
 module:
   wTesting.out:
     about:
@@ -23,23 +20,23 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - testing
         - unit test
         - functional test
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       npm.name: wTesting
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         wtest: node proto/wtools/atop/tester/entry/ExecUnrestricted
         single-process-wtest: node proto/wtools/atop/tester/entry/Exec
@@ -47,7 +44,7 @@ module:
         tst: node proto/wtools/atop/tester/entry/ExecUnrestricted
         single-process-tst: node proto/wtools/atop/tester/entry/Exec
         debug-tst: node proto/wtools/atop/tester/entry/ExecDebug
-      npm.bin:
+      npm.bin: &ref_6
         wtest: proto/wtools/atop/tester/entry/ExecUnrestricted
         single-process-wtest: proto/wtools/atop/tester/entry/Exec
         debug-wtest: proto/wtools/atop/tester/entry/ExecDebug
@@ -357,25 +354,31 @@ module:
         criterion:
           development: 1
       wait-sync:
-        path: 'npm:///wait-sync'
+        path: 'npm:///wait-sync#1.0.1'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#^5.0.0'
+        path: 'npm:///electron#8.2.5'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#^7.0.0'
+        path: 'npm:///spectron#10.0.1'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       puppeteer:
-        path: 'npm:///puppeteer#2.0.0'
+        path: 'npm:///puppeteer#5.2.1'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      eslint:
+        path: 'npm:///eslint#7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -887,24 +890,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -993,9 +978,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wTesting.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wTesting
@@ -1007,37 +991,14 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - testing
-        - unit test
-        - functional test
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
-        - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
+      contributors: *ref_4
       npm.name: wTesting
-      npm.scripts:
-        test: wtest .run proto/**
-        wtest: node proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: node proto/wtools/atop/tester/entry/Exec
-        debug-wtest: node proto/wtools/atop/tester/entry/ExecDebug
-        tst: node proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: node proto/wtools/atop/tester/entry/Exec
-        debug-tst: node proto/wtools/atop/tester/entry/ExecDebug
-      npm.bin:
-        wtest: proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-wtest: proto/wtools/atop/tester/entry/Exec
-        debug-wtest: proto/wtools/atop/tester/entry/ExecDebug
-        tst: proto/wtools/atop/tester/entry/ExecUnrestricted
-        single-process-tst: proto/wtools/atop/tester/entry/Exec
-        debug-tst: proto/wtools/atop/tester/entry/ExecDebug
+      npm.scripts: *ref_5
+      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
@@ -1212,25 +1173,31 @@ module:
         criterion:
           development: 1
       wait-sync:
-        path: 'npm:///wait-sync'
+        path: 'npm:///wait-sync#1.0.1'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#^5.0.0'
+        path: 'npm:///electron#8.2.5'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#^7.0.0'
+        path: 'npm:///spectron#10.0.1'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       puppeteer:
-        path: 'npm:///puppeteer#2.0.0'
+        path: 'npm:///puppeteer#5.2.1'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      eslint:
+        path: 'npm:///eslint#7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1770,6 +1737,5 @@ module:
         hash: b259909518ce877bcdeca298a613d7de
         size: 2784
       ../.im.will.yml:
-        hash: 468e0d493693c3599d8a35a0efbf59b5
-        size: 6284
-      wTesting.out.will.yml: *ref_0
+        hash: 23818c9e2beda7b688fab1814de2e5db
+        size: 6397

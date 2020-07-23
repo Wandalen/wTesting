@@ -23,7 +23,7 @@ let _ = _global_.wTools;
 
 
 // --
-// 
+//
 // --
 
 function main( test )
@@ -35,9 +35,9 @@ function main( test )
 
   function trivial( test )
   {
-    var o = 
+    var o =
     {
-      execPath : 'node -e "setTimeout(()=>{},10000)"', 
+      execPath : 'node -e "setTimeout(()=>{},10000)"',
       inputMirroring : 1,
       throwingExitCode : 1,
       mode : 'spawn'
@@ -47,7 +47,7 @@ function main( test )
 
   var suite = wTestSuite
   ({
-    
+
     override : notTakingIntoAccount,
     ignoringTesterOptions : 1,
 
@@ -61,38 +61,32 @@ function main( test )
     },
 
   })
-  
+
   var result = suite.run();
-  
-  result.finally( ( err, arg ) => 
+
+  result.finally( ( err, arg ) =>
   {
     test.identical( suite.report.errorsArray.length, 3 );
-    
+
     test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Time out!' ) );
     test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
     test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Process.test.s:48:15" had zombie process with pid' ), 1 );
-    
-    return _.time.out( 2000, () =>
-    {
-      test.identical( _.mapKeys( suite._processWatcherMap ).length, 1 );
-      _.each( suite._processWatcherMap, ( o ) =>
-      {
-        test.is( !_.process.isAlive( o.process.pid ) )
-      })
-      return null;
-    })
+
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+
+    return null;
   })
-  
+
   return result;
 }
 
 // --
-// 
+//
 // --
 
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-let Self = 
+let Self =
 {
   name : 'Tools.Tester.Process',
   silencing : 1,

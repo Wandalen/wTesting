@@ -27,7 +27,7 @@ function onSuiteBegin()
   let self = this;
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
-  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
+  self.appStartNonThrowing = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Main.s' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.spectronPath = require.resolve( 'spectron' );
   self.electronPath = require.resolve( 'electron' );
@@ -57,7 +57,7 @@ function assetFor( test, asset )
       if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
       return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
-      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.appStartNonThrowing )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
       read = _.strReplace( read, `'spectron'`, `'${_.strEscape( self.spectronPath )}'` );
       read = _.strReplace( read, `'electron'`, `'${_.strEscape( self.electronPath )}'` );
@@ -292,7 +292,7 @@ function processWatchingOnSpectronZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
+  a.appStartNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -302,7 +302,7 @@ function processWatchingOnSpectronZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Spectron.test.s r:spectronTimeOut ` })
+  a.appStartNonThrowing({ execPath : `Spectron.test.s r:spectronTimeOut ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -312,7 +312,7 @@ function processWatchingOnSpectronZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Spectron.test.s r:errorInTest ` })
+  a.appStartNonThrowing({ execPath : `Spectron.test.s r:errorInTest ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -322,7 +322,7 @@ function processWatchingOnSpectronZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Spectron.test.s r:clientContinuesToWorkAfterTest ` })
+  a.appStartNonThrowing({ execPath : `Spectron.test.s r:clientContinuesToWorkAfterTest ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -358,7 +358,7 @@ let Self =
 
     suiteTempPath : null,
     assetsOriginalPath : null,
-    execJsPath : null,
+    appStartNonThrowing : null,
     toolsPath : null,
     spectronPath : null,
     electronPath : null

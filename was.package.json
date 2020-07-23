@@ -21,7 +21,7 @@
     "tst" : "node proto/wtools/atop/tester/entry/ExecUnrestricted",
     "single-process-tst" : "node proto/wtools/atop/tester/entry/Exec",
     "debug-tst" : "node proto/wtools/atop/tester/entry/ExecDebug",
-    "test" : "wtest .run 'proto/**'"
+    "test" : "wtest .run 'proto/**' rapidity:-1"
   },
   "bin" :
   {
@@ -57,10 +57,11 @@
   "devDependencies" :
   {
     "wTesting" : "file:.",
-    "wait-sync" : "",
-    "electron" : "^5.0.0",
-    "spectron" : "^7.0.0",
-    "puppeteer" : "2.0.0"
+    "wait-sync" : "1.0.1",
+    "electron" : "8.2.5",
+    "spectron" : "10.0.1",
+    "puppeteer" : "5.2.1",
+    "eslint" : "7.1.0"
   },
   "keywords" : [ "testing", "unit test", "functional test", "wTools" ]
 }

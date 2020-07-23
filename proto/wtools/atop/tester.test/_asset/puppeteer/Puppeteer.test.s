@@ -2,7 +2,7 @@
 
 'use strict';
 
-let _ = require( 'wTesting' );
+require( 'wTesting' );
 var Puppeteer = require( 'puppeteer' );
 
 let _ = _realGlobal_._testerGlobal_.wTools
@@ -62,7 +62,7 @@ async function errorInTest( test )
   let page = await browser.newPage();
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
-  
+
   throw _.err( 'Test' );
 }
 

@@ -25,7 +25,7 @@ function onSuiteBegin()
 
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
-  self.execJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
+  self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.puppeteerPath = require.resolve( 'puppeteer' );
 }
@@ -56,7 +56,7 @@ function assetFor( test, asset )
       if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
       return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
-      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.execJsPath )}'` );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.appJsPath )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
       read = _.strReplace( read, `'puppeteer'`, `'${_.strEscape( self.puppeteerPath )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
@@ -84,7 +84,7 @@ function assetFor( test, asset )
 function html( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalPath, 'Puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
@@ -262,7 +262,7 @@ async function htmlAwait( test )
 function chaining( test )
 {
   let self = this;
-  let originalDirPath = _.path.join( self.assetsOriginalPath, 'Puppeteer' );
+  let originalDirPath = _.path.join( self.assetsOriginalPath, 'puppeteer' );
   let routinePath = _.path.join( self.suiteTempPath, test.name );
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let ready = new _.Consequence().take( null )
@@ -335,7 +335,7 @@ function processWatchingOnPuppeteerZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:routineTimeOut ` })
+  a.appStartNonThrowing({ execPath : `Puppeteer.test.s r:routineTimeOut ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -345,7 +345,7 @@ function processWatchingOnPuppeteerZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:puppeteerTimeOut ` })
+  a.appStartNonThrowing({ execPath : `Puppeteer.test.s r:puppeteerTimeOut ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -355,7 +355,7 @@ function processWatchingOnPuppeteerZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:errorInTest ` })
+  a.appStartNonThrowing({ execPath : `Puppeteer.test.s r:errorInTest ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -365,7 +365,7 @@ function processWatchingOnPuppeteerZombie( test )
     return null;
   })
 
-  a.jsNonThrowing({ execPath : `Puppeteer.test.s r:clientContinuesToWorkAfterTest ` })
+  a.appStartNonThrowing({ execPath : `Puppeteer.test.s r:clientContinuesToWorkAfterTest ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
@@ -389,19 +389,19 @@ let Self =
 
   name : 'Tools.atop.Tester.Puppeteer',
   silencing : 0,
-  enabled : 0,
+  enabled : 1,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
 
   context :
-  { 
+  {
     assetFor,
-    
+
     suiteTempPath : null,
     assetsOriginalPath : null,
-    execJsPath : null,
+    appJsPath : null,
     toolsPath : null,
     puppeteerPath : null
   },
@@ -412,7 +412,7 @@ let Self =
     htmlAwait,
     // html2,
     chaining,
-    
+
     processWatchingOnPuppeteerZombie
   }
 

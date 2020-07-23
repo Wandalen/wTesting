@@ -217,6 +217,8 @@ function appArgsRead()
 
   _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 
+  settingsTransform();
+
   let v = settings.verbosity;
   _.assert( v === null || v === undefined || _.boolLike( v ) || _.numberIs( v ) );
   if( v === null || v === undefined )
@@ -235,6 +237,19 @@ function appArgsRead()
   tester.verbosity = settings.verbosity;
 
   return appArgs;
+
+  /* */
+
+  function settingsTransform()
+  {
+    _.each( settings, ( value, key ) =>
+    {
+      if( _.arrayLike( value ) )
+      if( value.length > 1 )
+      if( !SettingsAsArrayMap[ key ] )
+      settings[ key ] = value[ value.length - 1 ];
+    })
+  }
 }
 
 appArgsRead.defaults =
@@ -1309,6 +1324,14 @@ let SettingsNameMap =
 
   // 'parent' : 'parent',
 
+}
+
+//
+
+/* Settings that expect array as value */
+
+let SettingsAsArrayMap =
+{
 }
 
 /**

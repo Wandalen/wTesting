@@ -772,20 +772,32 @@ function _end( err )
   /* process watcher */
 
   if( suite.processWatching )
-  ready.tap( () =>
+  ready.finally( () =>
   {
-    _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
-    _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
+    let r = _.Consequence().take( null );
+    let readies = [];
+
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
     {
       let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );
       suite.exceptionReport({ err : err });
-      _.process.kill({ pid : descriptor.process.pid, withChildren : 1 })
+      let con = _.process.kill({ pid : descriptor.process.pid, withChildren : 1, waitTimeOut : 5000 });
+      readies.push( con );
     })
-    _.time.out( 1000, () =>
+
+    if( readies.length )
+    r.andTake( readies )
+
+    r.finally( ( err, got ) =>
     {
+      if( err )
+      suite.exceptionReport({ err : err });
+
+      _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
+      _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
+
       _.each( suite._processWatcherMap, ( descriptor, pid ) =>
       {
         if( _.process.isAlive( descriptor.process.pid ) )
@@ -796,7 +808,11 @@ function _end( err )
           suite.exceptionReport({ err : err });
         }
       })
+
+      return null;
     })
+
+    return r;
   })
 
   ready.then( () =>

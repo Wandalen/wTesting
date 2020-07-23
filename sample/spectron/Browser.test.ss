@@ -58,7 +58,7 @@ async function browser( test )
 
   test.case = 'check browser window size'
   var size = await app.browserWindow.getSize();
-  test.identical( size, [ 800, 600 ] )
+  test.ge( size, [ 600, 400 ] )
 
   test.case = 'check userAgent'
   var userAgent = await app.webContents.getUserAgent();

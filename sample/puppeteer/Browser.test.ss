@@ -49,10 +49,10 @@ async function browser( test )
   let browser = await Puppeteer.launch({ headless : true });
 
   var version = await browser.version();
-  test.is( _.strHas( version, '79.0' ) );
+  test.is( _.strHas( version, '85.0' ) );
 
   var agent = await browser.userAgent();
-  test.is( _.strHas( agent, '79.0' ) );
+  test.is( _.strHas( agent, '85.0' ) );
 
   await browser.close();
 

@@ -175,7 +175,7 @@ module:
           export: 1
         path:
           - ../proto
-          - ../proto/Integration.test.s
+          - ../proto/Integration.test.ss
           - ../proto/wtools
           - ../proto/wtools/Tools.s
           - ../proto/wtools/abase

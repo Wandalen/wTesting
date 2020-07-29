@@ -107,14 +107,14 @@ For gentle introduction use tutorials. For getting exhaustive information on one
 </details>
 
 <details>
-  <summary><a href="./tutorial/Help.md">
+  <summary><a href="./tutorial/Options.md">
     Test run options and suite options
   </a></summary>
     Options to control the testing process.
 </details>
 
 <details>
-  <summary><a href="./tutorial/Options.md">
+  <summary><a href="./tutorial/Help.md">
     Help
   </a></summary>
     How to get help.

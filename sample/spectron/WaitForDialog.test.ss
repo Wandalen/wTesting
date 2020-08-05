@@ -72,7 +72,7 @@ var Self =
 
   name : 'Visual.Spectron.WaitForDialog',
   silencing : 1,
-  enabled : 1,
+  enabled : 0,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

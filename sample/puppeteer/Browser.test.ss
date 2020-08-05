@@ -50,7 +50,7 @@ async function browser( test )
 
   if( process.platform === 'linux' )
   if( _.process.insideTestContainer() )
-  options.args =  ['--no-sandbox', '--disable-setuid-sandbox'] }
+  options.args =  ['--no-sandbox', '--disable-setuid-sandbox']
 
   let browser = await Puppeteer.launch( options );
 

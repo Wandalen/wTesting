@@ -37,6 +37,6 @@ jobs :
         node-version : ${{ matrix.node-version }}
     - run : npm i
     - if : startsWith( matrix.os, 'ubuntu' )
-      run : xvfb-run --auto-servernum node sample/puppeteer/Browser.test.ss v:10
+      run : sudo xvfb-run --auto-servernum node sample/puppeteer/Browser.test.ss v:10
     - if : "!startsWith( matrix.os, 'ubuntu' )"
       run : npm test

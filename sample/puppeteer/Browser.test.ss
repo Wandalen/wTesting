@@ -46,7 +46,13 @@ async function browser( test )
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let browser = await Puppeteer.launch({ headless : true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  let options = { headless : true };
+
+  if( process.platform === 'linux' )
+  if( _.process.insideTestContainer() )
+  options.args =  ['--no-sandbox', '--disable-setuid-sandbox'] }
+
+  let browser = await Puppeteer.launch( options );
 
   var version = await browser.version();
   test.is( _.strHas( version, '85.0' ) );

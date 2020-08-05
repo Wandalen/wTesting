@@ -46,10 +46,8 @@ async function browser( test )
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
-  let options = { headless : true };
-
-  if( process.platform === 'linux' )
-  options.args =  [ '--no-sandbox', '--disable-setuid-sandbox']
+  let options = { headless : false };
+  options.args = [ '--no-sandbox', '--disable-setuid-sandbox' ]
 
   let browser = await Puppeteer.launch( options );
 

@@ -57,7 +57,7 @@ async function WaitForDialog( test )
   await app.client.waitForVisible( 'p', 5000 )
   await app.client.execute( () => alert( 'test message') );
   test.identical( await app.client.alertText(), 'test message' );
-  await app.client.alertAccept();
+  await app.client.alertAccept();// alertAccept doesn't work for spectron
   await app.stop();
 
   return null;
@@ -72,11 +72,11 @@ var Self =
 
   name : 'Visual.Spectron.WaitForDialog',
   silencing : 1,
-  enabled : 0,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,
+  enabled : 0,
 
   context :
   {

@@ -79,6 +79,45 @@ async function clientContinuesToWorkAfterTest( test )
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 }
 
+//
+
+async function waitForVisibleInViewportThrowing( test )
+{
+  let self = this;
+  let indexHtmlPath = _.path.join( __dirname, 'index.html' );
+  let browser;
+  let err;
+
+  try
+  {
+    browser = await Puppeteer.launch({ headless : true });
+    let page = await browser.newPage();
+
+    await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
+
+    await _.test.waitForVisibleInViewport
+    ({
+      targetSelector : 'p',
+      timeOut : 1,
+      page,
+      library : 'puppeteer'
+    });
+  }
+  catch( _err )
+  {
+    _.errLogOnce( _err );
+    err = _err;
+    if( browser )
+    await browser.close();
+  }
+  finally
+  {
+    test.is( _.errIs( err ) );
+    test.is( !browser.isConnected() )
+  }
+
+}
+
 // --
 // suite
 // --
@@ -101,7 +140,8 @@ let Self =
     routineTimeOut,
     puppeteerTimeOut,
     errorInTest,
-    clientContinuesToWorkAfterTest
+    clientContinuesToWorkAfterTest,
+    waitForVisibleInViewportThrowing
   }
 
 }

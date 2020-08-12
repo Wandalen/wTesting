@@ -59,8 +59,8 @@ function assetFor( test, asset )
       var read = a.fileProvider.fileRead( r.dst.absolute );
       read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.appStartNonThrowing )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
-      read = _.strReplace( read, `'spectron'`, `'${_.strEscape( self.spectronPath )}'` );
-      read = _.strReplace( read, `'electron'`, `'${_.strEscape( self.electronPath )}'` );
+      read = _.strReplace( read, `require( 'spectron' )`, `require( '${_.strEscape( self.spectronPath )}' )` );
+      read = _.strReplace( read, `require( 'electron' )`, `require( '${_.strEscape( self.electronPath )}' )` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
 
@@ -277,6 +277,37 @@ function chaining( test )
 
 //
 
+function waitForVisibleInViewportThrowing( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'spectron' );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = ''
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `Spectron.test.s r:waitForVisibleInViewportThrowing v:7` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+    test.identical( _.strCount( got.output, 'Waiting for selector "p" failed: timeout 1ms exceeded' ), 1 );
+    test.identical( _.strCount( got.output, `had zombie process` ), 0 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function processWatchingOnSpectronZombie( test )
 {
   let self = this;
@@ -370,6 +401,7 @@ let Self =
     htmlAwait,
     consequenceFromExperiment,
     chaining,
+    waitForVisibleInViewportThrowing,
 
     processWatchingOnSpectronZombie
   }

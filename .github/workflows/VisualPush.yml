@@ -36,6 +36,8 @@ jobs :
       with :
         node-version : ${{ matrix.node-version }}
     - run : npm i
+    - name: Debugging with tmate
+      uses: mxschmitt/action-tmate@v2
     - if : startsWith( matrix.os, 'ubuntu' )
       run : xvfb-run --auto-servernum npm test
     - if : "!startsWith( matrix.os, 'ubuntu' )"

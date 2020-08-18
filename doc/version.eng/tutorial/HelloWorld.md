@@ -138,7 +138,7 @@ The developer can place in the section the required amount of test routines to t
 
 The section is intended for definition of test suite - the highest structural unit of testing. The test file should contain only one test suite.
 
-A test suite definition should contain the test suite name and set of the test routines. References to test routines are placed in the `tests` section. Additionally, the test suite declaration may include [advanced options](TestOptions.md) that control the testing process.
+A test suite definition should contain the test suite name and set of the test routines. References to test routines are placed in the `tests` section. Additionally, the test suite declaration may include [advanced options](../concept/TestOption.md) that control the testing process.
 
 According to the code, the `Join.test.js` file contains the` Join` test suite. The test suite has two test routines. The test suite does not include any additional options.
 

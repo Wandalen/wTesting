@@ -163,6 +163,9 @@ function waitForVisibleInViewport( o )
     if( exists )
     element = await o.page.$( o.targetSelector );
 
+    if( ready.resourcesCount() )
+    return ready;
+
     if( element )
     {
       let isIntersectingViewport = await test.isVisibleWithinViewport
@@ -179,8 +182,7 @@ function waitForVisibleInViewport( o )
         return ready;
       }
     }
-    if( ready.resourcesCount() )
-    return ready;
+
     return _waitForVisibleInViewport();
   }
 }

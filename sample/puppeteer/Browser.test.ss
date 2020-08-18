@@ -48,6 +48,9 @@ async function browser( test )
 
   let browser = await Puppeteer.launch({ headless : true });
 
+  let page = await browser.newPage();
+  await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
+
   var version = await browser.version();
   test.is( _.strHas( version, '85.0' ) );
 

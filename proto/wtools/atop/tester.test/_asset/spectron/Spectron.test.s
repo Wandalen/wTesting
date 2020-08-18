@@ -92,6 +92,48 @@ async function clientContinuesToWorkAfterTest( test )
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 }
 
+//
+
+async function waitForVisibleInViewportThrowing( test )
+{
+  let self = this;
+  let appPath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
+  let app;
+  let err;
+
+  try
+  {
+    app = new Spectron.Application
+    ({
+      path : ElectronPath,
+      args : [ appPath ]
+    })
+
+    await app.start();
+    await _.test.waitForVisibleInViewport
+    ({
+      targetSelector : 'p',
+      timeOut : 1,
+      page : app.client,
+      library : 'spectron'
+    });
+  }
+  catch( _err )
+  {
+    _.errLogOnce( _err );
+
+    if( app && app.isRunning() )
+    await app.stop();
+
+    err = _err;
+  }
+  finally
+  {
+    test.is( _.errIs( err ) );
+    test.is( !app.isRunning() )
+  }
+}
+
 // --
 // suite
 // --
@@ -114,7 +156,8 @@ let Self =
     routineTimeOut,
     spectronTimeOut,
     errorInTest,
-    clientContinuesToWorkAfterTest
+    clientContinuesToWorkAfterTest,
+    waitForVisibleInViewportThrowing
   }
 
 }

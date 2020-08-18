@@ -285,6 +285,7 @@ module:
           - ../proto/wtools/atop/tester.test/_asset/requireTesting/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/spectron
           - ../proto/wtools/atop/tester.test/_asset/spectron/index.html
+          - ../proto/wtools/atop/tester.test/_asset/spectron/main.ss
           - ../proto/wtools/atop/tester.test/_asset/spectron/Spectron.test.s
           - ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage
           - >-

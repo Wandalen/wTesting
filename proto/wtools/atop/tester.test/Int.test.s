@@ -2825,7 +2825,8 @@ shouldMessageOnlyOnceReturn.timeOut = 30000;
 
 function chainedShould( test )
 {
-  var con = _.Consequence().take( null );
+  let context = this;
+  let con = _.Consequence().take( null );
 
   /* qqq : too complex. think how to write simpler alternative test routines */
 
@@ -3009,7 +3010,6 @@ function chainedShould( test )
       {
         return _.time.out( 50, function()
         {
-
           test.case = prefix + 'first ' + method + ' done';
 
           test.identical( t.suite.report.testCheckPasses, 3 );
@@ -8111,6 +8111,8 @@ let Self =
   context :
   {
     notTakingIntoAccount,
+    dt1 : 100,
+    dt2 : 1000,
   },
 
   tests :

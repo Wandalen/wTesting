@@ -207,7 +207,6 @@ module:
           - ../proto/wtools/atop/tester.test/Int.test.s
           - ../proto/wtools/atop/tester.test/Process.test.s
           - ../proto/wtools/atop/tester.test/Puppeteer.test.s
-          - ../proto/wtools/atop/tester.test/Time.test.s
           - ../proto/wtools/atop/tester.test/_asset
           - ../proto/wtools/atop/tester.test/_asset/asyncErrorHandling
           - >-

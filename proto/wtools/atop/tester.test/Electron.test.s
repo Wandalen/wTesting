@@ -375,7 +375,7 @@ function processWatchingOnSpectronZombie( test )
 let Self =
 {
 
-  name : 'Tools.atop.Tester.Electron',
+  name : 'Tools.Tester.Electron',
   silencing : 0,
   enabled : 1,
 

@@ -420,7 +420,7 @@ function processWatchingOnPuppeteerZombie( test )
 let Self =
 {
 
-  name : 'Tools.atop.Tester.Puppeteer',
+  name : 'Tools.Tester.Puppeteer',
   silencing : 0,
   enabled : 1,
 

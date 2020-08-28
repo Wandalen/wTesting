@@ -2961,13 +2961,16 @@ function _shouldDo( o )
   {
     result = o.routine;
   }
-  else try
+  else
   {
-    result = o.routine.call( this );
-  }
-  catch( _err )
-  {
-    return handleError( _err );
+    try
+    {
+      result = o.routine.call( this );
+    }
+    catch( _err )
+    {
+      return handleError( _err );
+    }
   }
 
   /* no sync error, but expected */
@@ -2976,8 +2979,6 @@ function _shouldDo( o )
   return handleLackOfSyncError();
 
   /* */
-
-  // debugger;
 
   if( _.consequenceIs( result ) )
   handleAsyncResult()
@@ -2997,7 +2998,6 @@ function _shouldDo( o )
 
     if( o.expectingSyncError )
     {
-      debugger;
       try
       {
         if( o.args[ 1 ] )
@@ -3011,6 +3011,7 @@ function _shouldDo( o )
 
     _.errAttend( err );
 
+    /* */
 
     if( o.ignoringError )
     {
@@ -3026,6 +3027,8 @@ function _shouldDo( o )
       return con;
     }
 
+    /* */
+
     trd.exceptionReport
     ({
       err,
@@ -3034,43 +3037,39 @@ function _shouldDo( o )
       outcome : o.expectingSyncError,
     });
 
-    if( !o.ignoringError )
+    begin( o.expectingSyncError );
+
+    if( o.expectingSyncError )
     {
 
-      begin( o.expectingSyncError );
+      trd._outcomeReportBoolean
+      ({
+        outcome : o.expectingSyncError,
+        msg : 'error thrown synchronously as expected',
+        stack,
+        selectMode : 'center',
+      });
 
-      if( o.expectingSyncError )
-      {
-
-        trd._outcomeReportBoolean
-        ({
-          outcome : o.expectingSyncError,
-          msg : 'error thrown synchronously as expected',
-          stack,
-          selectMode : 'center',
-        });
-
-      }
-      else
-      {
-
-        trd._outcomeReportBoolean
-        ({
-          outcome : o.expectingSyncError,
-          msg : 'error thrown synchronously, what was not expected',
-          stack,
-          selectMode : 'center',
-        });
-
-      }
-
-      end( o.expectingSyncError, err );
-
-      if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
-      return err;
-      else
-      return con;
     }
+    else
+    {
+
+      trd._outcomeReportBoolean
+      ({
+        outcome : o.expectingSyncError,
+        msg : 'error thrown synchronously, what was not expected',
+        stack,
+        selectMode : 'center',
+      });
+
+    }
+
+    end( o.expectingSyncError, err );
+
+    if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+    return err;
+    else
+    return con;
 
   }
 
@@ -3110,10 +3109,14 @@ function _shouldDo( o )
       arg = _arg;
 
       if( !o.ignoringError && !reported )
-      if( err && !o.expectingAsyncError )
-      reportAsync();
+      {
+        if( err && !o.expectingAsyncError )
+        reportAsync();
+      }
       else if( !err && o.expectingAsyncError )
-      reportAsync();
+      {
+        reportAsync();
+      }
 
       if( _.errIs( err ) )
       {
@@ -3395,7 +3398,7 @@ function _shouldDo( o )
 
 _shouldDo.defaults =
 {
-  args : null, /* qqq : cover 2-arguments calls for each should* check */
+  args : null, /* aaa : cover 2-arguments calls for each should* check */ /* Dmytro : covered */
   expectingSyncError : 1,
   expectingAsyncError : 1,
   ignoringError : 0,

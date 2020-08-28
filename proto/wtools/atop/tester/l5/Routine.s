@@ -1,4 +1,5 @@
-( function _Routine_s_() {
+( function _Routine_s_()
+{
 
 'use strict';
 
@@ -7,7 +8,7 @@
 /**
  * @classdesc Provides interface for creating of test routines. Interface is a collection of routines to create cases, groups of cases, perform different type of checks.
  * @class wTestRoutineDescriptor
- * @param {Object} o Test suite option map. {@link module:Tools/atop/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
+ * @param { Object } o - Test suite option map. {@link module:Tools/atop/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
  * @module Tools/atop/Tester
  */
 
@@ -343,10 +344,7 @@ function _runBegin()
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( trd._returned === null );
 
-  let msg =
-  [
-    `Running ${trd.decoratedAbsoluteName} ..`
-  ];
+  let msg = [ `Running ${trd.decoratedAbsoluteName} ..` ];
 
   suite.logger.begin({ verbosity : -4 });
 
@@ -378,7 +376,7 @@ function _runBegin()
   {
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
-    trd.exceptionReport({ err : err });
+    trd.exceptionReport({ err });
   }
 
   if( Config.debug !== debugWas )
@@ -411,7 +409,7 @@ function _runEnd()
     suite.exceptionReport
     ({
       unbarring : 1,
-      err : err,
+      err,
     });
 
   }
@@ -466,7 +464,7 @@ function _runEnd()
   }
   catch( err )
   {
-    trd.exceptionReport({ err : err });
+    trd.exceptionReport({ err });
     ok = false;
   }
 
@@ -528,7 +526,7 @@ function _runFinally( err, arg )
 
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
 
     trd._runEnd();
@@ -595,7 +593,7 @@ function _returnedVerification()
     suite.exceptionReport
     ({
       unbarring : 1,
-      err : err,
+      err,
     });
     throw err;
   }
@@ -636,18 +634,20 @@ function _timeOutError( err )
 
   err = _._err
   ({
-    args : [ err || '' , `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
+    args : [ err || '', `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
     reason : 'time limit',
   });
 
-  Object.defineProperty( err, '_testRoutine',
+  let o =
   {
     enumerable : false,
     configurable : false,
     writable : false,
     value : trd,
-  });
+  };
+
+  Object.defineProperty( err, '_testRoutine', o );
 
   err = _.errBrief( err );
 
@@ -790,9 +790,11 @@ function groupOpen( groupName )
     if( trd._groupsStack.length >= 2 )
     if( trd._groupsStack[ trd._groupsStack.length-1 ] === trd._groupsStack[ trd._groupsStack.length-2 ] )
     {
-      debugger;
-      let err = trd._groupingErorr( `Attempt to open group "${groupName}". Group with the same name is already opened. Might be you meant to close it?`, 2 );
-      err = trd.exceptionReport({ err : err });
+      let msg =
+      `Attempt to open group "${groupName}". Group with the same name is already opened. Might be you meant to close it?`;
+
+      let err = trd._groupingErorr( msg, 2 );
+      err = trd.exceptionReport({ err });
       return;
     }
 
@@ -801,7 +803,7 @@ function groupOpen( groupName )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -832,7 +834,7 @@ function groupClose( groupName )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -885,7 +887,7 @@ function _groupChange( o )
     // {
     //   debugger;
     //   let err = trd._groupingErorr( `Attempt to open group "${o.group}". Group with the same name is already opened. Might be you meant to close it?`, 4 );
-    //   err = trd.exceptionReport({ err : err });
+    //   err = trd.exceptionReport({ err });
     //   return;
     // }
 
@@ -905,9 +907,12 @@ function _groupChange( o )
 
     if( group !== o.group )
     {
-      debugger;
-      let err = trd._groupingErorr( `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "${o.group}", but current tests group is "${group}". Might be you want to close it first.`, 4 );
-      err = trd.exceptionReport({ err : err });
+      let msg =
+      `Discrepancy!. Attempt to close not the topmost tests group. \n`
+      + `Attempt to close "${o.group}", but current tests group is "${group}". Might be you want to close it first.`;
+
+      let err = trd._groupingErorr( msg, 4 );
+      err = trd.exceptionReport({ err });
     }
     else
     {
@@ -945,7 +950,7 @@ function _groupTestEnd()
   if( trd._groupsStack.length && !trd._groupError )
   {
     let err = trd._groupingErorr( `Tests group ${trd.group} was not closed`, 4 );
-    err = trd.exceptionReport({ err : err, usingSourceCode : 0 });
+    err = trd.exceptionReport({ err, usingSourceCode : 0 });
   }
 
 }
@@ -962,7 +967,7 @@ function _groupingErorr( msg, level )
   let err = _._err
   ({
     args : [ msg ],
-    level : level,
+    level,
     reason : 'grouping error',
     usingSourceCode : 0,
   });
@@ -1296,14 +1301,20 @@ function _outcomeReport( o )
   logger.begin({ verbosity : o.verbosity-1+verbosity });
 
   if( o.details )
-  logger.begin( 'details' ).log( o.details ).end( 'details' );
+  logger.begin( 'details' )
+  .log( o.details )
+  .end( 'details' );
 
   if( sourceCode )
-  logger.begin( 'sourceCode' ).log( sourceCode ).end( 'sourceCode' );
+  logger.begin( 'sourceCode' )
+  .log( sourceCode )
+  .end( 'sourceCode' );
 
   logger.end({ verbosity : o.verbosity-1+verbosity });
 
-  logger.begin( 'message' ).logDown( o.msg ).end( 'message' );
+  logger.begin( 'message' )
+  .logDown( o.msg )
+  .end( 'message' );
 
   logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
   if( logger.verbosityReserve() > 1 )
@@ -1436,8 +1447,8 @@ function _outcomeReportCompare( o )
   trd._outcomeReport
   ({
     outcome : o.outcome,
-    msg : msg,
-    details : details,
+    msg,
+    details,
     interruptible : o.interruptible,
   });
 
@@ -1449,10 +1460,9 @@ function _outcomeReportCompare( o )
 
   function msgExpectedGot()
   {
-    return '' +
-    'got :\n' + _.toStr( o.got, { stringWrapper : '\'' } ) + '\n' +
-    nameOfExpected + ' :\n' + _.toStr( o.expected, { stringWrapper : '\'' } ) +
-    '';
+    return
+    'got :\n' + _.toStr( o.got, { stringWrapper : '\'' } ) + '\n'
+    + nameOfExpected + ' :\n' + _.toStr( o.expected, { stringWrapper : '\'' } );
   }
 
 }
@@ -1533,8 +1543,8 @@ function exceptionReport( o )
     trd._outcomeReport
     ({
       outcome : o.outcome,
-      msg : msg,
-      details : details,
+      msg,
+      details,
       stack : o.stack,
       usingSourceCode : o.usingSourceCode,
       considering : o.considering,
@@ -1718,7 +1728,7 @@ function is( outcome )
     outcome = !!outcome;
     trd._outcomeReportBoolean
     ({
-      outcome : outcome,
+      outcome,
       msg : 'expected true',
       interruptible : 1,
     });
@@ -1752,7 +1762,7 @@ function isNot( outcome )
     outcome = !outcome;
     trd._outcomeReportBoolean
     ({
-      outcome : outcome,
+      outcome,
       msg : 'expected false',
       interruptible : 1,
     });
@@ -1813,7 +1823,7 @@ function identical( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -1851,9 +1861,9 @@ function identical( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
@@ -1916,7 +1926,7 @@ function notIdentical( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -1955,9 +1965,9 @@ function notIdentical( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 0,
     interruptible : 1,
@@ -2029,7 +2039,7 @@ function equivalent( got, expected, options )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2066,12 +2076,12 @@ function equivalent( got, expected, options )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
-    accuracy : accuracy,
+    accuracy,
     interruptible : 1,
     strictString : 0,
   });
@@ -2142,7 +2152,7 @@ function notEquivalent( got, expected, options )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2181,12 +2191,12 @@ function notEquivalent( got, expected, options )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
-    accuracy : accuracy,
+    accuracy,
     interruptible : 1,
     strictString : 0,
   });
@@ -2246,7 +2256,7 @@ function contains( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2285,9 +2295,9 @@ function contains( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
@@ -2319,7 +2329,7 @@ function containsAll( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2358,9 +2368,9 @@ function containsAll( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
@@ -2392,7 +2402,7 @@ function containsAny( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2431,9 +2441,9 @@ function containsAny( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
@@ -2465,7 +2475,7 @@ function containsOnly( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2504,9 +2514,9 @@ function containsOnly( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
@@ -2538,7 +2548,7 @@ function containsNone( got, expected )
   {
     trd.exceptionReport
     ({
-      err : err,
+      err,
     });
     return false;
   }
@@ -2577,9 +2587,9 @@ function containsNone( got, expected )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
-    expected : expected,
+    outcome,
+    got,
+    expected,
     path : o2.it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
@@ -2651,12 +2661,12 @@ function gt( got, than )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
+    outcome,
+    got,
     expected : than,
     nameOfPositiveExpected : 'greater than',
     nameOfNegativeExpected : 'not greater than',
-    diff : diff,
+    diff,
     usingExtraDetails : 1,
     interruptible : 1,
   });
@@ -2725,12 +2735,12 @@ function ge( got, than )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
+    outcome,
+    got,
     expected : than,
     nameOfPositiveExpected : greater ? 'greater than' : 'identical with',
     nameOfNegativeExpected : 'not greater neither identical with',
-    diff : diff,
+    diff,
     usingExtraDetails : 1,
     interruptible : 1,
   });
@@ -2800,12 +2810,12 @@ function lt( got, than )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
+    outcome,
+    got,
     expected : than,
     nameOfPositiveExpected : 'less than',
     nameOfNegativeExpected : 'not less than',
-    diff : diff,
+    diff,
     usingExtraDetails : 1,
     interruptible : 1,
   });
@@ -2877,12 +2887,12 @@ function le( got, than )
 
   trd._outcomeReportCompare
   ({
-    outcome : outcome,
-    got : got,
+    outcome,
+    got,
     expected : than,
     nameOfPositiveExpected : less ? 'less than' : 'identical with',
     nameOfNegativeExpected : 'not less neither identical with',
-    diff : diff,
+    diff,
     usingExtraDetails : 1,
     interruptible : 1,
   });
@@ -2923,17 +2933,17 @@ function _shouldDo( o )
   }
   catch( err )
   {
-    err = _.errRestack( err, 3 );
-    err = _._err
+    let error = _.errRestack( err, 3 );
+    error = _._err
     ({
-      args : [ err, '\nIllegal usage of should in', trd.absoluteName ],
+      args : [ error, '\nIllegal usage of should in', trd.absoluteName ],
     });
-    err = trd.exceptionReport
+    error = trd.exceptionReport
     ({
-      err : err,
+      err : error,
     });
-    debugger;
-    con.error( err );
+
+    con.error( error );
     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
     return false;
     else
@@ -2987,6 +2997,7 @@ function _shouldDo( o )
 
     if( o.expectingSyncError )
     {
+      debugger;
       try
       {
         if( o.args[ 1 ] )
@@ -3008,7 +3019,7 @@ function _shouldDo( o )
       ({
         outcome : 1,
         msg : 'error throwen synchronously, ignored',
-        stack : stack,
+        stack,
         selectMode : 'center'
       });
       end( 1, err );
@@ -3017,7 +3028,7 @@ function _shouldDo( o )
 
     trd.exceptionReport
     ({
-      err : err,
+      err,
       sync : 1,
       considering : 0,
       outcome : o.expectingSyncError,
@@ -3035,7 +3046,7 @@ function _shouldDo( o )
         ({
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously as expected',
-          stack : stack,
+          stack,
           selectMode : 'center',
         });
 
@@ -3047,7 +3058,7 @@ function _shouldDo( o )
         ({
           outcome : o.expectingSyncError,
           msg : 'error thrown synchronously, what was not expected',
-          stack : stack,
+          stack,
           selectMode : 'center',
         });
 
@@ -3074,8 +3085,8 @@ function _shouldDo( o )
     trd._outcomeReportBoolean
     ({
       outcome : 0,
-      msg : msg,
-      stack : stack,
+      msg,
+      stack,
       selectMode : 'center',
     });
 
@@ -3142,7 +3153,7 @@ function _shouldDo( o )
           ({
             outcome : 0,
             msg : 'Got more than one message',
-            stack : stack,
+            stack,
           });
 
           end( 0, _.err( msg ) );
@@ -3199,8 +3210,8 @@ function _shouldDo( o )
     trd._outcomeReportBoolean
     ({
       outcome : 0,
-      msg : msg,
-      stack : stack,
+      msg,
+      stack,
     });
 
     end( 0, _.err( msg ) );
@@ -3226,8 +3237,8 @@ function _shouldDo( o )
       trd._outcomeReportBoolean
       ({
         outcome : 0,
-        msg : msg,
-        stack : stack,
+        msg,
+        stack,
         selectMode : 'center',
       });
 
@@ -3241,7 +3252,7 @@ function _shouldDo( o )
       ({
         outcome : 1,
         msg : 'no error thrown, as expected',
-        stack : stack,
+        stack,
         selectMode : 'center',
       });
 
@@ -3318,7 +3329,7 @@ function _shouldDo( o )
       ({
         outcome : 1,
         msg : 'got single message',
-        stack : stack,
+        stack,
         selectMode : 'center'
       });
 
@@ -3330,7 +3341,7 @@ function _shouldDo( o )
 
       trd.exceptionReport
       ({
-        err : err,
+        err,
         sync : 0,
         considering : 0,
         outcome : o.expectingAsyncError,
@@ -3341,7 +3352,7 @@ function _shouldDo( o )
       ({
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously as expected',
-        stack : stack,
+        stack,
         selectMode : 'center'
       });
       else
@@ -3349,7 +3360,7 @@ function _shouldDo( o )
       ({
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously, not expected',
-        stack : stack,
+        stack,
         selectMode : 'center'
       });
 
@@ -3366,8 +3377,8 @@ function _shouldDo( o )
       trd._outcomeReportBoolean
       ({
         outcome : !o.expectingAsyncError,
-        msg : msg,
-        stack : stack,
+        msg,
+        stack,
         selectMode : 'center'
       });
 
@@ -3652,9 +3663,24 @@ function assetFor( a )
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
-  _.sure( _.strDefined( a.suiteTempPath ) || _.strDefined( a.routinePath ), `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. But test suite ${suite.name} does not have.` );
-  _.sure( a.assetsOriginalPath === null || _.strDefined( a.assetsOriginalPath ), `Test suite's context should have defined path to original asset directory {- assetsOriginalPath -}. But test suite ${suite.name} does not have.` );
-  _.sure( a.appJsPath === null || _.strDefined( a.appJsPath ), `Test suite's context should have defined path to default JS file {- appJsPath -}. But test suite ${suite.name} does not have.` );
+  _.sure
+  (
+    _.strDefined( a.suiteTempPath ) || _.strDefined( a.routinePath ),
+    `Test suite's context should have defined path to suite temp directory {- suiteTempPath -}. `
+    + `But test suite ${suite.name} does not have.`
+  );
+  _.sure
+  (
+    a.assetsOriginalPath === null || _.strDefined( a.assetsOriginalPath ),
+    `Test suite's context should have defined path to original asset directory {- assetsOriginalPath -}. `
+    + `But test suite ${suite.name} does not have.`
+  );
+  _.sure
+  (
+    a.appJsPath === null || _.strDefined( a.appJsPath ),
+    `Test suite's context should have defined path to default JS file {- appJsPath -}. `
+    + `But test suite ${suite.name} does not have.`
+  );
 
   Object.setPrototypeOf( a, context );
 
@@ -3837,7 +3863,13 @@ function assetFor( a )
   });
 
   if( a.originalAssetPath )
-  _.sure( a.fileProvider.isDir( a.originalAssetPath ), `Expects directory ${a.originalAssetPath} exists. Make one or change {- assetsOriginalPath -}` );
+  {
+    _.sure
+    (
+      a.fileProvider.isDir( a.originalAssetPath ),
+      `Expects directory ${a.originalAssetPath} exists. Make one or change {- assetsOriginalPath -}`
+    );
+  }
 
   program.defaults =
   {
@@ -4217,10 +4249,10 @@ let Extension =
   et : equivalent,
   ne : notEquivalent,
 
-  gt : gt,
-  ge : ge,
-  lt : lt,
-  le : le,
+  gt,
+  ge,
+  lt,
+  le,
 
   // shoulding
 

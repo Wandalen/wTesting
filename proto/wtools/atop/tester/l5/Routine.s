@@ -1,4 +1,4 @@
-(function _Routine_s_() {
+( function _Routine_s_() {
 
 'use strict';
 
@@ -2985,14 +2985,17 @@ function _shouldDo( o )
 
     err = _.err( _err );
 
-    try
+    if( o.expectingSyncError )
     {
-      if( o.args[ 1 ] )
-      o.args[ 1 ]( err, o );
-    }
-    catch( err2 )
-    {
-      console.error( err2 );
+      try
+      {
+        if( o.args[ 1 ] )
+        o.args[ 1 ]( err, o );
+      }
+      catch( err2 )
+      {
+        console.error( err2 );
+      }
     }
 
     _.errAttend( err );

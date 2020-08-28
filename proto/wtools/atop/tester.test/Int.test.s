@@ -1,4 +1,5 @@
-( function _Int_test_s_( ) {
+( function _Int_test_s_()
+{
 
 'use strict';
 
@@ -103,7 +104,7 @@ function identical( test )
 
   var suite = wTestSuite
   ({
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -146,7 +147,7 @@ function identicalConsequence( test )
 
   var suite = wTestSuite
   ({
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -469,7 +470,7 @@ function returnsSingleResource( test )
   var suite = wTestSuite
   ({
     name : 'Suite::ShouldMessageOnlyOnce',
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -792,7 +793,7 @@ function mustNotThrowError( test )
 
   var suite = wTestSuite
   ({
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -1087,7 +1088,7 @@ function shouldThrowErrorSync( test )
 
   var suite = wTestSuite
   ({
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -1686,7 +1687,7 @@ function shouldThrowErrorAsync( test )
 
   var suite = wTestSuite
   ({
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -2361,7 +2362,7 @@ function shouldThrowErrorOfAnyKind( test )
 
   var suite = wTestSuite
   ({
-    tests : { r1 : r1 },
+    tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
   });
@@ -3057,9 +3058,7 @@ function shouldThrowErrorAsyncSimple( test )
     test.identical( test._inroutineCon.resourcesGet().length, 0 );
 
     return null
-
-  })
-  ;
+  });
 
   return consequence;
 }
@@ -3121,8 +3120,7 @@ function shouldThrowErrorAsyncConcurrent( test )
     test.identical( test._inroutineCon.resourcesGet().length, 1 );
 
     return null;
-  })
-  ;
+  });
 
   return consequence;
 }
@@ -3136,11 +3134,11 @@ function shouldThrowErrorSyncReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -3204,11 +3202,11 @@ function shouldThrowErrorAsyncReturn( test )
   var done = 0;
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -3347,11 +3345,11 @@ function shouldThrowErrorReturn( test )
   var done = 0;
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -3477,11 +3475,11 @@ function mustNotThrowErrorReturn( test )
   var done = 0;
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -3608,11 +3606,11 @@ function shouldMessageOnlyOnceReturn( test )
   var done = 0;
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   // _.time.outError( 0 );
@@ -3752,7 +3750,9 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      var con = _.Consequence({ capacity : 2 }).take( 1 ).take( 2 );
+      var con = _.Consequence({ capacity : 2 })
+      .take( 1 )
+      .take( 2 );
       return t.returnsSingleResource( con )
       .finally( ( err, got ) =>
       {
@@ -3764,7 +3764,9 @@ function shouldMessageOnlyOnceReturn( test )
 
     .then( ( arg ) =>
     {
-      var con = _.Consequence({ capacity : 2 }).take( 1 ).take( 2 );
+      var con = _.Consequence({ capacity : 2 })
+      .take( 1 )
+      .take( 2 );
       return t.returnsSingleResource( () => con )
       .finally( ( err, got ) =>
       {
@@ -3900,7 +3902,7 @@ function chainedShould( test )
         test.identical( t.suite.report.testCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails, 0 );
 
-        var con = _.time.out( 50, function( err )
+        var con = _.time.out( 50, function()
         {
           test.case = prefix + 'give the first message';
           test.is( 1 );
@@ -3925,7 +3927,7 @@ function chainedShould( test )
         test.identical( t.suite.report.testCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails, 0 );
 
-        var con = _.time.out( 50, function( err )
+        var con = _.time.out( 50, function()
         {
           test.case = prefix + 'give the second message';
           test.is( 1 );
@@ -4038,7 +4040,7 @@ function chainedShould( test )
 
     var suite = wTestSuite
     ({
-      tests : { row : row, include : include },
+      tests : { row, include },
       override : this.notTakingIntoAccount,
       ignoringTesterOptions : 1,
       name : _.introspector.location().filePath + '/' + method + '/' + o.throwingError,
@@ -4093,11 +4095,11 @@ function isReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -4195,11 +4197,11 @@ function isNotReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -4297,11 +4299,11 @@ function identicalReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -4430,11 +4432,11 @@ function notIdenticalReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -4552,11 +4554,11 @@ function equivalentReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -4769,11 +4771,11 @@ function notEquivalentReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -4978,11 +4980,11 @@ function containReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -5121,11 +5123,11 @@ function ilReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -5252,11 +5254,11 @@ function niReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -5373,11 +5375,11 @@ function etReturn( test )
 {
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -5586,11 +5588,11 @@ function neReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -5805,11 +5807,11 @@ function gtReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -5941,11 +5943,11 @@ function geReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -6078,11 +6080,11 @@ function ltReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -6213,11 +6215,11 @@ function leReturn( test )
 
   var suite = wTestSuite
   ({
-    tests : { returnTest : returnTest },
+    tests : { returnTest },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
     name : test.name,
-    onSuiteEnd : onSuiteEnd,
+    onSuiteEnd,
   });
 
   return suite.run();
@@ -6500,7 +6502,8 @@ function testCase( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
     test.identical( visited, [ 'routine1' ] );
     test.identical( testRoutine._groupError, null );
@@ -6589,10 +6592,12 @@ function testsGroupSameNameError( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
     test.identical( visited, [ 'routine1' ] );
-    test.identical( String( testRoutine._groupError ), `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?` );
+    var exp = `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?`;
+    test.identical( String( testRoutine._groupError ), exp );
 
     var exp =
     {
@@ -6669,16 +6674,23 @@ function testsGroupDiscrepancyError( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
     test.identical( visited, [ 'routine1' ] );
-    test.identical( String( testRoutine._groupError ), `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "def2", but current tests group is "def". Might be you want to close it first.` );
+    var exp =
+    `Discrepancy!. Attempt to close not the topmost tests group. \n`
+    + `Attempt to close "def2", but current tests group is "def". Might be you want to close it first.`;
+    test.identical( String( testRoutine._groupError ), exp );
 
+    var msg =
+    `Discrepancy!. Attempt to close not the topmost tests group. \n`
+    + `Attempt to close "def2", but current tests group is "def". Might be you want to close it first.`;
     var exp =
     {
       'reason' : 'grouping error',
       'outcome' : false,
-      'errorsArray' : [ `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "def2", but current tests group is "def". Might be you want to close it first.` ],
+      'errorsArray' : [ msg ],
       'appExitCode' : 0,
       'testCheckPasses' : 1,
       'testCheckFails' : 1,
@@ -6689,10 +6701,13 @@ function testsGroupDiscrepancyError( test )
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
+    var msg =
+    `Discrepancy!. Attempt to close not the topmost tests group. \n`
+    + `Attempt to close "def2", but current tests group is "def". Might be you want to close it first.`;
     var exp =
     {
       'outcome' : false,
-      'errorsArray' : [ `Discrepancy!. Attempt to close not the topmost tests group. \nAttempt to close "def2", but current tests group is "def". Might be you want to close it first.` ],
+      'errorsArray' : [ msg ],
       'appExitCode' : 0,
       'testCheckPasses' : 1,
       'testCheckFails' : 1,
@@ -6927,7 +6942,8 @@ function testsGroupSingleLevel( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
     test.identical( visited, [ 'routine1' ] );
     test.identical( testRoutine._groupError, null );
@@ -7065,7 +7081,8 @@ function testsGroupMultipleLevels( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
 
     test.identical( visited, [ 'routine1' ] );
@@ -7171,7 +7188,8 @@ function testsGroupTestCaseSingleLevel( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
 
     test.identical( visited, [ 'routine1' ] );
@@ -7279,7 +7297,8 @@ function testsGroupTestCaseSameName( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
 
     test.identical( visited, [ 'routine1' ] );
@@ -7384,7 +7403,8 @@ function testsGroupAfterTestCase( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
 
     test.identical( visited, [ 'routine1' ] );
@@ -7510,7 +7530,8 @@ function testsGroupTestCaseMultipleLevels( test )
     ignoringTesterOptions : 1,
   });
 
-  return suite1.run().tap( ( err, arg ) =>
+  return suite1.run()
+  .tap( () =>
   {
 
     test.identical( visited, [ 'routine1' ] );
@@ -7601,39 +7622,39 @@ function runMultiple( test )
     var expected =
     [
       {
-        "outcome" : true,
-        "errorsArray" : [],
-        "appExitCode" : 0,
-        "testCheckPasses" : 1,
-        "testCheckFails" : 0,
-        "testCasePasses" : 0,
-        "testCaseFails" : 0,
-        // "testCaseNumber" : 0,
-        "testRoutinePasses" : 1,
-        "testRoutineFails" : 0
+        'outcome' : true,
+        'errorsArray' : [],
+        'appExitCode' : 0,
+        'testCheckPasses' : 1,
+        'testCheckFails' : 0,
+        'testCasePasses' : 0,
+        'testCaseFails' : 0,
+        // 'testCaseNumber' : 0,
+        'testRoutinePasses' : 1,
+        'testRoutineFails' : 0
       },
       {
-        "outcome" : false,
-        "appExitCode" : 0,
-        "testCheckPasses" : 1,
-        "testCheckFails" : 1,
-        "testCasePasses" : 0,
-        "testCaseFails" : 0,
-        // "testCaseNumber" : 0,
-        "testRoutinePasses" : 0,
-        "testRoutineFails" : 1
+        'outcome' : false,
+        'appExitCode' : 0,
+        'testCheckPasses' : 1,
+        'testCheckFails' : 1,
+        'testCasePasses' : 0,
+        'testCaseFails' : 0,
+        // 'testCaseNumber' : 0,
+        'testRoutinePasses' : 0,
+        'testRoutineFails' : 1
       },
       {
-        "outcome" : true,
-        "errorsArray" : [],
-        "appExitCode" : 0,
-        "testCheckPasses" : 1,
-        "testCheckFails" : 0,
-        "testCasePasses" : 0,
-        "testCaseFails" : 0,
-        // "testCaseNumber" : 0,
-        "testRoutinePasses" : 1,
-        "testRoutineFails" : 0
+        'outcome' : true,
+        'errorsArray' : [],
+        'appExitCode' : 0,
+        'testCheckPasses' : 1,
+        'testCheckFails' : 0,
+        'testCasePasses' : 0,
+        'testCaseFails' : 0,
+        // 'testCaseNumber' : 0,
+        'testRoutinePasses' : 1,
+        'testRoutineFails' : 0
       }
     ]
     test.contains( got, expected );
@@ -7682,16 +7703,16 @@ function appExitCode( test )
     var expected =
     [
       {
-        "outcome" : true,
-        "errorsArray" : [],
-        "appExitCode" : 0,
-        "testCheckPasses" : 1,
-        "testCheckFails" : 0,
-        "testCasePasses" : 0,
-        "testCaseFails" : 0,
-        // "testCaseNumber" : 0,
-        "testRoutinePasses" : 1,
-        "testRoutineFails" : 0
+        'outcome' : true,
+        'errorsArray' : [],
+        'appExitCode' : 0,
+        'testCheckPasses' : 1,
+        'testCheckFails' : 0,
+        'testCasePasses' : 0,
+        'testCaseFails' : 0,
+        // 'testCaseNumber' : 0,
+        'testRoutinePasses' : 1,
+        'testRoutineFails' : 0
       }
     ]
     test.contains( got, expected );
@@ -8786,7 +8807,7 @@ function processWatchingOff( test )
     trd = t;
     t.description = 'create three zombie processes';
     _.process.start( o );
-    t.identical( 1,1 );
+    t.identical( 1, 1 );
   }
 
   var suite = wTestSuite
@@ -8976,7 +8997,7 @@ function processWatchingOnSuiteBegin( test )
   function testRoutine( t )
   {
     trd = t;
-    t.identical( 1,1 );
+    t.identical( 1, 1 );
   }
 
   var suite = wTestSuite
@@ -9040,7 +9061,7 @@ function processWatchingOnSuiteEnd( test )
   function testRoutine( t )
   {
     trd = t;
-    t.identical( 1,1 );
+    t.identical( 1, 1 );
   }
 
   var suite = wTestSuite

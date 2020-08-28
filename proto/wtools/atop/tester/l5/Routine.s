@@ -4258,9 +4258,9 @@ let Extension =
 
   _shouldDo,
 
-  shouldThrowErrorSync, /* qqq : cover second argument */
-  shouldThrowErrorAsync, /* qqq : cover second argument */
-  shouldThrowErrorOfAnyKind, /* qqq : cover second argument */
+  shouldThrowErrorSync, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorAsync, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorOfAnyKind, /* aaa : cover second argument */ /* Dmytro : covered */
   mustNotThrowError,
   returnsSingleResource,
 

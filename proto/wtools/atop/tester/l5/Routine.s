@@ -1339,7 +1339,7 @@ function _outcomeReport( o )
     }
 
     if( code )
-    code = ' #inputRaw : 1# ' + code + ' #inputRaw : 0# ';
+    code = ' ❮inputRaw : 1❯ ' + code + ' ❮inputRaw : 0❯ ';
 
     return code;
   }

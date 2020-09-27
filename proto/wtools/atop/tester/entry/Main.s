@@ -8,8 +8,8 @@ if( typeof module !== 'undefined' )
   if( typeof Config !== 'undefined' )
   if( Config.interpreter !== 'njs' ) /* xxx : remove after fixing starter */
   {
-    debugger;
-    return;
+    // debugger;
+    // return;
   }
 
   require( '../include/Top.s' );

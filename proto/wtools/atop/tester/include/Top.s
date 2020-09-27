@@ -25,6 +25,8 @@ if( typeof module !== 'undefined' )
   }
 
   let Module = require( 'module' );
+  if( Config.interpreter === 'browser' )
+  debugger;
   let cache = Module._cache;
   Module._cache = Object.create( null );
 
@@ -63,6 +65,8 @@ if( typeof module !== 'undefined' )
     throw 'Something wrong, global should not be real!';
   }
 
+  if( Config.interpreter === 'browser' )
+  debugger;
   Module._cache = cache;
   _global_ = _wasGlobal;
 

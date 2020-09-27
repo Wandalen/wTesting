@@ -2,6 +2,9 @@
 
 'use strict';
 
+if( Config.interpreter === 'browser' )
+debugger;
+
 let _global = _global_;
 let _ = _global.wTools;
 
@@ -90,6 +93,7 @@ function _commandsMake()
 
   }
 
+  debugger;
   let ca = tester.ca = _.CommandsAggregator
   ({
     basePath : fileProvider.path.current(),
@@ -140,39 +144,6 @@ function commandVersion( e )
 }
 
 commandVersion.hint = 'Get information about version.';
-
-// function commandVersion( e ) /* xxx qqq : move to NpmTools */
-// {
-//   let tester = this.form();
-//   let fileProvider = tester.fileProvider;
-//   let path = tester.fileProvider.path;
-//   let logger = tester.logger;
-//
-//   let packageJsonPath = path.join( __dirname, '../../../../../package.json' );
-//   let packageJson =  fileProvider.fileRead({ filePath : packageJsonPath, encoding : 'json', throwing : 0 });
-//
-//   return _.process.start
-//   ({
-//     execPath : 'npm view wTesting@latest version',
-//     outputCollecting : 1,
-//     outputPiping : 0,
-//     inputMirroring : 0,
-//     throwingExitCode : 0
-//   })
-//   .then( ( got ) =>
-//   {
-//     let current = packageJson ? packageJson.version : 'unknown';
-//     let latest = _.strStrip( got.output );
-//
-//     if( got.exitCode || !latest )
-//     latest = 'unknown'
-//
-//     logger.log( 'Current version:', current );
-//     logger.log( 'Available version:', latest );
-//
-//     return null;
-//   })
-// }
 
 //
 
@@ -328,6 +299,8 @@ module[ 'exports' ] = Self;
 if( !_.instanceIs( _realGlobal_.wTester ) && !_.symbolIs( _realGlobal_.wTester ) )
 _realGlobal_.wTester = _global.wTester = new Self().form();
 
+if( Config.interpreter === 'browser' )
+debugger;
 if( !module.parent )
 Self.Exec();
 

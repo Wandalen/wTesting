@@ -779,6 +779,10 @@ function _end( err )
 
     _.each( suite._processWatcherMap, ( descriptor, pid ) =>
     {
+      if( !descriptor.process.connected )
+      if( !_.process.isAlive( descriptor.process.pid ) )
+      return delete suite._processWatcherMap[ pid ];
+
       let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
       if( suite.takingIntoAccount )
       suite.consoleBar( 0 );

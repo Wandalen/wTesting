@@ -3906,6 +3906,8 @@ function assetFor( a )
 
     _.routineOptions( program, o );
 
+    _.assert( _.strIs( o.tempPath ) );
+
     let o2 = _.program.write
     ({
       routine : o.routine,

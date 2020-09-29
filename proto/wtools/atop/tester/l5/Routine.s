@@ -3840,6 +3840,7 @@ function assetFor( a )
   {
     routine : null,
     locals : null,
+    tempPath : a.abs( '.' )
   }
 
   return a;
@@ -3909,7 +3910,7 @@ function assetFor( a )
     ({
       routine : o.routine,
       locals : o.locals,
-      tempPath : a.abs( '.' ),
+      tempPath : o.tempPath,
     });
 
     logger.log( _.strLinesNumber( o2.sourceCode ) );

@@ -2271,6 +2271,36 @@ function onSuiteEndReturnConsequence( test )
   return a.ready;
 }
 
+//
+
+function program( test )
+{
+  let self = this;
+  let a = self.assetFor( test, false );
+
+  test.case = 'default'
+  var got = a.program( testApp1 );
+  var exp = a.routinePath + '/' + testApp1.name + '.js'
+  test.il( got, exp )
+
+  test.case = 'options : routine, tempPath'
+  var got = a.program({ routine : testApp1, tempPath : a.abs( 'temp' ) });
+  var exp = a.routinePath + '/temp/' + testApp1.name + '.js'
+  test.il( got, exp )
+
+  test.case = 'options : routine, tempPath with spaces'
+  var got = a.program({ routine : testApp1, tempPath : a.abs( 'temp with spaces' ) });
+  var exp = a.routinePath + '/temp with spaces/' + testApp1.name + '.js'
+  test.il( got, exp )
+
+  test.case = 'throwing: temp path is relative'
+  test.shouldThrowErrorSync( () => a.program({ routine : testApp1, tempPath : 'temp' }) )
+
+  /* - */
+
+  function testApp1(){}
+}
+
 // --
 // suite
 // --
@@ -2325,6 +2355,8 @@ let Self =
     asyncErrorHandling,
 
     onSuiteEndReturnConsequence,
+
+    program
 
   }
 

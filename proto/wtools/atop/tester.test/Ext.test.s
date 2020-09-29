@@ -2283,22 +2283,20 @@ function program( test )
   var exp = a.routinePath + '/' + testApp1.name + '.js'
   test.il( got, exp )
 
-  test.case = 'options : routine, tempPath'
-  var got = a.program({ routine : testApp1, tempPath : a.abs( 'temp' ) });
+  test.case = 'options : routine, dirPath'
+  var got = a.program({ routine : testApp1, dirPath : 'temp' })
   var exp = a.routinePath + '/temp/' + testApp1.name + '.js'
   test.il( got, exp )
 
-  test.case = 'options : routine, tempPath with spaces'
-  var got = a.program({ routine : testApp1, tempPath : a.abs( 'temp with spaces' ) });
+  test.case = 'options : routine, dirPath with spaces'
+  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
   var exp = a.routinePath + '/temp with spaces/' + testApp1.name + '.js'
   test.il( got, exp )
-
-  test.case = 'throwing: temp path is relative'
-  test.shouldThrowErrorSync( () => a.program({ routine : testApp1, tempPath : 'temp' }) )
 
   /* - */
 
   function testApp1(){}
+
 }
 
 // --

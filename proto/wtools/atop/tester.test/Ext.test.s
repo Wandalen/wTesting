@@ -2274,7 +2274,7 @@ function onSuiteEndReturnConsequence( test )
 
 //
 
-function programOptionDirPath( test )
+function programOptionsRoutineDirPath( test )
 {
   let self = this;
   let a = self.assetFor( test, false );
@@ -2355,7 +2355,7 @@ let Self =
 
     onSuiteEndReturnConsequence,
 
-    programOptionDirPath
+    programOptionsRoutineDirPath
 
   }
 

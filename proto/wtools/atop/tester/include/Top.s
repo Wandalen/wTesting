@@ -4,8 +4,6 @@
 
 // global
 
-debugger;
-
 let _global = undefined;
 if( !_global && typeof Global !== 'undefined' && Global.Global === Global ) _global = Global;
 if( !_global && typeof global !== 'undefined' && global.global === global ) _global = global;

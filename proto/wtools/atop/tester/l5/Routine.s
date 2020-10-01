@@ -3840,6 +3840,7 @@ function assetFor( a )
   {
     routine : null,
     locals : null,
+    dirPath : '.'
   }
 
   return a;
@@ -3905,11 +3906,14 @@ function assetFor( a )
 
     _.routineOptions( program, o );
 
+    _.assert( _.strIs( o.dirPath ) );
+
     let o2 = _.program.write
     ({
       routine : o.routine,
       locals : o.locals,
       tempPath : a.abs( '.' ),
+      dirPath : o.dirPath
     });
 
     logger.log( _.strLinesNumber( o2.sourceCode ) );

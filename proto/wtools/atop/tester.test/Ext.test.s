@@ -2399,7 +2399,7 @@ let Self =
     asyncErrorHandling,
 
     onSuiteEndReturnConsequence,
-    onSuiteEndIsExecutedOnceOnSigint
+    onSuiteEndIsExecutedOnceOnSigint,
 
     programOptionsRoutineDirPath
 

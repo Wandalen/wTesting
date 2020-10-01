@@ -1,4 +1,5 @@
-( function _Ext_test_s_( ) {
+( function _Ext_test_s_( )
+{
 
 'use strict';
 
@@ -49,7 +50,7 @@ function assetFor( test, asset )
   a.reflect = function reflect()
   {
 
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
 
     reflected.forEach( ( r ) =>
     {
@@ -235,7 +236,7 @@ function run( test )
     return null;
   })
 
-/* - */
+  /* - */
 
   a.ready
   .then( () =>
@@ -541,7 +542,7 @@ function checkFails( test )
     return null;
   })
 
-  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1'] })
+  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1' ] })
   .then( ( got ) =>
   {
     test.ni( got.exitCode, 0 );
@@ -1821,7 +1822,7 @@ function timeLimitConsequence( test )
   {
     test.case = 'timeOut timeLimit a timeLimitOut';
 
-    var con = _.time.out( t*1 );
+    var con = _.time.out( Number( t ) );
     var con0 = _.time.out( t*3, 'a' );
     con.timeLimit( t*6, con0 );
 
@@ -2367,6 +2368,34 @@ onSuiteEndIsExecutedOnceOnSigintLate.description =
   - May not work on some machines because of races conditions!
 `
 
+//
+
+function programOptionsRoutineDirPath( test )
+{
+  let self = this;
+  let a = self.assetFor( test, false );
+
+  test.case = 'default'
+  var got = a.program( testApp1 );
+  var exp = a.routinePath + '/' + testApp1.name + '.js'
+  test.il( got, exp )
+
+  test.case = 'options : routine, dirPath'
+  var got = a.program({ routine : testApp1, dirPath : 'temp' })
+  var exp = a.routinePath + '/temp/' + testApp1.name + '.js'
+  test.il( got, exp )
+
+  test.case = 'options : routine, dirPath with spaces'
+  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
+  var exp = a.routinePath + '/temp with spaces/' + testApp1.name + '.js'
+  test.il( got, exp )
+
+  /* - */
+
+  function testApp1(){}
+
+}
+
 // --
 // suite
 // --
@@ -2378,8 +2407,8 @@ let Self =
   silencing : 1,
   enabled : 1,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :
@@ -2421,8 +2450,11 @@ let Self =
     asyncErrorHandling,
 
     onSuiteEndReturnConsequence,
+
     onSuiteEndIsExecutedOnceOnSigintEarly,
     onSuiteEndIsExecutedOnceOnSigintLate,
+
+    programOptionsRoutineDirPath
 
   }
 

@@ -4,8 +4,6 @@
 
 // global
 
-debugger;
-
 let _global = undefined;
 if( !_global && typeof Global !== 'undefined' && Global.Global === Global ) _global = Global;
 if( !_global && typeof global !== 'undefined' && global.global === global ) _global = global;
@@ -26,10 +24,7 @@ if( typeof module !== 'undefined' )
     return;
   }
 
-  // debugger;
   let Module = require( 'module' );
-  // if( Config.interpreter === 'browser' )
-  // debugger;
   let cache = Module._cache;
   Module._cache = Object.create( null );
 

@@ -14,7 +14,7 @@ process.on( 'message', ( signal ) =>
 function routine1( test )
 {
   test.identical( 1,1 );
-  return _.time.out( 2000 );
+  return _.time.out( 10000 );
 }
 
 //
@@ -23,7 +23,7 @@ let onSuiteEndIsExecuted = false;
 
 function onSuiteEnd()
 {
-  console.log( 'Executing onSuiteEnd' );
+  console.log( 'Executing onSuiteEnd' ); debugger;
 
   if( onSuiteEndIsExecuted )
   throw _.err( 'onSuiteEnd is executed for second time!' );
@@ -41,6 +41,8 @@ let Self =
 {
   name : 'IsExecutedOnceOnSigint',
   onSuiteEnd,
+  routineTimeOut : 60000,
+  suiteEndTimeOut : 60000,
   tests :
   {
     routine1,

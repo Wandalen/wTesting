@@ -93,7 +93,6 @@ function _commandsMake()
 
   }
 
-  debugger;
   let ca = tester.ca = _.CommandsAggregator
   ({
     basePath : fileProvider.path.current(),

@@ -2274,6 +2274,102 @@ function onSuiteEndReturnConsequence( test )
 
 //
 
+function onSuiteEndIsExecutedOnceOnSigintEarly( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'onSuiteEnd' );
+  a.reflect();
+
+  /* - */
+
+  let o =
+  {
+    execPath : `IsExecutedOnceOnSigint.test.js`,
+    outputPiping : 1,
+    ipc : 1
+  }
+
+  a.appStartNonThrowing( o )
+
+  o.onStart.then( () =>
+  {
+    o.process.send( 'SIGINT' );
+    return null;
+  })
+
+  o.onTerminate.then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );
+    test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
+    test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+onSuiteEndIsExecutedOnceOnSigintEarly.description =
+`
+  - Test suite uses deasync in onSuiteEnd handler.
+  - User terminates test run after short delay, early!
+  - Callback onSuiteEnd handler should be executed only once.
+`
+
+//
+
+function onSuiteEndIsExecutedOnceOnSigintLate( test )
+{
+  let self = this;
+  let a = self.assetFor( test, 'onSuiteEnd' );
+  a.reflect();
+
+  /* - */
+
+  let o = /* xxx : remove? */
+  {
+    execPath : `IsExecutedOnceOnSigint.test.js`,
+    outputPiping : 1,
+    ipc : 1
+  }
+
+  a.appStartNonThrowing( o )
+
+  o.onStart.then( () =>
+  {
+    _.time.out( 10000, () => o.process.send( 'SIGINT' ) );
+    return null;
+  })
+
+  o.onTerminate.then( ( got ) => /* xxx qqq : then( ( got ) -> then( ( op ) or then( ( arg ) */
+  {
+    test.notIdentical( got.exitCode, 0 );
+    test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );
+    test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
+    test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+onSuiteEndIsExecutedOnceOnSigintLate.description =
+`
+  - Test suite uses deasync in onSuiteEnd handler.
+  - User terminates test run after short delay, early!
+  - Callback onSuiteEnd handler should be executed only once.
+  - May not work on some machines because of races conditions!
+`
+
+//
+
 function programOptionsRoutineDirPath( test )
 {
   let self = this;
@@ -2299,51 +2395,6 @@ function programOptionsRoutineDirPath( test )
   function testApp1(){}
 
 }
-
-function onSuiteEndIsExecutedOnceOnSigint( test )
-{
-  let self = this;
-  let a = self.assetFor( test, 'onSuiteEnd' );
-  a.reflect();
-
-  /* - */
-
-  let o =
-  {
-    execPath : `IsExecutedOnceOnSigint.test.js`,
-    outputPiping : 1,
-    ipc : 1
-  }
-
-  a.appStartNonThrowing( o )
-
-  o.onStart.thenGive( () =>
-  {
-    o.process.send( 'SIGINT' );
-  })
-
-  o.onTerminate.then( ( got ) =>
-  {
-    test.notIdentical( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );
-    test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
-    test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
-    return null;
-  })
-
-  /* - */
-
-  return a.ready;
-}
-
-onSuiteEndIsExecutedOnceOnSigint.description =
-`
-Test suite uses deasync in onSuiteEnd handler.
-User terminates test run after short delay.
-onSuiteEnd handler should be executed only one.
-`
 
 // --
 // suite
@@ -2399,7 +2450,9 @@ let Self =
     asyncErrorHandling,
 
     onSuiteEndReturnConsequence,
-    onSuiteEndIsExecutedOnceOnSigint,
+
+    onSuiteEndIsExecutedOnceOnSigintEarly,
+    onSuiteEndIsExecutedOnceOnSigintLate,
 
     programOptionsRoutineDirPath
 

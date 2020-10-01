@@ -258,6 +258,8 @@ module:
           - >-
             ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/ErrorMessageByConsequence.test.js
           - >-
+            ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/IsExecutedOnceOnSigint.test.js
+          - >-
             ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/NormalMessageByConsequence.test.js
           - >-
             ../proto/wtools/atop/tester.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js

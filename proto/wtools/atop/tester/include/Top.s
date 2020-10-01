@@ -24,10 +24,7 @@ if( typeof module !== 'undefined' )
     return;
   }
 
-  // debugger;
   let Module = require( 'module' );
-  // if( Config.interpreter === 'browser' )
-  // debugger;
   let cache = Module._cache;
   Module._cache = Object.create( null );
 

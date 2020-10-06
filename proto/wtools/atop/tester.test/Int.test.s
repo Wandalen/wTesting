@@ -2421,7 +2421,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -2456,7 +2456,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 1 );
         test.identical( errStack[ 0 ], 'err1' );
@@ -2496,7 +2496,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 1 );
         test.identical( errStack[ 0 ], 'err1' );
@@ -2533,7 +2533,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -2575,7 +2575,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -2617,7 +2617,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );
@@ -2650,7 +2650,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -2681,7 +2681,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 200, () =>
+      return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );

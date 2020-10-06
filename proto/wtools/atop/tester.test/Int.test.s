@@ -62,7 +62,7 @@ function onSuiteEnd()
 }
 
 // --
-// tests
+// etc
 // --
 
 function trivial( test )
@@ -75,7 +75,9 @@ function trivial( test )
 
 }
 
-//
+// --
+// compare
+// --
 
 function identical( test )
 {
@@ -135,16 +137,6 @@ function identicalConsequence( test )
 {
   var testRoutine;
 
-  function r1( t )
-  {
-    testRoutine = t;
-
-    let con = _.Consequence().take( null );
-    t.identical( con, null );
-
-    return null;
-  }
-
   var suite = wTestSuite
   ({
     tests : { r1 },
@@ -167,6 +159,17 @@ function identicalConsequence( test )
   });
 
   return result;
+
+  function r1( t )
+  {
+    testRoutine = t;
+
+    let con = _.Consequence().take( null );
+    t.identical( con, null );
+
+    return null;
+  }
+
 }
 
 // --
@@ -7890,24 +7893,13 @@ function onSuiteEndThrowError( test )
 
 //
 
-function onSuiteEndTimeOut( test )
+function suiteEndTimeOut( test ) /* qqq : write similar test in Ext.test.s ( separate process ) */
 {
-  function trivial( t )
-  {
-    t.case = 'trivial'
-    t.identical( 1, 1 );
-  }
-
-  function onSuiteEnd()
-  {
-    let con = new _.Consequence();
-    return con;
-  }
 
   let suite1 = wTestSuite
   ({
     onSuiteEnd,
-    onSuiteEndTimeOut : 1500,
+    suiteEndTimeOut : 1500,
     tests : { trivial },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,
@@ -7941,6 +7933,19 @@ function onSuiteEndTimeOut( test )
   });
 
   return result;
+
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  function onSuiteEnd()
+  {
+    let con = new _.Consequence();
+    return con;
+  }
+
 }
 
 //
@@ -9136,7 +9141,13 @@ let Self =
   tests :
   {
 
+
+    // etc
+
     trivial,
+
+    // compare
+
     identical,
     identicalConsequence,
 
@@ -9209,13 +9220,13 @@ let Self =
     onSuiteBeginThrowError,
     onSuiteEndReturnsNothing,
     onSuiteEndThrowError,
-    onSuiteEndTimeOut,
+    suiteEndTimeOut,
     onSuiteEndErrorInConsequence,
     onSuiteEndNormalConsequence,
     onSuiteEndDelayedConsequence,
     /* qqq : please cover onRoutineBegin, onRoutineEnd */
 
-    // optionRoutine
+    // options
 
     optionRoutine,
 

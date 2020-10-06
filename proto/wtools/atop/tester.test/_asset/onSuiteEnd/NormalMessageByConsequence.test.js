@@ -23,7 +23,7 @@ let Self =
 {
   name : 'NormalMessageByConsequence',
   onSuiteEnd,
-  onSuiteEndTimeOut : 1500,
+  suiteEndTimeOut : 1500,
   tests :
   {
     routine1,

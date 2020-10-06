@@ -46,7 +46,7 @@ function samples( test )
     withDirs : 0,
     filter :
     {
-      maskTransientDirectory : { excludeAny : /asset/ }
+      maskTransientDirectory : { excludeAny : [ /asset/, /out/ ] }
     },
     mode : 'distinct',
     mandatory : 0,
@@ -130,7 +130,20 @@ function eslint( test )
     execPath : eslint,
     mode : 'fork',
     currentPath : rootPath,
-    args : [ '-c', '.eslintrc.yml', '--ext', '.js,.s,.ss', '--ignore-pattern', '*.html', '--ignore-pattern', '*.txt', '--ignore-pattern', '*.png', '--ignore-pattern', '*.json', '--ignore-pattern', '*.yml', '--ignore-pattern', '*.yaml', '--quiet' ],
+    args :
+    [
+      '-c', '.eslintrc.yml',
+      '--ext', '.js,.s,.ss',
+      '--ignore-pattern', '*.html',
+      '--ignore-pattern', '*.txt',
+      '--ignore-pattern', '*.png',
+      '--ignore-pattern', '*.json',
+      '--ignore-pattern', '*.yml',
+      '--ignore-pattern', '*.yaml',
+      '--ignore-pattern', '*.md',
+      '--ignore-pattern', '*.xml',
+      '--quiet'
+    ],
     throwingExitCode : 0,
     outputCollecting : 1,
   })
@@ -187,7 +200,7 @@ let Self =
   tests :
   {
     samples,
-    eslint,
+    // eslint,
   },
 
 }

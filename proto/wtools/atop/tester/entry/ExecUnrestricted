@@ -12,4 +12,4 @@ let o =
   execPath : _.strQuote( _.path.join( __dirname, 'Exec' ) ),
 }
 _.process._exitHandlerRepair();
-_.process.startNodePassingThrough( o );
+_.process.startNjsPassingThrough( o );

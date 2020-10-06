@@ -63,6 +63,8 @@ if( typeof module !== 'undefined' )
     throw 'Something wrong, global should not be real!';
   }
 
+  if( Config.interpreter === 'browser' )
+  debugger;
   Module._cache = cache;
   _global_ = _wasGlobal;
 

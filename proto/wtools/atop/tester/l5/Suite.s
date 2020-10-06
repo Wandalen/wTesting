@@ -1,4 +1,4 @@
-(function _Suite_s_()
+( function _Suite_s_()
 {
 
 'use strict';
@@ -120,7 +120,7 @@ function init( o )
         if( Self.InstancesMap[ inherit.name ] )
         {
           let inheritInited = Self.InstancesMap[ inherit.name ];
-          _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit } ) ) );
+          _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit : inherit } ) ) );
           inherits[ i ] = inheritInited;
         }
         else
@@ -214,17 +214,14 @@ function Froms( suites )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( suites ) );
 
-  for( let s in suites )
+  for( let s in suites ) try
   {
-    try
-    {
-      let suite = suites[ s ];
-      Self( suite );
-    }
-    catch( err )
-    {
-      throw _.errLog( 'Cant make test suite', s, '\n', err );
-    }
+    let suite = suites[ s ];
+    Self( suite );
+  }
+  catch( err )
+  {
+    throw _.errLog( 'Cant make test suite', s, '\n', err );
   }
 
   return this;
@@ -450,7 +447,7 @@ function _form()
 
   }
 
-  _.mapExtend( suite, extend ); /* xxx */
+  _.mapExtend( suite, extend );
 
   /* form test routines */
 
@@ -464,7 +461,7 @@ function _form()
     ({
       name : testRoutineName,
       routine : testRoutine,
-      suite,
+      suite : suite,
     });
 
     trd.form();
@@ -500,7 +497,8 @@ function _runSoon()
   let result = con
   .finally( () => _.time.ready() )
   .finally( () => suite._runNow() )
-  .split();
+  .split()
+  ;
 
   if( Config.debug )
   result.tag = suite.name;
@@ -521,7 +519,7 @@ function _runNow()
 
   /* */
 
-  let o =
+  let r = _.execStages( testRoutines,
   {
     manual : 1,
     onEachRoutine : handleRoutine,
@@ -529,9 +527,7 @@ function _runNow()
     onEnd : handleEnd,
     onRoutine : ( trd ) => trd.routine,
     delay : 10,
-  };
-
-  let r = _.execStages( testRoutines, o );
+  });
 
   return r;
 
@@ -565,6 +561,9 @@ function _begin()
   let suite = this;
   let ready = new _.Consequence().take( null );
 
+  _.assert( suite._state === null, `State of test suite should be "null", but it is "${suite._state}"` );
+  suite._state = 'beginning';
+
   if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.time.now();
 
@@ -578,14 +577,13 @@ function _begin()
 
   /* report */
 
-  suite.report = null;
+  suite.report = null; /* xxx : ? */
+  suite._appExitCode = _.process.exitCode( 0 ); /* xxx : ? */
   suite._reportBegin();
-  suite._appExitCode = _.process.exitCode( 0 );
 
   /* tracking */
 
   _.arrayAppendOnceStrictly( wTester.activeSuites, suite );
-
   _.assert( _.objectIs( suite.context ) );
   Object.preventExtensions( suite.context );
 
@@ -597,7 +595,7 @@ function _begin()
 
   if( suite.silencing )
   {
-    suite.consoleBar( 1 ); /* xxx */
+    suite.consoleBar( 1 );
   }
 
   /* */
@@ -605,7 +603,10 @@ function _begin()
   logger.verbosityPush( suite.verbosity );
   logger.begin({ verbosity : -2 });
 
-  let msg = [ 'Running test suite ( ' + suite.name + ' ) ..' ];
+  let msg =
+  [
+    'Running test suite ( ' + suite.name + ' ) ..',
+  ];
 
   logger.begin({ 'suite' : suite.name });
 
@@ -628,57 +629,64 @@ function _begin()
   /* process watcher */
 
   if( suite.processWatching )
-  {
-    suite._processWatcherMap = Object.create( null );
-    _.process.watcherEnable();
-    _.process.on( 'subprocessStartEnd', subprocessStartEnd );
-    _.process.on( 'subprocessTerminationEnd', subprocessTerminationEnd );
-    suite._processWatcher = { subprocessStartEnd, subprocessTerminationEnd };
-  }
+  suite.processWatchingBegin();
 
   /* */
 
   if( suite.onSuiteBegin )
   {
-    try
-    {
-      /*
-      xxx qqq : cover returned consequence
-      */
+    // try
+    // {
+/*
+qqq : cover returned from onSuiteBegin consequence
+*/
       ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
-    }
-    catch( err )
-    {
-      debugger;
-      let error = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
-      suite.exceptionReport({ err : error });
-      throw error;
-    }
+
+      ready.finally( ( err, arg ) =>
+      {
+        if( err )
+        {
+          err = _.err( err, `\nError in callback {- suite.onSuiteBegin -} of ${suite.qualifiedName}` );
+          throw err;
+        }
+        return arg;
+      });
+
+  //   }
+  //   catch( err )
+  //   {
+  //     debugger;
+  //     err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
+  //     suite.exceptionReport({ err : err });
+  //     throw err;
+  //   }
   }
 
   /* */
 
-  // if( _global_.process && suite.takingIntoAccount )
-  // {
-  //   suite._terminated_joined = _.routineJoin( suite, _terminated );
-  //   _global_.process.on( 'exit', suite._terminated_joined );
-  // }
-
   if( _.process && suite.takingIntoAccount )
   {
-    suite._terminated_joined = _.routineJoin( suite, _terminated );
+    suite._terminated_joined = _.routineJoin( suite, suite._terminated );
     _.process.on( 'exit', suite._terminated_joined );
   }
 
   ready.finally( ( err, arg ) =>
   {
+    _.assert( suite._state === 'beginning', `State of test suite should be "beginning", but it is "${suite._state}"` );
+    suite._state = 'begun';
+    if( err )
+    throw err;
+    return arg;
+  });
+
+  ready.finally( ( err, arg ) =>
+  {
     if( err )
     {
-      err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
-      suite.exceptionReport({ err });
+      suite.exceptionReport({ err : err, unbarring : 1 });
       throw err;
     }
-    if( !wTester._canContinue() )
+    if( !wTester._canContinue() ) /* xxx : check */
     {
       debugger;
       return false;
@@ -687,26 +695,6 @@ function _begin()
   });
 
   return ready;
-
-  /* */
-
-  function subprocessStartEnd( o )
-  {
-    if( o.sync )
-    return;
-    _.assert( !suite._processWatcherMap[ o.process.pid ] )
-    suite._processWatcherMap[ o.process.pid ] = o;
-  }
-
-  /* */
-
-  function subprocessTerminationEnd( o )
-  {
-    if( o.sync )
-    return;
-    _.assert( suite._processWatcherMap[ o.process.pid ] );
-    delete suite._processWatcherMap[ o.process.pid ];
-  }
 }
 
 //
@@ -730,105 +718,53 @@ function _end( err )
 {
   let suite = this;
   let logger = suite.logger;
-  let ready;
+  let ready = new _.Consequence().take( null );
 
   _.assert( arguments.length === 1 );
 
-  /* on suite end */
+  // console.log( '_end\n' + _.introspector.stack() );
 
-  if( suite.onSuiteEnd )
+  if( suite._state === 'ending' || suite._state === 'ended' )
+  return null;
+
+  ready.then( ( arg ) =>
   {
-    let timeLimitErrorCon = _.time.outError( suite.onSuiteEndTimeOut + wTester.settings.sanitareTime )
-    timeLimitErrorCon.tag = '_timeLimitErrorCon'
+    _.assert
+    (
+      suite._state === 'beginning' || suite._state === 'begun'
+      , `State of test suite should be "begun", but it is "${suite._state}"`
+    );
+    suite._state = 'ending';
+    return arg;
+  });
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+
+    /* process exit handler */
+
+    /*
+      it should go before onSuiteEnd to avoid second call of method _end by process exit event
+    */
 
     try
     {
-      ready = _.Consequence.From( suite.onSuiteEnd.call( suite.context, suite ) || null );
-    }
-    catch( err )
-    {
-      ready = new _.Consequence().error( err );
-    }
-
-    ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
-
-    ready.finally( ( _err, got ) =>
-    {
-      if( !timeLimitErrorCon.resourcesCount() )
-      timeLimitErrorCon.take( _.dont );
-
-      if( _err )
+      if( _.process && suite._terminated_joined && suite.takingIntoAccount )
       {
-        if( _err.reason === 'time out' )
-        _err = _._err
-        ({
-          args : [ _err || '', `\nTimeOut set to ${suite.onSuiteEndTimeOut} + ms` ],
-          usingSourceCode : 0,
-        });
-
-        err = _.err( `Error in suite.onSuiteEnd of ${suite.qualifiedName}\n`, _err );
-        suite.exceptionReport({ err });
+        if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
+        _.process.off( 'exit', suite._terminated_joined );
+        suite._terminated_joined = null;
       }
-
-      return null;
-    })
-  }
-
-  if( !ready )
-  ready = new _.Consequence().take( null );
-
-  /* process watcher */
-
-  if( suite.processWatching )
-  ready.finally( () =>
-  {
-    let r = _.Consequence().take( null );
-    let readies = [];
-
-    _.each( suite._processWatcherMap, ( descriptor, pid ) =>
+    }
+    catch( err3 )
     {
-      let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
-      if( suite.takingIntoAccount )
-      suite.consoleBar( 0 );
-      suite.exceptionReport({ err });
-      let con = _.process.kill({ pid : descriptor.process.pid, withChildren : 1, waitTimeOut : 5000 });
-      readies.push( con );
-    })
+      err = err || err3;
+    }
 
-    if( readies.length )
-    r.andTake( readies )
-
-    r.finally( ( err, got ) =>
-    {
-      if( err )
-      suite.exceptionReport({ err });
-
-      _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
-      _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
-
-      _.each( suite._processWatcherMap, ( descriptor, pid ) =>
-      {
-        if( _.process.isAlive( descriptor.process.pid ) )
-        {
-          let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
-          if( suite.takingIntoAccount )
-          suite.consoleBar( 0 );
-          suite.exceptionReport({ err });
-        }
-      })
-
-      return null;
-    })
-
-    return r;
-  })
-
-  ready.then( () =>
-  {
-    /* error */
+    /* no test routines */
 
     if( !err )
-    // if( suite.routine !== null && !suite.tests[ suite.routine ] )
     if( suite.routine !== null )
     if( suite.report.testRoutineFails + suite.report.testRoutinePasses === 0 )
     {
@@ -836,30 +772,77 @@ function _end( err )
       err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
     }
 
+    return arg || null;
+  });
+
+  /* on suite end */
+
+  if( suite.onSuiteEnd )
+  {
+    let timeLimitErrorCon = _.time.outError( suite.suiteEndTimeOut + wTester.settings.sanitareTime )
+    timeLimitErrorCon.tag = '_timeLimitErrorCon'
+
+    let originalReady = ready;
+    if( Config.debug && !originalReady.tag )
+    originalReady.tag = 'timeLimitErrorCon';
+    ready.then( () => suite.onSuiteEnd.call( suite.context, suite ) || null );
+
+    ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
+
+    ready.finally( ( err2, got ) =>
+    {
+      if( !timeLimitErrorCon.resourcesCount() )
+      timeLimitErrorCon.take( _.dont );
+
+      if( err2 )
+      {
+        if( err2.reason === 'time out' )
+        {
+          err2 = _._err
+          ({
+            args : [ err2 || '' , `\nTimeOut set to ${suite.suiteEndTimeOut} + ms` ],
+            usingSourceCode : 0,
+          });
+          originalReady.cancel();
+        }
+        err2 = _.err( `Error in callback {- suite.onSuiteEnd -} of ${suite.qualifiedName}\n`, err2 );
+        err = err2;
+        suite.exceptionReport({ err : err2 });
+      }
+
+      return null;
+    })
+  }
+
+  /* process watcher */
+
+  if( suite.processWatching )
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+    return suite.processWatchingEnd();
+  });
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+
+    /* state */
+
+    _.assert( suite._state === 'ending', `State of test suite should be "ending", but it is "${suite._state}"` );
+    suite._state = 'ended';
+
+    return arg || null;
+  });
+
+  /* log */
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+
     if( err )
-    {
-      try
-      {
-        if( suite.takingIntoAccount )
-        suite.consoleBar( 0 );
-        suite.exceptionReport({ err });
-      }
-      catch( err2 )
-      {
-        debugger;
-        console.error( err2 );
-        console.error( err.toString() + '\n' + err.stack );
-      }
-    }
-
-    /* process exit handler */
-
-    if( _.process && suite._terminated_joined && suite.takingIntoAccount )
-    {
-      if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
-      _.process.off( 'exit', suite._terminated_joined );
-      suite._terminated_joined = null;
-    }
+    suite.exceptionReport({ err : err, unbarring : 1 });
 
     /* report */
 
@@ -909,15 +892,31 @@ function _end( err )
     logger.end({ verbosity : -6 + suite.importanceOfDetails });
     logger.verbosityPop();
 
-    if( suite._appExitCode && !_.process.exitCode() )
-    suite._appExitCode = _.process.exitCode( suite._appExitCode );
-
     /* silencing */
 
     if( suite.silencing )
     suite.consoleBar( 0 );
 
-    /* */
+    return arg || null;
+  });
+
+  /* state */
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+
+    let ok = suite._reportIsPositive();
+
+    if( err2 )
+    suite.exceptionReport({ err : err2, unbarring : 1 });
+
+    /* exit code */
+
+    if( suite._appExitCode && !_.process.exitCode() )
+    suite._appExitCode = _.process.exitCode( suite._appExitCode );
+
+    /* considering */
 
     if( suite.takingIntoAccount )
     wTester._testSuiteConsider( ok );
@@ -927,14 +926,13 @@ function _end( err )
     _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
     _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
 
-    /* */
+    /* bunch */
 
     if( !wTester.activeSuites.length && !wTester.quedSuites.length )
     wTester._testingEndSoon();
 
     return suite;
-
-  })
+  });
 
   return ready;
 }
@@ -950,12 +948,7 @@ function _terminated()
     err = _.errBrief( 'Terminated by user' );
     _.errReason( err, 'terminated by user' );
   }
-  wTester.cancel
-  ({
-    err,
-    terminatedByUser : 1,
-    global : 1
-  });
+  wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
 }
 
 //
@@ -1160,7 +1153,7 @@ function _reportIsPositive()
   if( !report )
   return false;
 
-  suite._reportEnd();
+  // suite._reportEnd();
 
   return !!report.outcome;
 }
@@ -1294,7 +1287,23 @@ function exceptionReport( o )
   }
   catch( err2 )
   {
+    debugger;
+    console.error( err2 );
+    console.error( err.toString() + '\n' + err.stack );
   }
+
+  // try
+  // {
+  //   if( suite.takingIntoAccount )
+  //   suite.consoleBar( 0 );
+  //   suite.exceptionReport({ err : err });
+  // }
+  // catch( err2 )
+  // {
+  //   debugger;
+  //   console.error( err2 );
+  //   console.error( err.toString() + '\n' + err.stack );
+  // }
 
   return err;
 }
@@ -1342,6 +1351,95 @@ function decoratedAbsoluteNameGet()
   let suite = this;
   debugger;
   return wTester.textColor( suite.absoluteName, 'entity' );
+}
+
+// --
+// process watching
+// --
+
+function processWatchingBegin()
+{
+  let suite = this;
+
+  _.assert( !!suite.processWatching );
+  _.assert( suite._processWatcherMap === null );
+
+  suite._processWatcher = { subprocessStartEnd, subprocessTerminationEnd };
+  suite._processWatcherMap = Object.create( null );
+
+  _.process.watcherEnable();
+  _.process.on( 'subprocessStartEnd', subprocessStartEnd );
+  _.process.on( 'subprocessTerminationEnd', subprocessTerminationEnd );
+
+  return null;
+
+  function subprocessStartEnd( o )
+  {
+    if( o.sync )
+    return;
+    _.assert( !suite._processWatcherMap[ o.process.pid ] )
+    suite._processWatcherMap[ o.process.pid ] = o;
+  }
+  function subprocessTerminationEnd( o )
+  {
+    if( o.sync )
+    return;
+    _.assert( suite._processWatcherMap[ o.process.pid ] );
+    delete suite._processWatcherMap[ o.process.pid ];
+  }
+}
+
+//
+
+function processWatchingEnd()
+{
+  let suite = this;
+  let r = _.Consequence().take( null );
+  let readies = [];
+
+  _.assert( !!suite.processWatching );
+  _.assert( !!suite._processWatcherMap );
+
+  _.each( suite._processWatcherMap, ( descriptor, pid ) =>
+  {
+    if( !descriptor.process.connected )
+    if( !_.process.isAlive( descriptor.process.pid ) )
+    return delete suite._processWatcherMap[ pid ];
+
+    let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
+    // if( suite.takingIntoAccount )
+    // suite.consoleBar( 0 );
+    suite.exceptionReport({ err : err, unbarring : 1 });
+    let con = _.process.kill({ pid : descriptor.process.pid, withChildren : 1, waitTimeOut : 5000 });
+    readies.push( con );
+  })
+
+  if( readies.length )
+  r.andTake( readies )
+
+  r.finally( ( err, got ) =>
+  {
+    if( err )
+    suite.exceptionReport({ err : err, unbarring : 1 });
+
+    _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
+    _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
+
+    _.each( suite._processWatcherMap, ( descriptor, pid ) =>
+    {
+      if( _.process.isAlive( descriptor.process.pid ) )
+      {
+        let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
+        // if( suite.takingIntoAccount )
+        // suite.consoleBar( 0 );
+        suite.exceptionReport({ err : err, unbarring : 1 });
+      }
+    })
+
+    return null;
+  })
+
+  return r;
 }
 
 // --
@@ -1401,7 +1499,7 @@ let Composes =
   shoulding : 1,
 
   routineTimeOut : 5000,
-  onSuiteEndTimeOut : 15000,
+  suiteEndTimeOut : 15000,
   concurrent : 0,
   routine : null,
   platforms : null,
@@ -1420,7 +1518,6 @@ let Composes =
   usingSourceCode : 1,
   ignoringTesterOptions : 0,
 
-  // accuracyRange : null,
   accuracyExplicitly : null,
   accuracy : 1e-7,
   report : null,
@@ -1432,7 +1529,6 @@ let Composes =
 
   onRoutineBegin,
   onRoutineEnd,
-
   onSuiteBegin,
   onSuiteEnd,
 
@@ -1458,7 +1554,8 @@ let Restricts =
   _formed : 0,
   _appExitCode : null,
   _processWatcher : null,
-  _processWatcherMap : null
+  _processWatcherMap : null,
+  _state : null,
 }
 
 let Statics =
@@ -1496,13 +1593,6 @@ let Accessors =
   decoratedQualifiedName : { readOnly : 1 },
   absoluteName : { readOnly : 1 },
   decoratedAbsoluteName : { readOnly : 1 },
-
-  // logger : { set : function( src )
-  // {
-  //   if( src && !src.name )
-  //   debugger;
-  //   this[ Symbol.for( 'logger' ) ] = src;
-  // }},
 
 }
 
@@ -1542,6 +1632,8 @@ let Proto =
   _end,
   _terminated,
 
+  onRoutineBegin,
+  onRoutineEnd,
   onSuiteBegin,
   onSuiteEnd,
 
@@ -1571,6 +1663,11 @@ let Proto =
   decoratedQualifiedNameGet,
   absoluteNameGet,
   decoratedAbsoluteNameGet,
+
+  // process watching
+
+  processWatchingBegin,
+  processWatchingEnd,
 
   // relations
 
@@ -1609,3 +1706,4 @@ wTesterBasic[ Self.shortName ] = Self;
 _realGlobal_[ Self.name ] = _global_[ Self.name ] = Self;
 
 })();
+

@@ -1,14 +1,17 @@
-( function _WaitForCondition_test_s_( ) {
+( function _WaitForCondition_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -42,7 +45,7 @@ function onSuiteEnd()
 async function waitForCondition( test )
 {
   let self = this;
-  
+
   // Prepare path to electron app script( main.js )
   let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
@@ -56,7 +59,7 @@ async function waitForCondition( test )
   // Start the electron app
   await app.start()
   // Waint until page will be loaded( Text appears on page )
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   //Change text property after delay
   _.time.out( 1500, () =>
@@ -69,11 +72,11 @@ async function waitForCondition( test )
   })
 
   //Wait until text will be changed
-  await app.client.waitUntil( async () => 
+  await app.client.waitUntil( async () =>
   {
     return await app.client.$( 'p' ).getText() === 'Hello from test';
   })
-  
+
   //Check text property
   var got = await app.client.$( 'p' ).getText();
   test.identical( got, 'Hello from test' );
@@ -90,9 +93,9 @@ var Self =
 {
 
   name : 'Visual.Spectron.WaitForCondition',
-  
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

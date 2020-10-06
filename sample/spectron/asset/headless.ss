@@ -1,11 +1,11 @@
-let {app, BrowserWindow} = require('electron');
+let { app, BrowserWindow } = require( 'electron' );
 
 let mainWindow;
 
 app.on( 'window-all-closed', () =>
 {
-  if (process.platform != 'darwin')
-    app.quit();
+  if( process.platform !== 'darwin' )
+  app.quit();
 });
 
 app.on( 'ready', () =>
@@ -25,3 +25,4 @@ app.on( 'ready', () =>
     mainWindow = null;
   });
 });
+

@@ -1,14 +1,17 @@
-( function _Serverless_test_s_( ) {
+( function _Serverless_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -77,8 +80,8 @@ let Self =
   silencing : 1,
   enabled : 1,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

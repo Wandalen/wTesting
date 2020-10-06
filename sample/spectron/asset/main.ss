@@ -1,4 +1,4 @@
-let {app, BrowserWindow} = require('electron');
+let { app, BrowserWindow } = require( 'electron' );
 
 let mainWindow;
 
@@ -17,3 +17,4 @@ app.on( 'ready', () =>
     mainWindow = null;
   });
 });
+

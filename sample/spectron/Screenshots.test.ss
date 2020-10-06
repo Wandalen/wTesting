@@ -1,14 +1,17 @@
-( function _Screenshots_test_s_( ) {
+( function _Screenshots_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -54,8 +57,8 @@ async function screenshots( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+
   var screenshot = await app.browserWindow.capturePage();
   test.is( _.bufferNodeIs( screenshot ) )
 
@@ -72,11 +75,9 @@ let Self =
 {
 
   name : 'Visual.Spectron.Screenshots',
-  
-  
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

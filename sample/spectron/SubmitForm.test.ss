@@ -1,14 +1,17 @@
-( function _SubmitForm_test_s_( ) {
+( function _SubmitForm_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -80,9 +83,9 @@ var Self =
 {
 
   name : 'Visual.Spectron.SubmitForm',
-  
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

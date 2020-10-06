@@ -49,3 +49,4 @@ let Self =
 //
 
 Self = wTestSuite( Self );
+

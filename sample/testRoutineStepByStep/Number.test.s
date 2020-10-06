@@ -34,15 +34,15 @@ function numberIs( test )
   var got = num.numberIs( src );
   var expected = true;
   test.identical( got, expected );
-  
-  test.case = 'src is positive float without zero';
-  var src = .123;
+
+  test.case = 'src is positive float';
+  var src = 0.123;
   var got = num.numberIs( src );
   var expected = true;
   test.identical( got, expected );
 
-  test.case = 'src is negative float without zero';
-  var src = -.123;
+  test.case = 'src is negative float';
+  var src = -0.123;
   var got = num.numberIs( src );
   var expected = true;
   test.identical( got, expected );
@@ -161,3 +161,4 @@ let Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
+

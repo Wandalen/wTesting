@@ -1,6 +1,9 @@
-( function _Electron_test_s_( ) {
+( function _Electron_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
@@ -10,8 +13,8 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wFiles' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -50,7 +53,7 @@ function assetFor( test, asset )
   a.reflect = function reflect()
   {
 
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
 
     reflected.forEach( ( r ) =>
     {
@@ -100,7 +103,7 @@ function html( test )
 
   let ready = app.start()
 
-  .then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
+  .then( () => app.client.waitUntilTextExists( 'p', 'Hello world', 5000 ) )
 
   .then( () =>
   {
@@ -168,7 +171,7 @@ async function htmlAwait( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   test.case = 'Check element text'
   var got = await app.client.$( '.class1 p' ).getText();
@@ -234,7 +237,7 @@ function consequenceFromExperiment( test )
     return got;
   })
 
-  ready.then( () =>_.Consequence.From( app.stop() ) )
+  ready.then( () => _.Consequence.From( app.stop() ) )
 
   return ready;
 }
@@ -260,7 +263,7 @@ function chaining( test )
 
   let ready = app.start()
 
-  .then( () => app.client.waitUntilTextExists( 'p','Hello world', 5000 ) )
+  .then( () => app.client.waitUntilTextExists( 'p', 'Hello world', 5000 ) )
 
   //select command is chained with .getText
 
@@ -379,8 +382,8 @@ let Self =
   silencing : 0,
   enabled : 1,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

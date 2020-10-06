@@ -1,4 +1,5 @@
-( function _AsyncTimeout_test_s_( ) {
+( function _AsyncTimeout_test_s_()
+{
 
 'use strict';
 

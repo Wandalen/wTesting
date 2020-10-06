@@ -1640,7 +1640,7 @@ function shouldThrowErrorAsync( test )
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
     test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.time.out( 500, function()
@@ -1717,7 +1717,7 @@ function shouldThrowErrorAsync( test )
   return result;
 }
 
-shouldThrowErrorSync.timeOut = 30000;
+shouldThrowErrorAsync.timeOut = 30000;
 
 //
 
@@ -2020,7 +2020,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 2 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
       return _.time.out( 200, () =>
@@ -2051,7 +2051,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
       return _.time.out( 200, () =>
@@ -2319,7 +2319,7 @@ function shouldThrowErrorOfAnyKind( test )
     test.identical( counter.acheck.description, 'a' );
     test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
     test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+    test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
     _.time.out( 500, function()
@@ -2647,7 +2647,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 2 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
       return _.time.out( 200, () =>
@@ -2678,7 +2678,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
       return _.time.out( 200, () =>

@@ -1,4 +1,5 @@
-( function _Spectron_test_s_( ) {
+( function _Spectron_test_s_()
+{
 
 'use strict';
 
@@ -98,8 +99,7 @@ async function waitForVisibleInViewportThrowing( test )
 {
   let self = this;
   let appPath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
-  let app;
-  let err;
+  let app, err;
 
   try
   {

@@ -9,20 +9,23 @@ function routine1( test )
 
   test.open( 'string' );
 
-    test.case = 'trivial';
-    test.identical( Hello.join( 'a', 'b' ), 'ab' );
+  test.case = 'trivial';
+  test.identical( Hello.join( 'a', 'b' ), 'ab' );
 
-    test.case = 'empty';
-    test.identical( Hello.join( '', '' ), '' );
+  test.case = 'empty';
+  test.identical( Hello.join( '', '' ), '' );
 
   test.close( 'string' );
+
+  /* - */
+
   test.open( 'number' );
 
-    test.case = 'trivial';
-    test.identical( Hello.join( 1, 3 ), '13' );
+  test.case = 'trivial';
+  test.identical( Hello.join( 1, 3 ), '13' );
 
-    test.case = 'zeroes';
-    test.identical( Hello.join( 0, 0 ), '00' );
+  test.case = 'zeroes';
+  test.identical( Hello.join( 0, 0 ), '00' );
 
   test.close( 'number' );
 

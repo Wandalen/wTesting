@@ -21,15 +21,15 @@ function procedure1( test )
   {
     console.log( 'v2' )
     con1.take( 2 );
-    con1.give( ( err, got ) =>
+    con1.give( ( er, got ) =>
     {
       console.log( 'v3' )
     })
-    con1.give( ( err, got ) =>
+    con1.give( ( er, got ) =>
     {
       console.log( 'v4' )
     })
-    con1.give( ( err, got ) =>
+    con1.give( ( er, got ) =>
     {
       console.log( 'v5' )
     })

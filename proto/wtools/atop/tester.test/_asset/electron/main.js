@@ -1,4 +1,4 @@
-let {app, BrowserWindow} = require('electron');
+let { app, BrowserWindow } = require( 'electron' );
 
 let mainWindow;
 

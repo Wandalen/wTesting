@@ -1,4 +1,5 @@
-(function _IncludeTop_s_() {
+( function _IncludeTop_s_()
+{
 
 'use strict';
 
@@ -60,7 +61,7 @@ if( typeof module !== 'undefined' )
   if( _global_ === _realGlobal_ || _global_.wTools === _realGlobal_.wTools )
   {
     debugger;
-    throw 'Something wrong, global should not be real!';
+    throw Error( 'Something wrong, global should not be real!' );
   }
 
   if( Config.interpreter === 'browser' )

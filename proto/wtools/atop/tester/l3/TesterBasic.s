@@ -1,4 +1,5 @@
-( function _TesterBasic_s_( ) {
+( function _TesterBasic_s_()
+{
 
 'use strict';
 
@@ -294,12 +295,12 @@ function scenarioTest()
   }
   catch( err )
   {
-    err = _.errLogOnce( err );
+    let error = _.errLogOnce( err );
     _.process.exitCode( -1 );
     _.diagnosticBeep();
     _.diagnosticBeep();
     return;
-    throw err;
+    throw error; /* Dmytro : this code do nothing */
   }
 
 }
@@ -635,19 +636,22 @@ function cancel()
 
   /* */
 
-  if( o.terminatedByUser ) try
+  if( o.terminatedByUser )
   {
-    for( let t = 0 ; t < tester.activeSuites.length ; t++ )
+    try
     {
-      let suite = tester.activeSuites[ t ];
-      if( suite._state === 'beginning' || suite._state === 'begun' )
-      suite._end( o.err );
+      for( let t = 0 ; t < tester.activeSuites.length ; t++ )
+      {
+        let suite = tester.activeSuites[ t ];
+        if( suite._state === 'beginning' || suite._state === 'begun' )
+        suite._end( o.err );
+      }
     }
-  }
-  catch( err2 )
-  {
-    debugger;
-    logger.log( err2 );
+    catch( err2 )
+    {
+      debugger;
+      logger.log( err2 );
+    }
   }
 
   return o.err;
@@ -692,8 +696,8 @@ function _suitesRun( suites )
     }
     catch( err )
     {
-      err = _.errLogOnce( err );
-      return new _.Consequence().error( err );
+      let error = _.errLogOnce( err );
+      return new _.Consequence().error( error );
     }
 
   }
@@ -849,8 +853,8 @@ function _suitesIncludeAt( path )
     filePath : path,
     filter :
     {
-      ends : ends,
-      maskAll : maskAll,
+      ends,
+      maskAll,
       recursive : 2,
     }
   });
@@ -875,9 +879,9 @@ function _suitesIncludeAt( path )
     catch( err )
     {
       debugger;
-      err = _.err( err, '\nCant include', absolutePath );
-      _.errAttend( err );
-      tester._includeFailConsider( err );
+      let error = _.err( err, '\nCant include', absolutePath );
+      _.errAttend( error );
+      tester._includeFailConsider( error );
 
       if( tester.settings.coloring )
       logger.error( _.ct.fg( 'Cant include ' + absolutePath, 'red' ) );
@@ -885,7 +889,7 @@ function _suitesIncludeAt( path )
       logger.error( 'Cant include ' + absolutePath );
 
       if( logger.verbosity + tester.negativity >= 4 )
-      logger.error( _.err( err ) );
+      logger.error( _.err( error ) );
     }
 
   }
@@ -1255,9 +1259,13 @@ let ApplicationArgumentsMap =
   routine : `Testing of separate test routine. Accepts name of test routine or a glob.`,
   testRoutineTimeOut : `Limits the testing time for test routines. Accepts time in milliseconds. Default value is 5000ms.`,
   suiteEndTimeOut : `Limits the execution time for onSuiteEnd handler. Accepts time in milliseconds. Default value is 15000ms.`,
-  accuracy : `Sets the numeric deviation for the comparison of numerical values. Accepts numeric values of deviation. Default value is 1e-7.`,
-  sanitareTime : `Sets the delay between completing the test suite and running the next one. Accepts time in milliseconds. Default value is 2000ms.`,
-  negativity : `Restricts the console output of passed routines and increases output of failed test checks. Accepts a value from 0 to 9. Default value is 1.`,
+  accuracy :  `Sets the numeric deviation for the comparison of numerical values. `
+  + `Accepts numeric values of deviation. Default value is 1e-7.`,
+  sanitareTime : `Sets the delay between completing the test suite and running the next one. `
+  + `Accepts time in milliseconds. Default value is 2000ms.`,
+  negativity :
+  `Restricts the console output of passed routines and increases output of failed test checks. `
+  + `Accepts a value from 0 to 9. Default value is 1.`,
   silencing : `Enables hiding the console output from the test unit. Accepts 0 or 1. Default value is 0.`,
   shoulding : `Disables negative testing. Accepts 0 or 1. Default value is 0.`,
   fails : `Sets the number of errors received to interrupt the test. Accepts number of fails. By default is unlimited.`,
@@ -1302,7 +1310,7 @@ let SettingsNameMap =
   'coloring' : 'coloring',
   'timing' : 'timing',
   'rapidity' : 'rapidity',
-  'routine' : 'routine',
+  // 'routine' : 'routine',
   'suite' : 'suite',
 
   /**/
@@ -1399,7 +1407,7 @@ let Settings = _.mapExtend( null, SettingsOfSuite, SettingsOfTester );
 
 let Composes =
 {
-  verbosity : 3,
+  // verbosity : 3,
 
   settings : _.define.own( {} ),
   state : null,
@@ -1409,8 +1417,8 @@ let Composes =
 
   report : null,
 
-  sourceFileLocation : sourceFileLocation,
-  sourceFileStack : sourceFileStack,
+  sourceFileLocation,
+  sourceFileStack,
 
   _testingBeginTime : null,
   _isReal_ : 1,

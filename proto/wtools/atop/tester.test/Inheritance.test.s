@@ -1,4 +1,5 @@
-( function _Inheritance_test_s_( ) {
+( function _Inheritance_test_s_()
+{
 
 'use strict';
 
@@ -61,7 +62,7 @@ function inherit( test )
 
     tests :
     {
-      test1 : test1
+      test1,
     },
 
   };
@@ -81,15 +82,15 @@ function inherit( test )
     test.identical( tests, [ 'test1', 'test2' ] );
     test.identical( wTests[ childSuitName ].abstract, 0 );
 
-    test.identical( wTests[ childSuitName ].verbosity , wTests[ firstParentName ].verbosity );
-    test.identical( wTests[ childSuitName ].importanceOfDetails , wTests[ firstParentName ].importanceOfDetails );
-    test.identical( wTests[ childSuitName ].silencing , wTests[ firstParentName ].silencing );
-    test.identical( wTests[ childSuitName ].negativity , wTests[ secondParentName ].negativity );
+    test.identical( wTests[ childSuitName ].verbosity, wTests[ firstParentName ].verbosity );
+    test.identical( wTests[ childSuitName ].importanceOfDetails, wTests[ firstParentName ].importanceOfDetails );
+    test.identical( wTests[ childSuitName ].silencing, wTests[ firstParentName ].silencing );
+    test.identical( wTests[ childSuitName ].negativity, wTests[ secondParentName ].negativity );
     // test.identical( wTests[ childSuitName ].debug, wTests[ secondParentName ].debug );
 
-    test.identical( self.parentValue1 , 1 );
-    test.identical( self.parentValue2 , 2 );
-    test.identical( self.childValue , 3 );
+    test.identical( self.parentValue1, 1 );
+    test.identical( self.parentValue2, 2 );
+    test.identical( self.childValue, 3 );
 
     checksCount += test.checkCurrent()._checkIndex;
 
@@ -110,7 +111,7 @@ function inherit( test )
 
     tests :
     {
-      test2 : test2
+      test2,
     },
 
   };
@@ -140,7 +141,7 @@ function inherit( test )
 
   var suit = new wTestSuite( childSuit )
   .inherit( wTests[ firstParentName ] )
-  .inherit( wTests[ secondParentName] );
+  .inherit( wTests[ secondParentName ] );
 
   return suit.run()
   .finally( function()
@@ -164,7 +165,7 @@ var Proto =
 
   tests :
   {
-    inherit : inherit
+    inherit,
   },
 
 }

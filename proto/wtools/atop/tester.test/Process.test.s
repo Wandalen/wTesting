@@ -1,4 +1,5 @@
-( function _Process_test_s_( ) {
+( function _Process_test_s_()
+{
 
 'use strict';
 
@@ -64,7 +65,7 @@ function main( test )
 
   var result = suite.run();
 
-  result.finally( ( err, arg ) =>
+  result.finally( () =>
   {
     test.identical( suite.report.errorsArray.length, 3 );
 
@@ -100,7 +101,7 @@ let Self =
 
 }
 
-
+//
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )

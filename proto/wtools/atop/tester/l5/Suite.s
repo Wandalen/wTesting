@@ -120,7 +120,7 @@ function init( o )
         if( Self.InstancesMap[ inherit.name ] )
         {
           let inheritInited = Self.InstancesMap[ inherit.name ];
-          _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit : inherit } ) ) );
+          _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit } ) ) );
           inherits[ i ] = inheritInited;
         }
         else
@@ -214,14 +214,17 @@ function Froms( suites )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( suites ) );
 
-  for( let s in suites ) try
+  for( let s in suites )
   {
-    let suite = suites[ s ];
-    Self( suite );
-  }
-  catch( err )
-  {
-    throw _.errLog( 'Cant make test suite', s, '\n', err );
+    try
+    {
+      let suite = suites[ s ];
+      Self( suite );
+    }
+    catch( err )
+    {
+      throw _.errLog( 'Cant make test suite', s, '\n', err );
+    }
   }
 
   return this;
@@ -461,7 +464,7 @@ function _form()
     ({
       name : testRoutineName,
       routine : testRoutine,
-      suite : suite,
+      suite,
     });
 
     trd.form();
@@ -497,8 +500,7 @@ function _runSoon()
   let result = con
   .finally( () => _.time.ready() )
   .finally( () => suite._runNow() )
-  .split()
-  ;
+  .split();
 
   if( Config.debug )
   result.tag = suite.name;
@@ -519,7 +521,7 @@ function _runNow()
 
   /* */
 
-  let r = _.execStages( testRoutines,
+  let op =
   {
     manual : 1,
     onEachRoutine : handleRoutine,
@@ -527,7 +529,8 @@ function _runNow()
     onEnd : handleEnd,
     onRoutine : ( trd ) => trd.routine,
     delay : 10,
-  });
+  };
+  let r = _.execStages( testRoutines, op );
 
   return r;
 
@@ -603,10 +606,7 @@ function _begin()
   logger.verbosityPush( suite.verbosity );
   logger.begin({ verbosity : -2 });
 
-  let msg =
-  [
-    'Running test suite ( ' + suite.name + ' ) ..',
-  ];
+  let msg = [ 'Running test suite ( ' + suite.name + ' ) ..' ];
 
   logger.begin({ 'suite' : suite.name });
 
@@ -637,27 +637,27 @@ function _begin()
   {
     // try
     // {
-/*
-qqq : cover returned from onSuiteBegin consequence
-*/
-      ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
+    /*
+    qqq : cover returned from onSuiteBegin consequence
+    */
+    ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
 
-      ready.finally( ( err, arg ) =>
+    ready.finally( ( err, arg ) =>
+    {
+      if( err )
       {
-        if( err )
-        {
-          err = _.err( err, `\nError in callback {- suite.onSuiteBegin -} of ${suite.qualifiedName}` );
-          throw err;
-        }
-        return arg;
-      });
+        err = _.err( err, `\nError in callback {- suite.onSuiteBegin -} of ${suite.qualifiedName}` );
+        throw err;
+      }
+      return arg;
+    });
 
   //   }
   //   catch( err )
   //   {
   //     debugger;
   //     err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
-  //     suite.exceptionReport({ err : err });
+  //     suite.exceptionReport({ err });
   //     throw err;
   //   }
   }
@@ -683,7 +683,7 @@ qqq : cover returned from onSuiteBegin consequence
   {
     if( err )
     {
-      suite.exceptionReport({ err : err, unbarring : 1 });
+      suite.exceptionReport({ err, unbarring : 1 });
       throw err;
     }
     if( !wTester._canContinue() ) /* xxx : check */
@@ -800,7 +800,7 @@ function _end( err )
         {
           err2 = _._err
           ({
-            args : [ err2 || '' , `\nTimeOut set to ${suite.suiteEndTimeOut} + ms` ],
+            args : [ err2 || '', `\nTimeOut set to ${suite.suiteEndTimeOut} + ms` ],
             usingSourceCode : 0,
           });
           originalReady.cancel();
@@ -842,7 +842,7 @@ function _end( err )
     err = err || err2;
 
     if( err )
-    suite.exceptionReport({ err : err, unbarring : 1 });
+    suite.exceptionReport({ err, unbarring : 1 });
 
     /* report */
 
@@ -948,7 +948,7 @@ function _terminated()
     err = _.errBrief( 'Terminated by user' );
     _.errReason( err, 'terminated by user' );
   }
-  wTester.cancel({ err : err, terminatedByUser : 1, global : 1 });
+  wTester.cancel({ err, terminatedByUser : 1, global : 1 });
 }
 
 //
@@ -1296,7 +1296,7 @@ function exceptionReport( o )
   // {
   //   if( suite.takingIntoAccount )
   //   suite.consoleBar( 0 );
-  //   suite.exceptionReport({ err : err });
+  //   suite.exceptionReport({ err });
   // }
   // catch( err2 )
   // {
@@ -1409,7 +1409,7 @@ function processWatchingEnd()
     let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
     // if( suite.takingIntoAccount )
     // suite.consoleBar( 0 );
-    suite.exceptionReport({ err : err, unbarring : 1 });
+    suite.exceptionReport({ err, unbarring : 1 });
     let con = _.process.kill({ pid : descriptor.process.pid, withChildren : 1, waitTimeOut : 5000 });
     readies.push( con );
   })
@@ -1420,7 +1420,7 @@ function processWatchingEnd()
   r.finally( ( err, got ) =>
   {
     if( err )
-    suite.exceptionReport({ err : err, unbarring : 1 });
+    suite.exceptionReport({ err, unbarring : 1 });
 
     _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
     _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
@@ -1432,7 +1432,7 @@ function processWatchingEnd()
         let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
         // if( suite.takingIntoAccount )
         // suite.consoleBar( 0 );
-        suite.exceptionReport({ err : err, unbarring : 1 });
+        suite.exceptionReport({ err, unbarring : 1 });
       }
     })
 

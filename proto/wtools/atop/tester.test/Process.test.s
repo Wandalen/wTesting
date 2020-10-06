@@ -65,13 +65,13 @@ function main( test )
 
   var result = suite.run();
 
-  result.finally( () =>
+  result.finally( ( err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 3 );
 
     test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Time out!' ) );
     test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
-    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Process.test.s:48:15" had zombie process with pid' ), 1 );
+    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Process.test.s:49:15" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 

@@ -597,6 +597,7 @@ function _returnedVerification()
       unbarring : 1,
       err : err,
     });
+    debugger;
     throw err;
   }
 

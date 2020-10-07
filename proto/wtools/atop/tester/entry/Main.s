@@ -116,6 +116,8 @@ _realGlobal_.wTester.exec();
 - node Some.test.js . -- should give help
 - node Some.test.js .routines.list -- should list routines
 
+- implement trap. opened trap make test to fail. help to cover async callbacks which potentially could be not called
+
 */
 
 /*

@@ -1280,7 +1280,7 @@ function exceptionReport( o )
     logger.error( _.errOnce( err ) );
     logger.end({ verbosity : 9 });
 
-    if( o.unbarring )
+    if( o.unbarring && wasBarred )
     suite.consoleBarPreserving( wasBarred );
 
   }

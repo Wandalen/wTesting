@@ -2291,13 +2291,13 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
 
   a.appStartNonThrowing( o )
 
-  o.onStart.then( () =>
+  o.conStart.then( () =>
   {
     o.process.send( 'SIGINT' );
     return null;
   })
 
-  o.onTerminate.then( ( got ) =>
+  o.conTerminate.then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
 
@@ -2339,13 +2339,13 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
 
   a.appStartNonThrowing( o )
 
-  o.onStart.then( () =>
+  o.conStart.then( () =>
   {
     _.time.out( 10000, () => o.process.send( 'SIGINT' ) );
     return null;
   })
 
-  o.onTerminate.then( ( got ) => /* xxx qqq : then( ( got ) -> then( ( op ) or then( ( arg ) */
+  o.conTerminate.then( ( got ) => /* xxx qqq : then( ( got ) -> then( ( op ) or then( ( arg ) */
   {
     test.notIdentical( got.exitCode, 0 );
     test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );

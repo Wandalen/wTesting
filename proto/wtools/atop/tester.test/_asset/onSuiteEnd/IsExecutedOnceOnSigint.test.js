@@ -1,6 +1,6 @@
 
 require( 'wTesting' );
-let _ = _realGlobal_._testerGlobal_.wTools
+let _ = _realGlobal_._testerGlobal_.wTools;
 
 //
 
@@ -13,7 +13,7 @@ process.on( 'message', ( signal ) =>
 
 function routine1( test )
 {
-  test.identical( 1,1 );
+  test.identical( 1, 1 );
   return _.time.out( 10000 );
 }
 

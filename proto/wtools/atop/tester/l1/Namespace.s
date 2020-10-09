@@ -1,4 +1,5 @@
-( function _Namespace_s_() {
+( function _Namespace_s_()
+{
 
 'use strict';
 
@@ -62,7 +63,7 @@ function fileDrop( o )
       {
         e.target.files[ i ].path = path;
       })
-      Object.assign( event, { dataTransfer: { files: e.target.files } } )
+      Object.assign( event, { dataTransfer : { files : e.target.files } } );
       document.querySelector( targetSelector ).dispatchEvent( event );
     }
     document.body.appendChild( input );
@@ -246,12 +247,12 @@ function isVisibleWithinViewport( o )
   {
     o.page.timeouts
     ({
-      'script': o.timeOut
+      'script' : o.timeOut
     });
     return o.page.executeAsync( ( selector, cb ) =>
     {
       let element = document.querySelector( selector );
-      let observer = new IntersectionObserver( entries =>
+      let observer = new IntersectionObserver( ( entries ) =>
       {
         cb( entries[ 0 ].intersectionRatio > 0 );
         observer.disconnect();

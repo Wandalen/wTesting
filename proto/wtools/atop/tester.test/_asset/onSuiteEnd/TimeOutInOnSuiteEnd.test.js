@@ -1,12 +1,12 @@
 
 require( 'wTesting' );
-let _ = _realGlobal_._testerGlobal_.wTools
+let _ = _realGlobal_._testerGlobal_.wTools;
 
 //
 
 function routine1( test )
 {
-  test.identical( 1,1 );
+  test.identical( 1, 1 );
 }
 
 //

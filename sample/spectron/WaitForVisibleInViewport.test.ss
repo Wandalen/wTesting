@@ -1,14 +1,17 @@
-( function _WaitForVisibleInViewport_test_s_( ) {
+( function _WaitForVisibleInViewport_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -55,11 +58,11 @@ async function waitForVisibleInViewport( test )
 
   await app.start()
   await _.test.waitForVisibleInViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
+  ({
+    library : 'spectron',
+    page : app.client,
+    timeOut : 5000,
+    targetSelector : 'p'
   });
 
   var got = await app.client.$( 'p' ).isVisible();
@@ -81,8 +84,8 @@ var Self =
   silencing : 1,
   enabled : 1,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

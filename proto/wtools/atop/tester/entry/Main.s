@@ -1,4 +1,5 @@
-( function _Main_s_( ) {
+( function _Main_s_()
+{
 
 'use strict';
 

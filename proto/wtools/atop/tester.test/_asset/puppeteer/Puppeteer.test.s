@@ -1,4 +1,5 @@
-( function _Spectron_test_s_( ) {
+( function _Spectron_test_s_()
+{
 
 'use strict';
 
@@ -44,7 +45,7 @@ async function puppeteerTimeOut( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  await page.waitFor( () => document.querySelector( 'p' ).innerText === 'Hello worldd',{ timeout : 1000 } );
+  await page.waitFor( () => document.querySelector( 'p' ).innerText === 'Hello worldd', { timeout : 1000 } );
 
   await browser.close();
 
@@ -85,8 +86,7 @@ async function waitForVisibleInViewportThrowing( test )
 {
   let self = this;
   let indexHtmlPath = _.path.join( __dirname, 'index.html' );
-  let browser;
-  let err;
+  let browser, err;
 
   try
   {

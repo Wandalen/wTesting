@@ -1,14 +1,17 @@
-( function _WaitForDialog_test_s_( ) {
+( function _WaitForDialog_test_s_()
+{
 
 'use strict';
+
+let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -55,7 +58,7 @@ async function WaitForDialog( test )
 
   await app.start()
   await app.client.waitForVisible( 'p', 5000 )
-  await app.client.execute( () => alert( 'test message') );
+  await app.client.execute( () => alert( 'test message' ) );
   test.identical( await app.client.alertText(), 'test message' );
   await app.client.alertAccept();// alertAccept doesn't work for spectron
   await app.stop();
@@ -73,8 +76,8 @@ var Self =
   name : 'Visual.Spectron.WaitForDialog',
   silencing : 1,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
   enabled : 0,
 

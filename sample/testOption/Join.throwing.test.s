@@ -30,3 +30,4 @@ let Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
+

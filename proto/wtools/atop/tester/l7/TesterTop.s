@@ -1,4 +1,5 @@
-( function _TesterTop_s_( ) {
+( function _TesterTop_s_()
+{
 
 'use strict';
 
@@ -45,7 +46,7 @@ function exec()
   let appArgs = _.process.args({ keyValDelimeter : 0 });
   let ca = tester._commandsMake();
 
-  return ca.appArgsPerform({ appArgs : appArgs });
+  return ca.appArgsPerform({ appArgs });
 }
 
 //
@@ -96,7 +97,7 @@ function _commandsMake()
   let ca = tester.ca = _.CommandsAggregator
   ({
     basePath : fileProvider.path.current(),
-    commands : commands,
+    commands,
     commandPrefix : 'node ',
     logger : tester.logger,
     onSyntaxError : ( o ) => tester._commandHandleSyntaxError( o ),
@@ -235,7 +236,7 @@ let Restricts =
 
 let Statics =
 {
-  Exec : Exec,
+  Exec,
 }
 
 let Forbids =

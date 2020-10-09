@@ -1,6 +1,9 @@
-( function _Puppeteer_test_s_( ) {
+( function _Puppeteer_test_s_()
+{
 
 'use strict';
+
+let Puppeteer;
 
 if( typeof module !== 'undefined' )
 {
@@ -9,7 +12,7 @@ if( typeof module !== 'undefined' )
   require( '../tester/entry/Main.s' );
   _.include( 'wFiles' );
 
-  var Puppeteer = require( 'puppeteer' );
+  Puppeteer = require( 'puppeteer' );
 }
 
 let _global = _global_;
@@ -49,7 +52,7 @@ function assetFor( test, asset )
   a.reflect = function reflect()
   {
 
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp : onUp });
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
 
     reflected.forEach( ( r ) =>
     {
@@ -117,7 +120,7 @@ function html( test )
     return page.$eval( '.class1 a', ( e ) => e.href )
     .then( ( got ) =>
     {
-      test.is( _.strEnds( got,'index.html' ) );
+      test.is( _.strEnds( got, 'index.html' ) );
       return got;
     })
   })
@@ -184,7 +187,7 @@ async function htmlAwait( test )
 
   test.case = 'Check href attribute'
   var got = await page.$eval( '.class1 a', ( e ) => e.href );
-  test.is( _.strEnds( got,'index.html' ) );
+  test.is( _.strEnds( got, 'index.html' ) );
 
   test.case = 'Check input field value'
   var got = await page.$eval( '#input1', ( e ) => e.value )
@@ -424,8 +427,8 @@ let Self =
   silencing : 0,
   enabled : 1,
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

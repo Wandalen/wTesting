@@ -2930,7 +2930,7 @@ function _shouldDo( o )
     _.assert( arguments.length === 1, 'Expects single argument' );
     _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
     _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
-    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handler error should be routine' );
+    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
   }
   catch( err )
   {
@@ -2999,15 +2999,8 @@ function _shouldDo( o )
 
     if( o.expectingSyncError )
     {
-      try
-      {
-        if( o.args[ 1 ] )
-        o.args[ 1 ]( err, o );
-      }
-      catch( err2 )
-      {
-        console.error( err2 );
-      }
+      if( o.args[ 1 ] )
+      callbackRunOnResult( err );
     }
 
     _.errAttend( err );
@@ -3080,6 +3073,9 @@ function _shouldDo( o )
   {
     begin( 0 );
 
+    if( o.args[ 1 ] )
+    callbackRunOnResult( undefined, result );
+
     let msg = 'Error not thrown synchronously, but expected';
 
     trd._outcomeReportBoolean
@@ -3121,15 +3117,8 @@ function _shouldDo( o )
 
       if( _.errIs( err ) )
       {
-        try
-        {
-          if( o.args[ 1 ] )
-          o.args[ 1 ]( err, o );
-        }
-        catch( err2 )
-        {
-          console.error( err2 );
-        }
+        if( o.args[ 1 ] )
+        callbackRunOnResult( err );
         _.errAttend( err );
       }
 
@@ -3230,6 +3219,9 @@ function _shouldDo( o )
   function handleSyncResult()
   {
 
+    if( o.args[ 1 ] )
+    callbackRunOnResult( undefined, result );
+
     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
     {
       begin( 0 );
@@ -3325,6 +3317,9 @@ function _shouldDo( o )
     if( reported )
     return;
 
+    if( o.args[ 1 ] )
+    callbackRunOnResult( undefined, result );
+
     if( o.ignoringError )
     {
       begin( 1 );
@@ -3393,6 +3388,21 @@ function _shouldDo( o )
 
     }
 
+  }
+
+  /* */
+
+  function callbackRunOnResult( err, arg )
+  {
+    let onResult = o.args[ 1 ];
+    try
+    {
+      onResult( err, arg );
+    }
+    catch( err2 )
+    {
+      console.error( err2 );
+    }
   }
 
 }

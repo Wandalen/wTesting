@@ -3725,6 +3725,15 @@ function assetFor( a )
 
   if( a.reflect === null )
   a.reflect = reflect;
+
+  program_body.defaults =
+  {
+    routine : null,
+    locals : null,
+    dirPath : '.'
+  }
+  let program = _.routineFromPreAndBody( program_pre, program_body );
+
   if( a.program === null )
   a.program = program;
 
@@ -3875,13 +3884,6 @@ function assetFor( a )
     );
   }
 
-  program.defaults =
-  {
-    routine : null,
-    locals : null,
-    dirPath : '.'
-  }
-
   return a;
 
   /* */
@@ -3936,28 +3938,49 @@ function assetFor( a )
 
   /**/
 
-  function program( o )
+  function program_pre( routine, args )
   {
-    let a = this;
+    let o = args[ 0 ]
 
     if( !_.mapIs( o ) )
     o = { routine : o }
-
     _.routineOptions( program, o );
+    _.assert( _.strIs( o.dirPath ) );
+    _.assert( arguments.length === 2 );
+    _.assert( args.length === 1 );
+
+    return o;
+  }
+
+  /**/
+
+  function program_body( o )
+  {
+    let a = this;
 
     _.assert( _.strIs( o.dirPath ) );
+    _.assert( arguments.length === 1 );
 
-    let o2 = _.program.write
-    ({
-      routine : o.routine,
-      locals : o.locals,
-      tempPath : a.abs( '.' ),
-      dirPath : o.dirPath
-    });
+    if( !o.tempPath )
+    o.tempPath = a.abs( '.' );
 
-    logger.log( _.strLinesNumber( o2.sourceCode ) );
+    _.program.write( o );
 
-    return o2.programPath;
+    logger.log( _.strLinesNumber( o.sourceCode ) );
+
+    return o.programPath;
+
+    // let o2 = _.program.write
+    // ({
+    //   routine : o.routine,
+    //   locals : o.locals,
+    //   tempPath : a.abs( '.' ),
+    //   dirPath : o.dirPath
+    // });
+    //
+    // logger.log( _.strLinesNumber( o2.sourceCode ) );
+    //
+    // return o2.programPath;
   }
 
   /**/

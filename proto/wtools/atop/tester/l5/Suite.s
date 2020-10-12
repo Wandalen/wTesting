@@ -1410,7 +1410,12 @@ function processWatchingEnd()
     // if( suite.takingIntoAccount )
     // suite.consoleBar( 0 );
     suite.exceptionReport({ err, unbarring : 1 });
-    let con = _.process.kill({ pid : descriptor.process.pid, withChildren : 1, waitTimeOut : 5000 });
+    let con = _.process.terminate
+    ({
+      pid : descriptor.process.pid,
+      withChildren : 1,
+      timeOut : 5000,
+    });
     readies.push( con );
   })
 
@@ -1706,4 +1711,3 @@ wTesterBasic[ Self.shortName ] = Self;
 _realGlobal_[ Self.name ] = _global_[ Self.name ] = Self;
 
 })();
-

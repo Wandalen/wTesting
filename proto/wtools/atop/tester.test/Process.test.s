@@ -65,7 +65,7 @@ function main( test )
 
   var result = suite.run();
 
-  result.finally( ( err, got ) =>
+  result.finally( ( _err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 3 );
 

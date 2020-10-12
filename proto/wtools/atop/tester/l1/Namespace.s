@@ -249,12 +249,12 @@ function isVisibleWithinViewport( o )
     ({
       'script' : o.timeOut
     });
-    return o.page.executeAsync( ( selector, cb ) =>
+    return o.page.executeAsync( ( selector, onIntersectionRationCallback ) =>
     {
       let element = document.querySelector( selector );
       let observer = new IntersectionObserver( ( entries ) =>
       {
-        cb( entries[ 0 ].intersectionRatio > 0 );
+        onIntersectionRationCallback( entries[ 0 ].intersectionRatio > 0 );
         observer.disconnect();
       });
       observer.observe( element );

@@ -1410,13 +1410,11 @@ function processWatchingEnd()
     // if( suite.takingIntoAccount )
     // suite.consoleBar( 0 );
     suite.exceptionReport({ err, unbarring : 1 });
-    // let con = _.process.terminate /* Dmytro : routine `terminate` can't kill zombie process */
-    let con = _.process.kill
+    let con = _.process.terminate /* Dmytro : routine `terminate` can't kill zombie process */
     ({
       pid : descriptor.process.pid,
       withChildren : 1,
-      // timeOut : 5000,
-      waitTimeOut : 5000,
+      timeOut : 5000,
     });
     readies.push( con );
   })

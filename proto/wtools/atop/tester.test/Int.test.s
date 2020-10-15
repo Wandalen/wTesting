@@ -1966,7 +1966,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       return _.time.out( 400, () =>
       {
         test.identical( errStack.length, 1 );
-        test.is( _.consequenceIs( err ) );
+        test.is( _.consequenceIs( errStack[ 0 ] ) );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
@@ -2110,9 +2110,9 @@ function shouldThrowErrorAsyncWithCallback( test )
 
     test.is( test.logger.outputs.length > 0 );
     test.identical( counter.acheck.description, '' );
-    test.identical( counter.acheck.checkIndex, 14 );
-    test.identical( suite.report.testCheckPasses, 8 );
-    test.identical( suite.report.testCheckFails, 5 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 12 );
+    test.identical( suite.report.testCheckFails, 6 );
     test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
     if( err )

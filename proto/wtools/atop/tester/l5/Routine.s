@@ -3733,7 +3733,7 @@ function assetFor( a )
     locals : null,
     dirPath : '.'
   }
-  let program = _.routineFromPreAndBody( program_pre, program_body );
+  let program = _.routineUnite( program_head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3939,7 +3939,7 @@ function assetFor( a )
 
   /**/
 
-  function program_pre( routine, args )
+  function program_head( routine, args )
   {
     let o = args[ 0 ]
 

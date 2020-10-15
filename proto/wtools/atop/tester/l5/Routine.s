@@ -3462,7 +3462,7 @@ function _shouldDo_( o )
 
     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
     {
-      return false; /* Dmytro : why does false return? Can we throw error? */
+      return false;
     }
     else
     {
@@ -3545,7 +3545,7 @@ function _shouldDo_( o )
     msg = 'error thrown synchronously, what was not expected';
     outcomeReportBoolean( o.expectingSyncError, msg, err );
 
-    if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+    if( !o.expectingAsyncError && o.expectingSyncError )
     return err;
     else
     return con;
@@ -3588,7 +3588,7 @@ function _shouldDo_( o )
     if( reported || async )
     trd.checkRestore( acheck );
 
-    logger.begin({ verbosity : positive ? -5 : -5+trd.negativity });
+    logger.begin({ verbosity : positive ? -5 : -5 + trd.negativity });
     logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
@@ -3598,7 +3598,7 @@ function _shouldDo_( o )
   {
     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
-    logger.end({ verbosity : positive ? -5 : -5+trd.negativity });
+    logger.end({ verbosity : positive ? -5 : -5 + trd.negativity });
     logger.end({ connotation : positive ? 'positive' : 'negative' });
 
     if( reported || async )

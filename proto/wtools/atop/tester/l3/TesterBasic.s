@@ -620,9 +620,9 @@ function cancel()
   {
     /* xxx : dubious */
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
-    if( tester.activeRoutines[ t ]._returnCon )
+    if( tester.activeRoutines[ t ]._returnedCon )
     {
-      let con = tester.activeRoutines[ t ]._returnCon;
+      let con = tester.activeRoutines[ t ]._returnedCon;
       if( con.resourcesCount() === 0 )
       con.error( o.err );
       // con.cancel();

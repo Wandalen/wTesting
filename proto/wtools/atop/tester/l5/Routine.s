@@ -81,7 +81,7 @@ function form()
   let name = trd.decoratedAbsoluteName;
   let suite = trd.suite;
 
-  trd._returnCon = null;
+  trd._returnedCon = null;
   trd._fieldsForm();
   trd._accuracyChange();
   trd._reportBegin();
@@ -312,18 +312,19 @@ function _run()
 
   /* */
 
-  result = trd._returnCon = _.Consequence.From( result ); /* xxx : expose split instead */
+  trd._returnedData = result;
+  trd._originalReturneCon = _.Consequence.From( result );
+  trd._returnedCon = new _.Consequence(); /* yyy */
+  trd._originalReturneCon.then( trd._returnedCon );
+  // result = trd._returnedCon = _.Consequence.From( result ); /* xxx : expose split instead */
 
-  if( Config.debug && !result.tag )
-  result.tag = trd.name;
+  if( Config.debug && !trd._returnedCon.tag )
+  trd._returnedCon.tag = trd.name;
+  trd._returnedCon.andKeep( suite._inroutineCon );
+  trd._returnedCon = trd._returnedCon.orKeepingSplit([ trd._timeLimitErrorCon, wTester._cancelCon ]);
+  trd._returnedCon.finally( ( err, msg ) => trd._runFinally( err, msg ) );
 
-  result.andKeep( suite._inroutineCon );
-
-  result = result.orKeepingSplit([ trd._timeLimitErrorCon, wTester._cancelCon ]);
-
-  result.finally( ( err, msg ) => trd._runFinally( err, msg ) );
-
-  return result;
+  return trd._returnedCon;
 }
 
 //
@@ -553,8 +554,8 @@ function _runInterruptMaybe( throwing )
   {
     debugger; xxx
     /* qqq xxx */
-    // if( trd._returnCon )
-    // trd._returnCon.cancel();
+    // if( trd._returnedCon )
+    // trd._returnedCon.cancel();
     // let result = wTester.cancel({ global : 0 });
     let result = trd.cancel();
     if( throwing )
@@ -663,14 +664,14 @@ function cancel( o )
   let logger = trd.logger;
   o = _.routineOptions( cancel, arguments );
 
-  if( trd._returnCon )
-  if( trd._returnCon.resourcesCount() === 0 )
+  if( trd._returnedCon )
+  if( trd._returnedCon.resourcesCount() === 0 )
   {
     debugger;
     if( !o.err )
     o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
     logger.error( _.errOnce( o.err ) );
-    trd._returnCon.error( o.err );
+    trd._returnedCon.error( o.err );
   }
 
   return wTester.cancel( o );
@@ -4122,7 +4123,9 @@ let Restricts =
   _testRoutineBeginTime : null,
   _returned : null,
   _appExitCode : null,
-  _returnCon : null,
+  _returnedCon : null,
+  _originalReturneCon : null,
+  _returnedData : null,
   _timeLimitCon : null,
   _timeLimitErrorCon : null,
   report : null,

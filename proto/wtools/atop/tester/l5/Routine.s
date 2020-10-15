@@ -2931,18 +2931,17 @@ function _shouldDo( o )
     _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
     _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
     _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
+    if( o.args[ 1 ] )
+    {
+      _.sure( 1 <= o.args[ 1 ].length, 'Callback should have at least one argument.' );
+      _.sure( o.args[ 1 ].length <= 3, 'Callback should have less then three arguments.' );
+    }
   }
   catch( err )
   {
     let error = _.errRestack( err, 3 );
-    error = _._err
-    ({
-      args : [ error, '\nIllegal usage of should in', trd.absoluteName ],
-    });
-    error = trd.exceptionReport
-    ({
-      err : error,
-    });
+    error = _._err({ args : [ error, '\nIllegal usage of should in', trd.absoluteName ] });
+    error = trd.exceptionReport({ err : error });
 
     con.error( error );
     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
@@ -2997,10 +2996,12 @@ function _shouldDo( o )
 
     err = _.err( _err );
 
-    if( o.expectingSyncError )
+    if( o.args[ 1 ] )
     {
-      if( o.args[ 1 ] )
-      callbackRunOnResult( err );
+      if( o.expectingSyncError || ( o.expectingSyncError && o.expectingAsyncError ) )
+      callbackRunOnResult( err, result, true );
+      else if( o.expectingAsyncError )
+      callbackRunOnResult( err, result, false );
     }
 
     _.errAttend( err );
@@ -3074,7 +3075,7 @@ function _shouldDo( o )
     begin( 0 );
 
     if( o.args[ 1 ] )
-    callbackRunOnResult( undefined, result );
+    callbackRunOnResult( undefined, result, false );
 
     let msg = 'Error not thrown synchronously, but expected';
 
@@ -3107,11 +3108,15 @@ function _shouldDo( o )
 
       if( !o.ignoringError && !reported )
       {
+        if( o.args[ 1 ] && !err )
+        callbackRunOnResult( err, result, false );
         if( err && !o.expectingAsyncError )
         reportAsync();
       }
       else if( !err && o.expectingAsyncError )
       {
+        if( o.args[ 1 ] )
+        callbackRunOnResult( err, result, false );
         reportAsync();
       }
 
@@ -3219,12 +3224,12 @@ function _shouldDo( o )
   function handleSyncResult()
   {
 
-    if( o.args[ 1 ] )
-    callbackRunOnResult( undefined, result );
-
     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
     {
       begin( 0 );
+
+      if( o.args[ 1 ] )
+      callbackRunOnResult( undefined, result, false );
 
       let msg = 'Error not thrown asynchronously, but expected';
       if( o.expectingAsyncError )
@@ -3317,9 +3322,6 @@ function _shouldDo( o )
     if( reported )
     return;
 
-    if( o.args[ 1 ] )
-    callbackRunOnResult( undefined, result );
-
     if( o.ignoringError )
     {
       begin( 1 );
@@ -3392,12 +3394,12 @@ function _shouldDo( o )
 
   /* */
 
-  function callbackRunOnResult( err, arg )
+  function callbackRunOnResult( err, arg, ok )
   {
     let onResult = o.args[ 1 ];
     try
     {
-      onResult( err, arg );
+      onResult( err, arg, ok );
     }
     catch( err2 )
     {

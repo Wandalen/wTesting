@@ -2998,12 +2998,7 @@ function _shouldDo( o )
     err = _.err( _err );
 
     if( o.args[ 1 ] )
-    {
-      if( o.expectingSyncError || ( o.expectingSyncError && o.expectingAsyncError ) )
-      callbackRunOnResult( err, result, true );
-      else if( o.expectingAsyncError )
-      callbackRunOnResult( err, result, false );
-    }
+    callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
 
     _.errAttend( err );
 
@@ -3110,21 +3105,21 @@ function _shouldDo( o )
       if( !o.ignoringError && !reported )
       {
         if( o.args[ 1 ] && !err )
-        callbackRunOnResult( err, result, false );
+        callbackRunOnResult( err, result, !o.expectingAsyncError );
         if( err && !o.expectingAsyncError )
         reportAsync();
       }
       else if( !err && o.expectingAsyncError )
       {
         if( o.args[ 1 ] )
-        callbackRunOnResult( err, result, false );
+        callbackRunOnResult( err, result, !o.expectingAsyncError );
         reportAsync();
       }
 
       if( _.errIs( err ) )
       {
         if( o.args[ 1 ] )
-        callbackRunOnResult( err, result, true );
+        callbackRunOnResult( err, result, !!o.expectingAsyncError );
         _.errAttend( err );
       }
 
@@ -3224,13 +3219,12 @@ function _shouldDo( o )
 
   function handleSyncResult()
   {
+    if( o.args[ 1 ] )
+    callbackRunOnResult( err, result, !!( !o.expectingSyncError && !o.expectingAsyncError ) );
 
     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
     {
       begin( 0 );
-
-      if( o.args[ 1 ] )
-      callbackRunOnResult( undefined, result, false );
 
       let msg = 'Error not thrown asynchronously, but expected';
       if( o.expectingAsyncError )
@@ -3525,7 +3519,7 @@ function _shouldDo_( o )
   function handleSyncError()
   {
     if( callback )
-    callbackRunOnResult( err, result, !!o.expectingSyncError );
+    callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
 
     _.errAttend( err );
 

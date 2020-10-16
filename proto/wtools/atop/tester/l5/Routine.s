@@ -4792,15 +4792,15 @@ let Extension =
   _shouldDo_,
 
   shouldThrowErrorSync, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorSync_,
+  shouldThrowErrorSync_, /* !!! use instead of shouldThrowErrorSync */ /* Dmytro : refactored routine _shouldDo_ is used */
   shouldThrowErrorAsync, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorAsync_,
+  shouldThrowErrorAsync_, /* !!! use instead of shouldThrowErrorAsync */ /* Dmytro : refactored routine _shouldDo_ is used */
   shouldThrowErrorOfAnyKind, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorOfAnyKind_,
+  shouldThrowErrorOfAnyKind_, /* !!! use instead of shouldThrowErrorOfAnyKind */ /* Dmytro : refactored routine _shouldDo_ is used */
   mustNotThrowError,
-  mustNotThrowError_,
+  mustNotThrowError_, /* !!! use instead of mustNotThrowError */ /* Dmytro : refactored routine _shouldDo_ is used */
   returnsSingleResource,
-  returnsSingleResource_,
+  returnsSingleResource_, /* !!! use instead of returnsSingleResource */ /* Dmytro : refactored routine _shouldDo_ is used */
 
   // asset
 

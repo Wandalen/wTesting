@@ -798,7 +798,7 @@ function returnsSingleResource_( test )
 
   var suite = wTestSuite
   ({
-    name : 'Suite::ShouldMessageOnlyOnce',
+    name : 'Suite::ShouldMessageOnlyOnce_',
     tests : { r1 },
     override : this.notTakingIntoAccount,
     ignoringTesterOptions : 1,

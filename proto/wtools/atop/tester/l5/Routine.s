@@ -3124,7 +3124,7 @@ function _shouldDo( o )
       if( _.errIs( err ) )
       {
         if( o.args[ 1 ] )
-        callbackRunOnResult( err );
+        callbackRunOnResult( err, result, true );
         _.errAttend( err );
       }
 

@@ -3625,11 +3625,16 @@ function _shouldDo_( o )
       err = _err;
       arg = _arg;
 
+      let expected = !!o.expectingAsyncError;
+      if( !err )
+      expected = !expected;
+
       if( callback )
-      callbackRunOnResult( err, result, o.expectingAsyncError );
+      callbackRunOnResult( err, result, expected );
 
       if( !o.ignoringError && !reported )
       {
+
         if( err && !o.expectingAsyncError )
         reportAsync();
       }
@@ -3872,6 +3877,19 @@ function shouldThrowErrorAsync( routine )
 
 }
 
+function shouldThrowErrorAsync_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
+  ({
+    args : arguments,
+    expectingSyncError : 0,
+    expectingAsyncError : 1,
+  });
+
+}
+
 //
 
 /**
@@ -3902,6 +3920,19 @@ function shouldThrowErrorSync( routine )
   let trd = this;
 
   return trd._shouldDo
+  ({
+    args : arguments,
+    expectingSyncError : 1,
+    expectingAsyncError : 0,
+  });
+
+}
+
+function shouldThrowErrorSync_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
   ({
     args : arguments,
     expectingSyncError : 1,
@@ -3976,6 +4007,19 @@ function shouldThrowErrorOfAnyKind( routine )
 
 }
 
+function shouldThrowErrorOfAnyKind_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
+  ({
+    args : arguments,
+    expectingSyncError : 1,
+    expectingAsyncError : 1,
+  });
+
+}
+
 //
 
 /**
@@ -4017,6 +4061,20 @@ function mustNotThrowError( routine )
 
 }
 
+function mustNotThrowError_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
+  ({
+    args : arguments,
+    ignoringError : 0,
+    expectingSyncError : 0,
+    expectingAsyncError : 0,
+  });
+
+}
+
 //
 
 /**
@@ -4047,6 +4105,20 @@ function returnsSingleResource( routine )
   let trd = this;
 
   return trd._shouldDo
+  ({
+    args : arguments,
+    ignoringError : 1,
+    expectingSyncError : 0,
+    expectingAsyncError : 0,
+  });
+
+}
+
+function returnsSingleResource_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
   ({
     args : arguments,
     ignoringError : 1,
@@ -4720,10 +4792,15 @@ let Extension =
   _shouldDo_,
 
   shouldThrowErrorSync, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorSync_,
   shouldThrowErrorAsync, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorAsync_,
   shouldThrowErrorOfAnyKind, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorOfAnyKind_,
   mustNotThrowError,
+  mustNotThrowError_,
   returnsSingleResource,
+  returnsSingleResource_,
 
   // asset
 

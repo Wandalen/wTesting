@@ -1135,7 +1135,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'trivial, does not throw error, but expected';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1148,7 +1148,7 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack, [ undefined ] );
+    test.identical( errStack, [ undefined, false ] );
 
     _.time.out( 500, () =>
     {
@@ -1159,7 +1159,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'expected synchronous error';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1172,7 +1172,7 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
     counter.next();
 
-    test.identical( errStack[ 0 ], 'test' );
+    test.identical( errStack, [ 'test', true ] );
 
     _.time.out( 500, () =>
     {
@@ -1183,7 +1183,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'throw unexpected asynchronous error';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1202,8 +1202,9 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack.length, 1 );
+    test.identical( errStack.length, 2 );
     test.is( _.consequenceIs( errStack[ 0 ] ) );
+    test.identical( errStack[ 1 ], false );
 
     _.time.out( 500, () =>
     {
@@ -1214,7 +1215,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'single message, while synchronous error expected';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1230,8 +1231,9 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack.length, 1 );
+    test.identical( errStack.length, 2 );
     test.is( _.consequenceIs( errStack[ 0 ] ) );
+    test.identical( errStack[ 1 ], false );
 
     _.time.out( 500, () =>
     {
@@ -1242,7 +1244,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'not expected second message';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1267,8 +1269,9 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack.length, 1 );
+    test.identical( errStack.length, 2 );
     test.is( _.consequenceIs( errStack[ 0 ] ) );
+    test.identical( errStack[ 1 ], false );
 
     _.time.out( 500, function()
     {
@@ -1279,7 +1282,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'not expected second error';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1304,8 +1307,9 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack.length, 1 );
+    test.identical( errStack.length, 2 );
     test.is( _.consequenceIs( errStack[ 0 ] ) );
+    test.identical( errStack[ 1 ], false );
 
     _.time.out( 500, () =>
     {
@@ -1316,7 +1320,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'consequence with argument';
-    var onResult = ( err, arg ) => err ? errStack.push( err.message ) : errStack.push( arg );
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1329,8 +1333,9 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack.length, 1 );
+    test.identical( errStack.length, 2 );
     test.is( _.consequenceIs( errStack[ 0 ] ) );
+    test.identical( errStack[ 1 ], false );
 
     _.time.out( 500, () =>
     {
@@ -1341,6 +1346,7 @@ function shouldThrowErrorSyncWithCallback( test )
     /* */
 
     test.case = 'consequence with error';
+    var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
     var errStack = [];
 
     t.identical( 0, 0 );
@@ -1354,8 +1360,9 @@ function shouldThrowErrorSyncWithCallback( test )
     test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
     counter.next();
 
-    test.identical( errStack.length, 1 );
+    test.identical( errStack.length, 2 );
     test.is( _.consequenceIs( errStack[ 0 ] ) );
+    test.identical( errStack[ 1 ], false );
 
     _.time.out( 500, () =>
     {

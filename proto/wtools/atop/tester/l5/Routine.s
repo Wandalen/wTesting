@@ -321,7 +321,9 @@ function _run()
   if( Config.debug && !trd._returnedCon.tag )
   trd._returnedCon.tag = trd.name;
   trd._returnedCon.andKeep( suite._inroutineCon );
+  debugger;
   trd._returnedCon = trd._returnedCon.orKeepingSplit([ trd._timeLimitErrorCon, wTester._cancelCon ]);
+  debugger;
   trd._returnedCon.finally( ( err, msg ) => trd._runFinally( err, msg ) );
 
   return trd._returnedCon;

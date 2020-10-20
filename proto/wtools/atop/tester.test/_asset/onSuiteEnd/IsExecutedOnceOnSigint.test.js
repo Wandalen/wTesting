@@ -23,7 +23,7 @@ let onSuiteEndIsExecuted = false;
 
 function onSuiteEnd()
 {
-  console.log( 'Executing onSuiteEnd' ); debugger;
+  console.log( 'Executing onSuiteEnd' );
 
   if( onSuiteEndIsExecuted )
   throw _.err( 'onSuiteEnd is executed for second time!' );

@@ -514,7 +514,7 @@ function _runNow()
 {
   let suite = this;
   let testRoutines = suite.tests;
-  let logger = suite.logger || wTester.logger || _global_.logger;
+  let logger = suite.logger || wTester.logger || _global_.logger || _global_.console;
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0, 'Expects no arguments' );
@@ -581,7 +581,7 @@ function _begin()
   /* report */
 
   suite.report = null; /* xxx : ? */
-  suite._appExitCode = _.process.exitCode( 0 ); /* xxx : ? */
+  suite._exitCode = _.process.exitCode( 0 ); /* xxx : ? */
   suite._reportBegin();
 
   /* tracking */
@@ -635,7 +635,7 @@ function _begin()
 
   if( suite.onSuiteBegin )
   {
-    // try
+    // try // xxx : clean
     // {
     /*
     qqq : cover returned from onSuiteBegin consequence
@@ -704,6 +704,7 @@ function _endSoon( err, arg )
   let suite = this;
   let logger = suite.logger;
 
+  // console.log( '_endSoon', !!err, !!arg );
   suite._reportEnd();
 
   if( suite._reportIsPositive() )
@@ -913,8 +914,8 @@ function _end( err )
 
     /* exit code */
 
-    if( suite._appExitCode && !_.process.exitCode() )
-    suite._appExitCode = _.process.exitCode( suite._appExitCode );
+    if( suite._exitCode && !_.process.exitCode() )
+    suite._exitCode = _.process.exitCode( suite._exitCode );
 
     /* considering */
 
@@ -1259,7 +1260,7 @@ function _exceptionConsider( err )
 function exceptionReport( o )
 {
   let suite = this;
-  let logger = suite.logger || wTester.logger || _global_.logger;
+  let logger = suite.logger || wTester.logger || _global_.logger || _global_.console;
   let err;
 
   _.routineOptions( exceptionReport, o );
@@ -1557,7 +1558,7 @@ let Restricts =
   _hasConsoleInOutputs : 0,
   _testSuiteBeginTime : null,
   _formed : 0,
-  _appExitCode : null,
+  _exitCode : null,
   _processWatcher : null,
   _processWatcherMap : null,
   _state : null,

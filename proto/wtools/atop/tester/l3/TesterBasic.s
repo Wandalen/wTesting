@@ -189,7 +189,7 @@ function appArgsRead()
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.mapExtend( settings, tester.Settings );
 
-  let appArgs = _.process.args();
+  let appArgs = _.process.input();
   if( o.propertiesMap !== null )
   appArgs.propertiesMap = o.propertiesMap;
   if( o.subject !== null )
@@ -204,8 +204,7 @@ function appArgsRead()
     only : 1,
   }
 
-  // debugger;
-  _.process.argsReadTo( readOptions );
+  _.process.inputReadTo( readOptions );
   if( appArgs.err )
   throw _.errBrief( appArgs.err );
 

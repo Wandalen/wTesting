@@ -315,15 +315,15 @@ function _run()
   trd._returnedData = result;
   trd._originalReturneCon = _.Consequence.From( result );
   trd._returnedCon = new _.Consequence(); /* yyy */
-  trd._originalReturneCon.then( trd._returnedCon );
+  trd._originalReturneCon.finally( trd._returnedCon );
   // result = trd._returnedCon = _.Consequence.From( result ); /* xxx : expose split instead */
 
   if( Config.debug && !trd._returnedCon.tag )
   trd._returnedCon.tag = trd.name;
   trd._returnedCon.andKeep( suite._inroutineCon );
-  debugger;
+  // debugger;
   trd._returnedCon = trd._returnedCon.orKeepingSplit([ trd._timeLimitErrorCon, wTester._cancelCon ]);
-  debugger;
+  // debugger;
   trd._returnedCon.finally( ( err, msg ) => trd._runFinally( err, msg ) );
 
   return trd._returnedCon;
@@ -341,7 +341,7 @@ function _runBegin()
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
 
-  trd._appExitCode = _.process.exitCode( 0 );
+  trd._exitCode = _.process.exitCode( 0 );
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
@@ -400,8 +400,8 @@ function _runEnd()
   if( !trd._timeLimitErrorCon.resourcesCount() && !trd._timeLimitCon.resourcesCount() )
   trd._timeLimitErrorCon.take( _.dont );
 
-  if( trd._appExitCode && !_.process.exitCode )
-  trd._appExitCode = _.process.exitCode( trd._appExitCode );
+  if( trd._exitCode && !_.process.exitCode )
+  trd._exitCode = _.process.exitCode( trd._exitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
@@ -3786,8 +3786,8 @@ function assetFor( a )
     mode : 'fork',
   })
 
-  if( a.anotherStart === null )
-  a.anotherStart = a.process.starter
+  if( a.fork === null )
+  a.fork = a.process.starter
   ({
     currentPath : a.routinePath,
     outputCollecting : 1,
@@ -3797,8 +3797,8 @@ function assetFor( a )
     mode : 'fork',
   })
 
-  if( a.anotherStartNonThrowing === null )
-  a.anotherStartNonThrowing = a.process.starter
+  if( a.forkNonThrowing === null )
+  a.forkNonThrowing = a.process.starter
   ({
     currentPath : a.routinePath,
     outputCollecting : 1,
@@ -4017,8 +4017,8 @@ assetFor.defaults =
   shellNonThrowing : null,
   appStart : null,
   appStartNonThrowing : null,
-  anotherStart : null,
-  anotherStartThrowing : null,
+  fork : null,
+  forkNonThrowing : null,
   find : null,
   findAll : null,
   findDirs : null,
@@ -4112,7 +4112,7 @@ let Restricts =
 
   _testRoutineBeginTime : null,
   _returned : null,
-  _appExitCode : null,
+  _exitCode : null,
   _returnedCon : null,
   _originalReturneCon : null,
   _returnedData : null,
@@ -4267,7 +4267,7 @@ let Extension =
   // checker
 
   is, /* xxx : rename is -> true */
-  isNot, /* xxx : rename is -> false */
+  isNot, /* xxx : rename isNot -> false */
 
   identical,
   notIdentical,

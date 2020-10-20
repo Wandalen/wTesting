@@ -43,7 +43,7 @@ function exec()
 
   let logger = tester.logger;
   let fileProvider = tester.fileProvider;
-  let appArgs = _.process.args({ keyValDelimeter : 0 });
+  let appArgs = _.process.input({ keyValDelimeter : 0 });
   let ca = tester._commandsMake();
 
   return ca.appArgsPerform({ appArgs });
@@ -74,7 +74,7 @@ function _commandsMake()
   let tester = this;
   let logger = tester.logger;
   let fileProvider = tester.fileProvider;
-  let appArgs = _.process.args();
+  let appArgs = _.process.input();
 
   _.assert( _.instanceIs( tester ) );
   _.assert( arguments.length === 0, 'Expects no arguments' );
@@ -169,7 +169,7 @@ function commandImply( e )
   //
   // let request = tester.Resolver.strRequestParse( e.commandArgument );
   //
-  // _.process.argsReadTo
+  // _.process.inputReadTo
   // ({
   //   dst : tester,
   //   propertiesMap : request.map,

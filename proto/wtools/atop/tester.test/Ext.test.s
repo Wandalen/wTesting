@@ -16,18 +16,19 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 
+/* qqq : parametrixe delays */
+
 // --
 // context
 // --
 
 function onSuiteBegin()
 {
-  let self = this;
+  let context = this;
 
-  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
-  self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
-  self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
-  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../../wtools/Tools.s' ) );
+  context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  context.assetsOriginalPath = _.path.join( __dirname, '_asset' );
+  context.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
 
 }
 
@@ -35,19 +36,45 @@ function onSuiteBegin()
 
 function onSuiteEnd()
 {
-  let self = this;
-  _.assert( _.strHas( self.suiteTempPath, 'Tester' ) )
-  _.path.tempClose( self.suiteTempPath );
+  let context = this;
+  _.assert( _.strHas( context.suiteTempPath, 'Tester' ) )
+  _.path.tempClose( context.suiteTempPath );
 }
 
 //
 
 function assetFor( test, asset )
 {
-  let self = this;
+  let context = this;
   let a = test.assetFor( asset );
 
-  a.reflect = function reflect()
+  _.assert( _.routineIs( a.program.head ) );
+  _.assert( _.routineIs( a.program.body ) );
+
+  let oprogram = a.program;
+  program_body.defaults = a.program.defaults;
+  a.program = _.routineUnite( a.program.head, program_body );
+  a.reflect = reflect
+
+  return a;
+
+  /* */
+
+  function program_body( o )
+  {
+    let locals =
+    {
+      context : { t0 : context.t0, t1 : context.t1, t2 : context.t2, t3 : context.t3 },
+      toolsPath : _.module.resolve( 'wTools' ),
+    };
+    o.locals = o.locals || locals;
+    _.mapSupplement( o.locals, locals );
+    _.mapSupplement( o.locals.context, locals.context );
+    let programPath = a.path.nativize( oprogram.body.call( a, o ) );
+    return programPath;
+  }
+
+  function reflect()
   {
 
     let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
@@ -57,14 +84,12 @@ function assetFor( test, asset )
       if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
       return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
-      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( self.appJsPath )}'` );
-      read = _.strReplace( read, `'wTools'`, `'${_.strEscape( self.toolsPath )}'` );
+      read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( context.appJsPath )}'` );
+      read = _.strReplace( read, `'wTools'`, `'${_.strEscape( _.module.resolve( 'wTools' ) )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
 
   }
-
-  return a;
 
   function onUp( r )
   {
@@ -83,8 +108,8 @@ function assetFor( test, asset )
 
 function run( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'hello' );
+  let context = this;
+  let a = context.assetFor( test, 'hello' );
   // let a = test.assetFor( 'hello' );
 
   a.reflect();
@@ -340,8 +365,8 @@ function run( test )
 
 function runWithQuotedPath( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'hello' );
+  let context = this;
+  let a = context.assetFor( test, 'hello' );
 
   a.reflect();
   test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
@@ -501,8 +526,8 @@ function runWithQuotedPath( test )
 
 function checkFails( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
   test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
@@ -562,8 +587,8 @@ function checkFails( test )
 
 function double( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
   test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
@@ -601,8 +626,8 @@ function double( test )
 
 function optionSuite( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
 
@@ -687,8 +712,8 @@ function optionSuite( test )
 
 function optionAccuracyExplicitly( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
 
@@ -773,8 +798,8 @@ optionAccuracyExplicitly.description =
 
 function optionAccuracy( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
 
@@ -859,8 +884,8 @@ optionAccuracy.description =
 
 function optionRapidityAndSourceCode( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
 
@@ -929,8 +954,8 @@ optionRapidityAndSourceCode.description =
 
 function optionRapidity( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'optionRapidity' );
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
 
   a.reflect();
 
@@ -1491,8 +1516,8 @@ optionRapidity.timeOut = 900000;
 function optionRapidityTwice( test )
 {
 
-  let self = this;
-  let a = self.assetFor( test, 'optionRapidity' );
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
 
   a.reflect();
 
@@ -1542,8 +1567,8 @@ function optionRapidityTwice( test )
 
 function requireTesting( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
 
   a.reflect();
 
@@ -1577,8 +1602,8 @@ requireTesting.description =
 
 function noTestCheck( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */
@@ -1613,8 +1638,8 @@ function noTestCheck( test )
 
 function asyncTimeOut( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */
@@ -1649,8 +1674,8 @@ function asyncTimeOut( test )
 
 function checksAfterTimeOut( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */
@@ -1699,8 +1724,8 @@ function checksAfterTimeOut( test )
 
 function checksAfterTimeOutSilenced( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */
@@ -1748,8 +1773,8 @@ function checksAfterTimeOutSilenced( test )
 
 function timeOutExternalMessage( test )
 {
-  let self = this;
-  let a = self.assetFor( test );
+  let context = this;
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */
@@ -1846,8 +1871,8 @@ function timeLimitConsequence( test )
 
 function noTestSuite( test )
 {
-  let self = this;
-  let a = self.assetFor( test, false );
+  let context = this;
+  let a = context.assetFor( test, false );
 
   a.fileProvider.dirMake( a.routinePath );
 
@@ -2031,8 +2056,8 @@ function noTestSuite( test )
 
 function help( test )
 {
-  let self = this;
-  let a = self.assetFor( test, false );
+  let context = this;
+  let a = context.assetFor( test, false );
   a.fileProvider.dirMake( a.abs( '.' ) );
 
   /* */
@@ -2114,8 +2139,8 @@ function help( test )
 
 function version( test )
 {
-  let self = this;
-  let a = self.assetFor( test, false );
+  let context = this;
+  let a = context.assetFor( test, false );
   a.fileProvider.dirMake( a.abs( '.' ) );
 
   /* */
@@ -2136,8 +2161,8 @@ function version( test )
 
 function manualTermination( test )
 {
-  // let self = this;
-  // let a = self.assetFor( test, 'manualTermination' );
+  // let context = this;
+  // let a = context.assetFor( test, 'manualTermination' );
   //
   // /* - */
   //
@@ -2151,8 +2176,8 @@ function manualTermination( test )
   // };
   // a.shellNonThrowing( o )
 
-  let self = this;
-  let a = self.assetFor( test, 'manualTermination' );
+  let context = this;
+  let a = context.assetFor( test, 'manualTermination' );
   a.reflect();
 
   /* - */
@@ -2187,8 +2212,8 @@ manualTermination.description =
 
 function asyncErrorHandling( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'asyncErrorHandling' );
+  let context = this;
+  let a = context.assetFor( test, 'asyncErrorHandling' );
   a.reflect();
 
   /* - */
@@ -2223,8 +2248,8 @@ function asyncErrorHandling( test )
 
 function onSuiteEndReturnConsequence( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'onSuiteEnd' );
+  let context = this;
+  let a = context.assetFor( test, 'onSuiteEnd' );
   a.reflect();
 
   /* - */
@@ -2276,8 +2301,8 @@ function onSuiteEndReturnConsequence( test )
 
 function onSuiteEndIsExecutedOnceOnSigintEarly( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'onSuiteEnd' );
+  let context = this;
+  let a = context.assetFor( test, 'onSuiteEnd' );
   a.reflect();
 
   /* - */
@@ -2324,13 +2349,13 @@ onSuiteEndIsExecutedOnceOnSigintEarly.description =
 
 function onSuiteEndIsExecutedOnceOnSigintLate( test )
 {
-  let self = this;
-  let a = self.assetFor( test, 'onSuiteEnd' );
+  let context = this;
+  let a = context.assetFor( test, 'onSuiteEnd' );
   a.reflect();
 
   /* - */
 
-  let o = /* xxx : remove? */
+  let o =
   {
     execPath : `IsExecutedOnceOnSigint.test.js`,
     outputPiping : 1,
@@ -2345,7 +2370,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
     return null;
   })
 
-  o.conTerminate.then( ( got ) => /* xxx qqq : then( ( got ) -> then( ( op ) or then( ( arg ) */
+  o.conTerminate.then( ( got ) => /* qqq : then( ( got ) -> then( ( op ) or then( ( arg ) */
   {
     test.notIdentical( got.exitCode, 0 );
     test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );
@@ -2372,8 +2397,8 @@ onSuiteEndIsExecutedOnceOnSigintLate.description =
 
 function programOptionsRoutineDirPath( test )
 {
-  let self = this;
-  let a = self.assetFor( test, false );
+  let context = this;
+  let a = context.assetFor( test, false );
 
   test.case = 'default'
   var got = a.program( testApp1 );
@@ -2395,6 +2420,204 @@ function programOptionsRoutineDirPath( test )
   function testApp1(){}
 
 }
+
+//
+
+function termination( test )
+{
+  let context = this;
+  let a = context.assetFor( test, false );
+  let file1Path = a.abs( 'File1' );
+  let locals = { file1Path }
+  let programPath = a.program({ routine : program1, locals });
+  let ready = _.Consequence().take( null );
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'throwing:1 errAttend:1 terminationBegin:1';
+    let opts = { throwing : 1, errAttend : 1, terminationBegin : 1 };
+    a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
+      mode : 'fork',
+    })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'Waiting' ), 0 );
+      test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+      test.identical( _.strCount( op.output, 'ncaught' ), 0 );
+      test.identical( _.strCount( op.output, 'synchronous' ), 0 );
+      test.identical( _.strCount( op.output, 'Time' ), 0 );
+      test.identical( _.strCount( op.output, 'time' ), 0 );
+      test.identical( _.strCount( op.output, 'Error' ), 1 );
+      test.identical( _.strCount( op.output, 'error' ), 4 );
+      test.identical( _.strCount( op.output, 'Error1' ), 1 );
+      test.identical( _.strCount( op.output, 'Testing ...' ), 1 );
+      test.identical( _.strCount( op.output, '... failed' ), 3 );
+      test.identical( _.strCount( op.output, '... ok' ), 0 );
+      test.identical( _.strCount( op.output, 'throwing error' ), 2 );
+      test.notIdentical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'throwing:1 errAttend:1 terminationBegin:0';
+    let opts = { throwing : 1, errAttend : 1, terminationBegin : 0 };
+    a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
+      mode : 'fork',
+    })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'Waiting' ), 0 );
+      test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+      test.identical( _.strCount( op.output, 'ncaught' ), 0 );
+      test.identical( _.strCount( op.output, 'synchronous' ), 0 );
+      test.identical( _.strCount( op.output, 'Time' ), 0 );
+      test.identical( _.strCount( op.output, 'time' ), 0 );
+      test.identical( _.strCount( op.output, 'Error' ), 1 );
+      test.identical( _.strCount( op.output, 'error' ), 4 );
+      test.identical( _.strCount( op.output, 'Error1' ), 1 );
+      test.identical( _.strCount( op.output, 'Testing ...' ), 1 );
+      test.identical( _.strCount( op.output, '... failed' ), 3 );
+      test.identical( _.strCount( op.output, '... ok' ), 0 );
+      test.identical( _.strCount( op.output, 'throwing error' ), 2 );
+      test.notIdentical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'throwing:1 errAttend:0 terminationBegin:0';
+    let opts = { throwing : 1, errAttend : 0, terminationBegin : 0 };
+    a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
+      mode : 'fork',
+    })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'Waiting' ), 0 );
+      test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+      test.identical( _.strCount( op.output, 'ncaught' ), 0 );
+      test.identical( _.strCount( op.output, 'synchronous' ), 0 );
+      test.identical( _.strCount( op.output, 'Error' ), 3 );
+      test.identical( _.strCount( op.output, 'error' ), 7 );
+      test.identical( _.strCount( op.output, 'Error1' ), 3 );
+      test.identical( _.strCount( op.output, 'Testing ...' ), 1 );
+      test.identical( _.strCount( op.output, '... failed' ), 3 );
+      test.identical( _.strCount( op.output, '... ok' ), 0 );
+      test.identical( _.strCount( op.output, 'throwing error' ), 2 );
+      test.notIdentical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'throwing:0 errAttend:0 terminationBegin:0';
+    let opts = { throwing : 0, errAttend : 0, terminationBegin : 0 };
+    a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
+      mode : 'fork',
+    })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'Waiting' ), 0 );
+      test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+      test.identical( _.strCount( op.output, 'ncaught' ), 0 );
+      test.identical( _.strCount( op.output, 'synchronous' ), 0 );
+      test.identical( _.strCount( op.output, 'Error' ), 0 );
+      test.identical( _.strCount( op.output, 'error' ), 0 );
+      test.identical( _.strCount( op.output, 'Error1' ), 0 );
+      test.identical( _.strCount( op.output, 'Testing ...' ), 1 );
+      test.identical( _.strCount( op.output, '... failed' ), 0 );
+      test.identical( _.strCount( op.output, '... ok' ), 2 );
+      test.identical( _.strCount( op.output, 'throwing error' ), 0 );
+      test.identical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  return ready;
+
+  /* - */
+
+  function program1()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wTesting' );
+    _ = _realGlobal_._testerGlobal_.wTools;
+    let input = { map : _.fileProvider.fileRead({ filePath : _.path.join( __dirname, 'File1' ), encoding : 'json' }) };
+
+    function routine1( test )
+    {
+      test.is( true );
+      let con = new _.Consequence();
+      _.time.out( context.t1, () =>
+      {
+        if( input.map.throwing )
+        {
+          if( input.map.errAttend )
+          con.error( _.errAttend( 'Error1' ) );
+          else
+          con.error( 'Error1' );
+        }
+        else
+        {
+          con.take( null );
+        }
+      });
+      con.tap( ( err, arg ) =>
+      {
+        if( input.map.terminationBegin )
+        _.procedure.terminationBegin();
+      });
+      return con;
+    }
+
+    let Self =
+    {
+      name : 'xxx : make working without name',
+      routineTimeOut : context.t1*100,
+      tests :
+      {
+        routine1,
+      }
+    }
+
+    Self = wTestSuite( Self );
+    wTester.test( Self.name );
+    // wTestSuite( Self ).run(); // xxx : make it working
+  }
+
+}
+
+termination.description =
+`
+  - process terminates even if consequence recieves attended error
+  - process terminates even if consequence recieves unattended error
+  - process terminates even if consequence recieves argument
+`
 
 // --
 // suite
@@ -2419,7 +2642,10 @@ let Self =
     suiteTempPath : null,
     assetsOriginalPath : null,
     appJsPath : null,
-    toolsPath : null,
+
+    t1 : 100,
+    t2 : 1000,
+    t3 : 10000,
 
   },
 
@@ -2454,7 +2680,9 @@ let Self =
     onSuiteEndIsExecutedOnceOnSigintEarly,
     onSuiteEndIsExecutedOnceOnSigintLate,
 
-    programOptionsRoutineDirPath
+    programOptionsRoutineDirPath,
+
+    termination,
 
   }
 

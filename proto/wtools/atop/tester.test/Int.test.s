@@ -6682,12 +6682,12 @@ function testsGroupDiscrepancyError( test )
   {
     test.identical( visited, [ 'routine1' ] );
     var exp =
-    `Discrepancy!. Attempt to close not the topmost tests group. \n`
+    `Discrepancy!. Attempt to close not the topmost tests group.\n`
     + `Attempt to close "def2", but current tests group is "def". Might be you want to close it first.`;
     test.identical( String( testRoutine._groupError ), exp );
 
     var msg =
-    `Discrepancy!. Attempt to close not the topmost tests group. \n`
+    `Discrepancy!. Attempt to close not the topmost tests group.\n`
     + `Attempt to close "def2", but current tests group is "def". Might be you want to close it first.`;
     var exp =
     {
@@ -6705,7 +6705,7 @@ function testsGroupDiscrepancyError( test )
     test.identical( got, exp );
 
     var msg =
-    `Discrepancy!. Attempt to close not the topmost tests group. \n`
+    `Discrepancy!. Attempt to close not the topmost tests group.\n`
     + `Attempt to close "def2", but current tests group is "def". Might be you want to close it first.`;
     var exp =
     {

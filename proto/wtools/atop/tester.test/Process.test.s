@@ -81,6 +81,27 @@ function main( test )
   return result;
 }
 
+//
+
+function shouldThrowErrorSyncProcessHasErrorBefore( test )
+{
+  test.case = 'consequence of process starter has error';
+  var err = _.err( 'error' );
+  var ready = new _.Consequence().error( err );
+
+  var o =
+  {
+    execPath : 'unknown command',
+    ready,
+    sync : 1,
+    throwingExitCode : 0,
+  };
+
+  test.shouldThrowErrorSync( () => _.process.start( o ) );
+}
+
+shouldThrowErrorSyncProcessHasErrorBefore.experimental = 1;
+
 // --
 //
 // --
@@ -96,7 +117,8 @@ let Self =
 
   tests :
   {
-    main
+    main,
+    shouldThrowErrorSyncProcessHasErrorBefore,
   }
 
 }

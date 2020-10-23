@@ -673,6 +673,41 @@ function cancel( o )
     if( !o.err )
     o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
     logger.error( _.errOnce( o.err ) );
+
+    /* xxx : throw
+
+--------------- uncaught asynchronous error --------------->
+
+ = Message of error#2
+    Resource capacity of Consequence:: set to 1, but got more resources.
+    Consider resetting : "{ capacity : 0 }"
+
+ = Beautified calls stack
+    at Proxy.cancel (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:676:22)
+    at Proxy._runInterruptMaybe (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:572:22)
+    at Proxy._outcomeReport (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:1334:7)
+    at Proxy._outcomeReportCompare (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:1451:7)
+    at Proxy.notIdentical (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:1970:7)
+    at wConsequence.<anonymous> (/pro/builder/proto/wtools/abase/l0.test/Err.test.s:1617:14) *
+    at end3 (/pro/builder/proto/wtools/abase/l4_process/l3/Execution.s:793:15)
+    at end2 (/pro/builder/proto/wtools/abase/l4_process/l3/Execution.s:728:12)
+    at ChildProcess.handleClose (/pro/builder/proto/wtools/abase/l4_process/l3/Execution.s:861:7)
+    at ChildProcess.emit (events.js:214:15)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Socket.<anonymous> (internal/child_process.js:430:11)
+    at Socket.emit (events.js:209:13)
+    at Pipe.<anonymous> (net.js:588:12)
+
+ = Source code from /pro/builder/proto/wtools/atop/tester/l5/Routine.s:676:22
+      674 :     o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
+      675 :     logger.error( _.errOnce( o.err ) );
+    * 676 :     trd._returnedCon.error( o.err );
+      677 :   }
+      678 :
+
+    */
+
+    // if( !trd._returnedCon.resourcesCount() )
     trd._returnedCon.error( o.err );
   }
 

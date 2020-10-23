@@ -753,7 +753,7 @@ function _end( err )
     {
       if( _.process && suite._terminated_joined && suite.takingIntoAccount )
       {
-        if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
+        if( _.process.eventHasHandler( 'exit', suite._terminated_joined ) )
         _.process.off( 'exit', suite._terminated_joined );
         suite._terminated_joined = null;
       }

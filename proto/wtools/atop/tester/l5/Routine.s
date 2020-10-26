@@ -289,11 +289,26 @@ function _run()
 
   trd._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
   trd._timeLimitErrorCon = _.time.outError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
-  .tap( ( err, arg ) =>
+  .finally( ( err, arg ) =>
   {
-    trd._timeLimitCon.take( err || null );
-    if( err && !trd.reason )
-    trd.report.reason = 'timed limit';
+    if( err === _.dont )
+    {
+      trd._timeLimitCon.take( err );
+    }
+    else
+    {
+      _.errAttend( err );
+      err = trd._timeOutError();
+      if( err && !trd.report.reason )
+      trd.report.reason = err.reason;
+      _.errAttend( err );
+      _.assert( !err.logged );
+    }
+    if( !trd._returnedHow )
+    trd._returnedHow = 'test routine time out';
+    if( err )
+    throw err;
+    return arg;
   });
   trd._timeLimitErrorCon.tag = '_timeLimitErrorCon';
 
@@ -312,18 +327,42 @@ function _run()
 
   /* */
 
-  trd._returnedData = result;
-  trd._originalReturneCon = _.Consequence.From( result );
   trd._returnedCon = new _.Consequence(); /* yyy */
-  trd._originalReturneCon.finally( trd._returnedCon );
-  // result = trd._returnedCon = _.Consequence.From( result ); /* xxx : expose split instead */
-
   if( Config.debug && !trd._returnedCon.tag )
-  trd._returnedCon.tag = trd.name;
+  trd._returnedCon.tag = trd.name + '-1';
+
+  trd._returnedData = result;
+  trd._originalReturnedCon = _.Consequence.From( result );
+  trd._originalReturnedCon.give( ( err, arg ) =>
+  {
+    if( trd._returnedHow )
+    {
+      let err; debugger;
+      if( trd.report && trd.report.reason )
+      {
+        if( trd.report.reason === 'test routine time limit' )
+        return;
+        err = _.err( `${trd.qualifiedNameGet()} is ended because of ${trd.report.reason}, but it got several async returning` );
+      }
+      else
+      {
+        err = _.err( `${trd.qualifiedNameGet()} is ended, but it got several async returning` );
+      }
+      suite.exceptionReport
+      ({
+        err,
+      });
+    }
+    else
+    {
+      trd._returnedHow = 'normal';
+      trd._returnedCon.take( err, arg );
+      trd._originalReturnedCon.take( err, arg );
+    }
+  });
+
   trd._returnedCon.andKeep( suite._inroutineCon );
-  // debugger;
-  trd._returnedCon = trd._returnedCon.orKeepingSplit([ trd._timeLimitErrorCon, wTester._cancelCon ]);
-  // debugger;
+  trd._returnedCon.orKeeping([ trd._timeLimitErrorCon, wTester._cancelCon ]);
   trd._returnedCon.finally( ( err, msg ) => trd._runFinally( err, msg ) );
 
   return trd._returnedCon;
@@ -397,8 +436,13 @@ function _runEnd()
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
+  /* xxx */
   if( !trd._timeLimitErrorCon.resourcesCount() && !trd._timeLimitCon.resourcesCount() )
-  trd._timeLimitErrorCon.take( _.dont );
+  {
+    // console.log( `trd._timeLimitErrorCon` );
+    trd._timeLimitErrorCon.error( _.dont );
+  }
+  // trd._timeLimitErrorCon.take( _.dont );
 
   if( trd._exitCode && !_.process.exitCode )
   trd._exitCode = _.process.exitCode( trd._exitCode );
@@ -406,7 +450,6 @@ function _runEnd()
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
-
     debugger;
     let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
     suite.exceptionReport
@@ -414,7 +457,6 @@ function _runEnd()
       unbarring : 1,
       err,
     });
-
   }
 
   /* groups stack */
@@ -519,19 +561,27 @@ function _runFinally( err, arg )
   let trd = this;
   let suite = trd.suite;
 
-  _.assert( arguments.length === 2 );
-  _.assert( trd._returned === null );
+  // console.log( _runFinally, !!err, !!arg, !!trd._returned );
+  // _.assert( arguments.length === 2 );
+  // _.assert( trd._returned === null );
 
+  if( trd._returned === null )
   trd._returned = [ err, arg ];
+  else
+  trd.exceptionReport
+  ({
+    err : _.err( 'Returned several times!' ),
+  });
 
   if( err )
   {
-
+    // if( trd._returnedHow !== 'test routine time out' && err.reason !== 'time out' )
+    debugger;
     trd.exceptionReport
     ({
       err,
+      logging : trd._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
     });
-
     trd._runEnd();
     return err;
   }
@@ -554,11 +604,8 @@ function _runInterruptMaybe( throwing )
 
   if( !wTester._canContinue() )
   {
-    debugger; xxx
+    debugger;
     /* qqq xxx */
-    // if( trd._returnedCon )
-    // trd._returnedCon.cancel();
-    // let result = wTester.cancel({ global : 0 });
     let result = trd.cancel();
     if( throwing )
     throw result;
@@ -568,7 +615,7 @@ function _runInterruptMaybe( throwing )
   let elapsed = _.time.now() - trd._testRoutineBeginTime;
   if( elapsed > trd.timeOut && !debugged )
   {
-    logger.log( `Test routine ${trd.absoluteName} timed out, cant continue!` );
+    logger.error( `Test routine ${trd.absoluteName} timed out, cant continue!` );
     let result = trd.cancel({ err : trd._timeOutError() });
     if( throwing )
     throw result;
@@ -640,7 +687,7 @@ function _timeOutError( err )
   ({
     args : [ err || '', `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
-    reason : 'time limit',
+    reason : 'test routine time limit', /* xxx */
   });
 
   let o =
@@ -669,46 +716,12 @@ function cancel( o )
   if( trd._returnedCon )
   if( trd._returnedCon.resourcesCount() === 0 )
   {
-    debugger;
     if( !o.err )
     o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
     logger.error( _.errOnce( o.err ) );
-
-    /* xxx : throw
-
---------------- uncaught asynchronous error --------------->
-
- = Message of error#2
-    Resource capacity of Consequence:: set to 1, but got more resources.
-    Consider resetting : "{ capacity : 0 }"
-
- = Beautified calls stack
-    at Proxy.cancel (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:676:22)
-    at Proxy._runInterruptMaybe (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:572:22)
-    at Proxy._outcomeReport (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:1334:7)
-    at Proxy._outcomeReportCompare (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:1451:7)
-    at Proxy.notIdentical (/pro/builder/proto/wtools/atop/tester/l5/Routine.s:1970:7)
-    at wConsequence.<anonymous> (/pro/builder/proto/wtools/abase/l0.test/Err.test.s:1617:14) *
-    at end3 (/pro/builder/proto/wtools/abase/l4_process/l3/Execution.s:793:15)
-    at end2 (/pro/builder/proto/wtools/abase/l4_process/l3/Execution.s:728:12)
-    at ChildProcess.handleClose (/pro/builder/proto/wtools/abase/l4_process/l3/Execution.s:861:7)
-    at ChildProcess.emit (events.js:214:15)
-    at maybeClose (internal/child_process.js:1021:16)
-    at Socket.<anonymous> (internal/child_process.js:430:11)
-    at Socket.emit (events.js:209:13)
-    at Pipe.<anonymous> (net.js:588:12)
-
- = Source code from /pro/builder/proto/wtools/atop/tester/l5/Routine.s:676:22
-      674 :     o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
-      675 :     logger.error( _.errOnce( o.err ) );
-    * 676 :     trd._returnedCon.error( o.err );
-      677 :   }
-      678 :
-
-    */
-
-    // if( !trd._returnedCon.resourcesCount() )
-    trd._returnedCon.error( o.err );
+    trd._originalReturnedCon.error( o.err );
+    if( !trd._returnedHow )
+    trd._returnedHow = 'test routine time out';
   }
 
   return wTester.cancel( o );
@@ -906,7 +919,6 @@ function _groupChange( o )
     trd._testCheckPassesOfTestCase = 0;
     trd._testCheckFailsOfTestCase = 0;
     trd._descriptionChange({ src : '', touching : 0 });
-    // trd._caseClose();
   }
 
   /* */
@@ -914,21 +926,11 @@ function _groupChange( o )
   function open()
   {
     let group = trd.group;
-    // if( group !== o.group )
-    // trd._caseClose();
 
     _.assert( trd._groupOpenedWithCase === 0 );
 
     if( !o.group )
     return
-
-    // if( trd._groupsStack[ trd._groupsStack.length-1 ] === o.group )
-    // {
-    //   debugger;
-    //   let err = trd._groupingErorr( `Attempt to open group "${o.group}". Group with the same name is already opened. Might be you meant to close it?`, 4 );
-    //   err = trd.exceptionReport({ err });
-    //   return;
-    // }
 
     trd._groupsStack.push( o.group );
 
@@ -938,10 +940,6 @@ function _groupChange( o )
 
   function close()
   {
-    // let group = trd.group;
-    // if( group !== o.group )
-    // if(  )
-    // trd._caseClose();
     let group = trd.group;
 
     if( group !== o.group )
@@ -958,14 +956,12 @@ function _groupChange( o )
       trd._groupsStack.pop();
     }
 
-    // if( trd._groupIsCase )
     if( group )
     {
       if( trd._testCheckFailsOfTestCase > 0 || trd._testCheckPassesOfTestCase > 0 )
       trd._testCaseConsider( !trd._testCheckFailsOfTestCase );
     }
 
-    // trd._groupIsCase = 0;
   }
 
 }
@@ -975,7 +971,6 @@ _groupChange.defaults =
   group : null,
   open : null,
   touching : 9,
-  // closingCase : 0,
 }
 
 //
@@ -1303,17 +1298,14 @@ function _exceptionConsider( err )
 // report
 // --
 
-function _outcomeReport( o )
+function _outcomeLog( o )
 {
   let trd = this;
   let logger = trd.logger;
   let sourceCode = '';
 
-  _.routineOptions( _outcomeReport, o );
+  _.routineOptions( _outcomeLog, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
-
-  if( o.considering )
-  trd._testCheckConsider( o.outcome );
 
   /* */
 
@@ -1324,7 +1316,7 @@ function _outcomeReport( o )
 
   logger.begin({ verbosity : o.verbosity });
 
-  if( o.considering )
+  // if( o.considering )
   {
     logger.begin({ 'check' : trd.description || trd._checkIndex });
     logger.begin({ 'checkIndex' : trd._checkIndex });
@@ -1356,17 +1348,14 @@ function _outcomeReport( o )
   .end( 'message' );
 
   logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-  if( logger.verbosityReserve() > 1 )
+  if( logger.verbosityReserve() > 1 ) /* xxx */
   logger.log();
 
   logger.end({ verbosity : o.verbosity+verbosity });
 
-  if( o.considering )
+  // if( o.considering )
   logger.end( 'check', 'checkIndex' );
   logger.end({ verbosity : o.verbosity });
-
-  if( o.interruptible )
-  trd._runInterruptMaybe( 1 );
 
   /* */
 
@@ -1375,7 +1364,7 @@ function _outcomeReport( o )
     let code;
     if( trd.usingSourceCode && o.usingSourceCode )
     {
-      let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 4 });
+      let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 5 });
       let _code = _.introspector.code
       ({
         location : _location,
@@ -1396,7 +1385,7 @@ function _outcomeReport( o )
 
 }
 
-_outcomeReport.defaults =
+_outcomeLog.defaults =
 {
   outcome : null,
   msg : null,
@@ -1404,8 +1393,42 @@ _outcomeReport.defaults =
   stack : null,
   usingSourceCode : 1,
   selectMode : 'end',
-  considering : 1,
   verbosity : -4,
+}
+
+//
+
+function _outcomeReport( o )
+{
+  let trd = this;
+  let logger = trd.logger;
+  let sourceCode = '';
+
+  _.routineOptions( _outcomeReport, o );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( o.considering )
+  trd._testCheckConsider( o.outcome );
+
+  if( o.logging )
+  trd._outcomeLog( _.mapOnly( o, trd._outcomeLog.defaults ) );
+
+  if( o.interruptible )
+  trd._runInterruptMaybe( 1 );
+}
+
+_outcomeReport.defaults =
+{
+  ... _outcomeLog.defaults,
+  // outcome : null,
+  // msg : null,
+  // details : null,
+  // stack : null,
+  // usingSourceCode : 1,
+  // selectMode : 'end',
+  // verbosity : -4,
+  considering : 1,
+  logging : 1,
   interruptible : 0,
 }
 
@@ -1587,6 +1610,7 @@ function exceptionReport( o )
       stack : o.stack,
       usingSourceCode : o.usingSourceCode,
       considering : o.considering,
+      logging : o.logging
     });
 
     if( o.unbarring )
@@ -1610,6 +1634,7 @@ exceptionReport.defaults =
   stack : null,
   usingSourceCode : 0,
   considering : 1,
+  logging : 1,
   outcome : 0,
   unbarring : 0,
   sync : null,
@@ -3214,7 +3239,8 @@ function _shouldDo( o )
 
     result.finally( gotSecondResource );
 
-    let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
+    // let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
+    let r = _.Consequence.Or( result, trd._timeLimitCon, wTester._cancelCon );
     r.finally( ( err, arg ) =>
     {
       if( result.competitorHas( gotSecondResource ) )
@@ -4505,18 +4531,6 @@ function assetFor( a )
     logger.log( _.strLinesNumber( o.sourceCode ) );
 
     return o.programPath;
-
-    // let o2 = _.program.write
-    // ({
-    //   routine : o.routine,
-    //   locals : o.locals,
-    //   tempPath : a.abs( '.' ),
-    //   dirPath : o.dirPath
-    // });
-    //
-    // logger.log( _.strLinesNumber( o2.sourceCode ) );
-    //
-    // return o2.programPath;
   }
 
   /**/
@@ -4647,7 +4661,8 @@ let Restricts =
   _returned : null,
   _exitCode : null,
   _returnedCon : null,
-  _originalReturneCon : null,
+  _originalReturnedCon : null,
+  _returnedHow : 0,
   _returnedData : null,
   _timeLimitCon : null,
   _timeLimitErrorCon : null,
@@ -4787,6 +4802,7 @@ let Extension =
 
   // report
 
+  _outcomeLog,
   _outcomeReport,
   _outcomeReportBoolean,
   _outcomeReportCompare,

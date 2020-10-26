@@ -212,45 +212,41 @@ module:
           - >-
             ../proto/wtools/atop/tester.test/_asset/asyncErrorHandling/asyncErrorHandling.test.js
           - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut
-          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut/package.json
           - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOutCheck
+          - >-
+            ../proto/wtools/atop/tester.test/_asset/asyncTimeOutCheck/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOutSingle
+          - >-
+            ../proto/wtools/atop/tester.test/_asset/asyncTimeOutSingle/Suite.test.js
+          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOutTwo
+          - >-
+            ../proto/wtools/atop/tester.test/_asset/asyncTimeOutTwo/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/checkFails
           - ../proto/wtools/atop/tester.test/_asset/checkFails/Hello.js
           - ../proto/wtools/atop/tester.test/_asset/checkFails/Hello.test.js
-          - ../proto/wtools/atop/tester.test/_asset/checkFails/package.json
           - ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOut
-          - >-
-            ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOut/package.json
           - >-
             ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOut/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOutSilenced
-          - >-
-            ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/package.json
           - >-
             ../proto/wtools/atop/tester.test/_asset/checksAfterTimeOutSilenced/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/double
           - ../proto/wtools/atop/tester.test/_asset/double/Hello.js
           - ../proto/wtools/atop/tester.test/_asset/double/Hello.test.js
-          - ../proto/wtools/atop/tester.test/_asset/double/package.json
           - ../proto/wtools/atop/tester.test/_asset/electron
           - ../proto/wtools/atop/tester.test/_asset/electron/index.html
           - ../proto/wtools/atop/tester.test/_asset/electron/main.js
           - ../proto/wtools/atop/tester.test/_asset/grouping
           - ../proto/wtools/atop/tester.test/_asset/grouping/Grouping.test.js
           - ../proto/wtools/atop/tester.test/_asset/grouping/Hello.js
-          - ../proto/wtools/atop/tester.test/_asset/grouping/package-lock.json
-          - ../proto/wtools/atop/tester.test/_asset/grouping/package.json
           - ../proto/wtools/atop/tester.test/_asset/hello
           - ../proto/wtools/atop/tester.test/_asset/hello/Hello.js
           - ../proto/wtools/atop/tester.test/_asset/hello/Hello.test.js
-          - ../proto/wtools/atop/tester.test/_asset/hello/package.json
           - ../proto/wtools/atop/tester.test/_asset/manualTermination
           - >-
             ../proto/wtools/atop/tester.test/_asset/manualTermination/manualTermination.test.js
-          - >-
-            ../proto/wtools/atop/tester.test/_asset/manualTermination/package.json
           - ../proto/wtools/atop/tester.test/_asset/noTestCheck
-          - ../proto/wtools/atop/tester.test/_asset/noTestCheck/package.json
           - ../proto/wtools/atop/tester.test/_asset/noTestCheck/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/onSuiteEnd
           - >-
@@ -278,7 +274,6 @@ module:
           - ../proto/wtools/atop/tester.test/_asset/optionSuite/A1.test.js
           - ../proto/wtools/atop/tester.test/_asset/optionSuite/A2.test.js
           - ../proto/wtools/atop/tester.test/_asset/optionSuite/B1.test.js
-          - ../proto/wtools/atop/tester.test/_asset/optionSuite/package.json
           - ../proto/wtools/atop/tester.test/_asset/puppeteer
           - ../proto/wtools/atop/tester.test/_asset/puppeteer/index.html
           - ../proto/wtools/atop/tester.test/_asset/puppeteer/Puppeteer.test.s
@@ -289,8 +284,6 @@ module:
           - ../proto/wtools/atop/tester.test/_asset/spectron/main.ss
           - ../proto/wtools/atop/tester.test/_asset/spectron/Spectron.test.s
           - ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage
-          - >-
-            ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage/package.json
           - >-
             ../proto/wtools/atop/tester.test/_asset/timeOutExternalMessage/Suite.test.js
     submodule:

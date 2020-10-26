@@ -1634,9 +1634,11 @@ function noTestCheck( test )
   return a.ready;
 }
 
-//
+// --
+// time out
+// --
 
-function asyncTimeOut( test )
+function asyncTimeOutSingle( test )
 {
   let context = this;
   let a = context.assetFor( test );
@@ -1647,20 +1649,32 @@ function asyncTimeOut( test )
   a.ready
   .then( () =>
   {
-    test.case = 'tst .run **'
+    test.case = 'Suite.test.js'
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `.run **` })
+  a.appStartNonThrowing({ execPath : `.run Suite.test.js` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
-    test.identical( _.strCount( got.output, 'failed, time out' ), 1 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
+    test.identical( _.strCount( got.output, 'failed, time out' ), 0 );
+    test.identical( _.strCount( got.output, 'failed, test routine time limit' ), 0 );
+    test.identical( _.strCount( got.output, 'failed, time limit' ), 0 );
     test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
-    test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
+    test.identical( _.strCount( got.output, 'unchaught' ), 0 );
+    test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
+    test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'routine1.' ), 1 );
+    test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
+    test.identical( _.strCount( got.output, 'routine1.2' ), 0 );
+    test.identical( _.strCount( got.output, 'routine1.3' ), 0 );
 
     return null;
   })
@@ -1669,6 +1683,149 @@ function asyncTimeOut( test )
 
   return a.ready;
 }
+
+//
+
+function asyncTimeOutTwo( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'Suite.test.js'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run Suite.test.js` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'failed, time out' ), 0 );
+    test.identical( _.strCount( got.output, 'failed, test routine time limit' ), 0 );
+    test.identical( _.strCount( got.output, 'failed, time limit' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test checks 1 / 2' ), 2 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
+    test.identical( _.strCount( got.output, 'unchaught' ), 0 );
+    test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
+    test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'TestRoutine::routine1 is ended' ), 0 );
+    test.identical( _.strCount( got.output, 'time limit' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit )' ), 1 );
+    test.identical( _.strCount( got.output, 'is ended because of time limit' ), 0 );
+    test.identical( _.strCount( got.output, 'several' ), 1 );
+    test.identical( _.strCount( got.output, 'several async returning' ), 0 );
+    test.identical( _.strCount( got.output, 'Launching several' ), 1 );
+    test.identical( _.strCount( got.output, '= Message of error' ), 0 );
+    test.identical( _.strCount( got.output, 'stack' ), 0 );
+    test.identical( _.strCount( got.output, 'Stack' ), 0 );
+
+    test.identical( _.strCount( got.output, 'routine1.' ), 3 );
+    test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
+    test.identical( _.strCount( got.output, 'routine1.2' ), 1 );
+    test.identical( _.strCount( got.output, 'routine1.3' ), 1 );
+
+    test.identical( _.strCount( got.output, 'routine2.' ), 3 );
+    test.identical( _.strCount( got.output, 'routine2.1' ), 1 );
+    test.identical( _.strCount( got.output, 'routine2.2' ), 1 );
+    test.identical( _.strCount( got.output, 'routine2.3' ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function asyncTimeOutCheck( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run Suite.test.js'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run Suite.test.js` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
+    test.identical( _.strCount( got.output, 'failed, time out' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed test checks 2 / 3' ), 2 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit )' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Test check ( TestSuite::AsyncTimeOutAsset / TestRoutine::routine1 /  < description1 # 2 ) ... failed, test routine time limit' ), 1 );
+    test.identical( _.strCount( got.output, 'Test check ( TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'failed, test routine time limit' ), 1 );
+    test.identical( _.strCount( got.output, 'failed, time limit' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
+    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
+    test.identical( _.strCount( got.output, 'unchaught' ), 0 );
+    test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
+    test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
+
+    test.identical( _.strCount( got.output, 'routine1.' ), 2 );
+    test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
+    test.identical( _.strCount( got.output, 'routine1.2' ), 1 );
+    test.identical( _.strCount( got.output, 'routine1.3' ), 0 );
+    test.identical( _.strCount( got.output, 'routine2.' ), 3 );
+    test.identical( _.strCount( got.output, 'routine2.1' ), 1 );
+    test.identical( _.strCount( got.output, 'routine2.2' ), 1 );
+    test.identical( _.strCount( got.output, 'routine2.3' ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+// //
+//
+// function routine1( test )
+// {
+//   test.description = 'description1';
+//   console.log( 'v0' );
+//   test.identical( 1, 1 );
+//   test.description = 'description2';
+//   _.time.out( 2000 );
+//   _.time.out( 1000, () =>
+//   {
+//     console.log( 'v1' ); debugger;
+//     test.identical( 1, 1 );
+//     test.equivalent( 1, 1 );
+//     test.is( true );
+//     test.ge( 5, 0 );
+//     console.log( 'v2' );
+//   });
+//   return _.time.out( 2000 );
+// }
+//
+// routine1.timeOut = 100;
 
 //
 
@@ -1693,19 +1850,22 @@ function checksAfterTimeOut( test )
     test.notIdentical( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
-    test.identical( _.strCount( got.output, 'failed, time out' ), 1 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
+    test.identical( _.strCount( got.output, 'failed, time out' ), 0 );
+    test.identical( _.strCount( got.output, 'TestRoutine::routine1 returned, cant continue!' ), 1 );
+    test.identical( _.strCount( got.output, 'returned, cant continue!' ), 1 );
     test.identical( _.strCount( got.output, 'Passed test checks 2 / 3' ), 2 );
     test.identical( _.strCount( got.output, 'Passed test routines 1 / 2' ), 2 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
-    test.identical( _.strCount( got.output, 'failed' ), 3 );
+    test.identical( _.strCount( got.output, 'failed' ), 2 );
     test.identical( _.strCount( got.output, 'Failed' ), 1 );
+    test.identical( _.strCount( got.output, 'Time out' ), 0 );
+    test.identical( _.strCount( got.output, 'Time out!' ), 0 );
 
     test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description1 # 1 ) ... ok' ), 1 );
-    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1 /  < description2 # 2 ) ... failed, time out' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( timed limit ) TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Test check ( TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine2 /  < description1 # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( test routine time limit ) TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::ChecksAfterTimeOutAsset / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Test check' ), 3 );
+    test.identical( _.strCount( got.output, 'Test check' ), 2 );
 
     test.identical( _.strCount( got.output, 'v0' ), 1 );
     test.identical( _.strCount( got.output, 'v1' ), 1 );
@@ -1786,10 +1946,10 @@ function timeOutExternalMessage( test )
     return null;
   })
 
-  a.appStart({ execPath : `.run ** v:5` })
+  a.appStartNonThrowing({ execPath : `.run ** v:5` })
   .then( ( op ) =>
   {
-    test.identical( op.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
     test.identical( _.strCount( op.output, 'procedure::' ), 0 );
@@ -1812,10 +1972,10 @@ function timeOutExternalMessage( test )
     return null;
   })
 
-  a.shell({ execPath : `node Suite.test.js v:5` })
+  a.shellNonThrowing({ execPath : `node Suite.test.js v:5` })
   .then( ( op ) =>
   {
-    test.identical( op.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
     test.identical( _.strCount( op.output, 'procedure::' ), 0 );
@@ -2664,10 +2824,18 @@ let Self =
     optionRapidityTwice,
     requireTesting,
     noTestCheck,
-    asyncTimeOut,
+
+    // time out
+
+    asyncTimeOutSingle,
+    asyncTimeOutTwo,
+    asyncTimeOutCheck,
     checksAfterTimeOut,
     checksAfterTimeOutSilenced,
     timeOutExternalMessage,
+
+    //
+
     timeLimitConsequence,
     noTestSuite,
     help,

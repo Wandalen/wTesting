@@ -9,8 +9,7 @@ function routine1( test )
 {
   test.description = 'description1';
   console.log( 'routine1.1' );
-  _.time.out( 2000, () => console.log( '_.time.out( 2000 )' ) );
-  return _.time.out( 1000, () =>
+  return _.time.out( 200, () =>
   {
     console.log( 'routine1.2' );
     test.identical( 1, 1 );
@@ -22,6 +21,22 @@ routine1.timeOut = 100;
 
 //
 
+function routine2( test )
+{
+  test.description = 'description1';
+  console.log( 'routine2.1' );
+  return _.time.out( 1000, () =>
+  {
+    console.log( 'routine2.2' );
+    test.identical( 1, 1 );
+    console.log( 'routine2.3' );
+  })
+}
+
+routine2.timeOut = 2000;
+
+//
+
 var Self1 =
 {
   name : 'AsyncTimeOutAsset',
@@ -29,6 +44,7 @@ var Self1 =
   tests :
   {
     routine1,
+    routine2,
   }
 }
 

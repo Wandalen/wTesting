@@ -6,7 +6,6 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let debugged = _.process.isDebugged();
-// debugged = 0;
 
 //
 
@@ -753,7 +752,7 @@ function _end( err )
     {
       if( _.process && suite._terminated_joined && suite.takingIntoAccount )
       {
-        if( _.process.hasEventHandler( 'exit', suite._terminated_joined ) )
+        if( _.process.eventHasHandler( 'exit', suite._terminated_joined ) )
         _.process.off( 'exit', suite._terminated_joined );
         suite._terminated_joined = null;
       }
@@ -788,12 +787,13 @@ function _end( err )
     originalReady.tag = 'timeLimitErrorCon';
     ready.then( () => suite.onSuiteEnd.call( suite.context, suite ) || null );
 
-    ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
+    // ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
+    ready = _.Consequence.Or( ready, timeLimitErrorCon, wTester._cancelCon )
 
     ready.finally( ( err2, got ) =>
     {
       if( !timeLimitErrorCon.resourcesCount() )
-      timeLimitErrorCon.take( _.dont );
+      timeLimitErrorCon.error( _.dont );
 
       if( err2 )
       {

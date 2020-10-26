@@ -342,7 +342,6 @@ function waitForVisibleInViewportThrowing( test )
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
-
     test.identical( _.strCount( got.output, 'Waiting for selector "p" failed: timeout 1ms exceeded' ), 1 );
     test.identical( _.strCount( got.output, `had zombie process` ), 0 );
     return null;

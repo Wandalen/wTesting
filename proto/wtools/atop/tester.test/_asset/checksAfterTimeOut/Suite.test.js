@@ -21,7 +21,6 @@ function routine1( test )
     test.ge( 5, 0 );
     console.log( 'v2' );
   });
-  // throw _.err( 'Error1' );
   return _.time.out( 2000 );
 }
 

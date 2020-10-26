@@ -22,6 +22,9 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 
+/* qqq for Dmytro : parametrize all delays */
+/* qqq for Dmytro : ( err, got ) -> ( err, arg ) */
+
 // --
 // tools
 // --
@@ -176,6 +179,8 @@ function identicalConsequence( test )
 // should
 // --
 
+/* qqq for Dmytro : split test cases of returnsSingleResource by ready.then */
+/* qqq for Dmytro : fix please test check test.returnsSingleResource() */
 function returnsSingleResource( test )
 {
 
@@ -292,12 +297,8 @@ function returnsSingleResource( test )
 
     _.time.out( 500, function()
     {
-      // console.log( c4 );
-      // console.log( c4.argumentsGet() );
-      // debugger;
-      // test.identical( c4.resourcesCount(), 1 );
       test.identical( c4.argumentsCount(), 1 );
-      // test.identical( c4.errorsCount(), 0 );
+      test.identical( c4.errorsCount(), 0 );
       test.identical( c4.competitorsCount(), 0 );
       c4.give( function( err, arg )
       {
@@ -327,11 +328,14 @@ function returnsSingleResource( test )
 
     _.time.out( 500, function()
     {
-      test.identical( c5.resourcesGet().length, 1 );
+      // test.identical( c5.resourcesGet().length, 1 );
+      test.identical( c5.argumentsCount(), 1 );
+      test.identical( c5.errorsCount(), 0 );
+      test.identical( c5.competitorsCount(), 0 );
       c5.give( function( err, arg )
       {
         test.is( err === undefined );
-        test.is( arg === _.time.out );
+        test.is( _.timerIs( arg ) );
       });
       return null;
     });
@@ -647,7 +651,7 @@ function mustNotThrowError( test )
       c5.give( function( err, arg )
       {
         test.is( err === undefined );
-        test.is( arg === _.time.out );
+        test.is( _.timerIs( arg ) );
       });
       return null;
     });
@@ -3105,7 +3109,7 @@ function shouldThrowErrorAsyncConcurrent( test )
   .finally( function( err, arg )
   {
 
-    test.identical( arg, _.time.out );
+    test.is( _.timerIs( arg ) );
     test.identical( err, undefined );
 
     test.identical( test.report.testCheckPasses-counter.prevCheckPasses, 5 );
@@ -3712,7 +3716,7 @@ function shouldMessageOnlyOnceReturn( test )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
-        test.identical( _.routineIs( got ), true );
+        test.identical( _.timerIs( got ), true );
         return null;
       })
     })
@@ -3724,7 +3728,7 @@ function shouldMessageOnlyOnceReturn( test )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
-        test.identical( _.routineIs( got ), true );
+        test.identical( _.timerIs( got ), true );
         return null;
       })
     })

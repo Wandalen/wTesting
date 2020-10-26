@@ -1956,9 +1956,13 @@ function timeOutExternalMessage( test )
     test.identical( _.strCount( op.output, 'v1' ), 1 );
     test.identical( _.strCount( op.output, 'v2' ), 1 );
     test.identical( _.strCount( op.output, 'v3' ), 1 );
-    test.identical( _.strCount( op.output, 'v4' ), 1 );
+    test.identical( _.strCount( op.output, 'v4' ), 0 );
     test.identical( _.strCount( op.output, 'v5' ), 0 );
-    test.identical( _.strCount( op.output, /v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4(.|\n|\r)*/mg ), 1 );
+    var exp =
+`v1
+v2
+v3`
+    test.identical( _.strCount( op.output, exp ), 1 );
 
     return null;
   })
@@ -1982,9 +1986,13 @@ function timeOutExternalMessage( test )
     test.identical( _.strCount( op.output, 'v1' ), 1 );
     test.identical( _.strCount( op.output, 'v2' ), 1 );
     test.identical( _.strCount( op.output, 'v3' ), 1 );
-    test.identical( _.strCount( op.output, 'v4' ), 1 );
+    test.identical( _.strCount( op.output, 'v4' ), 0 );
     test.identical( _.strCount( op.output, 'v5' ), 0 );
-    test.identical( _.strCount( op.output, /v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4(.|\n|\r)*/mg ), 1 );
+    var exp =
+`v1
+v2
+v3`
+    test.identical( _.strCount( op.output, exp ), 1 );
 
     return null;
   })

@@ -8899,8 +8899,8 @@ function processWatchingRoutineTimeOut( test )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 2 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Time out' ) )
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) );
     test.identical( suite.report.testCheckFails, 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );

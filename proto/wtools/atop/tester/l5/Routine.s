@@ -289,7 +289,7 @@ function _run()
 
   trd._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
   trd._timeLimitErrorCon = _.time.outError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
-  .tap( ( err, arg ) =>
+  .finally( ( err, arg ) =>
   {
     if( err === _.dont )
     {
@@ -306,6 +306,9 @@ function _run()
     }
     if( !trd._returnedHow )
     trd._returnedHow = 'test routine time out';
+    if( err )
+    throw err;
+    return arg;
   });
   trd._timeLimitErrorCon.tag = '_timeLimitErrorCon';
 
@@ -324,18 +327,20 @@ function _run()
 
   /* */
 
+  trd._returnedCon = new _.Consequence(); /* yyy */
+  if( Config.debug && !trd._returnedCon.tag )
+  trd._returnedCon.tag = trd.name + '-1';
+
   trd._returnedData = result;
   trd._originalReturnedCon = _.Consequence.From( result );
-  trd._returnedCon = new _.Consequence(); /* yyy */
-
   trd._originalReturnedCon.give( ( err, arg ) =>
   {
     if( trd._returnedHow )
     {
-      let err;
+      let err; debugger;
       if( trd.report && trd.report.reason )
       {
-        if( trd.report.reason === 'time limit' )
+        if( trd.report.reason === 'test routine time limit' )
         return;
         err = _.err( `${trd.qualifiedNameGet()} is ended because of ${trd.report.reason}, but it got several async returning` );
       }
@@ -356,8 +361,6 @@ function _run()
     }
   });
 
-  if( Config.debug && !trd._returnedCon.tag )
-  trd._returnedCon.tag = trd.name + '-1';
   trd._returnedCon.andKeep( suite._inroutineCon );
   trd._returnedCon.orKeeping([ trd._timeLimitErrorCon, wTester._cancelCon ]);
   trd._returnedCon.finally( ( err, msg ) => trd._runFinally( err, msg ) );
@@ -573,10 +576,11 @@ function _runFinally( err, arg )
   if( err )
   {
     // if( trd._returnedHow !== 'test routine time out' && err.reason !== 'time out' )
+    debugger;
     trd.exceptionReport
     ({
       err,
-      logging : trd._returnedHow !== 'test routine time out' || err.reason !== 'time limit',
+      logging : trd._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
     });
     trd._runEnd();
     return err;
@@ -683,7 +687,7 @@ function _timeOutError( err )
   ({
     args : [ err || '', `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
-    reason : 'time limit',
+    reason : 'test routine time limit', /* xxx */
   });
 
   let o =
@@ -1360,7 +1364,7 @@ function _outcomeLog( o )
     let code;
     if( trd.usingSourceCode && o.usingSourceCode )
     {
-      let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 4 });
+      let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 5 });
       let _code = _.introspector.code
       ({
         location : _location,

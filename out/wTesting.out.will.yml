@@ -212,7 +212,6 @@ module:
           - >-
             ../proto/wtools/atop/tester.test/_asset/asyncErrorHandling/asyncErrorHandling.test.js
           - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut
-          - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut/package.json
           - ../proto/wtools/atop/tester.test/_asset/asyncTimeOut/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/checkFails
           - ../proto/wtools/atop/tester.test/_asset/checkFails/Hello.js

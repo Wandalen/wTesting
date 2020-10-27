@@ -380,7 +380,7 @@ function _testAllAct()
  *
  */
 
-let testAll = _.time.readyJoin( undefined, _testAllAct );
+let testAll = _.process.readyJoin( undefined, _testAllAct );
 
 //
 
@@ -410,7 +410,7 @@ function _test()
  *
  */
 
-let test = _.time.readyJoin( undefined, _test );
+let test = _.process.readyJoin( undefined, _test );
 
 //
 

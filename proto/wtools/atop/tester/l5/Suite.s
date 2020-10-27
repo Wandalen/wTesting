@@ -497,7 +497,7 @@ function _runSoon()
   let con = suite.concurrent ? new _.Consequence().take( null ) : wTester.TestSuite._SuitesReady;
 
   let result = con
-  .finally( () => _.time.ready() )
+  .finally( () => _.process.ready() )
   .finally( () => suite._runNow() )
   .split();
 

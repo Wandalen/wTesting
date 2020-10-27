@@ -145,15 +145,32 @@ function waitForVisibleInViewport( o )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
 
-  let ready = _.time.outError( o.timeOut, ( err ) =>
+  let timeOutError = _.time.outError( o.timeOut );
+  let result = _.Consequence();
+  let visilbe = _.Consequence.From( _waitForVisibleInViewport() );
+  
+  result.orKeeping( [ visilbe, timeOutError ] );
+  
+  result.finally( ( err, arg ) => 
   {
-    if( _.errIs( err ) )
+    if( !err || err.reason !== 'time out' )
+    timeOutError.error( _.dont );
+    
+    if( !err )
+    return arg;
+    
+    _.errAttend( err )
+    
+    if( err.reason === 'time out' )
+    return visilbe.then( () =>
     {
-      _.errAttend( err );
       throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
-    }
-  });
-  return _.Consequence.From( _waitForVisibleInViewport() );
+    })
+    
+    throw err;
+  })
+  
+  return result;
 
   /* */
 
@@ -161,15 +178,15 @@ function waitForVisibleInViewport( o )
   {
     let element = null;
     let exists = true;
-
+    
+    if( timeOutError.resourcesCount() )
+    return null;
+    
     if( o.library === 'spectron' )
     exists = await o.page.isExisting( o.targetSelector );
 
     if( exists )
     element = await o.page.$( o.targetSelector );
-
-    if( ready.resourcesCount() )
-    return ready;
 
     if( element )
     {
@@ -180,14 +197,9 @@ function waitForVisibleInViewport( o )
         library : o.library
       });
       if( isIntersectingViewport )
-      {
-        ready.error( _.dont );
-        await ready;
-        ready.take( isIntersectingViewport );
-        return ready;
-      }
+      return true;
     }
-
+    
     return _waitForVisibleInViewport();
   }
 }

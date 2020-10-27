@@ -144,6 +144,91 @@ function waitForVisibleInViewport( o )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
+  
+  let o2 = _.mapBut( o, { library : null } );
+
+  if( o.library === 'spectron' )
+  return test.waitForVisibleInViewportSpectron( o2 );
+  else
+  return test.waitForVisibleInViewportPuppeteer( o2 );
+}
+
+waitForVisibleInViewport.defaults =
+{
+  targetSelector : null,
+  timeOut : 5000,
+  page : null,
+  library : null
+}
+
+//
+
+function waitForVisibleInViewportPuppeteer( o )
+{
+  let test = this;
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( waitForVisibleInViewportPuppeteer, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.numberIs( o.timeOut ) )
+  _.assert( _.objectIs( o.page ) )
+  
+  let ready = _.Consequence().take( null )
+  
+  ready.then( () => 
+  {
+    let func = o.page._pageBindings.get( 'puppeteerWaitForVisible' );
+    if( _.routineIs( func ) )
+    return null;
+    return o.page.exposeFunction( 'puppeteerWaitForVisible', waitForVisible ) 
+  })
+  ready.then( () => o.page.waitForFunction( waitFunction, { timeout : o.timeOut }, o.targetSelector ) )
+
+  ready.catch( ( err ) => 
+  {
+    _.errAttend( err );
+    throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed, reason:\n`, err );
+  })
+  
+  return ready;
+  
+  /* */
+  
+  async function waitFunction( selector )
+  {
+    let result = await window.puppeteerWaitForVisible( selector );
+    return result;
+  }
+  
+  /* */
+  
+  async function waitForVisible( selector )
+  {
+    let element = await o.page.$( selector );
+    if( !element )
+    return false;
+    return element.isIntersectingViewport();
+  }
+}
+
+waitForVisibleInViewportPuppeteer.defaults =
+{
+  targetSelector : null,
+  timeOut : 5000,
+  page : null
+}
+
+//
+
+function waitForVisibleInViewportSpectron( o )
+{
+  let test = this;
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( waitForVisibleInViewportSpectron, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.numberIs( o.timeOut ) )
+  _.assert( _.objectIs( o.page ) )
 
   let timeOutError = _.time.outError( o.timeOut );
   let result = _.Consequence();
@@ -182,7 +267,6 @@ function waitForVisibleInViewport( o )
     if( timeOutError.resourcesCount() )
     return null;
     
-    if( o.library === 'spectron' )
     exists = await o.page.isExisting( o.targetSelector );
 
     if( exists )
@@ -194,7 +278,7 @@ function waitForVisibleInViewport( o )
       ({
         targetSelector : o.targetSelector,
         page : o.page,
-        library : o.library
+        library : 'spectron'
       });
       if( isIntersectingViewport )
       return true;
@@ -204,12 +288,11 @@ function waitForVisibleInViewport( o )
   }
 }
 
-waitForVisibleInViewport.defaults =
+waitForVisibleInViewportSpectron.defaults =
 {
   targetSelector : null,
   timeOut : 5000,
-  page : null,
-  library : null
+  page : null
 }
 
 //
@@ -302,6 +385,8 @@ let Routines =
   fileDrop,
   eventDispatch,
   waitForVisibleInViewport,
+  waitForVisibleInViewportPuppeteer,
+  waitForVisibleInViewportSpectron,
   isVisibleWithinViewport
 }
 

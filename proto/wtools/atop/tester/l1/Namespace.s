@@ -175,7 +175,13 @@ function waitForVisibleInViewportPuppeteer( o )
   
   let ready = _.Consequence().take( null )
   
-  ready.then( () => o.page.exposeFunction( 'waitForVisible', waitForVisible ) )
+  ready.then( () => 
+  {
+    let func = o.page._pageBindings.get( 'puppeteerWaitForVisible' );
+    if( _.routineIs( func ) )
+    return null;
+    return o.page.exposeFunction( 'puppeteerWaitForVisible', waitForVisible ) 
+  })
   ready.then( () => o.page.waitForFunction( waitFunction, { timeout : o.timeOut }, o.targetSelector ) )
 
   ready.catch( ( err ) => 
@@ -190,7 +196,7 @@ function waitForVisibleInViewportPuppeteer( o )
   
   async function waitFunction( selector )
   {
-    let result = await window.waitForVisible( selector );
+    let result = await window.puppeteerWaitForVisible( selector );
     return result;
   }
   

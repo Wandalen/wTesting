@@ -2993,19 +2993,18 @@ function _shouldDo( o )
     _.assert( arguments.length === 1, 'Expects single argument' );
     _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
     _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
-    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handler error should be routine' );
+    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
+    if( o.args[ 1 ] )
+    {
+      _.sure( 1 <= o.args[ 1 ].length, 'Callback should have at least one argument.' );
+      _.sure( o.args[ 1 ].length <= 3, 'Callback should have less then three arguments.' );
+    }
   }
   catch( err )
   {
     let error = _.errRestack( err, 3 );
-    error = _._err
-    ({
-      args : [ error, '\nIllegal usage of should in', trd.absoluteName ],
-    });
-    error = trd.exceptionReport
-    ({
-      err : error,
-    });
+    error = _._err({ args : [ error, '\nIllegal usage of should in', trd.absoluteName ] });
+    error = trd.exceptionReport({ err : error });
 
     con.error( error );
     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
@@ -3060,18 +3059,8 @@ function _shouldDo( o )
 
     err = _.err( _err );
 
-    if( o.expectingSyncError )
-    {
-      try
-      {
-        if( o.args[ 1 ] )
-        o.args[ 1 ]( err, o );
-      }
-      catch( err2 )
-      {
-        console.error( err2 );
-      }
-    }
+    if( o.args[ 1 ] )
+    callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
 
     _.errAttend( err );
 
@@ -3143,6 +3132,9 @@ function _shouldDo( o )
   {
     begin( 0 );
 
+    if( o.args[ 1 ] )
+    callbackRunOnResult( undefined, result, false );
+
     let msg = 'Error not thrown synchronously, but expected';
 
     trd._outcomeReportBoolean
@@ -3174,25 +3166,22 @@ function _shouldDo( o )
 
       if( !o.ignoringError && !reported )
       {
+        if( o.args[ 1 ] && !err )
+        callbackRunOnResult( err, result, !o.expectingAsyncError );
         if( err && !o.expectingAsyncError )
         reportAsync();
       }
       else if( !err && o.expectingAsyncError )
       {
+        if( o.args[ 1 ] )
+        callbackRunOnResult( err, result, !o.expectingAsyncError );
         reportAsync();
       }
 
       if( _.errIs( err ) )
       {
-        try
-        {
-          if( o.args[ 1 ] )
-          o.args[ 1 ]( err, o );
-        }
-        catch( err2 )
-        {
-          console.error( err2 );
-        }
+        if( o.args[ 1 ] )
+        callbackRunOnResult( err, result, !!o.expectingAsyncError );
         _.errAttend( err );
       }
 
@@ -3293,6 +3282,8 @@ function _shouldDo( o )
 
   function handleSyncResult()
   {
+    if( o.args[ 1 ] )
+    callbackRunOnResult( err, result, !!( !o.expectingSyncError && !o.expectingAsyncError ) );
 
     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
     {
@@ -3459,11 +3450,451 @@ function _shouldDo( o )
 
   }
 
+  /* */
+
+  function callbackRunOnResult( err, arg, ok )
+  {
+    let onResult = o.args[ 1 ];
+    try
+    {
+      onResult( err, arg, ok );
+    }
+    catch( err2 )
+    {
+      console.error( err2 );
+    }
+  }
+
 }
 
 _shouldDo.defaults =
 {
   args : null, /* aaa : cover 2-arguments calls for each should* check */ /* Dmytro : covered */
+  expectingSyncError : 1,
+  expectingAsyncError : 1,
+  ignoringError : 0,
+  allowingMultipleResources : 0,
+}
+
+//
+
+function _shouldDo_( o )
+{
+  let trd = this;
+  let reported = 0;
+  let good = 1;
+  let async = 0;
+  let stack = _.introspector.stack([ 2, -1 ]);
+  let logger = trd.logger;
+  let err, arg;
+  let con = new _.Consequence();
+
+  trd._returnedVerification();
+
+  if( !trd.shoulding )
+  return con.take( null );
+
+  /* check arguments */
+
+  try
+  {
+    _.assert( arguments.length === 1, 'Expects single argument' );
+    _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
+    _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
+    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
+
+    _.routineOptions( _shouldDo_, o );
+
+    if( o.args[ 1 ] )
+    {
+      _.sure( 1 <= o.args[ 1 ].length, 'Callback should have at least one argument.' );
+      _.sure( o.args[ 1 ].length <= 3, 'Callback should have less then three arguments.' );
+    }
+  }
+  catch( err )
+  {
+    let error = _.errRestack( err, 3 );
+    error = _._err({ args : [ error, '\nIllegal usage of should in', trd.absoluteName ] });
+    error = trd.exceptionReport({ err : error });
+
+    if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+    {
+      return false;
+    }
+    else
+    {
+      con.error( error );
+      return con;
+    }
+  }
+
+  /* make result */
+
+  let result;
+  let routine = o.args[ 0 ];
+  let callback = o.args[ 1 ];
+  let acheck = trd.checkCurrent();
+  trd._inroutineCon.give( 1 );
+
+  if( _.consequenceIs( routine ) )
+  {
+    result = routine;
+  }
+  else
+  {
+    try
+    {
+      result = routine.call( this );
+    }
+    catch( _err )
+    {
+      err = _err;
+    }
+  }
+
+  /* handle result */
+
+  if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
+  return handleLackOfSyncError();
+
+  if( !result && _.errIs( err ) )
+  return handleSyncError();
+  else if( _.consequenceIs( result ) )
+  handleAsyncResult()
+  else
+  handleSyncResult();
+
+  return con;
+
+  /* */
+
+  function handleLackOfSyncError()
+  {
+    if( callback )
+    callbackRunOnResult( err, result, false );
+    let msg = 'Error not thrown synchronously, but expected';
+    outcomeReportBoolean( 0, msg, _.err( msg ) );
+    return false;
+  }
+
+  /* */
+
+  function handleSyncError()
+  {
+    if( callback )
+    callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
+
+    _.errAttend( err );
+
+    if( o.ignoringError )
+    return errorIgnore();
+
+    trd.exceptionReport
+    ({
+      err,
+      sync : 1,
+      considering : 0,
+      outcome : o.expectingSyncError,
+    });
+
+    let msg = 'error thrown synchronously as expected';
+    if( !o.expectingSyncError )
+    msg = 'error thrown synchronously, what was not expected';
+    outcomeReportBoolean( o.expectingSyncError, msg, err );
+
+    if( !o.expectingAsyncError && o.expectingSyncError )
+    return err;
+    else
+    return con;
+  }
+
+  /* */
+
+  function errorIgnore()
+  {
+    let msg = 'error throwen synchronously, ignored';
+    outcomeReportBoolean( 1, msg, err );
+    return con;
+  }
+
+  /* */
+
+  function outcomeReportBoolean( sync, msg, reportedResult )
+  {
+    begin( sync );
+
+    trd._outcomeReportBoolean
+    ({
+      outcome : sync,
+      msg,
+      stack,
+      selectMode : 'center',
+    });
+
+    end( sync, reportedResult );
+  }
+
+  /* */
+
+  function begin( positive )
+  {
+    if( positive )
+    _.assert( !reported );
+    good = positive;
+
+    if( reported || async )
+    trd.checkRestore( acheck );
+
+    logger.begin({ verbosity : positive ? -5 : -5 + trd.negativity });
+    logger.begin({ connotation : positive ? 'positive' : 'negative' });
+  }
+
+  /* */
+
+  function end( positive, arg )
+  {
+    _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+    logger.end({ verbosity : positive ? -5 : -5 + trd.negativity });
+    logger.end({ connotation : positive ? 'positive' : 'negative' });
+
+    if( reported || async )
+    trd.checkRestore();
+
+    if( arg === undefined && !async )
+    arg = null;
+
+    if( positive )
+    con.take( undefined, arg );
+    else
+    con.take( _.errAttend( arg ), undefined );
+
+    if( !reported )
+    trd._inroutineCon.take( null );
+
+    reported = 1;
+  }
+
+  /* */
+
+  function handleAsyncResult()
+  {
+    trd.checkNext();
+    async = 1;
+
+    result.give( function( _err, _arg )
+    {
+
+      err = _err;
+      arg = _arg;
+
+      let expected = !!o.expectingAsyncError;
+      if( !err )
+      expected = !expected;
+
+      if( callback )
+      callbackRunOnResult( err, result, expected );
+
+      if( !o.ignoringError && !reported )
+      {
+
+        if( err && !o.expectingAsyncError )
+        reportAsync();
+      }
+      else if( !err && o.expectingAsyncError )
+      {
+        reportAsync();
+      }
+
+      if( _.errIs( err ) )
+      _.errAttend( err );
+
+      /* */
+
+      if( !reported )
+      if( !o.allowingMultipleResources )
+      _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
+      {
+
+        if( result.resourcesGet().length )
+        {
+          if( reported )
+          {
+            _.assert( !good );
+          }
+          else
+          {
+
+            begin( 0 );
+
+            _.assert( !reported );
+
+            trd._outcomeReportBoolean
+            ({
+              outcome : 0,
+              msg : 'Got more than one message',
+              stack,
+            });
+
+            end( 0, _.err( msg ) );
+          }
+        }
+
+        if( !reported )
+        reportAsync();
+
+        return null;
+      });
+
+    });
+
+    /* */
+
+    if( !o.allowingMultipleResources )
+    handleSecondResource();
+
+  }
+
+  /* */
+
+  function reportAsync()
+  {
+    if( trd._returned || reported )
+    return;
+
+    if( o.ignoringError )
+    {
+      let msg = 'got single message';
+      outcomeReportBoolean( 1, msg, err ? err : arg );
+      return;
+    }
+
+    else if( err !== undefined )
+    reportThrowenAsyncError();
+    else
+    reportNotThrowenAsyncError();
+  }
+
+  /* */
+
+  function reportThrowenAsyncError()
+  {
+    trd.exceptionReport
+    ({
+      err,
+      sync : 0,
+      considering : 0,
+      outcome : o.expectingAsyncError,
+    });
+
+    let msg = 'error thrown asynchronously as expected';
+    if( !o.expectingAsyncError )
+    msg = 'error thrown asynchronously, not expected';
+
+    outcomeReportBoolean( o.expectingAsyncError, msg, err );
+  }
+
+  /* */
+
+  function reportNotThrowenAsyncError()
+  {
+    let msg = 'error was not thrown asynchronously, but expected';
+    if( !o.expectingAsyncError && !o.expectingSyncError && good )
+    msg = 'error was not thrown as expected';
+
+    if( o.expectingAsyncError )
+    outcomeReportBoolean( !o.expectingAsyncError, msg, _._err({ args : [ msg ], catchCallsStack : stack }) );
+    else
+    outcomeReportBoolean( !o.expectingAsyncError, msg, arg );
+  }
+
+  /* */
+
+  function handleSecondResource()
+  {
+    if( reported && !good )
+    return;
+
+    result.finally( gotSecondResource );
+
+    let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
+    r.finally( ( err, arg ) =>
+    {
+      if( result.competitorHas( gotSecondResource ) )
+      result.competitorsCancel( gotSecondResource );
+      if( err )
+      throw err;
+      return arg;
+    });
+
+  }
+
+  /* */
+
+  function gotSecondResource( err, arg )
+  {
+    if( reported && !good )
+    return null;
+
+    let msg = 'Got more than one message';
+    outcomeReportBoolean( 0, msg, _.err( msg ) );
+
+    if( err )
+    throw err;
+    return arg;
+  }
+
+  /* */
+
+  function handleSyncResult()
+  {
+    if( callback )
+    callbackRunOnResult( err, result, ( !o.expectingSyncError && !o.expectingAsyncError ) );
+
+    _.assert( !err, 'Expect no error' );
+
+    if( o.expectingSyncError && !o.expectingAsyncError )
+    {
+      let msg = 'Error not thrown synchronously, but expected';
+      outcomeReportBoolean( 1, msg, _.err( msg ) );
+    }
+    if( !o.expectingSyncError && o.expectingAsyncError )
+    {
+      let msg = 'Error not thrown asynchronously, but expected';
+      outcomeReportBoolean( 0, msg, _.err( msg ) );
+    }
+    if( o.expectingSyncError && o.expectingAsyncError )
+    {
+      let msg = 'Error not thrown, but expected either synchronosuly or asynchronously';
+      outcomeReportBoolean( 0, msg, _.err( msg ) );
+    }
+    if( !o.expectingSyncError && !o.expectingAsyncError )
+    {
+      let msg = 'no error thrown, as expected';
+      outcomeReportBoolean( 1, msg, result );
+    }
+  }
+
+  /* */
+
+  function callbackRunOnResult( err, arg, ok )
+  {
+    let onResult = o.args[ 1 ];
+    try
+    {
+      onResult( err, arg, ok );
+    }
+    catch( err2 )
+    {
+      logger.error( err2 );
+    }
+  }
+
+}
+
+_shouldDo_.defaults =
+{
+  args : null,
   expectingSyncError : 1,
   expectingAsyncError : 1,
   ignoringError : 0,
@@ -3509,6 +3940,19 @@ function shouldThrowErrorAsync( routine )
 
 }
 
+function shouldThrowErrorAsync_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
+  ({
+    args : arguments,
+    expectingSyncError : 0,
+    expectingAsyncError : 1,
+  });
+
+}
+
 //
 
 /**
@@ -3539,6 +3983,19 @@ function shouldThrowErrorSync( routine )
   let trd = this;
 
   return trd._shouldDo
+  ({
+    args : arguments,
+    expectingSyncError : 1,
+    expectingAsyncError : 0,
+  });
+
+}
+
+function shouldThrowErrorSync_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
   ({
     args : arguments,
     expectingSyncError : 1,
@@ -3613,6 +4070,19 @@ function shouldThrowErrorOfAnyKind( routine )
 
 }
 
+function shouldThrowErrorOfAnyKind_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
+  ({
+    args : arguments,
+    expectingSyncError : 1,
+    expectingAsyncError : 1,
+  });
+
+}
+
 //
 
 /**
@@ -3654,6 +4124,20 @@ function mustNotThrowError( routine )
 
 }
 
+function mustNotThrowError_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
+  ({
+    args : arguments,
+    ignoringError : 0,
+    expectingSyncError : 0,
+    expectingAsyncError : 0,
+  });
+
+}
+
 //
 
 /**
@@ -3684,6 +4168,20 @@ function returnsSingleResource( routine )
   let trd = this;
 
   return trd._shouldDo
+  ({
+    args : arguments,
+    ignoringError : 1,
+    expectingSyncError : 0,
+    expectingAsyncError : 0,
+  });
+
+}
+
+function returnsSingleResource_( routine )
+{
+  let trd = this;
+
+  return trd._shouldDo_
   ({
     args : arguments,
     ignoringError : 1,
@@ -4344,12 +4842,18 @@ let Extension =
   // shoulding
 
   _shouldDo,
+  _shouldDo_,
 
   shouldThrowErrorSync, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorSync_, /* !!! use instead of shouldThrowErrorSync */ /* Dmytro : refactored routine _shouldDo_ is used */
   shouldThrowErrorAsync, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorAsync_, /* !!! use instead of shouldThrowErrorAsync */ /* Dmytro : refactored routine _shouldDo_ is used */
   shouldThrowErrorOfAnyKind, /* aaa : cover second argument */ /* Dmytro : covered */
+  shouldThrowErrorOfAnyKind_, /* !!! use instead of shouldThrowErrorOfAnyKind */ /* Dmytro : refactored routine _shouldDo_ is used */
   mustNotThrowError,
+  mustNotThrowError_, /* !!! use instead of mustNotThrowError */ /* Dmytro : refactored routine _shouldDo_ is used */
   returnsSingleResource,
+  returnsSingleResource_, /* !!! use instead of returnsSingleResource */ /* Dmytro : refactored routine _shouldDo_ is used */
 
   // asset
 
@@ -4388,3 +4892,4 @@ module[ 'exports' ] = Self;
 wTesterBasic[ Self.shortName ] = Self;
 
 })();
+

@@ -22,13 +22,50 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 
-
 // --
 //
 // --
 
 function main( test )
 {
+
+  var suite = wTestSuite
+  ({
+
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+
+    onSuiteEnd,
+    routineTimeOut : 3000,
+    processWatching : 1,
+    name : 'ForTesting',
+
+    tests :
+    {
+      trivial,
+    },
+
+  })
+
+  var result = suite.run();
+
+  result.finally( ( err, got ) =>
+  {
+    test.identical( suite.report.errorsArray.length, 3 );
+
+    console.log( suite.report.errorsArray.length );
+    console.log( suite.report.errorsArray );
+    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
+    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
+    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "ForTesting" had zombie process with pid' ), 1 );
+
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+
+    return null;
+  })
+
+  return result;
+
   function onSuiteEnd()
   {
     throw _.err( 'Error from onSuiteEnd' );
@@ -40,45 +77,12 @@ function main( test )
     {
       execPath : 'node -e "setTimeout(()=>{},10000)"',
       inputMirroring : 1,
-      throwingExitCode : 1,
+      throwingExitCode : 0,
       mode : 'spawn'
     }
     return _.process.start( o )
   }
 
-  var suite = wTestSuite
-  ({
-
-    override : notTakingIntoAccount,
-    ignoringTesterOptions : 1,
-
-    onSuiteEnd,
-    routineTimeOut : 3000,
-    processWatching : 1,
-
-    tests :
-    {
-      trivial
-    },
-
-  })
-
-  var result = suite.run();
-
-  result.finally( ( err, got ) =>
-  {
-    test.identical( suite.report.errorsArray.length, 3 );
-
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Time out!' ) );
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
-    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Process.test.s:49:15" had zombie process with pid' ), 1 );
-
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
-
-    return null;
-  })
-
-  return result;
 }
 
 // --

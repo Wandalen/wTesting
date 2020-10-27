@@ -181,7 +181,7 @@ function waitForVisibleInViewport( o )
       });
       if( isIntersectingViewport )
       {
-        ready.error( _.dont );
+        ready.take( _.dont );
         await ready;
         ready.take( isIntersectingViewport );
         return ready;

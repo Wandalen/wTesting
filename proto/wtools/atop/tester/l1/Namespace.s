@@ -145,9 +145,13 @@ function waitForVisibleInViewport( o )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
 
-  let ready = _.time.outError( o.timeOut, () =>
+  let ready = _.time.outError( o.timeOut, ( err ) =>
   {
-    throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
+    if( _.errIs( err ) )
+    {
+      _.errAttend( err );
+      throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
+    }
   });
   return _.Consequence.From( _waitForVisibleInViewport() );
 

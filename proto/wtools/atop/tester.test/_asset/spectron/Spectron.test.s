@@ -28,7 +28,7 @@ async function routineTimeOut( test )
 
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  _.time.out( 5000 ).deasync();
+  await _.time.out( 5000 );
   test.identical( 1, 1 );
   await app.stop();
 

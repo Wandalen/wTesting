@@ -2570,17 +2570,17 @@ function programOptionsRoutineDirPath( test )
 
   test.case = 'default'
   var got = a.program( testApp1 );
-  var exp = a.routinePath + '/' + testApp1.name + '.js'
+  var exp = a.path.nativize( a.routinePath + '/' + testApp1.name + '.js' )
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath'
   var got = a.program({ routine : testApp1, dirPath : 'temp' })
-  var exp = a.routinePath + '/temp/' + testApp1.name + '.js'
+  var exp = a.path.nativize( a.routinePath + '/temp/' + testApp1.name + '.js' )
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath with spaces'
   var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
-  var exp = a.routinePath + '/temp with spaces/' + testApp1.name + '.js'
+  var exp = a.path.nativize( a.routinePath + '/temp with spaces/' + testApp1.name + '.js' )
   test.il( got, exp )
 
   /* - */

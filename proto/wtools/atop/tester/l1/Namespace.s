@@ -146,9 +146,10 @@ function waitForVisibleInViewport( o )
   _.assert( _.objectIs( o.page ) )
 
   let timeOutError = _.time.outError( o.timeOut );
-  let result = _.Consequence.From( _waitForVisibleInViewport() );
+  let result = _.Consequence();
+  let visilbe = _.Consequence.From( _waitForVisibleInViewport() );
   
-  result.orKeeping( [ timeOutError ] );
+  result.orKeeping( [ visilbe, timeOutError ] );
   
   result.finally( ( err, arg ) => 
   {
@@ -161,7 +162,10 @@ function waitForVisibleInViewport( o )
     _.errAttend( err )
     
     if( err.reason === 'time out' )
-    throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
+    return visilbe.then( () =>
+    {
+      throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
+    })
     
     throw err;
   })

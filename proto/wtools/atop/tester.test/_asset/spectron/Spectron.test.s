@@ -17,7 +17,7 @@ let _ = _realGlobal_._testerGlobal_.wTools
 
 async function routineTimeOut( test )
 {
-  let self = this;
+  let context = this;
   let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
 
   let app = new Spectron.Application
@@ -27,21 +27,21 @@ async function routineTimeOut( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  _.time.out( 5000 ).deasync();
+  test.identical( app.isRunning(), true );
+  await _.time.out( context.t1 * 15 );
   test.identical( 1, 1 );
   await app.stop();
 
   return null;
 }
 
-routineTimeOut.timeOut = 3000;
+routineTimeOut.timeOut = 5000;
 
 //
 
 async function spectronTimeOut( test )
 {
-  let self = this;
+  let context = this;
   let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
 
   let app = new Spectron.Application
@@ -62,7 +62,7 @@ async function spectronTimeOut( test )
 
 async function errorInTest( test )
 {
-  let self = this;
+  let context = this;
   let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
 
   let app = new Spectron.Application
@@ -72,7 +72,7 @@ async function errorInTest( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  test.identical( app.isRunning(), true );
   throw _.err( 'Test' );
 }
 
@@ -80,7 +80,7 @@ async function errorInTest( test )
 
 async function clientContinuesToWorkAfterTest( test )
 {
-  let self = this;
+  let context = this;
   let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
 
   let app = new Spectron.Application
@@ -90,14 +90,14 @@ async function clientContinuesToWorkAfterTest( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  test.identical( app.isRunning(), true );
 }
 
 //
 
 async function waitForVisibleInViewportThrowing( test )
 {
-  let self = this;
+  let context = this;
   let appPath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
   let app, err;
 
@@ -149,6 +149,7 @@ let Self =
 
   context :
   {
+    t1 : 1000
   },
 
   tests :

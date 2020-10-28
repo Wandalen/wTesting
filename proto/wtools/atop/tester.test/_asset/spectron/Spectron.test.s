@@ -27,7 +27,7 @@ async function routineTimeOut( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  test.identical( app.isRunning(), true );
   await _.time.out( context.t1 * 15 );
   test.identical( 1, 1 );
   await app.stop();
@@ -72,7 +72,7 @@ async function errorInTest( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  test.identical( app.isRunning(), true );
   throw _.err( 'Test' );
 }
 
@@ -90,7 +90,7 @@ async function clientContinuesToWorkAfterTest( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
+  test.identical( app.isRunning(), true );
 }
 
 //

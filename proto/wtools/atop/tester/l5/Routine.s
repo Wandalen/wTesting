@@ -3817,7 +3817,7 @@ function _shouldDo_( o )
 
     result.finally( gotSecondResource );
 
-    let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
+    let r = _.Consequence.Or( result, trd._timeLimitCon, wTester._cancelCon );
     r.finally( ( err, arg ) =>
     {
       if( result.competitorHas( gotSecondResource ) )

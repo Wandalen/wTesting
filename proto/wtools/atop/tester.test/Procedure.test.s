@@ -11,9 +11,7 @@ if( typeof module !== 'undefined' )
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../tester/entry/Main.s' );
 
-  _.include( 'wProcedure' );
   _.include( 'wProcess' );
-  _.include( 'wFiles' );
 
 }
 
@@ -64,7 +62,10 @@ function terminationBeginWithTwoNamespaces( test )
     test.case = 'termination of procedures from first global namespace';
     test.notIdentical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Global procedures : undefined' ), 0 );
+    test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
     test.identical( _.strCount( op.output, 'Global procedures : 2' ), 2 );
+    test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+    test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
     test.identical( _.strCount( op.output, 'timer1' ), 1 );
     test.identical( _.strCount( op.output, 'timer2' ), 1 );
     test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
@@ -83,7 +84,10 @@ function terminationBeginWithTwoNamespaces( test )
     test.case = 'termination of procedures from second global namespace';
     test.notIdentical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Global procedures : undefined' ), 0 );
+    test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
     test.identical( _.strCount( op.output, 'Global procedures : 2' ), 2 );
+    test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+    test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
     test.identical( _.strCount( op.output, 'timer1' ), 1 );
     test.identical( _.strCount( op.output, 'timer2' ), 1 );
     test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
@@ -104,7 +108,6 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program1()
   {
-    debugger;
     let _ = require( toolsPath );
 
     console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_ }` );
@@ -113,10 +116,14 @@ function terminationBeginWithTwoNamespaces( test )
     _.include( 'wProcedure' );
 
     console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 0 ].__GLOBAL_WHICH__ }` );
 
     _.include( 'wTesting' );
 
     console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 1 ].__GLOBAL_WHICH__ }` );
+
+    console.log( `Instances are identical : ${ _realGlobal_._ProcedureGlobals_[ 0 ] === _realGlobal_._ProcedureGlobals_[ 1 ] }` );
 
     let t = _testerGlobal_.wTools;
 
@@ -171,10 +178,14 @@ function terminationBeginWithTwoNamespaces( test )
     _.include( 'wProcedure' );
 
     console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 0 ].__GLOBAL_WHICH__ }` );
 
     _.include( 'wTesting' );
 
     console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 1 ].__GLOBAL_WHICH__ }` );
+
+    console.log( `Instances are identical : ${ _realGlobal_._ProcedureGlobals_[ 0 ] === _realGlobal_._ProcedureGlobals_[ 1 ] }` );
 
     let t = _testerGlobal_.wTools;
 

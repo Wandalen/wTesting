@@ -977,7 +977,7 @@ function mustNotThrowError( test )
       c5.give( function( err, arg )
       {
         test.is( err === undefined );
-        test.is( arg === _.time.out );
+        test.is( _.timerIs( arg ) );
       });
       return null;
     });
@@ -1031,10 +1031,8 @@ function mustNotThrowError( test )
 
       _.time.out( 150, function()
       {
-        debugger;
         con.error( _.errAttend( 'error1' ) );
         con.error( _.errAttend( 'error2' ) );
-        debugger;
         return null;
       });
 
@@ -1334,7 +1332,7 @@ function mustNotThrowErrorWithCallback( test )
         c5.give( ( err, arg ) =>
         {
           test.is( err === undefined );
-          test.is( arg === _.time.out );
+          test.is( _.timerIs( arg ) );
         });
         return null;
       });
@@ -1718,7 +1716,7 @@ function mustNotThrowError_WithCallback( test )
         c5.give( ( err, arg ) =>
         {
           test.is( err === undefined );
-          test.is( arg === _.time.out );
+          test.is( _.timerIs( arg ) );
         });
         return null;
       });

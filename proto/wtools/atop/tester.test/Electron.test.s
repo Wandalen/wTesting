@@ -326,7 +326,7 @@ function processWatchingOnSpectronZombie( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut `, timeOut : 10000 })
+  a.appStartNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
   .then( ( got ) =>
   {
     test.notIdentical( got.exitCode, 0 );

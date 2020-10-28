@@ -144,52 +144,13 @@ function waitForVisibleInViewport( o )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
+  
+  let o2 = _.mapBut( o, { library : null } );
 
-  let ready = _.time.outError( o.timeOut, ( err ) =>
-  {
-    if( _.errIs( err ) )
-    {
-      _.errAttend( err );
-      throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
-    }
-  });
-  return _.Consequence.From( _waitForVisibleInViewport() );
-
-  /* */
-
-  async function _waitForVisibleInViewport()
-  {
-    let element = null;
-    let exists = true;
-
-    if( o.library === 'spectron' )
-    exists = await o.page.isExisting( o.targetSelector );
-
-    if( exists )
-    element = await o.page.$( o.targetSelector );
-
-    if( ready.resourcesCount() )
-    return ready;
-
-    if( element )
-    {
-      let isIntersectingViewport = await test.isVisibleWithinViewport
-      ({
-        targetSelector : o.targetSelector,
-        page : o.page,
-        library : o.library
-      });
-      if( isIntersectingViewport )
-      {
-        ready.error( _.dont );
-        await ready;
-        ready.take( isIntersectingViewport );
-        return ready;
-      }
-    }
-
-    return _waitForVisibleInViewport();
-  }
+  if( o.library === 'spectron' )
+  return test.waitForVisibleInViewportSpectron( o2 );
+  else
+  return test.waitForVisibleInViewportPuppeteer( o2 );
 }
 
 waitForVisibleInViewport.defaults =
@@ -198,6 +159,140 @@ waitForVisibleInViewport.defaults =
   timeOut : 5000,
   page : null,
   library : null
+}
+
+//
+
+function waitForVisibleInViewportPuppeteer( o )
+{
+  let test = this;
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( waitForVisibleInViewportPuppeteer, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.numberIs( o.timeOut ) )
+  _.assert( _.objectIs( o.page ) )
+  
+  let ready = _.Consequence().take( null )
+  
+  ready.then( () => 
+  {
+    let func = o.page._pageBindings.get( 'puppeteerWaitForVisible' );
+    if( _.routineIs( func ) )
+    return null;
+    return o.page.exposeFunction( 'puppeteerWaitForVisible', waitForVisible ) 
+  })
+  ready.then( () => o.page.waitForFunction( waitFunction, { timeout : o.timeOut }, o.targetSelector ) )
+
+  ready.catch( ( err ) => 
+  {
+    _.errAttend( err );
+    throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed, reason:\n`, err );
+  })
+  
+  return ready;
+  
+  /* */
+  
+  async function waitFunction( selector )
+  {
+    let result = await window.puppeteerWaitForVisible( selector );
+    return result;
+  }
+  
+  /* */
+  
+  async function waitForVisible( selector )
+  {
+    let element = await o.page.$( selector );
+    if( !element )
+    return false;
+    return element.isIntersectingViewport();
+  }
+}
+
+waitForVisibleInViewportPuppeteer.defaults =
+{
+  targetSelector : null,
+  timeOut : 5000,
+  page : null
+}
+
+//
+
+function waitForVisibleInViewportSpectron( o )
+{
+  let test = this;
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( waitForVisibleInViewportSpectron, o );
+  _.assert( _.strIs( o.targetSelector ) )
+  _.assert( _.numberIs( o.timeOut ) )
+  _.assert( _.objectIs( o.page ) )
+
+  let timeOutError = _.time.outError( o.timeOut );
+  let result = _.Consequence();
+  let visilbe = _.Consequence.From( _waitForVisibleInViewport() );
+  
+  result.orKeeping( [ visilbe, timeOutError ] );
+  
+  result.finally( ( err, arg ) => 
+  {
+    if( !err || err.reason !== 'time out' )
+    timeOutError.error( _.dont );
+    
+    if( !err )
+    return arg;
+    
+    _.errAttend( err )
+    
+    if( err.reason === 'time out' )
+    return visilbe.then( () =>
+    {
+      throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
+    })
+    
+    throw err;
+  })
+  
+  return result;
+
+  /* */
+
+  async function _waitForVisibleInViewport()
+  {
+    let element = null;
+    let exists = true;
+    
+    if( timeOutError.resourcesCount() )
+    return null;
+    
+    exists = await o.page.isExisting( o.targetSelector );
+
+    if( exists )
+    element = await o.page.$( o.targetSelector );
+
+    if( element )
+    {
+      let isIntersectingViewport = await test.isVisibleWithinViewport
+      ({
+        targetSelector : o.targetSelector,
+        page : o.page,
+        library : 'spectron'
+      });
+      if( isIntersectingViewport )
+      return true;
+    }
+    
+    return _waitForVisibleInViewport();
+  }
+}
+
+waitForVisibleInViewportSpectron.defaults =
+{
+  targetSelector : null,
+  timeOut : 5000,
+  page : null
 }
 
 //
@@ -290,6 +385,8 @@ let Routines =
   fileDrop,
   eventDispatch,
   waitForVisibleInViewport,
+  waitForVisibleInViewportPuppeteer,
+  waitForVisibleInViewportSpectron,
   isVisibleWithinViewport
 }
 

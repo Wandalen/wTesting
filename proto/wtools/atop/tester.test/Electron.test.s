@@ -108,7 +108,7 @@ function html( test )
   .then( () =>
   {
     test.case = 'Check element text'
-    return app.client.$( '.class1 p' ).getText()
+    return app.client.$( '.class1 p' ).then( ( e ) => e.getText() )
     .then( ( got ) =>
     {
       test.identical( got, 'Text1' )
@@ -118,7 +118,7 @@ function html( test )
   .then( () =>
   {
     test.case = 'Check href attribute'
-    return app.client.$( '.class1 a' ).getAttribute( 'href')
+    return app.client.$( '.class1 a' ).then( ( e ) => e.getAttribute( 'href' ) )
     .then( ( got ) =>
     {
       test.is( _.strEnds( got, '/index.html' ) )
@@ -128,7 +128,7 @@ function html( test )
   .then( () =>
   {
     test.case = 'Check input field value'
-    return app.client.getValue( '#input1' )
+    return app.client.$( '#input1' ).then( ( e ) => e.getValue() )
     .then( ( got ) =>
     {
       test.identical( got, '123' )
@@ -140,8 +140,7 @@ function html( test )
     test.case = 'Change input field value and check it'
     return app.client
     .$( '#input1' )
-    .setValue( '321' )
-    .getValue( '#input1' )
+    .then( ( e ) => e.setValue( '321' ).then( () => e.getValue() ) )
     .then( ( got ) =>
     {
       test.identical( got, '321' )
@@ -174,20 +173,20 @@ async function htmlAwait( test )
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   test.case = 'Check element text'
-  var got = await app.client.$( '.class1 p' ).getText();
+  var got = await app.client.$( '.class1 p' ).then( ( e ) => e.getText() );
   test.identical( got, 'Text1' )
 
   test.case = 'Check href attribute'
-  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
+  var got = await app.client.$( '.class1 a' ).then( ( e) => e.getAttribute( 'href' ) );
   test.is( _.strEnds( got, '/index.html' ) )
 
   test.case = 'Check input field value'
-  var got = await app.client.getValue( '#input1' );
+  var got = await app.client.$( '#input1' ).then( ( e ) => e.getValue() );
   test.identical( got, '123' )
 
   test.case = 'Change input field value and check it'
-  await app.client.$( '#input1' ).setValue( '321' )
-  var got = await app.client.getValue( '#input1' )
+  await app.client.$( '#input1' ).then( ( e ) => e.setValue( '321' ) );
+  var got = await app.client.$( '#input1' ).then( ( e ) => e.getValue() );
   test.identical( got, '321' )
 
   await app.stop();
@@ -220,7 +219,7 @@ function consequenceFromExperiment( test )
 
   ready = _.Consequence.From( ready );
 
-  ready.then( () => _.Consequence.From( app.client.getValue( '#input1' ) ) ) /* returns promiseLike object */
+  ready.then( () => _.Consequence.From( app.client.$( '#input1' ).then( ( e ) => e.getValue() ) ) ) /* returns promiseLike object */
 
   ready.then( ( got ) =>
   {
@@ -267,7 +266,7 @@ function chaining( test )
 
   //select command is chained with .getText
 
-  .then( () => app.client.getText( '.class1 p' ) )
+  .then( () => app.client.$( '.class1 p' ).then( ( e ) => e.getText() ))
 
   .then( ( text ) =>
   {

@@ -43,14 +43,17 @@ async function dragAndDropFile( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let htmlFilePath = _.path.nativize( _.path.join( routinePath, 'fileDragAndDrop.html' ) );
+  /* Fails with `read ECONNRESET` error on high load
+    Opening html file from electron app helps to solve the problem
+  */
+  let mainFilePath = _.path.nativize( _.path.join( routinePath, 'dragAndDrop.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ htmlFilePath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()
@@ -92,14 +95,14 @@ async function dragAndDropFileWithHelper( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let htmlFilePath = _.path.nativize( _.path.join( routinePath, 'fileDragAndDrop.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( routinePath, 'dragAndDrop.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ htmlFilePath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()

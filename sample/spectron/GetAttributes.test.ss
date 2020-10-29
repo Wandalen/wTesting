@@ -43,14 +43,14 @@ async function elementsAttributeGet( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexPath = _.path.nativize( _.path.join( routinePath, 'index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexPath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()

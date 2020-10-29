@@ -2534,7 +2534,8 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
 
   o.conStart.then( () =>
   {
-    _.time.out( 10000, () => o.process.send( 'SIGINT' ) );
+    /* time delay should be exactly 5s to match delay in test asset */
+    _.time.out( 5000, () => o.process.send( 'SIGINT' ) ); /* qqq : parametrize time delays */
     return null;
   })
 
@@ -2545,6 +2546,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
     test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
     return null;
   })
 

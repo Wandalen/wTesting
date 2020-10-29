@@ -56,7 +56,9 @@ async function elementsAttributeGet( test )
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  var got = await app.client.getAttribute( 'div[attr]', 'attr' );
+  var elements = await app.client.$$( 'div[attr]' );
+  var attributes = elements.map( ( e ) => _.Consequence.From( e.getAttribute( 'attr' ) ) );
+  var got = await _.Consequence.And( ...attributes );
   test.identical( got, [ '1', '2', '3' ] )
   
   await app.stop();

@@ -50,13 +50,20 @@ async function chaining( test )
     path : ElectronPath,
     args : [ mainPath ]
   })
+  
 
   await app.start()
   test.case = 'wait for load then check innerText property'
+  // Command chaining doesn't work anymore in new version of spectron
+  /*
   var text = await app.client
   .waitUntilTextExists( 'p','Hello world', 5000 )
   .$( '.class1 p' )
   .getText()
+  */
+  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  var element = await app.client.$( '.class1 p' );
+  var text = await element.getText();
   test.identical( text, 'Text1' );
   await app.stop();
   

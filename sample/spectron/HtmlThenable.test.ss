@@ -58,7 +58,8 @@ function html( test )
   .then( () =>
   {
     test.case = 'Check element text'
-    return app.client.$( '.class1 p' ).getText()
+    return app.client.$( '.class1 p' )
+    .then( ( e ) => e.getText() )
     .then( ( got ) =>
     {
       test.identical( got, 'Text1' )
@@ -68,7 +69,8 @@ function html( test )
   .then( () =>
   {
     test.case = 'Check href attribute'
-    return app.client.$( '.class1 a' ).getAttribute( 'href')
+    return app.client.$( '.class1 a' )
+    .then( ( e ) => e.getAttribute( 'href' ) )
     .then( ( got ) =>
     {
       test.is( _.strEnds( got, '/index.html' ) )
@@ -78,24 +80,21 @@ function html( test )
   .then( () =>
   {
     test.case = 'Check input field value'
-    return app.client.getValue( '#input1' )
+    return app.client.$( '#input1' )
+    .then( ( e ) => e.getValue() )
     .then( ( got ) =>
     {
       test.identical( got, '123' )
     })
   })
 
-  .then( () =>
+  .then( async () =>
   {
     test.case = 'Change input field value and check it'
-    return app.client
-    .$( '#input1' )
-    .setValue( '321' )
-    .getValue( '#input1' )
-    .then( ( got ) =>
-    {
-      test.identical( got, '321' )
-    })
+    let element = await app.client.$( '#input1' );
+    await element.setValue( '321' );
+    var got = await element.getValue();
+    test.identical( got, '321' )
   })
 
   .then( () => app.stop() )

@@ -1,6 +1,6 @@
 {
   "name" : "wTesting",
-  "version" : "1.0.385",
+  "version" : "1.0.386",
   "engine" : "node >= 10.0.0",
   "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -58,8 +58,8 @@
   {
     "wTesting" : "file:.",
     "wait-sync" : "1.0.1",
-    "electron" : "8.2.5",
-    "spectron" : "10.0.1",
+    "electron" : "10.1.5",
+    "spectron" : "12.0.0",
     "puppeteer" : "5.2.1",
     "eslint" : "7.1.0"
   },

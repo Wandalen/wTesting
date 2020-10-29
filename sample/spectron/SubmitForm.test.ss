@@ -47,13 +47,13 @@ async function submitForm( test )
   let self = this;
 
   // Prepare path to electron app script( main.js )
-  let indexHtml = _.path.nativize( _.path.join( __dirname, 'asset/form/index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( __dirname, 'asset/form/form.ss' ) );
 
   // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtml ]//use path to index html as arg for electron app
+    args : [ mainFilePath ]
   })
 
   // Start the electron app

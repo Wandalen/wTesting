@@ -76,9 +76,10 @@ async function dragAndDropFile( test )
   }, fileInputId, dropZoneSelector );
   
   let file = await app.client.uploadFile( __filename );
-  await app.client.$(`#${fileInputId}`).setValue( file.value )
+  var element = await app.client.$(`#${fileInputId}`);
+  await element.setValue( file )
   let result = await app.client.execute( () => window.dropFiles );
-  test.identical( result.value, [ _.path.name({ path : __filename, full : 1 }) ] )
+  test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
   
   await app.stop();
 
@@ -114,7 +115,7 @@ async function dragAndDropFileWithHelper( test )
   })
   
   let result = await app.client.execute( () => window.dropFiles );
-  test.identical( result.value, [ _.path.name({ path : __filename, full : 1 }) ] )
+  test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
   
   await app.stop();
 

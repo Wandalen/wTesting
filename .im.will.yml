@@ -56,12 +56,12 @@ submodule :
     criterion :
       development : 1
   electron :
-    path : npm:///electron#8.2.5
+    path : npm:///electron#10.1.5
     enabled : 0 # submodule
     criterion :
       development : 1
   spectron :
-    path : npm:///spectron#10.0.1
+    path : npm:///spectron#12.0.0
     enabled : 0 # submodule
     criterion :
       development : 1

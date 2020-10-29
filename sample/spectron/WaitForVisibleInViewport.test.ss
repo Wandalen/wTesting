@@ -65,7 +65,8 @@ async function waitForVisibleInViewport( test )
     targetSelector : 'p'
   });
 
-  var got = await app.client.$( 'p' ).isVisible();
+  var element = await app.client.$( 'p' );
+  var got = await element.isDisplayedInViewport();
   test.identical( got, true );
 
   await app.stop();

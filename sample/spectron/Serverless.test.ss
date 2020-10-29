@@ -59,9 +59,10 @@ async function loadLocalHtmlFile( test )
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   var got = await app.client.execute( () => window.scriptLoaded )
-  test.identical( got.value, true );
+  test.identical( got, true );
 
-  var got = await app.client.getCssProperty( 'p', 'color' )
+  var element = await app.client.$( 'p' );
+  var got = await element.getCSSProperty( 'color' );
   test.identical( got.value, 'rgba(192,192,192,1)' );
 
   await app.stop();

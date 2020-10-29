@@ -46,7 +46,7 @@ function fileDrop( o )
     ready
     .then( () => o.page.execute( fileInputCreate, o.fileInputId, o.targetSelector ) )
     // .then( () => _.Consequence.And( filePath.map( path => _.Consequence.From( o.page.uploadFile( path ) ) ) ) )
-    .then( () => o.page.$(`#${o.fileInputId}`).addValue( filePath.join( '\n' ) ) )
+    .then( () => o.page.$(`#${o.fileInputId}`).then( ( e ) => e.addValue( filePath.join( '\n' ) ) ) )
   }
 
   function fileInputCreate( fileInputId, targetSelector, filePaths )

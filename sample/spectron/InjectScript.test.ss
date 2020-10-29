@@ -65,7 +65,7 @@ async function injectScript( test )
     element.innerText = 'Hello from test';
     return element.innerText;
   })
-  test.identical( got.value, 'Hello from test' );
+  test.identical( got, 'Hello from test' );
 
   //Stop the electron app
   return app.stop();

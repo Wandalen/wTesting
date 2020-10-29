@@ -62,13 +62,16 @@ async function submitForm( test )
   await app.client.waitUntilTextExists( 'p', 'Result', 5000 );
 
   // Set input field value
-  await app.client.$( '#input1' ).setValue( '321' );
+  let input = await app.client.$( '#input1' );
+  await input.setValue( '321' );
 
   //Click submit button
-  await app.client.$( '#submit' ).click();
+  let submit = await app.client.$( '#submit' );
+  await submit.click();
 
   // Check text result
-  var result = await app.client.$( '#result' ).getText();
+  var result = await app.client.$( '#result' )
+  result = await result.getText();
   test.identical( result, 'Result:321' )
 
   //Stop the electron app

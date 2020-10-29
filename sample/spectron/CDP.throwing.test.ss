@@ -56,7 +56,7 @@ async function accessChromeDevToolsProtocol( test )
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
-  /* Does not work on Spectron v7.0.0 & v11.0.0 */
+  /* Does not work on Spectron v12.0.0 */
 
   await app.webContents.debugger.attach( '1.1' );
   await app.webContents.debugger.sendCommand( 'Page.enable' );

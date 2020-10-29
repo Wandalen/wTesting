@@ -59,7 +59,7 @@ async function localStorage( test )
   })
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  await app.client.localStorage( 'POST', { key : 'itemKey', value : 'itemValue' })
+  await app.client.execute( () => this.localStorage.setItem( 'itemKey', 'itemValue' ) )
   await app.stop();
   
   //
@@ -73,8 +73,8 @@ async function localStorage( test )
   })
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
-  var got = await app.client.localStorage( 'GET', 'itemKey' );
-  test.identical( got.value, 'itemValue' );
+  var got = await app.client.execute( () => this.localStorage.getItem( 'itemKey' ) )
+  test.identical( got, 'itemValue' );
   await app.stop();
 
   return null;

@@ -18,12 +18,12 @@ let _ = _realGlobal_._testerGlobal_.wTools
 async function routineTimeOut( test )
 {
   let context = this;
-  let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()
@@ -42,12 +42,12 @@ routineTimeOut.timeOut = 5000;
 async function spectronTimeOut( test )
 {
   let context = this;
-  let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()
@@ -63,12 +63,12 @@ async function spectronTimeOut( test )
 async function errorInTest( test )
 {
   let context = this;
-  let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()
@@ -81,12 +81,12 @@ async function errorInTest( test )
 async function clientContinuesToWorkAfterTest( test )
 {
   let context = this;
-  let indexHtmlPath = _.path.nativize( _.path.join( __dirname, 'index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( __dirname, 'main.ss' ) );
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainFilePath ]
   })
 
   await app.start()

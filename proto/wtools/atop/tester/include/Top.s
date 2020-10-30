@@ -10,7 +10,12 @@ if( !_global && typeof Global !== 'undefined' && Global.Global === Global ) _glo
 if( !_global && typeof global !== 'undefined' && global.global === global ) _global = global;
 if( !_global && typeof window !== 'undefined' && window.window === window ) _global = window;
 if( !_global && typeof self   !== 'undefined' && self.self === self ) _global = self;
-_global._realGlobal_ = _global;
+if( !_global._globals_ )
+{
+  _global._globals_ = Object.create( null );
+  _global._globals_.real = _global;
+}
+let _realGlobal = _global._realGlobal_ = _global;
 let _wasGlobal = _global._global_ || _global;
 _global = _wasGlobal;
 _global._global_ = _wasGlobal;
@@ -32,6 +37,7 @@ if( typeof module !== 'undefined' )
   _global = _global._global_ = Object.create( _global._global_ );
   _global.__GLOBAL_WHICH__ = 'wTesting';
   _realGlobal_._testerGlobal_ = _global;
+  _realGlobal_._globals_.testing = _global;
 
   //
 

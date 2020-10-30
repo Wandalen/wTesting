@@ -171,7 +171,7 @@ function detachedDisconnectedChildProcess( test )
   function suiteBegin()
   {
     var self = this;
-    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'ForTesting2' );
+    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
     self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
     self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
@@ -181,7 +181,7 @@ function detachedDisconnectedChildProcess( test )
   function suiteEnd()
   {
     var self = this;
-    _.assert( _.strHas( self.suiteTempPath, '/ForTesting2-' ) )
+    _.assert( _.strHas( self.suiteTempPath, '/DetachedProcess-' ) )
     _.path.tempClose( self.suiteTempPath );
   }
 
@@ -210,11 +210,11 @@ function detachedDisconnectedChildProcess( test )
     function testApp()
     {
       console.log( 'Child process start', process.pid )
-      setTimeout( context.t2 * 3, () =>
+      setTimeout( () =>
       {
         console.log( 'Child process end' )
         return null;
-      })
+      }, context.t2 * 3 )
     }
   }
 }

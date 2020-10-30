@@ -69,7 +69,7 @@ function main( test )
     onSuiteEnd,
     routineTimeOut : 3000,
     processWatching : 1,
-    name : 'ForTesting',
+    name : 'Trivial',
 
     tests :
     {
@@ -88,7 +88,7 @@ function main( test )
     console.log( suite.report.errorsArray );
     test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
     test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
-    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "ForTesting" had zombie process with pid' ), 1 );
+    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Trivial" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
@@ -130,7 +130,7 @@ function detachedDisconnectedChildProcess( test )
     onSuiteEnd : suiteEnd,
     routineTimeOut : 3000,
     processWatching : 1,
-    name : 'ForTesting',
+    name : 'DetachedProcess',
     
     context : 
     {
@@ -159,7 +159,7 @@ function detachedDisconnectedChildProcess( test )
 
     console.log( suite.report.errorsArray.length );
     console.log( suite.report.errorsArray );
-    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "ForTesting" had zombie process with pid' ), 1 );
+    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DetachedProcess" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 

@@ -8,10 +8,10 @@ if( typeof module !== 'undefined' )
 
   let _ = require( '../../Tools.s' );
 
-  if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../tester/entry/Main.s' );
 
   _.include( 'wProcess' );
+  _.include( 'wProcedure' );
 
 }
 
@@ -49,60 +49,107 @@ function onSuiteEnd()
 function terminationBeginWithTwoNamespaces( test )
 {
   let context = this;
+  var testRoutine;
   let a = test.assetFor( 'double' );
   let locals = { toolsPath : a.path.nativize( _.module.toolsPathGet() ) };
   let programPath1 = a.program({ routine : program1, locals });
   let programPath2 = a.program({ routine : program2, locals });
+  let currentPath = a.abs( '.' );
 
   /* */
 
-  a.appStartNonThrowing({ execPath : programPath1 })
-  .then( ( op ) =>
+  function testResult1( t )
   {
-    test.case = 'termination of procedures from first global namespace';
-    test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'Global procedures : undefined' ), 0 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
-    test.identical( _.strCount( op.output, 'Global procedures : 2' ), 2 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
-    test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
-    test.identical( _.strCount( op.output, 'timer1' ), 1 );
-    test.identical( _.strCount( op.output, 'timer2' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-    test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
-    test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-    test.identical( _.strCount( op.output, 'procedure::' ), 1 );
-    test.identical( _.strCount( op.output, 'v1' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationEnd2' ), 1 );
-    return null;
+    let context = this;
+    testRoutine = t;
+
+    let ready = new _.Consequence().take( null );
+
+    let start = _.process.starter
+    ({
+      execPath : 'node ',
+      currentPath,
+      outputCollecting : 1,
+      outputGraying : 1,
+      throwingExitCode : 0,
+      ready,
+      mode : 'shell',
+    });
+
+    start( programPath1 )
+    .then( ( op ) =>
+    {
+      t.case = 'termination of procedures from first global namespace';
+      t.identical( op.exitCode, 0 );
+      t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
+      t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+      t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+      t.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+      t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
+      t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
+      t.identical( _.strCount( op.output, 'timer1' ), 1 );
+      t.identical( _.strCount( op.output, 'timer2' ), 1 );
+      t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+      t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+      t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+      t.identical( _.strCount( op.output, 'procedure::' ), 1 );
+      t.identical( _.strCount( op.output, 'v1' ), 1 );
+      t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+      return null;
+    });
+
+    start( programPath2 )
+    .then( ( op ) =>
+    {
+      test.case = 'termination of procedures from second global namespace';
+      test.identical( op.exitCode, 0 );
+      test.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
+      test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+      test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+      test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+      test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
+      test.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
+      test.identical( _.strCount( op.output, 'timer1' ), 1 );
+      test.identical( _.strCount( op.output, 'timer2' ), 1 );
+      test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+      test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+      test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+      test.identical( _.strCount( op.output, 'procedure::' ), 1 );
+      test.identical( _.strCount( op.output, 'v1' ), 1 );
+      test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+      return null;
+    });
+
+    return ready;
+  }
+
+  /* */
+
+  var suite = wTestSuite
+  ({
+    tests : { testResult1 },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
   });
 
-  a.appStartNonThrowing({ execPath : programPath2 })
-  .then( ( op ) =>
+  var result = suite.run()
+  .finally( ( err, data ) =>
   {
-    test.case = 'termination of procedures from second global namespace';
-    test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'Global procedures : undefined' ), 0 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
-    test.identical( _.strCount( op.output, 'Global procedures : 2' ), 2 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
-    test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
-    test.identical( _.strCount( op.output, 'timer1' ), 1 );
-    test.identical( _.strCount( op.output, 'timer2' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-    test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
-    test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-    test.identical( _.strCount( op.output, 'procedure::' ), 1 );
-    test.identical( _.strCount( op.output, 'v1' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationEnd2' ), 1 );
+
+    var acheck = testRoutine.checkCurrent();
+    test.identical( acheck.checkIndex, 16 );
+    test.identical( suite.report.testCheckPasses, 15 );
+    test.identical( suite.report.testCheckFails, 0 );
+
+    if( err )
+    throw err;
+
     return null;
   });
 
   /* */
 
-  return a.ready;
+  return result;
 
   /* */
 
@@ -110,22 +157,28 @@ function terminationBeginWithTwoNamespaces( test )
   {
     let _ = require( toolsPath );
 
-    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_ }` );
+    let keys = _.mapKeys( _realGlobal_._globals_ );
+    console.log( `Global procedures : ${ keys.length }` );
 
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 0 ].__GLOBAL_WHICH__ }` );
+    keys = _.mapKeys( _realGlobal_._globals_ );
+    console.log( `Global procedures : ${ keys.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_WHICH__ }` );
 
     _.include( 'wTesting' );
 
-    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 1 ].__GLOBAL_WHICH__ }` );
+    keys = _.mapKeys( _realGlobal_._globals_ );
+    console.log( `Global procedures : ${ keys.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_WHICH__ }` );
 
-    console.log( `Instances are identical : ${ _realGlobal_._ProcedureGlobals_[ 0 ] === _realGlobal_._ProcedureGlobals_[ 1 ] }` );
+    console.log( `Instances are identical : ${ keys[ 0 ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
 
-    let t = _testerGlobal_.wTools;
+    if( _ !== _realGlobal_._globals_[ 'real' ].wTools )
+    throw _.err( 'Wrong namespace for _.' )
+
+    let t = _realGlobal_._globals_[ 'testing' ].wTools;
 
     /* */
 
@@ -155,11 +208,6 @@ function terminationBeginWithTwoNamespaces( test )
       console.log( 'terminationEnd1' );
     });
 
-    t.procedure.on( 'terminationEnd', () =>
-    {
-      console.log( 'terminationEnd2' );
-    });
-
     /* */
 
     _.procedure.terminationPeriod = 1000;
@@ -172,22 +220,28 @@ function terminationBeginWithTwoNamespaces( test )
   {
     let _ = require( toolsPath );
 
-    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_ }` );
+    let keys = _.mapKeys( _realGlobal_._globals_ );
+    console.log( `Global procedures : ${ keys.length }` );
 
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 0 ].__GLOBAL_WHICH__ }` );
+    keys = _.mapKeys( _realGlobal_._globals_ );
+    console.log( `Global procedures : ${ keys.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_WHICH__ }` );
 
     _.include( 'wTesting' );
 
-    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._ProcedureGlobals_[ 1 ].__GLOBAL_WHICH__ }` );
+    keys = _.mapKeys( _realGlobal_._globals_ );
+    console.log( `Global procedures : ${ keys.length }` );
+    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_WHICH__ }` );
 
-    console.log( `Instances are identical : ${ _realGlobal_._ProcedureGlobals_[ 0 ] === _realGlobal_._ProcedureGlobals_[ 1 ] }` );
+    console.log( `Instances are identical : ${ keys[ 0 ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
 
-    let t = _testerGlobal_.wTools;
+    if( _ !== _realGlobal_._globals_[ 'real' ].wTools )
+    throw _.err( 'Wrong namespace for _.' )
+
+    let t = _realGlobal_._globals_[ 'testing' ].wTools;
 
     /* */
 
@@ -217,11 +271,6 @@ function terminationBeginWithTwoNamespaces( test )
       console.log( 'terminationEnd1' );
     });
 
-    _.procedure.on( 'terminationEnd', () =>
-    {
-      console.log( 'terminationEnd2' );
-    });
-
     /* */
 
     t.procedure.terminationPeriod = 1000;
@@ -236,6 +285,10 @@ terminationBeginWithTwoNamespaces.description =
 - terminationBegin terminate global namespaces in _ProcedureGlobals_
 - each global namespace terminate own procedures
 `
+
+//
+
+var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
 // --
 // declare
@@ -256,6 +309,7 @@ let Self =
     suiteTempPath : null,
     assetsOriginalPath : null,
     appJsPath : null,
+    notTakingIntoAccount,
   },
 
   tests :

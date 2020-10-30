@@ -57,8 +57,9 @@ async function element( test )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
   test.case = 'Check element html'
-  var got = await app.client.$( '.class1 p' ).getHTML();
-  test.identical( got, '<p>Text1</p>' )
+  var element = await app.client.$( '.class1 p' );
+  var got = await element.getHTML();
+  test.identical( got, '<p>Text1</p>' );
 
   await app.stop();
 

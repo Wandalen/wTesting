@@ -943,6 +943,7 @@ function _end( err )
 function _terminated()
 {
   let suite = this;
+  debugger;
   let err = _.process ? _.process.exitReason() : null;
   if( !err )
   {
@@ -1381,6 +1382,7 @@ function processWatchingBegin()
     _.assert( !suite._processWatcherMap[ o.process.pid ] )
     suite._processWatcherMap[ o.process.pid ] = o;
   }
+
   function subprocessTerminationEnd( o )
   {
     if( o.sync )
@@ -1388,6 +1390,7 @@ function processWatchingBegin()
     _.assert( suite._processWatcherMap[ o.process.pid ] );
     delete suite._processWatcherMap[ o.process.pid ];
   }
+
 }
 
 //

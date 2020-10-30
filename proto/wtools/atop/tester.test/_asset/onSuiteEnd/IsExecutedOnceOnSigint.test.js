@@ -24,14 +24,10 @@ let onSuiteEndIsExecuted = false;
 function onSuiteEnd()
 {
   console.log( 'Executing onSuiteEnd' );
-
   if( onSuiteEndIsExecuted )
   throw _.err( 'onSuiteEnd is executed for second time!' );
-
   onSuiteEndIsExecuted = true;
-
-  let con = _.time.out( 1000 )
-  con.deasync();
+  let con = _.time.out( 10000 );
   return con;
 }
 

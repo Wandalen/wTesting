@@ -2534,7 +2534,8 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
 
   o.conStart.then( () =>
   {
-    _.time.out( 10000, () => o.process.send( 'SIGINT' ) );
+    /* time delay should be exactly 5s to match delay in test asset */
+    _.time.out( 5000, () => o.process.send( 'SIGINT' ) ); /* qqq : parametrize time delays */
     return null;
   })
 
@@ -2545,6 +2546,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
     test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
     return null;
   })
 
@@ -2787,6 +2789,72 @@ termination.description =
   - process terminates even if consequence recieves argument
 `
 
+//
+
+function uncaughtErrorNotSilenced( test )
+{
+  let context = this;
+  let a = context.assetFor( test, false );
+  let programPath = a.program({ routine : program1 });
+  let ready = _.Consequence().take( null );
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'basic';
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
+      args : [ 'silencing:1' ],
+      mode : 'fork',
+    })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
+      test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+      test.notIdentical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  return ready;
+
+  /* - */
+
+  function program1()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wTesting' );
+
+    function routine1( test )
+    {
+      _.time.begin( 1, () => _.error._handleUncaught2({ err : 'Error1' }) );
+    }
+
+    let Self =
+    {
+      tests :
+      {
+        routine1,
+      }
+    }
+
+    Self = wTestSuite( Self );
+    wTester.test( Self.name );
+  }
+
+}
+
+termination.description =
+`
+  - process terminates even if consequence recieves attended error
+  - process terminates even if consequence recieves unattended error
+  - process terminates even if consequence recieves argument
+`
+
 // --
 // suite
 // --
@@ -2859,6 +2927,7 @@ let Self =
     programOptionsRoutineDirPath,
 
     termination,
+    uncaughtErrorNotSilenced,
 
   }
 

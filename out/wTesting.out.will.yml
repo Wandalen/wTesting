@@ -3,14 +3,14 @@ root:
   - wTesting.out
 consistency:
   wTesting.out.will.yml: &ref_0
-    hash: 210e38d427c4ac30c438eac136d19740
-    size: 49538
+    hash: 38a3c5963ae0c8ebfa6b6dc6c00a3d13
+    size: 49156
   ../.ex.will.yml: &ref_1
     hash: b259909518ce877bcdeca298a613d7de
     size: 2784
   ../.im.will.yml: &ref_2
-    hash: 23818c9e2beda7b688fab1814de2e5db
-    size: 6397
+    hash: 5d51358b99c5c58089597978d21642eb
+    size: 6398
 module:
   wTesting.out:
     about:
@@ -358,13 +358,13 @@ module:
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#8.2.5'
+        path: 'npm:///electron#10.1.5'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#10.0.1'
+        path: 'npm:///spectron#12.0.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1219,13 +1219,13 @@ module:
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#8.2.5'
+        path: 'npm:///electron#10.1.5'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#10.0.1'
+        path: 'npm:///spectron#12.0.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1777,6 +1777,8 @@ module:
         hash: b259909518ce877bcdeca298a613d7de
         size: 2784
       ../.im.will.yml:
-        hash: 23818c9e2beda7b688fab1814de2e5db
-        size: 6397
-      wTesting.out.will.yml: *ref_0
+        hash: 5d51358b99c5c58089597978d21642eb
+        size: 6398
+      wTesting.out.will.yml:
+        hash: 38a3c5963ae0c8ebfa6b6dc6c00a3d13
+        size: 49156

@@ -57,20 +57,24 @@ async function htmlAwait( test )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
   test.case = 'Check element text'
-  var got = await app.client.$( '.class1 p' ).getText();
+  var element = await app.client.$( '.class1 p' );
+  var got = await element.getText();
   test.identical( got, 'Text1' )
 
   test.case = 'Check href attribute'
-  var got = await app.client.$( '.class1 a' ).getAttribute( 'href');
+  var element = await app.client.$( '.class1 a' );
+  var got = await element.getAttribute( 'href');
   test.is( _.strEnds( got, '/index.html' ) )
 
   test.case = 'Check input field value'
-  var got = await app.client.getValue( '#input1' );
+  var element = await app.client.$( '#input1' );
+  var got = await element.getValue();
   test.identical( got, '123' )
 
   test.case = 'Change input field value and check it'
-  await app.client.$( '#input1' ).setValue( '321' )
-  var got = await app.client.getValue( '#input1' )
+  var element = await app.client.$( '#input1' );
+  await element.setValue( '321' );
+  var got = await element.getValue( '#input1' )
   test.identical( got, '321' )
 
   await app.stop();

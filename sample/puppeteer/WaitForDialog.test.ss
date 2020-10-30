@@ -52,15 +52,17 @@ async function WaitForDialog( test )
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
   await page.waitForSelector( 'p', { visible : true } );
   
-  let ready = _.time.outError( 5000 );
+  let timeOutError = _.time.outError( 5000 );
+  let ready = _.Consequence();
   page.on( 'dialog', ( e ) => 
   { 
     test.identical( e.message(), 'test message' );
     e.accept();
-    ready.take( _.dont );
+    ready.take( true )
+    timeOutError.error( _.dont );//cancel timer
   });
   await page.evaluate( () => alert( 'test message' ) );
-  await ready;
+  await ready.orKeeping([ timeOutError ]);// wait for dialog to be accepted or time out error
   await browser.close();
 
   return null;

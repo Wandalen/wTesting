@@ -130,9 +130,9 @@ function detachedDisconnectedChildProcess( test )
     onSuiteEnd : suiteEnd,
     routineTimeOut : 3000,
     processWatching : 1,
-    name : 'ForTesting',
-    
-    context : 
+    name : 'ForTesting2',
+
+    context :
     {
       suiteTempPath : null,
       toolsPath : null,
@@ -159,7 +159,7 @@ function detachedDisconnectedChildProcess( test )
 
     console.log( suite.report.errorsArray.length );
     console.log( suite.report.errorsArray );
-    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "ForTesting" had zombie process with pid' ), 1 );
+    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "ForTesting2" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
@@ -171,7 +171,7 @@ function detachedDisconnectedChildProcess( test )
   function suiteBegin()
   {
     var self = this;
-    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'ForTesting' );
+    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'ForTesting2' );
     self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
     self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
@@ -181,7 +181,7 @@ function detachedDisconnectedChildProcess( test )
   function suiteEnd()
   {
     var self = this;
-    _.assert( _.strHas( self.suiteTempPath, '/ForTesting-' ) )
+    _.assert( _.strHas( self.suiteTempPath, '/ForTesting2-' ) )
     _.path.tempClose( self.suiteTempPath );
   }
 
@@ -189,24 +189,24 @@ function detachedDisconnectedChildProcess( test )
   {
     let context = this;
     let a = context.assetFor( test, null );
-    
+
     let testAppPath = a.path.nativize( a.program( testApp ) );
-    
-    let o = 
-    { 
+
+    let o =
+    {
       execPath : 'node ' + testAppPath,
-      mode : 'spawn', 
-      detaching : 1, 
-      stdio : 'pipe', 
-      outputPiping : 1 
+      mode : 'spawn',
+      detaching : 1,
+      stdio : 'pipe',
+      outputPiping : 1
     }
-    
+
     _.process.start( o );
-    
+
     o.conStart.thenGive( () => o.disconnect() )
-    
+
     //
-    
+
     function testApp()
     {
       console.log( 'Child process start', process.pid )

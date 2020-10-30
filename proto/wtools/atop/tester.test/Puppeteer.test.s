@@ -295,7 +295,7 @@ function chaining( test )
 
   ready.then( () =>
   {
-    return browser.close()
+    return browser.close()//qqq Phantom bug: https://github.com/puppeteer/puppeteer/issues/6341
     .then( () => null )
   });
 

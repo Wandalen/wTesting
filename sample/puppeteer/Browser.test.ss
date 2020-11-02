@@ -52,10 +52,10 @@ async function browser( test )
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
   var version = await browser.version();
-  test.is( _.strHas( version, '85.0' ) );
+  test.is( _.strHas( version, /\d\d.0/ ) );
 
   var agent = await browser.userAgent();
-  test.is( _.strHas( agent, '85.0' ) );
+  test.is( _.strHas( version, /\d\d.0/ ) );
 
   await browser.close();
 

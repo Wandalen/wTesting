@@ -57,7 +57,6 @@
   "devDependencies" :
   {
     "wTesting" : "file:.",
-    "wait-sync" : "1.0.1",
     "electron" : "10.1.5",
     "spectron" : "12.0.0",
     "puppeteer" : "5.2.1",

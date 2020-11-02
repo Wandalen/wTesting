@@ -47,13 +47,13 @@ async function submitForm( test )
   let self = this;
 
   // Prepare path to electron app script( main.js )
-  let indexHtml = _.path.nativize( _.path.join( __dirname, 'asset/form/index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( __dirname, 'asset/form/form.ss' ) );
 
   // Create app instance using path to main.js and electron binary
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtml ]//use path to index html as arg for electron app
+    args : [ mainFilePath ]
   })
 
   // Start the electron app
@@ -62,13 +62,16 @@ async function submitForm( test )
   await app.client.waitUntilTextExists( 'p', 'Result', 5000 );
 
   // Set input field value
-  await app.client.$( '#input1' ).setValue( '321' );
+  let input = await app.client.$( '#input1' );
+  await input.setValue( '321' );
 
   //Click submit button
-  await app.client.$( '#submit' ).click();
+  let submit = await app.client.$( '#submit' );
+  await submit.click();
 
   // Check text result
-  var result = await app.client.$( '#result' ).getText();
+  var result = await app.client.$( '#result' )
+  result = await result.getText();
   test.identical( result, 'Result:321' )
 
   //Stop the electron app

@@ -46,22 +46,23 @@ async function loadLocalHtmlFile( test )
 {
   let self = this;
   let routinePath = _.path.join( self.tempDir, test.name );
-  let indexHtmlPath = _.path.nativize( _.path.join( routinePath, 'serverless/index.html' ) );
+  let mainFilePath = _.path.nativize( _.path.join( routinePath, 'serverless/serverless.ss' ) );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   let app = new Spectron.Application
   ({
     path : ElectronPath,
-    args : [ indexHtmlPath ]
+    args : [ mainFilePath ]
   })
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   var got = await app.client.execute( () => window.scriptLoaded )
-  test.identical( got.value, true );
+  test.identical( got, true );
 
-  var got = await app.client.getCssProperty( 'p', 'color' )
+  var element = await app.client.$( 'p' );
+  var got = await element.getCSSProperty( 'color' );
   test.identical( got.value, 'rgba(192,192,192,1)' );
 
   await app.stop();

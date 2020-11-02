@@ -57,10 +57,11 @@ async function WaitForDialog( test )
   })
 
   await app.start()
-  await app.client.waitForVisible( 'p', 5000 )
+  let element = await app.client.$( 'p' );
+  await element.waitForDisplayed( 5000 );
   await app.client.execute( () => alert( 'test message' ) );
-  test.identical( await app.client.alertText(), 'test message' );
-  await app.client.alertAccept();// alertAccept doesn't work for spectron
+  test.identical( await app.client.getAlertText(), 'test message' );
+  await app.client.acceptAlert();// alertAccept doesn't work for spectron
   await app.stop();
 
   return null;

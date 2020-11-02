@@ -70,15 +70,18 @@ async function waitForCondition( test )
       element.innerText = 'Hello from test'
     })
   })
+  
+  let element = await app.client.$( 'p' );
 
   //Wait until text will be changed
   await app.client.waitUntil( async () =>
   {
-    return await app.client.$( 'p' ).getText() === 'Hello from test';
+    let text = await element.getText();
+    return text === 'Hello from test';
   })
 
   //Check text property
-  var got = await app.client.$( 'p' ).getText();
+  var got = await element.getText();
   test.identical( got, 'Hello from test' );
 
   //Stop the electron app

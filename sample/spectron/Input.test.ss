@@ -57,8 +57,9 @@ async function input( test )
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   test.case = 'keyboard';
-  await app.client.$( '#input1' ).setValue( '0123' );
-  var got = await app.client.getValue( '#input1' );
+  var element = await app.client.$( '#input1' );
+  await element.setValue( '0123' );
+  var got = await element.getValue( '#input1' );
   test.identical( got, '0123' );
 
   await app.stop();

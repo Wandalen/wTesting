@@ -298,14 +298,14 @@ function _run()
     else
     {
       _.errAttend( err );
-      err = trd._timeOutError();
+      err = trd._timeOutError( 'From run.' );
       if( err && !trd.report.reason )
       trd.report.reason = err.reason;
       _.errAttend( err );
       _.assert( !err.logged );
+      if( !trd._returnedHow )
+      trd._returnedHow = 'test routine time out';
     }
-    if( !trd._returnedHow )
-    trd._returnedHow = 'test routine time out';
     if( err )
     throw err;
     return arg;
@@ -439,10 +439,8 @@ function _runEnd()
   /* xxx */
   if( !trd._timeLimitErrorCon.resourcesCount() && !trd._timeLimitCon.resourcesCount() )
   {
-    // console.log( `trd._timeLimitErrorCon` );
     trd._timeLimitErrorCon.error( _.dont );
   }
-  // trd._timeLimitErrorCon.take( _.dont );
 
   if( trd._exitCode && !_.process.exitCode )
   trd._exitCode = _.process.exitCode( trd._exitCode );
@@ -616,7 +614,7 @@ function _runInterruptMaybe( throwing )
   if( elapsed > trd.timeOut && !debugged )
   {
     logger.error( `Test routine ${trd.absoluteName} timed out, cant continue!` );
-    let result = trd.cancel({ err : trd._timeOutError() });
+    let result = trd.cancel({ err : trd._timeOutError( 'Cancel.' ) });
     if( throwing )
     throw result;
     return result;
@@ -713,15 +711,16 @@ function cancel( o )
   let logger = trd.logger;
   o = _.routineOptions( cancel, arguments );
 
+  if( !o.err )
+  o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
+  logger.error( _.errOnce( o.err ) );
+
   if( trd._returnedCon )
   if( trd._returnedCon.resourcesCount() === 0 )
   {
-    if( !o.err )
-    o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
-    logger.error( _.errOnce( o.err ) );
     trd._originalReturnedCon.error( o.err );
-    if( !trd._returnedHow )
-    trd._returnedHow = 'test routine time out';
+    // if( !trd._returnedHow )
+    // trd._returnedHow = 'test routine time out';
   }
 
   return wTester.cancel( o );

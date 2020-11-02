@@ -57,15 +57,17 @@ async function domElementProperties( test )
   await app.start()
   // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  
+  var element = await app.client.$( 'p' );
 
   //innerText
-  var text = await app.client.$( 'p' ).getText();
+  var text = await element.getText();
   test.identical( text, 'Hello world' );
   //outerHtml 
-  var html = await app.client.$( 'p' ).getHTML();
+  var html = await element.getHTML();
   test.identical( html, '<p>Hello world</p>' );
   //Elements position on page
-  var location = await app.client.$( 'p' ).getLocation();
+  var location = await element.getLocation();
   test.gt( location.x, 0 );
   test.gt( location.y, 0 );
 

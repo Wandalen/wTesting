@@ -46,7 +46,7 @@ function fileDrop( o )
     ready
     .then( () => o.page.execute( fileInputCreate, o.fileInputId, o.targetSelector ) )
     // .then( () => _.Consequence.And( filePath.map( path => _.Consequence.From( o.page.uploadFile( path ) ) ) ) )
-    .then( () => o.page.$(`#${o.fileInputId}`).addValue( filePath.join( '\n' ) ) )
+    .then( () => o.page.$(`#${o.fileInputId}`).then( ( e ) => e.addValue( filePath.join( '\n' ) ) ) )
   }
 
   function fileInputCreate( fileInputId, targetSelector, filePaths )
@@ -261,18 +261,12 @@ function waitForVisibleInViewportSpectron( o )
 
   async function _waitForVisibleInViewport()
   {
-    let element = null;
-    let exists = true;
-    
     if( timeOutError.resourcesCount() )
     return null;
     
-    exists = await o.page.isExisting( o.targetSelector );
+    let element = await o.page.$( o.targetSelector );
 
-    if( exists )
-    element = await o.page.$( o.targetSelector );
-
-    if( element )
+    if( element.isExisting() )
     {
       let isIntersectingViewport = await test.isVisibleWithinViewport
       ({
@@ -310,16 +304,15 @@ function isVisibleWithinViewport( o )
 
   let con = _.Consequence().take( true );
 
-  if( o.library === 'spectron' )
-  con.then( () => o.page.isExisting( o.targetSelector ) )
+  con.then( () => o.page.$( o.targetSelector ) )
 
-  con.then( ( exists ) =>
+  con.then( ( element ) =>
   {
     if( o.library === 'spectron' )
-    if( !exists )
+    if( !element.isExisting() )
     return null;
 
-    return o.page.$( o.targetSelector );
+    return element;
   })
 
   con.then( ( element ) =>
@@ -344,7 +337,7 @@ function isVisibleWithinViewport( o )
 
   con.then( () =>
   {
-    o.page.timeouts
+    o.page.setTimeout
     ({
       'script' : o.timeOut
     });
@@ -359,7 +352,6 @@ function isVisibleWithinViewport( o )
       observer.observe( element );
     }, o.targetSelector );
   });
-  con.then( ( result ) => result.value )
 
   /* */
 

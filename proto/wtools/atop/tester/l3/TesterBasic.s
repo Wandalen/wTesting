@@ -624,7 +624,6 @@ function cancel()
       let con = tester.activeRoutines[ t ]._returnedCon;
       if( con.resourcesCount() === 0 )
       con.error( o.err );
-      // con.cancel();
     }
   }
   catch( err2 )

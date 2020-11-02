@@ -16,7 +16,11 @@ app.on( 'ready', () =>
     height : 600,
     show : false,
     frame : false,
-    webPreferences : { nodeIntegration : true },
+    webPreferences : 
+    { 
+      nodeIntegration : true, 
+      enableRemoteModule: true // fixes https://github.com/electron-userland/spectron/issues/720
+    },
   })
 
   mainWindow.loadFile( './index.html' );

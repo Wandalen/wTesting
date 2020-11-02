@@ -61,7 +61,7 @@ submodule :
     criterion :
       development : 1
   puppeteer :
-    path : npm:///puppeteer#5.2.1
+    path : npm:///puppeteer#5.4.1
     enabled : 0 # submodule
     criterion :
       development : 1

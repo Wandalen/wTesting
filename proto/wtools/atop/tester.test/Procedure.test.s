@@ -90,11 +90,12 @@ function terminationBeginWithTwoNamespaces( test )
       t.identical( _.strCount( op.output, 'timer1' ), 1 );
       t.identical( _.strCount( op.output, 'timer2' ), 1 );
       t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-      t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+      t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
       t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
       t.identical( _.strCount( op.output, 'procedure::' ), 1 );
       t.identical( _.strCount( op.output, 'v1' ), 1 );
       t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+      debugger;
       return null;
     });
 
@@ -112,11 +113,12 @@ function terminationBeginWithTwoNamespaces( test )
       test.identical( _.strCount( op.output, 'timer1' ), 1 );
       test.identical( _.strCount( op.output, 'timer2' ), 1 );
       test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-      test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+      test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
       test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
       test.identical( _.strCount( op.output, 'procedure::' ), 1 );
       test.identical( _.strCount( op.output, 'v1' ), 1 );
       test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+      debugger;
       return null;
     });
 

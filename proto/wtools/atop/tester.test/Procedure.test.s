@@ -63,8 +63,6 @@ function terminationBeginWithTwoNamespaces( test )
     let context = this;
     testRoutine = t;
 
-    let ready = new _.Consequence().take( null );
-
     let start = _.process.starter
     ({
       execPath : 'node ',
@@ -72,11 +70,20 @@ function terminationBeginWithTwoNamespaces( test )
       outputCollecting : 1,
       outputGraying : 1,
       throwingExitCode : 0,
-      ready,
       mode : 'shell',
     });
 
-    start( programPath1 )
+    let start2 = _.process.starter
+    ({
+      execPath : 'node ',
+      currentPath,
+      outputCollecting : 1,
+      outputGraying : 1,
+      throwingExitCode : 0,
+      mode : 'shell',
+    });
+
+    let con1 = start( programPath1 )
     .then( ( op ) =>
     {
       t.case = 'termination of procedures from first global namespace';
@@ -95,34 +102,32 @@ function terminationBeginWithTwoNamespaces( test )
       t.identical( _.strCount( op.output, 'procedure::' ), 1 );
       t.identical( _.strCount( op.output, 'v1' ), 1 );
       t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-      debugger;
       return null;
     });
 
-    start( programPath2 )
+    let con2 = start( programPath2 )
     .then( ( op ) =>
     {
-      test.case = 'termination of procedures from second global namespace';
-      test.identical( op.exitCode, 0 );
-      test.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
-      test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
-      test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-      test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
-      test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
-      test.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
-      test.identical( _.strCount( op.output, 'timer1' ), 1 );
-      test.identical( _.strCount( op.output, 'timer2' ), 1 );
-      test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-      test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
-      test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-      test.identical( _.strCount( op.output, 'procedure::' ), 1 );
-      test.identical( _.strCount( op.output, 'v1' ), 1 );
-      test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-      debugger;
+      t.case = 'termination of procedures from second global namespace';
+      t.identical( op.exitCode, 0 );
+      t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
+      t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+      t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+      t.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+      t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
+      t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
+      t.identical( _.strCount( op.output, 'timer1' ), 1 );
+      t.identical( _.strCount( op.output, 'timer2' ), 1 );
+      t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+      t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+      t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+      t.identical( _.strCount( op.output, 'procedure::' ), 1 );
+      t.identical( _.strCount( op.output, 'v1' ), 1 );
+      t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
       return null;
     });
 
-    return ready;
+    return _.Consequence.AndTake( con1, con2 );
   }
 
   /* */
@@ -139,8 +144,8 @@ function terminationBeginWithTwoNamespaces( test )
   {
 
     var acheck = testRoutine.checkCurrent();
-    test.identical( acheck.checkIndex, 16 );
-    test.identical( suite.report.testCheckPasses, 15 );
+    test.identical( acheck.checkIndex, 31 );
+    test.identical( suite.report.testCheckPasses, 30 );
     test.identical( suite.report.testCheckFails, 0 );
 
     if( err )

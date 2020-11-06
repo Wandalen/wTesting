@@ -1418,6 +1418,8 @@ function processWatchingEnd()
     ({
       pid : descriptor.process.pid,
       withChildren : 1,
+      ignoringErrorPerm : 1,
+      ignoringErrorEsrch : 1,
       timeOut : 5000,
     });
     readies.push( con );

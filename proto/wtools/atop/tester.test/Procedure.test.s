@@ -105,7 +105,7 @@ function terminationBeginWithTwoNamespaces( test )
       return null;
     });
 
-    let con2 = start( programPath2 )
+    let con2 = start2( programPath2 )
     .then( ( op ) =>
     {
       t.case = 'termination of procedures from second global namespace';

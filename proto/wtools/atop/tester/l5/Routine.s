@@ -3723,19 +3723,8 @@ function _shouldDo_( o )
           }
           else
           {
-
-            begin( 0 );
-
-            _.assert( !reported );
-
-            trd._outcomeReportBoolean
-            ({
-              outcome : 0,
-              msg : 'Got more than one message',
-              stack,
-            });
-
-            end( 0, _.err( msg ) );
+            let msg = 'Got more than one message';
+            outcomeReportBoolean( 0, msg, _.err( msg ) );
           }
         }
 

@@ -144,6 +144,8 @@ The `tst .imply silencing:1 .run path/to/dir` command displays a clean report wi
 
 Designed to disable negative testing. Test checks beginning with `should*` can be disabled by this option.
 
+<!-- qqq : show example of such test check -->
+
 The option has two values: 1 is enabled, 0 is off. By default - 1.
 
 The `tst .imply shoulding:0 .run path/to/dir` command executes the test by skipping all `should*` checks.

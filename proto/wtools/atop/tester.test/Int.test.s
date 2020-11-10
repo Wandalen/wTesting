@@ -1756,8 +1756,12 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
         test.identical( errStack.length, 0 );
 
         test.identical( c1.resourcesGet().length, 1 );
@@ -1791,8 +1795,12 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
         test.identical( errStack.length, 0 );
 
         test.identical( c2.resourcesGet().length, 1 );
@@ -1829,8 +1837,12 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
         test.identical( errStack.length, 1 );
         test.identical( errStack[ 0 ], 'test' );
 
@@ -1861,12 +1873,16 @@ function shouldThrowErrorAsyncWithCallback( test )
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+        counter.next();
+
         test.identical( errStack.length, 0 );
 
         test.identical( c4.resourcesGet().length, 1 );
@@ -1904,11 +1920,15 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );
 
@@ -1947,12 +1967,16 @@ function shouldThrowErrorAsyncWithCallback( test )
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
-      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+        counter.next();
+
         test.identical( errStack.length, 0 );
 
         test.identical( c6.resourcesGet().length, 1 );
@@ -1991,11 +2015,15 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+        counter.next();
+
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );
 
@@ -2024,11 +2052,15 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+        counter.next();
+
         test.identical( errStack.length, 0 );
 
         test.identical( c8.resourcesGet().length, 1 );
@@ -2055,11 +2087,15 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( counter.acheck.description, 'a' );
       test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 600, () =>
+      return _.time.out( 500, () =>
       {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );
 

@@ -2311,7 +2311,7 @@ function timeOutSeveralRoutines( test ) /* xxx : implement similar test routine 
     ({
       execPath : programPath,
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
       test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
@@ -2414,7 +2414,7 @@ function timeOutSeveralRoutinesDesync( test ) /* xxx : implement similar test ro
     ({
       execPath : programPath,
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
       test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
@@ -2675,7 +2675,7 @@ function termination( test )
       execPath : programPath,
       mode : 'fork',
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'Waiting' ), 0 );
       test.identical( _.strCount( op.output, 'procedure::' ), 0 );
@@ -2707,7 +2707,7 @@ function termination( test )
       execPath : programPath,
       mode : 'fork',
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'Waiting' ), 0 );
       test.identical( _.strCount( op.output, 'procedure::' ), 0 );
@@ -2739,7 +2739,7 @@ function termination( test )
       execPath : programPath,
       mode : 'fork',
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'Waiting' ), 0 );
       test.identical( _.strCount( op.output, 'procedure::' ), 0 );
@@ -2769,7 +2769,7 @@ function termination( test )
       execPath : programPath,
       mode : 'fork',
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'Waiting' ), 0 );
       test.identical( _.strCount( op.output, 'procedure::' ), 0 );
@@ -2818,7 +2818,7 @@ function termination( test )
           con.take( null );
         }
       });
-      con.tap( ( err, arg ) =>
+      con.tap( ( _err, arg ) =>
       {
         if( input.map.terminationBegin )
         _.procedure.terminationBegin();
@@ -2906,7 +2906,7 @@ function uncaughtErrorNotSilenced( test )
       args : [ 'silencing:1' ],
       mode : 'fork',
     })
-    .tap( ( err, op ) =>
+    .tap( ( _err, op ) =>
     {
       test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
       test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );

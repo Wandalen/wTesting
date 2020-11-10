@@ -1756,7 +1756,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -1791,7 +1791,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -1829,7 +1829,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 1 );
         test.identical( errStack[ 0 ], 'test' );
@@ -1865,7 +1865,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -1907,7 +1907,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );
@@ -1951,7 +1951,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -1994,7 +1994,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );
@@ -2027,7 +2027,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 0 );
 
@@ -2058,7 +2058,7 @@ function shouldThrowErrorAsyncWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 600, () =>
       {
         test.identical( errStack.length, 1 );
         test.is( _.strHas( errStack[ 0 ], 'error1' ) );

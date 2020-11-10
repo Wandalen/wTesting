@@ -1316,10 +1316,10 @@ function _outcomeLog( o )
   logger.begin({ verbosity : o.verbosity });
 
   // if( o.considering )
-  {
-    logger.begin({ 'check' : trd.description || trd._checkIndex });
-    logger.begin({ 'checkIndex' : trd._checkIndex });
-  }
+  // {
+  logger.begin({ 'check' : trd.description || trd._checkIndex });
+  logger.begin({ 'checkIndex' : trd._checkIndex });
+  // }
 
   logger.begin({ verbosity : o.verbosity+verbosity });
 

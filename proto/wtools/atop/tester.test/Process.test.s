@@ -152,8 +152,8 @@ function detachedDisconnectedChildProcess( test )
     routineTimeOut : 3000,
     processWatching : 1,
     name : 'DetachedProcess',
-    
-    context : 
+
+    context :
     {
       suiteTempPath : null,
       toolsPath : null,
@@ -174,7 +174,7 @@ function detachedDisconnectedChildProcess( test )
 
   var result = suite.run();
 
-  result.finally( ( err, got ) =>
+  result.finally( ( _err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 1 );
 

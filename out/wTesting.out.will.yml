@@ -178,8 +178,6 @@ module:
           - ../proto/Integration.test.ss
           - ../proto/wtools
           - ../proto/wtools/Tools.s
-          - ../proto/wtools/abase
-          - ../proto/wtools/amid
           - ../proto/wtools/atop
           - ../proto/wtools/atop/tester
           - ../proto/wtools/atop/tester/entry

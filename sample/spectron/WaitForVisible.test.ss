@@ -61,7 +61,7 @@ async function waitForVisible( test )
   var element = await app.client.$( 'p' );
   await element.waitForDisplayed( 5000 );
   var got = await element.isDisplayedInViewport();
-  
+
   test.identical( got, true );
 
   await app.stop();

@@ -180,7 +180,7 @@ function identicalConsequence( test )
 // --
 
 /* aaa for Dmytro : split test cases of returnsSingleResource by ready.then */ /* Dmytro : done */
-/* qqq for Dmytro : fix please test check test.returnsSingleResource() */
+/* aaa for Dmytro : fix please test check test.returnsSingleResource() */ /* Dmytro : it is clarified during the call, the task is done */
 
 function returnsSingleResource( test )
 {
@@ -11335,7 +11335,7 @@ syncTimeout1.description =
 `
 
 /* qqq : ask
-write equivalen external test
+write equivalent external test
 - make sure error is printed with default verbosity
 - make sure error message has proper message
 */

@@ -1427,27 +1427,41 @@ function processWatchingEnd()
 
   if( readies.length )
   r.andTake( readies )
-
+  
   r.finally( ( err, got ) =>
   {
     if( err )
     suite.exceptionReport({ err, unbarring : 1 });
-
-    _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
-    _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
-
-    _.each( suite._processWatcherMap, ( descriptor, pid ) =>
+    
+    let ready = _.process.watcherWaitForExit({ waitForAllNamespaces : 1, timeOut : 5000 });
+    
+    ready.finally( ( err, got ) => 
     {
-      if( _.process.isAlive( descriptor.process.pid ) )
+      if( err )
       {
-        let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
-        // if( suite.takingIntoAccount )
-        // suite.consoleBar( 0 );
+        if( err.reason === 'time out' )
+        err = _.err( 'Failed to wait for ProcessWatcher to handle exit of all registered processes. Reason:\n', err );
         suite.exceptionReport({ err, unbarring : 1 });
       }
+      
+      _.process.off( 'subprocessStartEnd', suite._processWatcher.subprocessStartEnd );
+      _.process.off( 'subprocessTerminationEnd', suite._processWatcher.subprocessTerminationEnd );
+
+      _.each( suite._processWatcherMap, ( descriptor, pid ) =>
+      {
+        if( _.process.isAlive( descriptor.process.pid ) )
+        {
+          let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
+          // if( suite.takingIntoAccount )
+          // suite.consoleBar( 0 );
+          suite.exceptionReport({ err, unbarring : 1 });
+        }
+      })
+      
+      return null;
     })
 
-    return null;
+    return ready;
   })
 
   return r;

@@ -103,19 +103,16 @@ function assetFor( test, asset )
 }
 
 // --
-// tests
+// conditions
 // --
 
 function run( test )
 {
   let context = this;
   let a = context.assetFor( test, 'hello' );
-  // let a = test.assetFor( 'hello' );
 
   a.reflect();
   test.is( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
-
-  // shell( 'npm i' );
 
   /* - */
 
@@ -623,6 +620,264 @@ function double( test )
 }
 
 //
+
+function requireTesting( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run ** v:5 s:0'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+requireTesting.description =
+`
+- require( 'wTesting' ) returns proper namespace
+`
+
+//
+
+function noTestCheck( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run **'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run **` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
+    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( passed none test check ) TestSuite::NoTestCheckAsset / TestRoutine::routine1' ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function noTestSuite( test )
+{
+  let context = this;
+  let a = context.assetFor( test, false );
+
+  a.fileProvider.dirMake( a.routinePath );
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'relative path'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : 'proto' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'relative path'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : 'proto/wtools' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'relative glob'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : 'proto/**' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'absolute'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : a.path.nativize( a.abs( '.' ) ) })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'absolute glob'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : a.path.nativize( a.abs( '**' ) ) })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'native'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : a.abs( '.' ) })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'native'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : '.run ' + a.abs( '.' ) })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'only option'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : 'n:1' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  .then( () =>
+  {
+    test.case = 'only option'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : '.run n:1' })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  return a.ready;
+}
+
+// --
+// options
+// --
 
 function optionSuite( test )
 {
@@ -1563,73 +1818,109 @@ function optionRapidityTwice( test )
   return a.ready;
 }
 
-//
+// --
+// commands
+// --
 
-function requireTesting( test )
+function help( test )
 {
   let context = this;
-  let a = context.assetFor( test );
+  let a = context.assetFor( test, false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
 
-  a.reflect();
-
-  /* - */
+  /* */
 
   a.ready
-  .then( () =>
-  {
-    test.case = 'tst .run ** v:5 s:0'
-    return null;
-  })
-
-  a.appStartNonThrowing({ execPath : `.run **` })
   .then( ( got ) =>
   {
-    test.identical( got.exitCode, 0 );
+
+    test.case = 'simple run without args'
+
     return null;
   })
 
-  /* - */
+  a.appStartNonThrowing( '' )
+
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+    test.is( got.output.length > 0 );
+    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
+    return null;
+  })
+
+  /* */
+
+  a.ready
+  .then( ( got ) =>
+  {
+
+    test.case = 'simple run without args'
+
+    return null;
+  })
+
+  a.appStartNonThrowing( '.' )
+
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+    test.is( got.output.length > 0 );
+    test.ge( _.strLinesCount( got.output ), 8 );
+    return null;
+  })
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : '.help' })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.ge( _.strLinesCount( op.output ), 23 );
+    return op;
+  })
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : '.' })
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.ge( _.strLinesCount( op.output ), 8 );
+    return op;
+  })
+
+  /* */
+
+  a.appStartNonThrowing({ args : [] })
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '0 test suite' ), 1 );
+    return op;
+  })
 
   return a.ready;
 }
 
-requireTesting.description =
-`
-- require( 'wTesting' ) returns proper namespace
-`
-
 //
 
-function noTestCheck( test )
+function version( test )
 {
   let context = this;
-  let a = context.assetFor( test );
-  a.reflect();
+  let a = context.assetFor( test, false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
 
-  /* - */
+  /* */
 
-  a.ready
-  .then( () =>
+  a.appStartNonThrowing( '.version' )
+  .then( ( op ) =>
   {
-    test.case = 'tst .run **'
-    return null;
+    test.identical( op.exitCode, 0 );
+    test.is( _.strHas( op.output, /Current version : .*\..*\..*/ ) );
+    test.is( _.strHas( op.output, /Latest version of wTesting!alpha : .*\..*\..*/ ) );
+    return op;
   })
-
-  a.appStartNonThrowing({ execPath : `.run **` })
-  .then( ( got ) =>
-  {
-    test.notIdentical( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
-    test.identical( _.strCount( got.output, 'Thrown' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed test checks 0 / 1' ), 2 );
-    test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( passed none test check ) TestSuite::NoTestCheckAsset / TestRoutine::routine1' ), 1 );
-
-    return null;
-  })
-
-  /* - */
 
   return a.ready;
 }
@@ -2004,415 +2295,213 @@ v3`
 
 //
 
-function timeLimitConsequence( test )
+function timeOutSeveralRoutines( test ) /* xxx : implement similar test routine with deasync */
 {
-  let t = 25;
-  let ready = new _.Consequence().take( null )
+  let context = this;
+  let a = context.assetFor( test, false );
+  let programPath = a.program({ routine : program1 });
+  let ready = _.Consequence().take( null );
 
   /* */
 
-  .thenKeep( function timeLimit1( arg )
+  ready.then( function( arg )
   {
-    test.case = 'timeOut timeLimit a timeLimitOut';
-
-    var con = _.time.out( Number( t ) );
-    var con0 = _.time.out( t*3, 'a' );
-    con.timeLimit( t*6, con0 );
-
-    return _.time.out( t*15, function()
-    {
-      debugger;
-      test.is( con.argumentsGet()[ 0 ] === 'a' );
-      test.identical( con.argumentsCount(), 1 );
-      test.identical( con.errorsCount(), 0 );
-      test.identical( con.competitorsCount(), 0 );
-      return null;
+    test.case = 'basic';
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
     })
-  })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
+      test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+
+      test.identical( _.strCount( op.output, 'Failed ( test routine time limit ) TestSuite::ForTesting / TestRoutine::routine1' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine2' ), 1 );
+      test.identical( _.strCount( op.output, 'Test routine TestSuite::ForTesting / TestRoutine::routine1 returned, cant continue!' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine3' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine4' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed test routines 3 / 4' ), 2 );
+
+      // test.identical( _.lexParse( op.output, '(-::routine1-)**(-::routine2-)**(-::routine3-)**(-::routine4-)' ).ok, true ); /* xxx : implement and uncomment */
+
+      test.notIdentical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
 
   /* */
 
   return ready;
-}
-
-//
-
-function noTestSuite( test )
-{
-  let context = this;
-  let a = context.assetFor( test, false );
-
-  a.fileProvider.dirMake( a.routinePath );
-
-  a.ready
-  .then( () =>
-  {
-    test.case = 'relative path'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : 'proto' })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  a.ready
-  .then( () =>
-  {
-    test.case = 'relative path'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : 'proto/wtools' })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'relative glob'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : 'proto/**' })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'absolute'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : a.path.nativize( a.abs( '.' ) ) })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'absolute glob'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : a.path.nativize( a.abs( '**' ) ) })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'native'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : a.abs( '.' ) })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'native'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : '.run ' + a.abs( '.' ) })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'only option'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : 'n:1' })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  .then( () =>
-  {
-    test.case = 'only option'
-    return null;
-  })
-
-  a.appStartNonThrowing({ args : '.run n:1' })
-  .then( ( got ) =>
-  {
-    test.ni( got.exitCode, 0 );
-
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
-
-    return null;
-  })
-
-  /* */
-
-  return a.ready;
-}
-
-//
-
-function help( test )
-{
-  let context = this;
-  let a = context.assetFor( test, false );
-  a.fileProvider.dirMake( a.abs( '.' ) );
-
-  /* */
-
-  a.ready
-  .then( ( got ) =>
-  {
-
-    test.case = 'simple run without args'
-
-    return null;
-  })
-
-  a.appStartNonThrowing( '' )
-
-  .then( ( got ) =>
-  {
-    test.notIdentical( got.exitCode, 0 );
-    test.is( got.output.length > 0 );
-    test.identical( _.strCount( got.output, '0 test suite' ), 1 );
-    return null;
-  })
-
-  /* */
-
-  a.ready
-  .then( ( got ) =>
-  {
-
-    test.case = 'simple run without args'
-
-    return null;
-  })
-
-  a.appStartNonThrowing( '.' )
-
-  .then( ( got ) =>
-  {
-    test.notIdentical( got.exitCode, 0 );
-    test.is( got.output.length > 0 );
-    test.ge( _.strLinesCount( got.output ), 8 );
-    return null;
-  })
-
-  /* */
-
-  a.appStartNonThrowing({ execPath : '.help' })
-  .then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.ge( _.strLinesCount( op.output ), 23 );
-    return op;
-  })
-
-  /* */
-
-  a.appStartNonThrowing({ execPath : '.' })
-  .then( ( op ) =>
-  {
-    test.notIdentical( op.exitCode, 0 );
-    test.ge( _.strLinesCount( op.output ), 8 );
-    return op;
-  })
-
-  /* */
-
-  a.appStartNonThrowing({ args : [] })
-  .then( ( op ) =>
-  {
-    test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, '0 test suite' ), 1 );
-    return op;
-  })
-
-  return a.ready;
-}
-
-//
-
-function version( test )
-{
-  let context = this;
-  let a = context.assetFor( test, false );
-  a.fileProvider.dirMake( a.abs( '.' ) );
-
-  /* */
-
-  a.appStartNonThrowing( '.version' )
-  .then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.is( _.strHas( op.output, /Current version : .*\..*\..*/ ) );
-    test.is( _.strHas( op.output, /Latest version of wTesting!alpha : .*\..*\..*/ ) );
-    return op;
-  })
-
-  return a.ready;
-}
-
-//
-
-function manualTermination( test )
-{
-  // let context = this;
-  // let a = context.assetFor( test, 'manualTermination' );
-  //
-  // /* - */
-  //
-  // let o =
-  // {
-  //   execPath : 'node manualTermination.test.js v:7',
-  //   currentPath : a.originalAssetPath,
-  //   mode : 'spawn',
-  //   outputCollecting : 1,
-  //   throwingExitCode : 0
-  // };
-  // a.shellNonThrowing( o )
-
-  let context = this;
-  let a = context.assetFor( test, 'manualTermination' );
-  a.reflect();
 
   /* - */
 
-  let o =
+  function program1()
   {
-    execPath : `${a.abs( 'manualTermination.test.js' )} v:7`,
-  };
-  a.appStartNonThrowing( o )
+    let _ = require( toolsPath );
+    _.include( 'wTesting' );
 
-  /* */
+    function routine1( test )
+    {
+      test.is( true );
+      _.time.begin( context.t2*4, () =>
+      {
+        console.log( 'routine1:time1' );
+        test.is( true );
+        console.log( 'routine1:time2' );
+      });
+      return _.time.out( context.t2*3 );
+    }
 
-  a.ready
-  .then( ( op ) =>
-  {
-    test.notIdentical( op.exitCode, 0 );
-    test.is( _.strHas( op.output, 'onSuiteEnd : 1' ) );
-    test.is( _.strHas( op.output, 'onExit : 2' ) );
-    return op;
-  })
+    function routine2( test )
+    {
+      test.is( true );
+      return _.time.out( context.t2 );
+    }
 
-  return a.ready;
+    function routine3( test )
+    {
+      test.is( true );
+      return _.time.out( context.t2 );
+    }
+
+    function routine4( test )
+    {
+      test.is( true );
+      return _.time.out( context.t2 );
+    }
+
+    let Self =
+    {
+      routineTimeOut : context.t2*2,
+      name : 'ForTesting',
+      tests :
+      {
+        routine1,
+        routine2,
+        routine3,
+        routine4,
+      }
+    }
+
+    Self = wTestSuite( Self );
+    wTester.test( Self.name );
+  }
+
 }
 
-manualTermination.description =
+timeOutSeveralRoutines.description =
 `
-  User terminates execution when second test routine is runnning.
-  onSuiteEnd handler should be executed before exit event
+  - time out of one test routine does not halt testing
+  - time out of one test routine does not prevent other test routines to run
 `
 
 //
 
-function asyncErrorHandling( test )
+function timeOutSeveralRoutinesDesync( test ) /* xxx : implement similar test routine with deasync */
 {
   let context = this;
-  let a = context.assetFor( test, 'asyncErrorHandling' );
-  a.reflect();
-
-  /* - */
-
-  let o =
-  {
-    execPath : `${a.abs( 'asyncErrorHandling.test.js' )} v:7`,
-  };
-  a.appStartNonThrowing( o )
-
-  a.ready
-  .then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'Cannot find' ), 0 );
-    test.identical( _.strCount( op.output, 'error(s)' ), 0 );
-    test.identical( _.strCount( op.output, 'nhandled' ), 0 );
-    test.identical( _.strCount( op.output, 'ncaught' ), 0 );
-    test.identical( _.strCount( op.output, '---' ), 0 );
-    test.identical( _.strCount( op.output, 'Thrown' ), 0 );
-    test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
-    test.identical( _.strCount( op.output, 'Error throwen asynchronously' ), 1 );
-    return op;
-  })
+  let a = context.assetFor( test, false );
+  let programPath = a.program({ routine : program1 });
+  let ready = _.Consequence().take( null );
 
   /* */
 
-  return a.ready;
+  ready.then( function( arg )
+  {
+    test.case = 'basic';
+    a.forkNonThrowing
+    ({
+      execPath : programPath,
+    })
+    .tap( ( err, op ) =>
+    {
+      test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
+      test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+
+      test.identical( _.strCount( op.output, 'Failed ( test routine time limit ) TestSuite::ForTesting / TestRoutine::routine1' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine2' ), 1 );
+      test.identical( _.strCount( op.output, 'Test routine TestSuite::ForTesting / TestRoutine::routine1 returned, cant continue!' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine3' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine4' ), 1 );
+      test.identical( _.strCount( op.output, 'Passed test routines 3 / 4' ), 2 );
+
+      test.notIdentical( op.exitCode, 0 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  return ready;
+
+  /* - */
+
+  function program1()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wTesting' );
+
+    function routine1( test )
+    {
+      test.is( true );
+      _.time.begin( context.t2*4, () =>
+      {
+        console.log( 'routine1:time1' );
+        test.is( true );
+        console.log( 'routine1:time2' );
+      });
+      _.time.out( context.t2*3 ).deasync();
+      test.is( true );
+    }
+
+    function routine2( test )
+    {
+      test.is( true );
+      return _.time.out( context.t2 );
+    }
+
+    function routine3( test )
+    {
+      test.is( true );
+      return _.time.out( context.t2 );
+    }
+
+    function routine4( test )
+    {
+      test.is( true );
+      return _.time.out( context.t2 );
+    }
+
+    let Self =
+    {
+      routineTimeOut : context.t2*2,
+      name : 'ForTesting',
+      tests :
+      {
+        routine1,
+        routine2,
+        routine3,
+        routine4,
+      }
+    }
+
+    Self = wTestSuite( Self );
+    wTester.test( Self.name );
+  }
+
 }
 
-//
+timeOutSeveralRoutinesDesync.description =
+`
+  - time out of one test routine does not halt testing
+  - time out of one test routine does not prevent other test routines to run
+  - deasync is used in timed out test routine
+`
+
+// --
+// events
+// --
 
 function onSuiteEndReturnConsequence( test )
 {
@@ -2562,34 +2651,6 @@ onSuiteEndIsExecutedOnceOnSigintLate.description =
   - Callback onSuiteEnd handler should be executed only once.
   - May not work on some machines because of races conditions!
 `
-
-//
-
-function programOptionsRoutineDirPath( test )
-{
-  let context = this;
-  let a = context.assetFor( test, false );
-
-  test.case = 'default'
-  var got = a.program( testApp1 );
-  var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name + '.js' ) )
-  test.il( got, exp )
-
-  test.case = 'options : routine, dirPath'
-  var got = a.program({ routine : testApp1, dirPath : 'temp' })
-  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name + '.js' ) )
-  test.il( got, exp )
-
-  test.case = 'options : routine, dirPath with spaces'
-  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
-  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name + '.js' ) )
-  test.il( got, exp )
-
-  /* - */
-
-  function testApp1(){}
-
-}
 
 //
 
@@ -2791,6 +2852,42 @@ termination.description =
 
 //
 
+function manualTermination( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'manualTermination' );
+  a.reflect();
+
+  /* - */
+
+  let o =
+  {
+    execPath : `${a.abs( 'manualTermination.test.js' )} v:7`,
+  };
+  a.appStartNonThrowing( o )
+
+  /* */
+
+  a.ready
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.is( _.strHas( op.output, 'onSuiteEnd : 1' ) );
+    test.is( _.strHas( op.output, 'onExit : 2' ) );
+    return op;
+  })
+
+  return a.ready;
+}
+
+manualTermination.description =
+`
+  User terminates execution when second test routine is runnning.
+  onSuiteEnd handler should be executed before exit event
+`
+
+//
+
 function uncaughtErrorNotSilenced( test )
 {
   let context = this;
@@ -2848,12 +2945,111 @@ function uncaughtErrorNotSilenced( test )
 
 }
 
-termination.description =
+uncaughtErrorNotSilenced.description = /* qqq : extend the test */
 `
-  - process terminates even if consequence recieves attended error
-  - process terminates even if consequence recieves unattended error
-  - process terminates even if consequence recieves argument
+  - uncaught error should not be silenced event if silencing:1
 `
+
+//
+
+function asyncErrorHandling( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'asyncErrorHandling' );
+  a.reflect();
+
+  /* - */
+
+  let o =
+  {
+    execPath : `${a.abs( 'asyncErrorHandling.test.js' )} v:7`,
+  };
+  a.appStartNonThrowing( o )
+
+  a.ready
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Cannot find' ), 0 );
+    test.identical( _.strCount( op.output, 'error(s)' ), 0 );
+    test.identical( _.strCount( op.output, 'nhandled' ), 0 );
+    test.identical( _.strCount( op.output, 'ncaught' ), 0 );
+    test.identical( _.strCount( op.output, '---' ), 0 );
+    test.identical( _.strCount( op.output, 'Thrown' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Error throwen asynchronously' ), 1 );
+    return op;
+  })
+
+  /* */
+
+  return a.ready;
+}
+
+// --
+// test asset
+// --
+
+function programOptionsRoutineDirPath( test )
+{
+  let context = this;
+  let a = context.assetFor( test, false );
+
+  test.case = 'default'
+  var got = a.program( testApp1 );
+  var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name + '.js' ) )
+  test.il( got, exp )
+
+  test.case = 'options : routine, dirPath'
+  var got = a.program({ routine : testApp1, dirPath : 'temp' })
+  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name + '.js' ) )
+  test.il( got, exp )
+
+  test.case = 'options : routine, dirPath with spaces'
+  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
+  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name + '.js' ) )
+  test.il( got, exp )
+
+  /* - */
+
+  function testApp1(){}
+
+}
+
+// --
+// related
+// --
+
+function timeLimitConsequence( test )
+{
+  let t = 25;
+  let ready = new _.Consequence().take( null )
+
+  /* */
+
+  .thenKeep( function timeLimit1( arg )
+  {
+    test.case = 'timeOut timeLimit a timeLimitOut';
+
+    var con = _.time.out( Number( t ) );
+    var con0 = _.time.out( t*3, 'a' );
+    con.timeLimit( t*6, con0 );
+
+    return _.time.out( t*15, function()
+    {
+      debugger;
+      test.is( con.argumentsGet()[ 0 ] === 'a' );
+      test.identical( con.argumentsCount(), 1 );
+      test.identical( con.errorsCount(), 0 );
+      test.identical( con.competitorsCount(), 0 );
+      return null;
+    })
+  })
+
+  /* */
+
+  return ready;
+}
 
 // --
 // suite
@@ -2888,18 +3084,29 @@ let Self =
   tests :
   {
 
+    // conditions
+
     run,
     runWithQuotedPath,
     checkFails,
     double,
+    requireTesting,
+    noTestCheck,
+    noTestSuite,
+
+    // options
+
     optionSuite,
     optionAccuracyExplicitly,
     optionAccuracy,
     optionRapidityAndSourceCode,
     optionRapidity,
     optionRapidityTwice,
-    requireTesting,
-    noTestCheck,
+
+    // commands
+
+    help,
+    version,
 
     // time out
 
@@ -2909,25 +3116,29 @@ let Self =
     checksAfterTimeOut,
     checksAfterTimeOutSilenced,
     timeOutExternalMessage,
+    timeOutSeveralRoutines,
+    timeOutSeveralRoutinesDesync,
 
-    //
-
-    timeLimitConsequence,
-    noTestSuite,
-    help,
-    version,
-    manualTermination,
-    asyncErrorHandling,
+    // events
 
     onSuiteEndReturnConsequence,
-
     onSuiteEndIsExecutedOnceOnSigintEarly,
     onSuiteEndIsExecutedOnceOnSigintLate,
 
-    programOptionsRoutineDirPath,
+    // termination
 
     termination,
+    manualTermination,
     uncaughtErrorNotSilenced,
+    asyncErrorHandling,
+
+    // test asset
+
+    programOptionsRoutineDirPath,
+
+    // related
+
+    timeLimitConsequence,
 
   }
 

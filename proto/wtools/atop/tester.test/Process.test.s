@@ -69,7 +69,7 @@ function main( test )
     onSuiteEnd,
     routineTimeOut : 3000,
     processWatching : 1,
-    name : 'ForTesting',
+    name : 'Trivial',
 
     tests :
     {
@@ -88,7 +88,7 @@ function main( test )
     console.log( suite.report.errorsArray );
     test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
     test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
-    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "ForTesting" had zombie process with pid' ), 1 );
+    test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Trivial" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
@@ -151,9 +151,9 @@ function detachedDisconnectedChildProcess( test )
     onSuiteEnd : suiteEnd,
     routineTimeOut : 3000,
     processWatching : 1,
-    name : 'ForTesting2',
-
-    context :
+    name : 'DetachedProcess',
+    
+    context : 
     {
       suiteTempPath : null,
       toolsPath : null,
@@ -180,7 +180,7 @@ function detachedDisconnectedChildProcess( test )
 
     console.log( suite.report.errorsArray.length );
     console.log( suite.report.errorsArray );
-    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "ForTesting2" had zombie process with pid' ), 1 );
+    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DetachedProcess" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
@@ -192,7 +192,7 @@ function detachedDisconnectedChildProcess( test )
   function suiteBegin()
   {
     var self = this;
-    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'ForTesting2' );
+    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
     self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
     self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
@@ -202,7 +202,7 @@ function detachedDisconnectedChildProcess( test )
   function suiteEnd()
   {
     var self = this;
-    _.assert( _.strHas( self.suiteTempPath, '/ForTesting2-' ) )
+    _.assert( _.strHas( self.suiteTempPath, '/DetachedProcess-' ) )
     _.path.tempClose( self.suiteTempPath );
   }
 
@@ -231,11 +231,11 @@ function detachedDisconnectedChildProcess( test )
     function testApp()
     {
       console.log( 'Child process start', process.pid )
-      setTimeout( context.t2 * 3, () =>
+      setTimeout( () =>
       {
         console.log( 'Child process end' )
         return null;
-      })
+      }, context.t2 * 3 )
     }
   }
 }

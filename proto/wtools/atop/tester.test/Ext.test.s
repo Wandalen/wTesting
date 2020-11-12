@@ -2797,7 +2797,7 @@ function termination( test )
   {
     let _ = require( toolsPath );
     _.include( 'wTesting' );
-    _ = _realGlobal_._testerGlobal_.wTools;
+    _ = _realGlobal_._globals_.testing.wTools;
     let input = { map : _.fileProvider.fileRead({ filePath : _.path.join( __dirname, 'File1' ), encoding : 'json' }) };
 
     function routine1( test )

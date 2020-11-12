@@ -15,4 +15,4 @@ let shell = _.process.startPassingThrough
 });
 
 if( typeof module !== 'undefined' )
-module[ 'exports' ] = _testerGlobal_.wTools;
+module[ 'exports' ] = _globals_.testing.wTools;

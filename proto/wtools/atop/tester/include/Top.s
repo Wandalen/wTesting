@@ -6,19 +6,54 @@
 // global
 
 let _global = undefined;
-if( !_global && typeof Global !== 'undefined' && Global.Global === Global ) _global = Global;
-if( !_global && typeof global !== 'undefined' && global.global === global ) _global = global;
-if( !_global && typeof window !== 'undefined' && window.window === window ) _global = window;
-if( !_global && typeof self   !== 'undefined' && self.self === self ) _global = self;
+if( typeof _global_ !== 'undefined' && _global_._global_ === _global_ )
+_global = _global_;
+else if( typeof globalThis !== 'undefined' && globalThis.globalThis === globalThis )
+_global = globalThis;
+else if( typeof Global !== 'undefined' && Global.Global === Global )
+_global = Global;
+else if( typeof global !== 'undefined' && global.global === global )
+_global = global;
+else if( typeof window !== 'undefined' && window.window === window )
+_global = window;
+else if( typeof self   !== 'undefined' && self.self === self )
+_global = self;
 if( !_global._globals_ )
 {
   _global._globals_ = Object.create( null );
   _global._globals_.real = _global;
+  _global._realGlobal_ = _global;
+  _global._global_ = _global;
 }
-let _realGlobal = _global._realGlobal_ = _global;
-let _wasGlobal = _global._global_ || _global;
-_global = _wasGlobal;
-_global._global_ = _wasGlobal;
+
+//
+
+let _wasGlobal, _wasCache;
+function globalNamespaceOpen( _global, name )
+{
+  if( _realGlobal_._globals_[ name ] )
+  throw Error( 'Global namespace::name already exists!' );
+  let Module = require( 'module' );
+  _wasCache = Module._cache;
+  _wasGlobal = _global;
+  Module._cache = Object.create( null );
+  _global = Object.create( _global );
+  _global.__GLOBAL_NAME__ = name;
+  _global._global_ = _global;
+  // _global.wTools = Object.create( null );
+  _realGlobal_._global_ = _global;
+  _realGlobal_._globals_[ name ] = _global;
+  return _global;
+}
+
+//
+
+function globalNamespaceClose()
+{
+  let Module = require( 'module' );
+  Module._cache = _wasCache;
+  _realGlobal_._global_ = _wasGlobal;
+}
 
 //
 
@@ -30,14 +65,18 @@ if( typeof module !== 'undefined' )
     return;
   }
 
-  let Module = require( 'module' );
-  let cache = Module._cache;
-  Module._cache = Object.create( null );
+  // let Module = require( 'module' );
+  // let _wasCache = Module._cache;
+  // Module._cache = Object.create( null );
 
-  _global = _global._global_ = Object.create( _global._global_ );
-  _global.__GLOBAL_WHICH__ = 'wTesting';
-  _realGlobal_._testerGlobal_ = _global;
-  _realGlobal_._globals_.testing = _global;
+  // _global = _global._global_ = Object.create( _global._global_ );
+  // _global.__GLOBAL_NAME__ = 'wTesting';
+  // // _realGlobal_._globals_.testing = _global;
+  // _realGlobal_._globals_.testing = _global;
+
+  debugger;
+  _global = globalNamespaceOpen( _global, 'testing' );
+  debugger;
 
   //
 
@@ -58,9 +97,8 @@ if( typeof module !== 'undefined' )
 
   _.assert( _global_ !== _realGlobal_ );
   _.assert( _global_.wTools !== _realGlobal_.wTools );
-  _.assert( _global_.wTools === _ );
   _.assert( _.routineIs( _realGlobal_.wTestSuite ) );
-  _.assert( !_realGlobal_.wTestRoutineDescriptor );
+  _.assert( !_realGlobal_.wTestRoutineObject );
   _.assert( _.objectIs( _realGlobal_.wTests ) );
   _.assert( _.objectIs( _realGlobal_.wTester ) );
 
@@ -72,12 +110,13 @@ if( typeof module !== 'undefined' )
 
   if( Config.interpreter === 'browser' )
   debugger;
-  Module._cache = cache;
-  _global_ = _wasGlobal;
+  // Module._cache = _wasCache;
+  // _global_ = _wasGlobal;
+  globalNamespaceClose();
 
 }
 
 if( typeof module !== 'undefined' )
-module[ 'exports' ] = _testerGlobal_.wTools;
+module[ 'exports' ] = _globals_.testing.wTools;
 
 })();

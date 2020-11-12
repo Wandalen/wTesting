@@ -957,7 +957,7 @@ function _terminated()
 
 /**
  * @summary Handler called before execution of each test routine
- * @param {Object} t Instance of {@link module:Tools/atop/Tester.wTestRoutineDescriptor}
+ * @param {Object} t Instance of {@link module:Tools/atop/Tester.wTestRoutineObject}
  * @method onRoutineBegin
  * @class wTestSuite
  * @module Tools/atop/Tester
@@ -971,7 +971,7 @@ function onRoutineBegin( t )
 
 /**
  * @summary Handler called after execution of each test routine
- * @param {Object} t Instance of {@link module:Tools/atop/Tester.wTestRoutineDescriptor}
+ * @param {Object} t Instance of {@link module:Tools/atop/Tester.wTestRoutineObject}
  * @method onRoutineBegin
  * @class wTestSuite
  * @module Tools/atop/Tester

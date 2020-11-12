@@ -1,14 +1,17 @@
-( function _Page_test_s_( ) {
+( function _Page_test_s_()
+{
 
 'use strict';
+
+var ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
   let _ = require( 'wTools' );
   _.include( 'wTesting' );
 
-  var ElectronPath = require( 'electron' );
-  var Spectron = require( 'spectron' );
+  ElectronPath = require( 'electron' );
+  Spectron = require( 'spectron' );
 
 }
 
@@ -54,7 +57,7 @@ async function page( test )
   })
 
   await app.start()
-  await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
+  await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   test.case = 'Check Page html'
   var html = await app.client.execute( () => document.documentElement.outerHTML );
@@ -73,11 +76,9 @@ let Self =
 {
 
   name : 'Visual.Spectron.Page',
-  
-  
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
   routineTimeOut : 300000,
 
   context :

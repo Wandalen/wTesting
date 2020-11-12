@@ -9,10 +9,10 @@ app.on( 'ready', () =>
   ({
     width : 800,
     height : 600,
-    webPreferences : 
-    { 
-      nodeIntegration : true, 
-      enableRemoteModule: true // fixes https://github.com/electron-userland/spectron/issues/720
+    webPreferences :
+    {
+      nodeIntegration : true,
+      enableRemoteModule : true // fixes https://github.com/electron-userland/spectron/issues/720
     }
   })
 

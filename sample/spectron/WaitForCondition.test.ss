@@ -70,7 +70,7 @@ async function waitForCondition( test )
       element.innerText = 'Hello from test'
     })
   })
-  
+
   let element = await app.client.$( 'p' );
 
   //Wait until text will be changed

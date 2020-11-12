@@ -1410,7 +1410,8 @@ function processWatchingEnd()
     if( !_.process.isAlive( descriptor.process.pid ) )
     return delete suite._processWatcherMap[ pid ];
 
-    let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n' );
+    let processInfo = `    ExecPath: ${descriptor.execPath}\n    CurrentPath: ${descriptor.currentPath}\n    Args: ${descriptor.args}`
+    let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n  ', processInfo );
     // if( suite.takingIntoAccount )
     // suite.consoleBar( 0 );
     suite.exceptionReport({ err, unbarring : 1 });

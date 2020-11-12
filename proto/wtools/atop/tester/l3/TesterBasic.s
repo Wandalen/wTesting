@@ -564,7 +564,7 @@ function _canContinue()
   if( tester.settings.fails <= tester.report.testCheckFails )
   {
     debugger;
-    let err = _.err( 'Too many fails', tester.settings.fails, '<=', trd.report.testCheckFails );
+    let err = _.err( 'Too many fails', tester.settings.fails, '<=', tester.report.testCheckFails );
     tester.report.errorsArray.push( err );
     return false;
   }
@@ -589,12 +589,12 @@ function cancel()
 {
   let tester = this;
 
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  let o = _.routineOptions( cancel, arguments );
+
   if( tester.settings.fails > 0 )
   if( tester.settings.fails <= tester.report.testCheckFails )
   o.global = 1;
-
-  _.assert( arguments.length === 0 || arguments.length === 1 );
-  let o = _.routineOptions( cancel, arguments );
 
   if( o.terminatedByUser )
   o.global = 1;

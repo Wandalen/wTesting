@@ -3723,19 +3723,8 @@ function _shouldDo_( o )
           }
           else
           {
-
-            begin( 0 );
-
-            _.assert( !reported );
-
-            trd._outcomeReportBoolean
-            ({
-              outcome : 0,
-              msg : 'Got more than one message',
-              stack,
-            });
-
-            end( 0, _.err( msg ) );
+            let msg = 'Got more than one message';
+            outcomeReportBoolean( 0, msg, _.err( msg ) );
           }
         }
 
@@ -3816,7 +3805,7 @@ function _shouldDo_( o )
 
     result.finally( gotSecondResource );
 
-    let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
+    let r = _.Consequence.Or( result, trd._timeLimitCon, wTester._cancelCon );
     r.finally( ( err, arg ) =>
     {
       if( result.competitorHas( gotSecondResource ) )

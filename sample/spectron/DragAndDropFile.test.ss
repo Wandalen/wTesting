@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -61,29 +61,29 @@ async function dragAndDropFile( test )
 
   var fileInputId = 'fileInput';
   var dropZoneSelector = '#dropzone';
-  
-  await app.client.execute(( fileInputId, dropZoneSelector) => 
-  { 
+
+  await app.client.execute(( fileInputId, dropZoneSelector) =>
+  {
     let input = document.createElement( 'input' );
     input.id = fileInputId,
     input.type = 'file';
     input.multiple = 'multiple';
-    input.onchange = ( e ) => 
-    { 
+    input.onchange = ( e ) =>
+    {
       let event = new Event( 'drop' );
       Object.assign( event, { dataTransfer: { files: e.target.files } } )
       document.querySelector( dropZoneSelector ).dispatchEvent( event );
     }
     document.body.appendChild( input );
-  
+
   }, fileInputId, dropZoneSelector );
-  
+
   let file = await app.client.uploadFile( __filename );
   var element = await app.client.$(`#${fileInputId}`);
   await element.setValue( file )
   let result = await app.client.execute( () => window.dropFiles );
   test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
-  
+
   await app.stop();
 
   return null;
@@ -107,7 +107,7 @@ async function dragAndDropFileWithHelper( test )
 
   await app.start()
   await app.client.waitUntilTextExists( 'p', 'Drag & Drop file', 5000 )
-  
+
   await _.test.fileDrop
   ({
     filePath : __filename,
@@ -116,10 +116,10 @@ async function dragAndDropFileWithHelper( test )
     page : app.client,
     library : 'spectron'
   })
-  
+
   let result = await app.client.execute( () => window.dropFiles );
   test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
-  
+
   await app.stop();
 
   return null;

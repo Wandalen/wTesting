@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -49,7 +49,7 @@ async function localStorage( test )
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   /* Use custom user-data-dir to persist localStorage between launches */
-  
+
   test.case = 'create new item'
   var app = new Spectron.Application
   ({
@@ -61,9 +61,9 @@ async function localStorage( test )
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
   await app.client.execute( () => this.localStorage.setItem( 'itemKey', 'itemValue' ) )
   await app.stop();
-  
+
   //
-  
+
   test.case = 'open browser again and get item value'
   var app = new Spectron.Application
   ({

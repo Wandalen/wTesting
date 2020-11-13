@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -47,23 +47,23 @@ async function domElementProperties( test )
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
 
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-  
+
   //Create browser and new page instance
   let browser = await Puppeteer.launch();
   let page = await browser.newPage();
-  
+
   //Open test page
   let path = 'file:///' + _.path.nativize( indexHtmlPath );
   await page.goto( path, { waitUntil : 'load' } );
-  
+
   //innerText
   var text = await page.$eval( 'p', ( e ) => e.innerText )
   test.identical( text, 'Hello world' );
-  
-  //outerHtml 
+
+  //outerHtml
   var html = await page.$eval( 'p', ( e ) => e.outerHTML )
   test.identical( html, '<p>Hello world</p>' );
-  
+
   //Elements position on page
   var element = await page.$( 'p' );
   var location = await element.boundingBox();
@@ -72,7 +72,7 @@ async function domElementProperties( test )
 
   //Close browser
   await browser.close();
-  
+
   return null;
 }
 
@@ -84,8 +84,8 @@ let Self =
 {
 
   name : 'Visual.Puppeteer.ElementProperties',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -55,19 +55,19 @@ async function isVisibleWithinViewport( test )
 
   await app.start()
   await _.test.waitForVisibleInViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
+  ({
+    library : 'spectron',
+    page : app.client,
+    timeOut : 5000,
+    targetSelector : 'p'
   });
 
   var got = await _.test.isVisibleWithinViewport
-  ({ 
-    library : 'spectron', 
-    page : app.client, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
+  ({
+    library : 'spectron',
+    page : app.client,
+    timeOut : 5000,
+    targetSelector : 'p'
   });
   test.identical( got, true );
 

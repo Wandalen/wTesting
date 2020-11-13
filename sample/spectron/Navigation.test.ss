@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -62,22 +62,22 @@ async function navigation( test )
   await app.client.url( 'https://www.npmjs.com/' );
   var url = await app.client.getUrl();
   test.identical( url,'https://www.npmjs.com/' );
-  
+
   // Open second url
   await app.client.url( 'https://www.npmjs.com/wTesting' );
   var url = await app.client.getUrl();
   test.identical( url,'https://www.npmjs.com/package/wTesting' );
-  
+
   // Move backward in history
   await app.client.back();
   var url = await app.client.getUrl();
   test.identical( url,'https://www.npmjs.com/' );
-  
+
   // Move forward in history
   await app.client.forward();
   var url = await app.client.getUrl();
   test.identical( url,'https://www.npmjs.com/package/wTesting' );
-  
+
   await app.stop();
 
   return null;

@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -51,11 +51,11 @@ async function WaitForDialog( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
   await page.waitForSelector( 'p', { visible : true } );
-  
+
   let timeOutError = _.time.outError( 5000 );
   let ready = _.Consequence();
-  page.on( 'dialog', ( e ) => 
-  { 
+  page.on( 'dialog', ( e ) =>
+  {
     test.identical( e.message(), 'test message' );
     e.accept();
     ready.take( true )
@@ -76,8 +76,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.WaitForDialog',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

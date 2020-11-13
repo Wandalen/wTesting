@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -45,31 +45,31 @@ async function localStorage( test )
   let indexHtmlPath = _.path.join( routinePath, 'index.html' );
   let userDataDirPath = _.path.nativize( _.path.join( routinePath, 'user-dir' ) );
   indexHtmlPath = _.path.nativize( indexHtmlPath );
-  
+
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
-  
+
   /* Use custom userDataDir to persist localStorage between launches */
 
   test.case = 'create new item'
   var browser = await Puppeteer.launch({ headless : true, userDataDir : userDataDirPath });
   var page = await browser.newPage();
   await page.goto( 'file:///' + indexHtmlPath, { waitUntil : 'load' } );
-  var got = await page.evaluate( () => 
-  { 
+  var got = await page.evaluate( () =>
+  {
     localStorage.setItem( 'itemKey', 'itemValue' );
     return localStorage.getItem( 'itemKey' );
   })
   test.identical( got, 'itemValue' );
   await browser.close();
-  
+
   //
-  
+
   test.case = 'reload browser and get item value'
   var browser = await Puppeteer.launch({ headless : true, userDataDir : userDataDirPath });
   var page = await browser.newPage();
   await page.goto( 'file:///' + indexHtmlPath, { waitUntil : 'load' } );
-  var got = await page.evaluate( () => 
-  { 
+  var got = await page.evaluate( () =>
+  {
     return localStorage.getItem( 'itemKey' );
   })
   test.identical( got, 'itemValue' );
@@ -86,8 +86,8 @@ let Self =
 {
 
   name : 'Visual.Puppeteer.LocalStorage',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

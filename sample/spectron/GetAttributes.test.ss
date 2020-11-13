@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -60,7 +60,7 @@ async function elementsAttributeGet( test )
   var attributes = elements.map( ( e ) => _.Consequence.From( e.getAttribute( 'attr' ) ) );
   var got = await _.Consequence.And( ...attributes );
   test.identical( got, [ '1', '2', '3' ] )
-  
+
   await app.stop();
 
   return null;

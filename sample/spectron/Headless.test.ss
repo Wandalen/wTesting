@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -55,10 +55,10 @@ async function headless( test )
 
   await app.start()
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
+
   var title = await app.client.getTitle();
   test.identical( title, 'Test' );
-    
+
   await app.stop();
 
   return null;
@@ -72,8 +72,8 @@ let Self =
 {
 
   name : 'Visual.Spectron.Headless',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

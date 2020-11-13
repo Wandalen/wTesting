@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -42,7 +42,7 @@ function onSuiteEnd()
 async function domElementProperties( test )
 {
   let self = this;
-  
+
   // Prepare path to electron app script( main.js )
   let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
@@ -57,13 +57,13 @@ async function domElementProperties( test )
   await app.start()
   // Waint until page will be loaded( Text appears on page )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
-  
+
   var element = await app.client.$( 'p' );
 
   //innerText
   var text = await element.getText();
   test.identical( text, 'Hello world' );
-  //outerHtml 
+  //outerHtml
   var html = await element.getHTML();
   test.identical( html, '<p>Hello world</p>' );
   //Elements position on page
@@ -83,8 +83,8 @@ let Self =
 {
 
   name : 'Visual.Spectron.ElementProperties',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

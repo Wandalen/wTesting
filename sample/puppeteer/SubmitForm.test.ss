@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -54,10 +54,10 @@ async function submitForm( test )
   // Set input field value
   await page.focus( '#input1' );
   await page.keyboard.type( '321' );
-  
+
   //Click submit button
   await page.click( '#submit' );
-  
+
   // Check text result
   var result = await page.$eval( '#result', e => e.innerText );
   test.identical( result, 'Result:321' )
@@ -75,8 +75,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.SubmitForm',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

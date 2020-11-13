@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -51,11 +51,11 @@ async function waitForVisibleInViewport( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
   await _.test.waitForVisibleInViewport
-  ({ 
-    library : 'puppeteer', 
-    page, 
-    timeOut : 5000, 
-    targetSelector : 'p' 
+  ({
+    library : 'puppeteer',
+    page,
+    timeOut : 5000,
+    targetSelector : 'p'
   });
   var text = await page.$eval( 'p', ( e ) => e.innerText )
   test.identical( text, 'Hello world' );
@@ -72,7 +72,7 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.WaitForVisibleInViewport',
-  
+
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,

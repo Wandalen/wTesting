@@ -200,7 +200,6 @@ module:
           - ../proto/wtools/atop/tester/l7
           - ../proto/wtools/atop/tester/l7/TesterTop.s
           - ../proto/wtools/atop/tester.test
-          - ../proto/wtools/atop/tester.test/AsyncTimeout.test.s
           - ../proto/wtools/atop/tester.test/Electron.test.s
           - ../proto/wtools/atop/tester.test/Ext.test.s
           - ../proto/wtools/atop/tester.test/Inheritance.test.s

@@ -40,7 +40,6 @@ function globalNamespaceOpen( _global, name )
   _global = Object.create( _global );
   _global.__GLOBAL_NAME__ = name;
   _global._global_ = _global;
-  // _global.wTools = Object.create( null );
   _realGlobal_._global_ = _global;
   _realGlobal_._globals_[ name ] = _global;
   return _global;
@@ -61,22 +60,9 @@ if( typeof module !== 'undefined' )
 {
 
   if( _realGlobal_.wTester && _realGlobal_.wTester._isReal_ )
-  {
-    return;
-  }
+  return;
 
-  // let Module = require( 'module' );
-  // let _wasCache = Module._cache;
-  // Module._cache = Object.create( null );
-
-  // _global = _global._global_ = Object.create( _global._global_ );
-  // _global.__GLOBAL_NAME__ = 'wTesting';
-  // // _realGlobal_._globals_.testing = _global;
-  // _realGlobal_._globals_.testing = _global;
-
-  debugger;
   _global = globalNamespaceOpen( _global, 'testing' );
-  debugger;
 
   //
 
@@ -110,8 +96,6 @@ if( typeof module !== 'undefined' )
 
   if( Config.interpreter === 'browser' )
   debugger;
-  // Module._cache = _wasCache;
-  // _global_ = _wasGlobal;
   globalNamespaceClose();
 
 }

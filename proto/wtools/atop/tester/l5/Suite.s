@@ -634,31 +634,17 @@ function _begin()
 
   if( suite.onSuiteBegin )
   {
-    // try // xxx : clean
-    // {
-    /*
-    qqq : cover returned from onSuiteBegin consequence
-    */
     ready.then( () => suite.onSuiteBegin.call( suite.context, suite ) || null );
-
     ready.finally( ( err, arg ) =>
     {
       if( err )
       {
+        debugger;
         err = _.err( err, `\nError in callback {- suite.onSuiteBegin -} of ${suite.qualifiedName}` );
         throw err;
       }
       return arg;
     });
-
-  //   }
-  //   catch( err )
-  //   {
-  //     debugger;
-  //     err = _.err( err, `\nError in suite.onSuiteBegin of ${suite.qualifiedName}` );
-  //     suite.exceptionReport({ err });
-  //     throw err;
-  //   }
   }
 
   /* */
@@ -703,7 +689,6 @@ function _endSoon( err, arg )
   let suite = this;
   let logger = suite.logger;
 
-  // console.log( '_endSoon', !!err, !!arg );
   suite._reportEnd();
 
   if( suite._reportIsPositive() )
@@ -722,10 +707,10 @@ function _end( err )
 
   _.assert( arguments.length === 1 );
 
-  // console.log( '_end\n' + _.introspector.stack() );
-
   if( suite._state === 'ending' || suite._state === 'ended' )
   return null;
+
+  /* - initial state - */
 
   ready.then( ( arg ) =>
   {
@@ -737,6 +722,8 @@ function _end( err )
     suite._state = 'ending';
     return arg;
   });
+
+  /* - early - */
 
   ready.finally( ( err2, arg ) =>
   {
@@ -772,10 +759,15 @@ function _end( err )
       err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
     }
 
+    // if( err )
+    // debugger;
+    // if( err )
+    // suite.exceptionReport({ err, unbarring : 1 });
+
     return arg || null;
   });
 
-  /* on suite end */
+  /* - on suite end - */
 
   if( suite.onSuiteEnd )
   {
@@ -787,7 +779,6 @@ function _end( err )
     originalReady.tag = 'timeLimitErrorCon';
     ready.then( () => suite.onSuiteEnd.call( suite.context, suite ) || null );
 
-    // ready = ready.orKeepingSplit([ timeLimitErrorCon, wTester._cancelCon ])
     ready = _.Consequence.Or( ready, timeLimitErrorCon, wTester._cancelCon )
 
     ready.finally( ( err2, got ) =>
@@ -806,7 +797,7 @@ function _end( err )
           });
           originalReady.cancel();
         }
-        err2 = _.err( `Error in callback {- suite.onSuiteEnd -} of ${suite.qualifiedName}\n`, err2 );
+        err2 = _.err( `Error in callback::onSuiteEnd of ${suite.qualifiedName}\n`, err2 );
         err = err2;
         suite.exceptionReport({ err : err2 });
       }
@@ -815,35 +806,48 @@ function _end( err )
     })
   }
 
-  /* process watcher */
-
-  if( suite.processWatching )
-  ready.finally( ( err2, arg ) =>
-  {
-    err = err || err2;
-    return suite.processWatchingEnd();
-  });
+  /* - state - */
 
   ready.finally( ( err2, arg ) =>
   {
     err = err || err2;
-
-    /* state */
 
     _.assert( suite._state === 'ending', `State of test suite should be "ending", but it is "${suite._state}"` );
     suite._state = 'ended';
 
-    return arg || null;
+    let ok = suite._reportIsPositive();
+
+    if( err )
+    suite.exceptionReport({ err : err, unbarring : 1 });
+
+    /* exit code */
+
+    if( !ok && !suite._exitCode )
+    suite._exitCode = -1;
+    if( suite._exitCode && !_.process.exitCode() )
+    suite._exitCode = _.process.exitCode( suite._exitCode );
+
+    /* considering */
+
+    if( suite.takingIntoAccount )
+    wTester._testSuiteConsider( ok );
+
+    /* tracking */
+
+    _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
+    _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
+
+    return suite;
   });
 
-  /* log */
+  /* - log - */
 
   ready.finally( ( err2, arg ) =>
   {
     err = err || err2;
 
-    if( err )
-    suite.exceptionReport({ err, unbarring : 1 });
+    if( err2 )
+    suite.exceptionReport({ err2, unbarring : 1 });
 
     /* report */
 
@@ -901,31 +905,27 @@ function _end( err )
     return arg || null;
   });
 
-  /* state */
+  /* - process watcher - */
 
+  if( suite.processWatching )
   ready.finally( ( err2, arg ) =>
   {
     err = err || err2;
+    return suite.processWatchingEnd();
+  });
 
-    let ok = suite._reportIsPositive();
+  /*
+  process watcher should follow setting state and process exit code
+  otherwise process exit from test routine will not give negative result of testing
+  */
+
+  /* - after - */
+
+  ready.finally( ( err2, arg ) =>
+  {
 
     if( err2 )
     suite.exceptionReport({ err : err2, unbarring : 1 });
-
-    /* exit code */
-
-    if( suite._exitCode && !_.process.exitCode() )
-    suite._exitCode = _.process.exitCode( suite._exitCode );
-
-    /* considering */
-
-    if( suite.takingIntoAccount )
-    wTester._testSuiteConsider( ok );
-
-    /* tracking */
-
-    _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
-    _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
 
     /* bunch */
 
@@ -934,6 +934,8 @@ function _end( err )
 
     return suite;
   });
+
+  /* - */
 
   return ready;
 }
@@ -947,8 +949,10 @@ function _terminated()
   let err = _.process ? _.process.exitReason() : null;
   if( !err )
   {
-    err = _.errBrief( 'Terminated by user' );
-    _.errReason( err, 'terminated by user' );
+    err = _.errBrief( 'Unexpected termination' );
+    _.errReason( err, 'unexpected termination' );
+    // err = _.errBrief( 'Terminated by user' );
+    // _.errReason( err, 'terminated by user' );
   }
   wTester.cancel({ err, terminatedByUser : 1, global : 1 });
 }

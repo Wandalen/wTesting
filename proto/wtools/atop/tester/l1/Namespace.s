@@ -144,7 +144,7 @@ function waitForVisibleInViewport( o )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
-  
+
   let o2 = _.mapBut( o, { library : null } );
 
   if( o.library === 'spectron' )
@@ -172,36 +172,36 @@ function waitForVisibleInViewportPuppeteer( o )
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( _.objectIs( o.page ) )
-  
+
   let ready = _.Consequence().take( null )
-  
-  ready.then( () => 
+
+  ready.then( () =>
   {
     let func = o.page._pageBindings.get( 'puppeteerWaitForVisible' );
     if( _.routineIs( func ) )
     return null;
-    return o.page.exposeFunction( 'puppeteerWaitForVisible', waitForVisible ) 
+    return o.page.exposeFunction( 'puppeteerWaitForVisible', waitForVisible )
   })
   ready.then( () => o.page.waitForFunction( waitFunction, { timeout : o.timeOut }, o.targetSelector ) )
 
-  ready.catch( ( err ) => 
+  ready.catch( ( err ) =>
   {
     _.errAttend( err );
     throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed, reason:\n`, err );
   })
-  
+
   return ready;
-  
+
   /* */
-  
+
   async function waitFunction( selector )
   {
     let result = await window.puppeteerWaitForVisible( selector );
     return result;
   }
-  
+
   /* */
-  
+
   async function waitForVisible( selector )
   {
     let element = await o.page.$( selector );
@@ -233,28 +233,28 @@ function waitForVisibleInViewportSpectron( o )
   let timeOutError = _.time.outError( o.timeOut );
   let result = _.Consequence();
   let visilbe = _.Consequence.From( _waitForVisibleInViewport() );
-  
+
   result.orKeeping( [ visilbe, timeOutError ] );
-  
-  result.finally( ( err, arg ) => 
+
+  result.finally( ( err, arg ) =>
   {
     if( !err || err.reason !== 'time out' )
     timeOutError.error( _.dont );
-    
+
     if( !err )
     return arg;
-    
+
     _.errAttend( err )
-    
+
     if( err.reason === 'time out' )
     return visilbe.then( () =>
     {
       throw _.err( `Waiting for selector ${_.strQuote( o.targetSelector )} failed: timeout ${o.timeOut}ms exceeded` );
     })
-    
+
     throw err;
   })
-  
+
   return result;
 
   /* */
@@ -263,7 +263,7 @@ function waitForVisibleInViewportSpectron( o )
   {
     if( timeOutError.resourcesCount() )
     return null;
-    
+
     let element = await o.page.$( o.targetSelector );
 
     if( element.isExisting() )
@@ -277,7 +277,7 @@ function waitForVisibleInViewportSpectron( o )
       if( isIntersectingViewport )
       return true;
     }
-    
+
     return _waitForVisibleInViewport();
   }
 }
@@ -368,11 +368,7 @@ isVisibleWithinViewport.defaults =
 
 //
 
-let Fields =
-{
-}
-
-let Routines =
+let Extension =
 {
   fileDrop,
   eventDispatch,
@@ -382,8 +378,7 @@ let Routines =
   isVisibleWithinViewport
 }
 
-_.mapExtend( Self, Fields );
-_.mapExtend( Self, Routines );
+_.mapExtend( Self, Extension );
 
 // --
 // export

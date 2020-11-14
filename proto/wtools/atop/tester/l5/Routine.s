@@ -442,7 +442,7 @@ function _runEnd()
     trd._timeLimitErrorCon.error( _.dont );
   }
 
-  if( trd._exitCode && !_.process.exitCode )
+  if( trd._exitCode && !_.process.exitCode() ) /* xxx */
   trd._exitCode = _.process.exitCode( trd._exitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );

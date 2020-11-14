@@ -213,7 +213,7 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  // debugger; /* qqq xxx : cover rapidity */
+  /* qqq : cover rapidity */
 
   _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 

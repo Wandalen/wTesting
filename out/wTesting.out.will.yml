@@ -245,7 +245,10 @@ module:
           - ../proto/wtools/atop/tester.test/_asset/hello/Hello.test.js
           - ../proto/wtools/atop/tester.test/_asset/manualTermination
           - >-
-            ../proto/wtools/atop/tester.test/_asset/manualTermination/manualTermination.test.js
+            ../proto/wtools/atop/tester.test/_asset/manualTermination/Test.test.js
+          - ../proto/wtools/atop/tester.test/_asset/manualTerminationAsync
+          - >-
+            ../proto/wtools/atop/tester.test/_asset/manualTerminationAsync/Test.test.js
           - ../proto/wtools/atop/tester.test/_asset/noTestCheck
           - ../proto/wtools/atop/tester.test/_asset/noTestCheck/Suite.test.js
           - ../proto/wtools/atop/tester.test/_asset/onSuiteEnd

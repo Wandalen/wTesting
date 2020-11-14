@@ -436,13 +436,13 @@ function _runEnd()
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  /* xxx */
   if( !trd._timeLimitErrorCon.resourcesCount() && !trd._timeLimitCon.resourcesCount() )
   {
     trd._timeLimitErrorCon.error( _.dont );
   }
 
-  if( trd._exitCode && !_.process.exitCode() ) /* xxx */
+  if( suite.takingIntoAccount )
+  if( trd._exitCode && !_.process.exitCode() )
   trd._exitCode = _.process.exitCode( trd._exitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
@@ -603,7 +603,6 @@ function _runInterruptMaybe( throwing )
   if( !wTester._canContinue() )
   {
     debugger;
-    /* qqq xxx */
     let result = trd.cancel();
     if( throwing )
     throw result;
@@ -685,7 +684,7 @@ function _timeOutError( err )
   ({
     args : [ err || '', `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
-    reason : 'test routine time limit', /* xxx */
+    reason : 'test routine time limit',
   });
 
   let o =
@@ -1315,11 +1314,8 @@ function _outcomeLog( o )
 
   logger.begin({ verbosity : o.verbosity });
 
-  // if( o.considering )
-  {
-    logger.begin({ 'check' : trd.description || trd._checkIndex });
-    logger.begin({ 'checkIndex' : trd._checkIndex });
-  }
+  logger.begin({ 'check' : trd.description || trd._checkIndex });
+  logger.begin({ 'checkIndex' : trd._checkIndex });
 
   logger.begin({ verbosity : o.verbosity+verbosity });
 
@@ -1347,12 +1343,11 @@ function _outcomeLog( o )
   .end( 'message' );
 
   logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-  if( logger.verbosityReserve() > 1 ) /* xxx */
+  if( logger.verbosityReserve() > 1 )
   logger.log();
 
   logger.end({ verbosity : o.verbosity+verbosity });
 
-  // if( o.considering )
   logger.end( 'check', 'checkIndex' );
   logger.end({ verbosity : o.verbosity });
 
@@ -1653,7 +1648,7 @@ function _reportBegin()
   report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
-  report.appExitCode = null;
+  report.appExitCode = null; /* xxx */
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -3188,7 +3183,7 @@ function _shouldDo( o )
 
       if( !reported )
       if( !o.allowingMultipleResources )
-      _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
+      _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
       {
 
         if( result.resourcesGet().length )
@@ -3712,7 +3707,7 @@ function _shouldDo_( o )
 
       if( !reported )
       if( !o.allowingMultipleResources )
-      _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
+      _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
       {
 
         if( result.resourcesGet().length )

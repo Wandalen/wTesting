@@ -2894,7 +2894,6 @@ function manualTermination( test )
     test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
     test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
     test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
-    test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( op.output, 'by user' ), 0 );
     test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
     test.identical( _.strCount( op.output, 'Error' ), 0 );
@@ -2939,7 +2938,6 @@ function manualTerminationAsync( test )
     test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
     test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
     test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
-    test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( op.output, 'by user' ), 0 );
     test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
     test.identical( _.strCount( op.output, 'Error in callback::onSuiteEnd of TestSuite::manualTermination' ), 1 );

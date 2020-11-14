@@ -617,7 +617,7 @@ function cancel()
   if( o.global )
   try
   {
-    /* xxx : dubious */
+    /* zzz : dubious */
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnedCon )
     {

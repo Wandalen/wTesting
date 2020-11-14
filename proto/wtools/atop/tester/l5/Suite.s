@@ -822,10 +822,15 @@ function _end( err )
 
     /* exit code */
 
-    if( !ok && !suite._exitCode )
-    suite._exitCode = -1;
-    if( suite._exitCode && !_.process.exitCode() )
-    suite._exitCode = _.process.exitCode( suite._exitCode );
+    // if( !ok && !suite._exitCode )
+    // suite._exitCode = -1;
+    if( suite.takingIntoAccount && !_.process.exitCode() )
+    {
+      if( suite._exitCode )
+      _.process.exitCode( suite._exitCode );
+      else if( !ok )
+      _.process.exitCode( -1 );
+    }
 
     /* considering */
 

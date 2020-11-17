@@ -368,11 +368,7 @@ isVisibleWithinViewport.defaults =
 
 //
 
-let Fields =
-{
-}
-
-let Routines =
+let Extension =
 {
   fileDrop,
   eventDispatch,
@@ -382,8 +378,7 @@ let Routines =
   isVisibleWithinViewport
 }
 
-_.mapExtend( Self, Fields );
-_.mapExtend( Self, Routines );
+_.mapExtend( Self, Extension );
 
 // --
 // export

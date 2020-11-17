@@ -7,7 +7,7 @@ require( 'wTesting' );
 var ElectronPath = require( 'electron' );
 var Spectron = require( 'spectron' );
 
-let _ = _realGlobal_._testerGlobal_.wTools
+let _ = _realGlobal_._globals_.testing.wTools
 
 // --
 // tests

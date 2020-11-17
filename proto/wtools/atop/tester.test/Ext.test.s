@@ -1962,6 +1962,7 @@ function asyncTimeOutSingle( test )
     test.identical( _.strCount( got.output, 'unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'routine1.' ), 1 );
     test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
     test.identical( _.strCount( got.output, 'routine1.2' ), 0 );
@@ -2010,6 +2011,7 @@ function asyncTimeOutTwo( test )
     test.identical( _.strCount( got.output, 'unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'TestRoutine::routine1 is ended' ), 0 );
     test.identical( _.strCount( got.output, 'time limit' ), 1 );
     test.identical( _.strCount( got.output, 'Failed ( test routine time limit )' ), 1 );
@@ -2077,6 +2079,7 @@ function asyncTimeOutCheck( test )
     test.identical( _.strCount( got.output, 'unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
 
     test.identical( _.strCount( got.output, 'routine1.' ), 2 );
     test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
@@ -2315,6 +2318,7 @@ function timeOutSeveralRoutines( test ) /* xxx : implement similar test routine 
     {
       test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
       test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+      test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
 
       test.identical( _.strCount( op.output, 'Failed ( test routine time limit ) TestSuite::ForTesting / TestRoutine::routine1' ), 1 );
       test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine2' ), 1 );
@@ -2418,6 +2422,7 @@ function timeOutSeveralRoutinesDesync( test ) /* xxx : implement similar test ro
     {
       test.identical( _.strCount( op.output, 'uncaught error' ), 0 );
       test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+      test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
 
       test.identical( _.strCount( op.output, 'Failed ( test routine time limit ) TestSuite::ForTesting / TestRoutine::routine1' ), 1 );
       test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine2' ), 1 );
@@ -2568,7 +2573,6 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
   {
     execPath : `IsExecutedOnceOnSigint.test.js`,
     outputPiping : 1,
-    ipc : 1
   }
 
   a.appStartNonThrowing( o )
@@ -2583,10 +2587,17 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
   {
     test.notIdentical( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );
+    test.identical( _.strCount( got.output, 'Terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Error' ), 0 );
+    test.identical( _.strCount( got.output, 'error' ), 2 );
+    test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
+    test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
+    test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
+
     return null;
   })
 
@@ -2631,11 +2642,19 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
   o.conTerminate.then( ( got ) => /* qqq : then( ( got ) -> then( ( op ) or then( ( arg ) */
   {
     test.notIdentical( got.exitCode, 0 );
-    test.identical( _.strCount( got.output, 'Terminated by user' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Terminated by user' ), 0 );
+    test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
-    test.identical( _.strCount( got.output, 'Thrown' ), 2 );
+    test.identical( _.strCount( got.output, 'Error' ), 0 );
+    test.identical( _.strCount( got.output, 'error' ), 2 );
+    test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
+    test.identical( _.strCount( got.output, 'Thrown' ), 1 );
+    test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
+    test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
+
     return null;
   })
 
@@ -2797,7 +2816,7 @@ function termination( test )
   {
     let _ = require( toolsPath );
     _.include( 'wTesting' );
-    _ = _realGlobal_._testerGlobal_.wTools;
+    _ = _realGlobal_._globals_.testing.wTools;
     let input = { map : _.fileProvider.fileRead({ filePath : _.path.join( __dirname, 'File1' ), encoding : 'json' }) };
 
     function routine1( test )
@@ -2855,14 +2874,14 @@ termination.description =
 function manualTermination( test )
 {
   let context = this;
-  let a = context.assetFor( test, 'manualTermination' );
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */
 
   let o =
   {
-    execPath : `${a.abs( 'manualTermination.test.js' )} v:7`,
+    execPath : `${a.abs( 'Test.test.js' )} v:7`,
   };
   a.appStartNonThrowing( o )
 
@@ -2872,10 +2891,17 @@ function manualTermination( test )
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
-    test.is( _.strHas( op.output, 'onSuiteEnd : 1' ) );
-    test.is( _.strHas( op.output, 'onExit : 2' ) );
+    test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
+    test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+    test.identical( _.strCount( op.output, 'by user' ), 0 );
+    test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
+    test.identical( _.strCount( op.output, 'Error' ), 0 );
+    test.identical( _.strCount( op.output, 'error' ), 1 );
     return op;
   })
+
+  /* - */
 
   return a.ready;
 }
@@ -2884,6 +2910,53 @@ manualTermination.description =
 `
   User terminates execution when second test routine is runnning.
   onSuiteEnd handler should be executed before exit event
+  exit code should be not zero
+`
+
+//
+
+function manualTerminationAsync( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  let o =
+  {
+    execPath : `${a.abs( 'Test.test.js' )} v:7`,
+  };
+  a.appStartNonThrowing( o )
+
+  /* */
+
+  a.ready
+  .then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
+    test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+    test.identical( _.strCount( op.output, 'by user' ), 0 );
+    test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
+    test.identical( _.strCount( op.output, 'Error in callback::onSuiteEnd of TestSuite::manualTermination' ), 1 );
+    test.identical( _.strCount( op.output, 'Error' ), 1 );
+    test.identical( _.strCount( op.output, 'error' ), 1 );
+    return op;
+  })
+
+  /* - */
+
+  return a.ready;
+}
+
+manualTerminationAsync.description =
+`
+  User terminates execution when second test routine is runnning.
+  onSuiteEnd handler should be executed before exit event
+  exit code should be not zero
+  on suite end returns consequence
 `
 
 //
@@ -2910,6 +2983,7 @@ function uncaughtErrorNotSilenced( test )
     {
       test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
       test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+      test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
       test.notIdentical( op.exitCode, 0 );
     });
     return a.ready;
@@ -3129,6 +3203,7 @@ let Self =
 
     termination,
     manualTermination,
+    manualTerminationAsync,
     uncaughtErrorNotSilenced,
     asyncErrorHandling,
 

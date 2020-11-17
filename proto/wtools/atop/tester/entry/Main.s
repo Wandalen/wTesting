@@ -18,7 +18,7 @@ if( typeof module !== 'undefined' )
 }
 
 if( typeof module !== 'undefined' )
-module[ 'exports' ] = _testerGlobal_.wTools;
+module[ 'exports' ] = _globals_.testing.wTools;
 
 if( !module.parent )
 _realGlobal_.wTester.exec();

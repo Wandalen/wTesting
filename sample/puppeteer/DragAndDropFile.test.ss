@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 // let _ = _global_.wTools;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -49,25 +49,25 @@ async function fileDragAndDrop( test )
 
   let browser = await Puppeteer.launch({ headless : false });
   let page = await browser.newPage();
-  
+
   var fileInputId = 'fileInput';
   var dropZoneSelector = '#dropzone';
-  
+
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
-  
-  await page.evaluate(( fileInputId, dropZoneSelector) => 
-  { 
+
+  await page.evaluate(( fileInputId, dropZoneSelector) =>
+  {
     let input = document.createElement( 'input' );
     input.id = fileInputId,
     input.type = 'file'
-    input.onchange = ( e ) => 
-    { 
+    input.onchange = ( e ) =>
+    {
       let event = new Event( 'drop' );
       Object.assign( event, { dataTransfer: { files: e.target.files } } )
       document.querySelector( dropZoneSelector ).dispatchEvent( event );
     }
     document.body.appendChild( input );
-  
+
   }, fileInputId, dropZoneSelector );
 
   const fileInput = await page.$(`#${fileInputId}`);
@@ -92,9 +92,9 @@ async function fileDragAndDropWithHelper( test )
 
   let browser = await Puppeteer.launch({ headless : false });
   let page = await browser.newPage();
-  
+
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
-  
+
   await _.test.fileDrop
   ({
     filePath : [ __filename ],
@@ -118,8 +118,8 @@ let Self =
 {
 
   name : 'Visual.Puppeteer.DragAndDropFile',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

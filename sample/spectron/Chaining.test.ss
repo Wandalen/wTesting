@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -50,7 +50,7 @@ async function chaining( test )
     path : ElectronPath,
     args : [ mainPath ]
   })
-  
+
 
   await app.start()
   test.case = 'wait for load then check innerText property'
@@ -66,7 +66,7 @@ async function chaining( test )
   var text = await element.getText();
   test.identical( text, 'Text1' );
   await app.stop();
-  
+
   return null;
 }
 
@@ -78,8 +78,8 @@ let Self =
 {
 
   name : 'Visual.Spectron.Html.Chaining',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

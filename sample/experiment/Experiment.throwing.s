@@ -18,7 +18,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 let Self = {};
 
 var singleMessage = function( test )

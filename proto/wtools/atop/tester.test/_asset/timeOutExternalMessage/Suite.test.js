@@ -1,7 +1,7 @@
 
 require( 'wTesting' );
 
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 _.include( 'wProcedure' );
 _.include( 'wConsequence' );

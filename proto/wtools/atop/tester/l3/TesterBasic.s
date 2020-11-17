@@ -213,7 +213,7 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  // debugger; /* qqq xxx : cover rapidity */
+  /* qqq : cover rapidity */
 
   _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 
@@ -617,7 +617,7 @@ function cancel()
   if( o.global )
   try
   {
-    /* xxx : dubious */
+    /* zzz : dubious */
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnedCon )
     {

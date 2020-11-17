@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
   require( './Main.s' );
 
   if( typeof module !== 'undefined' )
-  module[ 'exports' ] = _testerGlobal_.wTools;
+  module[ 'exports' ] = _globals_.testing.wTools;
 
   wTester.exec();
 

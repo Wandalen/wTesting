@@ -7,8 +7,8 @@
 
 /**
  * @classdesc Provides interface for creating of test routines. Interface is a collection of routines to create cases, groups of cases, perform different type of checks.
- * @class wTestRoutineDescriptor
- * @param { Object } o - Test suite option map. {@link module:Tools/atop/Tester.wTestRoutineDescriptor.TestRoutineFields More about options}
+ * @class wTestRoutineObject
+ * @param { Object } o - Test suite option map. {@link module:Tools/atop/Tester.wTestRoutineObject.TestRoutineFields More about options}
  * @module Tools/atop/Tester
  */
 
@@ -17,8 +17,8 @@ let _ = _global_.wTools;
 let debugged = _.process.isDebugged();
 
 let Parent = null;
-let Self = wTestRoutineDescriptor;
-function wTestRoutineDescriptor( o )
+let Self = wTestRoutineObject;
+function wTestRoutineObject( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -70,7 +70,7 @@ function init( o )
 /**
  * @summary Ensures that instance has all required properties defined.
  * @method form
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -436,13 +436,13 @@ function _runEnd()
   _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
   _.assert( suite.currentRoutine === trd );
 
-  /* xxx */
   if( !trd._timeLimitErrorCon.resourcesCount() && !trd._timeLimitCon.resourcesCount() )
   {
     trd._timeLimitErrorCon.error( _.dont );
   }
 
-  if( trd._exitCode && !_.process.exitCode )
+  if( suite.takingIntoAccount )
+  if( trd._exitCode && !_.process.exitCode() )
   trd._exitCode = _.process.exitCode( trd._exitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
@@ -603,7 +603,6 @@ function _runInterruptMaybe( throwing )
   if( !wTester._canContinue() )
   {
     debugger;
-    /* qqq xxx */
     let result = trd.cancel();
     if( throwing )
     throw result;
@@ -685,7 +684,7 @@ function _timeOutError( err )
   ({
     args : [ err || '', `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
     usingSourceCode : 0,
-    reason : 'test routine time limit', /* xxx */
+    reason : 'test routine time limit',
   });
 
   let o =
@@ -823,7 +822,7 @@ function _groupGet()
 /**
  * @summary Creates tests group with name `groupName`.
  * @method open
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -866,7 +865,7 @@ function groupOpen( groupName )
 /**
  * @summary Closes tests group with name `groupName`.
  * @method close
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1131,7 +1130,7 @@ function decoratedAbsoluteNameGet()
 /**
  * @summary Returns information about current test check.
  * @method checkCurrent
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1154,7 +1153,7 @@ function checkCurrent()
 /**
  * @summary Returns information about next test check.
  * @method checkCurrent
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1181,7 +1180,7 @@ function checkNext( description )
 /**
  * @summary Saves information current test check into a inner container.
  * @method checkCurrent
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1203,7 +1202,7 @@ function checkStore()
  * @descriptionNeeded
  * @param {Object} acheck
  * @method checkRestore
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1315,11 +1314,8 @@ function _outcomeLog( o )
 
   logger.begin({ verbosity : o.verbosity });
 
-  // if( o.considering )
-  // {
   logger.begin({ 'check' : trd.description || trd._checkIndex });
   logger.begin({ 'checkIndex' : trd._checkIndex });
-  // }
 
   logger.begin({ verbosity : o.verbosity+verbosity });
 
@@ -1347,12 +1343,11 @@ function _outcomeLog( o )
   .end( 'message' );
 
   logger.end({ 'connotation' : o.outcome ? 'positive' : 'negative' });
-  if( logger.verbosityReserve() > 1 ) /* xxx */
+  if( logger.verbosityReserve() > 1 )
   logger.log();
 
   logger.end({ verbosity : o.verbosity+verbosity });
 
-  // if( o.considering )
   logger.end( 'check', 'checkIndex' );
   logger.end({ verbosity : o.verbosity });
 
@@ -1653,7 +1648,7 @@ function _reportBegin()
   report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
-  report.appExitCode = null;
+  report.appExitCode = null; /* xxx */
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -1764,7 +1759,7 @@ _reportTextForTestCheck.defaults =
  * to the testing system. If test is failed function also outputs additional information.
  * @param {Boolean} outcome Result of some condition.
  * @method is
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1864,7 +1859,7 @@ function isNot( outcome )
  *
  * @throws {Exception} If no arguments provided.
  * @method identical
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -1967,7 +1962,7 @@ function identical( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method notIdentical
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2072,7 +2067,7 @@ function notIdentical( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method equivalent
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2185,7 +2180,7 @@ function equivalent( got, expected, options )
  *
  * @throws {Exception} If no arguments provided.
  * @method notEquivalent
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2297,7 +2292,7 @@ function notEquivalent( got, expected, options )
  *
  * @throws {Exception} If no arguments provided.
  * @method contains
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2686,7 +2681,7 @@ function containsNone( got, expected )
  *
  * @throws {Exception} If no arguments provided.
  * @method gt
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2759,7 +2754,7 @@ function gt( got, than )
  *
  * @throws {Exception} If no arguments provided.
  * @method ge
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2835,7 +2830,7 @@ function ge( got, than )
  *
  * @throws {Exception} If no arguments provided.
  * @method lt
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -2911,7 +2906,7 @@ function lt( got, than )
  *
  * @throws {Exception} If no arguments provided.
  * @method le
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -3188,7 +3183,7 @@ function _shouldDo( o )
 
       if( !reported )
       if( !o.allowingMultipleResources )
-      _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
+      _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
       {
 
         if( result.resourcesGet().length )
@@ -3712,7 +3707,7 @@ function _shouldDo_( o )
 
       if( !reported )
       if( !o.allowingMultipleResources )
-      _.time.out( 25, function() /* xxx : refactor that, use time out or test routine */
+      _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
       {
 
         if( result.resourcesGet().length )
@@ -3911,7 +3906,7 @@ _shouldDo_.defaults =
  *
  * @throws {Exception} If no arguments provided.
  * @method shouldThrowErrorAsync
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -3962,7 +3957,7 @@ function shouldThrowErrorAsync_( routine )
  *
  * @throws {Exception} If no arguments provided.
  * @method shouldThrowErrorSync
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -4041,7 +4036,7 @@ function shouldThrowErrorSync_( routine )
  * @throws {Exception} If no arguments provided.
  * @throws {Exception} If passed argument is not a Routine.
  * @method shouldThrowErrorSync
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -4094,7 +4089,7 @@ function shouldThrowErrorOfAnyKind_( routine )
  *
  * @throws {Exception} If no arguments provided.
  * @method mustNotThrowError
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -4147,7 +4142,7 @@ function mustNotThrowError_( routine )
  *
  * @throws {Exception} If no arguments provided.
  * @method returnsSingleResource
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -4239,7 +4234,7 @@ function assetFor( a )
   Object.setPrototypeOf( a, context );
 
   if( a.process === null )
-  a.process = _testerGlobal_.wTools.process;
+  a.process = _globals_.testing.wTools.process;
   if( a.fileProvider === null )
   {
     a.fileProvider = _.FileProvider.System({ providers : [] });
@@ -4251,9 +4246,9 @@ function assetFor( a )
     a.fileProvider.defaultProvider = defaultProvider;
   }
   if( a.path === null )
-  a.path = a.fileProvider.path || _testerGlobal_.wTools.uri;
+  a.path = a.fileProvider.path || _globals_.testing.wTools.uri;
   if( a.uri === null )
-  a.uri = _testerGlobal_.wTools.uri || a.fileProvider.path;
+  a.uri = _globals_.testing.wTools.uri || a.fileProvider.path;
   if( a.ready === null )
   a.ready = _.Consequence().take( null );
 
@@ -4579,7 +4574,7 @@ let usingSourceCodeSymbol = Symbol.for( 'usingSourceCode' );
  * @property {Number} accuracy
  * @property {Number} rapidity
  * @property {Boolean} usingSourceCode
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -4603,7 +4598,7 @@ let RoutineFields =
  * @property {Number} timeOut
  * @property {Boolean} experimental
  * @property {Boolean} usingSourceCode
- * @class wTestRoutineDescriptor
+ * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
@@ -4880,4 +4875,3 @@ module[ 'exports' ] = Self;
 wTesterBasic[ Self.shortName ] = Self;
 
 })();
-

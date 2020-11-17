@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -46,16 +46,16 @@ async function screenshot( test )
   test.case = 'go to npm and check url'
   page.goto( 'https://www.npmjs.com/' )
   await page.waitForNavigation();
-    
+
   test.case = 'screenshot whole window'
   var screenshot = await page.screenshot();
   test.is( _.bufferNodeIs( screenshot ) )
-  
+
   test.case = 'screenshot whole window and save to disk'
   var path = _.path.nativize( _.path.join( __dirname, 'screenshot.png' ) );
   await page.screenshot({ path });
   test.is( _.fileProvider.fileExists( path ) )
-  
+
   test.case = 'screenshot element'
   var element = await page.$( '#search');
   var screenshot = await element.screenshot();
@@ -74,8 +74,8 @@ var Self =
 {
 
   name : 'Visual.Puppeteer.Screenshots',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

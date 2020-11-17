@@ -91,7 +91,7 @@ function terminationBeginWithTwoNamespaces( test )
       t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
       t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
       t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-      t.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+      t.identical( _.strCount( op.output, 'GLOBAL WHICH : testing' ), 1 );
       t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
       t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
       t.identical( _.strCount( op.output, 'timer1' ), 1 );
@@ -113,7 +113,7 @@ function terminationBeginWithTwoNamespaces( test )
       t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
       t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
       t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-      t.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+      t.identical( _.strCount( op.output, 'GLOBAL WHICH : testing' ), 1 );
       t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
       t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
       t.identical( _.strCount( op.output, 'timer1' ), 1 );
@@ -172,15 +172,15 @@ function terminationBeginWithTwoNamespaces( test )
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `GLOBAL WHICH : ${ keys[ 0 ] }` );
 
     _.include( 'wTesting' );
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `GLOBAL WHICH : ${ keys[ 1 ] }` );
 
-    console.log( `Instances are identical : ${ keys[ 0 ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
+    console.log( `Instances are identical : ${ _realGlobal_._globals_[ keys[ 0 ] ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
 
     if( _ !== _realGlobal_._globals_[ 'real' ].wTools )
     throw _.err( 'Wrong namespace for _.' )
@@ -235,15 +235,15 @@ function terminationBeginWithTwoNamespaces( test )
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `GLOBAL WHICH : ${ keys[ 0 ] }` );
 
     _.include( 'wTesting' );
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `GLOBAL WHICH : ${ keys[ 1 ] }` );
 
-    console.log( `Instances are identical : ${ keys[ 0 ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
+    console.log( `Instances are identical : ${ _realGlobal_._globals_[ keys[ 0 ] ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
 
     if( _ !== _realGlobal_._globals_[ 'real' ].wTools )
     throw _.err( 'Wrong namespace for _.' )

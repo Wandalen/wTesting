@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -42,7 +42,7 @@ function onSuiteEnd()
 async function injectScript( test )
 {
   let self = this;
-  
+
   // Prepare path to electron app script( main.js )
   let mainJsPath = _.path.nativize( _.path.join( __dirname, 'asset/main.ss' ) );
 
@@ -59,7 +59,7 @@ async function injectScript( test )
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
 
   //Inject script that changes text property of DOM element and return it as value
-  let got = await app.client.execute( () => 
+  let got = await app.client.execute( () =>
   {
     let element = document.querySelector( 'p' );
     element.innerText = 'Hello from test';
@@ -79,7 +79,7 @@ let Self =
 {
 
   name : 'Visual.Spectron.InjectScript',
-  
+
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
   routineTimeOut : 300000,

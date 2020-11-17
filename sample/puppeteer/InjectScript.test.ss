@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -51,7 +51,7 @@ async function injectScript( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  let got = await page.evaluate( () => 
+  let got = await page.evaluate( () =>
   {
     let element = document.querySelector( 'p' );
     element.innerText = 'Hello from test';
@@ -72,8 +72,8 @@ let Self =
 {
 
   name : 'Visual.Puppeteer.Input',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

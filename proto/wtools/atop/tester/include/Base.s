@@ -8,7 +8,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( !_global_.wBase || _global_.__GLOBAL_WHICH__ !== 'real' )
+  if( !_global_.wBase || _global_.__GLOBAL_NAME__ !== 'real' )
   {
     let toolsPath = '../../../../wtools/Tools.s';
     let _externalTools = 0;

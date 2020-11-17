@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 // --
 // context
@@ -53,7 +53,7 @@ async function elementsAttributeGet( test )
 
   var got = await page.$$eval( 'div[attr]', ( elements ) => elements.map( e => e.getAttribute( 'attr') ) );
   test.identical( got, [ '1', '2', '3' ] );
-  
+
   await browser.close();
 
   return null;
@@ -67,8 +67,8 @@ let Self =
 {
 
   name : 'Visual.Puppeteer.GetAttributes',
-  
-  
+
+
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,

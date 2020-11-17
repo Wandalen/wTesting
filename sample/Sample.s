@@ -2,7 +2,7 @@
 if( typeof module !== 'undefined' )
 require( 'wTesting' );
 
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 
 //
 

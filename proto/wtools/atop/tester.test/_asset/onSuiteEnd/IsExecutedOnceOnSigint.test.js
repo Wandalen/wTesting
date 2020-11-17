@@ -1,6 +1,6 @@
 
 require( 'wTesting' );
-let _ = _realGlobal_._testerGlobal_.wTools;
+let _ = _realGlobal_._globals_.testing.wTools;
 
 //
 

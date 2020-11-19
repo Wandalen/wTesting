@@ -291,12 +291,12 @@ eq( 1, 1.00000001 )
 
 ![](https://img.shields.io/badge/technique-bad-red)
 ```js
-_.time.out( context.100, ( op ) =>
+_.time.out( 100, ( op ) =>
 {
   test.identical( op, true );
 });
 
-_.time.out( context.200, ( op ) =>
+_.time.out( 200, ( op ) =>
 {
   test.identical( op, true );
 });

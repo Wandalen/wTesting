@@ -4031,7 +4031,7 @@ function shouldThrowErrorAsync_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 500, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -4067,7 +4067,7 @@ function shouldThrowErrorAsync_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( 1000, () =>
+      return _.time.out( 500, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -4111,7 +4111,7 @@ function shouldThrowErrorAsync_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 500, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -4340,7 +4340,7 @@ function shouldThrowErrorAsync_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 500, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -4376,7 +4376,7 @@ function shouldThrowErrorAsync_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 400, () =>
+      return _.time.out( 500, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );

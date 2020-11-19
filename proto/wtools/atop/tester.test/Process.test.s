@@ -80,7 +80,7 @@ function main( test )
 
   var result = suite.run();
 
-  result.finally( ( err, got ) =>
+  result.finally( ( _err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 3 );
 
@@ -118,6 +118,27 @@ function main( test )
 
 //
 
+function shouldThrowErrorSyncProcessHasErrorBefore( test )
+{
+  test.case = 'consequence of process starter has error';
+  var err = _.err( 'error' );
+  var ready = new _.Consequence().error( err );
+
+  var o =
+  {
+    execPath : 'unknown command',
+    ready,
+    sync : 1,
+    throwingExitCode : 0,
+  };
+
+  test.shouldThrowErrorSync( () => _.process.start( o ) );
+}
+
+shouldThrowErrorSyncProcessHasErrorBefore.experimental = 1;
+
+//
+
 function detachedDisconnectedChildProcess( test )
 {
   var suite = wTestSuite
@@ -131,8 +152,8 @@ function detachedDisconnectedChildProcess( test )
     routineTimeOut : 3000,
     processWatching : 1,
     name : 'DetachedProcess',
-    
-    context : 
+
+    context :
     {
       suiteTempPath : null,
       toolsPath : null,
@@ -153,7 +174,7 @@ function detachedDisconnectedChildProcess( test )
 
   var result = suite.run();
 
-  result.finally( ( err, got ) =>
+  result.finally( ( _err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 1 );
 
@@ -235,6 +256,7 @@ let Self =
   tests :
   {
     main,
+    shouldThrowErrorSyncProcessHasErrorBefore,
     detachedDisconnectedChildProcess
   }
 

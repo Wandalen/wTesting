@@ -3,7 +3,7 @@ let Math = require( './Math.s' );
 
 //
 
-function sumTest( test )
+function sum( test )
 {
   test.case = 'integer';
   test.equivalent( Math.sum( 1, 1 ), 2 );
@@ -15,7 +15,7 @@ function sumTest( test )
 
 //
 
-function mulTest( test )
+function mul( test )
 {
   test.case = 'integer';
   test.equivalent( Math.mul( 1, 1 ), 1 );
@@ -40,8 +40,8 @@ let Self =
   abstract : 1,
   tests :
   {
-    sumTest,
-    mulTest,
+    sum,
+    mul,
     shouldBeFailed,
   }
 }

@@ -198,40 +198,46 @@ require( './Positive.test.js' );
 ### Тестування
 
 <details>
-  <summary><u>Вивід команди <code>tst .run .</code></u></summary>
+  <summary><u>Вивід команди <code>tst .run ./</code></u></summary>
 
 ```
 [user@user ~]$ tst .run .
-Running test suite ( Negative ) ..
-    at  /.../suiteInheritance/Negative.test.js:42
+Launching several ( 1 ) test suite(s) ..
+    Running test suite ( Negative ) ..
+    Located at /../Negative.test.s:42:8
 
-      Passed test routine ( Negative / sumThrowError ) in 0.066s
-      Passed test routine ( Negative / mulThrowError ) in 0.043s
-      Passed test routine ( Negative / shouldBeFailed ) in 0.037s
-      Passed test routine ( Negative / sum ) in 0.046s
-      Passed test routine ( Negative / mul ) in 0.044s
-
+      Passed TestSuite::Negative / TestRoutine::sumThrowError in 0.023s
+      Passed TestSuite::Negative / TestRoutine::mulThrowError in 0.013s
+      Passed TestSuite::Negative / TestRoutine::shouldBeFailed in 0.013s
+      Passed TestSuite::Negative / TestRoutine::sum in 0.015s
+      Passed TestSuite::Negative / TestRoutine::mul in 0.012s
     Passed test checks 9 / 9
     Passed test cases 6 / 6
     Passed test routines 5 / 5
-    Test suite ( Negative ) ... in 0.958s ... ok
+    Test suite ( Negative ) ... in 0.699s ... ok
 
 
-  Testing ... in 1.539s ... ok
+  Passed test checks 9 / 9
+  Passed test cases 6 / 6
+  Passed test routines 5 / 5
+  Passed test suites 1 / 1
+  Testing ... in 1.345s ... ok
+
 ```
 
 </details>
 
-Отримати результати тестування можна виконавши команду `tst .run .` в директорії модуля.
+Отримати результати тестування можна виконавши команду `tst .run ./` в директорії модуля.
 
 Вивід показує, що протестовано лише тест сюіт `Negative`. Всі тест рутини пройдено успішно. Тобто, рутина `shouldBeFailed` переписана нащадком - рутиною в тест сюіті `Negative`.
 
 Крім цього, при наслідуванні кожна тест рутина відноситься до сюіту-нащадка, в звіті це позначаєтся як:
 
 ```
-      Passed test routine ( Negative / mulThrowError ) in 0.043s    # Рутина тест сюіту `Negative`
-      Passed test routine ( Negative / shouldBeFailed ) in 0.037s   # Рутина тест сюіту `Negative`, що переписала рутину в тест сюітi `Positive`
-      Passed test routine ( Negative / sum ) in 0.046s          # Рутина в тест сюіті `Positive`
+
+      Passed TestSuite::Negative / TestRoutine::mulThrowError in 0.013s    # Рутина тест сюіту `Negative`
+      Passed TestSuite::Negative / TestRoutine::shouldBeFailed in 0.013s   # Рутина тест сюіту `Negative`, що переписала рутину в тест сюітi `Positive`
+      Passed TestSuite::Negative / TestRoutine::sum in 0.015s              # Рутина в тест сюіті `Positive`
 ```
 
 ### Підсумок

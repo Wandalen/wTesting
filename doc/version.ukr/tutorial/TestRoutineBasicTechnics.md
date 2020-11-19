@@ -1,8 +1,8 @@
 # Техніка розробки тестів
 
-<!-- qqq for Dmytro : review -->
-<!-- qqq for Dmytro : add what is missing -->
-<!-- qqq for Dmytro : parametrize time delays -->
+<!-- aaa for Dmytro : review --> <!-- Dmytro : reviewed-->
+<!-- aaa for Dmytro : add what is missing --> <!-- Dmytro : added info about parametrized time intervals, comments and conditional cases-->
+<!-- aaa for Dmytro : parametrize time delays --> <!-- Dmytro : added info, added shields -->
 
 Описано базові навички написання тест рутин та найпоширеніші помилки.
 

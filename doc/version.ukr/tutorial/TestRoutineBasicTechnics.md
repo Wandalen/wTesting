@@ -1,8 +1,8 @@
 # Техніка розробки тестів
 
-/* qqq for Dmytro : review */
-/* qqq for Dmytro : add what is missing */
-/* qqq for Dmytro : parametrize time delays */
+<!-- qqq for Dmytro : review -->
+<!-- qqq for Dmytro : add what is missing -->
+<!-- qqq for Dmytro : parametrize time delays -->
 
 Описано базові навички написання тест рутин та найпоширеніші помилки.
 
@@ -15,6 +15,9 @@
 - Вибір форматування даних
 - Відсутність груп тест кейсів занесених в структуру даних
 - Відсутність функціональних адаптерів
+- Параметризація інтервалів часу
+- Написання тест кейсів з умовою
+- Додавання пояснювальних коментарів
 
 ### Відсутність взаємозалежності між тест кейсами
 
@@ -24,6 +27,7 @@
 
 Для тест кейсів мають використовуватись власні незалежні змінні, що дозволяє ізолювати окремий тест кейс і тестувати його окремо.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'src is positive integer';
 var src = 5;
@@ -41,6 +45,7 @@ test.identical( got, expected );
 
 Змішування двох тест кейсів ( двох тест юнітів ) зменшує інформативність окремого тест кейса і ускладнює аналіз покриття тест юніта.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'expects empty array';
 var dst1 = [];
@@ -56,6 +61,7 @@ test.is( got === dst2 );
 
 Приведений тест кейс має бути розділеним:
 
+[](https://img.shields.io/badge/technique-good-green)
 ```js
 test.case = 'dst is empty array, expects empty array';
 var dst = [];
@@ -78,6 +84,7 @@ test.is( got === dst2 );
 
 Приклад розміщення змінних поза межами тест кейсу.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 function prefixGet( test )
 {
@@ -103,6 +110,7 @@ function prefixGet( test )
 
 Контекст виконання тест рутини - колбеки, інстанси класів котрі не змінюються або створюють спеціальні умови виконання тестування, можуть бути розміщені на початку або в кінці тест рутини. Контекст завжди використовується більш ніж одним тест кейсом, його багаторазове об'явлення може ускладнити роботу з тест рутиною.
 
+[](https://img.shields.io/badge/technique-good-green)
 ```js
 function srcOnly( filePath, it )
 {
@@ -123,6 +131,7 @@ function srcOnly( filePath, it )
 
 Збитковість тест кейсів проявляється у випадках, коли багаторазово тестуються однотипні дані.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'src is 5';
 var src = 5;
@@ -141,6 +150,7 @@ test.identical( got, expected );
 
 Збитковість тест перевірок проявляється в використанні додаткових перевірок, що не мають сенсу в представленому контексті.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'dst is null, ins is primitive';
 var dst = null;
@@ -157,6 +167,7 @@ test.is( got[ 0 ] === ins );
 
 Збитковість вхідних даних проявляється в створенні надлишкових змінних, а також в виборі невиправдано великого об'єму даних в структурах даних.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'remove single element';
 var dst = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
@@ -166,8 +177,7 @@ var expected = [ 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
 
 Зчитування інформації ускладнене через значний об'єм даних при цьому інформативність тест кейса не збільшилась. Для подібних тест кейсів достатньо обрати 3-5 елементів.
 
-
-
+[](https://img.shields.io/badge/technique-good-green)
 ```js
 test.case = 'remove single element';
 var dst = [ 1, 2, 3, 4 ];
@@ -185,6 +195,7 @@ var expected = [ 1, 2, 4 ];
 
 Неправильне форматування:
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'full uri with all components, primitiveOnly';
 var uri = 'http://www.site.com:13/path/name?query=here&and=here#anchor';
@@ -195,6 +206,7 @@ test.identical( got, expected );
 
 Відформатований кейс:
 
+[](https://img.shields.io/badge/technique-good-green)
 ```js
 test.case = 'full uri with all components, primitiveOnly';
 
@@ -221,6 +233,7 @@ test.identical( got, expected );
 
 Дані можуть предтавляються у неявному вигляді, що легко пропустити.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 test.case = 'unreadable expected variable';
 var got = _.arrayMake( 3 );
@@ -232,6 +245,7 @@ test.identical( got, expected );
 
 Проведення тестування скопом однотипних тест кейсів, що занесені в структуру даних ( масив, мапу ), погіршує читабельність рутини через необхідність співвіднесення даних структур і кейсу. В разі виникнення помилки, погіршується інформативність сервісної інформації бо може багаторазово повторюватись однаковий вивід.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 var src =
 [
@@ -251,8 +265,9 @@ for( let i = 0 ; i < src.length ; i++ )
 
 ### Відсутність функціональних адаптерів
 
-Негативною стороною використання функціональних адаптерів в погіршенні виводу сервісної інформації при виникненні помилки в декількох тест кейсах.
+Негативною стороною використання функціональних адаптерів полягає в погіршенні виводу сервісної інформації при виникненні помилки в декількох тест кейсах.
 
+[](https://img.shields.io/badge/technique-bad-red)
 ```js
 function eq( ins1, ins2 )
 {
@@ -264,6 +279,82 @@ eq( 1, 1 );
 
 test.case = 'equivalent values';
 eq( 1, 1.00000001 )
+```
+
+### Параметризація часових інтревалів
+
+Параметризація часових інтревалів - встановлення глобальних значень для часових інтревалів.
+
+Часові інтервали для тест рутин параметризуються в об'явленні тест сюіта.
+
+Для рутин, що працюють з часовими інтервалами достатньо обрати 2-4 стандартних значення. У випадку коли потрібні інтервали відмінні від встановлених значень, використовуються множники. Параметризація затримок часу 0 і 1 недоцільна.
+
+[](https://img.shields.io/badge/technique-bad-red)
+```js
+_.time.out( context.100, ( op ) =>
+{
+  test.identical( op, true );
+});
+
+_.time.out( context.200, ( op ) =>
+{
+  test.identical( op, true );
+});
+```
+
+[](https://img.shields.io/badge/technique-good-green)
+```js
+_.time.out( context.t1, ( op ) =>
+{
+  test.identical( op, true );
+});
+
+_.time.out( context.t1 * 2, ( op ) =>
+{
+  test.identical( op, true );
+});
+```
+
+### Написання тест кейсів з умовою
+
+При написанні тест рутин слід уникати умовних перевірок в тест кейсах. Це досягається розділенням загального тестового покриття на декілька тест рутин за певною тестовою ознакою - тип аргумента, опцією, платформою... Якщо виникає необхідність в написанні тест кейсів, що мають умовні переходи, то кожна із віток умовних переходів повинна містити однакові перевірки. Однакові перевірки дають інформацію про очікуваний результат і відмінності в поведінці тест юніта.
+
+[](https://img.shields.io/badge/technique-bad-red)
+```js
+if( process.platform === 'win32' )
+{
+  test.identical( op.ended, true );
+  test.identical( op.exitCode, null );
+  test.identical( op.exitSignal, 'SIGTERM' );
+  test.is( !_.strHas( op.output, 'SIGTERM' ) );
+  test.is( !_.strHas( op.output, 'Application timeout!' ) );
+}
+else
+{
+  test.identical( op.ended, true );
+  test.identical( op.exitCode, null );
+  test.identical( op.exitSignal, 'SIGTERM' );
+  test.is( !_.strHas( op.output, 'Application timeout!' ) );
+}
+```
+
+### Додавання пояснювальних коментарів
+
+Техніка відноситься до кейсів з підвищеною складністю, коли інформації в описі тест кейса недостатньо для пояснення очікуваного результата або умови перевірки.
+
+[](https://img.shields.io/badge/technique-good-green)
+```js
+/* Windows cmd supports only double quotes as grouping char, single quotes are treated as regular char*/
+if( process.platform === 'win32' )
+{
+  test.identical( op.map, { secondArg : `1 "third arg" 'fourth arg' 'fifth arg'` } )
+  test.identical( op.scriptArgs, [ 'firstArg', 'secondArg:1', 'third arg', `'fourth`, `arg'`, `'fifth`, `arg'` ] )
+}
+else
+{
+  test.identical( op.map, { secondArg : `1 "third arg" "fourth arg" "fifth" arg` } )
+  test.identical( op.scriptArgs, [ 'firstArg', 'secondArg:1', 'third arg', 'fourth arg', '"fifth" arg' ] )
+}
 ```
 
 [Повернутись до змісту](../README.md#Туторіали)

@@ -177,7 +177,7 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestIntrospectorBasicTechnics.md">
+  <summary><a href="./tutorial/TestRoutineBasicTechnics.md">
     Техніка розробки тестів
   </a></summary>
     Описано базові навички написання тест рутин та найпоширеніші помилки.

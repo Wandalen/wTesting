@@ -875,6 +875,120 @@ function noTestSuite( test )
   return a.ready;
 }
 
+//
+
+function exitCodeSeveralTestSuites( test )
+{
+  let context = this;
+  let a = context.assetFor( test, false );
+  let ready = _.take( null );
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'basic';
+    // xxx : remote a.forkNonThrowing?
+    let programPath = a.program({ routine : program1 });
+    a.fork
+    ({
+      execPath : programPath,
+      throwingExitCode : 0,
+    })
+    .tap( ( err, op ) =>
+    {
+      test.notIdentical( op.exitCode, 0 );
+      test.identical( _.strCount( op.output, 'ExitCode' ), 0 );
+      test.identical( _.strCount( op.output, 'Exit' ), 0 );
+      test.identical( _.strCount( op.output, 'exit' ), 2 );
+      test.identical( _.strCount( op.output, 'Code' ), 2 );
+      test.identical( _.strCount( op.output, 'code' ), 0 );
+      test.identical( _.strCount( op.output, 'exitCodeSeveralTestSuites' ), 2 );
+      test.identical( _.strCount( op.output, 'routine1.end' ), 1 );
+      test.identical( _.strCount( op.output, 'routine2.end' ), 1 );
+      test.identical( _.strShape( op.output, `**<routine1.end>**<routine2.end>**` ).match, true );
+      test.identical( _.strPrecedence( op.output, [ 'routine1.end', 'routine2.end' ] ), true );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  ready.then( function( arg )
+  {
+    test.case = 'basic';
+    let programPath = a.program({ routine : program2 });
+    a.fork
+    ({
+      execPath : programPath,
+      throwingExitCode : 0,
+    })
+    .tap( ( err, op ) =>
+    {
+      test.notIdentical( op.exitCode, 0 );
+      test.identical( _.strCount( op.output, 'ExitCode' ), 0 );
+      test.identical( _.strCount( op.output, 'Exit' ), 0 );
+      test.identical( _.strCount( op.output, 'exit' ), 2 );
+      test.identical( _.strCount( op.output, 'Code' ), 2 );
+      test.identical( _.strCount( op.output, 'code' ), 0 );
+      test.identical( _.strCount( op.output, 'exitCodeSeveralTestSuites' ), 2 );
+    });
+    return a.ready;
+  });
+
+  /* */
+
+  return ready;
+
+  /* - */
+
+  function program1()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wTesting' );
+
+    function routine1( test )
+    {
+      console.log( 'routine1.end' );
+    }
+
+    function routine2( test )
+    {
+      test.is( true );
+      console.log( 'routine2.end' );
+    }
+
+    let Test1 =
+    {
+      name : 'Suite1',
+      tests :
+      {
+        routine1,
+      }
+    }
+
+    let Test2 =
+    {
+      name : 'Suite2',
+      tests :
+      {
+        routine2,
+      }
+    }
+
+    Test1 = wTestSuite( Test1 );
+    Test2 = wTestSuite( Test2 );
+    wTester.test();
+
+  }
+
+}
+
+exitCodeSeveralTestSuites.description = /* qqq : extend the test */
+`
+  - previous test soute does not influence on exit code of the current
+`
+
 // --
 // options
 // --
@@ -2303,7 +2417,7 @@ function timeOutSeveralRoutines( test ) /* xxx : implement similar test routine 
   let context = this;
   let a = context.assetFor( test, false );
   let programPath = a.program({ routine : program1 });
-  let ready = _.Consequence().take( null );
+  let ready = _.take( null );
 
   /* */
 
@@ -2327,7 +2441,7 @@ function timeOutSeveralRoutines( test ) /* xxx : implement similar test routine 
       test.identical( _.strCount( op.output, 'Passed TestSuite::ForTesting / TestRoutine::routine4' ), 1 );
       test.identical( _.strCount( op.output, 'Passed test routines 3 / 4' ), 2 );
 
-      // test.identical( _.lexParse( op.output, '(-::routine1-)**(-::routine2-)**(-::routine3-)**(-::routine4-)' ).ok, true ); /* xxx : implement and uncomment */
+      // test.identical( _.strShape( op.output, '(-::routine1-)**(-::routine2-)**(-::routine3-)**(-::routine4-)' ).ok, true ); /* xxx : implement and uncomment */
 
       test.notIdentical( op.exitCode, 0 );
     });
@@ -2407,7 +2521,7 @@ function timeOutSeveralRoutinesDesync( test ) /* xxx : implement similar test ro
   let context = this;
   let a = context.assetFor( test, false );
   let programPath = a.program({ routine : program1 });
-  let ready = _.Consequence().take( null );
+  let ready = _.take( null );
 
   /* */
 
@@ -2680,7 +2794,7 @@ function termination( test )
   let file1Path = a.abs( 'File1' );
   let locals = { file1Path }
   let programPath = a.program({ routine : program1, locals });
-  let ready = _.Consequence().take( null );
+  let ready = _.take( null );
 
   /* */
 
@@ -2966,7 +3080,7 @@ function uncaughtErrorNotSilenced( test )
   let context = this;
   let a = context.assetFor( test, false );
   let programPath = a.program({ routine : program1 });
-  let ready = _.Consequence().take( null );
+  let ready = _.take( null );
 
   /* */
 
@@ -3097,7 +3211,7 @@ function programOptionsRoutineDirPath( test )
 function timeLimitConsequence( test )
 {
   let t = 25;
-  let ready = new _.Consequence().take( null )
+  let ready = new _.take( null )
 
   /* */
 
@@ -3167,6 +3281,7 @@ let Self =
     requireTesting,
     noTestCheck,
     noTestSuite,
+    exitCodeSeveralTestSuites,
 
     // options
 

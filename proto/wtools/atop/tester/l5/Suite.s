@@ -580,6 +580,10 @@ function _begin()
   /* report */
 
   suite.report = null; /* xxx : ? */
+
+  /*
+  store exit code to restore it later
+  */
   suite._exitCode = _.process.exitCode( 0 ); /* xxx : ? */
   suite._reportBegin();
 
@@ -671,7 +675,7 @@ function _begin()
       suite.exceptionReport({ err, unbarring : 1 });
       throw err;
     }
-    if( !wTester._canContinue() ) /* xxx : check */
+    if( !wTester._canContinue() ) /* xxx qqq : cover */
     {
       debugger;
       return false;
@@ -815,6 +819,8 @@ function _end( err )
     _.assert( suite._state === 'ending', `State of test suite should be "ending", but it is "${suite._state}"` );
     suite._state = 'ended';
 
+    suite._reportEnd();
+
     let ok = suite._reportIsPositive();
 
     if( err )
@@ -822,20 +828,18 @@ function _end( err )
 
     /* exit code */
 
-    // if( !ok && !suite._exitCode )
-    // suite._exitCode = -1;
-    if( suite.takingIntoAccount && !_.process.exitCode() )
+    if( suite._exitCode && !_.process.exitCode() )
+    suite._exitCode = _.process.exitCode( suite._exitCode );
+
+    if( suite.takingIntoAccount && !_.process.exitCode() && !ok )
     {
-      if( suite._exitCode )
-      _.process.exitCode( suite._exitCode );
-      else if( !ok )
       _.process.exitCode( -1 );
     }
 
     /* considering */
 
     if( suite.takingIntoAccount )
-    wTester._testSuiteConsider( ok );
+    wTester._testSuiteConsider( suite.report );
 
     /* tracking */
 
@@ -855,8 +859,6 @@ function _end( err )
     suite.exceptionReport({ err2, unbarring : 1 });
 
     /* report */
-
-    suite._reportEnd();
 
     let ok = suite._reportIsPositive();
 
@@ -1088,7 +1090,7 @@ function _reportBegin()
   report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
-  report.appExitCode = null;
+  report.exitCode = null;
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -1109,10 +1111,10 @@ function _reportEnd()
   let suite = this;
   let report = suite.report;
 
-  if( !report.appExitCode )
-  report.appExitCode = _.process.exitCode();
+  if( !report.exitCode )
+  report.exitCode = _.process.exitCode();
 
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )
   report.outcome = false;
 
   if( report.testCheckFails !== 0 )
@@ -1141,8 +1143,8 @@ function _reportToStr()
   let report = suite.report;
   let msg = '';
 
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
-  msg = 'ExitCode : ' + report.appExitCode + '\n';
+  if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )
+  msg = 'ExitCode : ' + report.exitCode + '\n';
 
   if( report.errorsArray.length )
   msg += 'Thrown ' + ( report.errorsArray.length ) + ' error(s)\n';
@@ -1163,8 +1165,6 @@ function _reportIsPositive()
 
   if( !report )
   return false;
-
-  // suite._reportEnd();
 
   return !!report.outcome;
 }
@@ -1215,27 +1215,33 @@ function _testCaseConsider( outcome )
 
 //
 
-function _testRoutineConsider( outcome )
+function _testRoutineConsider( routineReport )
 {
   let suite = this;
+  let report = suite.report;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( this.constructor === Self );
   _.assert( suite.takingIntoAccount !== undefined );
+  _.assert( _.mapIs( routineReport ) );
 
-  if( outcome )
+  if( routineReport.outcome )
   {
-    if( suite.report )
-    suite.report.testRoutinePasses += 1;
+    if( report )
+    report.testRoutinePasses += 1;
   }
   else
   {
-    if( suite.report )
-    suite.report.testRoutineFails += 1;
+    if( report )
+    report.testRoutineFails += 1;
   }
 
+  if( routineReport.exitCode !== undefined && routineReport.exitCode !== null && routineReport.exitCode !== 0 )
+  if( !report.exitCode )
+  report.exitCode = routineReport.exitCode;
+
   if( suite.takingIntoAccount )
-  wTester._testRoutineConsider( outcome );
+  wTester._testRoutineConsider( routineReport );
 
 }
 
@@ -1302,19 +1308,6 @@ function exceptionReport( o )
     console.error( err2 );
     console.error( err.toString() + '\n' + err.stack );
   }
-
-  // try
-  // {
-  //   if( suite.takingIntoAccount )
-  //   suite.consoleBar( 0 );
-  //   suite.exceptionReport({ err });
-  // }
-  // catch( err2 )
-  // {
-  //   debugger;
-  //   console.error( err2 );
-  //   console.error( err.toString() + '\n' + err.stack );
-  // }
 
   return err;
 }
@@ -1413,16 +1406,26 @@ function processWatchingEnd()
   _.assert( !!suite.processWatching );
   _.assert( !!suite._processWatcherMap );
 
+  // qqq2 for Vova : bad
+  // CurrentPath: undefined
+
+  // qqq2 for Dmytro : bad
+  // let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n  ', processInfo );
+  // Test suite "Visual.Spectron.Zombie" had zombie process with pid: 32297 ExecPath: /home/kos/.nvm/versions/node/v12.9.1/bin/node
+  //     CurrentPath: /tmp/Tester-2020-11-14-3-47-16-392-186.tmp/processWatchingOnSpectronZombie
+  //     Args: /pro/builder/node_modules/electron-chromedriver/chromedriver.js,--port=9515,--url-base=/
+
   _.each( suite._processWatcherMap, ( descriptor, pid ) =>
   {
     if( !descriptor.process.connected )
     if( !_.process.isAlive( descriptor.process.pid ) )
     return delete suite._processWatcherMap[ pid ];
 
-    let processInfo = `    ExecPath: ${descriptor.execPath}\n    CurrentPath: ${descriptor.currentPath}\n    Args: ${descriptor.args}`
+    let processInfo =
+`    ExecPath: ${descriptor.execPath}
+    CurrentPath: ${descriptor.currentPath}
+    Args: ${descriptor.args}`
     let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'had zombie process with pid:', pid, '\n  ', processInfo );
-    // if( suite.takingIntoAccount )
-    // suite.consoleBar( 0 );
     suite.exceptionReport({ err, unbarring : 1 });
     let con = _.process.terminate
     ({
@@ -1462,8 +1465,6 @@ function processWatchingEnd()
         if( _.process.isAlive( descriptor.process.pid ) )
         {
           let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
-          // if( suite.takingIntoAccount )
-          // suite.consoleBar( 0 );
           suite.exceptionReport({ err, unbarring : 1 });
         }
       })

@@ -9328,7 +9328,7 @@ function testCase( test )
       'reason' : null,
       'outcome' : false,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 4,
       'testCheckFails' : 1,
       'testCasePasses' : 2,
@@ -9341,7 +9341,7 @@ function testCase( test )
     {
       'outcome' : false,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 4,
       'testCheckFails' : 1,
       'testCasePasses' : 2,
@@ -9418,7 +9418,7 @@ function testsGroupSameNameError( test )
       'reason' : 'grouping error',
       'outcome' : false,
       'errorsArray' : [ `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?` ],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 2,
       'testCheckFails' : 1,
       'testCasePasses' : 0,
@@ -9432,7 +9432,7 @@ function testsGroupSameNameError( test )
     {
       'outcome' : false,
       'errorsArray' : [ `Attempt to open group "def". Group with the same name is already opened. Might be you meant to close it?` ],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 2,
       'testCheckFails' : 1,
       'testCasePasses' : 0,
@@ -9505,7 +9505,7 @@ function testsGroupDiscrepancyError( test )
       'reason' : 'grouping error',
       'outcome' : false,
       'errorsArray' : [ msg ],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 1,
       'testCheckFails' : 1,
       'testCasePasses' : 0,
@@ -9522,7 +9522,7 @@ function testsGroupDiscrepancyError( test )
     {
       'outcome' : false,
       'errorsArray' : [ msg ],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 1,
       'testCheckFails' : 1,
       'testCasePasses' : 0,
@@ -9767,7 +9767,7 @@ function testsGroupSingleLevel( test )
       'reason' : null,
       'outcome' : false,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 6,
       'testCheckFails' : 2,
       'testCasePasses' : 2,
@@ -9780,7 +9780,7 @@ function testsGroupSingleLevel( test )
     {
       'outcome' : false,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 6,
       'testCheckFails' : 2,
       'testCasePasses' : 2,
@@ -9907,7 +9907,7 @@ function testsGroupMultipleLevels( test )
       'reason' : null,
       'outcome' : false,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 1,
       'testCheckFails' : 3,
       'testCasePasses' : 0,
@@ -9920,7 +9920,7 @@ function testsGroupMultipleLevels( test )
     {
       'outcome' : false,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 1,
       'testCheckFails' : 3,
       'testCasePasses' : 0,
@@ -10014,7 +10014,7 @@ function testsGroupTestCaseSingleLevel( test )
       'reason' : null,
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 4,
       'testCheckFails' : 0,
       'testCasePasses' : 2,
@@ -10027,7 +10027,7 @@ function testsGroupTestCaseSingleLevel( test )
     {
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 4,
       'testCheckFails' : 0,
       'testCasePasses' : 2,
@@ -10121,7 +10121,7 @@ function testsGroupTestCaseSameName( test )
       'reason' : null,
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 4,
       'testCheckFails' : 0,
       'testCasePasses' : 2,
@@ -10134,7 +10134,7 @@ function testsGroupTestCaseSameName( test )
     {
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 4,
       'testCheckFails' : 0,
       'testCasePasses' : 2,
@@ -10227,7 +10227,7 @@ function testsGroupAfterTestCase( test )
       'reason' : null,
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 3,
       'testCheckFails' : 0,
       'testCasePasses' : 2,
@@ -10240,7 +10240,7 @@ function testsGroupAfterTestCase( test )
     {
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 3,
       'testCheckFails' : 0,
       'testCasePasses' : 2,
@@ -10354,7 +10354,7 @@ function testsGroupTestCaseMultipleLevels( test )
       'reason' : null,
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 6,
       'testCheckFails' : 0,
       'testCasePasses' : 3,
@@ -10367,7 +10367,7 @@ function testsGroupTestCaseMultipleLevels( test )
     {
       'outcome' : true,
       'errorsArray' : [],
-      'appExitCode' : 0,
+      'exitCode' : 0,
       'testCheckPasses' : 6,
       'testCheckFails' : 0,
       'testCasePasses' : 3,
@@ -10436,7 +10436,7 @@ function runMultiple( test )
       {
         'outcome' : true,
         'errorsArray' : [],
-        'appExitCode' : 0,
+        'exitCode' : 0,
         'testCheckPasses' : 1,
         'testCheckFails' : 0,
         'testCasePasses' : 0,
@@ -10447,7 +10447,7 @@ function runMultiple( test )
       },
       {
         'outcome' : false,
-        'appExitCode' : 0,
+        'exitCode' : 0,
         'testCheckPasses' : 1,
         'testCheckFails' : 1,
         'testCasePasses' : 0,
@@ -10459,7 +10459,7 @@ function runMultiple( test )
       {
         'outcome' : true,
         'errorsArray' : [],
-        'appExitCode' : 0,
+        'exitCode' : 0,
         'testCheckPasses' : 1,
         'testCheckFails' : 0,
         'testCasePasses' : 0,
@@ -10481,7 +10481,7 @@ function runMultiple( test )
 
 //
 
-function appExitCode( test )
+function exitCode( test )
 {
   var testRoutine;
 
@@ -10515,7 +10515,7 @@ function appExitCode( test )
       {
         'outcome' : true,
         'errorsArray' : [],
-        'appExitCode' : 0,
+        'exitCode' : 0,
         'testCheckPasses' : 1,
         'testCheckFails' : 0,
         'testCasePasses' : 0,
@@ -10572,7 +10572,7 @@ function onSuiteBeginThrowError( test )
 
     test.identical( got.outcome, false );
     test.identical( got.errorsArray, [ onSuiteBeginErr ] );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 0 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 0 );
@@ -10623,7 +10623,7 @@ function onSuiteEndReturnsNothing( test )
 
     test.identical( got.outcome, true );
     test.identical( got.errorsArray.length, 0 );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -10677,7 +10677,7 @@ function onSuiteEndThrowError( test )
 
     test.identical( got.outcome, false );
     test.identical( got.errorsArray, [ onSuiteEndErr ] );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -10721,7 +10721,7 @@ function suiteEndTimeOut( test ) /* qqq : write similar test in Ext.test.s ( sep
     test.identical( got.outcome, false );
     test.identical( got.errorsArray.length, 1 );
     test.identical( got.errorsArray[ 0 ].reason, 'time out' );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -10789,7 +10789,7 @@ function onSuiteEndErrorInConsequence( test )
 
     test.identical( got.outcome, false );
     test.identical( got.errorsArray, [ ConError ] );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -10843,7 +10843,7 @@ function onSuiteEndNormalConsequence( test )
 
     test.identical( got.outcome, true );
     test.identical( got.errorsArray.length, 0 );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -10900,7 +10900,7 @@ function onSuiteEndDelayedConsequence( test )
 
     test.identical( got.outcome, true );
     test.identical( got.errorsArray.length, 0 );
-    test.identical( got.appExitCode, 0 );
+    test.identical( got.exitCode, 0 );
     test.identical( got.testCheckPasses, 1 );
     test.identical( got.testCheckFails, 0 );
     test.identical( got.testCasePasses, 1 );
@@ -10950,7 +10950,7 @@ function optionRoutine( test )
 
       test.identical( got.outcome, true );
       test.identical( got.errorsArray, [] );
-      test.identical( got.appExitCode, 0 );
+      test.identical( got.exitCode, 0 );
       test.identical( got.testCheckPasses, 3 );
       test.identical( got.testCheckFails, 0 );
       test.identical( got.testCasePasses, 3 );
@@ -10997,7 +10997,7 @@ function optionRoutine( test )
 
       test.identical( report.outcome, true );
       test.identical( report.errorsArray, [] );
-      test.identical( report.appExitCode, 0 );
+      test.identical( report.exitCode, 0 );
       test.identical( report.testCheckPasses, 1 );
       test.identical( report.testCheckFails, 0 );
       test.identical( report.testCasePasses, 1 );
@@ -11046,7 +11046,7 @@ function optionRoutine( test )
 
       test.identical( report.outcome, true );
       test.identical( report.errorsArray, [] );
-      test.identical( report.appExitCode, 0 );
+      test.identical( report.exitCode, 0 );
       test.identical( report.testCheckPasses, 2 );
       test.identical( report.testCheckFails, 0 );
       test.identical( report.testCasePasses, 2 );
@@ -11095,7 +11095,7 @@ function optionRoutine( test )
 
       test.identical( report.outcome, false );
       test.identical( report.errorsArray.length, 1 );
-      test.identical( report.appExitCode, 0 );
+      test.identical( report.exitCode, 0 );
       test.identical( report.testCheckPasses, 0 );
       test.identical( report.testCheckFails, 0 );
       test.identical( report.testCasePasses, 0 );
@@ -12025,7 +12025,7 @@ let Self =
     // outcome
 
     runMultiple,
-    appExitCode,
+    exitCode,
 
     // handler
 

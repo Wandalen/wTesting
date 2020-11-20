@@ -73,7 +73,7 @@ function html( test )
     .then( ( e ) => e.getAttribute( 'href' ) )
     .then( ( got ) =>
     {
-      test.is( _.strEnds( got, '/index.html' ) )
+      test.true( _.strEnds( got, '/index.html' ) )
     })
   })
 

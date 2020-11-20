@@ -114,7 +114,7 @@ var ins = 'str';
 var got = _.arrayAppend( dst, ins );
 var expected = [ 'str' ];
 test.identical( got, expected );
-test.is( got === dst );
+test.true( got === dst );
 ```
 
 </details>

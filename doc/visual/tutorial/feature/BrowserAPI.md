@@ -21,7 +21,7 @@ How to get information about browser like user agent,version and window size.
 
   test.case = 'check userAgent'
   var userAgent = await app.webContents.getUserAgent();
-  test.is( _.strHas( userAgent, 'Electron' ) );
+  test.true( _.strHas( userAgent, 'Electron' ) );
 
   await app.stop();
 ```
@@ -33,10 +33,10 @@ How to get information about browser like user agent,version and window size.
   let browser = await Puppeteer.launch({ headless : true });
 
   var version = await browser.version();
-  test.is( _.strHas( version, '79.0' ) );
+  test.true( _.strHas( version, '79.0' ) );
 
   var agent = await browser.userAgent();
-  test.is( _.strHas( agent, '79.0' ) );
+  test.true( _.strHas( agent, '79.0' ) );
 
   await browser.close();
 ```

@@ -31,23 +31,23 @@ Self.shortName = 'TestRoutine';
 
 function init( o )
 {
-  let trd = this;
+  let tro = this;
 
-  trd[ accuracyEffectiveSymbol ] = null;
-  _.workpiece.initFields( trd );
-  Object.preventExtensions( trd );
+  tro[ accuracyEffectiveSymbol ] = null;
+  _.workpiece.initFields( tro );
+  Object.preventExtensions( tro );
 
   if( o )
-  trd.copy( o );
+  tro.copy( o );
 
-  _.assert( _.routineIs( trd.routine ) );
-  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype, trd.suite ) );
-  _.assert( Object.isPrototypeOf.call( Self.prototype, trd ) );
+  _.assert( _.routineIs( tro.routine ) );
+  _.assert( Object.isPrototypeOf.call( wTestSuite.prototype, tro.suite ) );
+  _.assert( Object.isPrototypeOf.call( Self.prototype, tro ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert
   (
-    _.strDefined( trd.routine.name ),
-    `Test routine should have name ${trd.name} test routine of test suite ${trd.suite.decoratedNickName} does not have name`
+    _.strDefined( tro.routine.name ),
+    `Test routine should have name ${tro.name} test routine of test suite ${tro.suite.decoratedNickName} does not have name`
   );
 
   let proxy =
@@ -60,9 +60,9 @@ function init( o )
     }
   }
 
-  trd = new Proxy( trd, proxy );
+  tro = new Proxy( tro, proxy );
 
-  return trd;
+  return tro;
 }
 
 //
@@ -76,48 +76,48 @@ function init( o )
 
 function form()
 {
-  let trd = this;
-  let routine = trd.routine;
-  let name = trd.decoratedAbsoluteName;
-  let suite = trd.suite;
+  let tro = this;
+  let routine = tro.routine;
+  let name = tro.decoratedAbsoluteName;
+  let suite = tro.suite;
 
-  trd._returnedCon = null;
-  trd._fieldsForm();
-  trd._accuracyChange();
-  trd._reportBegin();
+  tro._returnedCon = null;
+  tro._fieldsForm();
+  tro._accuracyChange();
+  tro._reportBegin();
 
   _.sure( routine.experimental === undefined || _.boolLike( routine.experimental ), name, 'Expects bool like in field {-experimental-} if defined' );
   _.sure( routine.timeOut === undefined || _.numberIs( routine.timeOut ), name, 'Expects number in field {-timeOut-} if defined' );
   _.sure( routine.routineTimeOut === undefined || _.numberIs( routine.routineTimeOut ), name, 'Expects number in field {-routineTimeOut-} if defined' );
-  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.rangeIs( routine.accuracy ), name, 'Expects number or range in field {-accuracy-} if defined' );
+  _.sure( routine.accuracy === undefined || _.numberIs( routine.accuracy ) || _.intervalIs( routine.accuracy ), name, 'Expects number or range in field {-accuracy-} if defined' );
   _.sure( routine.rapidity === undefined || _.numberIs( routine.rapidity ), name, 'Expects number in field {-rapidity-} if defined' );
 
   _.assert
   (
-    _.strDefined( trd.name ),
-    `Test routine should have name ${trd.name} test routine of test suite ${trd.suite.decoratedNickName} does not have name`
+    _.strDefined( tro.name ),
+    `Test routine should have name ${tro.name} test routine of test suite ${tro.suite.decoratedNickName} does not have name`
   );
   _.assert( suite instanceof wTestSuite );
-  _.assert( suite.tests[ trd.name ] === routine || suite.tests[ trd.name ] === trd );
+  _.assert( suite.tests[ tro.name ] === routine || suite.tests[ tro.name ] === tro );
 
-  suite.tests[ trd.name ] = trd;
+  suite.tests[ tro.name ] = tro;
 
-  trd._formed = 1;
-  return trd;
+  tro._formed = 1;
+  return tro;
 }
 
 //
 
 function _fieldsForm()
 {
-  let trd = this;
-  let routine = trd.routine;
-  let name = trd.decoratedAbsoluteName;
+  let tro = this;
+  let routine = tro.routine;
+  let name = tro.decoratedAbsoluteName;
 
-  for( let f in trd.RoutineFields )
+  for( let f in tro.RoutineFields )
   {
     if( routine[ f ] !== undefined )
-    trd[ trd.RoutineFields[ f ] ] = routine[ f ];
+    tro[ tro.RoutineFields[ f ] ] = routine[ f ];
   }
 
   _.sureMapHasOnly
@@ -135,69 +135,69 @@ function _fieldsForm()
 
 function _accuracyGet()
 {
-  let trd = this;
-  return trd[ accuracyEffectiveSymbol ];
+  let tro = this;
+  return tro[ accuracyEffectiveSymbol ];
 }
 
 //
 
 function _accuracySet( accuracy )
 {
-  let trd = this;
+  let tro = this;
 
-  _.assert( accuracy === null || _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'Expects number or range {-accuracy-}' );
+  _.assert( accuracy === null || _.numberIs( accuracy ) || _.intervalIs( accuracy ), 'Expects number or range {-accuracy-}' );
 
-  trd[ accuracySymbol ] = accuracy;
+  tro[ accuracySymbol ] = accuracy;
 
-  return trd._accuracyChange();
+  return tro._accuracyChange();
 }
 
 //
 
 function _accuracyEffectiveGet()
 {
-  let trd = this;
-  return trd[ accuracyEffectiveSymbol ];
+  let tro = this;
+  return tro[ accuracyEffectiveSymbol ];
 }
 
 //
 
 function _accuracyChange()
 {
-  let trd = this;
+  let tro = this;
   let result;
 
-  if( !trd.suite )
+  if( !tro.suite )
   return null;
 
-  if( _.numberIs( trd[ accuracySymbol ] ) )
+  if( _.numberIs( tro[ accuracySymbol ] ) )
   {
-    result = trd[ accuracySymbol ];
+    result = tro[ accuracySymbol ];
   }
   else
   {
-    if( _.rangeIs( trd[ accuracySymbol ] ) )
+    if( _.intervalIs( tro[ accuracySymbol ] ) )
     {
-      _.assert( _.rangeIs( trd[ accuracySymbol ] ) );
-      if( trd.suite.accuracyExplicitly !== null )
-      result = trd.suite.accuracyExplicitly
+      _.assert( _.intervalIs( tro[ accuracySymbol ] ) );
+      if( tro.suite.accuracyExplicitly !== null )
+      result = tro.suite.accuracyExplicitly
       else
-      result = trd[ accuracySymbol ][ 0 ];
-      if( _.rangeIs( result ) )
+      result = tro[ accuracySymbol ][ 0 ];
+      if( _.intervalIs( result ) )
       result = result[ 0 ];
-      result = _.numberClamp( result, trd[ accuracySymbol ] );
+      result = _.numberClamp( result, tro[ accuracySymbol ] );
     }
     else
     {
-      result = trd.suite.accuracy;
-      if( _.rangeIs( result ) )
+      result = tro.suite.accuracy;
+      if( _.intervalIs( result ) )
       result = result[ 0 ];
     }
   }
 
   _.assert( _.numberDefined( result ) );
 
-  trd[ accuracyEffectiveSymbol ] = result;
+  tro[ accuracyEffectiveSymbol ] = result;
   return result;
 }
 
@@ -205,11 +205,11 @@ function _accuracyChange()
 
 function _timeOutGet()
 {
-  let trd = this;
-  if( trd[ timeOutSymbol ] !== null )
-  return trd[ timeOutSymbol ];
-  if( trd.suite.routineTimeOut !== null )
-  return trd.suite.routineTimeOut;
+  let tro = this;
+  if( tro[ timeOutSymbol ] !== null )
+  return tro[ timeOutSymbol ];
+  if( tro.suite.routineTimeOut !== null )
+  return tro.suite.routineTimeOut;
   _.assert( 0 );
 }
 
@@ -217,9 +217,9 @@ function _timeOutGet()
 
 function _timeOutSet( timeOut )
 {
-  let trd = this;
+  let tro = this;
   _.assert( timeOut === null || _.numberIs( timeOut ) );
-  trd[ timeOutSymbol ] = timeOut;
+  tro[ timeOutSymbol ] = timeOut;
   return timeOut;
 }
 
@@ -227,9 +227,9 @@ function _timeOutSet( timeOut )
 
 function _rapidityGet()
 {
-  let trd = this;
-  if( trd[ rapiditySymbol ] !== null )
-  return trd[ rapiditySymbol ];
+  let tro = this;
+  if( tro[ rapiditySymbol ] !== null )
+  return tro[ rapiditySymbol ];
   _.assert( 0 );
 }
 
@@ -237,13 +237,13 @@ function _rapidityGet()
 
 function _rapiditySet( rapidity )
 {
-  let trd = this;
+  let tro = this;
   _.assert( _.numberIs( rapidity ) );
   if( rapidity > 9 )
   rapidity = 9;
   if( rapidity < -9 )
   rapidity = -9;
-  trd[ rapiditySymbol ] = rapidity;
+  tro[ rapiditySymbol ] = rapidity;
   return rapidity;
 }
 
@@ -251,16 +251,16 @@ function _rapiditySet( rapidity )
 
 function _usingSourceCodeGet()
 {
-  let trd = this;
+  let tro = this;
 
-  if( trd[ usingSourceCodeSymbol ] !== null )
-  return trd[ usingSourceCodeSymbol ];
+  if( tro[ usingSourceCodeSymbol ] !== null )
+  return tro[ usingSourceCodeSymbol ];
 
-  if( trd.rapidity < 0 && trd.suite.routine !== trd.name )
+  if( tro.rapidity < 0 && tro.suite.routine !== tro.name )
   return false;
 
-  if( trd.suite.usingSourceCode !== null )
-  return trd.suite.usingSourceCode;
+  if( tro.suite.usingSourceCode !== null )
+  return tro.suite.usingSourceCode;
 
   _.assert( 0 );
 }
@@ -269,9 +269,9 @@ function _usingSourceCodeGet()
 
 function _usingSourceCodeSet( usingSourceCode )
 {
-  let trd = this;
+  let tro = this;
   _.assert( usingSourceCode === null || _.boolLike( usingSourceCode ) );
-  trd[ usingSourceCodeSymbol ] = usingSourceCode;
+  tro[ usingSourceCodeSymbol ] = usingSourceCode;
   return usingSourceCode;
 }
 
@@ -281,42 +281,42 @@ function _usingSourceCodeSet( usingSourceCode )
 
 function _run()
 {
-  let trd = this;
-  let suite = trd.suite;
+  let tro = this;
+  let suite = tro.suite;
   let result;
 
-  trd._runBegin();
+  tro._runBegin();
 
-  trd._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
-  trd._timeLimitErrorCon = _.time.outError( debugged ? Infinity : trd.timeOut + wTester.settings.sanitareTime )
+  tro._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
+  tro._timeLimitErrorCon = _.time.outError( debugged ? Infinity : tro.timeOut + wTester.settings.sanitareTime )
   .finally( ( err, arg ) =>
   {
     if( err === _.dont )
     {
-      trd._timeLimitCon.take( err );
+      tro._timeLimitCon.take( err );
     }
     else
     {
       _.errAttend( err );
-      err = trd._timeOutError( 'From run.' );
-      if( err && !trd.report.reason )
-      trd.report.reason = err.reason;
+      err = tro._timeOutError( 'From run.' );
+      if( err && !tro.report.reason )
+      tro.report.reason = err.reason;
       _.errAttend( err );
       _.assert( !err.logged );
-      if( !trd._returnedHow )
-      trd._returnedHow = 'test routine time out';
+      if( !tro._returnedHow )
+      tro._returnedHow = 'test routine time out';
     }
     if( err )
     throw err;
     return arg;
   });
-  trd._timeLimitErrorCon.tag = '_timeLimitErrorCon';
+  tro._timeLimitErrorCon.tag = '_timeLimitErrorCon';
 
   /* */
 
   try
   {
-    result = trd.routine.call( suite.context, trd );
+    result = tro.routine.call( suite.context, tro );
     if( result === undefined )
     result = null;
   }
@@ -327,26 +327,26 @@ function _run()
 
   /* */
 
-  trd._returnedCon = new _.Consequence(); /* yyy */
-  if( Config.debug && !trd._returnedCon.tag )
-  trd._returnedCon.tag = trd.name + '-1';
+  tro._returnedCon = new _.Consequence(); /* yyy */
+  if( Config.debug && !tro._returnedCon.tag )
+  tro._returnedCon.tag = tro.name + '-1';
 
-  trd._returnedData = result;
-  trd._originalReturnedCon = _.Consequence.From( result );
-  trd._originalReturnedCon.give( ( err, arg ) =>
+  tro._returnedData = result;
+  tro._originalReturnedCon = _.Consequence.From( result );
+  tro._originalReturnedCon.give( ( err, arg ) =>
   {
-    if( trd._returnedHow )
+    if( tro._returnedHow )
     {
       let err; debugger;
-      if( trd.report && trd.report.reason )
+      if( tro.report && tro.report.reason )
       {
-        if( trd.report.reason === 'test routine time limit' )
+        if( tro.report.reason === 'test routine time limit' )
         return;
-        err = _.err( `${trd.qualifiedNameGet()} is ended because of ${trd.report.reason}, but it got several async returning` );
+        err = _.err( `${tro.qualifiedNameGet()} is ended because of ${tro.report.reason}, but it got several async returning` );
       }
       else
       {
-        err = _.err( `${trd.qualifiedNameGet()} is ended, but it got several async returning` );
+        err = _.err( `${tro.qualifiedNameGet()} is ended, but it got several async returning` );
       }
       suite.exceptionReport
       ({
@@ -355,49 +355,52 @@ function _run()
     }
     else
     {
-      trd._returnedHow = 'normal';
-      trd._returnedCon.take( err, arg );
-      trd._originalReturnedCon.take( err, arg );
+      tro._returnedHow = 'normal';
+      tro._returnedCon.take( err, arg );
+      tro._originalReturnedCon.take( err, arg );
     }
   });
 
-  trd._returnedCon.andKeep( suite._inroutineCon );
-  trd._returnedCon.orKeeping([ trd._timeLimitErrorCon, wTester._cancelCon ]);
-  trd._returnedCon.finally( ( err, msg ) => trd._runFinally( err, msg ) );
+  tro._returnedCon.andKeep( suite._inroutineCon );
+  tro._returnedCon.orKeeping([ tro._timeLimitErrorCon, wTester._cancelCon ]);
+  tro._returnedCon.finally( ( err, msg ) => tro._runFinally( err, msg ) );
 
-  return trd._returnedCon;
+  return tro._returnedCon;
 }
 
 //
 
 function _runBegin()
 {
-  let trd = this;
-  let suite = trd.suite;
+  let tro = this;
+  let suite = tro.suite;
 
   _.assert( !!wTester );
-  trd._testRoutineBeginTime = _.time.now();
+  tro._testRoutineBeginTime = _.time.now();
 
-  _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
+  _.arrayAppendOnceStrictly( wTester.activeRoutines, tro );
 
-  trd._exitCode = _.process.exitCode( 0 );
+  /*
+  store exit code to restore it later
+  */
+  tro._exitCode = _.process.exitCode( 0 );
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  _.assert( trd._returned === null );
+  _.assert( tro._returned === null );
 
-  let msg = [ `Running ${trd.decoratedAbsoluteName} ..` ];
+  let msg = [ `Running ${tro.decoratedAbsoluteName} ..` ];
 
   suite.logger.begin({ verbosity : -4 });
 
-  suite.logger.begin({ 'routine' : trd.routine.name });
+  suite.logger.begin({ 'routine' : tro.routine.name });
   suite.logger.logUp( msg.join( '\n' ) );
   suite.logger.end( 'routine' );
 
   suite.logger.end({ verbosity : -4 });
 
   _.assert( !suite.currentRoutine );
-  suite.currentRoutine = trd;
+  suite.currentRoutine = tro;
 
   let debugWas = Config.debug;
   if( wTester.settings.debug !== null && wTester.settings.debug !== undefined )
@@ -408,17 +411,17 @@ function _runBegin()
 
   try
   {
-    suite.onRoutineBegin.call( trd.context, trd );
+    suite.onRoutineBegin.call( tro.context, tro );
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
-    if( trd.eventGive )
-    trd.eventGive({ kind : 'routineBegin', testRoutine : trd, context : trd.context });
+    if( tro.eventGive )
+    tro.eventGive({ kind : 'routineBegin', testRoutine : tro, context : tro.context });
   }
   catch( err )
   {
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
-    trd.exceptionReport({ err });
+    tro.exceptionReport({ err });
   }
 
   if( Config.debug !== debugWas )
@@ -429,27 +432,23 @@ function _runBegin()
 
 function _runEnd()
 {
-  let trd = this;
-  let suite = trd.suite;
+  let tro = this;
+  let suite = tro.suite;
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
-  _.assert( suite.currentRoutine === trd );
+  _.assert( _.strDefined( tro.routine.name ), 'test routine should have name' );
+  _.assert( suite.currentRoutine === tro );
 
-  if( !trd._timeLimitErrorCon.resourcesCount() && !trd._timeLimitCon.resourcesCount() )
+  if( !tro._timeLimitErrorCon.resourcesCount() && !tro._timeLimitCon.resourcesCount() )
   {
-    trd._timeLimitErrorCon.error( _.dont );
+    tro._timeLimitErrorCon.error( _.dont );
   }
-
-  if( suite.takingIntoAccount )
-  if( trd._exitCode && !_.process.exitCode() )
-  trd._exitCode = _.process.exitCode( trd._exitCode );
 
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
     debugger;
-    let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + trd.absoluteName );
+    let err = _.err( 'Console is missing in logger`s outputs, probably it was removed' + '\n  in' + tro.absoluteName );
     suite.exceptionReport
     ({
       unbarring : 1,
@@ -459,24 +458,24 @@ function _runEnd()
 
   /* groups stack */
 
-  trd._descriptionChange({ src : '', touching : 0 });
-  trd._groupTestEnd();
+  tro._descriptionChange({ src : '', touching : 0 });
+  tro._groupTestEnd();
 
-  if( trd.report.errorsArray.length && !trd.report.reason )
+  if( tro.report.errorsArray.length && !tro.report.reason )
   {
-    if( trd.report.errorsArray[ 0 ].reason )
-    trd.report.reason = trd.report.errorsArray[ 0 ].reason;
+    if( tro.report.errorsArray[ 0 ].reason )
+    tro.report.reason = tro.report.errorsArray[ 0 ].reason;
     else
-    trd.report.reason = 'throwing error';
+    tro.report.reason = 'throwing error';
   }
 
   /* last test check */
 
-  if( trd.report.testCheckPasses === 0 && trd.report.testCheckFails === 0 )
+  if( tro.report.testCheckPasses === 0 && tro.report.testCheckFails === 0 )
   {
-    if( !trd.report.reason )
-    trd.report.reason = 'passed none test check';
-    trd._outcomeReportBoolean
+    if( !tro.report.reason )
+    tro.report.reason = 'passed none test check';
+    tro._outcomeReportBoolean
     ({
       outcome : 0,
       msg : 'test routine has passed none test check',
@@ -484,9 +483,9 @@ function _runEnd()
       usingDescription : 0,
     });
   }
-  else if( !trd.report.errorsArray )
+  else if( !tro.report.errorsArray )
   {
-    trd._outcomeReportBoolean
+    tro._outcomeReportBoolean
     ({
       outcome : 1,
       msg : 'test routine has not thrown an error',
@@ -497,23 +496,29 @@ function _runEnd()
 
   /* on end */
 
-  trd._reportEnd();
-  let ok = trd._reportIsPositive();
+  tro._reportEnd();
+  let ok = tro._reportIsPositive();
   try
   {
-    suite.onRoutineEnd.call( trd.context, trd, ok );
-    if( trd.eventGive )
-    trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
+    suite.onRoutineEnd.call( tro.context, tro, ok ); /* xxx qqq : may return consequence! should pass error if thrown */
+    if( tro.eventGive )
+    tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context });
   }
   catch( err )
   {
-    trd.exceptionReport({ err });
+    tro.exceptionReport({ err });
     ok = false;
   }
 
+  /* restoring exit code */
+
+  // if( suite.takingIntoAccount )
+  if( tro._exitCode && !_.process.exitCode() )
+  tro._exitCode = _.process.exitCode( tro._exitCode );
+
   /* */
 
-  suite._testRoutineConsider( ok );
+  suite._testRoutineConsider( tro.report );
 
   suite.currentRoutine = null;
 
@@ -526,11 +531,11 @@ function _runEnd()
   let timingStr = '';
   if( wTester )
   {
-    trd.report.timeSpent = _.time.now() - trd._testRoutineBeginTime;
-    timingStr = 'in ' + _.time.spentFormat( trd.report.timeSpent );
+    tro.report.timeSpent = _.time.now() - tro._testRoutineBeginTime;
+    timingStr = 'in ' + _.time.spentFormat( tro.report.timeSpent );
   }
 
-  let str = ( ok ? 'Passed' : 'Failed' ) + ( trd.report.reason ? ` ( ${trd.report.reason} )` : '' ) + ` ${trd.absoluteName} ${timingStr}`;
+  let str = ( ok ? 'Passed' : 'Failed' ) + ( tro.report.reason ? ` ( ${tro.report.reason} )` : '' ) + ` ${tro.absoluteName} ${timingStr}`;
 
   str = wTester.textColor( str, ok );
 
@@ -547,7 +552,7 @@ function _runEnd()
 
   suite.logger.end({ verbosity : -3 });
 
-  _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, trd );
+  _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, tro );
 
   return ok
 }
@@ -556,35 +561,35 @@ function _runEnd()
 
 function _runFinally( err, arg )
 {
-  let trd = this;
-  let suite = trd.suite;
+  let tro = this;
+  let suite = tro.suite;
 
-  // console.log( _runFinally, !!err, !!arg, !!trd._returned );
+  // console.log( _runFinally, !!err, !!arg, !!tro._returned );
   // _.assert( arguments.length === 2 );
-  // _.assert( trd._returned === null );
+  // _.assert( tro._returned === null );
 
-  if( trd._returned === null )
-  trd._returned = [ err, arg ];
+  if( tro._returned === null )
+  tro._returned = [ err, arg ];
   else
-  trd.exceptionReport
+  tro.exceptionReport
   ({
     err : _.err( 'Returned several times!' ),
   });
 
   if( err )
   {
-    // if( trd._returnedHow !== 'test routine time out' && err.reason !== 'time out' )
+    // if( tro._returnedHow !== 'test routine time out' && err.reason !== 'time out' )
     debugger;
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
-      logging : trd._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
+      logging : tro._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
     });
-    trd._runEnd();
+    tro._runEnd();
     return err;
   }
 
-  trd._runEnd();
+  tro._runEnd();
   return arg;
 }
 
@@ -592,28 +597,28 @@ function _runFinally( err, arg )
 
 function _runInterruptMaybe( throwing )
 {
-  let trd = this;
-  let logger = trd.logger;
+  let tro = this;
+  let logger = tro.logger;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( !!wTester.report );
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( !wTester._canContinue() )
   {
     debugger;
-    let result = trd.cancel();
+    let result = tro.cancel();
     if( throwing )
     throw result;
     return result;
   }
 
-  let elapsed = _.time.now() - trd._testRoutineBeginTime;
-  if( elapsed > trd.timeOut && !debugged )
+  let elapsed = _.time.now() - tro._testRoutineBeginTime;
+  if( elapsed > tro.timeOut && !debugged )
   {
-    logger.error( `Test routine ${trd.absoluteName} timed out, cant continue!` );
-    let result = trd.cancel({ err : trd._timeOutError( 'Cancel.' ) });
+    logger.error( `Test routine ${tro.absoluteName} timed out, cant continue!` );
+    let result = tro.cancel({ err : tro._timeOutError( 'Cancel.' ) });
     if( throwing )
     throw result;
     return result;
@@ -626,16 +631,16 @@ function _runInterruptMaybe( throwing )
 
 function _returnedVerification()
 {
-  let trd = this;
-  let suite = trd.suite;
-  let logger = trd.logger;
+  let tro = this;
+  let suite = tro.suite;
+  let logger = tro.logger;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( !!wTester.report );
 
-  if( trd._returned )
+  if( tro._returned )
   {
-    let err = _._err({ args : [ `Test routine ${trd.absoluteName} returned, cant continue!` ], reason : 'returned' });
+    let err = _._err({ args : [ `Test routine ${tro.absoluteName} returned, cant continue!` ], reason : 'returned' });
     err = _.errBrief( err );
     suite.exceptionReport
     ({
@@ -652,20 +657,20 @@ function _returnedVerification()
 
 function _runnableGet()
 {
-  let trd = this;
-  let suite = trd.suite;
+  let tro = this;
+  let suite = tro.suite;
 
   _.assert( _.numberIs( wTester.settings.rapidity ) );
 
   if( suite.routine )
   {
-    return _.path.globShortFit( trd.name, suite.routine );
+    return _.path.globShortFit( tro.name, suite.routine );
   }
 
-  if( trd.experimental )
+  if( tro.experimental )
   return false;
 
-  if( trd.rapidity < wTester.settings.rapidity )
+  if( tro.rapidity < wTester.settings.rapidity )
   return false;
 
   return true;
@@ -675,14 +680,14 @@ function _runnableGet()
 
 function _timeOutError( err )
 {
-  let trd = this;
+  let tro = this;
 
   if( err && err._testRoutine )
   return err;
 
   err = _._err
   ({
-    args : [ err || '', `\nTest routine ${trd.decoratedAbsoluteName} timed out. TimeOut set to ${trd.timeOut} + ms` ],
+    args : [ err || '', `\nTest routine ${tro.decoratedAbsoluteName} timed out. TimeOut set to ${tro.timeOut} + ms` ],
     usingSourceCode : 0,
     reason : 'test routine time limit',
   });
@@ -692,7 +697,7 @@ function _timeOutError( err )
     enumerable : false,
     configurable : false,
     writable : false,
-    value : trd,
+    value : tro,
   };
 
   Object.defineProperty( err, '_testRoutine', o );
@@ -706,20 +711,20 @@ function _timeOutError( err )
 
 function cancel( o )
 {
-  let trd = this;
-  let logger = trd.logger;
+  let tro = this;
+  let logger = tro.logger;
   o = _.routineOptions( cancel, arguments );
 
   if( !o.err )
-  o.err = _.errBrief( `Test routine ${trd.absoluteName} was canceled!` );
+  o.err = _.errBrief( `Test routine ${tro.absoluteName} was canceled!` );
   logger.error( _.errOnce( o.err ) );
 
-  if( trd._returnedCon )
-  if( trd._returnedCon.resourcesCount() === 0 )
+  if( tro._returnedCon )
+  if( tro._returnedCon.resourcesCount() === 0 )
   {
-    trd._originalReturnedCon.error( o.err );
-    // if( !trd._returnedHow )
-    // trd._returnedHow = 'test routine time out';
+    tro._originalReturnedCon.error( o.err );
+    // if( !tro._returnedHow )
+    // tro._returnedHow = 'test routine time out';
   }
 
   return wTester.cancel( o );
@@ -737,32 +742,32 @@ cancel.defaults =
 
 function _descriptionGet()
 {
-  let trd = this;
-  return trd[ descriptionSymbol ];
+  let tro = this;
+  return tro[ descriptionSymbol ];
 }
 
 //
 
 function _descriptionSet( src )
 {
-  let trd = this;
-  return trd._descriptionChange({ src });
+  let tro = this;
+  return tro._descriptionChange({ src });
 }
 
 //
 
 function _descriptionChange( o )
 {
-  let trd = this;
+  let tro = this;
 
   _.assert( _.mapIs( o ) );
   _.routineOptions( _descriptionChange, o );
 
   if( o.touching )
   if( wTester.report )
-  trd._runInterruptMaybe( 1 );
+  tro._runInterruptMaybe( 1 );
 
-  trd[ descriptionSymbol ] = o.src;
+  tro[ descriptionSymbol ] = o.src;
 
 }
 
@@ -776,21 +781,21 @@ _descriptionChange.defaults =
 
 function _descriptionFullGet()
 {
-  let trd = this;
+  let tro = this;
   let result = '';
   let right = ' > ';
   let left = ' < ';
 
-  result = trd._groupsStack.slice( 0, trd._groupsStack.length-1 ).join( right );
+  result = tro._groupsStack.slice( 0, tro._groupsStack.length-1 ).join( right );
   if( result )
-  result += right + trd.case
+  result += right + tro.case
   else
-  result += trd.case
-  if( trd.description )
+  result += tro.case
+  if( tro.description )
   result += left;
 
-  if( trd.description )
-  result += trd.description;
+  if( tro.description )
+  result += tro.description;
 
   return result;
 }
@@ -799,9 +804,9 @@ function _descriptionFullGet()
 
 function _descriptionWithNameGet()
 {
-  let trd = this;
-  let description = trd.descriptionFull;
-  let name = trd.absoluteName;
+  let tro = this;
+  let description = tro.descriptionFull;
+  let name = tro.absoluteName;
   let slash = ' / ';
   return name + slash + description
 }
@@ -812,9 +817,9 @@ function _descriptionWithNameGet()
 
 function _groupGet()
 {
-  let trd = this;
+  let tro = this;
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  return trd._groupsStack[ trd._groupsStack.length-1 ] || '';
+  return tro._groupsStack[ tro._groupsStack.length-1 ] || '';
 }
 
 //
@@ -828,30 +833,30 @@ function _groupGet()
 
 function groupOpen( groupName )
 {
-  let trd = this;
+  let tro = this;
 
   try
   {
     _.assert( arguments.length === 1, 'Expects single argument' );
     _.assert( _.strIs( groupName ), 'Expects string' );
-    trd._caseClose();
-    trd._groupChange({ group : groupName, open : 1 });
+    tro._caseClose();
+    tro._groupChange({ group : groupName, open : 1 });
 
-    if( trd._groupsStack.length >= 2 )
-    if( trd._groupsStack[ trd._groupsStack.length-1 ] === trd._groupsStack[ trd._groupsStack.length-2 ] )
+    if( tro._groupsStack.length >= 2 )
+    if( tro._groupsStack[ tro._groupsStack.length-1 ] === tro._groupsStack[ tro._groupsStack.length-2 ] )
     {
       let msg =
       `Attempt to open group "${groupName}". Group with the same name is already opened. Might be you meant to close it?`;
 
-      let err = trd._groupingErorr( msg, 2 );
-      err = trd.exceptionReport({ err });
+      let err = tro._groupingErorr( msg, 2 );
+      err = tro.exceptionReport({ err });
       return;
     }
 
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -871,32 +876,32 @@ function groupOpen( groupName )
 
 function groupClose( groupName )
 {
-  let trd = this;
+  let tro = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   try
   {
-    trd._caseClose();
-    trd._groupChange({ group : groupName, open : 0 });
+    tro._caseClose();
+    tro._groupChange({ group : groupName, open : 0 });
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
     return false;
   }
 
-  return trd.group;
+  return tro.group;
 }
 
 //
 
 function _groupChange( o )
 {
-  let trd = this;
+  let tro = this;
 
   _.routineOptions( _groupChange, o );
   _.assert( arguments.length === 1, 'Expects no arguments' );
@@ -913,24 +918,24 @@ function _groupChange( o )
 
   function reset()
   {
-    trd._groupOpenedWithCase = 0;
-    trd._testCheckPassesOfTestCase = 0;
-    trd._testCheckFailsOfTestCase = 0;
-    trd._descriptionChange({ src : '', touching : 0 });
+    tro._groupOpenedWithCase = 0;
+    tro._testCheckPassesOfTestCase = 0;
+    tro._testCheckFailsOfTestCase = 0;
+    tro._descriptionChange({ src : '', touching : 0 });
   }
 
   /* */
 
   function open()
   {
-    let group = trd.group;
+    let group = tro.group;
 
-    _.assert( trd._groupOpenedWithCase === 0 );
+    _.assert( tro._groupOpenedWithCase === 0 );
 
     if( !o.group )
     return
 
-    trd._groupsStack.push( o.group );
+    tro._groupsStack.push( o.group );
 
   }
 
@@ -938,7 +943,7 @@ function _groupChange( o )
 
   function close()
   {
-    let group = trd.group;
+    let group = tro.group;
 
     if( group !== o.group )
     {
@@ -946,18 +951,18 @@ function _groupChange( o )
       `Discrepancy!. Attempt to close not the topmost tests group. \n`
       + `Attempt to close "${o.group}", but current tests group is "${group}". Might be you want to close it first.`;
 
-      let err = trd._groupingErorr( msg, 4 );
-      err = trd.exceptionReport({ err });
+      let err = tro._groupingErorr( msg, 4 );
+      err = tro.exceptionReport({ err });
     }
     else
     {
-      trd._groupsStack.pop();
+      tro._groupsStack.pop();
     }
 
     if( group )
     {
-      if( trd._testCheckFailsOfTestCase > 0 || trd._testCheckPassesOfTestCase > 0 )
-      trd._testCaseConsider( !trd._testCheckFailsOfTestCase );
+      if( tro._testCheckFailsOfTestCase > 0 || tro._testCheckPassesOfTestCase > 0 )
+      tro._testCaseConsider( !tro._testCheckFailsOfTestCase );
     }
 
   }
@@ -975,14 +980,14 @@ _groupChange.defaults =
 
 function _groupTestEnd()
 {
-  let trd = this;
+  let tro = this;
 
-  trd._caseClose();
+  tro._caseClose();
 
-  if( trd._groupsStack.length && !trd._groupError )
+  if( tro._groupsStack.length && !tro._groupError )
   {
-    let err = trd._groupingErorr( `Tests group ${trd.group} was not closed`, 4 );
-    err = trd.exceptionReport({ err, usingSourceCode : 0 });
+    let err = tro._groupingErorr( `Tests group ${tro.group} was not closed`, 4 );
+    err = tro.exceptionReport({ err, usingSourceCode : 0 });
   }
 
 }
@@ -991,7 +996,7 @@ function _groupTestEnd()
 
 function _groupingErorr( msg, level )
 {
-  let trd = this;
+  let tro = this;
 
   if( level === undefined || level === null )
   level = 4;
@@ -1006,8 +1011,8 @@ function _groupingErorr( msg, level )
 
   err = _.errBrief( err );
 
-  if( !trd._groupError )
-  trd._groupError = err;
+  if( !tro._groupError )
+  tro._groupError = err;
 
   return err;
 }
@@ -1016,10 +1021,10 @@ function _groupingErorr( msg, level )
 
 function _caseGet()
 {
-  let trd = this;
+  let tro = this;
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  if( trd._groupOpenedWithCase )
-  return trd._groupsStack[ trd._groupsStack.length-1 ] || '';
+  if( tro._groupOpenedWithCase )
+  return tro._groupsStack[ tro._groupsStack.length-1 ] || '';
   else
   return '';
 }
@@ -1028,24 +1033,24 @@ function _caseGet()
 
 function _caseSet( src )
 {
-  let trd = this;
+  let tro = this;
   _.assert( arguments.length === 1 );
-  return trd._caseChange({ src });
+  return tro._caseChange({ src });
 }
 
 //
 
 function _caseClose()
 {
-  let trd = this;
-  let report = trd.report;
+  let tro = this;
+  let report = tro.report;
 
-  if( trd._groupOpenedWithCase )
+  if( tro._groupOpenedWithCase )
   {
-    // trd._groupOpenedWithCase = 0;
-    _.assert( _.strIs( trd.group ) );
-    trd._groupChange({ group : trd.group, touching : 0, open : 0 });
-    _.assert( trd._groupOpenedWithCase === 0 );
+    // tro._groupOpenedWithCase = 0;
+    _.assert( _.strIs( tro.group ) );
+    tro._groupChange({ group : tro.group, touching : 0, open : 0 });
+    _.assert( tro._groupOpenedWithCase === 0 );
   }
 
 }
@@ -1054,7 +1059,7 @@ function _caseClose()
 
 function _caseChange( o )
 {
-  let trd = this;
+  let tro = this;
 
   _.routineOptions( _caseChange, o );
   _.assert( _.mapIs( o ) );
@@ -1062,20 +1067,20 @@ function _caseChange( o )
   _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.strType( o.src )}` );
 
   // yyy
-  if( trd.case )
+  if( tro.case )
   {
-    trd._groupChange({ group : trd.group, touching : o.touching, open : 0 });
+    tro._groupChange({ group : tro.group, touching : o.touching, open : 0 });
   }
 
   if( o.src )
   {
-    trd._groupChange({ group : o.src, touching : o.touching, open : 1 });
-    trd._groupOpenedWithCase = 1;
+    tro._groupChange({ group : o.src, touching : o.touching, open : 1 });
+    tro._groupOpenedWithCase = 1;
   }
   else
   {
-    // if( trd.case )
-    // trd._groupChange({ group : o.src, touching : o.touching, open : 0 });
+    // if( tro.case )
+    // tro._groupChange({ group : o.src, touching : o.touching, open : 0 });
   }
 
   return o.src;
@@ -1093,34 +1098,34 @@ _caseChange.defaults =
 
 function qualifiedNameGet()
 {
-  let trd = this;
-  return trd.constructor.shortName + '::' + trd.name;
+  let tro = this;
+  return tro.constructor.shortName + '::' + tro.name;
 }
 
 //
 
 function decoratedQualifiedNameGet()
 {
-  let trd = this;
+  let tro = this;
   debugger;
-  return wTester.textColor( trd.qualifiedNameGet, 'entity' );
+  return wTester.textColor( tro.qualifiedNameGet, 'entity' );
 }
 
 //
 
 function absoluteNameGet()
 {
-  let trd = this;
+  let tro = this;
   let slash = ' / ';
-  return trd.suite.qualifiedName + slash + trd.qualifiedName;
+  return tro.suite.qualifiedName + slash + tro.qualifiedName;
 }
 
 //
 
 function decoratedAbsoluteNameGet()
 {
-  let trd = this;
-  return wTester.textColor( trd.absoluteName, 'entity' );
+  let tro = this;
+  return wTester.textColor( tro.absoluteName, 'entity' );
 }
 
 // --
@@ -1136,14 +1141,14 @@ function decoratedAbsoluteNameGet()
 
 function checkCurrent()
 {
-  let trd = this;
+  let tro = this;
   let result = Object.create( null );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
-  result.groupsStack = trd._groupsStack;
-  result.description = trd.description;
-  result.checkIndex = trd._checkIndex;
+  result.groupsStack = tro._groupsStack;
+  result.description = tro.description;
+  result.checkIndex = tro._checkIndex;
 
   return result;
 }
@@ -1159,20 +1164,20 @@ function checkCurrent()
 
 function checkNext( description )
 {
-  let trd = this;
+  let tro = this;
 
-  _.assert( trd instanceof Self );
+  _.assert( tro instanceof Self );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  if( !trd._checkIndex )
-  trd._checkIndex = 1;
+  if( !tro._checkIndex )
+  tro._checkIndex = 1;
   else
-  trd._checkIndex += 1;
+  tro._checkIndex += 1;
 
   if( description !== undefined )
-  trd.description = description;
+  tro.description = description;
 
-  return trd.checkCurrent();
+  return tro.checkCurrent();
 }
 
 //
@@ -1186,12 +1191,12 @@ function checkNext( description )
 
 function checkStore()
 {
-  let trd = this;
-  let result = trd.checkCurrent();
+  let tro = this;
+  let result = tro.checkCurrent();
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
-  trd._checksStack.push( result );
+  tro._checksStack.push( result );
 
   return result;
 }
@@ -1208,31 +1213,31 @@ function checkStore()
 
 function checkRestore( acheck )
 {
-  let trd = this;
+  let tro = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   if( acheck )
   {
-    trd.checkStore();
-    if( acheck === trd._checksStack[ trd._checksStack.length-1 ] )
+    tro.checkStore();
+    if( acheck === tro._checksStack[ tro._checksStack.length-1 ] )
     {
       debugger;
       _.assert( 0, 'not tested' );
-      trd._checksStack.pop();
+      tro._checksStack.pop();
     }
   }
   else
   {
-    _.assert( _.arrayIs( trd._checksStack ) && trd._checksStack.length, 'checkRestore : no stored check in stack' );
-    acheck = trd._checksStack.pop();
+    _.assert( _.arrayIs( tro._checksStack ) && tro._checksStack.length, 'checkRestore : no stored check in stack' );
+    acheck = tro._checksStack.pop();
   }
 
-  trd._checkIndex = acheck.checkIndex;
-  trd._groupsStack = acheck.groupsStack;
-  trd._descriptionChange({ src : acheck.description, touching : 0 });
+  tro._checkIndex = acheck.checkIndex;
+  tro._groupsStack = acheck.groupsStack;
+  tro._descriptionChange({ src : acheck.description, touching : 0 });
 
-  return trd;
+  return tro;
 }
 
 // --
@@ -1241,25 +1246,25 @@ function checkRestore( acheck )
 
 function _testCheckConsider( outcome )
 {
-  let trd = this;
+  let tro = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( trd.constructor === Self );
+  _.assert( tro.constructor === Self );
 
   if( outcome )
   {
-    trd.report.testCheckPasses += 1;
-    trd._testCheckPassesOfTestCase += 1;
+    tro.report.testCheckPasses += 1;
+    tro._testCheckPassesOfTestCase += 1;
   }
   else
   {
-    trd.report.testCheckFails += 1;
-    trd._testCheckFailsOfTestCase += 1;
+    tro.report.testCheckFails += 1;
+    tro._testCheckFailsOfTestCase += 1;
   }
 
-  trd.suite._testCheckConsider( outcome );
+  tro.suite._testCheckConsider( outcome );
 
-  trd.checkNext();
+  tro.checkNext();
 
 }
 
@@ -1267,28 +1272,28 @@ function _testCheckConsider( outcome )
 
 function _testCaseConsider( outcome )
 {
-  let trd = this;
-  let report = trd.report;
+  let tro = this;
+  let report = tro.report;
 
   if( outcome )
   report.testCasePasses += 1;
   else
   report.testCaseFails += 1;
 
-  trd.suite._testCaseConsider( outcome );
+  tro.suite._testCaseConsider( outcome );
 }
 
 //
 
 function _exceptionConsider( err )
 {
-  let trd = this;
+  let tro = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( trd.constructor === Self );
+  _.assert( tro.constructor === Self );
 
-  trd.report.errorsArray.push( err );
-  trd.suite._exceptionConsider( err );
+  tro.report.errorsArray.push( err );
+  tro.suite._exceptionConsider( err );
 
 }
 
@@ -1298,8 +1303,8 @@ function _exceptionConsider( err )
 
 function _outcomeLog( o )
 {
-  let trd = this;
-  let logger = trd.logger;
+  let tro = this;
+  let logger = tro.logger;
   let sourceCode = '';
 
   _.routineOptions( _outcomeLog, o );
@@ -1307,15 +1312,15 @@ function _outcomeLog( o )
 
   /* */
 
-  let verbosity = o.outcome ? 0 : trd.negativity;
+  let verbosity = o.outcome ? 0 : tro.negativity;
   sourceCode = sourceCodeGet();
 
   /* */
 
   logger.begin({ verbosity : o.verbosity });
 
-  logger.begin({ 'check' : trd.description || trd._checkIndex });
-  logger.begin({ 'checkIndex' : trd._checkIndex });
+  logger.begin({ 'check' : tro.description || tro._checkIndex });
+  logger.begin({ 'checkIndex' : tro._checkIndex });
 
   logger.begin({ verbosity : o.verbosity+verbosity });
 
@@ -1356,7 +1361,7 @@ function _outcomeLog( o )
   function sourceCodeGet()
   {
     let code;
-    if( trd.usingSourceCode && o.usingSourceCode )
+    if( tro.usingSourceCode && o.usingSourceCode )
     {
       let _location = o.stack ? _.introspector.location({ stack : o.stack }) : _.introspector.location({ level : 5 });
       let _code = _.introspector.code
@@ -1394,21 +1399,21 @@ _outcomeLog.defaults =
 
 function _outcomeReport( o )
 {
-  let trd = this;
-  let logger = trd.logger;
+  let tro = this;
+  let logger = tro.logger;
   let sourceCode = '';
 
   _.routineOptions( _outcomeReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( o.considering )
-  trd._testCheckConsider( o.outcome );
+  tro._testCheckConsider( o.outcome );
 
   if( o.logging )
-  trd._outcomeLog( _.mapOnly( o, trd._outcomeLog.defaults ) );
+  tro._outcomeLog( _.mapOnly( o, tro._outcomeLog.defaults ) );
 
   if( o.interruptible )
-  trd._runInterruptMaybe( 1 );
+  tro._runInterruptMaybe( 1 );
 }
 
 _outcomeReport.defaults =
@@ -1430,19 +1435,19 @@ _outcomeReport.defaults =
 
 function _outcomeReportBoolean( o )
 {
-  let trd = this;
+  let tro = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( _outcomeReportBoolean, o );
 
-  o.msg = trd._reportTextForTestCheck
+  o.msg = tro._reportTextForTestCheck
   ({
     outcome : o.outcome,
     msg : o.msg,
     usingDescription : o.usingDescription,
   });
 
-  trd._outcomeReport
+  tro._outcomeReport
   ({
     outcome : o.outcome,
     msg : o.msg,
@@ -1454,7 +1459,7 @@ function _outcomeReportBoolean( o )
   });
 
   // if( o.interruptible )
-  // trd._runInterruptMaybe( 1 );
+  // tro._runInterruptMaybe( 1 );
 
 }
 
@@ -1473,9 +1478,9 @@ _outcomeReportBoolean.defaults =
 
 function _outcomeReportCompare( o )
 {
-  let trd = this;
+  let tro = this;
 
-  _.assert( trd instanceof Self );
+  _.assert( tro instanceof Self );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
 
@@ -1498,9 +1503,9 @@ function _outcomeReportCompare( o )
     });
   }
 
-  let msg = trd._reportTextForTestCheck({ outcome : o.outcome });
+  let msg = tro._reportTextForTestCheck({ outcome : o.outcome });
 
-  trd._outcomeReport
+  tro._outcomeReport
   ({
     outcome : o.outcome,
     msg,
@@ -1509,7 +1514,7 @@ function _outcomeReportCompare( o )
   });
 
   if( !o.outcome )
-  if( trd.debug )
+  if( tro.debug )
   debugger;
 
   /**/
@@ -1542,7 +1547,7 @@ _outcomeReportCompare.defaults =
 
 function exceptionReport( o )
 {
-  let trd = this;
+  let tro = this;
   let msg = '';
   let err;
 
@@ -1558,8 +1563,8 @@ function exceptionReport( o )
 
     try
     {
-      if( trd.onError )
-      trd.onError.call( trd, o );
+      if( tro.onError )
+      tro.onError.call( tro, o );
     }
     catch( err2 )
     {
@@ -1571,9 +1576,9 @@ function exceptionReport( o )
       /* qqq : implement and cover different message if time out */
       /* qqq : implement and cover different message if user terminated the program */
       if( o.err && o.err.reason )
-      msg = trd._reportTextForTestCheck({ outcome : null }) + ` ... failed, ${o.err.reason}`;
+      msg = tro._reportTextForTestCheck({ outcome : null }) + ` ... failed, ${o.err.reason}`;
       else
-      msg = trd._reportTextForTestCheck({ outcome : null }) + ' ... failed, throwing error';
+      msg = tro._reportTextForTestCheck({ outcome : null }) + ' ... failed, throwing error';
     }
     else
     {
@@ -1594,9 +1599,9 @@ function exceptionReport( o )
     o.stack = o.stack === null ? o.err.stack : o.stack;
 
     if( o.considering )
-    trd._exceptionConsider( err );
+    tro._exceptionConsider( err );
 
-    trd._outcomeReport
+    tro._outcomeReport
     ({
       outcome : o.outcome,
       msg,
@@ -1638,23 +1643,20 @@ exceptionReport.defaults =
 
 function _reportBegin()
 {
-  let trd = this;
+  let tro = this;
 
-  _.assert( !trd.report, 'test routine already has report' );
+  _.assert( !tro.report, 'test routine already has report' );
 
-  let report = trd.report = Object.create( null );
+  let report = tro.report = Object.create( null );
 
   report.reason = null;
   report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
-  report.appExitCode = null; /* xxx */
+  report.exitCode = null;
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
-
-  // report.testCheckPassesOfTestCase = 0;
-  // report.testCheckFailsOfTestCase = 0;
 
   report.testCasePasses = 0;
   report.testCaseFails = 0;
@@ -1666,22 +1668,22 @@ function _reportBegin()
 
 function _reportEnd()
 {
-  let trd = this;
-  let report = trd.report;
+  let tro = this;
+  let report = tro.report;
 
-  if( !report.appExitCode )
-  report.appExitCode = _.process.exitCode();
+  if( !report.exitCode )
+  report.exitCode = _.process.exitCode();
 
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )
   report.outcome = false;
 
-  if( trd.report.testCheckFails !== 0 )
+  if( tro.report.testCheckFails !== 0 )
   report.outcome = false;
 
-  if( !( trd.report.testCheckPasses > 0 ) )
+  if( !( tro.report.testCheckPasses > 0 ) )
   report.outcome = false;
 
-  if( trd.report.errorsArray.length )
+  if( tro.report.errorsArray.length )
   report.outcome = false;
 
   if( report.outcome === null )
@@ -1694,13 +1696,13 @@ function _reportEnd()
 
 function _reportIsPositive()
 {
-  let trd = this;
-  let report = trd.report;
+  let tro = this;
+  let report = tro.report;
 
   if( !report )
   return false;
 
-  trd._reportEnd();
+  // tro._reportEnd(); // yyy
 
   return report.outcome;
 }
@@ -1709,21 +1711,21 @@ function _reportIsPositive()
 
 function _reportTextForTestCheck( o )
 {
-  let trd = this;
+  let tro = this;
 
   o = _.routineOptions( _reportTextForTestCheck, o );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.outcome === null || _.boolLike( o.outcome ) );
   _.assert( o.msg === null || _.strIs( o.msg ) );
-  _.assert( trd instanceof Self );
-  _.assert( trd._checkIndex >= 0 );
-  _.assert( _.strDefined( trd.routine.name ), 'test routine should have name' );
+  _.assert( tro instanceof Self );
+  _.assert( tro._checkIndex >= 0 );
+  _.assert( _.strDefined( tro.routine.name ), 'test routine should have name' );
 
-  // if( trd._returned )
+  // if( tro._returned )
   // debugger;
 
-  let result = 'Test check' + ' ( ' + trd.descriptionWithName + ' # ' + trd._checkIndex + ' )';
+  let result = 'Test check' + ' ( ' + tro.descriptionWithName + ' # ' + tro._checkIndex + ' )';
 
   if( o.msg )
   result += ' : ' + o.msg;
@@ -1758,21 +1760,21 @@ _reportTextForTestCheck.defaults =
  * @description Check passes if result if positive, otherwise fails. After check function reports result of test
  * to the testing system. If test is failed function also outputs additional information.
  * @param {Boolean} outcome Result of some condition.
- * @method is
+ * @method _true
  * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
 
-function is( outcome )
+function _true( outcome )
 {
-  let trd = this;
+  let tro = this;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Test check "is" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
@@ -1784,7 +1786,7 @@ function is( outcome )
   else
   {
     outcome = !!outcome;
-    trd._outcomeReportBoolean
+    tro._outcomeReportBoolean
     ({
       outcome,
       msg : 'expected true',
@@ -1797,16 +1799,16 @@ function is( outcome )
 
 //
 
-function isNot( outcome )
+function _false( outcome )
 {
-  let trd = this;
+  let tro = this;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( !_.boolLike( outcome ) || arguments.length !== 1 )
   {
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Test check "isNot" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
@@ -1818,7 +1820,7 @@ function isNot( outcome )
   else
   {
     outcome = !outcome;
-    trd._outcomeReportBoolean
+    tro._outcomeReportBoolean
     ({
       outcome,
       msg : 'expected false',
@@ -1865,10 +1867,10 @@ function isNot( outcome )
 
 function identical( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -1879,7 +1881,7 @@ function identical( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -1892,7 +1894,7 @@ function identical( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"identical" expects two arguments',
       level : 2,
@@ -1907,7 +1909,7 @@ function identical( got, expected )
   {
     debugger;
     outcome = false;
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -1917,7 +1919,7 @@ function identical( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -1968,10 +1970,10 @@ function identical( got, expected )
 
 function notIdentical( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -1982,7 +1984,7 @@ function notIdentical( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -1995,7 +1997,7 @@ function notIdentical( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"notIdentical" expects two arguments',
       level : 2,
@@ -2010,7 +2012,7 @@ function notIdentical( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2021,7 +2023,7 @@ function notIdentical( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2073,11 +2075,11 @@ function notIdentical( got, expected )
 
 function equivalent( got, expected, options )
 {
-  let trd = this;
-  let accuracy = trd.accuracyEffective;
+  let tro = this;
+  let accuracy = tro.accuracyEffective;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2095,7 +2097,7 @@ function equivalent( got, expected, options )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2108,7 +2110,7 @@ function equivalent( got, expected, options )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"equivalent" expects two arguments',
       level : 2,
@@ -2122,7 +2124,7 @@ function equivalent( got, expected, options )
   if( !o2.it || o2.it.lastPath === undefined )
   {
     outcome = false;
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2132,7 +2134,7 @@ function equivalent( got, expected, options )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2186,11 +2188,11 @@ function equivalent( got, expected, options )
 
 function notEquivalent( got, expected, options )
 {
-  let trd = this;
-  let accuracy = trd.accuracyEffective;
+  let tro = this;
+  let accuracy = tro.accuracyEffective;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2208,7 +2210,7 @@ function notEquivalent( got, expected, options )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2221,7 +2223,7 @@ function notEquivalent( got, expected, options )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"notEquivalent" expects two arguments',
       level : 2,
@@ -2236,7 +2238,7 @@ function notEquivalent( got, expected, options )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2247,7 +2249,7 @@ function notEquivalent( got, expected, options )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2298,10 +2300,10 @@ function notEquivalent( got, expected, options )
 
 function contains( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2312,7 +2314,7 @@ function contains( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2325,7 +2327,7 @@ function contains( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"contains" expects two arguments',
       level : 2,
@@ -2340,7 +2342,7 @@ function contains( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2351,7 +2353,7 @@ function contains( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2371,10 +2373,10 @@ function contains( got, expected )
 
 function containsAll( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2385,7 +2387,7 @@ function containsAll( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2398,7 +2400,7 @@ function containsAll( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"contains" expects two arguments',
       level : 2,
@@ -2413,7 +2415,7 @@ function containsAll( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2424,7 +2426,7 @@ function containsAll( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2444,10 +2446,10 @@ function containsAll( got, expected )
 
 function containsAny( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2458,7 +2460,7 @@ function containsAny( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2471,7 +2473,7 @@ function containsAny( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"contains" expects two arguments',
       level : 2,
@@ -2486,7 +2488,7 @@ function containsAny( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2497,7 +2499,7 @@ function containsAny( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2517,10 +2519,10 @@ function containsAny( got, expected )
 
 function containsOnly( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2531,7 +2533,7 @@ function containsOnly( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2544,7 +2546,7 @@ function containsOnly( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"contains" expects two arguments',
       level : 2,
@@ -2559,7 +2561,7 @@ function containsOnly( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2570,7 +2572,7 @@ function containsOnly( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2590,10 +2592,10 @@ function containsOnly( got, expected )
 
 function containsNone( got, expected )
 {
-  let trd = this;
+  let tro = this;
   let o2, outcome;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   /* */
 
@@ -2604,7 +2606,7 @@ function containsNone( got, expected )
   }
   catch( err )
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
     });
@@ -2617,7 +2619,7 @@ function containsNone( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"contains" expects two arguments',
       level : 2,
@@ -2632,7 +2634,7 @@ function containsNone( got, expected )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : 'Something wrong with entityIdentical, iterator misses lastPath',
       level : 2,
@@ -2643,7 +2645,7 @@ function containsNone( got, expected )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2687,9 +2689,9 @@ function containsNone( got, expected )
 
 function gt( got, than )
 {
-  let trd = this;
+  let tro = this;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( _.bigIntIs( got ) || _.bigIntIs( than ) )
   {
@@ -2706,7 +2708,7 @@ function gt( got, than )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"gt" expects two arguments',
       level : 2,
@@ -2717,7 +2719,7 @@ function gt( got, than )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2760,9 +2762,9 @@ function gt( got, than )
 
 function ge( got, than )
 {
-  let trd = this;
+  let tro = this;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( _.bigIntIs( got ) || _.bigIntIs( than ) )
   {
@@ -2780,7 +2782,7 @@ function ge( got, than )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"ge" expects two arguments',
       level : 2,
@@ -2791,7 +2793,7 @@ function ge( got, than )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2836,9 +2838,9 @@ function ge( got, than )
 
 function lt( got, than )
 {
-  let trd = this;
+  let tro = this;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( _.bigIntIs( got ) || _.bigIntIs( than ) )
   {
@@ -2855,7 +2857,7 @@ function lt( got, than )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"lt" expects two arguments',
       level : 2,
@@ -2866,7 +2868,7 @@ function lt( got, than )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2912,9 +2914,9 @@ function lt( got, than )
 
 function le( got, than )
 {
-  let trd = this;
+  let tro = this;
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
   if( _.bigIntIs( got ) || _.bigIntIs( than ) )
   {
@@ -2932,7 +2934,7 @@ function le( got, than )
   {
     outcome = false;
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err : '"le" expects two arguments',
       level : 2,
@@ -2943,7 +2945,7 @@ function le( got, than )
 
   /* */
 
-  trd._outcomeReportCompare
+  tro._outcomeReportCompare
   ({
     outcome,
     got,
@@ -2966,19 +2968,19 @@ function le( got, than )
 
 function _shouldDo( o )
 {
-  let trd = this;
+  let tro = this;
   let second = 0;
   let reported = 0;
   let good = 1;
   let async = 0;
   let stack = _.introspector.stack([ 2, -1 ]);
-  let logger = trd.logger;
+  let logger = tro.logger;
   let err, arg;
   let con = new _.Consequence();
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
-  if( !trd.shoulding )
+  if( !tro.shoulding )
   return con.take( null );
 
   try
@@ -2997,8 +2999,8 @@ function _shouldDo( o )
   catch( err )
   {
     let error = _.errRestack( err, 3 );
-    error = _._err({ args : [ error, '\nIllegal usage of should in', trd.absoluteName ] });
-    error = trd.exceptionReport({ err : error });
+    error = _._err({ args : [ error, '\nIllegal usage of should in', tro.absoluteName ] });
+    error = tro.exceptionReport({ err : error });
 
     con.error( error );
     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
@@ -3008,8 +3010,8 @@ function _shouldDo( o )
   }
 
   o.routine = o.args[ 0 ];
-  let acheck = trd.checkCurrent();
-  trd._inroutineCon.give( 1 );
+  let acheck = tro.checkCurrent();
+  tro._inroutineCon.give( 1 );
 
   /* */
 
@@ -3063,7 +3065,7 @@ function _shouldDo( o )
     if( o.ignoringError )
     {
       begin( 1 );
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : 1,
         msg : 'error throwen synchronously, ignored',
@@ -3076,7 +3078,7 @@ function _shouldDo( o )
 
     /* */
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
       sync : 1,
@@ -3089,7 +3091,7 @@ function _shouldDo( o )
     if( o.expectingSyncError )
     {
 
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : o.expectingSyncError,
         msg : 'error thrown synchronously as expected',
@@ -3101,7 +3103,7 @@ function _shouldDo( o )
     else
     {
 
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : o.expectingSyncError,
         msg : 'error thrown synchronously, what was not expected',
@@ -3131,7 +3133,7 @@ function _shouldDo( o )
 
     let msg = 'Error not thrown synchronously, but expected';
 
-    trd._outcomeReportBoolean
+    tro._outcomeReportBoolean
     ({
       outcome : 0,
       msg,
@@ -3149,7 +3151,7 @@ function _shouldDo( o )
   function handleAsyncResult()
   {
 
-    trd.checkNext();
+    tro.checkNext();
     async = 1;
 
     result.give( function( _err, _arg )
@@ -3199,7 +3201,7 @@ function _shouldDo( o )
 
           _.assert( !reported );
 
-          trd._outcomeReportBoolean
+          tro._outcomeReportBoolean
           ({
             outcome : 0,
             msg : 'Got more than one message',
@@ -3233,8 +3235,8 @@ function _shouldDo( o )
 
     result.finally( gotSecondResource );
 
-    // let r = result.orKeepingSplit([ trd._timeLimitCon, wTester._cancelCon ]);
-    let r = _.Consequence.Or( result, trd._timeLimitCon, wTester._cancelCon );
+    // let r = result.orKeepingSplit([ tro._timeLimitCon, wTester._cancelCon ]);
+    let r = _.Consequence.Or( result, tro._timeLimitCon, wTester._cancelCon );
     r.finally( ( err, arg ) =>
     {
       if( result.competitorHas( gotSecondResource ) )
@@ -3258,7 +3260,7 @@ function _shouldDo( o )
     second = 1;
     let msg = 'Got more than one message';
 
-    trd._outcomeReportBoolean
+    tro._outcomeReportBoolean
     ({
       outcome : 0,
       msg,
@@ -3287,7 +3289,7 @@ function _shouldDo( o )
       if( o.expectingAsyncError )
       msg = 'Error not thrown, but expected either synchronosuly or asynchronously';
 
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : 0,
         msg,
@@ -3301,7 +3303,7 @@ function _shouldDo( o )
     {
       begin( 1 );
 
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : 1,
         msg : 'no error thrown, as expected',
@@ -3315,7 +3317,7 @@ function _shouldDo( o )
     {
       debugger;
       _.assert( 0, 'unexpected' );
-      trd.checkNext();
+      tro.checkNext();
     }
 
   }
@@ -3329,9 +3331,9 @@ function _shouldDo( o )
     good = positive;
 
     if( reported || async )
-    trd.checkRestore( acheck );
+    tro.checkRestore( acheck );
 
-    logger.begin({ verbosity : positive ? -5 : -5+trd.negativity });
+    logger.begin({ verbosity : positive ? -5 : -5+tro.negativity });
     logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
@@ -3341,13 +3343,13 @@ function _shouldDo( o )
   {
     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
-    logger.end({ verbosity : positive ? -5 : -5+trd.negativity });
+    logger.end({ verbosity : positive ? -5 : -5+tro.negativity });
     logger.end({ connotation : positive ? 'positive' : 'negative' });
 
     if( reported )
     debugger;
     if( reported || async )
-    trd.checkRestore();
+    tro.checkRestore();
 
     if( arg === undefined && !async )
     arg = null;
@@ -3358,7 +3360,7 @@ function _shouldDo( o )
     con.take( _.errAttend( arg ), undefined );
 
     if( !reported )
-    trd._inroutineCon.take( null );
+    tro._inroutineCon.take( null );
 
     reported = 1;
   }
@@ -3369,7 +3371,7 @@ function _shouldDo( o )
   {
 
     /* yyy */
-    if( trd._returned )
+    if( tro._returned )
     return;
     if( reported )
     return;
@@ -3378,7 +3380,7 @@ function _shouldDo( o )
     {
       begin( 1 );
 
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : 1,
         msg : 'got single message',
@@ -3392,7 +3394,7 @@ function _shouldDo( o )
     {
       begin( o.expectingAsyncError );
 
-      trd.exceptionReport
+      tro.exceptionReport
       ({
         err,
         sync : 0,
@@ -3401,7 +3403,7 @@ function _shouldDo( o )
       });
 
       if( o.expectingAsyncError )
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously as expected',
@@ -3409,7 +3411,7 @@ function _shouldDo( o )
         selectMode : 'center'
       });
       else
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : o.expectingAsyncError,
         msg : 'error thrown asynchronously, not expected',
@@ -3427,7 +3429,7 @@ function _shouldDo( o )
       if( !o.expectingAsyncError && !o.expectingSyncError && good )
       msg = 'error was not thrown as expected';
 
-      trd._outcomeReportBoolean
+      tro._outcomeReportBoolean
       ({
         outcome : !o.expectingAsyncError,
         msg,
@@ -3474,18 +3476,18 @@ _shouldDo.defaults =
 
 function _shouldDo_( o )
 {
-  let trd = this;
+  let tro = this;
   let reported = 0;
   let good = 1;
   let async = 0;
   let stack = _.introspector.stack([ 2, -1 ]);
-  let logger = trd.logger;
+  let logger = tro.logger;
   let err, arg;
   let con = new _.Consequence();
 
-  trd._returnedVerification();
+  tro._returnedVerification();
 
-  if( !trd.shoulding )
+  if( !tro.shoulding )
   return con.take( null );
 
   /* check arguments */
@@ -3508,8 +3510,8 @@ function _shouldDo_( o )
   catch( err )
   {
     let error = _.errRestack( err, 3 );
-    error = _._err({ args : [ error, '\nIllegal usage of should in', trd.absoluteName ] });
-    error = trd.exceptionReport({ err : error });
+    error = _._err({ args : [ error, '\nIllegal usage of should in', tro.absoluteName ] });
+    error = tro.exceptionReport({ err : error });
 
     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
     {
@@ -3527,8 +3529,8 @@ function _shouldDo_( o )
   let result;
   let routine = o.args[ 0 ];
   let callback = o.args[ 1 ];
-  let acheck = trd.checkCurrent();
-  trd._inroutineCon.give( 1 );
+  let acheck = tro.checkCurrent();
+  tro._inroutineCon.give( 1 );
 
   if( _.consequenceIs( routine ) )
   {
@@ -3583,7 +3585,7 @@ function _shouldDo_( o )
     if( o.ignoringError )
     return errorIgnore();
 
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
       sync : 1,
@@ -3617,7 +3619,7 @@ function _shouldDo_( o )
   {
     begin( sync );
 
-    trd._outcomeReportBoolean
+    tro._outcomeReportBoolean
     ({
       outcome : sync,
       msg,
@@ -3637,9 +3639,9 @@ function _shouldDo_( o )
     good = positive;
 
     if( reported || async )
-    trd.checkRestore( acheck );
+    tro.checkRestore( acheck );
 
-    logger.begin({ verbosity : positive ? -5 : -5 + trd.negativity });
+    logger.begin({ verbosity : positive ? -5 : -5 + tro.negativity });
     logger.begin({ connotation : positive ? 'positive' : 'negative' });
   }
 
@@ -3649,11 +3651,11 @@ function _shouldDo_( o )
   {
     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
-    logger.end({ verbosity : positive ? -5 : -5 + trd.negativity });
+    logger.end({ verbosity : positive ? -5 : -5 + tro.negativity });
     logger.end({ connotation : positive ? 'positive' : 'negative' });
 
     if( reported || async )
-    trd.checkRestore();
+    tro.checkRestore();
 
     if( arg === undefined && !async )
     arg = null;
@@ -3664,7 +3666,7 @@ function _shouldDo_( o )
     con.take( _.errAttend( arg ), undefined );
 
     if( !reported )
-    trd._inroutineCon.take( null );
+    tro._inroutineCon.take( null );
 
     reported = 1;
   }
@@ -3673,7 +3675,7 @@ function _shouldDo_( o )
 
   function handleAsyncResult()
   {
-    trd.checkNext();
+    tro.checkNext();
     async = 1;
 
     result.give( function( _err, _arg )
@@ -3742,7 +3744,7 @@ function _shouldDo_( o )
 
   function reportAsync()
   {
-    if( trd._returned || reported )
+    if( tro._returned || reported )
     return;
 
     if( o.ignoringError )
@@ -3762,7 +3764,7 @@ function _shouldDo_( o )
 
   function reportThrowenAsyncError()
   {
-    trd.exceptionReport
+    tro.exceptionReport
     ({
       err,
       sync : 0,
@@ -3800,7 +3802,7 @@ function _shouldDo_( o )
 
     result.finally( gotSecondResource );
 
-    let r = _.Consequence.Or( result, trd._timeLimitCon, wTester._cancelCon );
+    let r = _.Consequence.Or( result, tro._timeLimitCon, wTester._cancelCon );
     r.finally( ( err, arg ) =>
     {
       if( result.competitorHas( gotSecondResource ) )
@@ -3912,9 +3914,9 @@ _shouldDo_.defaults =
 
 function shouldThrowErrorAsync( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo
+  return tro._shouldDo
   ({
     args : arguments,
     expectingSyncError : 0,
@@ -3925,9 +3927,9 @@ function shouldThrowErrorAsync( routine )
 
 function shouldThrowErrorAsync_( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo_
+  return tro._shouldDo_
   ({
     args : arguments,
     expectingSyncError : 0,
@@ -3963,9 +3965,9 @@ function shouldThrowErrorAsync_( routine )
 
 function shouldThrowErrorSync( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo
+  return tro._shouldDo
   ({
     args : arguments,
     expectingSyncError : 1,
@@ -3976,9 +3978,9 @@ function shouldThrowErrorSync( routine )
 
 function shouldThrowErrorSync_( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo_
+  return tro._shouldDo_
   ({
     args : arguments,
     expectingSyncError : 1,
@@ -4042,9 +4044,9 @@ function shouldThrowErrorSync_( routine )
 
 function shouldThrowErrorOfAnyKind( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo
+  return tro._shouldDo
   ({
     args : arguments,
     expectingSyncError : 1,
@@ -4055,9 +4057,9 @@ function shouldThrowErrorOfAnyKind( routine )
 
 function shouldThrowErrorOfAnyKind_( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo_
+  return tro._shouldDo_
   ({
     args : arguments,
     expectingSyncError : 1,
@@ -4095,9 +4097,9 @@ function shouldThrowErrorOfAnyKind_( routine )
 
 function mustNotThrowError( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo
+  return tro._shouldDo
   ({
     args : arguments,
     ignoringError : 0,
@@ -4109,9 +4111,9 @@ function mustNotThrowError( routine )
 
 function mustNotThrowError_( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo_
+  return tro._shouldDo_
   ({
     args : arguments,
     ignoringError : 0,
@@ -4148,9 +4150,9 @@ function mustNotThrowError_( routine )
 
 function returnsSingleResource( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo
+  return tro._shouldDo
   ({
     args : arguments,
     ignoringError : 1,
@@ -4162,9 +4164,9 @@ function returnsSingleResource( routine )
 
 function returnsSingleResource_( routine )
 {
-  let trd = this;
+  let tro = this;
 
-  return trd._shouldDo_
+  return tro._shouldDo_
   ({
     args : arguments,
     ignoringError : 1,
@@ -4178,9 +4180,9 @@ function returnsSingleResource_( routine )
 
 function assetFor( a )
 {
-  let trd = this;
-  let context = trd.context;
-  let suite = trd.suite;
+  let tro = this;
+  let context = tro.context;
+  let suite = tro.suite;
 
   if( !_.mapIs( a ) )
   {
@@ -4190,7 +4192,7 @@ function assetFor( a )
     a = { assetName : arguments[ 0 ] }
   }
 
-  _.assert( a.trd === undefined );
+  _.assert( a.tro === undefined );
   _.assert( a.suite === undefined );
   _.assert( a.routine === undefined );
   _.routineOptions( assetFor, a );
@@ -4202,9 +4204,9 @@ function assetFor( a )
   if( a.appJsPath === null && context.appJsPath !== undefined )
   a.appJsPath = context.appJsPath;
 
-  a.trd = trd;
+  a.tro = tro;
   a.suite = suite;
-  a.routine = trd.routine;
+  a.routine = tro.routine;
   if( !a.assetName )
   a.assetName = a.routine.name;
 
@@ -4798,8 +4800,8 @@ let Extension =
 
   // checker
 
-  is, /* xxx : rename is -> true */
-  isNot, /* xxx : rename isNot -> false */
+  true : _true, /* xxx : rename is -> true */ /* qqq2 for Dmytro : rename in documentation */
+  false : _false, /* xxx : rename isNot -> false /* qqq2 for Dmytro : rename in documentation */
 
   identical,
   notIdentical,

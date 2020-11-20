@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../tester/entry/Main.s' );
+  require( '../testing/entry/Main.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
@@ -80,14 +80,14 @@ function main( test )
 
   var result = suite.run();
 
-  result.finally( ( err, got ) =>
+  result.finally( ( _err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 3 );
 
     console.log( suite.report.errorsArray.length );
     console.log( suite.report.errorsArray );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
+    test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
     test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Trivial" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
@@ -118,6 +118,27 @@ function main( test )
 
 //
 
+function shouldThrowErrorSyncProcessHasErrorBefore( test )
+{
+  test.case = 'consequence of process starter has error';
+  var err = _.err( 'error' );
+  var ready = new _.Consequence().error( err );
+
+  var o =
+  {
+    execPath : 'unknown command',
+    ready,
+    sync : 1,
+    throwingExitCode : 0,
+  };
+
+  test.shouldThrowErrorSync( () => _.process.start( o ) );
+}
+
+shouldThrowErrorSyncProcessHasErrorBefore.experimental = 1;
+
+//
+
 function detachedDisconnectedChildProcess( test )
 {
   var suite = wTestSuite
@@ -131,8 +152,8 @@ function detachedDisconnectedChildProcess( test )
     routineTimeOut : 3000,
     processWatching : 1,
     name : 'DetachedProcess',
-    
-    context : 
+
+    context :
     {
       suiteTempPath : null,
       toolsPath : null,
@@ -153,7 +174,7 @@ function detachedDisconnectedChildProcess( test )
 
   var result = suite.run();
 
-  result.finally( ( err, got ) =>
+  result.finally( ( _err, got ) =>
   {
     test.identical( suite.report.errorsArray.length, 1 );
 
@@ -235,6 +256,7 @@ let Self =
   tests :
   {
     main,
+    shouldThrowErrorSyncProcessHasErrorBefore,
     detachedDisconnectedChildProcess
   }
 

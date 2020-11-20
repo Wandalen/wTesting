@@ -15,7 +15,7 @@ How to create screenshow of whole page and selected DOM element.
   await app.client.waitUntilTextExists( 'p','Hello world', 5000 )
   
   var screenshot = await app.browserWindow.capturePage();
-  test.is( _.bufferNodeIs( screenshot ) )
+  test.true( _.bufferNodeIs( screenshot ) )
 
   await app.stop();
 ```
@@ -35,17 +35,17 @@ How to create screenshow of whole page and selected DOM element.
     
   test.case = 'screenshot whole window'
   var screenshot = await page.screenshot();
-  test.is( _.bufferNodeIs( screenshot ) )
+  test.true( _.bufferNodeIs( screenshot ) )
   
   test.case = 'screenshot whole window and save to disk'
   var path = _.path.nativize( _.path.join( __dirname, 'screenshot.png' ) );
   await page.screenshot({ path });
-  test.is( _.fileProvider.fileExists( path ) )
+  test.true( _.fileProvider.fileExists( path ) )
   
   test.case = 'screenshot element'
   var element = await page.$( '#search');
   var screenshot = await element.screenshot();
-  test.is( _.bufferNodeIs( screenshot ) )
+  test.true( _.bufferNodeIs( screenshot ) )
 
   await browser.close();
 ```

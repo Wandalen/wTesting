@@ -849,6 +849,20 @@ function _end( err )
     return suite;
   });
 
+  /* - process watcher - */
+
+  if( suite.processWatching )
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+    return suite.processWatchingEnd();
+  });
+
+  /*
+  process watcher should follow setting state and process exit code
+  otherwise process exit from test routine will not give negative result of testing
+  */
+
   /* - log - */
 
   ready.finally( ( err2, arg ) =>
@@ -911,20 +925,6 @@ function _end( err )
 
     return arg || null;
   });
-
-  /* - process watcher - */
-
-  if( suite.processWatching )
-  ready.finally( ( err2, arg ) =>
-  {
-    err = err || err2;
-    return suite.processWatchingEnd();
-  });
-
-  /*
-  process watcher should follow setting state and process exit code
-  otherwise process exit from test routine will not give negative result of testing
-  */
 
   /* - after - */
 

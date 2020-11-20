@@ -177,7 +177,7 @@
 </details>
 
 <details>
-  <summary><a href="./tutorial/TestRoutineBasicTechnics.md">
+  <summary><a href="./tutorial/TestIntrospectorBasicTechnics.md">
     Техніка розробки тестів
   </a></summary>
     Описано базові навички написання тест рутин та найпоширеніші помилки.
@@ -310,3 +310,4 @@
     Використання кольорового звіту.
 </details>
 -->
+

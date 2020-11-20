@@ -472,6 +472,8 @@ function _testingEndSoon()
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
+  tester._reportEnd();
+
   if( tester._reportIsPositive() )
   return _.time.out( tester.settings.sanitareTime, () => tester._testingEndNow() );
   else
@@ -486,6 +488,9 @@ function _testingEndNow()
 {
   let tester = this;
   let logger = tester.logger;
+
+  tester._reportEnd();
+
   let ok = tester._reportIsPositive();
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
@@ -987,7 +992,7 @@ function _reportBegin()
   report.timeSpent = null;
   report.errorsArray = [];
   report.includeErrorsArray = [];
-  report.appExitCode = null;
+  report.exitCode = null;
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
@@ -1011,10 +1016,10 @@ function _reportEnd()
   let tester = this;
   let report = tester.report;
 
-  if( !report.appExitCode )
-  report.appExitCode = _.process.exitCode();
+  // if( !report.exitCode ) /* xxx yyy */
+  // report.exitCode = _.process.exitCode();
 
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )
   report.outcome = false;
 
   if( report.testCheckFails !== 0 )
@@ -1053,8 +1058,8 @@ function _reportToStr()
   let msg = '';
   let errorsCount = report.errorsArray.length + report.includeErrorsArray.length;
 
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
-  msg = 'ExitCode : ' + report.appExitCode + '\n';
+  if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )
+  msg = 'ExitCode : ' + report.exitCode + '\n';
 
   /*
     qqq : cover case when all passes testing, but it has include error
@@ -1083,7 +1088,7 @@ function _reportIsPositive()
   if( !report )
   return false;
 
-  tester._reportEnd();
+  // tester._reportEnd();
 
   return report.outcome;
 }
@@ -1150,7 +1155,6 @@ function _testCheckConsider( outcome )
   let tester = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  // _.assert( tester === Self );
 
   if( outcome )
   {
@@ -1183,14 +1187,19 @@ function _testCaseConsider( outcome )
 
 //
 
-function _testRoutineConsider( outcome )
+function _testRoutineConsider( routineReport )
 {
   let tester = this;
   let report = tester.report;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( _.mapIs( routineReport ) );
 
-  if( outcome )
+  if( routineReport.exitCode !== undefined && routineReport.exitCode !== null && routineReport.exitCode !== 0 )
+  if( !report.exitCode )
+  report.exitCode = routineReport.exitCode;
+
+  if( routineReport.outcome )
   {
     report.testRoutinePasses += 1;
   }
@@ -1203,14 +1212,19 @@ function _testRoutineConsider( outcome )
 
 //
 
-function _testSuiteConsider( outcome )
+function _testSuiteConsider( suiteReport )
 {
   let tester = this;
   let report = tester.report;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( _.mapIs( suiteReport ) );
 
-  if( outcome )
+  if( suiteReport.exitCode !== undefined && suiteReport.exitCode !== null && suiteReport.exitCode !== 0 )
+  if( !report.exitCode )
+  report.exitCode = suiteReport.exitCode;
+
+  if( suiteReport.outcome )
   {
     report.testSuitePasses += 1;
   }
@@ -1227,7 +1241,6 @@ function _exceptionConsider( err )
 {
   let tester = this;
   _.assert( arguments.length === 1, 'Expects single argument' );
-  // tester.report.errorsArray.push( err );
   _.arrayAppendOnce( tester.report.errorsArray, err );
 }
 
@@ -1263,7 +1276,7 @@ let ApplicationArgumentsMap =
   + `Accepts time in milliseconds. Default value is 2000ms.`,
   negativity :
   `Restricts the console output of passed routines and increases output of failed test checks. `
-  + `Accepts a value from 0 to 9. Default value is 1.`,
+  + `Accepts a value from 0 to 9. Default value is 1.`, /* qqq for Dmytro : use multiline string. ask */
   silencing : `Enables hiding the console output from the test unit. Accepts 0 or 1. Default value is 0.`,
   shoulding : `Disables negative testing. Accepts 0 or 1. Default value is 0.`,
   fails : `Sets the number of errors received to interrupt the test. Accepts number of fails. By default is unlimited.`,

@@ -380,6 +380,9 @@ function _runBegin()
 
   _.arrayAppendOnceStrictly( wTester.activeRoutines, trd );
 
+  /*
+  store exit code to restore it later
+  */
   trd._exitCode = _.process.exitCode( 0 );
   suite._hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
 
@@ -441,10 +444,6 @@ function _runEnd()
     trd._timeLimitErrorCon.error( _.dont );
   }
 
-  if( suite.takingIntoAccount )
-  if( trd._exitCode && !_.process.exitCode() )
-  trd._exitCode = _.process.exitCode( trd._exitCode );
-
   let _hasConsoleInOutputs = suite.logger.hasOutput( console, { deep : 0, withoutOutputToOriginal : 0 } );
   if( suite._hasConsoleInOutputs !== _hasConsoleInOutputs && !wTester._canceled )
   {
@@ -501,7 +500,7 @@ function _runEnd()
   let ok = trd._reportIsPositive();
   try
   {
-    suite.onRoutineEnd.call( trd.context, trd, ok );
+    suite.onRoutineEnd.call( trd.context, trd, ok ); /* xxx qqq : may return consequence! should pass error if thrown */
     if( trd.eventGive )
     trd.eventGive({ kind : 'routineEnd', testRoutine : trd, context : trd.context });
   }
@@ -511,9 +510,15 @@ function _runEnd()
     ok = false;
   }
 
+  /* restoring exit code */
+
+  // if( suite.takingIntoAccount )
+  if( trd._exitCode && !_.process.exitCode() )
+  trd._exitCode = _.process.exitCode( trd._exitCode );
+
   /* */
 
-  suite._testRoutineConsider( ok );
+  suite._testRoutineConsider( trd.report );
 
   suite.currentRoutine = null;
 
@@ -1648,13 +1653,10 @@ function _reportBegin()
   report.outcome = null;
   report.timeSpent = null;
   report.errorsArray = [];
-  report.appExitCode = null; /* xxx */
+  report.exitCode = null;
 
   report.testCheckPasses = 0;
   report.testCheckFails = 0;
-
-  // report.testCheckPassesOfTestCase = 0;
-  // report.testCheckFailsOfTestCase = 0;
 
   report.testCasePasses = 0;
   report.testCaseFails = 0;
@@ -1669,10 +1671,10 @@ function _reportEnd()
   let trd = this;
   let report = trd.report;
 
-  if( !report.appExitCode )
-  report.appExitCode = _.process.exitCode();
+  if( !report.exitCode )
+  report.exitCode = _.process.exitCode();
 
-  if( report.appExitCode !== undefined && report.appExitCode !== null && report.appExitCode !== 0 )
+  if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )
   report.outcome = false;
 
   if( trd.report.testCheckFails !== 0 )
@@ -1700,7 +1702,7 @@ function _reportIsPositive()
   if( !report )
   return false;
 
-  trd._reportEnd();
+  // trd._reportEnd(); // yyy
 
   return report.outcome;
 }

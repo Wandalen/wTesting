@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../Tools.s' );
 
-  require( '../tester/entry/Main.s' );
+  require( '../testing/entry/Main.s' );
   _.include( 'wFiles' );
 
   Puppeteer = require( 'puppeteer' );
@@ -28,7 +28,7 @@ function onSuiteBegin()
 
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
-  self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
+  self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Exec' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.puppeteerPath = require.resolve( 'puppeteer' );
 }
@@ -120,7 +120,7 @@ function html( test )
     return page.$eval( '.class1 a', ( e ) => e.href )
     .then( ( got ) =>
     {
-      test.is( _.strEnds( got, 'index.html' ) );
+      test.true( _.strEnds( got, 'index.html' ) );
       return got;
     })
   })
@@ -187,7 +187,7 @@ async function htmlAwait( test )
 
   test.case = 'Check href attribute'
   var got = await page.$eval( '.class1 a', ( e ) => e.href );
-  test.is( _.strEnds( got, 'index.html' ) );
+  test.true( _.strEnds( got, 'index.html' ) );
 
   test.case = 'Check input field value'
   var got = await page.$eval( '#input1', ( e ) => e.value )
@@ -225,7 +225,7 @@ async function htmlAwait( test )
 //   test.identical( got, 'Text1' )
 
 //   var got = page.$eval( '.class1 a', ( e ) => e.href )
-//   test.is( _.strEnds( got,'index.html' ) );
+//   test.true( _.strEnds( got,'index.html' ) );
 
 //   var got = page.$eval( '#input1', ( e ) => e.value )
 //   test.identical( got, '123' );

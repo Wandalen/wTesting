@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../../wtools/Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../tester/entry/Main.s' );
+  require( '../testing/entry/Main.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
@@ -146,7 +146,7 @@ function inherit( test )
   return suit.run()
   .finally( function()
   {
-    test.is( test.report.testCheckPasses > 8  );
+    test.true( test.report.testCheckPasses > 8  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
     test.identical( _.mapOwnKeys( suit.tests ).length, 2 );

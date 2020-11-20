@@ -62,7 +62,7 @@ async function browser( test )
 
   test.case = 'check userAgent'
   var userAgent = await app.webContents.getUserAgent();
-  test.is( _.strHas( userAgent, 'Electron' ) );
+  test.true( _.strHas( userAgent, 'Electron' ) );
 
   await app.stop();
 

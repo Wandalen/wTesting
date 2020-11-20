@@ -61,7 +61,7 @@ async function page( test )
 
   test.case = 'Check Page html'
   var html = await app.client.execute( () => document.documentElement.outerHTML );
-  test.is( _.strHas( html, '<p>Hello world</p>' ) );
+  test.true( _.strHas( html, '<p>Hello world</p>' ) );
 
   await app.stop();
 

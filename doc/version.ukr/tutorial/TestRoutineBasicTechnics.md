@@ -48,10 +48,10 @@ var dst2 = [ 1, 1, 1 ];
 var got = _.arrayRemove( dst1, 1 );
 var expected = [];
 test.identical( got, expected );
-test.is( got === dst1 );
+test.true( got === dst1 );
 var got = _.arrayRemove( dst2, 1 );
 test.identical( got, expected );
-test.is( got === dst2 );
+test.true( got === dst2 );
 ```
 
 Приведений тест кейс має бути розділеним:
@@ -62,14 +62,14 @@ var dst = [];
 var got = _.arrayRemove( dst, 1 );
 var expected = [];
 test.identical( got, expected );
-test.is( got === dst );
+test.true( got === dst );
 
 test.case = 'dst contains only searched element, expects empty array';
 var dst = [ 1, 1, 1 ];
 var got = _.arrayRemove( dst2, 1 );
 var expected = [];
 test.identical( got, expected );
-test.is( got === dst2 );
+test.true( got === dst2 );
 ```
 
 #### Правильне розміщення змінних тест кейсів
@@ -148,9 +148,9 @@ var ins = 'str';
 var got = _.arrayAppend( dst, ins );
 var expected = [ 'str' ];
 test.identical( got, expected );
-test.is( got !== dst );
-test.is( got !== ins );
-test.is( got[ 0 ] === ins );
+test.true( got !== dst );
+test.true( got !== ins );
+test.true( got[ 0 ] === ins );
 ```
 
 #### Збитковість вхідних даних

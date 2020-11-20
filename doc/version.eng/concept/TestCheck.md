@@ -57,10 +57,10 @@ It returns `true` if the test check is passed and` false` if the test check fail
 
 ```js
 var got = true;
-test.is( got );
+test.true( got );
 ```
 
-The `test.is` check will be passed as the `got` variable is `true` during the test.
+The `test.true` check will be passed as the `got` variable is `true` during the test.
 
 ##### Test check `isNot`
 
@@ -72,10 +72,10 @@ The check fails if the argument is `true-like`, that is,` true` or the numeric v
 
 ```js
 var got = false;
-test.isNot( got );
+test.false( got );
 ```
 
-The `test.isNot` check will be passed as the `got` variable is `false` during the test.
+The `test.false` check will be passed as the `got` variable is `false` during the test.
 
 ##### Test check `identical`
 

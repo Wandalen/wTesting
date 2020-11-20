@@ -53,7 +53,7 @@ async function page( test )
 
   test.case = 'Get page html'
   var html = await page.content();
-  test.is( _.strHas( html, '<p>Hello world</p>' ) );
+  test.true( _.strHas( html, '<p>Hello world</p>' ) );
 
   await browser.close();
 

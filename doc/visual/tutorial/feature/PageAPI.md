@@ -28,7 +28,7 @@ This sample shows how to get page HTML code.
 
   test.case = 'Check Page html'
   var html = await app.client.execute( () => document.documentElement.outerHTML );
-  test.is( _.strHas( html.value, '<p>Hello world</p>' ) );
+  test.true( _.strHas( html.value, '<p>Hello world</p>' ) );
 
   await app.stop();
 ```
@@ -44,7 +44,7 @@ This sample shows how to get page HTML code.
 
   test.case = 'Get page html'
   var html = await page.content();
-  test.is( _.strHas( html, '<p>Hello world</p>' ) );
+  test.true( _.strHas( html, '<p>Hello world</p>' ) );
 
   await browser.close();
 ```

@@ -60,7 +60,7 @@ async function screenshots( test )
   await app.client.waitUntilTextExists( 'p', 'Hello world', 5000 )
 
   var screenshot = await app.browserWindow.capturePage();
-  test.is( _.bufferNodeIs( screenshot ) )
+  test.true( _.bufferNodeIs( screenshot ) )
 
   await app.stop();
 

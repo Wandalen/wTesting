@@ -48,7 +48,7 @@ async function device( test )
   test.case = 'emulate iphone and check userAgent'
   await page.emulate( Puppeteer.devices[ 'iPhone 6' ] );
   let agent = await page.evaluate( () => window.navigator.userAgent )
-  test.is( _.strHas( agent, 'iPhone' ) )
+  test.true( _.strHas( agent, 'iPhone' ) )
 
   await browser.close();
 

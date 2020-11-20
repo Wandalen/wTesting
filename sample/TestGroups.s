@@ -46,9 +46,9 @@ Test case is the lowest level of test group and `test.case` expects no closing, 
   test.will = 'preserve src2';
   test.identical( src2, src2Copy );
   test.will = 'return not src1';
-  test.is( got !== src1 );
+  test.true( got !== src1 );
   test.will = 'return not src2';
-  test.is( got !== src2 );
+  test.true( got !== src2 );
 
   test.close( 'first argument is null' );
 ```
@@ -100,9 +100,9 @@ function mapExtend( test )
   test.will = 'preserve src2';
   test.identical( src2, src2Copy );
   test.will = 'return not src1';
-  test.is( got !== src1 );
+  test.true( got !== src1 );
   test.will = 'return not src2';
-  test.is( got !== src2 );
+  test.true( got !== src2 );
 
   test.case = 'rewriting'; /* */
   var src1 = { a : 1, b : 2 };
@@ -118,9 +118,9 @@ function mapExtend( test )
   test.will = 'preserve src2';
   test.identical( src2, src2Copy );
   test.will = 'return not src1';
-  test.is( got !== src1 );
+  test.true( got !== src1 );
   test.will = 'return not src2';
-  test.is( got !== src2 );
+  test.true( got !== src2 );
 
   test.close( 'first argument is null' );
 
@@ -139,9 +139,9 @@ function mapExtend( test )
   test.will = 'preserve src2';
   test.identical( src2, src2Copy );
   test.will = 'return dst';
-  test.is( got === dst );
+  test.true( got === dst );
   test.will = 'return not src2';
-  test.is( got !== src2 );
+  test.true( got !== src2 );
 
   test.case = 'rewriting'; /* */
   var dst = { a : 1, b : 2 };
@@ -154,9 +154,9 @@ function mapExtend( test )
   test.will = 'preserve src2';
   test.identical( src2, src2Copy );
   test.will = 'return not dst';
-  test.is( got === dst );
+  test.true( got === dst );
   test.will = 'return not src2';
-  test.is( got !== src2 );
+  test.true( got !== src2 );
 
   test.close( 'first argument is dst' );
 

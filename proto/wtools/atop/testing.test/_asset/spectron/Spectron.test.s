@@ -129,8 +129,8 @@ async function waitForVisibleInViewportThrowing( test )
   }
   finally
   {
-    test.is( _.errIs( err ) );
-    test.is( !app.isRunning() )
+    test.true( _.errIs( err ) );
+    test.true( !app.isRunning() )
   }
 }
 

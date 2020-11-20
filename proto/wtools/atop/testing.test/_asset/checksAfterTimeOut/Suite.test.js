@@ -17,7 +17,7 @@ function routine1( test )
     console.log( 'v1' );
     test.identical( 1, 1 );
     test.equivalent( 1, 1 );
-    test.is( true );
+    test.true( true );
     test.ge( 5, 0 );
     console.log( 'v2' );
   });

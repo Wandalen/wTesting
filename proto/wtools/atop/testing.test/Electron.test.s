@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../Tools.s' );
 
-  require( '../tester/entry/Main.s' );
+  require( '../testing/entry/Main.s' );
 
   _.include( 'wFiles' );
 
@@ -30,7 +30,7 @@ function onSuiteBegin()
   let self = this;
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
-  self.appStartNonThrowing = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Main.s' ) );
+  self.appStartNonThrowing = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Main.s' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
   self.spectronPath = require.resolve( 'spectron' );
   self.electronPath = require.resolve( 'electron' );
@@ -121,7 +121,7 @@ function html( test )
     return app.client.$( '.class1 a' ).then( ( e ) => e.getAttribute( 'href' ) )
     .then( ( got ) =>
     {
-      test.is( _.strEnds( got, '/index.html' ) )
+      test.true( _.strEnds( got, '/index.html' ) )
     })
   })
 
@@ -178,7 +178,7 @@ async function htmlAwait( test )
 
   test.case = 'Check href attribute'
   var got = await app.client.$( '.class1 a' ).then( ( e) => e.getAttribute( 'href' ) );
-  test.is( _.strEnds( got, '/index.html' ) )
+  test.true( _.strEnds( got, '/index.html' ) )
 
   test.case = 'Check input field value'
   var got = await app.client.$( '#input1' ).then( ( e ) => e.getValue() );
@@ -213,7 +213,7 @@ function consequenceFromExperiment( test )
 
   let ready = app.start();
 
-  test.is( _.promiseIs( ready ) );
+  test.true( _.promiseIs( ready ) );
 
   ready.then( () => app.client.waitUntilTextExists( 'p', 'Hello world', 5000 ) )
 

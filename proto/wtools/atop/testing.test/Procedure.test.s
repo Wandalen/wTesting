@@ -8,7 +8,7 @@ if( typeof module !== 'undefined' )
 
   let _ = require( '../../Tools.s' );
 
-  require( '../tester/entry/Main.s' );
+  require( '../testing/entry/Main.s' );
 
   _.include( 'wProcess' );
   _.include( 'wProcedure' );
@@ -28,7 +28,7 @@ function onSuiteBegin()
 
   context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   context.assetsOriginalPath = _.path.join( __dirname, '_asset' );
-  context.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../tester/entry/Exec' ) );
+  context.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Exec' ) );
 
 }
 

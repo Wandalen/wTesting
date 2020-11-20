@@ -248,11 +248,11 @@ function _accuracySet( accuracy )
     suite.accuracyExplicitly = accuracy;
   }
 
-  _.assert( _.numberIs( accuracy ) || _.rangeIs( accuracy ), 'Expects number {-accuracy-}' );
+  _.assert( _.numberIs( accuracy ) || _.intervalIs( accuracy ), 'Expects number {-accuracy-}' );
   suite[ accuracySymbol ] = accuracy;
 
   if( suite._formed )
-  suite.routineEach( ( trd ) => trd._accuracyChange() );
+  suite.routineEach( ( tro ) => tro._accuracyChange() );
 
   return accuracy;
 }
@@ -459,16 +459,16 @@ function _form()
 
     _.assert( _.routineIs( testRoutine ) );
 
-    let trd = wTester.TestRoutine
+    let tro = wTester.TestRoutine
     ({
       name : testRoutineName,
       routine : testRoutine,
       suite,
     });
 
-    trd.form();
+    tro.form();
 
-    _.assert( suite.tests[ testRoutineName ] === trd )
+    _.assert( suite.tests[ testRoutineName ] === tro )
   }
 
   /* validate */
@@ -526,7 +526,7 @@ function _runNow()
     onEachRoutine : handleRoutine,
     onBegin : handleBegin,
     onEnd : handleEnd,
-    onRoutine : ( trd ) => trd.routine,
+    onRoutine : ( tro ) => tro.routine,
     delay : 10,
   };
   let r = _.execStages( testRoutines, op );
@@ -535,9 +535,9 @@ function _runNow()
 
   /* */
 
-  function handleRoutine( trd, iteration, iterator )
+  function handleRoutine( tro, iteration, iterator )
   {
-    return suite._testRoutineRun( trd );
+    return suite._testRoutineRun( tro );
   }
 
   /* */
@@ -584,7 +584,7 @@ function _begin()
   /*
   store exit code to restore it later
   */
-  suite._exitCode = _.process.exitCode( 0 ); /* xxx : ? */
+  suite._exitCode = _.process.exitCode( 0 );
   suite._reportBegin();
 
   /* tracking */
@@ -675,7 +675,7 @@ function _begin()
       suite.exceptionReport({ err, unbarring : 1 });
       throw err;
     }
-    if( !wTester._canContinue() ) /* xxx qqq : cover */
+    if( !wTester._canContinue() )
     {
       debugger;
       return false;
@@ -958,6 +958,8 @@ function _terminated()
   {
     err = _.errBrief( 'Unexpected termination' );
     _.errReason( err, 'unexpected termination' );
+    if( !_.process.exitCode() )
+    _.process.exitCode( 1 );
     // err = _.errBrief( 'Terminated by user' );
     // _.errReason( err, 'terminated by user' );
   }
@@ -1024,7 +1026,7 @@ function onSuiteEnd( t )
 // test routine
 // --
 
-function _testRoutineRun( trd )
+function _testRoutineRun( tro )
 {
   let suite = this;
   let report = suite.report;
@@ -1034,7 +1036,7 @@ function _testRoutineRun( trd )
   if( !wTester._canContinue() )
   return null;
 
-  if( !trd.runnable )
+  if( !tro.runnable )
   return null;
 
   /* */
@@ -1042,7 +1044,7 @@ function _testRoutineRun( trd )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   return suite._routineCon
-  .then( () => trd._run() )
+  .then( () => tro._run() )
   .split();
 
 }

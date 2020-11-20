@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../../wtools/Tools.s' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../tester/entry/Main.s' );
+  require( '../testing/entry/Main.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );
@@ -221,8 +221,8 @@ function returnsSingleResource( test )
 
         c1.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === null );
+          test.true( err === undefined );
+          test.true( arg === null );
         });
         return null;
       });
@@ -253,8 +253,8 @@ function returnsSingleResource( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'msg' );
+          test.true( err === undefined );
+          test.true( arg === 'msg' );
         });
         return null;
       });
@@ -286,9 +286,9 @@ function returnsSingleResource( test )
 
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'error1' ) );
         });
         return null;
       });
@@ -328,9 +328,9 @@ function returnsSingleResource( test )
 
         c4.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'error1' ) );
         });
         return null;
       });
@@ -364,8 +364,8 @@ function returnsSingleResource( test )
 
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.timerIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.timerIs( arg ) );
         });
         return null;
       });
@@ -408,9 +408,9 @@ function returnsSingleResource( test )
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -454,9 +454,9 @@ function returnsSingleResource( test )
 
         c7.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -488,8 +488,8 @@ function returnsSingleResource( test )
 
         c8.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'arg' );
+          test.true( err === undefined );
+          test.true( arg === 'arg' );
         });
         return null;
       });
@@ -520,9 +520,9 @@ function returnsSingleResource( test )
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'error1' ) );
         });
         return null;
       });
@@ -606,8 +606,8 @@ function returnsSingleResource_( test )
 
         c1.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === null );
+          test.true( err === undefined );
+          test.true( arg === null );
         });
         return null;
       });
@@ -638,8 +638,8 @@ function returnsSingleResource_( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'msg' );
+          test.true( err === undefined );
+          test.true( arg === 'msg' );
         });
         return null;
       });
@@ -671,9 +671,9 @@ function returnsSingleResource_( test )
 
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'error1' ) );
         });
         return null;
       });
@@ -713,9 +713,9 @@ function returnsSingleResource_( test )
 
         c4.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'error1' ) );
         });
         return null;
       });
@@ -749,8 +749,8 @@ function returnsSingleResource_( test )
 
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.timerIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.timerIs( arg ) );
         });
         return null;
       });
@@ -793,9 +793,9 @@ function returnsSingleResource_( test )
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -839,9 +839,9 @@ function returnsSingleResource_( test )
 
         c7.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -873,8 +873,8 @@ function returnsSingleResource_( test )
 
         c8.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'arg' );
+          test.true( err === undefined );
+          test.true( arg === 'arg' );
         });
         return null;
       });
@@ -905,9 +905,9 @@ function returnsSingleResource_( test )
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'error1' ) );
         });
         return null;
       });
@@ -988,8 +988,8 @@ function mustNotThrowError( test )
 
         c1.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === null );
+          test.true( err === undefined );
+          test.true( arg === null );
         });
         return null;
       });
@@ -1021,8 +1021,8 @@ function mustNotThrowError( test )
 
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'msg' );
+          test.true( err === undefined );
+          test.true( arg === 'msg' );
         });
         return null;
       });
@@ -1054,8 +1054,8 @@ function mustNotThrowError( test )
 
         c3.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1094,8 +1094,8 @@ function mustNotThrowError( test )
 
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1127,8 +1127,8 @@ function mustNotThrowError( test )
 
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.timerIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.timerIs( arg ) );
         });
         return null;
       });
@@ -1172,9 +1172,9 @@ function mustNotThrowError( test )
 
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1218,8 +1218,8 @@ function mustNotThrowError( test )
 
         c7.give( ( err, arg ) =>
         {
-          test.is( _.strHas( _.err( err ).message, 'error1' ) );
-          test.is( !arg );
+          test.true( _.strHas( _.err( err ).message, 'error1' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1251,8 +1251,8 @@ function mustNotThrowError( test )
 
         c8.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'arg' );
+          test.true( err === undefined );
+          test.true( arg === 'arg' );
         });
         return null;
       });
@@ -1284,8 +1284,8 @@ function mustNotThrowError( test )
 
         c9.give( ( err, arg ) =>
         {
-          test.is( _.strHas( _.err( err ).message, 'error1' ) );
-          test.is( !arg );
+          test.true( _.strHas( _.err( err ).message, 'error1' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1367,8 +1367,8 @@ function mustNotThrowErrorWithCallback( test )
         test.identical( c1.resourcesGet().length, 1 );
         c1.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === null );
+          test.true( err === undefined );
+          test.true( arg === null );
         });
         return null;
       });
@@ -1403,8 +1403,8 @@ function mustNotThrowErrorWithCallback( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'msg' );
+          test.true( err === undefined );
+          test.true( arg === 'msg' );
         });
         return null;
       });
@@ -1435,14 +1435,14 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'test' ) );
+        test.true( _.strHas( errStack[ 0 ], 'test' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c3.resourcesGet().length, 1 );
         c3.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1481,14 +1481,14 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'test' ) );
+        test.true( _.strHas( errStack[ 0 ], 'test' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1519,14 +1519,14 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.timerIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.timerIs( arg ) );
         });
         return null;
       });
@@ -1570,15 +1570,15 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1622,14 +1622,14 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c7.resourcesGet().length, 1 );
         c7.give( ( err, arg ) =>
         {
-          test.is( _.strHas( _.err( err ).message, 'error1' ) );
-          test.is( !arg );
+          test.true( _.strHas( _.err( err ).message, 'error1' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1660,14 +1660,14 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c8.resourcesGet().length, 1 );
         c8.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'arg' );
+          test.true( err === undefined );
+          test.true( arg === 'arg' );
         });
         return null;
       });
@@ -1699,14 +1699,14 @@ function mustNotThrowErrorWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( _.strHas( _.err( err ).message, 'error1' ) );
-          test.is( !arg );
+          test.true( _.strHas( _.err( err ).message, 'error1' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1788,8 +1788,8 @@ function mustNotThrowError_WithCallback( test )
         test.identical( c1.resourcesGet().length, 1 );
         c1.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === null );
+          test.true( err === undefined );
+          test.true( arg === null );
         });
         return null;
       });
@@ -1824,8 +1824,8 @@ function mustNotThrowError_WithCallback( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'msg' );
+          test.true( err === undefined );
+          test.true( arg === 'msg' );
         });
         return null;
       });
@@ -1856,14 +1856,14 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'test' ) );
+        test.true( _.strHas( errStack[ 0 ], 'test' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c3.resourcesGet().length, 1 );
         c3.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1902,14 +1902,14 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'test' ) );
+        test.true( _.strHas( errStack[ 0 ], 'test' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -1940,14 +1940,14 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.timerIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.timerIs( arg ) );
         });
         return null;
       });
@@ -1991,15 +1991,15 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -2043,14 +2043,14 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c7.resourcesGet().length, 1 );
         c7.give( ( err, arg ) =>
         {
-          test.is( _.strHas( _.err( err ).message, 'error1' ) );
-          test.is( !arg );
+          test.true( _.strHas( _.err( err ).message, 'error1' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -2081,14 +2081,14 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c8.resourcesGet().length, 1 );
         c8.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( arg === 'arg' );
+          test.true( err === undefined );
+          test.true( arg === 'arg' );
         });
         return null;
       });
@@ -2120,14 +2120,14 @@ function mustNotThrowError_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( _.strHas( _.err( err ).message, 'error1' ) );
-          test.is( !arg );
+          test.true( _.strHas( _.err( err ).message, 'error1' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -2231,7 +2231,7 @@ function shouldThrowErrorSync( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( _.errIs( c2 ) );
+        test.true( _.errIs( c2 ) );
         return null;
       });
     });
@@ -2427,8 +2427,8 @@ function shouldThrowErrorSync( test )
         test.identical( c80.resourcesGet().length, 1 );
         c80.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -2508,7 +2508,7 @@ function shouldThrowErrorSyncWithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.isNot( c1 );
+        test.false( c1 );
         return null;
       });
     });
@@ -2539,7 +2539,7 @@ function shouldThrowErrorSyncWithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( _.errIs( c2 ) );
+        test.true( _.errIs( c2 ) );
         return null;
       });
     });
@@ -2569,7 +2569,7 @@ function shouldThrowErrorSyncWithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2578,7 +2578,7 @@ function shouldThrowErrorSyncWithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( c3 === false );
+        test.true( c3 === false );
         return null;
       });
     });
@@ -2605,7 +2605,7 @@ function shouldThrowErrorSyncWithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2614,7 +2614,7 @@ function shouldThrowErrorSyncWithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( c4 === false );
+        test.true( c4 === false );
         return null;
       });
     });
@@ -2650,7 +2650,7 @@ function shouldThrowErrorSyncWithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2659,7 +2659,7 @@ function shouldThrowErrorSyncWithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( c5 === false );
+        test.true( c5 === false );
         return null;
       });
     })
@@ -2695,7 +2695,7 @@ function shouldThrowErrorSyncWithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2728,7 +2728,7 @@ function shouldThrowErrorSyncWithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2762,7 +2762,7 @@ function shouldThrowErrorSyncWithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2775,8 +2775,8 @@ function shouldThrowErrorSyncWithCallback( test )
         test.identical( c80.resourcesGet().length, 1 );
         c80.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -2856,7 +2856,7 @@ function shouldThrowErrorSync_WithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.isNot( c1 );
+        test.false( c1 );
         return null;
       });
     });
@@ -2887,7 +2887,7 @@ function shouldThrowErrorSync_WithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( _.errIs( c2 ) );
+        test.true( _.errIs( c2 ) );
         return null;
       });
     });
@@ -2917,7 +2917,7 @@ function shouldThrowErrorSync_WithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2926,7 +2926,7 @@ function shouldThrowErrorSync_WithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( c3 === false );
+        test.true( c3 === false );
         return null;
       });
     });
@@ -2953,7 +2953,7 @@ function shouldThrowErrorSync_WithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -2962,7 +2962,7 @@ function shouldThrowErrorSync_WithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( c4 === false );
+        test.true( c4 === false );
         return null;
       });
     });
@@ -2998,7 +2998,7 @@ function shouldThrowErrorSync_WithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -3007,7 +3007,7 @@ function shouldThrowErrorSync_WithCallback( test )
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
         counter.next();
 
-        test.is( c5 === false );
+        test.true( c5 === false );
         return null;
       });
     })
@@ -3043,7 +3043,7 @@ function shouldThrowErrorSync_WithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -3076,7 +3076,7 @@ function shouldThrowErrorSync_WithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -3110,7 +3110,7 @@ function shouldThrowErrorSync_WithCallback( test )
       counter.next();
 
       test.identical( errStack.length, 2 );
-      test.is( _.consequenceIs( errStack[ 0 ] ) );
+      test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
       return _.time.out( 500, () =>
@@ -3123,8 +3123,8 @@ function shouldThrowErrorSync_WithCallback( test )
         test.identical( c80.resourcesGet().length, 1 );
         c80.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3172,7 +3172,7 @@ function shouldThrowErrorAsync( test )
 
   var counter = new CheckCounter();
 
-  test.is( test.logger.outputs.length > 0 );
+  test.true( test.logger.outputs.length > 0 );
 
   function r1( t )
   {
@@ -3205,8 +3205,8 @@ function shouldThrowErrorAsync( test )
 
         c1.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3241,8 +3241,8 @@ function shouldThrowErrorAsync( test )
 
         c2.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3280,8 +3280,8 @@ function shouldThrowErrorAsync( test )
 
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
         });
         return null;
       });
@@ -3316,8 +3316,8 @@ function shouldThrowErrorAsync( test )
 
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3360,8 +3360,8 @@ function shouldThrowErrorAsync( test )
 
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -3404,8 +3404,8 @@ function shouldThrowErrorAsync( test )
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3449,9 +3449,9 @@ function shouldThrowErrorAsync( test )
 
         c7.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3483,8 +3483,8 @@ function shouldThrowErrorAsync( test )
 
         c8.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3515,8 +3515,8 @@ function shouldThrowErrorAsync( test )
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -3541,7 +3541,7 @@ function shouldThrowErrorAsync( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.is( test.logger.outputs.length > 0 );
+    test.true( test.logger.outputs.length > 0 );
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck.checkIndex, 19 );
     test.identical( suite.report.testCheckPasses, 12 );
@@ -3567,7 +3567,7 @@ function shouldThrowErrorAsyncWithCallback( test )
 
   var counter = new CheckCounter();
 
-  test.is( test.logger.outputs.length > 0 );
+  test.true( test.logger.outputs.length > 0 );
 
   function r1( t )
   {
@@ -3605,8 +3605,8 @@ function shouldThrowErrorAsyncWithCallback( test )
         test.identical( c1.resourcesGet().length, 1 );
         c1.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3642,8 +3642,8 @@ function shouldThrowErrorAsyncWithCallback( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3686,8 +3686,8 @@ function shouldThrowErrorAsyncWithCallback( test )
         test.identical( c3.resourcesGet().length, 1 );
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
         });
         return null;
       });
@@ -3722,14 +3722,14 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3771,14 +3771,14 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -3821,14 +3821,14 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3871,15 +3871,15 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c7.resourcesGet().length, 1 );
         c7.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3914,8 +3914,8 @@ function shouldThrowErrorAsyncWithCallback( test )
         test.identical( c8.resourcesGet().length, 1 );
         c8.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -3946,14 +3946,14 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -3978,7 +3978,7 @@ function shouldThrowErrorAsyncWithCallback( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.is( test.logger.outputs.length > 0 );
+    test.true( test.logger.outputs.length > 0 );
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck.checkIndex, 19 );
     test.identical( suite.report.testCheckPasses, 12 );
@@ -4004,7 +4004,7 @@ function shouldThrowErrorAsync_WithCallback( test )
 
   var counter = new CheckCounter();
 
-  test.is( test.logger.outputs.length > 0 );
+  test.true( test.logger.outputs.length > 0 );
 
   function r1( t )
   {
@@ -4042,8 +4042,8 @@ function shouldThrowErrorAsync_WithCallback( test )
         test.identical( c1.resourcesGet().length, 1 );
         c1.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4079,8 +4079,8 @@ function shouldThrowErrorAsync_WithCallback( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4123,8 +4123,8 @@ function shouldThrowErrorAsync_WithCallback( test )
         test.identical( c3.resourcesGet().length, 1 );
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
         });
         return null;
       });
@@ -4159,14 +4159,14 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4208,14 +4208,14 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -4258,14 +4258,14 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4308,15 +4308,15 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c7.resourcesGet().length, 1 );
         c7.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4351,8 +4351,8 @@ function shouldThrowErrorAsync_WithCallback( test )
         test.identical( c8.resourcesGet().length, 1 );
         c8.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4383,14 +4383,14 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -4415,7 +4415,7 @@ function shouldThrowErrorAsync_WithCallback( test )
 
     counter.acheck = counter.testRoutine.checkCurrent();
 
-    test.is( test.logger.outputs.length > 0 );
+    test.true( test.logger.outputs.length > 0 );
     test.identical( counter.acheck.description, '' );
     test.identical( counter.acheck.checkIndex, 19 );
     test.identical( suite.report.testCheckPasses, 12 );
@@ -4472,8 +4472,8 @@ function shouldThrowErrorOfAnyKind( test )
 
         c1.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4508,9 +4508,9 @@ function shouldThrowErrorOfAnyKind( test )
 
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'err1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'err1' ) );
         });
         return null;
       });
@@ -4548,9 +4548,9 @@ function shouldThrowErrorOfAnyKind( test )
 
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'err1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'err1' ) );
         });
         return null;
       });
@@ -4582,8 +4582,8 @@ function shouldThrowErrorOfAnyKind( test )
 
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4626,8 +4626,8 @@ function shouldThrowErrorOfAnyKind( test )
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4671,9 +4671,9 @@ function shouldThrowErrorOfAnyKind( test )
 
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4705,8 +4705,8 @@ function shouldThrowErrorOfAnyKind( test )
 
         c8.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4737,8 +4737,8 @@ function shouldThrowErrorOfAnyKind( test )
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -4820,8 +4820,8 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         test.identical( c1.resourcesGet().length, 1 );
         c1.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4861,9 +4861,9 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'err1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'err1' ) );
         });
         return null;
       });
@@ -4906,9 +4906,9 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         test.identical( c3.resourcesGet().length, 1 );
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'err1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'err1' ) );
         });
         return null;
       });
@@ -4943,14 +4943,14 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -4992,14 +4992,14 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5041,15 +5041,15 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5080,14 +5080,14 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c8.resourcesGet().length, 1 );
         c8.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5118,14 +5118,14 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -5207,8 +5207,8 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         test.identical( c1.resourcesGet().length, 1 );
         c1.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5248,9 +5248,9 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         test.identical( c2.resourcesGet().length, 1 );
         c2.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'err1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'err1' ) );
         });
         return null;
       });
@@ -5293,9 +5293,9 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         test.identical( c3.resourcesGet().length, 1 );
         c3.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.errIs( arg ) );
-          test.is( _.strHas( arg.message, 'err1' ) );
+          test.true( err === undefined );
+          test.true( _.errIs( arg ) );
+          test.true( _.strHas( arg.message, 'err1' ) );
         });
         return null;
       });
@@ -5330,14 +5330,14 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
         c4.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5379,14 +5379,14 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c5.resourcesGet().length, 1 );
         c5.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5428,15 +5428,15 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c6.resourcesGet().length, 1 );
         c6.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( _.strHas( err.message, 'Got more than one message' ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( _.strHas( err.message, 'Got more than one message' ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5467,14 +5467,14 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.consequenceIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c8.resourcesGet().length, 1 );
         c8.give( ( err, arg ) =>
         {
-          test.is( _.errIs( err ) );
-          test.is( !arg );
+          test.true( _.errIs( err ) );
+          test.true( !arg );
         });
         return null;
       });
@@ -5505,14 +5505,14 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.is( _.strHas( errStack[ 0 ], 'error1' ) );
+        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
         test.identical( errStack[ 1 ], true );
 
         test.identical( c9.resourcesGet().length, 1 );
         c9.give( ( err, arg ) =>
         {
-          test.is( err === undefined );
-          test.is( _.strHas( _.err( arg ).message, 'error1' ) );
+          test.true( err === undefined );
+          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
         });
         return null;
       });
@@ -5845,8 +5845,8 @@ function shouldThrowErrorAsyncSimple( test )
 
   ready.finally( ( err, arg ) =>
   {
-    test.is( err === undefined );
-    test.is( _.errIs( arg ) );
+    test.true( err === undefined );
+    test.true( _.errIs( arg ) );
     test.case = 'b';
     test.description = 'bb';
 
@@ -5868,8 +5868,8 @@ function shouldThrowErrorAsyncSimple( test )
 
   ready.finally( ( err, arg ) =>
   {
-    test.is( err === undefined );
-    test.is( _.errIs( arg ) );
+    test.true( err === undefined );
+    test.true( _.errIs( arg ) );
 
     test.identical( test.report.testCheckFails-counter.prevCheckFails, 0 );
     test.identical( test.report.testCheckPasses-counter.prevCheckPasses, 9 );
@@ -5929,7 +5929,7 @@ function shouldThrowErrorAsyncConcurrent( test )
   .finally( ( err, arg ) =>
   {
 
-    test.is( _.timerIs( arg ) );
+    test.true( _.timerIs( arg ) );
     test.identical( err, undefined );
 
     test.identical( test.report.testCheckPasses-counter.prevCheckPasses, 5 );
@@ -6104,7 +6104,7 @@ function shouldThrowErrorAsyncReturn( test )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
-        test.is( _.strHas( _.err( got ).message, 'error1' ) );
+        test.true( _.strHas( _.err( got ).message, 'error1' ) );
         return null;
       })
     })
@@ -6234,7 +6234,7 @@ function shouldThrowErrorReturn( test )
       .finally( ( err, got ) =>
       {
         test.identical( err, undefined );
-        test.is( _.strHas( _.err( got ).message, 'error1' ) );
+        test.true( _.strHas( _.err( got ).message, 'error1' ) );
         return null;
       })
     })
@@ -6363,7 +6363,7 @@ function mustNotThrowErrorReturn( test )
       return t.mustNotThrowError( _.Consequence().error( 'error1' ) )
       .finally( ( err, got ) =>
       {
-        test.is( _.strHas( _.err( err ).message, 'error1' ) );
+        test.true( _.strHas( _.err( err ).message, 'error1' ) );
         test.identical( got, undefined );
         return null;
       })
@@ -6730,7 +6730,7 @@ function chainedShould( test )
         var con = _.time.out( 50, function()
         {
           test.case = prefix + 'give the first message';
-          test.is( 1 );
+          test.true( 1 );
           if( o.throwingError === 'async' )
           throw _.err( 'async error' );
           else if( o.throwingError === 'sync' )
@@ -6755,7 +6755,7 @@ function chainedShould( test )
         var con = _.time.out( 50, function()
         {
           test.case = prefix + 'give the second message';
-          test.is( 1 );
+          test.true( 1 );
           if( o.throwingError === 'async' )
           throw _.err( 'async error' );
           else if( o.throwingError === 'sync' )
@@ -6945,25 +6945,25 @@ function isReturn( test )
   function returnTest( t )
   {
 
-    var got = t.is( 1 );
+    var got = t.true( 1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.is( 0 );
+    var got = t.true( 0 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.is( true );
+    var got = t.true( true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.is( false );
+    var got = t.true( false );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -6971,43 +6971,43 @@ function isReturn( test )
 
     test.case = 'not bool-like, string';
 
-    var got = t.is( '1' );
+    var got = t.true( '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'not bool-like, map';
 
-    var got = t.is( {} );
+    var got = t.true( {} );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'not bool-like, array';
 
-    var got = t.is( [] );
+    var got = t.true( [] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'not bool-like, routine';
 
-    var got = t.is( t.is );
+    var got = t.true( t.true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    var got = t.is( true, false );
+    var got = t.true( true, false );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'no arguments';
 
-    var got = t.is();
+    var got = t.true();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    var got = t.is( { a : 1 }, { a : 1 } );
+    var got = t.true( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -7047,25 +7047,25 @@ function isNotReturn( test )
   function returnTest( t )
   {
 
-    var got = t.isNot( 1 );
+    var got = t.false( 1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.isNot( 0 );
+    var got = t.false( 0 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.isNot( true );
+    var got = t.false( true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.isNot( false );
+    var got = t.false( false );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -7073,43 +7073,43 @@ function isNotReturn( test )
 
     test.case = 'not bool-like, string';
 
-    var got = t.isNot( '1' );
+    var got = t.false( '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'not bool-like, map';
 
-    var got = t.isNot( {} );
+    var got = t.false( {} );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'not bool-like, array';
 
-    var got = t.isNot( [] );
+    var got = t.false( [] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'not bool-like, routine';
 
-    var got = t.isNot( t.isNot );
+    var got = t.false( t.false );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    var got = t.isNot( true, false );
+    var got = t.false( true, false );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'no arguments';
 
-    var got = t.isNot();
+    var got = t.false();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    var got = t.isNot( { a : 1 }, { a : 1 } );
+    var got = t.false( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -7491,14 +7491,14 @@ function equivalentReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     t.suite.accuracy = null;
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -7507,9 +7507,9 @@ function equivalentReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy < t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy < t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -7557,9 +7557,9 @@ function equivalentReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -7705,14 +7705,14 @@ function notEquivalentReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     t.suite.accuracy = null;
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -7721,9 +7721,9 @@ function notEquivalentReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy < t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy < t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -7744,9 +7744,9 @@ function notEquivalentReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -8308,14 +8308,14 @@ function etReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     t.suite.accuracy = null;
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -8324,9 +8324,9 @@ function etReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy < t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy < t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -8374,9 +8374,9 @@ function etReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -8520,14 +8520,14 @@ function neReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     t.suite.accuracy = null;
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -8536,9 +8536,9 @@ function neReturn( test )
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy < t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy < t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -8559,9 +8559,9 @@ function neReturn( test )
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    test.is( t.suite.accuracy === t.accuracy );
-    test.is( _.numberIs( t.suite.accuracy ) );
-    test.is( _.numberIs( t.accuracy ) );
+    test.true( t.suite.accuracy === t.accuracy );
+    test.true( _.numberIs( t.suite.accuracy ) );
+    test.true( _.numberIs( t.accuracy ) );
 
     /* */
 
@@ -10582,8 +10582,8 @@ function onSuiteBeginThrowError( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
     return null;
@@ -10632,8 +10632,8 @@ function onSuiteEndReturnsNothing( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
     return null;
@@ -10687,8 +10687,8 @@ function onSuiteEndThrowError( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
     return null;
@@ -10730,8 +10730,8 @@ function suiteEndTimeOut( test ) /* qqq : write similar test in Ext.test.s ( sep
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
 
@@ -10798,8 +10798,8 @@ function onSuiteEndErrorInConsequence( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
     return null;
@@ -10852,8 +10852,8 @@ function onSuiteEndNormalConsequence( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
     return null;
@@ -10909,8 +10909,8 @@ function onSuiteEndDelayedConsequence( test )
     test.identical( got.testRoutineFails, 0 );
 
     _.errAttend( err );
-    test.isNot( _.errIs( err ) );
-    test.is( _.arrayIs( suites ) );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
 
     _.process.exitCode( 0 );
     return null;
@@ -10960,8 +10960,8 @@ function optionRoutine( test )
       test.identical( got.testRoutineFails, 0 );
 
       _.errAttend( err );
-      test.isNot( _.errIs( err ) );
-      test.is( _.arrayIs( suites ) );
+      test.false( _.errIs( err ) );
+      test.true( _.arrayIs( suites ) );
       test.identical( visited, [ 'a1', 'a2', 'b1' ] );
 
       _.process.exitCode( 0 );
@@ -11007,8 +11007,8 @@ function optionRoutine( test )
       test.identical( report.testRoutineFails, 0 );
 
       _.errAttend( err );
-      test.isNot( _.errIs( err ) );
-      test.is( _.arrayIs( suites ) );
+      test.false( _.errIs( err ) );
+      test.true( _.arrayIs( suites ) );
       test.identical( visited, [ 'a1' ] );
       test.identical( suite1.routine, 'a1' );
       test.identical( suite.routine, 'a1' );
@@ -11056,8 +11056,8 @@ function optionRoutine( test )
       test.identical( report.testRoutineFails, 0 );
 
       _.errAttend( err );
-      test.isNot( _.errIs( err ) );
-      test.is( _.arrayIs( suites ) );
+      test.false( _.errIs( err ) );
+      test.true( _.arrayIs( suites ) );
       test.identical( visited, [ 'a1', 'a2' ] );
       test.identical( suite1.routine, 'a*' );
       test.identical( suite.routine, 'a*' );
@@ -11105,8 +11105,8 @@ function optionRoutine( test )
       test.identical( report.testRoutineFails, 0 );
 
       _.errAttend( err );
-      test.isNot( _.errIs( err ) );
-      test.is( _.arrayIs( suites ) );
+      test.false( _.errIs( err ) );
+      test.true( _.arrayIs( suites ) );
       test.identical( visited, [] );
       test.identical( suite1.routine, 'c*' );
       test.identical( suite.routine, 'c*' );
@@ -11199,11 +11199,11 @@ function asyncTestRoutine( test )
 
 function syncTestRoutineWithProperty( test )
 {
-  var trd; /* xxx : rename later */
+  var tro; /* xxx : rename later */
 
   function syncTest( t )
   {
-    trd = t;
+    tro = t;
     t.identical( 1, 1 );
   }
 
@@ -11220,7 +11220,7 @@ function syncTestRoutineWithProperty( test )
   .finally( function( err, data )
   {
 
-    var acheck = trd.checkCurrent();
+    var acheck = tro.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 0 );
@@ -11238,11 +11238,11 @@ function syncTestRoutineWithProperty( test )
 
 function asyncTestRoutineWithProperty( test )
 {
-  var trd;
+  var tro;
 
   async function asyncTest( t )
   {
-    trd = t;
+    tro = t;
     var got = await Promise.resolve( 1 );
     t.identical( got, 1 );
     return got;
@@ -11261,7 +11261,7 @@ function asyncTestRoutineWithProperty( test )
   .finally( function( err, data )
   {
 
-    var acheck = trd.checkCurrent();
+    var acheck = tro.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 0 );
@@ -11279,12 +11279,12 @@ function asyncTestRoutineWithProperty( test )
 
 function syncTimeout1( test )
 {
-  let trd;
+  let tro;
   let testRoutineDone = 0;
 
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'description1';
     t.identical( 0, 1 );
     _.time.out( 500 ).deasync();
@@ -11308,13 +11308,13 @@ function syncTimeout1( test )
   .finally( function( err, arg )
   {
 
-    var acheck = trd.checkCurrent();
+    var acheck = tro.checkCurrent();
     test.identical( acheck.checkIndex, 3 );
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.testCheckFails, 2 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
     test.identical( testRoutineDone, 0 );
 
@@ -11344,13 +11344,13 @@ write equivalent external test
 
 function syncTimeout2( test )
 {
-  let trd;
+  let tro;
   let counter = 0;
   let testRoutineDone = 0;
 
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'description1';
     t.identical( 0, 1 );
     _.time.out( 500 ).deasync();
@@ -11374,13 +11374,13 @@ function syncTimeout2( test )
   .finally( function( err, arg )
   {
 
-    var acheck = trd.checkCurrent();
+    var acheck = tro.checkCurrent();
     test.identical( acheck.checkIndex, 4 );
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.testCheckFails, 2 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
     test.identical( testRoutineDone, 0 );
 
@@ -11404,13 +11404,13 @@ syncTimeout2.description =
 
 function asyncTimeout1( test )
 {
-  let trd;
+  let tro;
   let counter = 0;
   let visits = [];
 
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'description1';
     visit( 'v0' );
     return _.time.out( 1000, () =>
@@ -11437,13 +11437,13 @@ function asyncTimeout1( test )
   .finally( function( err, arg )
   {
 
-    var acheck = trd.checkCurrent();
+    var acheck = tro.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     test.identical( visits, [ 'v0' ] );
@@ -11480,7 +11480,7 @@ asyncTimeout1.description =
 
 function processWatchingOnDefault( test )
 {
-  let trd;
+  let tro;
 
   var suite = wTestSuite
   ({
@@ -11496,15 +11496,15 @@ function processWatchingOnDefault( test )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 3 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
-    test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )
@@ -11517,7 +11517,7 @@ function processWatchingOnDefault( test )
 
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'create three zombie processes';
     var o =
     {
@@ -11543,10 +11543,10 @@ processWatchingOnDefault.description =
 
 function processWatchingOnExplicit( test )
 {
-  let trd;
+  let tro;
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'create three zombie processes';
     var o =
     {
@@ -11575,15 +11575,15 @@ function processWatchingOnExplicit( test )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 3 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
-    test.is( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )
@@ -11605,7 +11605,7 @@ processWatchingOnExplicit.description =
 
 function processWatchingOff( test )
 {
-  let trd;
+  let tro;
   var o =
   {
     execPath : 'node -e "setTimeout(()=>{},10000)"',
@@ -11615,7 +11615,7 @@ function processWatchingOff( test )
   }
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'create three zombie processes';
     _.process.start( o );
     t.identical( 1, 1 );
@@ -11638,10 +11638,10 @@ function processWatchingOff( test )
     test.identical( suite.report.errorsArray.length, 0 );
     test.identical( suite.report.testCheckFails, 0 );
     test.identical( suite._processWatcherMap, null );
-    test.is( _.process.isAlive( o.process.pid ) )
+    test.true( _.process.isAlive( o.process.pid ) )
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )
@@ -11652,7 +11652,7 @@ function processWatchingOff( test )
 
     return _.time.out( 1000, () =>
     {
-      test.is( !_.process.isAlive( o.process.pid ) )
+      test.true( !_.process.isAlive( o.process.pid ) )
       return null;
     })
   });
@@ -11670,10 +11670,10 @@ processWatchingOnExplicit.description =
 
 function processWatchingRoutineTimeOut( test )
 {
-  let trd;
+  let tro;
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'create three zombie processes';
     var o =
     {
@@ -11701,14 +11701,14 @@ function processWatchingRoutineTimeOut( test )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 2 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) );
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'timed out' ) );
+    test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) );
     test.identical( suite.report.testCheckFails, 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )
@@ -11731,10 +11731,10 @@ processWatchingRoutineTimeOut.description =
 
 function processWatchingErrorInTestRoutine( test )
 {
-  let trd;
+  let tro;
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.description = 'create three zombie processes';
     var o =
     {
@@ -11762,14 +11762,14 @@ function processWatchingErrorInTestRoutine( test )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 2 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'Test' ) )
-    test.is( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'Test' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )
@@ -11792,7 +11792,7 @@ processWatchingErrorInTestRoutine.description =
 
 function processWatchingOnSuiteBegin( test )
 {
-  let trd;
+  let tro;
 
   function onSuiteBegin()
   {
@@ -11807,7 +11807,7 @@ function processWatchingOnSuiteBegin( test )
   }
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.identical( 1, 1 );
   }
 
@@ -11827,13 +11827,13 @@ function processWatchingOnSuiteBegin( test )
   {
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.errorsArray.length, 1 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )
@@ -11856,7 +11856,7 @@ processWatchingOnSuiteBegin.description =
 
 function processWatchingOnSuiteEnd( test )
 {
-  let trd;
+  let tro;
 
   function onSuiteEnd()
   {
@@ -11871,7 +11871,7 @@ function processWatchingOnSuiteEnd( test )
   }
   function testRoutine( t )
   {
-    trd = t;
+    tro = t;
     t.identical( 1, 1 );
   }
 
@@ -11891,13 +11891,13 @@ function processWatchingOnSuiteEnd( test )
   {
     test.identical( suite.report.testCheckPasses, 1 );
     test.identical( suite.report.errorsArray.length, 1 );
-    test.is( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
+    test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
 
-    test.is( err === undefined );
-    test.is( arg === suite );
+    test.true( err === undefined );
+    test.true( arg === suite );
     test.identical( result.tag, suite.name );
 
     if( err )

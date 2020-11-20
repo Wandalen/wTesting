@@ -112,8 +112,8 @@ async function waitForVisibleInViewportThrowing( test )
   }
   finally
   {
-    test.is( _.errIs( err ) );
-    test.is( !browser.isConnected() )
+    test.true( _.errIs( err ) );
+    test.true( !browser.isConnected() )
   }
 
 }

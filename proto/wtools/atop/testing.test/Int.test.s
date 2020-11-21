@@ -11199,7 +11199,7 @@ function asyncTestRoutine( test )
 
 function syncTestRoutineWithProperty( test )
 {
-  var tro; /* xxx : rename later */
+  var tro;
 
   function syncTest( t )
   {

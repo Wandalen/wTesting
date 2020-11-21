@@ -544,21 +544,21 @@ function _runNow()
 
   function handleBegin()
   {
-    return suite._begin();
+    return suite._runBegin();
   }
 
   /* */
 
   function handleEnd( err, arg )
   {
-    return suite._endSoon( err, arg );
+    return suite._runEndSoon( err, arg );
   }
 
 }
 
 //
 
-function _begin()
+function _runBegin()
 {
   let suite = this;
   let ready = new _.Consequence().take( null );
@@ -655,8 +655,8 @@ function _begin()
 
   if( _.process && suite.takingIntoAccount )
   {
-    suite._terminated_joined = _.routineJoin( suite, suite._terminated );
-    _.process.on( 'exit', suite._terminated_joined );
+    suite._exit_joined = _.routineJoin( suite, suite._exit );
+    _.process.on( 'exit', suite._exit_joined );
   }
 
   ready.finally( ( err, arg ) =>
@@ -688,7 +688,7 @@ function _begin()
 
 //
 
-function _endSoon( err, arg )
+function _runEndSoon( err, arg )
 {
   let suite = this;
   let logger = suite.logger;
@@ -696,18 +696,19 @@ function _endSoon( err, arg )
   suite._reportEnd();
 
   if( suite._reportIsPositive() )
-  return _.time.out( wTester.settings.sanitareTime, () => suite._end( err ) );
+  return _.time.out( wTester.settings.sanitareTime, () => suite._runEnd( err ) );
   else
-  return suite._end( err );
+  return suite._runEnd( err );
 }
 
 //
 
-function _end( err )
+function _runEnd( err )
 {
   let suite = this;
   let logger = suite.logger;
   let ready = new _.Consequence().take( null );
+  let processWatching = suite.processWatching;
 
   _.assert( arguments.length === 1 );
 
@@ -736,16 +737,16 @@ function _end( err )
     /* process exit handler */
 
     /*
-      it should go before onSuiteEnd to avoid second call of method _end by process exit event
+      it should go before onSuiteEnd to avoid second call of method _runEnd by process exit event
     */
 
     try
     {
-      if( _.process && suite._terminated_joined && suite.takingIntoAccount )
+      if( _.process && suite._exit_joined && suite.takingIntoAccount )
       {
-        if( _.process.eventHasHandler( 'exit', suite._terminated_joined ) )
-        _.process.off( 'exit', suite._terminated_joined );
-        suite._terminated_joined = null;
+        if( _.process.eventHasHandler( 'exit', suite._exit_joined ) )
+        _.process.off( 'exit', suite._exit_joined );
+        suite._exit_joined = null;
       }
     }
     catch( err3 )
@@ -763,11 +764,6 @@ function _end( err )
       err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'does not have test routine', _.strQuote( suite.routine ), '\n' );
     }
 
-    // if( err )
-    // debugger;
-    // if( err )
-    // suite.exceptionReport({ err, unbarring : 1 });
-
     return arg || null;
   });
 
@@ -775,18 +771,28 @@ function _end( err )
 
   if( suite.onSuiteEnd )
   {
-    let timeLimitErrorCon = _.time.outError( suite.suiteEndTimeOut + wTester.settings.sanitareTime )
-    timeLimitErrorCon.tag = '_timeLimitErrorCon'
 
     let originalReady = ready;
     if( Config.debug && !originalReady.tag )
-    originalReady.tag = 'timeLimitErrorCon';
+    originalReady.tag = 'suite.end';
+
     ready.then( () => suite.onSuiteEnd.call( suite.context, suite ) || null );
 
-    ready = _.Consequence.Or( ready, timeLimitErrorCon, wTester._cancelCon )
+    let timeLimitErrorCon = _.time.outError( suite.suiteEndTimeOut + wTester.settings.sanitareTime )
+    timeLimitErrorCon.tag = '_timeLimitErrorCon'
+
+    /*
+    if exiting then cant wait async code
+    */
+    let noAsync = _.Consequence();
+    if( _.errIs( wTester._canceled ) )
+    noAsync.take( wTester._canceled )
+
+    ready = _.Consequence.Or( ready, timeLimitErrorCon, wTester._cancelCon, noAsync )
 
     ready.finally( ( err2, got ) =>
     {
+
       if( !timeLimitErrorCon.resourcesCount() )
       timeLimitErrorCon.error( _.dont );
 
@@ -810,11 +816,14 @@ function _end( err )
     })
   }
 
-  /* - state - */
+  /* - state1 - */
 
   ready.finally( ( err2, arg ) =>
   {
     err = err || err2;
+
+    if( err )
+    suite.exceptionReport({ err : err, unbarring : 1 });
 
     _.assert( suite._state === 'ending', `State of test suite should be "ending", but it is "${suite._state}"` );
     suite._state = 'ended';
@@ -823,13 +832,47 @@ function _end( err )
 
     let ok = suite._reportIsPositive();
 
-    if( err )
-    suite.exceptionReport({ err : err, unbarring : 1 });
+    /* tracking */
 
-    /* exit code */
+    _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
+    _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
 
-    if( suite._exitCode && !_.process.exitCode() )
-    suite._exitCode = _.process.exitCode( suite._exitCode );
+    return suite;
+  });
+
+  /* - process watcher 1 - */
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+    if( err2 )
+    suite.exceptionReport({ err : err2, unbarring : 1 });
+    if( !wTester._canceled || !_.errIs( wTester._canceled ) )
+    if( processWatching )
+    {
+      processWatching = false;
+      return suite.processWatchingEnd();
+    }
+    return null;
+  });
+
+  /*
+  process watcher should follow setting state and process exit code
+  otherwise process.exit() from test routine will not give negative result of testing
+  */
+
+  /* - state2 - */
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+
+    if( err2 )
+    suite.exceptionReport({ err : err2, unbarring : 1 });
+
+    suite._reportEnd();
+
+    let ok = suite._reportIsPositive();
 
     if( suite.takingIntoAccount && !_.process.exitCode() && !ok )
     {
@@ -841,27 +884,8 @@ function _end( err )
     if( suite.takingIntoAccount )
     wTester._testSuiteConsider( suite.report );
 
-    /* tracking */
-
-    _.arrayRemoveElementOnceStrictly( wTester.activeSuites, suite );
-    _.arrayRemoveElementOnceStrictly( wTester.quedSuites, suite );
-
     return suite;
   });
-
-  /* - process watcher - */
-
-  if( suite.processWatching )
-  ready.finally( ( err2, arg ) =>
-  {
-    err = err || err2;
-    return suite.processWatchingEnd();
-  });
-
-  /*
-  process watcher should follow setting state and process exit code
-  otherwise process exit from test routine will not give negative result of testing
-  */
 
   /* - log - */
 
@@ -926,13 +950,37 @@ function _end( err )
     return arg || null;
   });
 
+  /* - process watcher 2 - */
+
+  ready.finally( ( err2, arg ) =>
+  {
+    err = err || err2;
+    if( err2 )
+    suite.exceptionReport({ err : err2, unbarring : 1 });
+    if( processWatching )
+    {
+      /*
+      entering happen, but exiting, probably, never
+      because processWatchingEnd asynchronous and exit handler is last routine called
+      */
+      processWatching = false;
+      return suite.processWatchingEnd();
+    }
+    return null;
+  });
+
   /* - after - */
 
   ready.finally( ( err2, arg ) =>
   {
-
+    err = err || err2;
     if( err2 )
     suite.exceptionReport({ err : err2, unbarring : 1 });
+
+    /* exit code */
+
+    if( suite._exitCode && !_.process.exitCode() )
+    suite._exitCode = _.process.exitCode( suite._exitCode );
 
     /* bunch */
 
@@ -949,10 +997,9 @@ function _end( err )
 
 //
 
-function _terminated()
+function _exit()
 {
   let suite = this;
-  debugger;
   let err = _.process ? _.process.exitReason() : null;
   if( !err )
   {
@@ -960,10 +1007,13 @@ function _terminated()
     _.errReason( err, 'unexpected termination' );
     if( !_.process.exitCode() )
     _.process.exitCode( 1 );
-    // err = _.errBrief( 'Terminated by user' );
-    // _.errReason( err, 'terminated by user' );
   }
-  wTester.cancel({ err, terminatedByUser : 1, global : 1 });
+  wTester.cancel
+  ({
+    err,
+    // unexpectedTermination : err.reason === 'unexpected termination',
+    // global : 1,
+  });
 }
 
 //
@@ -1586,7 +1636,7 @@ let Restricts =
 {
   currentRoutine : null,
   _initialOptions : null,
-  _terminated_joined : null,
+  _exit_joined : null,
   _hasConsoleInOutputs : 0,
   _testSuiteBeginTime : null,
   _formed : 0,
@@ -1665,10 +1715,10 @@ let Proto =
   _form,
   _runSoon,
   _runNow,
-  _begin,
-  _endSoon,
-  _end,
-  _terminated,
+  _runBegin,
+  _runEndSoon,
+  _runEnd,
+  _exit,
 
   onRoutineBegin,
   onRoutineEnd,

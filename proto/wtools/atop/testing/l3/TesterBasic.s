@@ -603,7 +603,7 @@ function cancel()
   // if( tester.settings.fails > 0 )
   // if( tester.settings.fails <= tester.report.testCheckFails )
   // o.global = 1;
-  //
+
   // if( o.unexpectedTermination )
   // o.global = 1;
 
@@ -615,17 +615,16 @@ function cancel()
   o.err = _.err( o.err );
 
   // if( o.global )
-  // {
+  {
     tester._canceled = o.err || true;
     tester._cancelCon.error( o.err );
-  // }
+  }
 
   /* */
 
   // if( o.global )
   try
   {
-    /* zzz : dubious */
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnedCon )
     {
@@ -643,7 +642,8 @@ function cancel()
   /* */
 
   // if( o.unexpectedTermination )
-  // {
+  // if( o.global )
+  {
     try
     {
       for( let t = 0 ; t < tester.activeSuites.length ; t++ )
@@ -658,15 +658,15 @@ function cancel()
       debugger;
       logger.log( err2 );
     }
-  // }
+  }
 
   return o.err;
 }
 
 let defaults = cancel.defaults = Object.create( null );
 defaults.err = null;
+// defaults.global = 0;
 // defaults.unexpectedTermination = 0;
-// defaults.global = 0; /* yyy : remove? */
 
 // --
 // suites

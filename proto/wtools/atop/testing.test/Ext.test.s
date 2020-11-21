@@ -3214,7 +3214,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
 
   let o =
   {
-    execPath : `IsExecutedOnceOnSigint.test.js`,
+    execPath : `OnceOnSigintAsync.test.js`,
     outputPiping : 1,
     ipc : 1
   }

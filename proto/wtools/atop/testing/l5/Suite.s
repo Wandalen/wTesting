@@ -579,7 +579,7 @@ function _runBegin()
 
   /* report */
 
-  suite.report = null; /* xxx : ? */
+  // suite.report = null; /* xxx yyy : ? */
 
   /*
   store exit code to restore it later

@@ -722,7 +722,14 @@ function cancel( o )
     tro._originalReturnedCon.error( o.err );
   }
 
-  return wTester.cancel({ err : o.err });
+  if( wTester.settings.fails > 0 )
+  if( wTester.settings.fails <= wTester.report.testCheckFails )
+  {
+    return wTester.cancel({ err : o.err });
+  }
+
+  // return wTester.cancel({ err : o.err, global : o.global });
+  return o.err;
 }
 
 cancel.defaults =

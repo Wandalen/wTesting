@@ -51,9 +51,8 @@ function terminationBeginWithTwoNamespaces( test )
   let context = this;
   var testRoutine;
   let a = test.assetFor( 'double' );
-  let locals = { toolsPath : a.path.nativize( _.module.toolsPathGet() ) };
-  let programPath1 = a.program({ routine : program1, locals });
-  let programPath2 = a.program({ routine : program2, locals });
+  let programPath1 = a.path.nativize( a.path.normalize( a.program( program1 ) ) );
+  let programPath2 = a.path.nativize( a.path.normalize( a.program( program2 ) ) );
   let currentPath = a.abs( '.' );
 
   /* */
@@ -65,7 +64,6 @@ function terminationBeginWithTwoNamespaces( test )
 
     let start = _.process.starter
     ({
-      execPath : 'node ',
       currentPath,
       outputCollecting : 1,
       outputGraying : 1,
@@ -75,7 +73,6 @@ function terminationBeginWithTwoNamespaces( test )
 
     let start2 = _.process.starter
     ({
-      execPath : 'node ',
       currentPath,
       outputCollecting : 1,
       outputGraying : 1,
@@ -83,7 +80,7 @@ function terminationBeginWithTwoNamespaces( test )
       mode : 'shell',
     });
 
-    let con1 = start( programPath1 )
+    let con1 = start( 'node ' + programPath1 )
     .then( ( op ) =>
     {
       t.case = 'termination of procedures from first global namespace';
@@ -105,7 +102,7 @@ function terminationBeginWithTwoNamespaces( test )
       return null;
     });
 
-    let con2 = start2( programPath2 )
+    let con2 = start2( 'node ' + programPath2 )
     .then( ( op ) =>
     {
       t.case = 'termination of procedures from second global namespace';

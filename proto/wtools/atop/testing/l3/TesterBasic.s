@@ -594,15 +594,18 @@ function cancel()
 {
   let tester = this;
 
-  _.assert( arguments.length === 0 || arguments.length === 1 );
   let o = _.routineOptions( cancel, arguments );
 
-  if( tester.settings.fails > 0 )
-  if( tester.settings.fails <= tester.report.testCheckFails )
-  o.global = 1;
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( o.global === undefined );
+  _.assert( o.unexpectedTermination === undefined );
 
-  if( o.terminatedByUser )
-  o.global = 1;
+  // if( tester.settings.fails > 0 )
+  // if( tester.settings.fails <= tester.report.testCheckFails )
+  // o.global = 1;
+
+  // if( o.unexpectedTermination )
+  // o.global = 1;
 
   if( tester._canceled )
   return tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
@@ -611,18 +614,17 @@ function cancel()
   o.err = tester.report.errorsArray[ tester.report.errorsArray.length-1 ];
   o.err = _.err( o.err );
 
-  if( o.global )
+  // if( o.global )
   {
-    tester._canceled = 1;
+    tester._canceled = o.err || true;
     tester._cancelCon.error( o.err );
   }
 
   /* */
 
-  if( o.global )
+  // if( o.global )
   try
   {
-    /* zzz : dubious */
     for( let t = 0 ; t < tester.activeRoutines.length ; t++ )
     if( tester.activeRoutines[ t ]._returnedCon )
     {
@@ -639,7 +641,8 @@ function cancel()
 
   /* */
 
-  if( o.terminatedByUser )
+  // if( o.unexpectedTermination )
+  // if( o.global )
   {
     try
     {
@@ -647,7 +650,7 @@ function cancel()
       {
         let suite = tester.activeSuites[ t ];
         if( suite._state === 'beginning' || suite._state === 'begun' )
-        suite._end( o.err );
+        suite._runEnd( o.err );
       }
     }
     catch( err2 )
@@ -662,8 +665,8 @@ function cancel()
 
 let defaults = cancel.defaults = Object.create( null );
 defaults.err = null;
-defaults.terminatedByUser = 0;
-defaults.global = 0;
+// defaults.global = 0;
+// defaults.unexpectedTermination = 0;
 
 // --
 // suites
@@ -1016,7 +1019,7 @@ function _reportEnd()
   let tester = this;
   let report = tester.report;
 
-  // if( !report.exitCode ) /* xxx yyy */
+  // if( !report.exitCode ) /* yyy */
   // report.exitCode = _.process.exitCode();
 
   if( report.exitCode !== undefined && report.exitCode !== null && report.exitCode !== 0 )

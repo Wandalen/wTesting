@@ -73,7 +73,7 @@ function htmlThenable( test )
     return page.$eval( '.class1 a', ( e ) => e.href )
     .then( ( got ) =>
     {
-      test.is( _.strEnds( got,'index.html' ) );
+      test.true( _.strEnds( got,'index.html' ) );
       return got;
     })
   })

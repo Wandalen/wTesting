@@ -75,8 +75,8 @@
 
 #### Перелік тест перевірок
 
-- `is`;
-- `isNot`;
+- `true`;
+- `false`;
 - `identical`;
 - `notIdentical`;
 - `equivalent`;

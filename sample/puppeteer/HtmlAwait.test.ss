@@ -58,7 +58,7 @@ async function htmlAwait( test )
 
   test.case = 'Check href attribute'
   var got = await page.$eval( '.class1 a', ( e ) => e.href );
-  test.is( _.strEnds( got,'index.html' ) );
+  test.true( _.strEnds( got,'index.html' ) );
 
   test.case = 'Check input field value'
   var got = await page.$eval( '#input1', ( e ) => e.value )

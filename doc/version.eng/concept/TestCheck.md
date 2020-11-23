@@ -20,8 +20,8 @@ The figure shows a test case `join strings` with three test checks. Each of the 
 It is a test to show the correct operation of the test unit under normal conditions without errors in the input data and in the normal state.
 
 The next test checks can be applied for positive testing:
-- `is`;
-- `isNot`;
+- `true`;
+- `false`;
 - `identical`;
 - `notIdentical`;
 - `equivalent`;
@@ -45,7 +45,7 @@ The next test checks can be applied for negative testing:
 
 ### The list of test checks
 
-##### Test check `is`
+##### Test check `true`
 
 Expects a single `bool-like` argument.
 
@@ -57,12 +57,12 @@ It returns `true` if the test check is passed and` false` if the test check fail
 
 ```js
 var got = true;
-test.is( got );
+test.true( got );
 ```
 
-The `test.is` check will be passed as the `got` variable is `true` during the test.
+The `test.true` check will be passed as the `got` variable is `true` during the test.
 
-##### Test check `isNot`
+##### Test check `false`
 
 Expects a single `bool-like` argument.
 
@@ -72,10 +72,10 @@ The check fails if the argument is `true-like`, that is,` true` or the numeric v
 
 ```js
 var got = false;
-test.isNot( got );
+test.false( got );
 ```
 
-The `test.isNot` check will be passed as the `got` variable is `false` during the test.
+The `test.false` check will be passed as the `got` variable is `false` during the test.
 
 ##### Test check `identical`
 

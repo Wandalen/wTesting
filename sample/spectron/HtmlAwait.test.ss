@@ -64,7 +64,7 @@ async function htmlAwait( test )
   test.case = 'Check href attribute'
   var element = await app.client.$( '.class1 a' );
   var got = await element.getAttribute( 'href');
-  test.is( _.strEnds( got, '/index.html' ) )
+  test.true( _.strEnds( got, '/index.html' ) )
 
   test.case = 'Check input field value'
   var element = await app.client.$( '#input1' );

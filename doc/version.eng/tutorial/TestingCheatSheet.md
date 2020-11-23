@@ -191,13 +191,13 @@ Example of a minimum test file is given below. It uses the basic structural elem
 Test checks are the smallest structural element that checks one aspect of a test unit behavior.
 
 ```
-test.is( boolLike arg );
+test.true( boolLike arg );
 ```
 
 Passes if argument is true-like.
 
 ```
-test.isNot( boolLike arg );
+test.false( boolLike arg );
 ```
 
 Passes if argument is false-like.

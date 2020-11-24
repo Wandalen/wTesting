@@ -3715,7 +3715,7 @@ function timeLimitConsequence( test )
 
 //
 
-function runDiffMapsWithRoutinesFailed( test )
+function checkDiffWithRoutines( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
@@ -3819,7 +3819,7 @@ function runDiffMapsWithRoutinesFailed( test )
   return a.ready;
 }
 
-runDiffMapsWithRoutinesFailed.description =
+checkDiffWithRoutines.description =
 `
 Check diff from test.identical, when comparing maps that contain routines.
 `
@@ -3915,7 +3915,7 @@ let Self =
     // related
 
     timeLimitConsequence,
-    runDiffMapsWithRoutinesFailed,
+    checkDiffWithRoutines,
 
   }
 

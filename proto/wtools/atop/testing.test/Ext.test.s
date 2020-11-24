@@ -3715,7 +3715,7 @@ function timeLimitConsequence( test )
 
 //
 
-function runFailedOutput( test )
+function runDiffMapsWithRoutinesFailed( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
@@ -3728,7 +3728,7 @@ function runFailedOutput( test )
   a.ready
   .then( () =>
   {
-    test.case = 'not identical maps with 1 identical functions'
+    test.case = 'not identical maps with 1 identical function'
     return null;
   })
 
@@ -3744,11 +3744,6 @@ function runFailedOutput( test )
     let exp5 = `- difference :`;
     let exp6 = `{ 'a' : 'reducing*`;
 
-    test.identical( _.strCount( op.output, 'Failed TestSuite::Fail / TestRoutine::identical1' ), 1 );
-    test.identical( _.strCount( op.output, /Passed.*test checks 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Passed.*test cases 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Passed.*test routines 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Test suite.*\(.*Fail.*\).*failed/ ), 1 );
     test.identical( _.strCount( op.output, exp1 ), 1 );
     test.identical( _.strCount( op.output, exp2 ), 1 );
     test.identical( _.strCount( op.output, exp3 ), 1 );
@@ -3780,11 +3775,6 @@ function runFailedOutput( test )
     let exp5 = `- difference :`;
     let exp6 = `{ 'f2' : [ routine b ], 'a' : 'reducing*`;
 
-    test.identical( _.strCount( op.output, 'Failed TestSuite::Fail / TestRoutine::identical2' ), 1 );
-    test.identical( _.strCount( op.output, /Passed.*test checks 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Passed.*test cases 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Passed.*test routines 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Test suite.*\(.*Fail.*\).*failed/ ), 1 );
     test.identical( _.strCount( op.output, exp1 ), 1 );
     test.identical( _.strCount( op.output, exp2 ), 1 );
     test.identical( _.strCount( op.output, exp3 ), 1 );
@@ -3816,11 +3806,6 @@ function runFailedOutput( test )
     let exp5 = `- difference :`;
     let exp6 = `{ 'f4' : [ routine a ], 'a' : 'reducing*`;
 
-    test.identical( _.strCount( op.output, 'Failed TestSuite::Fail / TestRoutine::identical3' ), 1 );
-    test.identical( _.strCount( op.output, /Passed.*test checks 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Passed.*test cases 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Passed.*test routines 0 \/ 1/ ), 2 );
-    test.identical( _.strCount( op.output, /Test suite.*\(.*Fail.*\).*failed/ ), 1 );
     test.identical( _.strCount( op.output, exp1 ), 1 );
     test.identical( _.strCount( op.output, exp2 ), 1 );
     test.identical( _.strCount( op.output, exp3 ), 1 );
@@ -3833,6 +3818,11 @@ function runFailedOutput( test )
 
   return a.ready;
 }
+
+runDiffMapsWithRoutinesFailed.description =
+`
+Check diff from test.identical, when comparing maps that contain routines.
+`
 
 // --
 // suite
@@ -3925,7 +3915,7 @@ let Self =
     // related
 
     timeLimitConsequence,
-    runFailedOutput,
+    runDiffMapsWithRoutinesFailed,
 
   }
 

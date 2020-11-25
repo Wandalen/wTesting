@@ -3123,7 +3123,7 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
 
     o.conStart.then( () =>
     {
-      o.process.send( 'SIGINT' );
+      o.pnd.send( 'SIGINT' );
       return null;
     })
 
@@ -3165,7 +3165,7 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
 
     o.conStart.then( () =>
     {
-      o.process.send( 'SIGINT' );
+      o.pnd.send( 'SIGINT' );
       return null;
     })
 
@@ -3224,7 +3224,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
   o.conStart.then( () =>
   {
     /* time delay should be exactly 5s to match delay in test asset */
-    _.time.out( 5000, () => o.process.send( 'SIGINT' ) ); /* qqq : parametrize time delays */
+    _.time.out( 5000, () => o.pnd.send( 'SIGINT' ) ); /* qqq : parametrize time delays */
     return null;
   })
 

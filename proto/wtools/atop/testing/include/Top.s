@@ -32,7 +32,7 @@ let _wasGlobal, _wasCache;
 function globalNamespaceOpen( _global, name )
 {
   if( _realGlobal_._globals_[ name ] )
-  throw Error( 'Global namespace::name already exists!' );
+  throw Error( `Global namespace::${name} already exists!` );
   let Module = require( 'module' );
   _wasCache = Module._cache;
   _wasGlobal = _global;

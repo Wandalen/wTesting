@@ -1433,16 +1433,16 @@ function processWatchingBegin()
   {
     if( o.sync )
     return;
-    _.assert( !suite._processWatcherMap[ o.process.pid ] )
-    suite._processWatcherMap[ o.process.pid ] = o;
+    _.assert( !suite._processWatcherMap[ o.pnd.pid ] )
+    suite._processWatcherMap[ o.pnd.pid ] = o;
   }
 
   function subprocessTerminationEnd( o )
   {
     if( o.sync )
     return;
-    _.assert( suite._processWatcherMap[ o.process.pid ] );
-    delete suite._processWatcherMap[ o.process.pid ];
+    _.assert( suite._processWatcherMap[ o.pnd.pid ] );
+    delete suite._processWatcherMap[ o.pnd.pid ];
   }
 
 }

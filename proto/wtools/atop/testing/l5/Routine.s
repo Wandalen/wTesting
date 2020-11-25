@@ -500,7 +500,11 @@ function _runEnd()
   let ok = tro._reportIsPositive();
   try
   {
-    suite.onRoutineEnd.call( tro.context, tro, ok ); /* xxx qqq : may return consequence! should pass error if thrown */
+    suite.onRoutineEnd.call( tro.context, tro, ok ); /* xxx qqq for Dmytro : may return consequence! should pass error if thrown */
+    /* qqq : should be
+    it = { err, arg, test : tro }
+    suite.onRoutineEnd.call( tro.context, it );
+    */
     if( tro.eventGive )
     tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context });
   }
@@ -512,7 +516,6 @@ function _runEnd()
 
   /* restoring exit code */
 
-  // if( suite.takingIntoAccount )
   if( tro._exitCode && !_.process.exitCode() )
   tro._exitCode = _.process.exitCode( tro._exitCode );
 
@@ -564,10 +567,6 @@ function _runFinally( err, arg )
   let tro = this;
   let suite = tro.suite;
 
-  // console.log( _runFinally, !!err, !!arg, !!tro._returned );
-  // _.assert( arguments.length === 2 );
-  // _.assert( tro._returned === null );
-
   if( tro._returned === null )
   tro._returned = [ err, arg ];
   else
@@ -578,8 +577,6 @@ function _runFinally( err, arg )
 
   if( err )
   {
-    // if( tro._returnedHow !== 'test routine time out' && err.reason !== 'time out' )
-    debugger;
     tro.exceptionReport
     ({
       err,
@@ -723,11 +720,16 @@ function cancel( o )
   if( tro._returnedCon.resourcesCount() === 0 )
   {
     tro._originalReturnedCon.error( o.err );
-    // if( !tro._returnedHow )
-    // tro._returnedHow = 'test routine time out';
   }
 
-  return wTester.cancel( o );
+  if( wTester.settings.fails > 0 )
+  if( wTester.settings.fails <= wTester.report.testCheckFails )
+  {
+    return wTester.cancel({ err : o.err });
+  }
+
+  // return wTester.cancel({ err : o.err, global : o.global });
+  return o.err;
 }
 
 cancel.defaults =
@@ -1776,7 +1778,7 @@ function _true( outcome )
 
     tro.exceptionReport
     ({
-      err : 'Test check "is" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
+      err : 'Test check "true()" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
     });
 
@@ -1810,7 +1812,7 @@ function _false( outcome )
 
     tro.exceptionReport
     ({
-      err : 'Test check "isNot" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
+      err : 'Test check "false()" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
     });
 
@@ -4800,8 +4802,8 @@ let Extension =
 
   // checker
 
-  true : _true, /* xxx : rename is -> true */ /* qqq2 for Dmytro : rename in documentation */
-  false : _false, /* xxx : rename isNot -> false /* qqq2 for Dmytro : rename in documentation */
+  true : _true,
+  false : _false,
 
   identical,
   notIdentical,

@@ -11199,7 +11199,7 @@ function asyncTestRoutine( test )
 
 function syncTestRoutineWithProperty( test )
 {
-  var tro; /* xxx : rename later */
+  var tro;
 
   function syncTest( t )
   {
@@ -11638,7 +11638,7 @@ function processWatchingOff( test )
     test.identical( suite.report.errorsArray.length, 0 );
     test.identical( suite.report.testCheckFails, 0 );
     test.identical( suite._processWatcherMap, null );
-    test.true( _.process.isAlive( o.process.pid ) )
+    test.true( _.process.isAlive( o.pnd.pid ) )
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11648,11 +11648,11 @@ function processWatchingOff( test )
     throw err;
 
 
-    o.process.kill();
+    o.pnd.kill();
 
     return _.time.out( 1000, () =>
     {
-      test.true( !_.process.isAlive( o.process.pid ) )
+      test.true( !_.process.isAlive( o.pnd.pid ) )
       return null;
     })
   });

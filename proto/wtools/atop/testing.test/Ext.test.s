@@ -2124,6 +2124,239 @@ function optionRapidityTwice( test )
   return a.ready;
 }
 
+//
+
+function optionFails( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+  a.reflect();
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'tst .run ** - default value of fails';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `.run ** v:5` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Command ".run ** v:5"' ), 1 );
+    test.identical( _.strCount( got.output, 'fails : null' ), 1 );
+    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'tst .run ** v:5 fails:0 - disable fails - unlimited number of fails';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `.run ** v:5 fails:0` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:0"' ), 1 );
+    test.identical( _.strCount( got.output, 'fails : 0' ), 1 );
+    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, /Thrown \d error/ ), 0 );
+    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'tst .run ** v:5 fails:10 - number of allowed fails is greater than total number of fails';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `.run ** v:5 fails:10` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:10"' ), 1 );
+    test.identical( _.strCount( got.output, 'fails : 10' ), 1 );
+    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, /Thrown \d error/ ), 0 );
+    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'tst .run ** v:5 fails:3 - number of allowed fails is equivalent to total number of fails';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `.run ** v:5 fails:3` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:3"' ), 1 );
+    test.identical( _.strCount( got.output, 'fails : 3' ), 1 );
+    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, /Thrown \d error/ ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test checks 3 / 7' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( got.output, 'Passed test routines 3 / 6' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'tst .run ** v:1 fails:3 - number of allowed fails is less than total number of fails';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `.run ** v:5 fails:1` })
+  .then( ( got ) =>
+  {
+    test.notIdentical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:1"' ), 1 );
+    test.identical( _.strCount( got.output, 'fails : 1' ), 1 );
+    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( got.output, /Thrown \d error/ ), 2 );
+    test.identical( _.strCount( got.output, 'Passed test checks 2 / 4' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( got.output, 'Passed test routines 2 / 3' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // commands
 // --
@@ -2875,36 +3108,86 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
 
   /* - */
 
-  let o =
+  a.ready.then( () =>
   {
-    execPath : `IsExecutedOnceOnSigint.test.js`,
-    outputPiping : 1,
-  }
+    test.case = 'sync onSuiteEnd';
 
-  a.appStartNonThrowing( o )
+    let o =
+    {
+      execPath : `OnceOnSigintSync.test.js`,
+      outputPiping : 1,
+      ready : _.take( null ),
+    }
 
-  o.conStart.then( () =>
-  {
-    o.process.send( 'SIGINT' );
-    return null;
+    a.appStartNonThrowing( o )
+
+    o.conStart.then( () =>
+    {
+      o.pnd.send( 'SIGINT' );
+      return null;
+    })
+
+    o.conTerminate.then( ( got ) =>
+    {
+      test.notIdentical( got.exitCode, 0 );
+
+      test.identical( _.strCount( got.output, 'Terminated by user' ), 0 );
+      test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
+      test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
+      test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
+      test.identical( _.strCount( got.output, 'Error' ), 0 );
+      test.identical( _.strCount( got.output, 'error' ), 2 );
+      test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+      test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
+      test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
+      test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
+
+      return null;
+    })
+
+    return o.conTerminate;
   })
 
-  o.conTerminate.then( ( got ) =>
+  /* - */
+
+  a.ready.then( () =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.case = 'async onSuiteEnd';
 
-    test.identical( _.strCount( got.output, 'Terminated by user' ), 0 );
-    test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
-    test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
-    test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-    test.identical( _.strCount( got.output, 'Error' ), 0 );
-    test.identical( _.strCount( got.output, 'error' ), 2 );
-    test.identical( _.strCount( got.output, 'Message of error' ), 1 );
-    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
-    test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
-    test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
+    let o =
+    {
+      execPath : `OnceOnSigintAsync.test.js`,
+      outputPiping : 1,
+      ready : _.take( null ),
+    }
 
-    return null;
+    a.appStartNonThrowing( o )
+
+    o.conStart.then( () =>
+    {
+      o.pnd.send( 'SIGINT' );
+      return null;
+    })
+
+    o.conTerminate.then( ( got ) =>
+    {
+      test.notIdentical( got.exitCode, 0 );
+
+      test.identical( _.strCount( got.output, 'Terminated by user' ), 0 );
+      test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
+      test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
+      test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
+      test.identical( _.strCount( got.output, 'Error' ), 0 );
+      test.identical( _.strCount( got.output, 'error' ), 2 );
+      test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+      test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
+      test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
+      test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
+
+      return null;
+    })
+
+    return o.conTerminate;
   })
 
   /* - */
@@ -2931,7 +3214,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
 
   let o =
   {
-    execPath : `IsExecutedOnceOnSigint.test.js`,
+    execPath : `OnceOnSigintAsync.test.js`,
     outputPiping : 1,
     ipc : 1
   }
@@ -2941,7 +3224,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
   o.conStart.then( () =>
   {
     /* time delay should be exactly 5s to match delay in test asset */
-    _.time.out( 5000, () => o.process.send( 'SIGINT' ) ); /* qqq : parametrize time delays */
+    _.time.out( 5000, () => o.pnd.send( 'SIGINT' ) ); /* qqq : parametrize time delays */
     return null;
   })
 
@@ -3153,7 +3436,6 @@ function termination( test )
 
     let Self =
     {
-      name : 'xxx : make working without name',
       routineTimeOut : context.t1*100,
       tests :
       {
@@ -3483,6 +3765,7 @@ let Self =
     optionRapidityAndSourceCode,
     optionRapidity,
     optionRapidityTwice,
+    optionFails,
 
     // commands
 

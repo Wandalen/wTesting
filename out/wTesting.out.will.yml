@@ -257,9 +257,11 @@ module:
           - >-
             ../proto/wtools/atop/testing.test/_asset/onSuiteEnd/ErrorMessageByConsequence.test.js
           - >-
-            ../proto/wtools/atop/testing.test/_asset/onSuiteEnd/IsExecutedOnceOnSigint.test.js
-          - >-
             ../proto/wtools/atop/testing.test/_asset/onSuiteEnd/NormalMessageByConsequence.test.js
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/onSuiteEnd/OnceOnSigintAsync.test.js
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/onSuiteEnd/OnceOnSigintSync.test.js
           - >-
             ../proto/wtools/atop/testing.test/_asset/onSuiteEnd/TimeOutInOnSuiteEnd.test.js
           - ../proto/wtools/atop/testing.test/_asset/optionAccuracy
@@ -268,6 +270,10 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/optionAccuracyExplicitly
           - >-
             ../proto/wtools/atop/testing.test/_asset/optionAccuracyExplicitly/Suite.test.js
+          - ../proto/wtools/atop/testing.test/_asset/optionFails
+          - ../proto/wtools/atop/testing.test/_asset/optionFails/A1.test.js
+          - ../proto/wtools/atop/testing.test/_asset/optionFails/A2.test.js
+          - ../proto/wtools/atop/testing.test/_asset/optionFails/A3.test.js
           - ../proto/wtools/atop/testing.test/_asset/optionRapidity
           - >-
             ../proto/wtools/atop/testing.test/_asset/optionRapidity/OptionRapidity.test.js

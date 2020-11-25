@@ -3713,6 +3713,117 @@ function timeLimitConsequence( test )
   return ready;
 }
 
+//
+
+function checkDiffWithRoutines( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'failout' );
+
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'Fail.test.js' ) ) );
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'not identical maps with 1 identical function'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical1` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'not identical maps with 1 identical and 1 different functions'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical2` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f2' : [ routine b ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f2' : [ routine b ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f2' : [ routine b ], 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'not identical maps with 3 identical and 1 different functions, with async'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical3` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f4' : [ routine a ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f4' : [ routine a ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f4' : [ routine a ], 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  })
+
+  return a.ready;
+}
+
+checkDiffWithRoutines.description =
+`
+Check diff from test.identical, when comparing maps that contain routines.
+`
+
 // --
 // suite
 // --
@@ -3804,6 +3915,7 @@ let Self =
     // related
 
     timeLimitConsequence,
+    checkDiffWithRoutines,
 
   }
 

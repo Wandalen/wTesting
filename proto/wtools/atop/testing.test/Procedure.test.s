@@ -67,8 +67,8 @@ function terminationBeginWithTwoNamespaces( test )
       currentPath,
       outputCollecting : 1,
       outputGraying : 1,
-      throwingExitCode : 0,
-      mode : 'shell',
+      throwingExitCode : 1,
+      mode : 'fork',
     });
 
     let start2 = _.process.starter
@@ -76,11 +76,11 @@ function terminationBeginWithTwoNamespaces( test )
       currentPath,
       outputCollecting : 1,
       outputGraying : 1,
-      throwingExitCode : 0,
-      mode : 'shell',
+      throwingExitCode : 1,
+      mode : 'fork',
     });
 
-    let con1 = start( 'node ' + programPath1 )
+    let con1 = start( programPath1 )
     .then( ( op ) =>
     {
       t.case = 'termination of procedures from first global namespace';
@@ -102,30 +102,35 @@ function terminationBeginWithTwoNamespaces( test )
       return null;
     });
 
-    let con2 = start2( 'node ' + programPath2 )
-    .then( ( op ) =>
+    con1 .then( () =>
     {
-      t.case = 'termination of procedures from second global namespace';
-      t.identical( op.exitCode, 0 );
-      t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
-      t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
-      t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-      t.identical( _.strCount( op.output, 'GLOBAL WHICH : testing' ), 1 );
-      t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
-      t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
-      t.identical( _.strCount( op.output, 'timer1' ), 1 );
-      t.identical( _.strCount( op.output, 'timer2' ), 1 );
-      t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-      t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
-      t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-      t.identical( _.strCount( op.output, 'procedure::' ), 1 );
-      t.identical( _.strCount( op.output, 'v1' ), 1 );
-      t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-      return null;
-    });
 
-    return _.Consequence.AndTake( con1, con2 );
+      return start2( programPath2 )
+      .then( ( op ) =>
+      {
+        t.case = 'termination of procedures from second global namespace';
+        t.identical( op.exitCode, 0 );
+        t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
+        t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+        t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+        t.identical( _.strCount( op.output, 'GLOBAL WHICH : testing' ), 1 );
+        t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
+        t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
+        t.identical( _.strCount( op.output, 'timer1' ), 1 );
+        t.identical( _.strCount( op.output, 'timer2' ), 1 );
+        t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+        t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+        t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+        t.identical( _.strCount( op.output, 'procedure::' ), 1 );
+        t.identical( _.strCount( op.output, 'v1' ), 1 );
+        t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+        return null;
+      });
+    })
+
+    return con1;
   }
+  testResult1.timeOut = 30000;
 
   /* */
 

@@ -51,9 +51,8 @@ function terminationBeginWithTwoNamespaces( test )
   let context = this;
   var testRoutine;
   let a = test.assetFor( 'double' );
-  let locals = { toolsPath : a.path.nativize( _.module.toolsPathGet() ) };
-  let programPath1 = a.program({ routine : program1, locals });
-  let programPath2 = a.program({ routine : program2, locals });
+  let programPath1 = a.path.nativize( a.path.normalize( a.program( program1 ) ) );
+  let programPath2 = a.path.nativize( a.path.normalize( a.program( program2 ) ) );
   let currentPath = a.abs( '.' );
 
   /* */
@@ -65,22 +64,20 @@ function terminationBeginWithTwoNamespaces( test )
 
     let start = _.process.starter
     ({
-      execPath : 'node ',
       currentPath,
       outputCollecting : 1,
       outputGraying : 1,
-      throwingExitCode : 0,
-      mode : 'shell',
+      throwingExitCode : 1,
+      mode : 'fork',
     });
 
     let start2 = _.process.starter
     ({
-      execPath : 'node ',
       currentPath,
       outputCollecting : 1,
       outputGraying : 1,
-      throwingExitCode : 0,
-      mode : 'shell',
+      throwingExitCode : 1,
+      mode : 'fork',
     });
 
     let con1 = start( programPath1 )
@@ -105,30 +102,34 @@ function terminationBeginWithTwoNamespaces( test )
       return null;
     });
 
-    let con2 = start2( programPath2 )
-    .then( ( op ) =>
+    con1 .then( () =>
     {
-      t.case = 'termination of procedures from second global namespace';
-      t.identical( op.exitCode, 0 );
-      t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
-      t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
-      t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-      t.identical( _.strCount( op.output, 'GLOBAL WHICH : testing' ), 1 );
-      t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
-      t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
-      t.identical( _.strCount( op.output, 'timer1' ), 1 );
-      t.identical( _.strCount( op.output, 'timer2' ), 1 );
-      t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
-      t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
-      t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-      t.identical( _.strCount( op.output, 'procedure::' ), 1 );
-      t.identical( _.strCount( op.output, 'v1' ), 1 );
-      t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-      return null;
-    });
+      return start2( programPath2 )
+      .then( ( op ) =>
+      {
+        t.case = 'termination of procedures from second global namespace';
+        t.identical( op.exitCode, 0 );
+        t.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
+        t.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+        t.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+        t.identical( _.strCount( op.output, 'GLOBAL WHICH : testing' ), 1 );
+        t.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
+        t.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
+        t.identical( _.strCount( op.output, 'timer1' ), 1 );
+        t.identical( _.strCount( op.output, 'timer2' ), 1 );
+        t.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+        t.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*time(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+        t.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+        t.identical( _.strCount( op.output, 'procedure::' ), 1 );
+        t.identical( _.strCount( op.output, 'v1' ), 1 );
+        t.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+        return null;
+      });
+    })
 
-    return _.Consequence.AndTake( con1, con2 );
+    return con1;
   }
+  testResult1.timeOut = 30000;
 
   /* */
 
@@ -285,6 +286,7 @@ function terminationBeginWithTwoNamespaces( test )
   }
 
 }
+
 
 terminationBeginWithTwoNamespaces.timeOut = 60000;
 terminationBeginWithTwoNamespaces.description =

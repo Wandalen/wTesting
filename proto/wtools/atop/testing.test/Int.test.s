@@ -11491,8 +11491,7 @@ function processWatchingOnDefault( test )
 
   var result = suite.run();
 
-  result
-  .finally( function( err, arg )
+  result.finally( function( err, arg )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 3 );

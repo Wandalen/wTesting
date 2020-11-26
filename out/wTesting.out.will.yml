@@ -237,6 +237,8 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/electron
           - ../proto/wtools/atop/testing.test/_asset/electron/index.html
           - ../proto/wtools/atop/testing.test/_asset/electron/main.js
+          - ../proto/wtools/atop/testing.test/_asset/failout
+          - ../proto/wtools/atop/testing.test/_asset/failout/Fail.test.js
           - ../proto/wtools/atop/testing.test/_asset/grouping
           - ../proto/wtools/atop/testing.test/_asset/grouping/Grouping.test.js
           - ../proto/wtools/atop/testing.test/_asset/grouping/Hello.js

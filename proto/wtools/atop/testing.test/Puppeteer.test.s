@@ -293,10 +293,12 @@ function chaining( test )
     })
   })
 
-  ready.then( () =>
+  ready.then( async () =>
   {
-    return browser.close()//qqq Phantom bug: https://github.com/puppeteer/puppeteer/issues/6341
-    .then( () => null )
+    let pages = await browser.pages();
+    await _.Consequence.And( ... pages.map( ( p ) => p.close() ) )
+    await browser.close() //qqq Phantom bug: https://github.com/puppeteer/puppeteer/issues/6341
+    return null;
   });
 
   return ready;

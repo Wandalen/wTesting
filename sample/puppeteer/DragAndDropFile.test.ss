@@ -74,8 +74,10 @@ async function fileDragAndDrop( test )
   await fileInput.uploadFile( __filename );
   let result = await page.evaluate( () => window.dropFiles );
   test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
-  await page.close();
-  await browser.close();/* phantom bug: https://github.com/puppeteer/puppeteer/issues/298 */
+
+  let pages = await browser.pages();
+  await _.Consequence.And( ... pages.map( ( p ) => p.close() ) );
+  await browser.close(); /* phantom bug: https://github.com/puppeteer/puppeteer/issues/298 */
 
   return null;
 }
@@ -105,6 +107,9 @@ async function fileDragAndDropWithHelper( test )
   })
   let result = await page.evaluate( () => window.dropFiles );
   test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
+
+  let pages = await browser.pages();
+  await _.Consequence.And( ... pages.map( ( p ) => p.close() ) );
   await browser.close();
 
   return null;

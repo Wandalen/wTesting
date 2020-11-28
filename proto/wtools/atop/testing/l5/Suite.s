@@ -529,7 +529,7 @@ function _runNow()
     onRoutine : ( tro ) => tro.routine,
     delay : 10,
   };
-  let r = _.execStages( testRoutines, op );
+  let r = _.stagesRun( testRoutines, op );
 
   return r;
 

@@ -3834,7 +3834,7 @@ function checkDiffWithProto( test )
     let exp3 = `- expected :`;
     let exp4 = `{ 'b' : 'hello2' }`;
     let exp5 = `- difference :`;
-    let exp6 = `{ 'a' : 'reducing*`;
+    // let exp6 = `{ 'a' : 'reducing*`;
 
     test.identical( _.strCount( op.output, exp1 ), 1 );
     test.identical( _.strCount( op.output, exp2 ), 0 );

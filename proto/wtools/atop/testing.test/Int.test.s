@@ -10925,7 +10925,7 @@ function onSuiteEndDelayedConsequence( test )
 
 function optionRoutine( test )
 {
-  let ready = _.now();
+  let ready = _.take( null );
   let visited = [];
 
   /* */
@@ -11491,8 +11491,7 @@ function processWatchingOnDefault( test )
 
   var result = suite.run();
 
-  result
-  .finally( function( err, arg )
+  result.finally( function( err, arg )
   {
     test.identical( suite.report.testCheckPasses, 0 );
     test.identical( suite.report.errorsArray.length, 3 );
@@ -11638,7 +11637,7 @@ function processWatchingOff( test )
     test.identical( suite.report.errorsArray.length, 0 );
     test.identical( suite.report.testCheckFails, 0 );
     test.identical( suite._processWatcherMap, null );
-    test.true( _.process.isAlive( o.process.pid ) )
+    test.true( _.process.isAlive( o.pnd.pid ) )
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11648,11 +11647,11 @@ function processWatchingOff( test )
     throw err;
 
 
-    o.process.kill();
+    o.pnd.kill();
 
     return _.time.out( 1000, () =>
     {
-      test.true( !_.process.isAlive( o.process.pid ) )
+      test.true( !_.process.isAlive( o.pnd.pid ) )
       return null;
     })
   });

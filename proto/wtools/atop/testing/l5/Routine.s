@@ -1778,7 +1778,7 @@ function _true( outcome )
 
     tro.exceptionReport
     ({
-      err : 'Test check "is" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
+      err : 'Test check "true()" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
     });
 
@@ -1812,7 +1812,7 @@ function _false( outcome )
 
     tro.exceptionReport
     ({
-      err : 'Test check "isNot" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
+      err : 'Test check "false()" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
       level : 2,
     });
 

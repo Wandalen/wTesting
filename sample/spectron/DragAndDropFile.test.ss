@@ -73,16 +73,26 @@ async function dragAndDropFile( test )
       let event = new Event( 'drop' );
       Object.assign( event, { dataTransfer: { files: e.target.files } } )
       document.querySelector( dropZoneSelector ).dispatchEvent( event );
-    }
+
+      let reader = new FileReader();
+      reader.onload = ( e ) =>
+      {
+        window.file = e.target.result;
+      }
+      reader.readAsText( e.target.files[ 0 ] );
+    };
+
     document.body.appendChild( input );
 
   }, fileInputId, dropZoneSelector );
 
-  let file = await app.client.uploadFile( __filename );
+  await app.client.uploadFile( __filename );
   var element = await app.client.$(`#${fileInputId}`);
-  await element.setValue( file )
+  await element.setValue( __filename )
   let result = await app.client.execute( () => window.dropFiles );
   test.identical( result, [ _.path.name({ path : __filename, full : 1 }) ] )
+  let result2 = await app.client.execute( () => window.file );
+  test.identical( result2, _.fileProvider.fileRead( __filename ) )
 
   await app.stop();
 

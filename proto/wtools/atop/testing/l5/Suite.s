@@ -529,7 +529,7 @@ function _runNow()
     onRoutine : ( tro ) => tro.routine,
     delay : 10,
   };
-  let r = _.execStages( testRoutines, op );
+  let r = _.stagesRun( testRoutines, op );
 
   return r;
 
@@ -1433,16 +1433,16 @@ function processWatchingBegin()
   {
     if( o.sync )
     return;
-    _.assert( !suite._processWatcherMap[ o.process.pid ] )
-    suite._processWatcherMap[ o.process.pid ] = o;
+    _.assert( !suite._processWatcherMap[ o.pnd.pid ] )
+    suite._processWatcherMap[ o.pnd.pid ] = o;
   }
 
   function subprocessTerminationEnd( o )
   {
     if( o.sync )
     return;
-    _.assert( suite._processWatcherMap[ o.process.pid ] );
-    delete suite._processWatcherMap[ o.process.pid ];
+    _.assert( suite._processWatcherMap[ o.pnd.pid ] );
+    delete suite._processWatcherMap[ o.pnd.pid ];
   }
 
 }
@@ -1469,8 +1469,10 @@ function processWatchingEnd()
 
   _.each( suite._processWatcherMap, ( descriptor, pid ) =>
   {
-    if( !descriptor.process.connected )
-    if( !_.process.isAlive( descriptor.process.pid ) )
+    // if( !descriptor.process.connected )
+    // if( !_.process.isAlive( descriptor.process.pid ) )
+    if( !descriptor.pnd.connected )
+    if( !_.process.isAlive( descriptor.pnd.pid ) )
     return delete suite._processWatcherMap[ pid ];
 
     let processInfo =
@@ -1481,7 +1483,8 @@ function processWatchingEnd()
     suite.exceptionReport({ err, unbarring : 1 });
     let con = _.process.terminate
     ({
-      pid : descriptor.process.pid,
+      pid : descriptor.pnd.pid,
+      // pid : descriptor.process.pid,
       withChildren : 1,
       ignoringErrorPerm : 1,
       ignoringErrorEsrch : 1,
@@ -1514,7 +1517,8 @@ function processWatchingEnd()
 
       _.each( suite._processWatcherMap, ( descriptor, pid ) =>
       {
-        if( _.process.isAlive( descriptor.process.pid ) )
+        // if( _.process.isAlive( descriptor.process.pid ) )
+        if( _.process.isAlive( descriptor.pnd.pid ) )
         {
           let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
           suite.exceptionReport({ err, unbarring : 1 });

@@ -3725,12 +3725,11 @@ function checkDiffWithRoutines( test )
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
     test.case = 'not identical maps with 1 identical function'
     return null;
-  })
+  });
 
   a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical1` })
   .then( ( op ) =>
@@ -3752,16 +3751,15 @@ function checkDiffWithRoutines( test )
     test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
-  })
+  });
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
-    test.case = 'not identical maps with 1 identical and 1 different functions'
+    test.case = 'not identical maps with 1 identical and 1 different functions';
     return null;
-  })
+  });
 
   a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical2` })
   .then( ( op ) =>
@@ -3783,14 +3781,13 @@ function checkDiffWithRoutines( test )
     test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
-  })
+  });
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
-    test.case = 'not identical maps with 3 identical and 1 different functions, with async'
+    test.case = 'not identical maps with 3 identical and 1 different functions, with async';
     return null;
   })
 
@@ -3814,7 +3811,7 @@ function checkDiffWithRoutines( test )
     test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
-  })
+  });
 
   return a.ready;
 }

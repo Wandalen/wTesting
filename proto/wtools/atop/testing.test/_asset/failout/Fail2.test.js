@@ -30,12 +30,12 @@ function identical2( test )
   var srcs =
   [
     {
-      a : 'hello',
+      a : 'hello1',
       b : 'hello2',
       __proto__ : {}
     },
     {
-      a : 'hello',
+      a : 'hello1',
       b : 'hello2',
       __proto__ : {}
     },

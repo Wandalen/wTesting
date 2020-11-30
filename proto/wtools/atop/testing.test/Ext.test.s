@@ -3977,7 +3977,7 @@ function checkDiffWithProto( test )
   a.appStartNonThrowing({ execPath : `${programPath} r:identical5` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.il( op.exitCode, 0 );
     console.log( 'OOO: ', op.output )
     /*
     OUTPUT : nothing, test passes, as it should
@@ -3989,9 +3989,9 @@ function checkDiffWithProto( test )
     let exp4 = `'b' : 'hello2'`;
     let exp5 = `__proto__`;
 
-    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp1 ), 0 );
     test.identical( _.strCount( op.output, exp2 ), 0 );
-    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 0 );
     test.identical( _.strCount( op.output, exp4 ), 0 );
     test.identical( _.strCount( op.output, exp5 ), 0 );
 

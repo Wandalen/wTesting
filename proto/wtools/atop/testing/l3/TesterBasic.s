@@ -213,9 +213,10 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  /* qqq : cover rapidity */
+  /* aaa : cover rapidity */ /* Dmytro : covered */
 
-  _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
+  _.mapSupplement( settings, _.mapOnly( appArgs.map, tester.Settings ) ); /* Dmytro : settings should supplements by missed values */
+  // _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 
   settingsTransform();
 

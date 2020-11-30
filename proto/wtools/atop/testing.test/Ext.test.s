@@ -3807,7 +3807,7 @@ Check diff from test.identical, when comparing maps that contain routines.
 
 //
 
-function checkDiffWithStrings( test )
+function checkDiffWithProto( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
@@ -3911,9 +3911,9 @@ function checkDiffWithStrings( test )
   return a.ready;
 }
 
-checkDiffWithStrings.description =
+checkDiffWithProto.description =
 `
-Check diff from test.identical, when comparing maps that contain routines.
+Check diff from test.identical, when comparing maps that set new __proto__.
 `
 
 // --
@@ -4008,7 +4008,7 @@ let Self =
 
     timeLimitConsequence,
     checkDiffWithRoutines,
-    checkDiffWithStrings
+    checkDiffWithProto
 
   }
 

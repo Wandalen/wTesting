@@ -5,27 +5,20 @@ let _ = require( 'wTesting' );
 
 function identical1( test )
 {
-  test.case = 'maps with 1 identical funcs, without path';
+  test.case = 'identical maps, 1 with __proto__ : {}';
   var srcs =
   [
     {
-      f : func1,
-      a : 'reducing1',
-      b : [ 1, 3 ],
-      c : true,
+      a : 'hello',
+      b : 'hello2',
+      __proto__ : {}
     },
     {
-      f : func1,
-      a : 'reducing2',
-      b : [ 1, 3 ],
-      c : true,
+      a : 'hello',
+      b : 'hello2'
     },
   ]
   test.identical( srcs[ 0 ], srcs[ 1 ] );
-
-  /* - */
-
-  function func1(){};
 
 }
 
@@ -33,66 +26,85 @@ function identical1( test )
 
 function identical2( test )
 {
-  test.case = 'maps with 1 identical func and 1 different';
+  test.case = 'identical maps, 2 with __proto__ : {}';
   var srcs =
   [
     {
-      f1 : func1,
-      f2 : function b(){},
-      a : 'reducing1',
-      b : [ 1, 3 ],
-      c : true,
+      a : 'hello',
+      b : 'hello2',
+      __proto__ : {}
     },
     {
-      f1 : func1,
-      f2 : function b(){},
-      a : 'reducing2',
-      b : [ 1, 3 ],
-      c : true,
+      a : 'hello',
+      b : 'hello2',
+      __proto__ : {}
     },
   ]
   test.identical( srcs[ 0 ], srcs[ 1 ] );
-
-  /* - */
-
-  function func1(){};
 }
 
 //
 
 function identical3( test )
 {
-  test.case = 'maps with 3 identical func and 1 different, with async';
+  test.case = 'not identical maps, 1 with __proto__ : {}';
   var srcs =
   [
     {
-      f1 : func1,
-      f2 : func2,
-      f3 : func3a,
-      f4 : function a(){},
-      a : 'reducing1',
-      b : [ 1, 3 ],
-      c : true,
+      a : 'hello1',
+      b : 'hello2',
+      __proto__ : {}
     },
     {
-      f1 : func1,
-      f2 : func2,
-      f3 : func3a,
-      f4 : function a(){},
-      a : 'reducing2',
-      b : [ 1, 3 ],
-      c : true,
+      a : 'hello',
+      b : 'hello2',
     },
   ]
   test.identical( srcs[ 0 ], srcs[ 1 ] );
 
-  /* - */
+}
 
-  function func1(){};
+//
 
-  function func2(){};
+function identical4( test )
+{
+  test.case = 'not identical maps, 2 with non empty identical __proto__';
+  var srcs =
+  [
+    {
+      a : 'hello1',
+      b : 'hello2',
+      __proto__ : { c : 'hello3' }
+    },
+    {
+      a : 'hello',
+      b : 'hello2',
+      __proto__ : { c : 'hello3' }
+    },
+  ]
+  test.identical( srcs[ 0 ], srcs[ 1 ] );
 
-  async function func3a(){};
+}
+
+//
+
+function identical5( test )
+{
+  test.case = 'not identical maps, 2 with non empty not identical __proto__';
+  var srcs =
+  [
+    {
+      a : 'hello1',
+      b : 'hello2',
+      __proto__ : { c : 'hello3' }
+    },
+    {
+      a : 'hello',
+      b : 'hello2',
+      __proto__ : { c : 'hello4' }
+    },
+  ]
+  test.identical( srcs[ 0 ], srcs[ 1 ] );
 
 }
 
@@ -106,6 +118,8 @@ let Self =
     identical1,
     identical2,
     identical3,
+    identical4,
+    identical5,
   }
 }
 

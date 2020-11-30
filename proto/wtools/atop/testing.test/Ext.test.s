@@ -3818,153 +3818,153 @@ function checkDiffWithProto( test )
 
   /* */
 
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'not identical maps, 1 with __proto__ : {}';
-  //   return null;
-  // })
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps, 1 with __proto__ : {}';
+    return null;
+  })
 
-  // a.appStartNonThrowing({ execPath : `${programPath} r:identical1` })
-  // .then( ( op ) =>
-  // {
-  //   test.ni( op.exitCode, 0 );
-  //   /*
-  //   OUTPUT :
-  // - got :
-  //   { 'a' : 'hello1', 'b' : 'hello2' }
-  // - expected :
-  //   { 'a' : 'hello1', 'b' : 'hello2' }
-  //   */
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical1` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    /*
+    OUTPUT :
+  - got :
+    { 'a' : 'hello1', 'b' : 'hello2' }
+  - expected :
+    { 'a' : 'hello1', 'b' : 'hello2' }
+    */
 
-  //   console.log( 'OOOO: ', op.output )
+    console.log( 'OOOO: ', op.output )
 
-  //   let exp1 = `- got :`;
-  //   let exp2 = `'a' : 'hello1'`;
-  //   let exp3 = `- expected :`;
-  //   let exp4 = `'b' : 'hello2'`;
-  //   let exp5 = `__proto__`;
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
 
-  //   test.identical( _.strCount( op.output, exp1 ), 1 );
-  //   test.identical( _.strCount( op.output, exp2 ), 0 );
-  //   test.identical( _.strCount( op.output, exp3 ), 1 );
-  //   test.identical( _.strCount( op.output, exp4 ), 0 );
-  //   test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
 
-  //   return null;
-  // })
-
-  /* */
-
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'identical maps, 2 with __proto__ : {}';
-  //   return null;
-  // })
-
-  // a.appStartNonThrowing({ execPath : `${programPath} r:identical2` })
-  // .then( ( op ) =>
-  // {
-  //   test.ni( op.exitCode, 0 );
-  //   console.log( 'OOO: ', op.output )
-  //   /*
-  //   OUTPUT :
-  //   nothing, test passes, but shouldn't
-  //   */
-
-  //   let exp1 = `- got :`;
-  //   let exp2 = `'a' : 'hello1'`;
-  //   let exp3 = `- expected :`;
-  //   let exp4 = `'b' : 'hello2'`;
-  //   let exp5 = `__proto__`;
-
-  //   test.identical( _.strCount( op.output, exp1 ), 1 );
-  //   test.identical( _.strCount( op.output, exp2 ), 0 );
-  //   test.identical( _.strCount( op.output, exp3 ), 1 );
-  //   test.identical( _.strCount( op.output, exp4 ), 0 );
-  //   test.identical( _.strCount( op.output, exp5 ), 1 );
-
-  //   return null;
-  // })
+    return null;
+  })
 
   /* */
 
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'not identical maps, 1 with __proto__ : {}';
-  //   return null;
-  // })
+  a.ready.then( () =>
+  {
+    test.case = 'identical maps, 2 with __proto__ : {}';
+    return null;
+  })
 
-  // a.appStartNonThrowing({ execPath : `${programPath} r:identical3` })
-  // .then( ( op ) =>
-  // {
-  //   test.ni( op.exitCode, 0 );
-  //   console.log( 'OOO: ', op.output )
-  //   /*
-  //   OUTPUT :
-  //   - got :
-  //     { 'a' : 'hello1', 'b' : 'hello2' }
-  //   - expected :
-  //     { 'a' : 'hello', 'b' : 'hello2' }
-  //   - difference :
-  //     { 'a' : 'hello*
-  //   */
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical2` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    nothing, test passes, but shouldn't
+    */
 
-  //   let exp1 = `- got :`;
-  //   let exp2 = `'a' : 'hello'`;
-  //   let exp3 = `'a' : 'hello1'`;
-  //   let exp4 = `- expected :`;
-  //   let exp5 = `'b' : 'hello2'`;
-  //   let exp6 = `__proto__`;
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
 
-  //   test.identical( _.strCount( op.output, exp1 ), 1 );
-  //   test.identical( _.strCount( op.output, exp2 ), 1 );
-  //   test.identical( _.strCount( op.output, exp3 ), 1 );
-  //   test.identical( _.strCount( op.output, exp4 ), 1 );
-  //   test.identical( _.strCount( op.output, exp5 ), 0 );
-  //   test.identical( _.strCount( op.output, exp6 ), 1 );
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
 
-  //   return null;
-  // })
+    return null;
+  })
 
   /* */
 
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'not identical maps, 2 with non empty equivalent __proto__';
-  //   return null;
-  // })
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps, 1 with __proto__ : {}';
+    return null;
+  })
 
-  // a.appStartNonThrowing({ execPath : `${programPath} r:identical4` })
-  // .then( ( op ) =>
-  // {
-  //   test.ni( op.exitCode, 0 );
-  //   console.log( 'OOO: ', op.output )
-  //   /*
-  //   OUTPUT :
-  //   - got :
-  //     { 'a' : 'hello1', 'b' : 'hello2' }
-  //   - expected :
-  //     { 'a' : 'hello', 'b' : 'hello2' }
-  //   - difference :
-  //     { 'a' : 'hello*
-  //   */
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical3` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    - got :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    - expected :
+      { 'a' : 'hello', 'b' : 'hello2' }
+    - difference :
+      { 'a' : 'hello*
+    */
 
-  //   let exp1 = `- got :`;
-  //   let exp2 = `'a' : 'hello'`;
-  //   let exp3 = `'a' : 'hello1'`;
-  //   let exp4 = `- expected :`;
-  //   let exp5 = `'b' : 'hello2'`;
-  //   let exp6 = `__proto__`;
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello'`;
+    let exp3 = `'a' : 'hello1'`;
+    let exp4 = `- expected :`;
+    let exp5 = `'b' : 'hello2'`;
+    let exp6 = `__proto__`;
 
-  //   test.identical( _.strCount( op.output, exp1 ), 1 );
-  //   test.identical( _.strCount( op.output, exp2 ), 1 );
-  //   test.identical( _.strCount( op.output, exp3 ), 1 );
-  //   test.identical( _.strCount( op.output, exp4 ), 1 );
-  //   test.identical( _.strCount( op.output, exp5 ), 0 );
-  //   test.identical( _.strCount( op.output, exp6 ), 1 );
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 0 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
-  //   return null;
-  // })
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps, 2 with non empty equivalent __proto__';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical4` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    - got :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    - expected :
+      { 'a' : 'hello', 'b' : 'hello2' }
+    - difference :
+      { 'a' : 'hello*
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello'`;
+    let exp3 = `'a' : 'hello1'`;
+    let exp4 = `- expected :`;
+    let exp5 = `'b' : 'hello2'`;
+    let exp6 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 0 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  })
 
   /* */
 

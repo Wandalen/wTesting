@@ -3998,6 +3998,42 @@ function checkDiffWithProto( test )
     return null;
   })
 
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'identical maps, diff __proto__, same fields on diff level in __proto__';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical6` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    - got :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    - expected :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+
+    return null;
+  })
+
   return a.ready;
 
   /* - */
@@ -4117,6 +4153,33 @@ function checkDiffWithProto( test )
       test.identical( obj1, obj2 );
     }
 
+    //
+
+    function identical6( test )
+    {
+      test.case = `identical maps, diff __proto__, same fields on diff level in __proto__`;
+
+      let proto1 = {}
+      Object.setPrototypeOf( proto1, { 'c' : 'hello3' } );
+
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, proto1 );
+
+      let proto2 = { 'c' : 'hello3' };
+      let obj2 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj2, proto2 );
+
+      test.identical( obj1, obj2 );
+    }
+
     let Self =
     {
       name : 'Fail',
@@ -4127,6 +4190,7 @@ function checkDiffWithProto( test )
         identical3,
         identical4,
         identical5,
+        identical6
       }
     }
 

@@ -6,11 +6,10 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../wtools/Tools.s' );
-
   require( '../testing/entry/Main.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
-
+  _.include( 'wConsequence' );
 }
 
 let _global = _global_;
@@ -2893,25 +2892,25 @@ function timeOutSeveralRoutines( test )
         test.true( true );
         console.log( 'routine1:time2' );
       });
-      return _.time.out( context.t2*3 );
+      return _globals_.testing.wTools.time.out( context.t2*3 );
     }
 
     function routine2( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine3( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine4( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     let Self =
@@ -2995,26 +2994,26 @@ function timeOutSeveralRoutinesDesync( test )
         test.true( true );
         console.log( 'routine1:time2' );
       });
-      _.time.out( context.t2*3 ).deasync();
+      _globals_.testing.wTools.time.out( context.t2*3 ).deasync();
       test.true( true );
     }
 
     function routine2( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine3( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine4( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     let Self =

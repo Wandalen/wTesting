@@ -10925,7 +10925,7 @@ function onSuiteEndDelayedConsequence( test )
 
 function optionRoutine( test )
 {
-  let ready = _.now();
+  let ready = _.take( null );
   let visited = [];
 
   /* */

@@ -3828,20 +3828,21 @@ function checkDiffWithProto( test )
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
 
     let exp1 = `- got :`;
-    let exp2 = `{ 'a' : 'hello1' }`;
+    let exp2 = `'a' : 'hello1'`;
     let exp3 = `- expected :`;
-    let exp4 = `{ 'b' : 'hello2' }`;
-    let exp5 = `- difference :`;
+    let exp4 = `'b' : 'hello2'`;
+    // let exp5 = `- difference :`;
     // let exp6 = `{ 'a' : 'reducing*`;
 
     test.identical( _.strCount( op.output, exp1 ), 1 );
     test.identical( _.strCount( op.output, exp2 ), 0 );
     test.identical( _.strCount( op.output, exp3 ), 1 );
     test.identical( _.strCount( op.output, exp4 ), 0 );
-    test.identical( _.strCount( op.output, exp5 ), 1 );
-    test.identical( _.strCount( op.output, exp6 ), 1 );
+    // test.identical( _.strCount( op.output, exp5 ), 1 );
+    // test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   })

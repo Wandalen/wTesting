@@ -2461,6 +2461,93 @@ function version( test )
   return a.ready;
 }
 
+//
+
+function imply( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
+  a.reflect();
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = '.imply v:8 rapidity:-9 .run **';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.imply v:8 rapidity:-9 .run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity4` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity5` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity6` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity7` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity8` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity9` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity ` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity0` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity3` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity4` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity5` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity6` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity7` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity8` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity9` ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = '.imply v:5 rapidity:9 .run **';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.imply v:5 rapidity:9 .run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity4` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity5` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity6` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity7` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity8` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity9` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity ` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity0` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity3` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity4` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity5` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity6` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity7` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity8` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity9` ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // time out
 // --
@@ -3861,6 +3948,7 @@ let Self =
 
     help,
     version,
+    imply,
 
     // time out
 

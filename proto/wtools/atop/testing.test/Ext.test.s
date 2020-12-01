@@ -3814,7 +3814,6 @@ function checkDiffWithProto( test )
   let programPath = a.program( program );
 
   a.reflect();
-  test.true( a.fileProvider.fileExists( a.abs( 'Fail2.test.js' ) ) );
 
   /* */
 

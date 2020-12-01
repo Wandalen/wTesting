@@ -182,8 +182,9 @@ function appArgsRead()
   let logger = tester.logger;
   let settings = tester.settings;
 
-  if( tester._appArgs )
-  return tester._appArgs;
+  /* Dmytro : in sequence of commands it has side effect - the subject of previous command set exec path and it is not changed in next command */
+  // if( tester._appArgs )
+  // return tester._appArgs;
 
   let o = _.routineOptions( appArgsRead, arguments );
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -202,7 +203,7 @@ function appArgsRead()
     namesMap : tester.SettingsNameMap,
     removing : 0,
     only : 1,
-  }
+  };
 
   _.process.inputReadTo( readOptions );
   if( appArgs.err )
@@ -220,21 +221,21 @@ function appArgsRead()
   settingsTransform();
 
   let v = settings.verbosity;
-  _.assert( v === null || v === undefined || _.boolLike( v ) || _.numberIs( v ) );
   if( v === null || v === undefined )
   settings.verbosity = tester.verbosity;
+  else
+  _.assert( _.boolLike( v ) || _.numberIs( v ) );
+  tester.verbosity = settings.verbosity;
 
   if( settings.beeping === null )
   settings.beeping = !!settings.verbosity;
 
-  tester._appArgs = appArgs;
+  // tester._appArgs = appArgs;
   tester.filePath = _.strUnquote( appArgs.subject ) || _.path.current();
   tester.filePath = _.path.join( _.path.current(), tester.filePath );
 
   if( settings.negativity !== undefined && settings.negativity !== null )
   tester.negativity = Number( settings.negativity ) || 0;
-
-  tester.verbosity = settings.verbosity;
 
   return appArgs;
 

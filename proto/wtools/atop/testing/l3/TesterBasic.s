@@ -188,7 +188,8 @@ function appArgsRead()
 
   let o = _.routineOptions( appArgsRead, arguments );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.mapExtend( settings, tester.Settings );
+  /* Dmytro : defaults should not rewrite settings but supplement it */
+  _.mapSupplement( settings, tester.Settings );
 
   let appArgs = _.process.input();
   if( o.propertiesMap !== null )
@@ -216,7 +217,7 @@ function appArgsRead()
 
   /* qqq : cover rapidity */
 
-  _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
+  // _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
 
   settingsTransform();
 

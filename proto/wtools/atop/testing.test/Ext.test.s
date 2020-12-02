@@ -586,7 +586,7 @@ function runWithSeveralMixedOptions( test )
   let context = this;
   let a = context.assetFor( test, 'optionRapidity' );
   a.reflect();
-  test.true( a.fileProvider.fileExists( a.abs( 'OptionRapidity.test.s' ) ) );
+  test.true( a.fileProvider.fileExists( a.abs( 'OptionRapidity.test.js' ) ) );
 
   /* - */
 
@@ -615,8 +615,6 @@ function runWithSeveralMixedOptions( test )
 
   return a.ready;
 }
-
-runWithSeveralMixedOptions.experimental = 1;
 
 //
 
@@ -3822,7 +3820,6 @@ function timeLimitConsequence( test )
 
     return _.time.out( t*15, function()
     {
-      debugger;
       test.true( con.argumentsGet()[ 0 ] === 'a' );
       test.identical( con.argumentsCount(), 1 );
       test.identical( con.errorsCount(), 0 );

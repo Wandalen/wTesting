@@ -182,18 +182,30 @@ function appArgsRead()
   let logger = tester.logger;
   let settings = tester.settings;
 
-  if( tester._appArgs )
-  return tester._appArgs;
+  /* Dmytro : in sequence of commands it has side effect - the subject of previous command set exec path and it is not changed in next command */
+  // if( tester._appArgs )
+  // return tester._appArgs;
 
   let o = _.routineOptions( appArgsRead, arguments );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.mapExtend( settings, tester.Settings );
+  /* Dmytro : defaults should not rewrite settings but supplement it */
+  _.mapSupplement( settings, tester.Settings );
 
   let appArgs = _.process.input();
   if( o.propertiesMap !== null )
   appArgs.propertiesMap = o.propertiesMap;
   if( o.subject !== null )
   appArgs.subject = o.subject;
+
+  if( appArgs.propertiesMap )
+  {
+    appArgs.propertiesMap = filterVectorizedOptions( appArgs.propertiesMap );
+    if( appArgs.propertiesMap.routine )
+    {
+      settings.routine = appArgs.propertiesMap.routine;
+      delete appArgs.propertiesMap.routine;
+    }
+  }
 
   let readOptions =
   {
@@ -202,7 +214,7 @@ function appArgsRead()
     namesMap : tester.SettingsNameMap,
     removing : 0,
     only : 1,
-  }
+  };
 
   _.process.inputReadTo( readOptions );
   if( appArgs.err )
@@ -213,42 +225,45 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  /* qqq : cover rapidity */
-
-  _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
-
-  settingsTransform();
+  /* aaa : cover rapidity */ /* Dmytro : covered a time ago */
 
   let v = settings.verbosity;
-  _.assert( v === null || v === undefined || _.boolLike( v ) || _.numberIs( v ) );
   if( v === null || v === undefined )
   settings.verbosity = tester.verbosity;
+  else
+  _.assert( _.boolLike( v ) || _.numberIs( v ) );
+  tester.verbosity = settings.verbosity;
 
   if( settings.beeping === null )
   settings.beeping = !!settings.verbosity;
 
-  tester._appArgs = appArgs;
+  // tester._appArgs = appArgs;
   tester.filePath = _.strUnquote( appArgs.subject ) || _.path.current();
   tester.filePath = _.path.join( _.path.current(), tester.filePath );
 
   if( settings.negativity !== undefined && settings.negativity !== null )
   tester.negativity = Number( settings.negativity ) || 0;
 
-  tester.verbosity = settings.verbosity;
-
   return appArgs;
 
   /* */
 
-  function settingsTransform()
+  function filterVectorizedOptions( src )
   {
-    _.each( settings, ( value, key ) =>
+    _.each( src, ( value, key ) =>
     {
       if( _.arrayLike( value ) )
-      if( value.length > 1 )
       if( !SettingsAsArrayMap[ key ] )
-      settings[ key ] = value[ value.length - 1 ];
-    })
+      src[ key ] = value[ value.length - 1 ];
+    });
+
+    if( src.r )
+    {
+      src.routine = _.scalarAppend( src.routine, src.r );
+      delete src.r;
+    }
+
+    return src;
   }
 }
 
@@ -1355,6 +1370,8 @@ let SettingsNameMap =
 
 let SettingsAsArrayMap =
 {
+  routine : 1,
+  r : 1,
 }
 
 /**

@@ -1469,11 +1469,6 @@ function processWatchingEnd()
 
   _.each( suite._processWatcherMap, ( descriptor, pid ) =>
   {
-    // if( !descriptor.process.connected )
-    // if( !_.process.isAlive( descriptor.process.pid ) )
-    if( !descriptor.pnd.connected )
-    if( !_.process.isAlive( descriptor.pnd.pid ) )
-    return delete suite._processWatcherMap[ pid ];
 
     let processInfo =
 `    ExecPath: ${descriptor.execPath}

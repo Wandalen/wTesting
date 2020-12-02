@@ -15,7 +15,7 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 
-/* qqq : parametrixe delays */
+/* qqq : parametrize delays */
 
 // --
 // context

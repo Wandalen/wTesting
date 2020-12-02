@@ -197,6 +197,16 @@ function appArgsRead()
   if( o.subject !== null )
   appArgs.subject = o.subject;
 
+  if( appArgs.propertiesMap )
+  {
+    appArgs.propertiesMap = filterVectorizedOptions( appArgs.propertiesMap );
+    if( appArgs.propertiesMap.routine )
+    {
+      settings.routine = appArgs.propertiesMap.routine;
+      delete appArgs.propertiesMap.routine;
+    }
+  }
+
   let readOptions =
   {
     propertiesMap : appArgs.propertiesMap,
@@ -215,11 +225,7 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  /* qqq : cover rapidity */
-
-  // _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
-
-  settingsTransform();
+  /* aaa : cover rapidity */ /* Dmytro : covered a time ago */
 
   let v = settings.verbosity;
   if( v === null || v === undefined )
@@ -242,15 +248,22 @@ function appArgsRead()
 
   /* */
 
-  function settingsTransform()
+  function filterVectorizedOptions( src )
   {
-    _.each( settings, ( value, key ) =>
+    _.each( src, ( value, key ) =>
     {
       if( _.arrayLike( value ) )
-      if( value.length > 1 )
       if( !SettingsAsArrayMap[ key ] )
-      settings[ key ] = value[ value.length - 1 ];
-    })
+      src[ key ] = value[ value.length - 1 ];
+    });
+
+    if( src.r )
+    {
+      src.routine = _.scalarAppend( src.routine, src.r );
+      delete src.r;
+    }
+
+    return src;
   }
 }
 
@@ -1357,6 +1370,8 @@ let SettingsNameMap =
 
 let SettingsAsArrayMap =
 {
+  routine : 1,
+  r : 1,
 }
 
 /**

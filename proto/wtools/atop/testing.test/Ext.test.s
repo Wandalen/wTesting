@@ -590,103 +590,103 @@ function runWithSeveralMixedOptions( test )
 
   /* - */
 
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'run with several option `r` and several `verbosity`';
-  //   return null;
-  // });
-  //
-  // a.appStart({ execPath : `.run ./ r:routinePositiveRapidity1 r:routinePositiveRapidity2 v:1 v:5` })
-  // .then( ( got ) =>
-  // {
-  //   test.identical( got.exitCode, 0 );
-  //
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
-  //
-  //   return null;
-  // });
-  //
-  // /* */
-  //
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'run with vectorized option `r` and vectorized `verbosity`';
-  //   return null;
-  // });
-  //
-  // a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
-  // .then( ( got ) =>
-  // {
-  //   test.identical( got.exitCode, 0 );
-  //
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
-  //
-  //   return null;
-  // });
-  //
-  // /* */
-  //
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'run with several option `routine` and several `verbosity`';
-  //   return null;
-  // });
-  //
-  // a.appStart({ execPath : `.run ./ routine:routinePositiveRapidity1 routine:routinePositiveRapidity2 v:1 v:5` })
-  // .then( ( got ) =>
-  // {
-  //   test.identical( got.exitCode, 0 );
-  //
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
-  //
-  //   return null;
-  // });
-  //
-  // /* */
-  //
-  // a.ready.then( () =>
-  // {
-  //   test.case = 'run with vectorized option `routine` and vectorized `verbosity`';
-  //   return null;
-  // });
-  //
-  // a.appStart({ execPath : `.run ./ routine:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
-  // .then( ( got ) =>
-  // {
-  //   test.identical( got.exitCode, 0 );
-  //
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
-  //   test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
-  //   var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
-  //   test.identical( _.strCount( got.output, exp ), 1 );
-  //   test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
-  //
-  //   return null;
-  // });
+  a.ready.then( () =>
+  {
+    test.case = 'run with several option `r` and several `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:routinePositiveRapidity1 r:routinePositiveRapidity2 v:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with several option `routine` and several `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:routinePositiveRapidity1 routine:routinePositiveRapidity2 v:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `routine` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
 
   /* */
 

@@ -139,6 +139,214 @@ shouldThrowErrorSyncProcessHasErrorBefore.experimental = 1;
 
 //
 
+
+function disconnectedChildProcess( test )
+{
+  var suite = wTestSuite
+  ({
+
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+
+    onSuiteBegin : suiteBegin,
+    onSuiteEnd : suiteEnd,
+    routineTimeOut : 3000,
+    processWatching : 1,
+    name : 'DisconnectedProcess',
+
+    context :
+    {
+      suiteTempPath : null,
+      toolsPath : null,
+      toolsPathInclude : null,
+      t0 : 100,
+      t1 : 1000,
+      t2 : 5000,
+      t3 : 15000,
+      assetFor,
+    },
+
+    tests :
+    {
+      disconnectedChildProcess,
+    },
+
+  })
+
+  var result = suite.run();
+
+  result.finally( ( _err, got ) =>
+  {
+    test.identical( suite.report.errorsArray.length, 1 );
+
+    console.log( suite.report.errorsArray.length );
+    console.log( suite.report.errorsArray[ 0 ] );
+    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DisconnectedProcess" had zombie process with pid' ), 1 );
+
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+
+    return null;
+  })
+
+  return result;
+
+  function suiteBegin()
+  {
+    var self = this;
+    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
+    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+  }
+
+  //
+
+  function suiteEnd()
+  {
+    var self = this;
+    _.assert( _.strHas( self.suiteTempPath, '/DetachedProcess-' ) )
+    _.path.tempClose( self.suiteTempPath );
+  }
+
+  function disconnectedChildProcess( test )
+  {
+    let context = this;
+    let a = context.assetFor( test, null );
+
+    let testAppPath = a.path.nativize( a.program( testApp ) );
+
+    let o =
+    {
+      execPath : 'node ' + testAppPath,
+      mode : 'spawn',
+      detaching : 0,
+      stdio : 'pipe',
+      outputPiping : 1
+    }
+
+    _.process.start( o );
+
+    o.conStart.thenGive( () => o.disconnect() )
+
+    //
+
+    function testApp()
+    {
+      console.log( 'Child process start', process.pid )
+      setTimeout( () =>
+      {
+        console.log( 'Child process end' )
+        return null;
+      }, context.t2 * 3 )
+    }
+  }
+}
+
+//
+
+function disconnectedChildProcessWithIPC( test )
+{
+  var suite = wTestSuite
+  ({
+
+    override : notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+
+    onSuiteBegin : suiteBegin,
+    onSuiteEnd : suiteEnd,
+    routineTimeOut : 3000,
+    processWatching : 1,
+    name : 'DisconnectedProcessIPC',
+
+    context :
+    {
+      suiteTempPath : null,
+      toolsPath : null,
+      toolsPathInclude : null,
+      t0 : 100,
+      t1 : 1000,
+      t2 : 5000,
+      t3 : 15000,
+      assetFor,
+    },
+
+    tests :
+    {
+      disconnectedChildProcessIPC,
+    },
+
+  })
+
+  var result = suite.run();
+
+  result.finally( ( _err, got ) =>
+  {
+    test.identical( suite.report.errorsArray.length, 1 );
+
+    console.log( suite.report.errorsArray.length );
+    console.log( suite.report.errorsArray[ 0 ] );
+    test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DisconnectedProcessIPC" had zombie process with pid' ), 1 );
+
+    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+
+    return null;
+  })
+
+  return result;
+
+  function suiteBegin()
+  {
+    var self = this;
+    self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
+    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+  }
+
+  //
+
+  function suiteEnd()
+  {
+    var self = this;
+    _.assert( _.strHas( self.suiteTempPath, '/DetachedProcess-' ) )
+    _.path.tempClose( self.suiteTempPath );
+  }
+
+  function disconnectedChildProcessIPC( test )
+  {
+    let context = this;
+    let a = context.assetFor( test, null );
+
+    let testAppPath = a.path.nativize( a.program( testApp ) );
+
+    let o =
+    {
+      execPath : 'node ' + testAppPath,
+      mode : 'spawn',
+      detaching : 0,
+      ipc : 1,
+      stdio : 'pipe',
+      outputPiping : 1
+    }
+
+    _.process.start( o );
+
+    o.conStart.thenGive( () => o.disconnect() )
+
+    //
+
+    function testApp()
+    {
+      console.log( 'Child process start', process.pid )
+      setTimeout( () =>
+      {
+        console.log( 'Child process end' )
+        return null;
+      }, context.t2 * 3 )
+    }
+  }
+}
+
+//
+
 function detachedDisconnectedChildProcess( test )
 {
   var suite = wTestSuite
@@ -179,7 +387,7 @@ function detachedDisconnectedChildProcess( test )
     test.identical( suite.report.errorsArray.length, 1 );
 
     console.log( suite.report.errorsArray.length );
-    console.log( suite.report.errorsArray );
+    console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DetachedProcess" had zombie process with pid' ), 1 );
 
     test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
@@ -257,6 +465,8 @@ let Self =
   {
     main,
     shouldThrowErrorSyncProcessHasErrorBefore,
+    disconnectedChildProcess,
+    disconnectedChildProcessWithIPC,
     detachedDisconnectedChildProcess
   }
 

@@ -18,7 +18,7 @@ function routine1( test )
   })
 }
 
-routine1.timeOut = 100;
+routine1.timeOut = 500;
 
 //
 

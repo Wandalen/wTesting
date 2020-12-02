@@ -264,7 +264,7 @@ function _routineSet( src )
   let suite = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( src === null || _.routineIs( src ) || _.strIs( src ), 'Expects routine or string' );
+  _.assert( src === null || _.routineIs( src ) || _.strIs( src ) || _.arrayIs( src ), 'Expects routine or string' );
 
   if( _.routineIs( src ) )
   debugger;
@@ -1469,11 +1469,6 @@ function processWatchingEnd()
 
   _.each( suite._processWatcherMap, ( descriptor, pid ) =>
   {
-    // if( !descriptor.process.connected )
-    // if( !_.process.isAlive( descriptor.process.pid ) )
-    if( !descriptor.pnd.connected )
-    if( !_.process.isAlive( descriptor.pnd.pid ) )
-    return delete suite._processWatcherMap[ pid ];
 
     let processInfo =
 `    ExecPath: ${descriptor.execPath}

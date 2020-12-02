@@ -225,16 +225,7 @@ function appArgsRead()
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-<<<<<<< HEAD
-  /* aaa : cover rapidity */ /* Dmytro : covered */
-
-  _.mapSupplement( settings, _.mapOnly( appArgs.map, tester.Settings ) ); /* Dmytro : settings should supplements by missed values */
-  // _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
-
-  settingsTransform();
-=======
   /* aaa : cover rapidity */ /* Dmytro : covered a time ago */
->>>>>>> 824342f21050509a502fc3e81bc57564fdb01ee3
 
   let v = settings.verbosity;
   if( v === null || v === undefined )

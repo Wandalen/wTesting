@@ -52,7 +52,7 @@ function exec()
     ({
       program : _.strUnquote( appArgs.original ),
       withParsed : 1,
-      severalValues : 0,
+      severalValues : 1,
     });
   })
   .finally( ( err, arg ) =>

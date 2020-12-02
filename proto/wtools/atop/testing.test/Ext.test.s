@@ -357,6 +357,258 @@ function run( test )
   return a.ready;
 }
 
+function run( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'hello' );
+
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'node Hello.test.js beeping:0'
+    return null;
+  })
+
+  a.shellNonThrowing({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'wtest Hello.test.js'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute path as subject + options'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute nativized path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute nativized path as subject + options'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute nativized path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute nativized path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  // shell( 'npm rm -g wTesting' );
+  return a.ready;
+}
+
 //
 
 function runWithQuotedPath( test )
@@ -514,6 +766,125 @@ function runWithQuotedPath( test )
 
     return null;
   })
+
+  return a.ready;
+}
+
+//
+
+function runWithSeveralSimilarOptions( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'grouping' );
+  a.reflect();
+
+  test.true( a.fileProvider.fileExists( a.abs( 'Grouping.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ v:3 verbosity:5` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ v:3 verbosity:5"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ v:5 verbosity:3` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ v:5 verbosity:3"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ verbosity:3 v:5` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ verbosity:3 v:5"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ verbosity:5 v:3` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ verbosity:5 v:3"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* - */
 
   return a.ready;
 }
@@ -4140,6 +4511,7 @@ let Self =
 
     run,
     runWithQuotedPath,
+    runWithSeveralSimilarOptions,
     checkFails,
     runWithSeveralMixedOptions,
     double,

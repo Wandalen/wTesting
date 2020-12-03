@@ -1648,7 +1648,7 @@ let Restricts =
 let Statics =
 {
   Froms,
-  UsingUniqueNames : _.define.contained({ ini : 1, readOnly : 1 }),
+  UsingUniqueNames : _.define.contained({ val : 1, readOnly : 1 }),
   _SuitesReady : new _.Consequence().take( null ),
 }
 

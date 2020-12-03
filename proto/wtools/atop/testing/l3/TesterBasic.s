@@ -182,14 +182,12 @@ function appArgsRead()
   let logger = tester.logger;
   let settings = tester.settings;
 
-  /* Dmytro : in sequence of commands it has side effect - the subject of previous command set exec path and it is not changed in next command */
-  // if( tester._appArgs )
-  // return tester._appArgs;
+  if( tester._appArgs )
+  return tester._appArgs;
 
   let o = _.routineOptions( appArgsRead, arguments );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  /* Dmytro : defaults should not rewrite settings but supplement it */
-  _.mapSupplement( settings, tester.Settings );
+  _.mapExtend( settings, tester.Settings );
 
   let appArgs = _.process.input();
   if( o.propertiesMap !== null )
@@ -220,6 +218,9 @@ function appArgsRead()
   if( appArgs.err )
   throw _.errBrief( appArgs.err );
 
+  if( appArgs.propertiesMap && settings.routine )
+  appArgs.propertiesMap.routine = settings.routine;
+
   _.assert( _.mapIs( appArgs.map ) );
 
   if( !appArgs.map )
@@ -243,6 +244,8 @@ function appArgsRead()
 
   if( settings.negativity !== undefined && settings.negativity !== null )
   tester.negativity = Number( settings.negativity ) || 0;
+
+  tester._appArgs = appArgs;
 
   return appArgs;
 

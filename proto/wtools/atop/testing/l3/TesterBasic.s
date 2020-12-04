@@ -238,8 +238,8 @@ function appArgsRead()
   if( settings.beeping === null )
   settings.beeping = !!settings.verbosity;
 
-  // tester._appArgs = appArgs;
   tester.filePath = _.strUnquote( appArgs.subject ) || _.path.current();
+  tester.filePath = _.path.nativize( tester.filePath );
   tester.filePath = _.path.join( _.path.current(), tester.filePath );
 
   if( settings.negativity !== undefined && settings.negativity !== null )

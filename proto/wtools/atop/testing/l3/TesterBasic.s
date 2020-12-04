@@ -786,7 +786,7 @@ function suitesFilterOut( suites )
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
   _.assert( _.objectIs( suites ) );
 
-  suites = _.entityFilter( suites, function( suite )
+  suites = _.filter_( null, suites, function( suite )
   {
     if( _.strIs( suite ) )
     {

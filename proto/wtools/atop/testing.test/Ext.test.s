@@ -4403,12 +4403,20 @@ function checkDiffWithRoutines( test )
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, `- got :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f' : \[ .* \], 'a' : 'reducing1' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- expected :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f' : \[ .* \], 'a' : 'reducing2' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- difference :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f' : \[ .* \], 'a' : 'reducing\*/ ), 1 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   });
@@ -4425,12 +4433,20 @@ function checkDiffWithRoutines( test )
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, `- got :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f1' : \[ .* \], 'f2' : \[ .* \], 'a' : 'reducing1' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- expected :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f1' : \[ .* \], 'f2' : \[ .* \], 'a' : 'reducing2' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- difference :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f1' : \[ .* \], 'f2' : \[ .* \], 'a' : 'reducing\*/ ), 1 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f2' : [ routine b ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f2' : [ routine b ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f2' : [ routine b ], 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   });
@@ -4448,20 +4464,19 @@ function checkDiffWithRoutines( test )
   {
     test.ni( op.exitCode, 0 );
 
-    test.identical( _.strCount( op.output, `- got :` ), 1 );
-    var exp =
-    /\{\s*\n\s*'f1' : .*,\s*\n\s*'f2' : .*,\s*\n\s*'f3' : async.*,\s*\n\s*'f4' : .*,\s*\n\s*'a' : 'reducing1'\s*\n\s*\}/;
-    test.identical( _.strCount( op.output, exp ), 1 );
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f4' : [ routine a ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f4' : [ routine a ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f4' : [ routine a ], 'a' : 'reducing*`;
 
-    test.identical( _.strCount( op.output, `- expected :` ), 1 );
-    var exp =
-    /\{\s*\n\s*'f1' : .*,\s*\n\s*'f2' : .*,\s*\n\s*'f3' : async.*,\s*\n\s*'f4' : .*,\s*\n\s*'a' : 'reducing2'\s*\n\s*\}/;
-    test.identical( _.strCount( op.output, exp ), 1 );
-
-    test.identical( _.strCount( op.output, `- difference :` ), 1 );
-    var exp =
-    /\{\s*\n\s*'f1' : \[.*\],\s*\n\s*'f2' : \[.*\],\s*\n\s*'f3' : async.*,\s*\n\s*'f4' : \[.*\],\s*\n\s*'a' : 'reducing\*/;
-    test.identical( _.strCount( op.output, exp ), 1 );
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   });

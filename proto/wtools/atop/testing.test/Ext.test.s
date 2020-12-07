@@ -1111,6 +1111,8 @@ function runCheckNotRewritingDefaultOption( test )
   let a = context.assetFor( test, 'optionsRewriting' );
   a.reflect();
 
+  /* */
+
   a.appStartNonThrowing( '.run ./' )
   .then( ( op ) =>
   {
@@ -1122,7 +1124,24 @@ function runCheckNotRewritingDefaultOption( test )
     test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 0 );
     test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
     return null;
-  })
+  });
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./ v:5' )
+  .then( ( op ) =>
+  {
+    test.case = 'default verbosity is 4, verbosity in command line option is 5';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* - */
 
   return a.ready;
 }

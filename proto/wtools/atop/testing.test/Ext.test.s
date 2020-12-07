@@ -4641,12 +4641,20 @@ function checkDiffWithRoutines( test )
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, `- got :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f' : \[ .* \], 'a' : 'reducing1' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- expected :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f' : \[ .* \], 'a' : 'reducing2' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- difference :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f' : \[ .* \], 'a' : 'reducing\*/ ), 1 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   });
@@ -4663,12 +4671,20 @@ function checkDiffWithRoutines( test )
   .then( ( op ) =>
   {
     test.ni( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, `- got :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f1' : \[ .* \], 'f2' : \[ .* \], 'a' : 'reducing1' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- expected :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f1' : \[ .* \], 'f2' : \[ .* \], 'a' : 'reducing2' \}/ ), 1 );
-    test.identical( _.strCount( op.output, `- difference :` ), 1 );
-    test.identical( _.strCount( op.output, /\{ 'f1' : \[ .* \], 'f2' : \[ .* \], 'a' : 'reducing\*/ ), 1 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f2' : [ routine b ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f2' : [ routine b ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f2' : [ routine b ], 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   });
@@ -4686,20 +4702,19 @@ function checkDiffWithRoutines( test )
   {
     test.ni( op.exitCode, 0 );
 
-    test.identical( _.strCount( op.output, `- got :` ), 1 );
-    var exp =
-    /\{\s*\n\s*'f1' : .*,\s*\n\s*'f2' : .*,\s*\n\s*'f3' : async.*,\s*\n\s*'f4' : .*,\s*\n\s*'a' : 'reducing1'\s*\n\s*\}/;
-    test.identical( _.strCount( op.output, exp ), 1 );
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f4' : [ routine a ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f4' : [ routine a ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f4' : [ routine a ], 'a' : 'reducing*`;
 
-    test.identical( _.strCount( op.output, `- expected :` ), 1 );
-    var exp =
-    /\{\s*\n\s*'f1' : .*,\s*\n\s*'f2' : .*,\s*\n\s*'f3' : async.*,\s*\n\s*'f4' : .*,\s*\n\s*'a' : 'reducing2'\s*\n\s*\}/;
-    test.identical( _.strCount( op.output, exp ), 1 );
-
-    test.identical( _.strCount( op.output, `- difference :` ), 1 );
-    var exp =
-    /\{\s*\n\s*'f1' : \[.*\],\s*\n\s*'f2' : \[.*\],\s*\n\s*'f3' : async.*,\s*\n\s*'f4' : \[.*\],\s*\n\s*'a' : 'reducing\*/;
-    test.identical( _.strCount( op.output, exp ), 1 );
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
 
     return null;
   });
@@ -4710,6 +4725,406 @@ function checkDiffWithRoutines( test )
 checkDiffWithRoutines.description =
 `
 Check diff from test.identical, when comparing maps that contain routines.
+`
+
+//
+
+function checkDiffWithProto( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'failout' );
+  let programPath = a.program( program );
+
+  a.reflect();
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps, 1 with __proto__ : {}';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical1` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    /*
+    OUTPUT :
+  - got :
+    { 'a' : 'hello1', 'b' : 'hello2' }
+  - expected :
+    { 'a' : 'hello1', 'b' : 'hello2' }
+    */
+
+    console.log( 'OOOO: ', op.output )
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'identical maps, 2 with __proto__ : {}';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical2` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    nothing, test passes, but shouldn't
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps, 1 with __proto__ : {}';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical3` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    - got :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    - expected :
+      { 'a' : 'hello', 'b' : 'hello2' }
+    - difference :
+      { 'a' : 'hello*
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello'`;
+    let exp3 = `'a' : 'hello1'`;
+    let exp4 = `- expected :`;
+    let exp5 = `'b' : 'hello2'`;
+    let exp6 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 0 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps, 2 with non empty equivalent __proto__';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical4` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    - got :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    - expected :
+      { 'a' : 'hello', 'b' : 'hello2' }
+    - difference :
+      { 'a' : 'hello*
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello'`;
+    let exp3 = `'a' : 'hello1'`;
+    let exp4 = `- expected :`;
+    let exp5 = `'b' : 'hello2'`;
+    let exp6 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 0 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'identical maps, 2 with identical __proto__';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical5` })
+  .then( ( op ) =>
+  {
+    test.il( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT : nothing, test passes, as it should
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 0 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 0 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 0 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'identical maps, diff __proto__, same fields on diff level in __proto__';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:identical6` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+    console.log( 'OOO: ', op.output )
+    /*
+    OUTPUT :
+    - got :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    - expected :
+      { 'a' : 'hello1', 'b' : 'hello2' }
+    */
+
+    let exp1 = `- got :`;
+    let exp2 = `'a' : 'hello1'`;
+    let exp3 = `- expected :`;
+    let exp4 = `'b' : 'hello2'`;
+    let exp5 = `__proto__`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 0 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+
+    return null;
+  })
+
+  return a.ready;
+
+  /* - */
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wTesting' );
+
+    //
+
+    function identical1( test )
+    {
+      test.case = 'identical maps, 1 with __proto__ : {}';
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, {} );
+
+      let obj2 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+
+      test.identical( obj1, obj2 );
+    }
+
+    //
+
+    function identical2( test )
+    {
+      test.case = 'identical maps, 2 with __proto__ : {}';
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, {} );
+
+      let obj2 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj2, {} );
+
+      test.identical( obj1, obj2 );
+    }
+
+    //
+
+    function identical3( test )
+    {
+      test.case = 'not identical maps, 1 with __proto__ : {}';
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, {} );
+
+      let obj2 =
+      {
+        a : 'hello',
+        b : 'hello2',
+      }
+
+      test.identical( obj1, obj2 );
+    }
+
+    //
+
+    function identical4( test )
+    {
+      test.case = 'not identical maps, 2 with non empty equivalent __proto__';
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, { c : 'hello3' } );
+
+      let obj2 =
+      {
+        a : 'hello',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj2, { c : 'hello3' } );
+
+      test.identical( obj1, obj2 );
+    }
+
+    //
+
+    function identical5( test )
+    {
+      test.case = `identical maps, 2 with identical __proto__`;
+
+      let proto = { 'c' : 'hello3' }
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, proto );
+
+      let obj2 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj2, proto );
+
+      test.identical( obj1, obj2 );
+    }
+
+    //
+
+    function identical6( test )
+    {
+      test.case = `identical maps, diff __proto__, same fields on diff level in __proto__`;
+
+      let proto1 = {}
+      Object.setPrototypeOf( proto1, { 'c' : 'hello3' } );
+
+      let obj1 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj1, proto1 );
+
+      let proto2 = { 'c' : 'hello3' };
+      let obj2 =
+      {
+        a : 'hello1',
+        b : 'hello2',
+      }
+      Object.setPrototypeOf( obj2, proto2 );
+
+      test.identical( obj1, obj2 );
+    }
+
+    let Self =
+    {
+      name : 'Fail',
+      tests :
+      {
+        identical1,
+        identical2,
+        identical3,
+        identical4,
+        identical5,
+        identical6
+      }
+    }
+
+    //
+
+    Self = wTestSuite( Self );
+    wTester.test();
+  }
+}
+
+checkDiffWithProto.description =
+`
+Check diff from test.identical, when comparing maps that set new __proto__.
 `
 
 // --
@@ -4808,6 +5223,7 @@ let Self =
 
     timeLimitConsequence,
     checkDiffWithRoutines,
+    checkDiffWithProto
 
   }
 

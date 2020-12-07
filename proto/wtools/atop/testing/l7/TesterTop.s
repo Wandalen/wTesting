@@ -51,8 +51,9 @@ function exec()
     return ca.programPerform
     ({
       program : _.strUnquote( appArgs.original ),
-      withParsed : 1,
+      withParsed : 0,
       severalValues : 1,
+      subjectWinPathsMaybe : process.platform === 'win32',
     });
   })
   .finally( ( err, arg ) =>

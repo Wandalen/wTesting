@@ -1148,6 +1148,51 @@ function runCheckNotRewritingDefaultOption( test )
 
 //
 
+function runCheckRewritingSuiteOptions( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionsSuiteRewriting' );
+  a.reflect();
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'suite silencing is 1, should not rewrite';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'good' ), 0 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./ v:5 silencing:0' )
+  .then( ( op ) =>
+  {
+    test.case = 'suite silencing is 1, silencing in command line option is 0';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'good' ), 2 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function runOptions( test )
 {
   let context = this;
@@ -5186,6 +5231,7 @@ let Self =
     runWithSeveralSimilarOptions,
     runWithSeveralMixedOptions,
     runCheckNotRewritingDefaultOption,
+    runCheckRewritingSuiteOptions,
     checkFails,
     double,
     requireTesting,

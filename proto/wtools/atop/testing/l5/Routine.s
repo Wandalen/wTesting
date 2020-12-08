@@ -4689,16 +4689,16 @@ let Accessors =
   rapidity : 'rapidity',
   usingSourceCode : 'usingSourceCode',
 
-  group : { readOnly : 1 },
-  descriptionFull : { readOnly : 1 },
-  descriptionWithName : { readOnly : 1 },
-  accuracyEffective : { readOnly : 1 },
-  runnable : { readOnly : 1 },
+  group : { writable : 0 },
+  descriptionFull : { writable : 0 },
+  descriptionWithName : { writable : 0 },
+  accuracyEffective : { writable : 0 },
+  runnable : { writable : 0 },
 
-  qualifiedName : { readOnly : 1 },
-  decoratedQualifiedName : { readOnly : 1 },
-  absoluteName : { readOnly : 1 },
-  decoratedAbsoluteName : { readOnly : 1 },
+  qualifiedName : { writable : 0 },
+  decoratedQualifiedName : { writable : 0 },
+  absoluteName : { writable : 0 },
+  decoratedAbsoluteName : { writable : 0 },
 
 }
 

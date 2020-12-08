@@ -1648,7 +1648,7 @@ let Restricts =
 let Statics =
 {
   Froms,
-  UsingUniqueNames : _.define.contained({ val : 1, readOnly : 1 }),
+  UsingUniqueNames : _.define.contained({ val : 1, writable : 0 }),
   _SuitesReady : new _.Consequence().take( null ),
 }
 
@@ -1676,10 +1676,10 @@ let Accessors =
   routine : 'routine',
   enabled : 'enabled',
 
-  qualifiedName : { readOnly : 1 },
-  decoratedQualifiedName : { readOnly : 1 },
-  absoluteName : { readOnly : 1 },
-  decoratedAbsoluteName : { readOnly : 1 },
+  qualifiedName : { writable : 0 },
+  decoratedQualifiedName : { writable : 0 },
+  absoluteName : { writable : 0 },
+  decoratedAbsoluteName : { writable : 0 },
 
 }
 

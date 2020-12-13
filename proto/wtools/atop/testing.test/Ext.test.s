@@ -3025,35 +3025,42 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : null' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : null' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -3067,36 +3074,43 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:0` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:0"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 0' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:0"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 0' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 0 );
-    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 0 );
+    test.identical( _.strCount( op.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -3110,36 +3124,43 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:10` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:10"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 10' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:10"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 10' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 0 );
-    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 0 );
+    test.identical( _.strCount( op.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -3153,38 +3174,45 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:3` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:3"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 3' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:3"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 3' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 2 );
-    test.identical( _.strCount( got.output, 'Passed test checks 3 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 3 / 6' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 2 );
+    test.identical( _.strCount( op.output, 'Passed test checks 3 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 3 / 6' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -3198,40 +3226,40 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:1` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:1"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 1' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:1"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed ( throwing error ) TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 2 );
-    test.identical( _.strCount( got.output, 'Passed test checks 2 / 4' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 2 / 3' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 2 );
+    test.identical( _.strCount( op.output, 'Passed test checks 2 / 4' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 2 / 3' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });

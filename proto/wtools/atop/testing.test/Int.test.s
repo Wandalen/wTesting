@@ -2821,7 +2821,7 @@ shouldThrowErrorSyncWithCallback.timeOut = 30000;
 
 function shouldThrowErrorSync_WithCallback( test )
 {
-
+  let context = this;
   var counter = new CheckCounter();
 
   function r1( t )
@@ -2850,7 +2850,7 @@ function shouldThrowErrorSync_WithCallback( test )
 
       test.identical( errStack, [ undefined, false ] );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -2881,7 +2881,7 @@ function shouldThrowErrorSync_WithCallback( test )
 
       test.identical( errStack, [ 'test', true ] );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -2903,7 +2903,7 @@ function shouldThrowErrorSync_WithCallback( test )
       t.identical( 0, 0 );
       var c3 = t.shouldThrowErrorSync_( () =>
       {
-        return _.time.out( 150, () =>
+        return _.time.out( context.t1, () =>
         {
           throw _.errAttend( 'test1' );
         });
@@ -2920,7 +2920,7 @@ function shouldThrowErrorSync_WithCallback( test )
       test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -2942,7 +2942,7 @@ function shouldThrowErrorSync_WithCallback( test )
       t.identical( 0, 0 );
       var c4 = t.shouldThrowErrorSync_( () =>
       {
-        return _.time.out( 150 );
+        return _.time.out( context.t1 );
       }, onResult );
 
       counter.acheck = t.checkCurrent();
@@ -2956,7 +2956,7 @@ function shouldThrowErrorSync_WithCallback( test )
       test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -2980,7 +2980,7 @@ function shouldThrowErrorSync_WithCallback( test )
       {
         var con = _.Consequence({ capacity : 0 });
 
-        _.time.out( 150, () =>
+        _.time.out( context.t1, () =>
         {
           con.take( null );
           con.take( null );
@@ -3001,7 +3001,7 @@ function shouldThrowErrorSync_WithCallback( test )
       test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -3026,7 +3026,7 @@ function shouldThrowErrorSync_WithCallback( test )
         var con = _.Consequence({ capacity : 0 })
         .error( _.errAttend( 'error1' ) );
 
-        _.time.out( 150, () =>
+        _.time.out( context.t1, () =>
         {
           con.error( _.errAttend( 'error2' ) );
           return null;
@@ -3046,7 +3046,7 @@ function shouldThrowErrorSync_WithCallback( test )
       test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -3079,7 +3079,7 @@ function shouldThrowErrorSync_WithCallback( test )
       test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -3113,7 +3113,7 @@ function shouldThrowErrorSync_WithCallback( test )
       test.true( _.consequenceIs( errStack[ 0 ] ) );
       test.identical( errStack[ 1 ], false );
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t2 / 2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );

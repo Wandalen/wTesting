@@ -4834,16 +4834,16 @@ let Extension =
   // _shouldDo,
   _shouldDo_,
 
-  shouldThrowErrorSync : shouldThrowErrorSync_, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorSync_, /* !!! use instead of shouldThrowErrorSync */ /* Dmytro : refactored routine _shouldDo_ is used */
-  shouldThrowErrorAsync : shouldThrowErrorAsync_, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorAsync_, /* !!! use instead of shouldThrowErrorAsync */ /* Dmytro : refactored routine _shouldDo_ is used */
-  shouldThrowErrorOfAnyKind : shouldThrowErrorOfAnyKind_, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorOfAnyKind_, /* !!! use instead of shouldThrowErrorOfAnyKind */ /* Dmytro : refactored routine _shouldDo_ is used */
-  mustNotThrowError : mustNotThrowError_,
-  mustNotThrowError_, /* !!! use instead of mustNotThrowError */ /* Dmytro : refactored routine _shouldDo_ is used */
-  returnsSingleResource : returnsSingleResource_,
-  returnsSingleResource_, /* !!! use instead of returnsSingleResource */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorSync : shouldThrowErrorSync_, /* aaa : cover second argument */ /* Dmytro : covered */ /* !!! use instead of shouldThrowErrorSync */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorSync_,
+  shouldThrowErrorAsync : shouldThrowErrorAsync_, /* aaa : cover second argument */ /* Dmytro : covered */ /* !!! use instead of shouldThrowErrorAsync */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorAsync_,
+  shouldThrowErrorOfAnyKind : shouldThrowErrorOfAnyKind_, /* aaa : cover second argument */ /* Dmytro : covered */ /* !!! use instead of shouldThrowErrorOfAnyKind */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorOfAnyKind_,
+  mustNotThrowError : mustNotThrowError_, /* !!! use instead of mustNotThrowError */ /* Dmytro : refactored routine _shouldDo_ is used */
+  mustNotThrowError_,
+  returnsSingleResource : returnsSingleResource_, /* !!! use instead of returnsSingleResource */ /* Dmytro : refactored routine _shouldDo_ is used */
+  returnsSingleResource_,
 
   // asset
 

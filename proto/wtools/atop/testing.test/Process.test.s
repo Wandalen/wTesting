@@ -225,7 +225,10 @@ function disconnectedChildProcess( test )
 
     _.process.start( o );
 
-    o.conStart.thenGive( () => o.disconnect() )
+    o.conStart.thenGive( () => o.disconnect() );
+
+    test.true( true );
+    return o;
 
     //
 
@@ -331,6 +334,9 @@ function disconnectedChildProcessWithIPC( test )
 
     o.conStart.thenGive( () => o.disconnect() )
 
+    test.true( true );
+    return o;
+
     //
 
     function testApp()
@@ -433,6 +439,9 @@ function detachedDisconnectedChildProcess( test )
     _.process.start( o );
 
     o.conStart.thenGive( () => o.disconnect() )
+
+    test.true( true );
+    return o;
 
     //
 

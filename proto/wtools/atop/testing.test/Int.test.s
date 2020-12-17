@@ -569,7 +569,7 @@ returnsSingleResource.timeOut = 30000;
 
 function returnsSingleResource_( test )
 {
-
+  let context = this;
   var counter = new CheckCounter();
 
   function r1( t )
@@ -596,7 +596,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -629,7 +629,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -661,7 +661,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -688,7 +688,7 @@ function returnsSingleResource_( test )
       t.identical( 0, 0 );
       var c4 = t.returnsSingleResource_( () =>
       {
-        return _.time.out( 150, () =>
+        return _.time.out( context.t1, () =>
         {
           throw _.errAttend( 'error1' );
         });
@@ -701,7 +701,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -728,7 +728,7 @@ function returnsSingleResource_( test )
       test.case = 'single async message, no error';
 
       t.identical( 0, 0 );
-      var c5 = t.returnsSingleResource_( () => _.time.out( 150 ) );
+      var c5 = t.returnsSingleResource_( () => _.time.out( context.t1 ) );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -737,7 +737,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -767,7 +767,7 @@ function returnsSingleResource_( test )
       {
         var con = _.Consequence();
 
-        _.time.out( 150, () =>
+        _.time.out( context.t1, () =>
         {
           con.take( 'msg1' );
           con.take( 'msg2' );
@@ -784,7 +784,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -812,7 +812,7 @@ function returnsSingleResource_( test )
       {
         var con = _.Consequence();
 
-        _.time.out( 150, () =>
+        _.time.out( context.t1, () =>
         {
           con.error( _.errAttend( 'error1' ) );
           con.error( _.errAttend( 'error2' ) );
@@ -829,7 +829,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -863,7 +863,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -896,7 +896,7 @@ function returnsSingleResource_( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( 500, () =>
+      return _.time.out( context.t1 * 8, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -917,6 +917,7 @@ function returnsSingleResource_( test )
 
     return ready;
   }
+  r1.timeOut = 15000;
 
   /* */
 

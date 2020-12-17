@@ -29,6 +29,7 @@ Self.shortName = 'TesterCli';
 function Exec()
 {
   let cui = new this.Self();
+  cui.form();
   return cui.exec();
 }
 
@@ -53,7 +54,7 @@ function exec()
       program : _.strUnquote( appArgs.original ),
       withParsed : 0,
       severalValues : 1,
-      subjectWinPathsMaybe : process.platform === 'win32',
+      subjectWinPathsMaybe : Config.interpreter === 'njs' ? process.platform === 'win32' : false,
     });
   })
   .finally( ( err, arg ) =>

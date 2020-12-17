@@ -1591,7 +1591,7 @@ let Composes =
   routine : null,
   platforms : null,
 
-  processWatching : 1,
+  processWatching : Config.interpreter === 'njs',
 
   /* */
 

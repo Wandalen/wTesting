@@ -3221,7 +3221,7 @@ function optionFails( test )
 
   a.ready.then( () =>
   {
-    test.case = 'tst .run ** v:1 fails:3 - number of allowed fails is less than total number of fails';
+    test.case = 'tst .run ** v:5 fails:1 - number of allowed fails is less than total number of fails';
     return null;
   });
 
@@ -3245,6 +3245,13 @@ function optionFails( test )
     test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
     test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, '- got :' ), 1 );
+    test.identical( _.strCount( op.output, '- expected :' ), 1 );
+    test.identical( _.strCount( op.output, '- difference :' ), 1 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 1 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 0 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 1 );
 
     test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 0 );

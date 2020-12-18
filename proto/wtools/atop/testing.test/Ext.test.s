@@ -3494,7 +3494,7 @@ function asyncTimeOutSingle( test )
   {
     test.notIdentical( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
+    test.identical( _.strCount( got.output, 'Thrown 1 error' ), 2 );
     test.identical( _.strCount( got.output, 'Thrown' ), 2 );
     test.identical( _.strCount( got.output, 'failed, time out' ), 0 );
     test.identical( _.strCount( got.output, 'failed, test routine time limit' ), 0 );
@@ -3503,15 +3503,13 @@ function asyncTimeOutSingle( test )
     test.identical( _.strCount( got.output, 'Failed ( test routine time limit )' ), 1 );
     test.identical( _.strCount( got.output, 'Failed ( test routine time limit ) TestSuite::AsyncTimeOutAsset / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'test routine has passed none test check' ), 0 );
-    test.identical( _.strCount( got.output, 'cant continue' ), 1 );
+    test.identical( _.strCount( got.output, 'cant continue' ), 0 );
     test.identical( _.strCount( got.output, 'unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'Unchaught' ), 0 );
     test.identical( _.strCount( got.output, 'terminated by user' ), 0 );
     test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
-    test.identical( _.strCount( got.output, 'routine1.' ), 2 );
+    test.identical( _.strCount( got.output, 'routine1.' ), 1 );
     test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
-    test.identical( _.strCount( got.output, 'routine1.2' ), 1 );
-    test.identical( _.strCount( got.output, 'routine1.3' ), 0 );
 
     return null;
   })

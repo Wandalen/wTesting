@@ -45,7 +45,7 @@ async function puppeteerTimeOut( test )
 
   await page.goto( 'file:///' + _.path.nativize( indexHtmlPath ), { waitUntil : 'load' } );
 
-  await page.waitFor( () => document.querySelector( 'p' ).innerText === 'Hello worldd', { timeout : 1000 } );
+  await page.waitForFunction( () => document.querySelector( 'p' ).innerText === 'Hello worldd', { timeout : 1000 } );
 
   await browser.close();
 

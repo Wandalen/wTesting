@@ -885,8 +885,7 @@ function _suitesIncludeAt( path )
 
   if( !files.length )
   {
-    let basePath = Config.interpreter === 'browser' ? '/' : null;
-    let record = tester.fileProvider.recordFactory({ allowingMissed : 1, basePath }).record( path );
+    let record = tester.fileProvider.recordFactory({ allowingMissed : 1 }).record( path );
     if( record.stat && !record.stat.isDir() && record.isActual )
     files = [ record ];
   }
@@ -939,6 +938,9 @@ function suitesIncludeAt( path )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
+  
+  if( Config.interpreter === 'browser' )
+  return;
 
   logger.verbosityPush( tester.verbosity );
 

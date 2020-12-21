@@ -3550,6 +3550,7 @@ function _shouldDo_( o )
     catch( _err )
     {
       err = _err;
+      return handleSyncError();
     }
   }
 
@@ -3558,9 +3559,7 @@ function _shouldDo_( o )
   if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
   return handleLackOfSyncError();
 
-  if( !result && _.errIs( err ) )
-  return handleSyncError();
-  else if( _.consequenceIs( result ) )
+  if( _.consequenceIs( result ) )
   handleAsyncResult()
   else
   handleSyncResult();

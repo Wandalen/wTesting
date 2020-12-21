@@ -54,7 +54,7 @@ async function dialog( test )
 
   page.evaluate( () => alert( 'Alert message' ) );
 
-  await page.waitForTimeout( 1000 );
+  await page.waitFor( 1000 );
   await browser.close();
 
   return null;

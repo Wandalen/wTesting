@@ -885,7 +885,8 @@ function _suitesIncludeAt( path )
 
   if( !files.length )
   {
-    let record = tester.fileProvider.recordFactory({ allowingMissed : 1 }).record( path );
+    let basePath = Config.interpreter === 'browser' ? '/' : null;
+    let record = tester.fileProvider.recordFactory({ allowingMissed : 1, basePath }).record( path );
     if( record.stat && !record.stat.isDir() && record.isActual )
     files = [ record ];
   }

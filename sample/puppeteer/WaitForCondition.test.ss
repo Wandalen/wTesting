@@ -61,7 +61,7 @@ async function waitForTextChange( test )
   })
 
   //Wait until text will be changed
-  await page.waitFor( () =>
+  await page.waitForFunction( () =>
   {
     return document.querySelector( 'p' ).innerText === 'Hello from test';
   })

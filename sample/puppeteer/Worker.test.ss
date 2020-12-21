@@ -65,7 +65,7 @@ async function worker( test )
     test.identical( workerMessages, [ 123 ] );
   })
 
-  await page.waitForTimeout( 1000 );
+  await page.waitFor( 1000 );
 
   await browser.close();
 

@@ -58,7 +58,7 @@ async function request( test )
     test.identical( data.name, 'wTesting' );
   })
 
-  await page.waitForTimeout( 5000 );
+  await page.waitFor( 5000 );
   await browser.close();
 
   return null;

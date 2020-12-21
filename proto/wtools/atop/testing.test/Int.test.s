@@ -2215,7 +2215,34 @@ function shouldThrowErrorSync( test )
 
     ready.then( () =>
     {
-      test.case = 'expected synchronous error';
+      test.case = 'expected synchronous error, throw string message';
+
+      t.identical( 0, 0 );
+      var c2 = t.shouldThrowErrorSync( () => { throw 'test' } );
+
+      counter.acheck = t.checkCurrent();
+      test.identical( counter.acheck.description, 'a' );
+      test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
+
+      return _.time.out( context.t2 / 2, () =>
+      {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
+        test.false( _.errIs( c2 ) );
+        return null;
+      });
+    });
+
+    /* */
+
+    ready.then( () =>
+    {
+      test.case = 'expected synchronous error, throw error';
 
       t.identical( 0, 0 );
       var c2 = t.shouldThrowErrorSync( () => { throw _.err( 'test' ) } );
@@ -2455,8 +2482,8 @@ function shouldThrowErrorSync( test )
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.identical( counter.acheck.description, '' );
-    test.identical( counter.acheck.checkIndex, 17 );
-    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 11 );
     test.identical( suite.report.testCheckFails, 7 );
     test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
@@ -2519,7 +2546,38 @@ function shouldThrowErrorSyncWithCallback( test )
 
     ready.then( () =>
     {
-      test.case = 'expected synchronous error';
+      test.case = 'expected synchronous error, throw string';
+      var onResult = ( err, arg, ok ) => err ? errStack.push( err, ok ) : errStack.push( arg, ok );
+      var errStack = [];
+
+      t.identical( 0, 0 );
+      var c2 = t.shouldThrowErrorSync( () => { throw 'test' }, onResult );
+
+      counter.acheck = t.checkCurrent();
+      test.identical( counter.acheck.description, 'a' );
+      test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
+
+      test.identical( errStack, [ 'test', true ] );
+
+      return _.time.out( 500, () =>
+      {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
+        test.false( _.errIs( c2 ) );
+        return null;
+      });
+    });
+
+    /* */
+
+    ready.then( () =>
+    {
+      test.case = 'expected synchronous error, throw error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
       var errStack = [];
 
@@ -2803,8 +2861,8 @@ function shouldThrowErrorSyncWithCallback( test )
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.identical( counter.acheck.description, '' );
-    test.identical( counter.acheck.checkIndex, 17 );
-    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 11 );
     test.identical( suite.report.testCheckFails, 7 );
     test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 
@@ -2867,7 +2925,38 @@ function shouldThrowErrorSync_WithCallback( test )
 
     ready.then( () =>
     {
-      test.case = 'expected synchronous error';
+      test.case = 'expected synchronous error, throw string';
+      var onResult = ( err, arg, ok ) => err ? errStack.push( err, ok ) : errStack.push( arg, ok );
+      var errStack = [];
+
+      t.identical( 0, 0 );
+      var c2 = t.shouldThrowErrorSync_( () => { throw 'test' }, onResult );
+
+      counter.acheck = t.checkCurrent();
+      test.identical( counter.acheck.description, 'a' );
+      test.identical( counter.acheck.checkIndex-counter.prevCheckIndex, 2 );
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
+
+      test.identical( errStack, [ 'test', true ] );
+
+      return _.time.out( context.t2 / 2, () =>
+      {
+        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+        counter.next();
+
+        test.false( _.errIs( c2 ) );
+        return null;
+      });
+    });
+
+    /* */
+
+    ready.then( () =>
+    {
+      test.case = 'expected synchronous error, throw error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
       var errStack = [];
 
@@ -3151,8 +3240,8 @@ function shouldThrowErrorSync_WithCallback( test )
     counter.acheck = counter.testRoutine.checkCurrent();
 
     test.identical( counter.acheck.description, '' );
-    test.identical( counter.acheck.checkIndex, 17 );
-    test.identical( suite.report.testCheckPasses, 9 );
+    test.identical( counter.acheck.checkIndex, 19 );
+    test.identical( suite.report.testCheckPasses, 11 );
     test.identical( suite.report.testCheckFails, 7 );
     test.identical( counter.acheck.checkIndex, suite.report.testCheckPasses+suite.report.testCheckFails+1 );
 

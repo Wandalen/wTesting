@@ -264,7 +264,7 @@ function _routineSet( src )
   let suite = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( src === null || _.routineIs( src ) || _.strIs( src ), 'Expects routine or string' );
+  _.assert( src === null || _.routineIs( src ) || _.strIs( src ) || _.arrayIs( src ), 'Expects routine or string' );
 
   if( _.routineIs( src ) )
   debugger;
@@ -529,7 +529,7 @@ function _runNow()
     onRoutine : ( tro ) => tro.routine,
     delay : 10,
   };
-  let r = _.execStages( testRoutines, op );
+  let r = _.stagesRun( testRoutines, op );
 
   return r;
 
@@ -1469,9 +1469,6 @@ function processWatchingEnd()
 
   _.each( suite._processWatcherMap, ( descriptor, pid ) =>
   {
-    if( !descriptor.process.connected )
-    if( !_.process.isAlive( descriptor.process.pid ) )
-    return delete suite._processWatcherMap[ pid ];
 
     let processInfo =
 `    ExecPath: ${descriptor.execPath}
@@ -1481,7 +1478,8 @@ function processWatchingEnd()
     suite.exceptionReport({ err, unbarring : 1 });
     let con = _.process.terminate
     ({
-      pid : descriptor.process.pid,
+      pid : descriptor.pnd.pid,
+      // pid : descriptor.process.pid,
       withChildren : 1,
       ignoringErrorPerm : 1,
       ignoringErrorEsrch : 1,
@@ -1514,7 +1512,8 @@ function processWatchingEnd()
 
       _.each( suite._processWatcherMap, ( descriptor, pid ) =>
       {
-        if( _.process.isAlive( descriptor.process.pid ) )
+        // if( _.process.isAlive( descriptor.process.pid ) )
+        if( _.process.isAlive( descriptor.pnd.pid ) )
         {
           let err = _.errBrief( 'Test suite', _.strQuote( suite.name ), 'fails to kill zombie process with pid:', pid, '\n' );
           suite.exceptionReport({ err, unbarring : 1 });
@@ -1592,7 +1591,7 @@ let Composes =
   routine : null,
   platforms : null,
 
-  processWatching : 1,
+  processWatching : Config.interpreter === 'njs',
 
   /* */
 
@@ -1649,7 +1648,7 @@ let Restricts =
 let Statics =
 {
   Froms,
-  UsingUniqueNames : _.define.contained({ ini : 1, readOnly : 1 }),
+  UsingUniqueNames : _.define.contained({ val : 1, writable : 0 }),
   _SuitesReady : new _.Consequence().take( null ),
 }
 
@@ -1677,10 +1676,10 @@ let Accessors =
   routine : 'routine',
   enabled : 'enabled',
 
-  qualifiedName : { readOnly : 1 },
-  decoratedQualifiedName : { readOnly : 1 },
-  absoluteName : { readOnly : 1 },
-  decoratedAbsoluteName : { readOnly : 1 },
+  qualifiedName : { writable : 0 },
+  decoratedQualifiedName : { writable : 0 },
+  absoluteName : { writable : 0 },
+  decoratedAbsoluteName : { writable : 0 },
 
 }
 

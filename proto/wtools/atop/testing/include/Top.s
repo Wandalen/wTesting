@@ -87,6 +87,11 @@ if( typeof module !== 'undefined' )
   _.assert( !_realGlobal_.wTestRoutineObject );
   _.assert( _.objectIs( _realGlobal_.wTests ) );
   _.assert( _.objectIs( _realGlobal_.wTester ) );
+  _.assert
+  (
+    !_realGlobal_.wTools.time || _realGlobal_.wTools.time.sleep !== _globals_.testing.wTools.time.sleep,
+    'Should have own varesion _globals_.testing.wTools.time.sleep, but does not have'
+  );
 
   if( _global_ === _realGlobal_ || _global_.wTools === _realGlobal_.wTools )
   {

@@ -6,17 +6,16 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../wtools/Tools.s' );
-
   require( '../testing/entry/Main.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
-
+  _.include( 'wConsequence' );
 }
 
 let _global = _global_;
 let _ = _global_.wTools;
 
-/* qqq : parametrixe delays */
+/* qqq : parametrize delays */
 
 // --
 // context
@@ -105,6 +104,258 @@ function assetFor( test, asset )
 // --
 // conditions
 // --
+
+function run( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'hello' );
+
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'Hello.test.js' ) ) );
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'node Hello.test.js beeping:0'
+    return null;
+  })
+
+  a.shellNonThrowing({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'wtest Hello.test.js'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute path as subject + options'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( op.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( op.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute nativized path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst absolute nativized path as subject + options'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute nativized path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  /* - */
+
+  a.ready
+  .then( () =>
+  {
+    test.case = 'tst .run absolute nativized path as subject'
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
+  .then( ( got ) =>
+  {
+    test.ni( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
+    test.identical( _.strCount( got.output, /Passed.*test checks 2 \/ 3/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test cases 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Passed.*test routines 1 \/ 2/ ), 2 );
+    test.identical( _.strCount( got.output, /Test suite.*\(.*Hello.*\).*failed/ ), 1 );
+
+    return null;
+  })
+
+  // shell( 'npm rm -g wTesting' );
+  return a.ready;
+}
 
 function run( test )
 {
@@ -515,6 +766,641 @@ function runWithQuotedPath( test )
 
     return null;
   })
+
+  return a.ready;
+}
+
+//
+
+function runWithSeveralSimilarOptions( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'grouping' );
+  a.reflect();
+
+  test.true( a.fileProvider.fileExists( a.abs( 'Grouping.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ v:3 verbosity:5` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ v:3 verbosity:5"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ v:5 verbosity:3` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ v:5 verbosity:3"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ verbosity:3 v:5` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ verbosity:3 v:5"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 1 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'the first option is less than the second';
+    return null;
+  })
+
+  a.appStart({ execPath : `.run ./ verbosity:5 v:3` })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Command ".run ./ verbosity:5 v:3"' ), 1 );
+    test.identical( _.strCount( op.output, 'Tester Settings :' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 5' ), 0 );
+    test.identical( _.strCount( op.output, 'verbosity : 3' ), 0 );
+    test.identical( _.strCount( op.output, 'Running test suite ( Hello ) ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::Hello / TestRoutine::routine1 ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::Hello / TestRoutine::routine1 / string > trivial # 1 )' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( Hello \) \.\.\. in \d+.\d+s \.\.\. ok/ ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runWithSeveralMixedOptions( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'OptionRapidity.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with several option `r` and several `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:routinePositiveRapidity1 r:routinePositiveRapidity2 v:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with several option `routine` and several `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:routinePositiveRapidity1 routine:routinePositiveRapidity2 v:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `routine` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with options `routine` and `r`, vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:routinePositiveRapidity1 routine:routinePositiveRapidity2 v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with options `r` and `routine`, vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:routinePositiveRapidity1 r:routinePositiveRapidity2 v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`, options `verbosity` and `v`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] verbosity:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`, options `v` and `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:1 verbosity:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runCheckNotRewritingDefaultOption( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionsRewriting' );
+  a.reflect();
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'default verbosity is 4, should not rewrite';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./ v:5' )
+  .then( ( op ) =>
+  {
+    test.case = 'default verbosity is 4, verbosity in command line option is 5';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runCheckRewritingSuiteOptions( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionsSuiteRewriting' );
+  a.reflect();
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'suite silencing is 1, should not rewrite';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'good' ), 0 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine ..' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 0 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.appStartNonThrowing( '.run ./ v:5 silencing:0' )
+  .then( ( op ) =>
+  {
+    test.case = 'suite silencing is 1, silencing in command line option is 0';
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'good' ), 2 );
+    test.identical( _.strCount( op.output, 'Running TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine ..' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 1 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Test check ( TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine /  # 2 ) ... ok' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionsSuiteRewriting.test.s:102:14 / TestRoutine::routine in' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runOptions( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'OptionRapidity.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with several option `r` and several `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:routinePositiveRapidity1 r:routinePositiveRapidity2 v:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with several option `routine` and several `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:routinePositiveRapidity1 routine:routinePositiveRapidity2 v:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `routine` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:[routinePositiveRapidity1,routinePositiveRapidity2] v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with options `routine` and `r`, vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:routinePositiveRapidity1 routine:routinePositiveRapidity2 v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with options `r` and `routine`, vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ routine:routinePositiveRapidity1 r:routinePositiveRapidity2 v:[1,5]` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`, options `verbosity` and `v`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] verbosity:1 v:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`, options `v` and `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:1 verbosity:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* - */
 
   return a.ready;
 }
@@ -2076,49 +2962,47 @@ optionRapidity.timeOut = 900000;
 
 function optionRapidityTwice( test )
 {
-
   let context = this;
   let a = context.assetFor( test, 'optionRapidity' );
-
   a.reflect();
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
     test.case = 'tst .run ** v:8 rapidity:3 rapidity:-3';
     return null;
   })
 
   a.appStartNonThrowing({ execPath : `.run ** v:8 rapidity:3 rapidity:-3` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.identical( got.exitCode, 0 );
+    test.identical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity4` ), 0 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity5` ), 0 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity6` ), 0 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity7` ), 0 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity8` ), 0 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity9` ), 0 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity ` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity0` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity3` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity4` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity5` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity6` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity7` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity8` ), 1 );
-    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity9` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity4` ), 0 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity5` ), 0 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity6` ), 0 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity7` ), 0 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity8` ), 0 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity9` ), 0 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity ` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity0` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity3` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity4` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity5` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity6` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity7` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity8` ), 1 );
+    test.identical( _.strCount( op.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity9` ), 1 );
 
     return null;
-  })
+  });
+
   /* - */
 
   return a.ready;
@@ -2141,35 +3025,42 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : null' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : null' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -2183,36 +3074,43 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:0` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:0"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 0' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:0"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 0' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 0 );
-    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 0 );
+    test.identical( _.strCount( op.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -2226,36 +3124,43 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:10` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:10"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 10' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:10"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 10' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 0 );
-    test.identical( _.strCount( got.output, 'Passed test checks 5 / 8' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 4 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 0 );
+    test.identical( _.strCount( op.output, 'Passed test checks 5 / 8' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 4 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -2269,38 +3174,45 @@ function optionFails( test )
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:3` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:3"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 3' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:3"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 3' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 3 );
+    test.identical( _.strCount( op.output, '- expected :' ), 3 );
+    test.identical( _.strCount( op.output, '- difference :' ), 3 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 2 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 1 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 3 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 2 );
-    test.identical( _.strCount( got.output, 'Passed test checks 3 / 7' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 3 / 6' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 2 );
+    test.identical( _.strCount( op.output, 'Passed test checks 3 / 7' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 3 / 6' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -2309,45 +3221,52 @@ function optionFails( test )
 
   a.ready.then( () =>
   {
-    test.case = 'tst .run ** v:1 fails:3 - number of allowed fails is less than total number of fails';
+    test.case = 'tst .run ** v:5 fails:1 - number of allowed fails is less than total number of fails';
     return null;
   });
 
   a.appStartNonThrowing({ execPath : `.run ** v:5 fails:1` })
-  .then( ( got ) =>
+  .then( ( op ) =>
   {
-    test.notIdentical( got.exitCode, 0 );
+    test.notIdentical( op.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Command ".run ** v:5 fails:1"' ), 1 );
-    test.identical( _.strCount( got.output, 'fails : 1' ), 1 );
-    test.identical( _.strCount( got.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Command ".run ** v:5 fails:1"' ), 1 );
+    test.identical( _.strCount( op.output, 'fails : 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Launching several ( 3 ) test suite(s)' ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA1 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA1 / TestRoutine::routine2' ), 1 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA1 \) \.+ in \d+\.\d+s \.+ ok/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA2 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed ( throwing error ) TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA2 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA2 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
-    test.identical( _.strCount( got.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
-    test.identical( _.strCount( got.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
-    test.identical( _.strCount( got.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, '- got :' ), 1 );
+    test.identical( _.strCount( op.output, '- expected :' ), 1 );
+    test.identical( _.strCount( op.output, '- difference :' ), 1 );
+    test.identical( _.strCount( op.output, ': function routine1( test )' ), 1 );
+    test.identical( _.strCount( op.output, ': function routine2( test )' ), 0 );
+    test.identical( _.strCount( op.output, ':   test.identical( 1, 0 );' ), 1 );
 
-    test.identical( _.strCount( got.output, /Thrown \d error/ ), 2 );
-    test.identical( _.strCount( got.output, 'Passed test checks 2 / 4' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test cases 0 / 0' ), 4 );
-    test.identical( _.strCount( got.output, 'Passed test routines 2 / 3' ), 1 );
-    test.identical( _.strCount( got.output, 'Passed test suites 1 / 3' ), 1 );
-    test.identical( _.strCount( got.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+    test.identical( _.strCount( op.output, 'Running test suite ( OptionFailsA3 )' ), 1 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine1' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed ( throwing error ) TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine2' ), 0 );
+    test.identical( _.strCount( op.output, 'Failed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::OptionFailsA3 / TestRoutine::routine3' ), 0 );
+    test.identical( _.strCount( op.output, /Test suite \( OptionFailsA3 \) \.+ in \d+\.\d+s \.+ failed/ ), 1 );
+
+    test.identical( _.strCount( op.output, /Thrown \d error/ ), 2 );
+    test.identical( _.strCount( op.output, 'Passed test checks 2 / 4' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test cases 0 / 0' ), 4 );
+    test.identical( _.strCount( op.output, 'Passed test routines 2 / 3' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 3' ), 1 );
+    test.identical( _.strCount( op.output, /Testing \.+ in \d+\.\d+s \.+ failed/ ), 1 );
 
     return null;
   });
@@ -2464,6 +3383,93 @@ function version( test )
   return a.ready;
 }
 
+//
+
+function imply( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
+  a.reflect();
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = '.imply v:8 rapidity:-9 .run **';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.imply v:8 rapidity:-9 .run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity4` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity5` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity6` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity7` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity8` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity9` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity ` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity0` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity3` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity4` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity5` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity6` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity7` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity8` ), 1 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity9` ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = '.imply v:5 rapidity:9 .run **';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `.imply v:5 rapidity:9 .run **` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity1` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity2` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity3` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity4` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity5` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity6` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity7` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity8` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineNegativeRapidity9` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity ` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routineRapidity0` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity3` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity4` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity5` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity6` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity7` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity8` ), 0 );
+    test.identical( _.strCount( got.output, `Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity9` ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
 // --
 // time out
 // --
@@ -2504,8 +3510,6 @@ function asyncTimeOutSingle( test )
     test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'routine1.' ), 1 );
     test.identical( _.strCount( got.output, 'routine1.1' ), 1 );
-    test.identical( _.strCount( got.output, 'routine1.2' ), 0 );
-    test.identical( _.strCount( got.output, 'routine1.3' ), 0 );
 
     return null;
   })
@@ -2893,25 +3897,25 @@ function timeOutSeveralRoutines( test )
         test.true( true );
         console.log( 'routine1:time2' );
       });
-      return _.time.out( context.t2*3 );
+      return _globals_.testing.wTools.time.out( context.t2*3 );
     }
 
     function routine2( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine3( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine4( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     let Self =
@@ -2995,26 +3999,26 @@ function timeOutSeveralRoutinesDesync( test )
         test.true( true );
         console.log( 'routine1:time2' );
       });
-      _.time.out( context.t2*3 ).deasync();
+      _globals_.testing.wTools.time.out( context.t2*3 ).deasync();
       test.true( true );
     }
 
     function routine2( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine3( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     function routine4( test )
     {
       test.true( true );
-      return _.time.out( context.t2 );
+      return _globals_.testing.wTools.time.out( context.t2 );
     }
 
     let Self =
@@ -3699,7 +4703,6 @@ function timeLimitConsequence( test )
 
     return _.time.out( t*15, function()
     {
-      debugger;
       test.true( con.argumentsGet()[ 0 ] === 'a' );
       test.identical( con.argumentsCount(), 1 );
       test.identical( con.errorsCount(), 0 );
@@ -3712,6 +4715,514 @@ function timeLimitConsequence( test )
 
   return ready;
 }
+
+//
+
+function checkDiffWithRoutines( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'failout' );
+
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'Fail.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps with 1 identical function';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical1` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps with 1 identical and 1 different functions';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical2` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f2' : [ routine b ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f2' : [ routine b ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f2' : [ routine b ], 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'not identical maps with 3 identical and 1 different functions, with async';
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical3` })
+  .then( ( op ) =>
+  {
+    test.ni( op.exitCode, 0 );
+
+    let exp1 = `- got :`;
+    let exp2 = `{ 'f4' : [ routine a ], 'a' : 'reducing1' }`;
+    let exp3 = `- expected :`;
+    let exp4 = `{ 'f4' : [ routine a ], 'a' : 'reducing2' }`;
+    let exp5 = `- difference :`;
+    let exp6 = `{ 'f4' : [ routine a ], 'a' : 'reducing*`;
+
+    test.identical( _.strCount( op.output, exp1 ), 1 );
+    test.identical( _.strCount( op.output, exp2 ), 1 );
+    test.identical( _.strCount( op.output, exp3 ), 1 );
+    test.identical( _.strCount( op.output, exp4 ), 1 );
+    test.identical( _.strCount( op.output, exp5 ), 1 );
+    test.identical( _.strCount( op.output, exp6 ), 1 );
+
+    return null;
+  });
+
+  return a.ready;
+}
+
+checkDiffWithRoutines.description =
+`
+Check diff from test.identical, when comparing maps that contain routines.
+`
+
+//
+
+// function checkDiffWithProto( test )
+// {
+//   let context = this;
+//   let a = context.assetFor( test, 'failout' );
+//   let programPath = a.program( program );
+
+//   a.reflect();
+
+//   /* */
+
+//   a.ready.then( () =>
+//   {
+//     test.case = 'not identical maps, 1 with __proto__ : {}';
+//     return null;
+//   })
+
+//   a.appStartNonThrowing({ execPath : `${programPath} r:identical1` })
+//   .then( ( op ) =>
+//   {
+//     test.ni( op.exitCode, 0 );
+//     /*
+//     OUTPUT :
+//   - got :
+//     { 'a' : 'hello1', 'b' : 'hello2' }
+//   - expected :
+//     { 'a' : 'hello1', 'b' : 'hello2' }
+//     */
+
+//     console.log( 'OOOO: ', op.output )
+
+//     let exp1 = `- got :`;
+//     let exp2 = `'a' : 'hello1'`;
+//     let exp3 = `- expected :`;
+//     let exp4 = `'b' : 'hello2'`;
+//     let exp5 = `__proto__`;
+
+//     test.identical( _.strCount( op.output, exp1 ), 1 );
+//     test.identical( _.strCount( op.output, exp2 ), 0 );
+//     test.identical( _.strCount( op.output, exp3 ), 1 );
+//     test.identical( _.strCount( op.output, exp4 ), 0 );
+//     test.identical( _.strCount( op.output, exp5 ), 1 );
+
+//     return null;
+//   })
+
+//   /* */
+
+//   a.ready.then( () =>
+//   {
+//     test.case = 'identical maps, 2 with __proto__ : {}';
+//     return null;
+//   })
+
+//   a.appStartNonThrowing({ execPath : `${programPath} r:identical2` })
+//   .then( ( op ) =>
+//   {
+//     test.ni( op.exitCode, 0 );
+//     console.log( 'OOO: ', op.output )
+//     /*
+//     OUTPUT :
+//     nothing, test passes, but shouldn't
+//     */
+
+//     let exp1 = `- got :`;
+//     let exp2 = `'a' : 'hello1'`;
+//     let exp3 = `- expected :`;
+//     let exp4 = `'b' : 'hello2'`;
+//     let exp5 = `__proto__`;
+
+//     test.identical( _.strCount( op.output, exp1 ), 1 );
+//     test.identical( _.strCount( op.output, exp2 ), 0 );
+//     test.identical( _.strCount( op.output, exp3 ), 1 );
+//     test.identical( _.strCount( op.output, exp4 ), 0 );
+//     test.identical( _.strCount( op.output, exp5 ), 1 );
+
+//     return null;
+//   })
+
+//   /* */
+
+//   a.ready.then( () =>
+//   {
+//     test.case = 'not identical maps, 1 with __proto__ : {}';
+//     return null;
+//   })
+
+//   a.appStartNonThrowing({ execPath : `${programPath} r:identical3` })
+//   .then( ( op ) =>
+//   {
+//     test.ni( op.exitCode, 0 );
+//     console.log( 'OOO: ', op.output )
+//     /*
+//     OUTPUT :
+//     - got :
+//       { 'a' : 'hello1', 'b' : 'hello2' }
+//     - expected :
+//       { 'a' : 'hello', 'b' : 'hello2' }
+//     - difference :
+//       { 'a' : 'hello*
+//     */
+
+//     let exp1 = `- got :`;
+//     let exp2 = `'a' : 'hello'`;
+//     let exp3 = `'a' : 'hello1'`;
+//     let exp4 = `- expected :`;
+//     let exp5 = `'b' : 'hello2'`;
+//     let exp6 = `__proto__`;
+
+//     test.identical( _.strCount( op.output, exp1 ), 1 );
+//     test.identical( _.strCount( op.output, exp2 ), 1 );
+//     test.identical( _.strCount( op.output, exp3 ), 1 );
+//     test.identical( _.strCount( op.output, exp4 ), 1 );
+//     test.identical( _.strCount( op.output, exp5 ), 0 );
+//     test.identical( _.strCount( op.output, exp6 ), 1 );
+
+//     return null;
+//   })
+
+//   /* */
+
+//   a.ready.then( () =>
+//   {
+//     test.case = 'not identical maps, 2 with non empty equivalent __proto__';
+//     return null;
+//   })
+
+//   a.appStartNonThrowing({ execPath : `${programPath} r:identical4` })
+//   .then( ( op ) =>
+//   {
+//     test.ni( op.exitCode, 0 );
+//     console.log( 'OOO: ', op.output )
+//     /*
+//     OUTPUT :
+//     - got :
+//       { 'a' : 'hello1', 'b' : 'hello2' }
+//     - expected :
+//       { 'a' : 'hello', 'b' : 'hello2' }
+//     - difference :
+//       { 'a' : 'hello*
+//     */
+
+//     let exp1 = `- got :`;
+//     let exp2 = `'a' : 'hello'`;
+//     let exp3 = `'a' : 'hello1'`;
+//     let exp4 = `- expected :`;
+//     let exp5 = `'b' : 'hello2'`;
+//     let exp6 = `__proto__`;
+
+//     test.identical( _.strCount( op.output, exp1 ), 1 );
+//     test.identical( _.strCount( op.output, exp2 ), 1 );
+//     test.identical( _.strCount( op.output, exp3 ), 1 );
+//     test.identical( _.strCount( op.output, exp4 ), 1 );
+//     test.identical( _.strCount( op.output, exp5 ), 0 );
+//     test.identical( _.strCount( op.output, exp6 ), 1 );
+
+//     return null;
+//   })
+
+//   /* */
+
+//   a.ready.then( () =>
+//   {
+//     test.case = 'identical maps, 2 with identical __proto__';
+//     return null;
+//   })
+
+//   a.appStartNonThrowing({ execPath : `${programPath} r:identical5` })
+//   .then( ( op ) =>
+//   {
+//     test.il( op.exitCode, 0 );
+//     console.log( 'OOO: ', op.output )
+//     /*
+//     OUTPUT : nothing, test passes, as it should
+//     */
+
+//     let exp1 = `- got :`;
+//     let exp2 = `'a' : 'hello1'`;
+//     let exp3 = `- expected :`;
+//     let exp4 = `'b' : 'hello2'`;
+//     let exp5 = `__proto__`;
+
+//     test.identical( _.strCount( op.output, exp1 ), 0 );
+//     test.identical( _.strCount( op.output, exp2 ), 0 );
+//     test.identical( _.strCount( op.output, exp3 ), 0 );
+//     test.identical( _.strCount( op.output, exp4 ), 0 );
+//     test.identical( _.strCount( op.output, exp5 ), 0 );
+
+//     return null;
+//   })
+
+//   /* */
+
+//   a.ready.then( () =>
+//   {
+//     test.case = 'identical maps, diff __proto__, same fields on diff level in __proto__';
+//     return null;
+//   })
+
+//   a.appStartNonThrowing({ execPath : `${programPath} r:identical6` })
+//   .then( ( op ) =>
+//   {
+//     test.ni( op.exitCode, 0 );
+//     console.log( 'OOO: ', op.output )
+//     /*
+//     OUTPUT :
+//     - got :
+//       { 'a' : 'hello1', 'b' : 'hello2' }
+//     - expected :
+//       { 'a' : 'hello1', 'b' : 'hello2' }
+//     */
+
+//     let exp1 = `- got :`;
+//     let exp2 = `'a' : 'hello1'`;
+//     let exp3 = `- expected :`;
+//     let exp4 = `'b' : 'hello2'`;
+//     let exp5 = `__proto__`;
+
+//     test.identical( _.strCount( op.output, exp1 ), 1 );
+//     test.identical( _.strCount( op.output, exp2 ), 0 );
+//     test.identical( _.strCount( op.output, exp3 ), 1 );
+//     test.identical( _.strCount( op.output, exp4 ), 0 );
+//     test.identical( _.strCount( op.output, exp5 ), 1 );
+
+//     return null;
+//   })
+
+//   return a.ready;
+
+//   /* - */
+
+//   function program()
+//   {
+//     let _ = require( toolsPath );
+//     _.include( 'wTesting' );
+
+//     //
+
+//     function identical1( test )
+//     {
+//       test.case = 'identical maps, 1 with __proto__ : {}';
+//       let obj1 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj1, {} );
+
+//       let obj2 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+
+//       test.identical( obj1, obj2 );
+//     }
+
+//     //
+
+//     function identical2( test )
+//     {
+//       test.case = 'identical maps, 2 with __proto__ : {}';
+//       let obj1 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj1, {} );
+
+//       let obj2 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj2, {} );
+
+//       test.identical( obj1, obj2 );
+//     }
+
+//     //
+
+//     function identical3( test )
+//     {
+//       test.case = 'not identical maps, 1 with __proto__ : {}';
+//       let obj1 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj1, {} );
+
+//       let obj2 =
+//       {
+//         a : 'hello',
+//         b : 'hello2',
+//       }
+
+//       test.identical( obj1, obj2 );
+//     }
+
+//     //
+
+//     function identical4( test )
+//     {
+//       test.case = 'not identical maps, 2 with non empty equivalent __proto__';
+//       let obj1 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj1, { c : 'hello3' } );
+
+//       let obj2 =
+//       {
+//         a : 'hello',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj2, { c : 'hello3' } );
+
+//       test.identical( obj1, obj2 );
+//     }
+
+//     //
+
+//     function identical5( test )
+//     {
+//       test.case = `identical maps, 2 with identical __proto__`;
+
+//       let proto = { 'c' : 'hello3' }
+//       let obj1 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj1, proto );
+
+//       let obj2 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj2, proto );
+
+//       test.identical( obj1, obj2 );
+//     }
+
+//     //
+
+//     function identical6( test )
+//     {
+//       test.case = `identical maps, diff __proto__, same fields on diff level in __proto__`;
+
+//       let proto1 = {}
+//       Object.setPrototypeOf( proto1, { 'c' : 'hello3' } );
+
+//       let obj1 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj1, proto1 );
+
+//       let proto2 = { 'c' : 'hello3' };
+//       let obj2 =
+//       {
+//         a : 'hello1',
+//         b : 'hello2',
+//       }
+//       Object.setPrototypeOf( obj2, proto2 );
+
+//       test.identical( obj1, obj2 );
+//     }
+
+//     let Self =
+//     {
+//       name : 'Fail',
+//       tests :
+//       {
+//         identical1,
+//         identical2,
+//         identical3,
+//         identical4,
+//         identical5,
+//         identical6
+//       }
+//     }
+
+//     //
+
+//     Self = wTestSuite( Self );
+//     wTester.test();
+//   }
+// }
+
+// checkDiffWithProto.description =
+// `
+// Check diff from test.identical, when comparing maps that set new __proto__.
+// `
 
 // --
 // suite
@@ -3750,6 +5261,10 @@ let Self =
 
     run,
     runWithQuotedPath,
+    runWithSeveralSimilarOptions,
+    runWithSeveralMixedOptions,
+    runCheckNotRewritingDefaultOption,
+    runCheckRewritingSuiteOptions,
     checkFails,
     double,
     requireTesting,
@@ -3771,6 +5286,7 @@ let Self =
 
     help,
     version,
+    imply,
 
     // time out
 
@@ -3804,6 +5320,8 @@ let Self =
     // related
 
     timeLimitConsequence,
+    checkDiffWithRoutines,
+    // checkDiffWithProto
 
   }
 

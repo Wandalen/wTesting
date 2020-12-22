@@ -237,6 +237,8 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/electron
           - ../proto/wtools/atop/testing.test/_asset/electron/index.html
           - ../proto/wtools/atop/testing.test/_asset/electron/main.js
+          - ../proto/wtools/atop/testing.test/_asset/failout
+          - ../proto/wtools/atop/testing.test/_asset/failout/Fail.test.js
           - ../proto/wtools/atop/testing.test/_asset/grouping
           - ../proto/wtools/atop/testing.test/_asset/grouping/Grouping.test.js
           - ../proto/wtools/atop/testing.test/_asset/grouping/Hello.js
@@ -280,6 +282,12 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/optionRapidityAndSourceCode
           - >-
             ../proto/wtools/atop/testing.test/_asset/optionRapidityAndSourceCode/Suite.test.js
+          - ../proto/wtools/atop/testing.test/_asset/optionsRewriting
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/optionsRewriting/OptionsRewriting.test.s
+          - ../proto/wtools/atop/testing.test/_asset/optionsSuiteRewriting
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/optionsSuiteRewriting/OptionsSuiteRewriting.test.s
           - ../proto/wtools/atop/testing.test/_asset/optionSuite
           - ../proto/wtools/atop/testing.test/_asset/optionSuite/A1.test.js
           - ../proto/wtools/atop/testing.test/_asset/optionSuite/A2.test.js

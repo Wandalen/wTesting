@@ -661,6 +661,9 @@ function _runnableGet()
 
   if( suite.routine )
   {
+
+    if( _.arrayIs( suite.routine ) )
+    return _.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
     return _.path.globShortFit( tro.name, suite.routine );
   }
 
@@ -2968,511 +2971,511 @@ function le( got, than )
 // shoulding
 // --
 
-function _shouldDo( o )
-{
-  let tro = this;
-  let second = 0;
-  let reported = 0;
-  let good = 1;
-  let async = 0;
-  let stack = _.introspector.stack([ 2, -1 ]);
-  let logger = tro.logger;
-  let err, arg;
-  let con = new _.Consequence();
-
-  tro._returnedVerification();
-
-  if( !tro.shoulding )
-  return con.take( null );
-
-  try
-  {
-    _.routineOptions( _shouldDo, o );
-    _.assert( arguments.length === 1, 'Expects single argument' );
-    _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
-    _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
-    _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
-    if( o.args[ 1 ] )
-    {
-      _.sure( 1 <= o.args[ 1 ].length, 'Callback should have at least one argument.' );
-      _.sure( o.args[ 1 ].length <= 3, 'Callback should have less then three arguments.' );
-    }
-  }
-  catch( err )
-  {
-    let error = _.errRestack( err, 3 );
-    error = _._err({ args : [ error, '\nIllegal usage of should in', tro.absoluteName ] });
-    error = tro.exceptionReport({ err : error });
-
-    con.error( error );
-    if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
-    return false;
-    else
-    return con;
-  }
-
-  o.routine = o.args[ 0 ];
-  let acheck = tro.checkCurrent();
-  tro._inroutineCon.give( 1 );
-
-  /* */
-
-  let result;
-  if( _.consequenceIs( o.routine ) )
-  {
-    result = o.routine;
-  }
-  else
-  {
-    try
-    {
-      result = o.routine.call( this );
-    }
-    catch( _err )
-    {
-      return handleError( _err );
-    }
-  }
-
-  /* no sync error, but expected */
-
-  if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
-  return handleLackOfSyncError();
-
-  /* */
-
-  if( _.consequenceIs( result ) )
-  handleAsyncResult()
-  else
-  handleSyncResult();
-
-  /* */
-
-  return con;
-
-  /* */
-
-  function handleError( _err )
-  {
-
-    err = _.err( _err );
-
-    if( o.args[ 1 ] )
-    callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
-
-    _.errAttend( err );
-
-    /* */
-
-    if( o.ignoringError )
-    {
-      begin( 1 );
-      tro._outcomeReportBoolean
-      ({
-        outcome : 1,
-        msg : 'error throwen synchronously, ignored',
-        stack,
-        selectMode : 'center'
-      });
-      end( 1, err );
-      return con;
-    }
-
-    /* */
-
-    tro.exceptionReport
-    ({
-      err,
-      sync : 1,
-      considering : 0,
-      outcome : o.expectingSyncError,
-    });
-
-    begin( o.expectingSyncError );
-
-    if( o.expectingSyncError )
-    {
-
-      tro._outcomeReportBoolean
-      ({
-        outcome : o.expectingSyncError,
-        msg : 'error thrown synchronously as expected',
-        stack,
-        selectMode : 'center',
-      });
-
-    }
-    else
-    {
-
-      tro._outcomeReportBoolean
-      ({
-        outcome : o.expectingSyncError,
-        msg : 'error thrown synchronously, what was not expected',
-        stack,
-        selectMode : 'center',
-      });
-
-    }
-
-    end( o.expectingSyncError, err );
-
-    if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
-    return err;
-    else
-    return con;
-
-  }
-
-  /* */
-
-  function handleLackOfSyncError()
-  {
-    begin( 0 );
-
-    if( o.args[ 1 ] )
-    callbackRunOnResult( undefined, result, false );
-
-    let msg = 'Error not thrown synchronously, but expected';
-
-    tro._outcomeReportBoolean
-    ({
-      outcome : 0,
-      msg,
-      stack,
-      selectMode : 'center',
-    });
-
-    end( 0, _.err( msg ) );
-
-    return false;
-  }
-
-  /* */
-
-  function handleAsyncResult()
-  {
-
-    tro.checkNext();
-    async = 1;
-
-    result.give( function( _err, _arg )
-    {
-
-      err = _err;
-      arg = _arg;
-
-      if( !o.ignoringError && !reported )
-      {
-        if( o.args[ 1 ] && !err )
-        callbackRunOnResult( err, result, !o.expectingAsyncError );
-        if( err && !o.expectingAsyncError )
-        reportAsync();
-      }
-      else if( !err && o.expectingAsyncError )
-      {
-        if( o.args[ 1 ] )
-        callbackRunOnResult( err, result, !o.expectingAsyncError );
-        reportAsync();
-      }
-
-      if( _.errIs( err ) )
-      {
-        if( o.args[ 1 ] )
-        callbackRunOnResult( err, result, !!o.expectingAsyncError );
-        _.errAttend( err );
-      }
-
-      /* */
-
-      if( !reported )
-      if( !o.allowingMultipleResources )
-      _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
-      {
-
-        if( result.resourcesGet().length )
-        if( reported )
-        {
-          _.assert( !good );
-        }
-        else
-        {
-
-          begin( 0 );
-          debugger;
-
-          _.assert( !reported );
-
-          tro._outcomeReportBoolean
-          ({
-            outcome : 0,
-            msg : 'Got more than one message',
-            stack,
-          });
-
-          end( 0, _.err( msg ) );
-        }
-
-        if( !reported )
-        reportAsync();
-
-        return null;
-      });
-
-    });
-
-    /* */
-
-    if( !o.allowingMultipleResources )
-    handleSecondResource();
-
-  }
-
-  /* */
-
-  function handleSecondResource()
-  {
-    if( reported && !good )
-    return;
-
-    result.finally( gotSecondResource );
-
-    // let r = result.orKeepingSplit([ tro._timeLimitCon, wTester._cancelCon ]);
-    let r = _.Consequence.Or( result, tro._timeLimitCon, wTester._cancelCon );
-    r.finally( ( err, arg ) =>
-    {
-      if( result.competitorHas( gotSecondResource ) )
-      result.competitorsCancel( gotSecondResource );
-      if( err )
-      throw err;
-      return arg;
-    });
-
-  }
-
-  /* */
-
-  function gotSecondResource( err, arg )
-  {
-    if( reported && !good )
-    return null;
-
-    begin( 0 );
-
-    second = 1;
-    let msg = 'Got more than one message';
-
-    tro._outcomeReportBoolean
-    ({
-      outcome : 0,
-      msg,
-      stack,
-    });
-
-    end( 0, _.err( msg ) );
-
-    if( err )
-    throw err;
-    return arg;
-  }
-
-  /* */
-
-  function handleSyncResult()
-  {
-    if( o.args[ 1 ] )
-    callbackRunOnResult( err, result, !!( !o.expectingSyncError && !o.expectingAsyncError ) );
-
-    if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
-    {
-      begin( 0 );
-
-      let msg = 'Error not thrown asynchronously, but expected';
-      if( o.expectingAsyncError )
-      msg = 'Error not thrown, but expected either synchronosuly or asynchronously';
-
-      tro._outcomeReportBoolean
-      ({
-        outcome : 0,
-        msg,
-        stack,
-        selectMode : 'center',
-      });
-
-      end( 0, _.err( msg ) );
-    }
-    else if( !o.expectingSyncError && !err )
-    {
-      begin( 1 );
-
-      tro._outcomeReportBoolean
-      ({
-        outcome : 1,
-        msg : 'no error thrown, as expected',
-        stack,
-        selectMode : 'center',
-      });
-
-      end( 1, result );
-    }
-    else
-    {
-      debugger;
-      _.assert( 0, 'unexpected' );
-      tro.checkNext();
-    }
-
-  }
-
-  /* */
-
-  function begin( positive )
-  {
-    if( positive )
-    _.assert( !reported );
-    good = positive;
-
-    if( reported || async )
-    tro.checkRestore( acheck );
-
-    logger.begin({ verbosity : positive ? -5 : -5+tro.negativity });
-    logger.begin({ connotation : positive ? 'positive' : 'negative' });
-  }
-
-  /* */
-
-  function end( positive, arg )
-  {
-    _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-
-    logger.end({ verbosity : positive ? -5 : -5+tro.negativity });
-    logger.end({ connotation : positive ? 'positive' : 'negative' });
-
-    if( reported )
-    debugger;
-    if( reported || async )
-    tro.checkRestore();
-
-    if( arg === undefined && !async )
-    arg = null;
-
-    if( positive )
-    con.take( undefined, arg );
-    else
-    con.take( _.errAttend( arg ), undefined );
-
-    if( !reported )
-    tro._inroutineCon.take( null );
-
-    reported = 1;
-  }
-
-  /* */
-
-  function reportAsync()
-  {
-
-    /* yyy */
-    if( tro._returned )
-    return;
-    if( reported )
-    return;
-
-    if( o.ignoringError )
-    {
-      begin( 1 );
-
-      tro._outcomeReportBoolean
-      ({
-        outcome : 1,
-        msg : 'got single message',
-        stack,
-        selectMode : 'center'
-      });
-
-      end( 1, err ? err : arg );
-    }
-    else if( err !== undefined )
-    {
-      begin( o.expectingAsyncError );
-
-      tro.exceptionReport
-      ({
-        err,
-        sync : 0,
-        considering : 0,
-        outcome : o.expectingAsyncError,
-      });
-
-      if( o.expectingAsyncError )
-      tro._outcomeReportBoolean
-      ({
-        outcome : o.expectingAsyncError,
-        msg : 'error thrown asynchronously as expected',
-        stack,
-        selectMode : 'center'
-      });
-      else
-      tro._outcomeReportBoolean
-      ({
-        outcome : o.expectingAsyncError,
-        msg : 'error thrown asynchronously, not expected',
-        stack,
-        selectMode : 'center'
-      });
-
-      end( o.expectingAsyncError, err );
-    }
-    else
-    {
-      begin( !o.expectingAsyncError );
-
-      let msg = 'error was not thrown asynchronously, but expected';
-      if( !o.expectingAsyncError && !o.expectingSyncError && good )
-      msg = 'error was not thrown as expected';
-
-      tro._outcomeReportBoolean
-      ({
-        outcome : !o.expectingAsyncError,
-        msg,
-        stack,
-        selectMode : 'center'
-      });
-
-      if( o.expectingAsyncError )
-      end( !o.expectingAsyncError, _._err({ args : [ msg ], catchCallsStack : stack }) );
-      else
-      end( !o.expectingAsyncError, arg );
-
-    }
-
-  }
-
-  /* */
-
-  function callbackRunOnResult( err, arg, ok )
-  {
-    let onResult = o.args[ 1 ];
-    try
-    {
-      onResult( err, arg, ok );
-    }
-    catch( err2 )
-    {
-      console.error( err2 );
-    }
-  }
-
-}
-
-_shouldDo.defaults =
-{
-  args : null, /* aaa : cover 2-arguments calls for each should* check */ /* Dmytro : covered */
-  expectingSyncError : 1,
-  expectingAsyncError : 1,
-  ignoringError : 0,
-  allowingMultipleResources : 0,
-}
+// function _shouldDo( o )
+// {
+//   let tro = this;
+//   let second = 0;
+//   let reported = 0;
+//   let good = 1;
+//   let async = 0;
+//   let stack = _.introspector.stack([ 2, -1 ]);
+//   let logger = tro.logger;
+//   let err, arg;
+//   let con = new _.Consequence();
+//
+//   tro._returnedVerification();
+//
+//   if( !tro.shoulding )
+//   return con.take( null );
+//
+//   try
+//   {
+//     _.routineOptions( _shouldDo, o );
+//     _.assert( arguments.length === 1, 'Expects single argument' );
+//     _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
+//     _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
+//     _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
+//     if( o.args[ 1 ] )
+//     {
+//       _.sure( 1 <= o.args[ 1 ].length, 'Callback should have at least one argument.' );
+//       _.sure( o.args[ 1 ].length <= 3, 'Callback should have less then three arguments.' );
+//     }
+//   }
+//   catch( err )
+//   {
+//     let error = _.errRestack( err, 3 );
+//     error = _._err({ args : [ error, '\nIllegal usage of should in', tro.absoluteName ] });
+//     error = tro.exceptionReport({ err : error });
+//
+//     con.error( error );
+//     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+//     return false;
+//     else
+//     return con;
+//   }
+//
+//   o.routine = o.args[ 0 ];
+//   let acheck = tro.checkCurrent();
+//   tro._inroutineCon.give( 1 );
+//
+//   /* */
+//
+//   let result;
+//   if( _.consequenceIs( o.routine ) )
+//   {
+//     result = o.routine;
+//   }
+//   else
+//   {
+//     try
+//     {
+//       result = o.routine.call( this );
+//     }
+//     catch( _err )
+//     {
+//       return handleError( _err );
+//     }
+//   }
+//
+//   /* no sync error, but expected */
+//
+//   if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
+//   return handleLackOfSyncError();
+//
+//   /* */
+//
+//   if( _.consequenceIs( result ) )
+//   handleAsyncResult()
+//   else
+//   handleSyncResult();
+//
+//   /* */
+//
+//   return con;
+//
+//   /* */
+//
+//   function handleError( _err )
+//   {
+//
+//     err = _.err( _err );
+//
+//     if( o.args[ 1 ] )
+//     callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
+//
+//     _.errAttend( err );
+//
+//     /* */
+//
+//     if( o.ignoringError )
+//     {
+//       begin( 1 );
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : 1,
+//         msg : 'error throwen synchronously, ignored',
+//         stack,
+//         selectMode : 'center'
+//       });
+//       end( 1, err );
+//       return con;
+//     }
+//
+//     /* */
+//
+//     tro.exceptionReport
+//     ({
+//       err,
+//       sync : 1,
+//       considering : 0,
+//       outcome : o.expectingSyncError,
+//     });
+//
+//     begin( o.expectingSyncError );
+//
+//     if( o.expectingSyncError )
+//     {
+//
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : o.expectingSyncError,
+//         msg : 'error thrown synchronously as expected',
+//         stack,
+//         selectMode : 'center',
+//       });
+//
+//     }
+//     else
+//     {
+//
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : o.expectingSyncError,
+//         msg : 'error thrown synchronously, what was not expected',
+//         stack,
+//         selectMode : 'center',
+//       });
+//
+//     }
+//
+//     end( o.expectingSyncError, err );
+//
+//     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
+//     return err;
+//     else
+//     return con;
+//
+//   }
+//
+//   /* */
+//
+//   function handleLackOfSyncError()
+//   {
+//     begin( 0 );
+//
+//     if( o.args[ 1 ] )
+//     callbackRunOnResult( undefined, result, false );
+//
+//     let msg = 'Error not thrown synchronously, but expected';
+//
+//     tro._outcomeReportBoolean
+//     ({
+//       outcome : 0,
+//       msg,
+//       stack,
+//       selectMode : 'center',
+//     });
+//
+//     end( 0, _.err( msg ) );
+//
+//     return false;
+//   }
+//
+//   /* */
+//
+//   function handleAsyncResult()
+//   {
+//
+//     tro.checkNext();
+//     async = 1;
+//
+//     result.give( function( _err, _arg )
+//     {
+//
+//       err = _err;
+//       arg = _arg;
+//
+//       if( !o.ignoringError && !reported )
+//       {
+//         if( o.args[ 1 ] && !err )
+//         callbackRunOnResult( err, result, !o.expectingAsyncError );
+//         if( err && !o.expectingAsyncError )
+//         reportAsync();
+//       }
+//       else if( !err && o.expectingAsyncError )
+//       {
+//         if( o.args[ 1 ] )
+//         callbackRunOnResult( err, result, !o.expectingAsyncError );
+//         reportAsync();
+//       }
+//
+//       if( _.errIs( err ) )
+//       {
+//         if( o.args[ 1 ] )
+//         callbackRunOnResult( err, result, !!o.expectingAsyncError );
+//         _.errAttend( err );
+//       }
+//
+//       /* */
+//
+//       if( !reported )
+//       if( !o.allowingMultipleResources )
+//       _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
+//       {
+//
+//         if( result.resourcesGet().length )
+//         if( reported )
+//         {
+//           _.assert( !good );
+//         }
+//         else
+//         {
+//
+//           begin( 0 );
+//           debugger;
+//
+//           _.assert( !reported );
+//
+//           tro._outcomeReportBoolean
+//           ({
+//             outcome : 0,
+//             msg : 'Got more than one message',
+//             stack,
+//           });
+//
+//           end( 0, _.err( msg ) );
+//         }
+//
+//         if( !reported )
+//         reportAsync();
+//
+//         return null;
+//       });
+//
+//     });
+//
+//     /* */
+//
+//     if( !o.allowingMultipleResources )
+//     handleSecondResource();
+//
+//   }
+//
+//   /* */
+//
+//   function handleSecondResource()
+//   {
+//     if( reported && !good )
+//     return;
+//
+//     result.finally( gotSecondResource );
+//
+//     // let r = result.orKeepingSplit([ tro._timeLimitCon, wTester._cancelCon ]);
+//     let r = _.Consequence.Or( result, tro._timeLimitCon, wTester._cancelCon );
+//     r.finally( ( err, arg ) =>
+//     {
+//       if( result.competitorHas( gotSecondResource ) )
+//       result.competitorsCancel( gotSecondResource );
+//       if( err )
+//       throw err;
+//       return arg;
+//     });
+//
+//   }
+//
+//   /* */
+//
+//   function gotSecondResource( err, arg )
+//   {
+//     if( reported && !good )
+//     return null;
+//
+//     begin( 0 );
+//
+//     second = 1;
+//     let msg = 'Got more than one message';
+//
+//     tro._outcomeReportBoolean
+//     ({
+//       outcome : 0,
+//       msg,
+//       stack,
+//     });
+//
+//     end( 0, _.err( msg ) );
+//
+//     if( err )
+//     throw err;
+//     return arg;
+//   }
+//
+//   /* */
+//
+//   function handleSyncResult()
+//   {
+//     if( o.args[ 1 ] )
+//     callbackRunOnResult( err, result, !!( !o.expectingSyncError && !o.expectingAsyncError ) );
+//
+//     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
+//     {
+//       begin( 0 );
+//
+//       let msg = 'Error not thrown asynchronously, but expected';
+//       if( o.expectingAsyncError )
+//       msg = 'Error not thrown, but expected either synchronosuly or asynchronously';
+//
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : 0,
+//         msg,
+//         stack,
+//         selectMode : 'center',
+//       });
+//
+//       end( 0, _.err( msg ) );
+//     }
+//     else if( !o.expectingSyncError && !err )
+//     {
+//       begin( 1 );
+//
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : 1,
+//         msg : 'no error thrown, as expected',
+//         stack,
+//         selectMode : 'center',
+//       });
+//
+//       end( 1, result );
+//     }
+//     else
+//     {
+//       debugger;
+//       _.assert( 0, 'unexpected' );
+//       tro.checkNext();
+//     }
+//
+//   }
+//
+//   /* */
+//
+//   function begin( positive )
+//   {
+//     if( positive )
+//     _.assert( !reported );
+//     good = positive;
+//
+//     if( reported || async )
+//     tro.checkRestore( acheck );
+//
+//     logger.begin({ verbosity : positive ? -5 : -5+tro.negativity });
+//     logger.begin({ connotation : positive ? 'positive' : 'negative' });
+//   }
+//
+//   /* */
+//
+//   function end( positive, arg )
+//   {
+//     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+//
+//     logger.end({ verbosity : positive ? -5 : -5+tro.negativity });
+//     logger.end({ connotation : positive ? 'positive' : 'negative' });
+//
+//     if( reported )
+//     debugger;
+//     if( reported || async )
+//     tro.checkRestore();
+//
+//     if( arg === undefined && !async )
+//     arg = null;
+//
+//     if( positive )
+//     con.take( undefined, arg );
+//     else
+//     con.take( _.errAttend( arg ), undefined );
+//
+//     if( !reported )
+//     tro._inroutineCon.take( null );
+//
+//     reported = 1;
+//   }
+//
+//   /* */
+//
+//   function reportAsync()
+//   {
+//
+//     /* yyy */
+//     if( tro._returned )
+//     return;
+//     if( reported )
+//     return;
+//
+//     if( o.ignoringError )
+//     {
+//       begin( 1 );
+//
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : 1,
+//         msg : 'got single message',
+//         stack,
+//         selectMode : 'center'
+//       });
+//
+//       end( 1, err ? err : arg );
+//     }
+//     else if( err !== undefined )
+//     {
+//       begin( o.expectingAsyncError );
+//
+//       tro.exceptionReport
+//       ({
+//         err,
+//         sync : 0,
+//         considering : 0,
+//         outcome : o.expectingAsyncError,
+//       });
+//
+//       if( o.expectingAsyncError )
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : o.expectingAsyncError,
+//         msg : 'error thrown asynchronously as expected',
+//         stack,
+//         selectMode : 'center'
+//       });
+//       else
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : o.expectingAsyncError,
+//         msg : 'error thrown asynchronously, not expected',
+//         stack,
+//         selectMode : 'center'
+//       });
+//
+//       end( o.expectingAsyncError, err );
+//     }
+//     else
+//     {
+//       begin( !o.expectingAsyncError );
+//
+//       let msg = 'error was not thrown asynchronously, but expected';
+//       if( !o.expectingAsyncError && !o.expectingSyncError && good )
+//       msg = 'error was not thrown as expected';
+//
+//       tro._outcomeReportBoolean
+//       ({
+//         outcome : !o.expectingAsyncError,
+//         msg,
+//         stack,
+//         selectMode : 'center'
+//       });
+//
+//       if( o.expectingAsyncError )
+//       end( !o.expectingAsyncError, _._err({ args : [ msg ], catchCallsStack : stack }) );
+//       else
+//       end( !o.expectingAsyncError, arg );
+//
+//     }
+//
+//   }
+//
+//   /* */
+//
+//   function callbackRunOnResult( err, arg, ok )
+//   {
+//     let onResult = o.args[ 1 ];
+//     try
+//     {
+//       onResult( err, arg, ok );
+//     }
+//     catch( err2 )
+//     {
+//       console.error( err2 );
+//     }
+//   }
+//
+// }
+//
+// _shouldDo.defaults =
+// {
+//   args : null, /* aaa : cover 2-arguments calls for each should* check */ /* Dmytro : covered */
+//   expectingSyncError : 1,
+//   expectingAsyncError : 1,
+//   ignoringError : 0,
+//   allowingMultipleResources : 0,
+// }
 
 //
 
@@ -3547,6 +3550,7 @@ function _shouldDo_( o )
     catch( _err )
     {
       err = _err;
+      return handleSyncError();
     }
   }
 
@@ -3555,9 +3559,7 @@ function _shouldDo_( o )
   if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
   return handleLackOfSyncError();
 
-  if( !result && _.errIs( err ) )
-  return handleSyncError();
-  else if( _.consequenceIs( result ) )
+  if( _.consequenceIs( result ) )
   handleAsyncResult()
   else
   handleSyncResult();
@@ -3965,18 +3967,18 @@ function shouldThrowErrorAsync_( routine )
  * @module Tools/atop/Tester
  */
 
-function shouldThrowErrorSync( routine )
-{
-  let tro = this;
-
-  return tro._shouldDo
-  ({
-    args : arguments,
-    expectingSyncError : 1,
-    expectingAsyncError : 0,
-  });
-
-}
+// function shouldThrowErrorSync( routine )
+// {
+//   let tro = this;
+//
+//   return tro._shouldDo
+//   ({
+//     args : arguments,
+//     expectingSyncError : 1,
+//     expectingAsyncError : 0,
+//   });
+//
+// }
 
 function shouldThrowErrorSync_( routine )
 {
@@ -4044,18 +4046,18 @@ function shouldThrowErrorSync_( routine )
  * @module Tools/atop/Tester
  */
 
-function shouldThrowErrorOfAnyKind( routine )
-{
-  let tro = this;
-
-  return tro._shouldDo
-  ({
-    args : arguments,
-    expectingSyncError : 1,
-    expectingAsyncError : 1,
-  });
-
-}
+// function shouldThrowErrorOfAnyKind( routine )
+// {
+//   let tro = this;
+//
+//   return tro._shouldDo
+//   ({
+//     args : arguments,
+//     expectingSyncError : 1,
+//     expectingAsyncError : 1,
+//   });
+//
+// }
 
 function shouldThrowErrorOfAnyKind_( routine )
 {
@@ -4097,19 +4099,19 @@ function shouldThrowErrorOfAnyKind_( routine )
  * @module Tools/atop/Tester
  */
 
-function mustNotThrowError( routine )
-{
-  let tro = this;
-
-  return tro._shouldDo
-  ({
-    args : arguments,
-    ignoringError : 0,
-    expectingSyncError : 0,
-    expectingAsyncError : 0,
-  });
-
-}
+// function mustNotThrowError( routine )
+// {
+//   let tro = this;
+//
+//   return tro._shouldDo
+//   ({
+//     args : arguments,
+//     ignoringError : 0,
+//     expectingSyncError : 0,
+//     expectingAsyncError : 0,
+//   });
+//
+// }
 
 function mustNotThrowError_( routine )
 {
@@ -4150,19 +4152,19 @@ function mustNotThrowError_( routine )
  * @module Tools/atop/Tester
  */
 
-function returnsSingleResource( routine )
-{
-  let tro = this;
-
-  return tro._shouldDo
-  ({
-    args : arguments,
-    ignoringError : 1,
-    expectingSyncError : 0,
-    expectingAsyncError : 0,
-  });
-
-}
+// function returnsSingleResource( routine )
+// {
+//   let tro = this;
+//
+//   return tro._shouldDo
+//   ({
+//     args : arguments,
+//     ignoringError : 1,
+//     expectingSyncError : 0,
+//     expectingAsyncError : 0,
+//   });
+//
+// }
 
 function returnsSingleResource_( routine )
 {
@@ -4686,16 +4688,16 @@ let Accessors =
   rapidity : 'rapidity',
   usingSourceCode : 'usingSourceCode',
 
-  group : { readOnly : 1 },
-  descriptionFull : { readOnly : 1 },
-  descriptionWithName : { readOnly : 1 },
-  accuracyEffective : { readOnly : 1 },
-  runnable : { readOnly : 1 },
+  group : { writable : 0 },
+  descriptionFull : { writable : 0 },
+  descriptionWithName : { writable : 0 },
+  accuracyEffective : { writable : 0 },
+  runnable : { writable : 0 },
 
-  qualifiedName : { readOnly : 1 },
-  decoratedQualifiedName : { readOnly : 1 },
-  absoluteName : { readOnly : 1 },
-  decoratedAbsoluteName : { readOnly : 1 },
+  qualifiedName : { writable : 0 },
+  decoratedQualifiedName : { writable : 0 },
+  absoluteName : { writable : 0 },
+  decoratedAbsoluteName : { writable : 0 },
 
 }
 
@@ -4828,19 +4830,19 @@ let Extension =
 
   // shoulding
 
-  _shouldDo,
+  // _shouldDo,
   _shouldDo_,
 
-  shouldThrowErrorSync, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorSync_, /* !!! use instead of shouldThrowErrorSync */ /* Dmytro : refactored routine _shouldDo_ is used */
-  shouldThrowErrorAsync, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorAsync_, /* !!! use instead of shouldThrowErrorAsync */ /* Dmytro : refactored routine _shouldDo_ is used */
-  shouldThrowErrorOfAnyKind, /* aaa : cover second argument */ /* Dmytro : covered */
-  shouldThrowErrorOfAnyKind_, /* !!! use instead of shouldThrowErrorOfAnyKind */ /* Dmytro : refactored routine _shouldDo_ is used */
-  mustNotThrowError,
-  mustNotThrowError_, /* !!! use instead of mustNotThrowError */ /* Dmytro : refactored routine _shouldDo_ is used */
-  returnsSingleResource,
-  returnsSingleResource_, /* !!! use instead of returnsSingleResource */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorSync : shouldThrowErrorSync_, /* aaa : cover second argument */ /* Dmytro : covered */ /* !!! use instead of shouldThrowErrorSync */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorSync_,
+  shouldThrowErrorAsync : shouldThrowErrorAsync_, /* aaa : cover second argument */ /* Dmytro : covered */ /* !!! use instead of shouldThrowErrorAsync */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorAsync_,
+  shouldThrowErrorOfAnyKind : shouldThrowErrorOfAnyKind_, /* aaa : cover second argument */ /* Dmytro : covered */ /* !!! use instead of shouldThrowErrorOfAnyKind */ /* Dmytro : refactored routine _shouldDo_ is used */
+  shouldThrowErrorOfAnyKind_,
+  mustNotThrowError : mustNotThrowError_, /* !!! use instead of mustNotThrowError */ /* Dmytro : refactored routine _shouldDo_ is used */
+  mustNotThrowError_,
+  returnsSingleResource : returnsSingleResource_, /* !!! use instead of returnsSingleResource */ /* Dmytro : refactored routine _shouldDo_ is used */
+  returnsSingleResource_,
 
   // asset
 

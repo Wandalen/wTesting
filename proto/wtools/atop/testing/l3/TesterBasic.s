@@ -32,7 +32,7 @@ if( wTester._isReal_ )
 
 _.assert( _.routineIs( _.toStr ), 'wTesting needs Stringer' );
 _.assert( _.routineIs( _.process.start ), 'wTesting needs ProcessBasic' );
-_.assert( _.routineIs( _.execStages ), 'wTesting needs IntrospectorBasic' );
+_.assert( _.routineIs( _.stagesRun ), 'wTesting needs IntrospectorBasic' );
 _.assert( _.routineIs( _.Consequence ), 'wTesting needs Consequence' );
 _.assert( _.numberIs( _.accuracy ), 'wTesting needs _.accuracy' );
 _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
@@ -195,6 +195,16 @@ function appArgsRead()
   if( o.subject !== null )
   appArgs.subject = o.subject;
 
+  if( appArgs.propertiesMap )
+  {
+    appArgs.propertiesMap = filterVectorizedOptions( appArgs.propertiesMap );
+    if( appArgs.propertiesMap.routine )
+    {
+      settings.routine = appArgs.propertiesMap.routine;
+      delete appArgs.propertiesMap.routine;
+    }
+  }
+
   let readOptions =
   {
     propertiesMap : appArgs.propertiesMap,
@@ -202,53 +212,61 @@ function appArgsRead()
     namesMap : tester.SettingsNameMap,
     removing : 0,
     only : 1,
-  }
+  };
 
   _.process.inputReadTo( readOptions );
   if( appArgs.err )
   throw _.errBrief( appArgs.err );
+
+  if( appArgs.propertiesMap && settings.routine )
+  appArgs.propertiesMap.routine = settings.routine;
 
   _.assert( _.mapIs( appArgs.map ) );
 
   if( !appArgs.map )
   appArgs.map = Object.create( null );
 
-  /* qqq : cover rapidity */
-
-  _.mapExtend( settings, _.mapOnly( appArgs.map, tester.Settings ) );
-
-  settingsTransform();
+  /* aaa : cover rapidity */ /* Dmytro : covered a time ago */
 
   let v = settings.verbosity;
-  _.assert( v === null || v === undefined || _.boolLike( v ) || _.numberIs( v ) );
   if( v === null || v === undefined )
   settings.verbosity = tester.verbosity;
+  else
+  _.assert( _.boolLike( v ) || _.numberIs( v ) );
+  tester.verbosity = settings.verbosity;
 
   if( settings.beeping === null )
   settings.beeping = !!settings.verbosity;
 
-  tester._appArgs = appArgs;
   tester.filePath = _.strUnquote( appArgs.subject ) || _.path.current();
+  tester.filePath = _.path.nativize( tester.filePath );
   tester.filePath = _.path.join( _.path.current(), tester.filePath );
 
   if( settings.negativity !== undefined && settings.negativity !== null )
   tester.negativity = Number( settings.negativity ) || 0;
 
-  tester.verbosity = settings.verbosity;
+  tester._appArgs = appArgs;
 
   return appArgs;
 
   /* */
 
-  function settingsTransform()
+  function filterVectorizedOptions( src )
   {
-    _.each( settings, ( value, key ) =>
+    _.each( src, ( value, key ) =>
     {
       if( _.arrayLike( value ) )
-      if( value.length > 1 )
       if( !SettingsAsArrayMap[ key ] )
-      settings[ key ] = value[ value.length - 1 ];
-    })
+      src[ key ] = value[ value.length - 1 ];
+    });
+
+    if( src.r )
+    {
+      src.routine = _.scalarAppend( src.routine, src.r );
+      delete src.r;
+    }
+
+    return src;
   }
 }
 
@@ -768,7 +786,7 @@ function suitesFilterOut( suites )
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
   _.assert( _.objectIs( suites ) );
 
-  suites = _.entityFilter( suites, function( suite )
+  suites = _.filter_( null, suites, function( suite )
   {
     if( _.strIs( suite ) )
     {
@@ -920,6 +938,9 @@ function suitesIncludeAt( path )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
+  
+  if( Config.interpreter === 'browser' )
+  return;
 
   logger.verbosityPush( tester.verbosity );
 
@@ -1355,6 +1376,8 @@ let SettingsNameMap =
 
 let SettingsAsArrayMap =
 {
+  routine : 1,
+  r : 1,
 }
 
 /**

@@ -37,6 +37,6 @@ jobs :
         node-version : ${{ matrix.node-version }}
     - run : npm i
     - if : startsWith( matrix.os, 'ubuntu' )
-      run : xvfb-run --auto-servernum npm test
+      run : xvfb-run --auto-servernum npm test v:9
     - if : "!startsWith( matrix.os, 'ubuntu' )"
-      run : npm test
+      run : npm test v:9

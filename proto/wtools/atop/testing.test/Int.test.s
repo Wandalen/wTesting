@@ -1358,7 +1358,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1394,7 +1394,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1430,7 +1430,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1476,7 +1476,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -1514,7 +1514,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1565,7 +1565,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -1617,7 +1617,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -1655,7 +1655,7 @@ function mustNotThrowErrorWithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1694,7 +1694,7 @@ function mustNotThrowErrorWithCallback( test )
 
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1712,12 +1712,13 @@ function mustNotThrowErrorWithCallback( test )
         });
         return null;
       });
-    })
+    });
 
     /* */
 
     return ready;
   }
+  r1.timeOut = 20000;
 
   /* */
 
@@ -1747,7 +1748,7 @@ function mustNotThrowErrorWithCallback( test )
   return result;
 }
 
-mustNotThrowErrorWithCallback.timeOut = 10000;
+mustNotThrowErrorWithCallback.timeOut = 30000;
 
 //
 
@@ -1779,7 +1780,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1815,7 +1816,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1851,7 +1852,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1897,7 +1898,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -1935,7 +1936,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -1986,7 +1987,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -2038,7 +2039,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
@@ -2076,7 +2077,7 @@ function mustNotThrowError_WithCallback( test )
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -2115,7 +2116,7 @@ function mustNotThrowError_WithCallback( test )
 
       counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
+      return _.time.out( context.t2, () =>
       {
         test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
         test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
@@ -2133,12 +2134,13 @@ function mustNotThrowError_WithCallback( test )
         });
         return null;
       });
-    })
+    });
 
     /* */
 
     return ready;
   }
+  r1.timeOut = 20000;
 
   /* */
 
@@ -2168,7 +2170,7 @@ function mustNotThrowError_WithCallback( test )
   return result;
 }
 
-mustNotThrowError_WithCallback.timeOut = 10000;
+mustNotThrowError_WithCallback.timeOut = 30000;
 
 //
 

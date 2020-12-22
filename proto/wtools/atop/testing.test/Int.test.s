@@ -2506,7 +2506,7 @@ shouldThrowErrorSync.timeOut = 30000;
 
 function shouldThrowErrorSyncWithCallback( test )
 {
-
+  let context = this;
   var counter = new CheckCounter();
 
   function r1( t )

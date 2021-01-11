@@ -78,7 +78,7 @@ function inherit( test )
     routines.push( test.name );
 
     test.case = 'check if child suit inherits tests, options, context from parent';
-    var tests = _.mapOwnKeys( wTests[ childSuitName ].tests );
+    var tests = _.mapOnlyOwnKeys( wTests[ childSuitName ].tests );
     test.identical( tests, [ 'test1', 'test2' ] );
     test.identical( wTests[ childSuitName ].abstract, 0 );
 
@@ -149,7 +149,7 @@ function inherit( test )
     test.true( test.report.testCheckPasses > 8  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
-    test.identical( _.mapOwnKeys( suit.tests ).length, 2 );
+    test.identical( _.mapOnlyOwnKeys( suit.tests ).length, 2 );
     return null;
   })
 }

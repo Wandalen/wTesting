@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wTesting.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wTesting.out.will.yml: &ref_0
+    hash: a427dd95cd1cca30d4ce299d09040aa7
+    size: 50069
+  ../.ex.will.yml: &ref_1
     hash: 984cb3aad208231181d4e056698101ba
     size: 2796
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: ca5ab47bb3930134f939710ee464c0cf
     size: 6286
 module:
@@ -20,23 +23,23 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - testing
         - unit test
         - functional test
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       npm.name: wTesting
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         wtest: node proto/wtools/atop/testing/entry/ExecUnrestricted
         single-process-wtest: node proto/wtools/atop/testing/entry/Exec
@@ -44,7 +47,7 @@ module:
         tst: node proto/wtools/atop/testing/entry/ExecUnrestricted
         single-process-tst: node proto/wtools/atop/testing/entry/Exec
         debug-tst: node proto/wtools/atop/testing/entry/ExecDebug
-      npm.bin: &ref_6
+      npm.bin:
         wtest: proto/wtools/atop/testing/entry/ExecUnrestricted
         single-process-wtest: proto/wtools/atop/testing/entry/Exec
         debug-wtest: proto/wtools/atop/testing/entry/ExecDebug
@@ -80,20 +83,20 @@ module:
         criterion:
           predefined: 1
       repository:
-        path: 'git+https:///github.com/Wandalen/wTesting.git'
+        path: git+https:///github.com/Wandalen/wTesting.git
       origins:
         path:
-          - 'git+https:///github.com/Wandalen/wTesting.git'
-          - 'npm:///wTesting'
+          - git+https:///github.com/Wandalen/wTesting.git
+          - npm:///wTesting
       bugtracker:
-        path: 'https:///github.com/Wandalen/wTesting/issues'
+        path: https:///github.com/Wandalen/wTesting/issues
       in:
         path: .
       out:
         path: .
       temp:
         path:
-          - 'path::out'
+          - path::out
           - ../package-lock.json
           - ../package.json
           - ../node_modules
@@ -304,89 +307,89 @@ module:
             ../proto/wtools/atop/testing.test/_asset/timeOutExternalMessage/Suite.test.js
     submodule:
       wConsequence:
-        path: 'npm:///wConsequence'
+        path: npm:///wConsequence
         autoExporting: 0
         enabled: 0
       wCopyable:
-        path: 'npm:///wCopyable'
+        path: npm:///wCopyable
         autoExporting: 0
         enabled: 0
       wFiles:
-        path: 'npm:///wFiles'
+        path: npm:///wFiles
         autoExporting: 0
         enabled: 0
       wLogger:
-        path: 'npm:///wLogger'
+        path: npm:///wLogger
         autoExporting: 0
         enabled: 0
       wProto:
-        path: 'npm:///wProto'
+        path: npm:///wProto
         autoExporting: 0
         enabled: 0
       wTools:
-        path: 'npm:///wTools'
+        path: npm:///wTools
         autoExporting: 0
         enabled: 0
       wComparator:
-        path: 'npm:///wcomparator'
+        path: npm:///wcomparator
         autoExporting: 0
         enabled: 0
       wExternalFundamentals:
-        path: 'npm:///wexternalfundamentals'
+        path: npm:///wexternalfundamentals
         autoExporting: 0
         enabled: 0
       wCommandsAggregator:
-        path: 'npm:///wcommandsaggregator'
+        path: npm:///wcommandsaggregator
         autoExporting: 0
         enabled: 0
       wInstancing:
-        path: 'npm:///winstancing'
+        path: npm:///winstancing
         autoExporting: 0
         enabled: 0
       wLooker:
-        path: 'npm:///wlooker'
+        path: npm:///wlooker
         autoExporting: 0
         enabled: 0
       wSelector:
-        path: 'npm:///wselector'
+        path: npm:///wselector
         autoExporting: 0
         enabled: 0
       wprocesswatcher:
-        path: 'npm:///wprocesswatcher'
+        path: npm:///wprocesswatcher
         autoExporting: 0
         enabled: 0
       wEventHandler:
-        path: 'npm:///wEventHandler'
+        path: npm:///wEventHandler
         autoExporting: 0
         enabled: 0
         criterion:
           optional: 1
       wTesting:
-        path: 'hd://..'
+        path: hd://..
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#10.1.5'
+        path: npm:///electron#10.1.5
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#12.0.0'
+        path: npm:///spectron#12.0.0
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       puppeteer:
-        path: 'npm:///puppeteer#5.5.0'
+        path: npm:///puppeteer#5.5.0
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint#7.1.0'
+        path: npm:///eslint#7.1.0
         autoExporting: 0
         enabled: 0
         criterion:
@@ -395,7 +398,7 @@ module:
       reflect.proto.debug.raw:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -409,7 +412,7 @@ module:
       reflect.proto.release.raw:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -423,7 +426,7 @@ module:
       reflect.proto.debug.compiled:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -437,7 +440,7 @@ module:
       reflect.proto.release.compiled:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -451,7 +454,7 @@ module:
       transpile.proto.raw:
         src:
           filePath:
-            'path::proto': '{path::out.raw.release}'
+            path::proto: '{path::out.raw.release}'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -466,7 +469,7 @@ module:
           filePath:
             '**.test*': false
             '**.test/**': false
-            'path::proto': '{path::out.*=1}/Main.s'
+            path::proto: '{path::out.*=1}/Main.s'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -482,7 +485,7 @@ module:
           filePath:
             '**.test*': false
             '**.test/**': false
-            'path::proto': '{path::out.*=1}/Main.s'
+            path::proto: '{path::out.*=1}/Main.s'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -497,7 +500,7 @@ module:
         src:
           filePath:
             '**.test*': true
-            'path::proto': '{path::out.*=1}/Tests.test.s'
+            path::proto: '{path::out.*=1}/Tests.test.s'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -512,7 +515,7 @@ module:
         src:
           filePath:
             '**.test*': true
-            'path::proto': '{path::out.*=1}/Tests.test.s'
+            path::proto: '{path::out.*=1}/Tests.test.s'
           prefixPath: ''
         dst:
           prefixPath: ''
@@ -538,9 +541,9 @@ module:
       exported.files.proto.export:
         src:
           filePath:
-            'path::exported.files.proto.export': ''
+            path::exported.files.proto.export: ''
           basePath: .
-          prefixPath: 'path::exported.dir.proto.export'
+          prefixPath: path::exported.dir.proto.export
           recursive: 0
         recursive: 0
         criterion:
@@ -550,7 +553,7 @@ module:
     step:
       proto.export:
         opts:
-          export: 'path::export'
+          export: path::export
           tar: 0
         criterion:
           content: proto
@@ -558,7 +561,7 @@ module:
           - module.export
       doc.export:
         opts:
-          export: 'path::doc'
+          export: path::doc
           tar: 0
         criterion:
           content: doc
@@ -577,7 +580,7 @@ module:
           shell: npm publish
       npm.generate.debug.raw:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -587,7 +590,7 @@ module:
           - npm.generate
       npm.generate.release.raw:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -597,7 +600,7 @@ module:
           - npm.generate
       npm.generate.debug.compiled:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -607,7 +610,7 @@ module:
           - npm.generate
       npm.generate.release.compiled:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -777,7 +780,7 @@ module:
           - files.delete
       clean.out.npm:
         opts:
-          filePath: 'path::out.*=1'
+          filePath: path::out.*=1
         criterion:
           debug: debug
           raw: compiled
@@ -787,24 +790,24 @@ module:
           - files.delete
       tst.proto:
         opts:
-          shell: 'tst {path::proto}'
+          shell: tst {path::proto}
         criterion:
           content: proto
       tst.debug:
         opts:
-          shell: 'tst {path::out.*=1}'
+          shell: tst {path::out.*=1}
         criterion:
           content: prime
           debug: debug
       tst.release:
         opts:
-          shell: 'tst {path::out.*=1}'
+          shell: tst {path::out.*=1}
         criterion:
           content: prime
           debug: release
       reflect.proto.debug.raw:
         opts:
-          filePath: 'reflector::reflect.proto.debug.raw'
+          filePath: reflector::reflect.proto.debug.raw
         criterion:
           tests: no.tests
           debug: debug
@@ -814,7 +817,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          filePath: 'reflector::reflect.proto.release.raw'
+          filePath: reflector::reflect.proto.release.raw
         criterion:
           tests: no.tests
           debug: release
@@ -824,7 +827,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          filePath: 'reflector::reflect.proto.debug.compiled'
+          filePath: reflector::reflect.proto.debug.compiled
         criterion:
           tests: no.tests
           debug: debug
@@ -834,7 +837,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          filePath: 'reflector::reflect.proto.release.compiled'
+          filePath: reflector::reflect.proto.release.compiled
         criterion:
           tests: no.tests
           debug: release
@@ -844,8 +847,8 @@ module:
           - files.reflect
       transpile.proto.raw:
         opts:
-          entry: 'path::entry.proto.no.tests'
-          filePath: 'reflector::transpile.proto.raw'
+          entry: path::entry.proto.no.tests
+          filePath: reflector::transpile.proto.raw
         criterion:
           raw: raw
           debug: release
@@ -854,8 +857,8 @@ module:
           - files.transpile
       transpile.proto.no.tests.compiled.debug:
         opts:
-          entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
+          entry: path::entry.proto.*=1
+          filePath: reflector::transpile.proto.no.tests.compiled.debug
         criterion:
           tests: no.tests
           raw: compiled
@@ -865,8 +868,8 @@ module:
           - files.transpile
       transpile.proto.no.tests.compiled.release:
         opts:
-          entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
+          entry: path::entry.proto.*=1
+          filePath: reflector::transpile.proto.no.tests.compiled.release
         criterion:
           tests: no.tests
           raw: compiled
@@ -876,9 +879,9 @@ module:
           - files.transpile
       transpile.proto.only.tests.compiled.debug:
         opts:
-          entry: 'path::entry.proto.*=1'
+          entry: path::entry.proto.*=1
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
+          filePath: reflector::transpile.proto.only.tests.compiled.debug
         criterion:
           tests: only.tests
           raw: compiled
@@ -888,9 +891,9 @@ module:
           - files.transpile
       transpile.proto.only.tests.compiled.release:
         opts:
-          entry: 'path::entry.proto.*=1'
+          entry: path::entry.proto.*=1
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
+          filePath: reflector::transpile.proto.only.tests.compiled.release
         criterion:
           tests: only.tests
           raw: compiled
@@ -898,34 +901,52 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: reflector::exported.proto.export
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: reflector::exported.files.proto.export
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
-          - 'step::proto.export'
+          - step::proto.export
         criterion:
           content: proto
           export: 1
       doc.export:
         steps:
-          - 'step::doc.export'
+          - step::doc.export
         criterion:
           content: doc
           export: 1
       npm.export:
         steps:
-          - 'step::npm.publish'
+          - step::npm.publish
         criterion:
           content: npm
           export: 1
       export:
         steps:
-          - 'build::proto.export'
+          - build::proto.export
         criterion:
           default: 1
           export: 1
       debug:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - reflect.proto.*=1
         criterion:
           default: 1
@@ -934,7 +955,7 @@ module:
           content: prime
       compiled.debug:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - transpile.proto.no.tests*=1
           - transpile.proto.only.tests*=1
         criterion:
@@ -943,7 +964,7 @@ module:
           content: prime
       raw.release:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - transpile.proto.raw
         criterion:
           debug: release
@@ -951,7 +972,7 @@ module:
           content: prime
       release:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - transpile.proto.no.tests*=1
           - transpile.proto.only.tests*=1
         criterion:
@@ -967,27 +988,28 @@ module:
           content: npm
       all:
         steps:
-          - 'build::debug'
-          - 'build::compiled.debug'
-          - 'build::raw.release'
-          - 'build::release'
-          - 'build::npm'
+          - build::debug
+          - build::compiled.debug
+          - build::raw.release
+          - build::release
+          - build::npm
     exported:
       proto.export:
         version: 1.1.0
         recursive: 0
         withIntegrated: 2
         tar: 0
-        exportedReflector: 'reflector::exported.proto.export'
-        exportedFilesReflector: 'reflector::exported.files.proto.export'
-        exportedDirPath: 'path::exported.dir.proto.export'
-        exportedFilesPath: 'path::exported.files.proto.export'
+        exportedReflector: reflector::exported.proto.export
+        exportedFilesReflector: reflector::exported.files.proto.export
+        exportedDirPath: path::exported.dir.proto.export
+        exportedFilesPath: path::exported.files.proto.export
         criterion:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wTesting.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wTesting
@@ -999,14 +1021,37 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - testing
+        - unit test
+        - functional test
+        - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
+        - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       npm.name: wTesting
-      npm.scripts: *ref_5
-      npm.bin: *ref_6
+      npm.scripts:
+        test: wtest .run proto/**
+        wtest: node proto/wtools/atop/testing/entry/ExecUnrestricted
+        single-process-wtest: node proto/wtools/atop/testing/entry/Exec
+        debug-wtest: node proto/wtools/atop/testing/entry/ExecDebug
+        tst: node proto/wtools/atop/testing/entry/ExecUnrestricted
+        single-process-tst: node proto/wtools/atop/testing/entry/Exec
+        debug-tst: node proto/wtools/atop/testing/entry/ExecDebug
+      npm.bin:
+        wtest: proto/wtools/atop/testing/entry/ExecUnrestricted
+        single-process-wtest: proto/wtools/atop/testing/entry/Exec
+        debug-wtest: proto/wtools/atop/testing/entry/ExecDebug
+        tst: proto/wtools/atop/testing/entry/ExecUnrestricted
+        single-process-tst: proto/wtools/atop/testing/entry/Exec
+        debug-tst: proto/wtools/atop/testing/entry/ExecDebug
     path:
       module.willfiles:
         criterion:
@@ -1036,20 +1081,20 @@ module:
         criterion:
           predefined: 1
       repository:
-        path: 'git+https:///github.com/Wandalen/wTesting.git'
+        path: git+https:///github.com/Wandalen/wTesting.git
       origins:
         path:
-          - 'git+https:///github.com/Wandalen/wTesting.git'
-          - 'npm:///wTesting'
+          - git+https:///github.com/Wandalen/wTesting.git
+          - npm:///wTesting
       bugtracker:
-        path: 'https:///github.com/Wandalen/wTesting/issues'
+        path: https:///github.com/Wandalen/wTesting/issues
       in:
         path: .
       out:
         path: out
       temp:
         path:
-          - 'path::out'
+          - path::out
           - package-lock.json
           - package.json
           - node_modules
@@ -1117,89 +1162,89 @@ module:
         path: '{path::out.*=}/source/Index.s'
     submodule:
       wConsequence:
-        path: 'npm:///wConsequence'
+        path: npm:///wConsequence
         autoExporting: 0
         enabled: 0
       wCopyable:
-        path: 'npm:///wCopyable'
+        path: npm:///wCopyable
         autoExporting: 0
         enabled: 0
       wFiles:
-        path: 'npm:///wFiles'
+        path: npm:///wFiles
         autoExporting: 0
         enabled: 0
       wLogger:
-        path: 'npm:///wLogger'
+        path: npm:///wLogger
         autoExporting: 0
         enabled: 0
       wProto:
-        path: 'npm:///wProto'
+        path: npm:///wProto
         autoExporting: 0
         enabled: 0
       wTools:
-        path: 'npm:///wTools'
+        path: npm:///wTools
         autoExporting: 0
         enabled: 0
       wComparator:
-        path: 'npm:///wcomparator'
+        path: npm:///wcomparator
         autoExporting: 0
         enabled: 0
       wExternalFundamentals:
-        path: 'npm:///wexternalfundamentals'
+        path: npm:///wexternalfundamentals
         autoExporting: 0
         enabled: 0
       wCommandsAggregator:
-        path: 'npm:///wcommandsaggregator'
+        path: npm:///wcommandsaggregator
         autoExporting: 0
         enabled: 0
       wInstancing:
-        path: 'npm:///winstancing'
+        path: npm:///winstancing
         autoExporting: 0
         enabled: 0
       wLooker:
-        path: 'npm:///wlooker'
+        path: npm:///wlooker
         autoExporting: 0
         enabled: 0
       wSelector:
-        path: 'npm:///wselector'
+        path: npm:///wselector
         autoExporting: 0
         enabled: 0
       wprocesswatcher:
-        path: 'npm:///wprocesswatcher'
+        path: npm:///wprocesswatcher
         autoExporting: 0
         enabled: 0
       wEventHandler:
-        path: 'npm:///wEventHandler'
+        path: npm:///wEventHandler
         autoExporting: 0
         enabled: 0
         criterion:
           optional: 1
       wTesting:
-        path: 'hd://.'
+        path: hd://.
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#10.1.5'
+        path: npm:///electron#10.1.5
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#12.0.0'
+        path: npm:///spectron#12.0.0
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       puppeteer:
-        path: 'npm:///puppeteer#5.5.0'
+        path: npm:///puppeteer#5.5.0
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint#7.1.0'
+        path: npm:///eslint#7.1.0
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1208,7 +1253,7 @@ module:
       reflect.proto.debug.raw:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
         criterion:
           tests: no.tests
           debug: debug
@@ -1219,7 +1264,7 @@ module:
       reflect.proto.release.raw:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
         criterion:
           tests: no.tests
           debug: release
@@ -1230,7 +1275,7 @@ module:
       reflect.proto.debug.compiled:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
         criterion:
           tests: no.tests
           debug: debug
@@ -1241,7 +1286,7 @@ module:
       reflect.proto.release.compiled:
         src:
           filePath:
-            'path::proto': '{path::out.*=1}/source'
+            path::proto: '{path::out.*=1}/source'
         criterion:
           tests: no.tests
           debug: release
@@ -1252,7 +1297,7 @@ module:
       transpile.proto.raw:
         src:
           filePath:
-            'path::proto': '{path::out.raw.release}'
+            path::proto: '{path::out.raw.release}'
         criterion:
           raw: raw
           debug: release
@@ -1264,7 +1309,7 @@ module:
           filePath:
             '**.test*': 0
             '**.test/**': 0
-            'path::proto': '{path::out.*=1}/Main.s'
+            path::proto: '{path::out.*=1}/Main.s'
         criterion:
           tests: no.tests
           raw: compiled
@@ -1277,7 +1322,7 @@ module:
           filePath:
             '**.test*': 0
             '**.test/**': 0
-            'path::proto': '{path::out.*=1}/Main.s'
+            path::proto: '{path::out.*=1}/Main.s'
         criterion:
           tests: no.tests
           raw: compiled
@@ -1289,7 +1334,7 @@ module:
         src:
           filePath:
             '**.test*': 1
-            'path::proto': '{path::out.*=1}/Tests.test.s'
+            path::proto: '{path::out.*=1}/Tests.test.s'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1301,7 +1346,7 @@ module:
         src:
           filePath:
             '**.test*': 1
-            'path::proto': '{path::out.*=1}/Tests.test.s'
+            path::proto: '{path::out.*=1}/Tests.test.s'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1312,7 +1357,7 @@ module:
     step:
       proto.export:
         opts:
-          export: 'path::export'
+          export: path::export
           tar: 0
         criterion:
           content: proto
@@ -1320,7 +1365,7 @@ module:
           - module.export
       doc.export:
         opts:
-          export: 'path::doc'
+          export: path::doc
           tar: 0
         criterion:
           content: doc
@@ -1339,7 +1384,7 @@ module:
           shell: npm publish
       npm.generate.debug.raw:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -1349,7 +1394,7 @@ module:
           - npm.generate
       npm.generate.release.raw:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -1359,7 +1404,7 @@ module:
           - npm.generate
       npm.generate.debug.compiled:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -1369,7 +1414,7 @@ module:
           - npm.generate
       npm.generate.release.compiled:
         opts:
-          entryPath: 'path::entry.out.*=1'
+          entryPath: path::entry.out.*=1
           packagePath: '{path::out.*=1}/package.json'
           filesPath: '{path::out.*=1}/source/**'
         criterion:
@@ -1539,7 +1584,7 @@ module:
           - files.delete
       clean.out.npm:
         opts:
-          filePath: 'path::out.*=1'
+          filePath: path::out.*=1
         criterion:
           debug: debug
           raw: compiled
@@ -1549,24 +1594,24 @@ module:
           - files.delete
       tst.proto:
         opts:
-          shell: 'tst {path::proto}'
+          shell: tst {path::proto}
         criterion:
           content: proto
       tst.debug:
         opts:
-          shell: 'tst {path::out.*=1}'
+          shell: tst {path::out.*=1}
         criterion:
           content: prime
           debug: debug
       tst.release:
         opts:
-          shell: 'tst {path::out.*=1}'
+          shell: tst {path::out.*=1}
         criterion:
           content: prime
           debug: release
       reflect.proto.debug.raw:
         opts:
-          filePath: 'reflector::reflect.proto.debug.raw'
+          filePath: reflector::reflect.proto.debug.raw
         criterion:
           tests: no.tests
           debug: debug
@@ -1576,7 +1621,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          filePath: 'reflector::reflect.proto.release.raw'
+          filePath: reflector::reflect.proto.release.raw
         criterion:
           tests: no.tests
           debug: release
@@ -1586,7 +1631,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          filePath: 'reflector::reflect.proto.debug.compiled'
+          filePath: reflector::reflect.proto.debug.compiled
         criterion:
           tests: no.tests
           debug: debug
@@ -1596,7 +1641,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          filePath: 'reflector::reflect.proto.release.compiled'
+          filePath: reflector::reflect.proto.release.compiled
         criterion:
           tests: no.tests
           debug: release
@@ -1606,8 +1651,8 @@ module:
           - files.reflect
       transpile.proto.raw:
         opts:
-          entry: 'path::entry.proto.no.tests'
-          filePath: 'reflector::transpile.proto.raw'
+          entry: path::entry.proto.no.tests
+          filePath: reflector::transpile.proto.raw
         criterion:
           raw: raw
           debug: release
@@ -1616,8 +1661,8 @@ module:
           - files.transpile
       transpile.proto.no.tests.compiled.debug:
         opts:
-          entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
+          entry: path::entry.proto.*=1
+          filePath: reflector::transpile.proto.no.tests.compiled.debug
         criterion:
           tests: no.tests
           raw: compiled
@@ -1627,8 +1672,8 @@ module:
           - files.transpile
       transpile.proto.no.tests.compiled.release:
         opts:
-          entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
+          entry: path::entry.proto.*=1
+          filePath: reflector::transpile.proto.no.tests.compiled.release
         criterion:
           tests: no.tests
           raw: compiled
@@ -1638,9 +1683,9 @@ module:
           - files.transpile
       transpile.proto.only.tests.compiled.debug:
         opts:
-          entry: 'path::entry.proto.*=1'
+          entry: path::entry.proto.*=1
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
+          filePath: reflector::transpile.proto.only.tests.compiled.debug
         criterion:
           tests: only.tests
           raw: compiled
@@ -1650,9 +1695,9 @@ module:
           - files.transpile
       transpile.proto.only.tests.compiled.release:
         opts:
-          entry: 'path::entry.proto.*=1'
+          entry: path::entry.proto.*=1
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
+          filePath: reflector::transpile.proto.only.tests.compiled.release
         criterion:
           tests: only.tests
           raw: compiled
@@ -1663,31 +1708,31 @@ module:
     build:
       proto.export:
         steps:
-          - 'step::proto.export'
+          - step::proto.export
         criterion:
           content: proto
           export: 1
       doc.export:
         steps:
-          - 'step::doc.export'
+          - step::doc.export
         criterion:
           content: doc
           export: 1
       npm.export:
         steps:
-          - 'step::npm.publish'
+          - step::npm.publish
         criterion:
           content: npm
           export: 1
       export:
         steps:
-          - 'build::proto.export'
+          - build::proto.export
         criterion:
           default: 1
           export: 1
       debug:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - reflect.proto.*=1
         criterion:
           default: 1
@@ -1696,7 +1741,7 @@ module:
           content: prime
       compiled.debug:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - transpile.proto.no.tests*=1
           - transpile.proto.only.tests*=1
         criterion:
@@ -1705,7 +1750,7 @@ module:
           content: prime
       raw.release:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - transpile.proto.raw
         criterion:
           debug: release
@@ -1713,7 +1758,7 @@ module:
           content: prime
       release:
         steps:
-          - 'step::clean.out*=2'
+          - step::clean.out*=2
           - transpile.proto.no.tests*=1
           - transpile.proto.only.tests*=1
         criterion:
@@ -1729,11 +1774,11 @@ module:
           content: npm
       all:
         steps:
-          - 'build::debug'
-          - 'build::compiled.debug'
-          - 'build::raw.release'
-          - 'build::release'
-          - 'build::npm'
+          - build::debug
+          - build::compiled.debug
+          - build::raw.release
+          - build::release
+          - build::npm
     consistency:
       ../.ex.will.yml:
         hash: 984cb3aad208231181d4e056698101ba
@@ -1741,3 +1786,6 @@ module:
       ../.im.will.yml:
         hash: ca5ab47bb3930134f939710ee464c0cf
         size: 6286
+      wTesting.out.will.yml:
+        hash: a427dd95cd1cca30d4ce299d09040aa7
+        size: 50069

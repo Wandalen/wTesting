@@ -5130,7 +5130,6 @@ function checkDiffWithProto( test )
     function identical6( test )
     {
       test.case = `identical maps, diff __proto__, same fields on diff level in __proto__`;
-      debugger;
       let proto1 = {}
       Object.setPrototypeOf( proto1, { 'c' : 'hello3' } );
 
@@ -5148,7 +5147,6 @@ function checkDiffWithProto( test )
         b : 'hello2',
       }
       Object.setPrototypeOf( obj2, proto2 );
-      debugger;
       test.identical( obj1, obj2 );
     }
 

@@ -59,7 +59,7 @@ function production( test )
   }
 
   console.log( `Event : ${process.env.GITHUB_EVENT_NAME}` );
-  console.log( `Env :\n${_.toStr( process.env )}` );
+  console.log( `Env :\n${_.toStr( _.mapBut( process.env, { WTOOLS_BOT_TOKEN : null } ) )}` );
 
   /* */
 
@@ -301,7 +301,7 @@ function eslint( test )
     outputCollecting : 1,
   })
 
-  /**/
+  /* */
 
   ready.then( () =>
   {
@@ -316,7 +316,7 @@ function eslint( test )
     return null;
   })
 
-  /**/
+  /* */
 
   if( fileProvider.fileExists( sampleDir ) )
   ready.then( () =>

@@ -47,8 +47,10 @@ function exec()
   let appArgs = _.process.input({ keyValDelimeter : 0 });
   let ca = cui._commandsMake();
 
+  debugger;
   return _.Consequence.Try( () =>
   {
+    debugger;
     return ca.programPerform
     ({
       program : _.strUnquote( appArgs.original ),
@@ -59,6 +61,7 @@ function exec()
   })
   .finally( ( err, arg ) =>
   {
+    debugger;
     if( err )
     {
       _.process.exitCode( -1 );

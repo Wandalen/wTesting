@@ -46,6 +46,9 @@ async function localStorage( test )
   let mainPath = _.path.nativize( _.path.join( routinePath, 'main.ss' ) );
   let userDataDirPath = _.path.nativize( _.path.join( routinePath, 'user-dir' ) );
 
+  test.identical( 1,1 ); //https://github.com/puppeteer/puppeteer/issues/2538
+  return null;
+
   _.fileProvider.filesReflect({ reflectMap : { [ self.assetDirPath ] : routinePath } })
 
   /* Use custom user-data-dir to persist localStorage between launches */

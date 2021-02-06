@@ -6,25 +6,7 @@ To get a list of test suites, the `.suites.list` command is used. It is used to 
 
 ### Downloading
 
-The [`Tools`](<https://github.com/Wandalen/wTools>) module has a ready test suites. Use them to test the search scenario. Clone the repository of the module by executing the `git clone https://github.com/Wandalen/wTools.git` command.
-
-<details>
-  <summary><u>File structure of <code>Tools</code> module</u></summary>
-
-```
-wTools
-   ├── .git
-   ├── doc
-   ├── out
-   ├── proto
-   ├── sample
-   ├── ...
-   └── package.json
-```
-
-</details>
-
-The module code, along with its tests, is located in the `proto` directory. Also, the `sample` directory can contain examples with test files.
+The [`Tools`](<https://github.com/Wandalen/wTools>) module has a ready test suites. Use them to test the search scenario. Clone the repository of the module by executing the `git clone https://github.com/Wandalen/wTools.git` command and change directory to newly created `wTools`.
 
 ### Run scenario
 

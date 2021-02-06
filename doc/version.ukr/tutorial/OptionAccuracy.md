@@ -25,7 +25,7 @@ accuracy
 <details>
     <summary><u>Код файла <code>Sum.js</code></u></summary>
 
-```js    
+```js
 module.exports.sum = function( a, b )
 {
   return Number( a ) + Number( b );
@@ -43,7 +43,7 @@ module.exports.sum = function( a, b )
 <details>
     <summary><u>Код файла <code>Sum.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Sum = require( './Sum.js' );
 
@@ -80,7 +80,7 @@ let Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-wTester.test( Self.name );  
+wTester.test( Self.name );
 ```
 
 </details>
@@ -101,7 +101,7 @@ tst .run Sum.test.js
   <summary><u>Вивід команди <code>tst .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Sum.test.js
+$ tst .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:35
 
@@ -130,7 +130,7 @@ Running test suite ( Sum ) ..
   <summary><u>Вивід команди <code>tst .imply accuracy:1e-5 .run Sum.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply accuracy:1e-5 .run Sum.test.js
+$ tst .imply accuracy:1e-5 .run Sum.test.js
 Running test suite ( Sum ) ..
     at  /path_to_module/testCreation/Sum.test.js:35
 

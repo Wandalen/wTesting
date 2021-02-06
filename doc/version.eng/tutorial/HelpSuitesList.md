@@ -22,7 +22,7 @@ The utility should scan the `proto` directory and displays a list of test suites
   <summary><u>Command output <code>tst .suites.list ./proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .suites.list ./proto
+$ tst .suites.list ./proto
 
 /.../wTools/proto/wtools/abase/l1.test/Array.test.s:19500 - enabled
 /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled

@@ -25,7 +25,7 @@ routineTimeOut
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -43,7 +43,7 @@ module.exports.join = function( a, b )
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -85,7 +85,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>package.json</code></u></summary>
 
-```json    
+```json
 {
   "dependencies": {
     "wTesting": ""
@@ -105,7 +105,7 @@ wTester.test( Self.name );
   <summary><u>Вивід команди <code>tst .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Join.test.js
+$ tst .run Join.test.js
 Running test suite ( Join ) ..
     at  /.../Join.test.js:40
 
@@ -136,7 +136,7 @@ tst .imply routineTimeOut:5 .run .
   <summary><u>Вивід команди <code>tst .imply routineTimeOut:5 .run .</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply routineTimeOut:5 .run .
+$ tst .imply routineTimeOut:5 .run .
 Running test suite ( Join ) ..
     at  /.../Join.test.js:40
 
@@ -163,7 +163,7 @@ Running test suite ( Join ) ..
 <details>
     <summary><u>Код файла <code>Join.test.js</code> з опцією <code>timeOut</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -205,7 +205,7 @@ wTester.test( Self.name );
   <summary><u>Вивід команди <code>tst .imply routineTimeOut:5 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply routineTimeOut:5 .run Join.test.js
+$ tst .imply routineTimeOut:5 .run Join.test.js
 Running test suite ( Join ) ..
     at  /.../Join.test.js:41
 

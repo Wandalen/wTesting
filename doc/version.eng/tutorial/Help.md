@@ -8,7 +8,7 @@ All commands of the utility start with `tst .`, so enter the command in the cons
   <summary><u>Command output <code>tst .</code></u></summary>
 
 ```
-[user@user ~]$ tst .
+$ tst .
 Command "."
 Ambiguity. Did you mean?
   .help - Get help.
@@ -30,7 +30,7 @@ tst .help
   <summary><u>Command output <code>tst .help</code></u></summary>
 
 ```
-[user@user ~]$ tst .help
+$ tst .help
 Command ".help"
 Known commands
   .help - Get help.

@@ -80,7 +80,7 @@ sqrtTestExperiment.experimental = true;
 <summary><u>Вивід команди <code>tst .run ./Experiment.test.js</code></u></summary>
 
 ```
-[user@user ~]$ node Experiment.test.js
+$ node Experiment.test.js
 
 Running test suite ( Experiment ) ..
 Located at Experiment.test.js:34
@@ -102,7 +102,7 @@ Test suite ( Experiment ) ... in 0.601s ... ok
 <summary><u>Вивід команди <code>tst .run ./Experiment.test.js r:sumTestExperiment</code></u></summary>
 
 ```
-[user@user ~]$ node Experiment.test.js r:experiment
+$ node Experiment.test.js r:experiment
 
 Running test suite ( Experiment ) ..
 Located at Experiment.test.js:34

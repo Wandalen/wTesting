@@ -27,7 +27,7 @@ sanitareTime
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -41,7 +41,7 @@ module.exports.join = function( a, b )
 <details>
     <summary><u>Код файла <code>Multiply.js</code></u></summary>
 
-```js    
+```js
 module.exports.multiply = function( a, b )
 {
   return Number( a ) * Number( b );
@@ -55,7 +55,7 @@ module.exports.multiply = function( a, b )
 <details>
     <summary><u>Код файла <code>Sum.js</code></u></summary>
 
-```js    
+```js
 module.exports.sum = function( a, b )
 {
   return Number( a ) + Number( b );
@@ -73,7 +73,7 @@ module.exports.sum = function( a, b )
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -114,7 +114,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>Multiply.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Mul = require( './Multiply.js' );
 
@@ -142,7 +142,7 @@ let Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-wTester.test( Self.name );                            
+wTester.test( Self.name );
 ```
 
 </details>
@@ -152,7 +152,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>Sum.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Sum = require( './Sum.js' );
 
@@ -180,7 +180,7 @@ let Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-wTester.test( Self.name );  
+wTester.test( Self.name );
 ```
 
 </details>
@@ -194,7 +194,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>package.json</code></u></summary>
 
-```json    
+```json
 {
   "dependencies": {
     "wTesting": ""
@@ -214,7 +214,7 @@ wTester.test( Self.name );
   <summary><u>Вивід команди <code>tst .imply sanitareTime:1000 .run .</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply sanitareTime:1000 .run .
+$ tst .imply sanitareTime:1000 .run .
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
 

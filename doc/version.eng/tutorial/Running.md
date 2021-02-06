@@ -43,7 +43,7 @@ tst .suites.list
   <summary><u>Command output <code>tst .suites.list</code></u></summary>
 
 ```
-[user@user ~]$ tst .suites.list
+$ tst .suites.list
 
 /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500 - enabled
 /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
@@ -78,7 +78,7 @@ As a result, the test will be performed, and a report will be displayed.
   <summary><u>Command output <code>node proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ node proto/wtools/abase/l1.test/Long.test.s
+$ node proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -123,7 +123,7 @@ tst .run proto/wtools/abase/l1.test/Long.test.s
   <summary><u>Command output <code>tst .run proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto/wtools/abase/l1.test/Long.test.s
+$ tst .run proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -197,7 +197,7 @@ tst .imply routine:bufferFrom .run proto/wtools/abase/l1.test/Long.test.s
   <summary><u>Command output <code>tst .imply routine:bufferFrom .run proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply routine:bufferFrom .run proto/wtools/abase/l1.test/Long.test.s
+$ tst .imply routine:bufferFrom .run proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -231,7 +231,7 @@ tst .run proto
   <summary><u>Command output <code>tst .run proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto
+$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
     at  /.../sources/wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309

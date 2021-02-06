@@ -25,7 +25,7 @@ shoulding
 <details>
     <summary><u>Код файла <code>Multiply.js</code></u></summary>
 
-```js    
+```js
 module.exports.multiply = function( a, b )
 {
   return Number( a ) * Number( b );
@@ -43,7 +43,7 @@ module.exports.multiply = function( a, b )
 <details>
     <summary><u>Код файла <code>Multiply.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Mul = require( './Multiply.js' );
 
@@ -71,7 +71,7 @@ let Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-wTester.test( Self.name );                            
+wTester.test( Self.name );
 ```
 
 </details>
@@ -85,7 +85,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>package.json</code></u></summary>
 
-```json    
+```json
 {
   "dependencies": {
     "wTesting": ""
@@ -112,7 +112,7 @@ tst .run Multiply.test.js
   <summary><u>Вивід команди <code>tst .run Multiply.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Multiply.test.js
+$ tst .run Multiply.test.js
 Running test suite ( Multiply ) ..
     at  /.../Multiply.test.js:27
 
@@ -137,7 +137,7 @@ Running test suite ( Multiply ) ..
   <summary><u>Вивід команди <code>tst .imply shoulding:0 .run Multiply.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply shoulding:0 .run Multiply.test.js
+$ tst .imply shoulding:0 .run Multiply.test.js
 Running test suite ( Multiply ) ..
     at  /.../Multiply.test.js:27
 

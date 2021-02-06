@@ -203,7 +203,7 @@ require( './Positive.test.js' );
   <summary><u>Вивід команди <code>tst .run ./</code></u></summary>
 
 ```
-[user@user ~]$ tst .run .
+$ tst .run .
 Launching several ( 1 ) test suite(s) ..
     Running test suite ( Negative ) ..
     Located at /../Negative.test.s:42:8

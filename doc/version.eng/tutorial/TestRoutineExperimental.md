@@ -81,7 +81,7 @@ Run the test suite `Expriment.test.js`. To do this, enter the command `node Expe
 <summary><u>Command output <code>tst .run ./Experiment.test.js</code></u></summary>
 
 ```
-[user@user ~]$ node Experiment.test.js
+$ node Experiment.test.js
 
 Running test suite ( Experiment ) ..
 Located at Experiment.test.js:34
@@ -103,7 +103,7 @@ To execute an experimental test routine [run it explicitly](./Running.md) using 
 <summary><u>Command output <code>tst .run ./Experiment.test.js r:sumTestExperiment</code></u></summary>
 
 ```
-[user@user ~]$ node Experiment.test.js r:experiment
+$ node Experiment.test.js r:experiment
 
 Running test suite ( Experiment ) ..
 Located at Experiment.test.js:34

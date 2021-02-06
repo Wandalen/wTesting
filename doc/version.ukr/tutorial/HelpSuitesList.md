@@ -22,7 +22,7 @@ tst .suites.list ./proto
   <summary><u>Вивід команди <code>tst .suites.list ./proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .suites.list ./proto
+$ tst .suites.list ./proto
 
 /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
 /.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808 - enabled

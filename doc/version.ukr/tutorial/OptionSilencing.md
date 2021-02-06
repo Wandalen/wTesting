@@ -27,7 +27,7 @@ silencing
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -45,7 +45,7 @@ module.exports.join = function( a, b )
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -55,7 +55,7 @@ function routine1( test )
 {
   test.case = 'pass';
   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
-  console.log( Join.join(1, 2) );  
+  console.log( Join.join(1, 2) );
   test.identical( Join.join( 1, 2 ), '12' );
 }
 
@@ -96,7 +96,7 @@ tst .run Join.test.js
   <summary><u>Вивід команди <code>tst .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Join.test.js
+$ tst .run Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
 
@@ -119,7 +119,7 @@ Running test suite ( Join ) ..
   <summary><u>Вивід команди <code>tst .imply silencing:0 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply silencing:0 .run Join.test.js
+$ tst .imply silencing:0 .run Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:40
 12

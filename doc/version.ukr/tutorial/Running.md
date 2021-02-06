@@ -44,7 +44,7 @@ tst .suites.list
   <summary><u>Вивід команди <code>tst .suites.list</code></u></summary>
 
 ```
-[user@user ~]$ tst .suites.list
+$ tst .suites.list
 
 /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
 /.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808 - enabled
@@ -79,7 +79,7 @@ node proto/wtools/abase/l1.test/Long.test.s
   <summary><u>Вивід команди <code>node proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ node proto/wtools/abase/l1.test/Long.test.s
+$ node proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -123,7 +123,7 @@ tst .run proto/wtools/abase/l1.test/Long.test.s
   <summary><u>Вивід команди <code>tst .run proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto/wtools/abase/l1.test/Long.test.s
+$ tst .run proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -196,7 +196,7 @@ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
   <summary><u>Вивід команди <code>tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom</code></u></summary>
 
 ```
-[user@user ~]$ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
+$ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -230,7 +230,7 @@ tst .run proto
   <summary><u>Вивід команди <code>tst .run proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto
+$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
     at  /.../sources/wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309

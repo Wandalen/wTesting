@@ -216,7 +216,7 @@ Self = wTestSuite( Self ).inherit( Parent1 ).inherit( Parent );
   <summary><u>Вивід команди <code>tst .imply v:6 .run All.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply v:6 .run All.test.js
+$ tst .imply v:6 .run All.test.js
 Command ".imply v:6 .run All.test.js"
 Includes tests from : /home/user/.../
 

@@ -52,7 +52,7 @@ tst .run proto
   <summary><u>Вивід команди <code>tst .run proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto
+$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
       at  /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:2036
@@ -187,7 +187,7 @@ tst .run proto
   <summary><u>Вивід команди <code>tst .imply concurrent:1 .run proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply concurrent:1 .run proto
+$ tst .imply concurrent:1 .run proto
 
   Running test suite ( Tools/base/l1/Diagnostics ) ..
   at  /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309

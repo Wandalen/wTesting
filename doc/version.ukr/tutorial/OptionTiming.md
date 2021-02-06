@@ -27,7 +27,7 @@ timing
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -45,7 +45,7 @@ module.exports.join = function( a, b )
 <details>
     <summary><u>Код файла <code>Join.test.js</code></u></summary>
 
-```js    
+```js
 let _ = require( 'wTesting' );
 let Join = require( './Join.js' );
 
@@ -87,7 +87,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>package.json</code></u></summary>
 
-```json    
+```json
 {
   "dependencies": {
     "wTesting": ""
@@ -112,7 +112,7 @@ tst .run Join.test.js
   <summary><u>Вивід команди <code>tst .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Join.test.js
+$ tst .run Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:26
 
@@ -134,7 +134,7 @@ Running test suite ( Join ) ..
   <summary><u>Вивід команди <code>tst .imply timing:0 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply timing:0 .run Join.test.js
+$ tst .imply timing:0 .run Join.test.js
 Running test suite ( Join ) ..
     at  /path_to_module/testCreation/Join.test.js:26
 

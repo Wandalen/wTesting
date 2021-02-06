@@ -6,23 +6,6 @@ How to run single file testing and group testing.
 
 The [`Tools`](<https://github.com/Wandalen/wTools>) module has a ready test suites. Use them see how the framework works. Clone the repository of the module by executing the `git clone https://github.com/Wandalen/wTools.git` command.
 
-<details>
-  <summary><u>The file structure of <code>Tools</code> module</u></summary>
-
-```
-wTools
-   ├── .git
-   ├── doc
-   ├── out
-   ├── proto
-   ├── sample
-   ├── ...
-   └── package.json
-
-```
-
-</details>
-
 The module code, along with its tests, is located in the `proto` directory.
 
 After cloning, go to the module directory and enter the command
@@ -64,7 +47,7 @@ According to the output, the `Tools` module has 10 test suites. In other words, 
 
 ### Testing one test suite
 
-The testing is performed by executing the `JavaScript` file with the test suite.
+The testing is performed by executing the file with the test suite by interpreter `NodeJS`.
 
 Enter the command:
 
@@ -115,6 +98,7 @@ The report shows that all tests were successful: `Test suite (Tools/base/l1/Long
 Duration of the first test routine `bufferFrom` is 0.358 seconds, and according to the report, it, like the rest, was passed. The passed tests in the report indicate green. Failed tests indicate red. It's enough one failed test check to consider the entire test suite has failed.
 
 The second way is to use the `tst` command. Enter the command
+
 ```
 tst .run proto/wtools/abase/l1.test/Long.test.s
 ```
@@ -160,10 +144,12 @@ Read the command as: find and run all tests in the `proto/wtools/abase/l1.test/L
 ### Comparison of command input
 
 So, you can run the test suite by launching the 'JavaScript' file by the interpreter. To do this, after the interpreter command, type a path to the file as an argument
+
 ```
 node File.test.js
 ```
 or enter this path as an utility argument
+
 ```
 tst .run File.test.js
 ```
@@ -172,7 +158,7 @@ tst .run File.test.js
 
 The test suite is divided into test routines that run sequentially or concurrently and independently of each other. Testing a whole test suite is not always appropriate - it takes more time than testing one test routine.
 
-To run a separate test routine, use the `routine` option.
+To run a separate test routine, use the option `routine`.
 
 ```
 node path/to/TestSuite.js routine:someRoutine

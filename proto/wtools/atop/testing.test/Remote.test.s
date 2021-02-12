@@ -116,6 +116,119 @@ function netInterfacesGet( test )
 
 //
 
+function netInterfacesUp( test )
+{
+  let context = this;
+  let a = test.assetFor( 'hello' );
+  let testing = _globals_.testing.wTools;
+
+  if( process.platform !== 'linux' )
+  {
+    test.shouldThrowErrorSync( () => testing.test.workflowSshAgentRun() );
+    return;
+  }
+  /* prevent disabling of interfaces on real machines */
+  if( !_.process.insideTestContainer() )
+  {
+    test.true( true );
+    return;
+  }
+
+  /* */
+
+  let activeInterfaces = testing.test.netInterfacesGet({ activeInterfaces : 1, sync : 1 });
+  /* check if it is possible to disable some interface */
+  if( !activeInterfaces.length )
+  return test.true( true );
+
+  a.ready.then( () => testing.test.netInterfacesDown({ interfaces : activeInterfaces[ 0 ] }) );
+  a.ready.then( () => testing.test.netInterfacesUp({ interfaces : activeInterfaces[ 0 ] }) );
+  a.ready.then( ( op ) =>
+  {
+    test.case = 'interfaces - string, enable single interface';
+    test.identical( op.exitCode, 0 );
+    test.identical( op.output, '' );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () => testing.test.netInterfacesDown({ interfaces : activeInterfaces }) );
+  a.ready.then( () => testing.test.netInterfacesUp({ interfaces : activeInterfaces }) );
+  a.ready.then( ( op ) =>
+  {
+    test.case = 'interfaces - array, enable interfaces';
+    test.identical( op.exitCode, 0 );
+    test.identical( op.output, '' );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () => testing.test.netInterfacesDown({ interfaces : activeInterfaces[ 0 ] }) );
+  a.ready.then( () =>
+  {
+    test.case = 'interfaces - string, sync interface enabling';
+    var got = testing.test.netInterfacesUp({ interfaces : activeInterfaces[ 0 ], sync : 1 });
+    test.identical( got.exitCode, 0 );
+    test.identical( got.output, '' );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () => testing.test.netInterfacesDown({ interfaces : activeInterfaces }) );
+  a.ready.then( () =>
+  {
+    test.case = 'interfaces - array, sync interfaces enabling';
+    var got = testing.test.netInterfacesUp({ interfaces : activeInterfaces, sync : 1 });
+    test.identical( got.exitCode, 0 );
+    test.identical( got.output, '' );
+    return null;
+  });
+
+  /* - */
+
+  if( Config.debug )
+  {
+    a.ready.then( () =>
+    {
+      test.case = 'without arguments';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp() );
+
+      test.case = 'extra arguments';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp( { interfaces : 'enp3s0' }, { sync : 0 } ) );
+
+      test.case = 'wrong type of options map {-o-}';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp( 'wrong' ) );
+
+      test.case = 'unknown option in options map {-o-}';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp({ interfaces : 'enp3s0', unknown : 1 }) );
+
+      test.case = 'o.interfaces is not defined string, not array of strings';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp({ interfaces : undefined }) );
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp({ interfaces : '' }) );
+
+      test.case = 'o.interfaces is empty array';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp({ interfaces : [] }) );
+
+      test.case = 'o.interfaces is array with not defined string';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp({ interfaces : [ 'enp3s0', undefined ] }) );
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesUp({ interfaces : [ 'enp3s0', '' ] }) );
+
+      return null;
+    });
+  }
+
+  a.ready.finally( () => testing.test.netInterfacesUp({ interfaces : activeInterfaces }) );
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function netInterfacesDown( test )
 {
   let context = this;
@@ -300,6 +413,7 @@ let Self =
   {
 
     netInterfacesGet,
+    netInterfacesUp,
     netInterfacesDown,
 
     workflowSshAgentRun,

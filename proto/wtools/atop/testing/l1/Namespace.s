@@ -507,6 +507,47 @@ netInterfacesDown.defaults =
 
 //
 
+function workflowTriggerGet()
+{
+  if( !_.process.insideTestContainer() )
+  return null;
+
+  if( process.env.CIRCLECI )
+  {
+    if( process.env.CI_PULL_REQUEST )
+    return 'pull_request';
+    if( publishPushIs() )
+    return 'publish';
+    else
+    return 'push';
+  }
+
+  if( process.env.GITHUB_EVENT_NAME === 'pull_request' )
+  return 'pull_request';
+  if( publishPushIs() )
+  return 'publish';
+  if( process.env.GITHUB_EVENT_NAME === 'push' )
+  return 'publish';
+  else
+  _.assert( 0, 'Unknown trigger' );
+
+  /* */
+
+  function publishPushIs()
+  {
+    let lastCommitLog = a.shell
+    ({
+      currentPath : a.abs( __dirname, '..' ),
+      execPath : 'git log --format=%B -n 1',
+      sync : 1,
+    });
+    let commitMsg = lastCommitLog.output;
+    return _.strBegins( commitMsg, 'version' );
+  }
+}
+
+//
+
 function workflowSshAgentRun()
 {
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
@@ -584,7 +625,9 @@ let Extension =
   netInterfacesUp,
   netInterfacesDown,
 
+  workflowTriggerGet,
   workflowSshAgentRun,
+
 }
 
 _.mapExtend( Self, Extension );

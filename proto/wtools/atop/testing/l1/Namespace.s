@@ -368,6 +368,54 @@ isVisibleWithinViewport.defaults =
 
 //
 
+function netInterfacesGet( o )
+{
+  if( arguments.length === 0 )
+  o = Object.create( null );
+
+  _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single options map {-o-}' );
+  _.routineOptions( netInterfacesGet, o );
+
+  let execPath = 'ip a';
+  if( o.activeInterfaces )
+  execPath += ' | awk \'/state UP/{print $2}\'';
+
+  const ready = _.process.start
+  ({
+    currentPath : _.path.current(),
+    execPath,
+    outputCollecting : 1,
+    inputMirroring : 0,
+  });
+  ready.then( ( op ) =>
+  {
+    let result = op.output.split( '\n' );
+    for( let i = 0; i < result.length; i++ )
+    {
+      result[ i ] = result[ i ].replace( /(.*):/, '$1' );
+      if( result[ i ] === '' )
+      result.splice( i, 1 );
+    }
+    return result;
+  });
+
+  if( o.sync )
+  {
+    ready.deasync();
+    return ready.sync();
+  }
+
+  return ready;
+}
+
+netInterfacesGet.defaults =
+{
+  activeInterfaces : 0,
+  sync : 0,
+};
+
+//
+
 let Extension =
 {
   fileDrop,
@@ -375,7 +423,11 @@ let Extension =
   waitForVisibleInViewport,
   waitForVisibleInViewportPuppeteer,
   waitForVisibleInViewportSpectron,
-  isVisibleWithinViewport
+  isVisibleWithinViewport,
+
+  //
+
+  netInterfacesGet,
 }
 
 _.mapExtend( Self, Extension );

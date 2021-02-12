@@ -417,6 +417,45 @@ netInterfacesGet.defaults =
 
 //
 
+function netInterfacesUp( o )
+{
+  _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
+  _.routineOptions( netInterfacesUp, o );
+  _.assert( _.strIs( o.interfaces ) || _.arrayIs( o.interfaces ) );
+
+  o.interfaces = _.arrayAs( o.interfaces );
+
+  let ready = _.take( null );
+
+  const shell = _.process.starter
+  ({
+    currentPath : _.path.current(),
+    outputCollecting : 1,
+    inputMirroring : 0,
+    mode : 'shell',
+  });
+
+  for( let i = 0 ; i < o.interfaces.length ; i++ )
+  ready.then( () => shell( `sudo ip link set ${ o.interfaces[ i ] } up` ) );
+
+  if( o.sync )
+  {
+    ready.deasync();
+    return ready.sync();
+  }
+
+  return ready;
+}
+
+
+netInterfacesUp.defaults =
+{
+  interfaces : null,
+  sync : 0,
+};
+
+//
+
 function netInterfacesDown( o )
 {
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
@@ -467,6 +506,7 @@ let Extension =
   // utilities
 
   netInterfacesGet,
+  netInterfacesUp,
   netInterfacesDown,
 }
 

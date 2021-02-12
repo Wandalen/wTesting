@@ -578,6 +578,8 @@ let Extension =
   netInterfacesGet,
   netInterfacesUp,
   netInterfacesDown,
+
+  workflowSshAgentRun,
 }
 
 _.mapExtend( Self, Extension );

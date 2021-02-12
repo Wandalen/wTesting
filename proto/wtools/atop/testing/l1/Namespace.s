@@ -368,6 +368,51 @@ isVisibleWithinViewport.defaults =
 
 //
 
+/**
+ * Routine netInterfacesGet() gets the list of network interfaces in OS.
+ *
+ * @example
+ * let ready = _globals_.testing.wTools.test.netInterfacesGet();
+ * ready.deasync();
+ * let result = ready.sync();
+ * console.log( result );
+ * // log : [ 'lo', 'enp3s0', 'wlx503eaa413cd5' ]
+ *
+ * @example
+ * let result = _globals_.testing.wTools.test.netInterfacesGet({ sync : 1 });
+ * console.log( result );
+ * // log : [ 'lo', 'enp3s0', 'wlx503eaa413cd5' ]
+ *
+ * @example
+ * let result = _globals_.testing.wTools.test.netInterfacesGet({ sync : 1 });
+ * console.log( result );
+ * // log : [ 'lo', 'enp3s0', 'wlx503eaa413cd5' ]
+ *
+ * @example
+ * let ready = _globals_.testing.wTools.test.netInterfacesGet({ activeInterfaces : 1 });
+ * ready.deasync();
+ * let result = ready.sync();
+ * console.log( result );
+ * // log : [ 'wlx503eaa413cd5' ]
+ *
+ * @example
+ * let result = _globals_.testing.wTools.test.netInterfacesGet({ activeInterfaces : 1, sync : 1 });
+ * console.log( result );
+ * // log : [ 'wlx503eaa413cd5' ]
+ *
+ * @param { Map } o - Options map.
+ * @param { BoolLike } o.activeInterfaces - If it is true, then routine filters only active network interfaces. Default is false.
+ * @param { BoolLike } o.sync - If it is true, then routine returns result synchronously. Default is false.
+ * @returns { Consequence|Array } - Returns a Consequence which resolves to array with network interfaces names. If {-o.sync-}
+ * is true, returns array with network interfaces names.
+ * @function netInterfacesGet
+ * @throws { Error } If arguments.length is greater than 1.
+ * @throws { Error } If options map {-o-} has not valid type.
+ * @throws { Error } If options map {-o-} has unknown option.
+ * @namespace wTesting.wTools.test
+ * @module Tools/top/testing
+ */
+
 function netInterfacesGet( o )
 {
   if( arguments.length === 0 )

@@ -376,6 +376,9 @@ function netInterfacesGet( o )
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single options map {-o-}' );
   _.routineOptions( netInterfacesGet, o );
 
+  if( process.platform !== 'linux' )
+  _.assert( 0, 'not implemented' );
+
   let execPath = 'ip a';
   if( o.activeInterfaces )
   execPath += ' | awk \'/state UP/{print $2}\'';
@@ -423,9 +426,12 @@ function netInterfacesUp( o )
   _.routineOptions( netInterfacesUp, o );
   _.assert( _.strIs( o.interfaces ) || _.arrayIs( o.interfaces ) );
 
+  if( process.platform !== 'linux' )
+  _.assert( 0, 'not implemented' );
+
   o.interfaces = _.arrayAs( o.interfaces );
 
-  let ready = _.take( null );
+  const ready = _.take( null );
 
   const shell = _.process.starter
   ({
@@ -462,9 +468,12 @@ function netInterfacesDown( o )
   _.routineOptions( netInterfacesDown, o );
   _.assert( _.strIs( o.interfaces ) || _.arrayIs( o.interfaces ) );
 
+  if( process.platform !== 'linux' )
+  _.assert( 0, 'not implemented' );
+
   o.interfaces = _.arrayAs( o.interfaces );
 
-  let ready = _.take( null );
+  const ready = _.take( null );
 
   const shell = _.process.starter
   ({
@@ -491,6 +500,67 @@ netInterfacesDown.defaults =
   interfaces : null,
   sync : 0,
 };
+
+//
+
+function workflowSshAgentRun()
+{
+  _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
+  _.assert( process.env.SSH_PRIVATE_KEY !== undefined, 'Expects data for ssh private key' );
+
+  if( process.platform !== 'linux' )
+  _.assert( 0, 'not implemented' );
+
+  const ready = _.take( null );
+  const shell = _.process.starter
+  ({
+    currentPath : _.path.current(),
+    outputCollecting : 1,
+    inputMirroring : 0,
+    mode : 'shell',
+    ready,
+  });
+
+  /* */
+
+  let keyPath;
+  ready.then( sshKeyWrite() );
+  shell( 'ssh-agent' );
+  ready.then( sshAgentEnvironmentsSetup );
+  shell( `ssh-add ${ keyPath }` );
+
+  return ready;
+
+  /* */
+
+  function sshKeyWrite()
+  {
+    const provider = _.fileProvider;
+    const path = provider.path;
+    const keyFileName = 'private.key';
+    provider.dirMake( path.join( process.env.HOME, '.ssh' ) );
+    keyPath = path.join( process.env.HOME, '.ssh', keyFileName );
+    const keyData = process.env.SSH_PRIVATE_KEY;
+    provider.fileWrite( keyPath, keyData );
+    provider.rightsWrite({ keyPath, setRights : 0o600 });
+    return keyPath;
+  }
+
+  /* */
+
+  function sshAgentEnvironmentsSetup( op )
+  {
+    const lines = op.output.split( '\n' );
+    for( let i = 0 ; i < lines.length ; i++ )
+    {
+      const matches = /^(SSH_AUTH_SOCK|SSH_AGENT_PID)=(.*); export \1/.exec( lines[ i ] );
+      if( matches && matches.length > 0 )
+      process.env[ matches[ 1 ] ] = String( matches[ 2 ] );
+    }
+    return null;
+  }
+}
 
 //
 

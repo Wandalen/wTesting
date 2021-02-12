@@ -510,7 +510,7 @@ netInterfacesDown.defaults =
 function workflowTriggerGet()
 {
   if( !_.process.insideTestContainer() )
-  return null;
+  return 'local_run';
 
   if( process.env.CIRCLECI )
   {

@@ -37,6 +37,85 @@ function onSuiteEnd()
 // tests
 // --
 
+function netInterfacesGet( test )
+{
+  let context = this;
+  let a = test.assetFor( 'hello' );
+  let testing = _globals_.testing.wTools;
+
+  if( process.platform !== 'linux' )
+  {
+    test.shouldThrowErrorSync( () => testing.test.workflowSshAgentRun() );
+    return;
+  }
+
+  /* */
+
+  a.ready.then( () => testing.test.netInterfacesGet() );
+  a.ready.then( ( op ) =>
+  {
+    test.case = 'without arguments, all interfaces';
+    test.true( _.arrayIs( op ) );
+    test.true( op.length >= 1 );
+    test.true( _.strDefined( op[ 0 ] ) );
+    return null;
+  });
+
+  a.ready.then( () => testing.test.netInterfacesGet({ activeInterfaces : 1 }) );
+  a.ready.then( ( op ) =>
+  {
+    test.case = 'only active interfaces';
+    test.true( _.arrayIs( op ) );
+    test.true( op.length >= 0 );
+    if( op.length )
+    test.true( _.strDefined( op[ 0 ] ) );
+    return null;
+  });
+
+  a.ready.then( () =>
+  {
+    test.case = 'sync, all interfaces';
+    var got = testing.test.netInterfacesGet({ sync : 1 });
+    test.true( _.arrayIs( got ) );
+    test.true( got.length >= 1 );
+    test.true( _.strDefined( got[ 0 ] ) );
+
+    test.case = 'sync, active interfaces';
+    var got = testing.test.netInterfacesGet({ activeInterfaces : 1, sync : 1 });
+    test.true( _.arrayIs( got ) );
+    test.true( got.length >= 1 );
+    if( got.length )
+    test.true( _.strDefined( got[ 0 ] ) );
+
+    return null;
+  });
+
+  /* - */
+
+  if( Config.debug )
+  {
+    a.ready.then( () =>
+    {
+      test.case = 'extra arguments';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesGet( { sync : 1 }, { activeInterfaces : 1 } ) );
+
+      test.case = 'wrong type of options map';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesGet( 'wrong' ) );
+
+      test.case = 'unknown option in options map';
+      test.shouldThrowErrorSync( () => testing.test.netInterfacesGet({ sync : 1, unknown : 1 }) );
+
+      return null;
+    });
+  }
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function workflowSshAgentRun( test )
 {
   let context = this;
@@ -106,6 +185,8 @@ let Self =
 
   tests :
   {
+
+    netInterfacesGet,
 
     workflowSshAgentRun,
 

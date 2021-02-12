@@ -679,6 +679,23 @@ function workflowTriggerGet()
 
 //
 
+/**
+ * Routine workflowSshAgentRun() setup the ssh-agent on remote workflow.
+ *
+ * @example
+ * _globals_.testing.wTools.test.workflowSshAgentRun();
+ * // returns : Consequence which resolves into Process instance
+ *
+ * @returns { Consequence } - Returns a Consequence which resolves to Process instance with result of setup.
+ * @function workflowSshAgentRun
+ * @throws { Error } If arguments are provided.
+ * @throws { Error } If routine runs on local machine.
+ * @throws { Error } If environment variable `SSH_PRIVATE_KEY` does not exist.
+ * @throws { Error } If environment variable `SSH_PRIVATE_KEY` has not supported format.
+ * @namespace wTesting.wTools.test
+ * @module Tools/top/testing
+ */
+
 function workflowSshAgentRun()
 {
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );

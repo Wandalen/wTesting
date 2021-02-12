@@ -544,6 +544,40 @@ netInterfacesUp.defaults =
 
 //
 
+/**
+ * Routine netInterfacesDown() disables network interfaces from list {-o.interfaces-}.
+ *
+ * @example
+ * _globals_.testing.wTools.test.netInterfacesDown({ interfaces : 'enp3s0' });
+ * // returns Consequence which resolves into Process instance
+ *
+ * @example
+ * _globals_.testing.wTools.test.netInterfacesDown({ interfaces : [ 'enp3s0', 'wlx503eaa413cd5' ] });
+ * // returns Consequence which resolves into Process instance
+ *
+ * @example
+ * let result = _globals_.testing.wTools.test.netInterfacesDown({ interfaces : 'enp3s0', sync : 1 });
+ * // returns Process instance
+ *
+ * @example
+ * let result = _globals_.testing.wTools.test.netInterfacesDown({ interfaces : [ 'enp3s0', 'wlx503eaa413cd5' ], sync : 1 });
+ * // returns Process instance
+ *
+ * @param { Map } o - Options map.
+ * @param { String|Array } o.interfaces - Name or array of names of network interfaces to disable.
+ * @param { BoolLike } o.sync - If it is true, then routine returns result synchronously. Default is false.
+ * @returns { Consequence|Process } - Returns a Consequence which resolves to Process instance with result of execution.
+ * If {-o.sync-} is true, returns Process instance synchronously.
+ * @function netInterfacesDown
+ * @throws { Error } If arguments.length is not equal to 1.
+ * @throws { Error } If options map {-o-} has not valid type.
+ * @throws { Error } If options map {-o-} has unknown option.
+ * @throws { Error } If option {-o.interfaces-} has not valid type.
+ * @throws { Error } If option {-o.interfaces-} is empty array.
+ * @namespace wTesting.wTools.test
+ * @module Tools/top/testing
+ */
+
 function netInterfacesDown( o )
 {
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );

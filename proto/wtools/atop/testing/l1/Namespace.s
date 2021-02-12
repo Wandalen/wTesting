@@ -620,6 +620,24 @@ netInterfacesDown.defaults =
 
 //
 
+/**
+ * Routine workflowTriggerGet() determines what trigger activate workflow run.
+ *
+ * @example
+ * _globals_.testing.wTools.test.workflowTriggerGet();
+ * // returns : 'local_run'
+ *
+ * @returns { String } - Returns a String with name of trigger:
+ * - 'pull_request' - for pull requests;
+ * - 'publish' - if pushed commit has module version in commit message;
+ * - 'push' - for regular pushes;
+ * - 'local_run' - for runs on local machines.
+ * @function workflowTriggerGet
+ * @throws { Error } If workflow run is activated by unknown trigger.
+ * @namespace wTesting.wTools.test
+ * @module Tools/top/testing
+ */
+
 function workflowTriggerGet()
 {
   if( !_.process.insideTestContainer() )

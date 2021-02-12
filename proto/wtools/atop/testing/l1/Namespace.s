@@ -426,25 +426,26 @@ function netInterfacesUp( o )
 {
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
   _.routineOptions( netInterfacesUp, o );
-  _.assert( _.strIs( o.interfaces ) || _.arrayIs( o.interfaces ) );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
   o.interfaces = _.arrayAs( o.interfaces );
+  _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
+  _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to enable' );
 
   const ready = _.take( null );
-
   const shell = _.process.starter
   ({
     currentPath : _.path.current(),
     outputCollecting : 1,
     inputMirroring : 0,
     mode : 'shell',
+    ready,
   });
 
   for( let i = 0 ; i < o.interfaces.length ; i++ )
-  ready.then( () => shell( `sudo ip link set ${ o.interfaces[ i ] } up` ) );
+  shell( `sudo ip link set ${ o.interfaces[ i ] } up` );
 
   if( o.sync )
   {
@@ -468,25 +469,26 @@ function netInterfacesDown( o )
 {
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
   _.routineOptions( netInterfacesDown, o );
-  _.assert( _.strIs( o.interfaces ) || _.arrayIs( o.interfaces ) );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
   o.interfaces = _.arrayAs( o.interfaces );
+  _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
+  _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to disable' );
 
   const ready = _.take( null );
-
   const shell = _.process.starter
   ({
     currentPath : _.path.current(),
     outputCollecting : 1,
     inputMirroring : 0,
     mode : 'shell',
+    ready,
   });
 
   for( let i = 0 ; i < o.interfaces.length ; i++ )
-  ready.then( () => shell( `sudo ip link set ${ o.interfaces[ i ] } down` ) );
+  shell( `sudo ip link set ${ o.interfaces[ i ] } down` );
 
   if( o.sync )
   {

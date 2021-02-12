@@ -379,9 +379,11 @@ function netInterfacesGet( o )
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
-  let execPath = 'ip a';
+  let execPath = 'ip a | awk ';
   if( o.activeInterfaces )
-  execPath += ' | awk \'/state UP/{print $2}\'';
+  execPath += '\'/state UP/{print $2}\'';
+  else
+  execPath += '\'/state /{print $2}\'';
 
   const ready = _.process.start
   ({

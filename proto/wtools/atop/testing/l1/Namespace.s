@@ -386,6 +386,7 @@ function netInterfacesGet( o )
     execPath,
     outputCollecting : 1,
     inputMirroring : 0,
+    mode : 'shell',
   });
   ready.then( ( op ) =>
   {
@@ -416,6 +417,44 @@ netInterfacesGet.defaults =
 
 //
 
+function netInterfacesDown( o )
+{
+  _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
+  _.routineOptions( netInterfacesDown, o );
+  _.assert( _.strIs( o.interfaces ) || _.arrayIs( o.interfaces ) );
+
+  o.interfaces = _.arrayAs( o.interfaces );
+
+  let ready = _.take( null );
+
+  const shell = _.process.starter
+  ({
+    currentPath : _.path.current(),
+    outputCollecting : 1,
+    inputMirroring : 0,
+    mode : 'shell',
+  });
+
+  for( let i = 0 ; i < o.interfaces.length ; i++ )
+  ready.then( () => shell( `sudo ip link set ${ o.interfaces[ i ] } down` ) );
+
+  if( o.sync )
+  {
+    ready.deasync();
+    return ready.sync();
+  }
+
+  return ready;
+}
+
+netInterfacesDown.defaults =
+{
+  interfaces : null,
+  sync : 0,
+};
+
+//
+
 let Extension =
 {
   fileDrop,
@@ -425,9 +464,10 @@ let Extension =
   waitForVisibleInViewportSpectron,
   isVisibleWithinViewport,
 
-  //
+  // utilities
 
   netInterfacesGet,
+  netInterfacesDown,
 }
 
 _.mapExtend( Self, Extension );

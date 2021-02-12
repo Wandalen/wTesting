@@ -507,7 +507,7 @@ function workflowSshAgentRun()
 {
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  _.assert( process.env.SSH_PRIVATE_KEY !== undefined, 'Expects data for ssh private key' );
+  _.assert( _.strDefined( process.env.SSH_PRIVATE_KEY ), 'Expects data for ssh private key' );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
@@ -518,6 +518,7 @@ function workflowSshAgentRun()
     currentPath : _.path.current(),
     outputCollecting : 1,
     inputMirroring : 0,
+    outputPiping : 1,
     mode : 'shell',
     ready,
   });
@@ -525,7 +526,7 @@ function workflowSshAgentRun()
   /* */
 
   let keyPath;
-  ready.then( sshKeyWrite() );
+  ready.then( sshKeyWrite );
   shell( 'ssh-agent' );
   ready.then( sshAgentEnvironmentsSetup );
   shell( `ssh-add ${ keyPath }` );
@@ -543,7 +544,7 @@ function workflowSshAgentRun()
     keyPath = path.join( process.env.HOME, '.ssh', keyFileName );
     const keyData = process.env.SSH_PRIVATE_KEY;
     provider.fileWrite( keyPath, keyData );
-    provider.rightsWrite({ keyPath, setRights : 0o600 });
+    provider.rightsWrite({ filePath : keyPath, setRights : 0o600 });
     return keyPath;
   }
 

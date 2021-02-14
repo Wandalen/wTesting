@@ -166,13 +166,31 @@ function production( test )
     if( !a.fileProvider.fileExists( a.abs( filePath ) ) )
     return null;
     runList.push( filePath );
-    a.shell( `node ${ filePath }` )
+    a.shell
+    ({
+      execPath : `node ${ filePath }`,
+      throwingExitCode : 0
+    })
     .then( ( op ) =>
     {
       test.case = `running of sample ${filePath}`;
       test.identical( op.exitCode, 0 );
       test.ge( op.output.length, 3 );
+
+      if( op.exitCode === 0 || !isFork )
       return null;
+
+      test.case = 'fork is up to date with origin'
+      return _.git.isUpToDate
+      ({
+        localPath : a.abs( __dirname, '..' ),
+        remotePath : _.git.path.normalize( mdl.repository.url )
+      })
+      .then( ( isUpToDate ) =>
+      {
+        test.identical( isUpToDate, true );
+        return null;
+      })
     });
 
   }

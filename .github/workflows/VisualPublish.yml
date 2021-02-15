@@ -25,6 +25,7 @@ jobs :
       with :
         node-version : ${{ matrix.node-version }}
     - run : npm i
+    - run : npm list
     - if : startsWith( matrix.os, 'ubuntu' )
       run : xvfb-run --auto-servernum npm test
     - if : "!startsWith( matrix.os, 'ubuntu' )"

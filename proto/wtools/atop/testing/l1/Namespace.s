@@ -673,6 +673,7 @@ function workflowTriggerGet( localPath )
     ({
       currentPath : localPath,
       execPath : 'git log --format=%B -n 1',
+      outputCollecting : 1,
       sync : 1,
     });
     let commitMsg = lastCommitLog.output;

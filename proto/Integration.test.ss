@@ -48,7 +48,7 @@ function production( test )
   let context = this;
   let a = test.assetFor( 'production' );
   let runList = [];
-  let trigger = _.test.workflowTriggerGet();
+  let trigger = _.test.workflowTriggerGet( a.abs( __dirname, '..' ) );
 
   if( trigger === 'pull_request' )
   {

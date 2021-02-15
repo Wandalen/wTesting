@@ -661,7 +661,7 @@ function workflowTriggerGet( localPath )
   if( publishPushIs() )
   return 'publish';
   if( process.env.GITHUB_EVENT_NAME === 'push' )
-  return 'publish';
+  return 'push';
   else
   _.assert( 0, 'Unknown trigger' );
 
@@ -677,6 +677,7 @@ function workflowTriggerGet( localPath )
       sync : 1,
     });
     let commitMsg = lastCommitLog.output;
+    debugger;
     return _.strBegins( commitMsg, 'version' );
   }
 }

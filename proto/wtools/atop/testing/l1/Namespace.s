@@ -638,14 +638,10 @@ netInterfacesDown.defaults =
  * @module Tools/top/testing
  */
 
-function workflowTriggerGet( o )
+function workflowTriggerGet( localPath )
 {
-  if( arguments.length === 0 )
-  o = Object.create( null );
-  else
   _.assert( arguments.length === 1 );
-
-  _.routineOptions( workflowTriggerGet, o );
+  _.assert( _.strDefined( localPath ) );
 
   if( !_.process.insideTestContainer() )
   return 'local_run';
@@ -673,10 +669,9 @@ function workflowTriggerGet( o )
 
   function publishPushIs()
   {
-    let currentPath = o.localPath ? o.localPath : _.path.join( __dirname, '..' );
     let lastCommitLog = _.process.start
     ({
-      currentPath,
+      currentPath : localPath,
       execPath : 'git log --format=%B -n 1',
       sync : 1,
     });

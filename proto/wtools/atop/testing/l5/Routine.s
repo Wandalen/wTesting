@@ -2272,6 +2272,100 @@ function notEquivalent( got, expected, options )
 
 //
 
+function contains_functor( fo )
+{
+
+  if( arguments.length > 1 )
+  fo = { methodName : arguments[ 0 ], compareName : arguments[ 1 ], positive : arguments[ 2 ] }
+  _.routineOptions( contains_functor, fo );
+  _.assert( _.routineIs( _.equaler[ fo.compareName ] ) );
+  const methodName = fo.methodName;
+  const compare = _.routineJoin( _, _[ fo.compareName ] );
+  const positive = fo.positive;
+
+  return function contains( got, expected )
+  {
+    let tro = this;
+    let o2, outcome;
+
+    tro._returnedVerification();
+
+    /* */
+
+    try
+    {
+      o2 = Object.create( null );
+      // outcome = _.entityContains( got, expected, o2 );
+      outcome = compare( got, expected, o2 );
+      if( !positive )
+      outcome = !outcome;
+    }
+    catch( err )
+    {
+      tro.exceptionReport
+      ({
+        err,
+      });
+      return false;
+    }
+
+    /* */
+
+    if( arguments.length !== 2 )
+    {
+      outcome = false;
+
+      tro.exceptionReport
+      ({
+        err : `"${methodName}" expects two arguments`,
+        level : 2,
+      });
+
+      return outcome;
+    }
+
+    /* */
+
+    if( !o2.it || o2.it.lastPath === undefined )
+    {
+      outcome = false;
+      tro.exceptionReport
+      ({
+        err : 'Something wrong with equaler, iterator does not have lastPath',
+        level : 2,
+      });
+      return outcome;
+    }
+
+    /* */
+
+    tro._outcomeReportCompare
+    ({
+      outcome,
+      got,
+      expected,
+      path : o2.it.lastPath,
+      usingExtraDetails : 1,
+      interruptible : 1,
+      strictString : 0,
+    });
+
+    /* */
+
+    return outcome;
+  }
+
+}
+
+contains_functor.defaults =
+{
+  methodName : null,
+  compareName : null,
+  positive : true,
+}
+
+//
+
 /**
  * Checks if test passes a specified condition by deep contains comparsing result of code execution( got )
  * with target( expected ). Uses recursive comparsion for objects, arrays and array-like objects.
@@ -2303,368 +2397,380 @@ function notEquivalent( got, expected, options )
  * @module Tools/atop/Tester
  */
 
-function contains( got, expected )
-{
-  let tro = this;
-  let o2, outcome;
-
-  tro._returnedVerification();
-
-  /* */
-
-  try
-  {
-    o2 = Object.create( null );
-    outcome = _.entityContains( got, expected, o2 );
-  }
-  catch( err )
-  {
-    tro.exceptionReport
-    ({
-      err,
-    });
-    return false;
-  }
-
-  /* */
-
-  if( arguments.length !== 2 )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : '"contains" expects two arguments',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  tro._outcomeReportCompare
-  ({
-    outcome,
-    got,
-    expected,
-    path : o2.it.lastPath,
-    usingExtraDetails : 1,
-    interruptible : 1,
-    strictString : 0,
-  });
-
-  /* */
-
-  return outcome;
-}
+// function contains( got, expected )
+// {
+//   let tro = this;
+//   let o2, outcome;
+//
+//   tro._returnedVerification();
+//
+//   /* */
+//
+//   try
+//   {
+//     o2 = Object.create( null );
+//     outcome = _.entityContains( got, expected, o2 );
+//   }
+//   catch( err )
+//   {
+//     tro.exceptionReport
+//     ({
+//       err,
+//     });
+//     return false;
+//   }
+//
+//   /* */
+//
+//   if( arguments.length !== 2 )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : '"contains" expects two arguments',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   if( !o2.it || o2.it.lastPath === undefined )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   tro._outcomeReportCompare
+//   ({
+//     outcome,
+//     got,
+//     expected,
+//     path : o2.it.lastPath,
+//     usingExtraDetails : 1,
+//     interruptible : 1,
+//     strictString : 0,
+//   });
+//
+//   /* */
+//
+//   return outcome;
+// }
 
 //
 
-function containsAll( got, expected )
-{
-  let tro = this;
-  let o2, outcome;
-
-  tro._returnedVerification();
-
-  /* */
-
-  try
-  {
-    o2 = Object.create( null );
-    outcome = _.entityContainsAll( got, expected, o2 );
-  }
-  catch( err )
-  {
-    tro.exceptionReport
-    ({
-      err,
-    });
-    return false;
-  }
-
-  /* */
-
-  if( arguments.length !== 2 )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : '"contains" expects two arguments',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  tro._outcomeReportCompare
-  ({
-    outcome,
-    got,
-    expected,
-    path : o2.it.lastPath,
-    usingExtraDetails : 1,
-    interruptible : 1,
-    strictString : 0,
-  });
-
-  /* */
-
-  return outcome;
-}
+// function containsAll( got, expected )
+// {
+//   let tro = this;
+//   let o2, outcome;
+//
+//   tro._returnedVerification();
+//
+//   /* */
+//
+//   try
+//   {
+//     o2 = Object.create( null );
+//     outcome = _.entityContainsAll( got, expected, o2 );
+//   }
+//   catch( err )
+//   {
+//     tro.exceptionReport
+//     ({
+//       err,
+//     });
+//     return false;
+//   }
+//
+//   /* */
+//
+//   if( arguments.length !== 2 )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : '"contains" expects two arguments',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   if( !o2.it || o2.it.lastPath === undefined )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   tro._outcomeReportCompare
+//   ({
+//     outcome,
+//     got,
+//     expected,
+//     path : o2.it.lastPath,
+//     usingExtraDetails : 1,
+//     interruptible : 1,
+//     strictString : 0,
+//   });
+//
+//   /* */
+//
+//   return outcome;
+// }
 
 //
 
-function containsAny( got, expected )
-{
-  let tro = this;
-  let o2, outcome;
-
-  tro._returnedVerification();
-
-  /* */
-
-  try
-  {
-    o2 = Object.create( null );
-    outcome = _.entityContainsAny( got, expected, o2 );
-  }
-  catch( err )
-  {
-    tro.exceptionReport
-    ({
-      err,
-    });
-    return false;
-  }
-
-  /* */
-
-  if( arguments.length !== 2 )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : '"contains" expects two arguments',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  tro._outcomeReportCompare
-  ({
-    outcome,
-    got,
-    expected,
-    path : o2.it.lastPath,
-    usingExtraDetails : 1,
-    interruptible : 1,
-    strictString : 0,
-  });
-
-  /* */
-
-  return outcome;
-}
+// function containsAny( got, expected )
+// {
+//   let tro = this;
+//   let o2, outcome;
+//
+//   tro._returnedVerification();
+//
+//   /* */
+//
+//   try
+//   {
+//     o2 = Object.create( null );
+//     outcome = _.entityContainsAny( got, expected, o2 );
+//   }
+//   catch( err )
+//   {
+//     tro.exceptionReport
+//     ({
+//       err,
+//     });
+//     return false;
+//   }
+//
+//   /* */
+//
+//   if( arguments.length !== 2 )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : '"contains" expects two arguments',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   if( !o2.it || o2.it.lastPath === undefined )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   tro._outcomeReportCompare
+//   ({
+//     outcome,
+//     got,
+//     expected,
+//     path : o2.it.lastPath,
+//     usingExtraDetails : 1,
+//     interruptible : 1,
+//     strictString : 0,
+//   });
+//
+//   /* */
+//
+//   return outcome;
+// }
 
 //
 
-function containsOnly( got, expected )
-{
-  let tro = this;
-  let o2, outcome;
-
-  tro._returnedVerification();
-
-  /* */
-
-  try
-  {
-    o2 = Object.create( null );
-    outcome = _.containsOnly( got, expected, o2 );
-  }
-  catch( err )
-  {
-    tro.exceptionReport
-    ({
-      err,
-    });
-    return false;
-  }
-
-  /* */
-
-  if( arguments.length !== 2 )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : '"contains" expects two arguments',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  tro._outcomeReportCompare
-  ({
-    outcome,
-    got,
-    expected,
-    path : o2.it.lastPath,
-    usingExtraDetails : 1,
-    interruptible : 1,
-    strictString : 0,
-  });
-
-  /* */
-
-  return outcome;
-}
+// function containsOnly( got, expected )
+// {
+//   let tro = this;
+//   let o2, outcome;
+//
+//   tro._returnedVerification();
+//
+//   /* */
+//
+//   try
+//   {
+//     o2 = Object.create( null );
+//     outcome = _.containsOnly( got, expected, o2 );
+//   }
+//   catch( err )
+//   {
+//     tro.exceptionReport
+//     ({
+//       err,
+//     });
+//     return false;
+//   }
+//
+//   /* */
+//
+//   if( arguments.length !== 2 )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : '"contains" expects two arguments',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   if( !o2.it || o2.it.lastPath === undefined )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   tro._outcomeReportCompare
+//   ({
+//     outcome,
+//     got,
+//     expected,
+//     path : o2.it.lastPath,
+//     usingExtraDetails : 1,
+//     interruptible : 1,
+//     strictString : 0,
+//   });
+//
+//   /* */
+//
+//   return outcome;
+// }
 
 //
 
-function containsNone( got, expected )
-{
-  let tro = this;
-  let o2, outcome;
+// function containsNone( got, expected )
+// {
+//   let tro = this;
+//   let o2, outcome;
+//
+//   tro._returnedVerification();
+//
+//   /* */
+//
+//   try
+//   {
+//     o2 = Object.create( null );
+//     outcome = _.entityContainsNone( got, expected, o2 );
+//   }
+//   catch( err )
+//   {
+//     tro.exceptionReport
+//     ({
+//       err,
+//     });
+//     return false;
+//   }
+//
+//   /* */
+//
+//   if( arguments.length !== 2 )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : '"contains" expects two arguments',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   if( !o2.it || o2.it.lastPath === undefined )
+//   {
+//     outcome = false;
+//
+//     tro.exceptionReport
+//     ({
+//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
+//       level : 2,
+//     });
+//
+//     return outcome;
+//   }
+//
+//   /* */
+//
+//   tro._outcomeReportCompare
+//   ({
+//     outcome,
+//     got,
+//     expected,
+//     path : o2.it.lastPath,
+//     usingExtraDetails : 1,
+//     interruptible : 1,
+//     strictString : 0,
+//   });
+//
+//   /* */
+//
+//   return outcome;
+// }
 
-  tro._returnedVerification();
+let contains = contains_functor( 'contains', 'contains', true );
+let containsAll = contains_functor( 'containsAll', 'containsAll', true );
+let containsAny = contains_functor( 'containsAny', 'containsAny', true );
+let containsOnly = contains_functor( 'containsOnly', 'containsOnly', true );
+let containsNone = contains_functor( 'containsNone', 'containsNone', true );
 
-  /* */
-
-  try
-  {
-    o2 = Object.create( null );
-    outcome = _.entityContainsNone( got, expected, o2 );
-  }
-  catch( err )
-  {
-    tro.exceptionReport
-    ({
-      err,
-    });
-    return false;
-  }
-
-  /* */
-
-  if( arguments.length !== 2 )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : '"contains" expects two arguments',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
-  tro._outcomeReportCompare
-  ({
-    outcome,
-    got,
-    expected,
-    path : o2.it.lastPath,
-    usingExtraDetails : 1,
-    interruptible : 1,
-    strictString : 0,
-  });
-
-  /* */
-
-  return outcome;
-}
+let notContains = contains_functor( 'notContains', 'contains', false );
+let notContainsAll = contains_functor( 'notContainsAll', 'containsAll', false );
+let notContainsAny = contains_functor( 'notContainsAny', 'containsAny', false );
+let notContainsOnly = contains_functor( 'notContainsOnly', 'containsOnly', false );
+let notContainsNone = contains_functor( 'notContainsNone', 'containsNone', false );
 
 //
 
@@ -4812,16 +4918,21 @@ let Extension =
   equivalent,
   notEquivalent,
 
-  contains,
-  containsAll,
-  containsAny,
-  containsOnly,
-  containsNone,
+  contains, /* qqq : cover and jsdoc, please */
+  containsAll, /* qqq : cover and jsdoc, please */
+  containsAny, /* qqq : cover and jsdoc, please */
+  containsOnly, /* qqq : cover and jsdoc, please */
+  containsNone, /* qqq : cover and jsdoc, please */
+  notContains, /* qqq : cover and jsdoc, please */
+  notContainsAll, /* qqq : cover and jsdoc, please */
+  notContainsAny, /* qqq : cover and jsdoc, please */
+  notContainsOnly, /* qqq : cover and jsdoc, please */
+  notContainsNone, /* qqq : cover and jsdoc, please */
 
   il : identical,
-  ni : notIdentical,
-  et : equivalent,
-  ne : notEquivalent,
+  nil : notIdentical,
+  eq : equivalent,
+  neq : notEquivalent,
 
   gt,
   ge,

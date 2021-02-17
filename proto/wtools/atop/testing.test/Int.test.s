@@ -8189,31 +8189,31 @@ function niReturn( test )
 
   function returnTest( t )
   {
-    var got = t.ni( 1, 1 );
+    var got = t.nil( 1, 1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( 1, '1' );
+    var got = t.nil( 1, '1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( '1', '1' );
+    var got = t.nil( '1', '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( true, true );
+    var got = t.nil( true, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( false, true );
+    var got = t.nil( false, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8222,43 +8222,43 @@ function niReturn( test )
     var d1 = new Date( Date.now() );
     var d2 = new Date( d1 );
 
-    var got = t.ni( d1, d2 );
+    var got = t.nil( d1, d2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( [ 1 ], [ 1 ] );
+    var got = t.nil( [ 1 ], [ 1 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( [ 1 ], [ 2 ] );
+    var got = t.nil( [ 1 ], [ 2 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( { a : 1 }, { a : 1 } );
+    var got = t.nil( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( { a : 1 }, { a : 2 } );
+    var got = t.nil( { a : 1 }, { a : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( test, t );
+    var got = t.nil( test, t );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ni( t.ni, t.ni );
+    var got = t.nil( t.nil, t.nil );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8266,13 +8266,13 @@ function niReturn( test )
 
     test.case = 'no arguments';
 
-    var got = t.ni();
+    var got = t.nil();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    var got = t.ni( { a : 1 }, { a : 1 }, { a : 1 } );
+    var got = t.nil( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8311,31 +8311,31 @@ function etReturn( test )
   function returnTest( t )
   {
 
-    var got = t.et( 1, 1 );
+    var got = t.eq( 1, 1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( 1, 2 );
+    var got = t.eq( 1, 2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( 1, '1' );
+    var got = t.eq( 1, '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( '1', 1 );
+    var got = t.eq( '1', 1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( '1', '1' );
+    var got = t.eq( '1', '1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8344,62 +8344,62 @@ function etReturn( test )
     var d1 = new Date( Date.now() );
     var d2 = new Date( d1 );
 
-    var got = t.et( d1, d2 );
+    var got = t.eq( d1, d2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( true, true );
+    var got = t.eq( true, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( false, true );
+    var got = t.eq( false, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( [ 1 ], [ 1 ] );
+    var got = t.eq( [ 1 ], [ 1 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( [ 1 ], [ 2 ] );
+    var got = t.eq( [ 1 ], [ 2 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( { a : 1 }, { a : 1 } );
+    var got = t.eq( { a : 1 }, { a : 1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( { a : 1 }, { a : 2 } );
+    var got = t.eq( { a : 1 }, { a : 2 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( test, t );
+    var got = t.eq( test, t );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.et( t.notIdentical, t.notIdentical );
+    var got = t.eq( t.notIdentical, t.notIdentical );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     t.suite.accuracy = 0.1;
-    var got = t.et( 1, 1.05 );
+    var got = t.eq( 1, 1.05 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8415,7 +8415,7 @@ function etReturn( test )
     /* */
 
     t.accuracy = 0.01;
-    var got = t.et( 1, 1.05 );
+    var got = t.eq( 1, 1.05 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8427,11 +8427,11 @@ function etReturn( test )
 
     test.case = 'third argument is accuracy';
 
-    var got = t.et( 1, 1.05, 0.01 );
+    var got = t.eq( 1, 1.05, 0.01 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    var got = t.et( 1, 1.05, 0.1 );
+    var got = t.eq( 1, 1.05, 0.1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8439,18 +8439,18 @@ function etReturn( test )
 
     test.case = 'third argument is options map with accuracy';
 
-    var got = t.et( 1, 1.05, { accuracy : 0.01 } );
+    var got = t.eq( 1, 1.05, { accuracy : 0.01 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    var got = t.et( 1, 1.05, { accuracy : 0.1 } );
+    var got = t.eq( 1, 1.05, { accuracy : 0.1 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     t.accuracy = 0.1;
-    var got = t.et( 1, 1.05 );
+    var got = t.eq( 1, 1.05 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8458,14 +8458,14 @@ function etReturn( test )
 
     t.accuracy = null;
     t.suite.accuracy = 0.01;
-    var got = t.et( 1, 1.05 );
+    var got = t.eq( 1, 1.05 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
-    var got = t.et( 1, 1.005 );
+    var got = t.eq( 1, 1.005 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    var got = t.et( 1, 1 + 1e-11 );
+    var got = t.eq( 1, 1 + 1e-11 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8477,16 +8477,16 @@ function etReturn( test )
 
     test.case = 'no arguments';
 
-    var got = t.et();
+    var got = t.eq();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    t.et( { a : 1 }, { a : 1 }, { a : 1 } );
-    t.et( 1.05, 1, null )
-    t.et( 1.05, 1, 'x' )
-    t.et( 1.05, 1, [] )
+    t.eq( { a : 1 }, { a : 1 }, { a : 1 } );
+    t.eq( 1.05, 1, null )
+    t.eq( 1.05, 1, 'x' )
+    t.eq( 1.05, 1, [] )
 
   }
 
@@ -8524,31 +8524,31 @@ function neReturn( test )
   function returnTest( t )
   {
 
-    var got = t.ne( 1, 1 );
+    var got = t.neq( 1, 1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( 1, 2 );
+    var got = t.neq( 1, 2 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( 1, '1' );
+    var got = t.neq( 1, '1' );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( '1', 1 );
+    var got = t.neq( '1', 1 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( '1', '1' );
+    var got = t.neq( '1', '1' );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8556,62 +8556,62 @@ function neReturn( test )
 
     var d1 = new Date( Date.now() );
     var d2 = new Date( d1 );
-    var got = t.ne( d1, d2 );
+    var got = t.neq( d1, d2 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( true, true );
+    var got = t.neq( true, true );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( false, true );
+    var got = t.neq( false, true );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( [ 1 ], [ 1 ] );
+    var got = t.neq( [ 1 ], [ 1 ] );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( [ 1 ], [ 2 ] );
+    var got = t.neq( [ 1 ], [ 2 ] );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( { a : 1 }, { a : 1 } );
+    var got = t.neq( { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( { a : 1 }, { a : 2 } );
+    var got = t.neq( { a : 1 }, { a : 2 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( test, t );
+    var got = t.neq( test, t );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
-    var got = t.ne( t.notIdentical, t.notIdentical );
+    var got = t.neq( t.notIdentical, t.notIdentical );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     /* */
 
     t.suite.accuracy = 0.1;
-    var got = t.ne( 1, 1.05 );
+    var got = t.neq( 1, 1.05 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8627,7 +8627,7 @@ function neReturn( test )
     /* */
 
     t.accuracy = 0.01;
-    var got = t.ne( 1, 1.05 );
+    var got = t.neq( 1, 1.05 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
@@ -8638,7 +8638,7 @@ function neReturn( test )
     /* */
 
     t.accuracy = 0.1;
-    var got = t.ne( 1, 1.05 );
+    var got = t.neq( 1, 1.05 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8646,11 +8646,11 @@ function neReturn( test )
 
     t.accuracy = null;
     t.suite.accuracy = 0.1;
-    var got = t.ne( 1, 1.05 );
+    var got = t.neq( 1, 1.05 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
-    var got = t.ne( 1, 1 + 1e-11 );
+    var got = t.neq( 1, 1 + 1e-11 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8662,11 +8662,11 @@ function neReturn( test )
 
     test.case = 'third argument is accuracy';
 
-    var got = t.ne( 1, 1.05, 0.01 );
+    var got = t.neq( 1, 1.05, 0.01 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    var got = t.ne( 1, 1.05, 0.1 );
+    var got = t.neq( 1, 1.05, 0.1 );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8674,11 +8674,11 @@ function neReturn( test )
 
     test.case = 'third argument is options map with accuracy';
 
-    var got = t.ne( 1, 1.05, { accuracy : 0.01 } );
+    var got = t.neq( 1, 1.05, { accuracy : 0.01 } );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
 
-    var got = t.ne( 1, 1.05, { accuracy : 0.1 } );
+    var got = t.neq( 1, 1.05, { accuracy : 0.1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -8686,19 +8686,19 @@ function neReturn( test )
 
     test.case = 'no arguments';
 
-    var got = t.ne();
+    var got = t.neq();
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
     test.case = 'extra arguments';
 
-    t.ne( { a : 1 }, { a : 1 }, { a : 1 } );
+    t.neq( { a : 1 }, { a : 1 }, { a : 1 } );
 
-    t.ne( 1.05, 1, null )
+    t.neq( 1.05, 1, null )
 
-    t.ne( 1.05, 1, 'x' )
+    t.neq( 1.05, 1, 'x' )
 
-    t.ne( 1.05, 1, [] )
+    t.neq( 1.05, 1, [] )
 
   }
 

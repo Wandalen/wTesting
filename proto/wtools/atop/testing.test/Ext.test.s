@@ -125,7 +125,7 @@ function run( test )
   a.shellNonThrowing({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
@@ -149,7 +149,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -173,7 +173,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -197,7 +197,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -221,7 +221,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -245,7 +245,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -269,7 +269,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -293,7 +293,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -317,7 +317,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -341,7 +341,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -377,7 +377,7 @@ function run( test )
   a.shellNonThrowing({ args : [ 'node', 'Hello.test.js',  'beeping:0' ] })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2' ), 1 );
@@ -401,7 +401,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -425,7 +425,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -449,7 +449,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( op.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -473,7 +473,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ '.run', a.abs( 'Hello.test.js' ),  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -497,7 +497,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `.run ${a.abs( 'Hello.test.js' )} v:7 beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -521,7 +521,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -545,7 +545,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -569,7 +569,7 @@ function run( test )
   a.appStartNonThrowing({ args : [ '.run', a.path.nativize( a.abs( 'Hello.test.js' ) ),  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -593,7 +593,7 @@ function run( test )
   a.appStartNonThrowing({ execPath : `.run ${a.path.nativize( a.abs( 'Hello.test.js' ) )} v:7 beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -631,7 +631,7 @@ function runWithQuotedPath( test )
   a.appStartNonThrowing({ execPath : `.run "'${a.path.nativize( a.abs( './**' ) )}'" beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -656,7 +656,7 @@ function runWithQuotedPath( test )
   a.appStartNonThrowing({ execPath : `.run '"${a.path.nativize( a.abs( './**' ) )}"' beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -681,7 +681,7 @@ function runWithQuotedPath( test )
   a.appStartNonThrowing({ execPath : `.run "\`${a.path.nativize( a.abs( './**' ) )}\`" beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -705,7 +705,7 @@ function runWithQuotedPath( test )
   a.appStartNonThrowing({ execPath : `"'${a.path.nativize( a.abs( './**' ) )}'" beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -730,7 +730,7 @@ function runWithQuotedPath( test )
   a.appStartNonThrowing({ execPath : `'"${a.path.nativize( a.abs( './**' ) )}"' beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -755,7 +755,7 @@ function runWithQuotedPath( test )
   a.appStartNonThrowing({ execPath : `"\`${a.path.nativize( a.abs( './**' ) )}\`" beeping:0` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -1429,7 +1429,7 @@ function checkFails( test )
   a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello / TestRoutine::routine2 in' ), 1 );
@@ -1453,7 +1453,7 @@ function checkFails( test )
   a.appStartNonThrowing({ args : [ 'Hello.test.js',  'beeping:0', 'fails:1' ] })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello / TestRoutine::routine1 in' ), 1 );
     test.identical( _.strCount( got.output, 'Failed ( throwing error ) TestSuite::Hello / TestRoutine::routine2' ), 1 );
     test.identical( _.strCount( got.output, /Test suite \( Hello \) ... in .* ... failed/ ), 1 );
@@ -1490,7 +1490,7 @@ function double( test )
   a.shellNonThrowing({ execPath : `node Hello.test.js v:5` })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, 'Passed TestSuite::Hello1 / TestRoutine::routine1' ), 1 );
     test.identical( _.strCount( got.output, 'Failed TestSuite::Hello1 / TestRoutine::routine2' ), 1 );
@@ -1595,7 +1595,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : 'proto' })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1615,7 +1615,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : 'proto/wtools' })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1634,7 +1634,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : 'proto/**' })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1653,7 +1653,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : a.path.nativize( a.abs( '.' ) ) })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1672,7 +1672,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : a.path.nativize( a.abs( '**' ) ) })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1691,7 +1691,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : a.abs( '.' ) })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1710,7 +1710,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : '.run ' + a.abs( '.' ) })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1729,7 +1729,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : 'n:1' })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -1748,7 +1748,7 @@ function noTestSuite( test )
   a.appStartNonThrowing({ args : '.run n:1' })
   .then( ( got ) =>
   {
-    test.ni( got.exitCode, 0 );
+    test.nil( got.exitCode, 0 );
 
     test.identical( _.strCount( got.output, '0 test suite' ), 1 );
     test.identical( _.strCount( got.output, 'No enabled test suite to run' ), 1 );
@@ -4737,7 +4737,7 @@ function checkDiffWithRoutines( test )
   a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical1` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     let exp1 = `- got :`;
     let exp2 = `{ 'a' : 'reducing1' }`;
@@ -4767,7 +4767,7 @@ function checkDiffWithRoutines( test )
   a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical2` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     let exp1 = `- got :`;
     let exp2 = `{ 'f2' : [ routine b ], 'a' : 'reducing1' }`;
@@ -4797,7 +4797,7 @@ function checkDiffWithRoutines( test )
   a.appStartNonThrowing({ execPath : `${a.abs( 'Fail.test.js' )} r:identical3` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     let exp1 = `- got :`;
     let exp2 = `{ 'f4' : [ routine a ], 'a' : 'reducing1' }`;
@@ -4845,7 +4845,7 @@ function checkDiffWithProto( test )
   a.appStartNonThrowing({ execPath : `${programPath} r:identical1` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     let exp1 = `- got :`;
     let exp2 = `'a' : 'hello1'`;
@@ -4901,7 +4901,7 @@ function checkDiffWithProto( test )
   a.appStartNonThrowing({ execPath : `${programPath} r:identical3` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     let exp1 = `- got :`;
     let exp2 = `'a' : 'hello'`;
@@ -4931,7 +4931,7 @@ function checkDiffWithProto( test )
   a.appStartNonThrowing({ execPath : `${programPath} r:identical4` })
   .then( ( op ) =>
   {
-    test.ni( op.exitCode, 0 );
+    test.nil( op.exitCode, 0 );
 
     let exp1 = `- got :`;
     let exp2 = `'a' : 'hello'`;

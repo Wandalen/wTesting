@@ -713,8 +713,8 @@ function workflowSshAgentRun( o )
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
 
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
-  _.routineOptions( workflowTriggerGet, o );
-  _.assert( _.strDefined( process.env.SSH_PRIVATE_KEY ), 'Expects data for ssh private key' );
+  _.routineOptions( workflowSshAgentRun, o );
+  _.assert( _.strDefined( o.keyData ), 'Expects data for ssh private key' );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
@@ -749,8 +749,7 @@ function workflowSshAgentRun( o )
     const keyFileName = 'private.key';
     provider.dirMake( path.join( process.env.HOME, '.ssh' ) );
     keyPath = path.join( process.env.HOME, '.ssh', keyFileName );
-    const keyData = o.keyData;
-    provider.fileWrite( keyPath, keyData );
+    provider.fileWrite( keyPath, o.keyData );
     provider.rightsWrite({ filePath : keyPath, setRights : 0o600 });
     return keyPath;
   }

@@ -20,7 +20,7 @@ let _ = _globals_.testing.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.appStartNonThrowing = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Main.s' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
@@ -344,7 +344,10 @@ function workflowSshAgentRun( test )
   let context = this;
   let a = test.assetFor( 'hello' );
 
-  if( !_.process.insideTestContainer() || process.platform !== 'linux' )
+  let keyData = process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
+  let insideTestContainer =  _.process.insideTestContainer();
+  let validPlatform = process.platform === 'linux';
+  if( !insideTestContainer || !validPlatform || !keyData )
   {
     test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
     return;
@@ -364,16 +367,36 @@ function workflowSshAgentRun( test )
 
   /* */
 
+  a.shell( 'ssh-add -D' )
+  a.ready.then( () => _.test.workflowSshAgentRun({ keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }) );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Identity added' ), 1 );
+    test.true( process.env.SSH_AUTH_SOCK !== undefined );
+    test.true( /\d+/.test( process.env.SSH_AGENT_PID ) );
+    return null;
+  });
+
+  /* - */
+
   if( Config.debug )
   {
     a.ready.then( () =>
     {
       test.case = 'extra argument';
-      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( 'extra' ) );
+      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( { keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }, 'extra' ) );
 
       test.case = 'not valid environment';
-      process.env.SSH_PRIVATE_KEY = '';
+      process.env.PRIVATE_WTOOLS_BOT_SSH_KEY = '';
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
+      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun({ keyData : '' }) );
+
+      test.case = 'unknown option in options map';
+      test.shouldThrowErrorSync( () =>
+      {
+        _.test.workflowSshAgentRun({ keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY, unknown : 1 });
+      });
 
       return null;
     });

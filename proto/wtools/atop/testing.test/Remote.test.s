@@ -390,6 +390,7 @@ function workflowSshAgentRun( test )
       test.case = 'not valid environment';
       let tmp = process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
       delete process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
+      _.test.workflowSshAgentRun.defaults.keyData = '';
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
       process.env[ 'PRIVATE_WTOOLS_BOT_SSH_KEY' ] = tmp;
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun({ keyData : '' }) );

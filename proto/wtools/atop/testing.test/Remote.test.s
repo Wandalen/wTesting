@@ -344,7 +344,10 @@ function workflowSshAgentRun( test )
   let context = this;
   let a = test.assetFor( 'hello' );
 
-  if( !_.process.insideTestContainer() || process.platform !== 'linux' )
+  let keyData = process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
+  let insideTestContainer =  _.process.insideTestContainer();
+  let validPlatform = process.platform === 'linux';
+  if( !insideTestContainer || !validPlatform || !keyData )
   {
     test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
     return;

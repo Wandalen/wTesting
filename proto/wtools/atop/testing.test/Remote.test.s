@@ -367,7 +367,7 @@ function workflowSshAgentRun( test )
 
   /* */
 
-  a.shell( 'ssh-add -D' )
+  a.shell({ currentPath : a.path.current(), execPath : 'ssh-add -D' });
   a.ready.then( () => _.test.workflowSshAgentRun({ keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }) );
   a.ready.then( ( op ) =>
   {

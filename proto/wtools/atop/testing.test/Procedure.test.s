@@ -26,7 +26,7 @@ function onSuiteBegin()
 {
   let context = this;
 
-  context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'Tester' );
   context.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   context.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Exec' ) );
 
@@ -102,7 +102,7 @@ function terminationBeginWithTwoNamespaces( test )
       return null;
     });
 
-    con1 .then( () =>
+    con1.then( () =>
     {
       return start2( programPath2 )
       .then( ( op ) =>

@@ -20,7 +20,7 @@ let _ = _globals_.testing.wTools;
 function onSuiteBegin()
 {
   let self = this;
-  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.appStartNonThrowing = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Main.s' ) );
   self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
@@ -382,7 +382,7 @@ function workflowSshAgentRun( test )
     a.ready.then( () =>
     {
       test.case = 'extra argument';
-      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( { keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY } ,'extra' ) );
+      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( { keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }, 'extra' ) );
 
       test.case = 'not valid environment';
       process.env.PRIVATE_WTOOLS_BOT_SSH_KEY = '';

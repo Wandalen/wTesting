@@ -677,7 +677,6 @@ function workflowTriggerGet( localPath )
       sync : 1,
     });
     let commitMsg = lastCommitLog.output;
-    debugger;
     return _.strBegins( commitMsg, 'version' );
   }
 }
@@ -745,7 +744,7 @@ function workflowSshAgentRun()
     const keyFileName = 'private.key';
     provider.dirMake( path.join( process.env.HOME, '.ssh' ) );
     keyPath = path.join( process.env.HOME, '.ssh', keyFileName );
-    const keyData = process.env.SSH_PRIVATE_KEY;
+    const keyData = process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
     provider.fileWrite( keyPath, keyData );
     provider.rightsWrite({ filePath : keyPath, setRights : 0o600 });
     return keyPath;

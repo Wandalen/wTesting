@@ -387,7 +387,13 @@ function workflowSshAgentRun( test )
       test.case = 'not valid environment';
       process.env.PRIVATE_WTOOLS_BOT_SSH_KEY = '';
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
-      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun({ keyData : 'wrong' }) );
+      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun({ keyData : '' }) );
+
+      test.case = 'unknown option in options map';
+      test.shouldThrowErrorSync( () =>
+      {
+        _.test.workflowSshAgentRun({ keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY, unknown : 1 });
+      });
 
       return null;
     });

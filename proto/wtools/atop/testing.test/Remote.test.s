@@ -367,7 +367,7 @@ function workflowSshAgentRun( test )
 
   /* */
 
-  a.shell( 'ssh-add -D' )
+  a.shell({ currentPath : a.path.current(), execPath : 'ssh-add -D' });
   a.ready.then( () => _.test.workflowSshAgentRun({ keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }) );
   a.ready.then( ( op ) =>
   {
@@ -388,8 +388,11 @@ function workflowSshAgentRun( test )
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( { keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }, 'extra' ) );
 
       test.case = 'not valid environment';
-      process.env.PRIVATE_WTOOLS_BOT_SSH_KEY = '';
+      let tmp = process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
+      delete process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
+      _.test.workflowSshAgentRun.defaults.keyData = '';
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
+      process.env[ 'PRIVATE_WTOOLS_BOT_SSH_KEY' ] = tmp;
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun({ keyData : '' }) );
 
       test.case = 'unknown option in options map';

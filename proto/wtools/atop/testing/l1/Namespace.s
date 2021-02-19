@@ -714,7 +714,7 @@ function workflowSshAgentRun( o )
 
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
   _.routineOptions( workflowTriggerGet, o );
-  _.assert( _.strDefined( process.env.SSH_PRIVATE_KEY ), 'Expects data for ssh private key' );
+  _.assert( _.strDefined( o.keyData ), 'Expects data for ssh private key' );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );

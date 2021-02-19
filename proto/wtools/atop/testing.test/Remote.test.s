@@ -364,16 +364,30 @@ function workflowSshAgentRun( test )
 
   /* */
 
+  a.shell( 'ssh-add -D' )
+  a.ready.then( () => _.test.workflowSshAgentRun({ keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY }) );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Identity added' ), 1 );
+    test.true( process.env.SSH_AUTH_SOCK !== undefined );
+    test.true( /\d+/.test( process.env.SSH_AGENT_PID ) );
+    return null;
+  });
+
+  /* - */
+
   if( Config.debug )
   {
     a.ready.then( () =>
     {
       test.case = 'extra argument';
-      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( 'extra' ) );
+      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun( { keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY } ,'extra' ) );
 
       test.case = 'not valid environment';
-      process.env.SSH_PRIVATE_KEY = '';
+      process.env.PRIVATE_WTOOLS_BOT_SSH_KEY = '';
       test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun() );
+      test.shouldThrowErrorSync( () => _.test.workflowSshAgentRun({ keyData : 'wrong' }) );
 
       return null;
     });

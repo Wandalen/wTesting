@@ -749,8 +749,7 @@ function workflowSshAgentRun( o )
     const keyFileName = 'private.key';
     provider.dirMake( path.join( process.env.HOME, '.ssh' ) );
     keyPath = path.join( process.env.HOME, '.ssh', keyFileName );
-    const keyData = o.keyData;
-    provider.fileWrite( keyPath, keyData );
+    provider.fileWrite( keyPath, o.keyData );
     provider.rightsWrite({ filePath : keyPath, setRights : 0o600 });
     return keyPath;
   }

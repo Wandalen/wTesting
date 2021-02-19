@@ -705,10 +705,15 @@ workflowTriggerGet.defaults =
  * @module Tools/top/testing
  */
 
-function workflowSshAgentRun()
+function workflowSshAgentRun( o )
 {
+  if( arguments.length === 0 )
+  o = Object.create( null );
+  else
+  _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
+
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
-  _.assert( arguments.length === 0, 'Expects no arguments' );
+  _.routineOptions( workflowTriggerGet, o );
   _.assert( _.strDefined( process.env.SSH_PRIVATE_KEY ), 'Expects data for ssh private key' );
 
   if( process.platform !== 'linux' )
@@ -744,7 +749,7 @@ function workflowSshAgentRun()
     const keyFileName = 'private.key';
     provider.dirMake( path.join( process.env.HOME, '.ssh' ) );
     keyPath = path.join( process.env.HOME, '.ssh', keyFileName );
-    const keyData = process.env.PRIVATE_WTOOLS_BOT_SSH_KEY;
+    const keyData = o.keyData;
     provider.fileWrite( keyPath, keyData );
     provider.rightsWrite({ filePath : keyPath, setRights : 0o600 });
     return keyPath;
@@ -764,6 +769,11 @@ function workflowSshAgentRun()
     return null;
   }
 }
+
+workflowSshAgentRun.defaults =
+{
+  keyData : process.env.PRIVATE_WTOOLS_BOT_SSH_KEY,
+};
 
 //
 

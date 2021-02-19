@@ -26,10 +26,15 @@ jobs :
       matrix :
         os : [ ubuntu-latest, windows-latest, macos-latest ]
         node-version : [ 14.x ]
+    env :
+      PRIVATE_WTOOLS_BOT_TOKEN : ${{ secrets.PRIVATE_WTOOLS_BOT_TOKEN }}
+      PRIVATE_WTOOLS_BOT_SSH_KEY : ${{ secrets.PRIVATE_WTOOLS_BOT_SSH_KEY }}
     steps :
-    - run : git config --global core.autocrlf input
-    - run : git config --global user.email "testing@testing.com"
-    - run : git config --global user.name "Testing"
+    - name : git config
+      run : |
+        git config --global core.autocrlf input
+        git config --global user.email "testing@testing.com"
+        git config --global user.name "Testing"
     - uses : actions/checkout@v2
     - name : ${{ matrix.node-version }}
       uses : actions/setup-node@v1
@@ -43,6 +48,8 @@ jobs :
       if : "startsWith( steps.getnpmver.outputs.npmver, '6.' )"
       run : npm install -g npm@latest-6
     - run : npm i
+    - name : environment
+      run : env
     - run : npm list
     - if : startsWith( matrix.os, 'ubuntu' )
       run : xvfb-run --auto-servernum npm test v:9

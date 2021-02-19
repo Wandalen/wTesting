@@ -656,14 +656,16 @@ function workflowTriggerGet( localPath )
     return 'push';
   }
 
-  if( process.env.GITHUB_EVENT_NAME === 'pull_request' )
-  return 'pull_request';
   if( publishPushIs() )
   return 'publish';
   if( process.env.GITHUB_EVENT_NAME === 'push' )
   return 'push';
-  else
-  _.assert( 0, 'Unknown trigger' );
+  if( process.env.GITHUB_EVENT_NAME === 'pull_request' )
+  return 'pull_request';
+  console.log( `process.env.GITHUB_EVENT_NAME : ${process.env.GITHUB_EVENT_NAME}` );
+  return process.env.GITHUB_EVENT_NAME || null;
+  // else
+  // _.assert( 0, 'Unknown trigger' );
 
   /* */
 

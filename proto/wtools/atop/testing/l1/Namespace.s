@@ -713,7 +713,7 @@ function workflowSshAgentRun( o )
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
 
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
-  _.routineOptions( workflowTriggerGet, o );
+  _.routineOptions( workflowSshAgentRun, o );
   _.assert( _.strDefined( o.keyData ), 'Expects data for ssh private key' );
 
   if( process.platform !== 'linux' )

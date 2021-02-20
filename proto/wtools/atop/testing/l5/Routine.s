@@ -1875,8 +1875,8 @@ function identical( got, expected )
     o2 = Object.create( null );
     outcome = _.entityIdentical( got, expected, o2 );
 
-    // it = o2;
-    it = o2.it; /* yyy */
+    it = o2;
+    // it = o2.it; /* yyy */
     if( !it || it.lastPath === undefined )
     {
       debugger;
@@ -1979,8 +1979,8 @@ function notIdentical( got, expected )
     o2 = Object.create( null );
     outcome = !_.entityIdentical( got, expected, o2 );
 
-    // it = o2;
-    it = o2.it; /* yyy */
+    it = o2;
+    // it = o2.it; /* yyy */
     if( !it || it.lastPath === undefined )
     {
       debugger;
@@ -2092,8 +2092,8 @@ function equivalent( got, expected, options )
     accuracy = o2.accuracy;
     outcome = _.entityEquivalent( got, expected, o2 );
 
-    // it = o2;
-    it = o2.it; /* yyy */
+    it = o2;
+    // it = o2.it; /* yyy */
     if( !it || it.lastPath === undefined )
     {
       debugger;
@@ -2207,8 +2207,8 @@ function notEquivalent( got, expected, options )
     accuracy = o2.accuracy;
     outcome = !_.entityEquivalent( got, expected, o2 );
 
-    // it = o2;
-    it = o2.it; /* yyy */
+    it = o2;
+    // it = o2.it; /* yyy */
     if( !it || it.lastPath === undefined )
     {
       debugger;
@@ -2293,8 +2293,8 @@ function contains_functor( fo )
       if( !positive )
       outcome = !outcome;
 
-      // it = o2;
-      it = o2.it; /* yyy */
+      it = o2;
+      // it = o2.it; /* yyy */
       if( !it || it.lastPath === undefined )
       {
         debugger;

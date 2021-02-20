@@ -327,7 +327,7 @@ function _run()
 
   /* */
 
-  tro._returnedCon = new _.Consequence(); /* yyy */
+  tro._returnedCon = new _.Consequence();
   if( Config.debug && !tro._returnedCon.tag )
   tro._returnedCon.tag = tro.name + '-1';
 
@@ -1052,7 +1052,6 @@ function _caseClose()
 
   if( tro._groupOpenedWithCase )
   {
-    // tro._groupOpenedWithCase = 0;
     _.assert( _.strIs( tro.group ) );
     tro._groupChange({ group : tro.group, touching : 0, open : 0 });
     _.assert( tro._groupOpenedWithCase === 0 );
@@ -1071,7 +1070,6 @@ function _caseChange( o )
   _.assert( arguments.length === 1 );
   _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.strType( o.src )}` );
 
-  // yyy
   if( tro.case )
   {
     tro._groupChange({ group : tro.group, touching : o.touching, open : 0 });
@@ -1081,11 +1079,6 @@ function _caseChange( o )
   {
     tro._groupChange({ group : o.src, touching : o.touching, open : 1 });
     tro._groupOpenedWithCase = 1;
-  }
-  else
-  {
-    // if( tro.case )
-    // tro._groupChange({ group : o.src, touching : o.touching, open : 0 });
   }
 
   return o.src;
@@ -1707,8 +1700,6 @@ function _reportIsPositive()
   if( !report )
   return false;
 
-  // tro._reportEnd(); // yyy
-
   return report.outcome;
 }
 
@@ -1873,7 +1864,7 @@ function _false( outcome )
 function identical( got, expected )
 {
   let tro = this;
-  let o2, outcome;
+  let o2, outcome, it;
 
   tro._returnedVerification();
 
@@ -1883,6 +1874,21 @@ function identical( got, expected )
   {
     o2 = Object.create( null );
     outcome = _.entityIdentical( got, expected, o2 );
+
+    // it = o2;
+    it = o2.it; /* yyy */
+    if( !it || it.lastPath === undefined )
+    {
+      debugger;
+      outcome = false;
+      tro.exceptionReport
+      ({
+        err : 'Something wrong with entityIdentical, iterator misses lastPath',
+        level : 2,
+      });
+      return outcome;
+    }
+
   }
   catch( err )
   {
@@ -1910,26 +1916,12 @@ function identical( got, expected )
 
   /* */
 
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    debugger;
-    outcome = false;
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-    return outcome;
-  }
-
-  /* */
-
   tro._outcomeReportCompare
   ({
     outcome,
     got,
     expected,
-    path : o2.it.lastPath,
+    path : it.lastPath,
     usingExtraDetails : 1,
     interruptible : 1,
   });
@@ -1976,7 +1968,7 @@ function identical( got, expected )
 function notIdentical( got, expected )
 {
   let tro = this;
-  let o2, outcome;
+  let o2, outcome, it;
 
   tro._returnedVerification();
 
@@ -1986,6 +1978,21 @@ function notIdentical( got, expected )
   {
     o2 = Object.create( null );
     outcome = !_.entityIdentical( got, expected, o2 );
+
+    // it = o2;
+    it = o2.it; /* yyy */
+    if( !it || it.lastPath === undefined )
+    {
+      debugger;
+      outcome = false;
+      tro.exceptionReport
+      ({
+        err : 'Something wrong with entityIdentical, iterator misses lastPath',
+        level : 2,
+      });
+      return outcome;
+    }
+
   }
   catch( err )
   {
@@ -2013,27 +2020,12 @@ function notIdentical( got, expected )
 
   /* */
 
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
   tro._outcomeReportCompare
   ({
     outcome,
     got,
     expected,
-    path : o2.it.lastPath,
+    path : it.lastPath,
     usingExtraDetails : 0,
     interruptible : 1,
   });
@@ -2082,7 +2074,7 @@ function equivalent( got, expected, options )
 {
   let tro = this;
   let accuracy = tro.accuracyEffective;
-  let o2, outcome;
+  let o2, outcome, it;
 
   tro._returnedVerification();
 
@@ -2099,6 +2091,21 @@ function equivalent( got, expected, options )
     else _.assert( options === undefined );
     accuracy = o2.accuracy;
     outcome = _.entityEquivalent( got, expected, o2 );
+
+    // it = o2;
+    it = o2.it; /* yyy */
+    if( !it || it.lastPath === undefined )
+    {
+      debugger;
+      outcome = false;
+      tro.exceptionReport
+      ({
+        err : 'Something wrong with entityEquivalent, iterator misses lastPath',
+        level : 2,
+      });
+      return outcome;
+    }
+
   }
   catch( err )
   {
@@ -2126,25 +2133,12 @@ function equivalent( got, expected, options )
 
   /* */
 
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-    return outcome;
-  }
-
-  /* */
-
   tro._outcomeReportCompare
   ({
     outcome,
     got,
     expected,
-    path : o2.it.lastPath,
+    path : it.lastPath,
     usingExtraDetails : 1,
     accuracy,
     interruptible : 1,
@@ -2195,7 +2189,7 @@ function notEquivalent( got, expected, options )
 {
   let tro = this;
   let accuracy = tro.accuracyEffective;
-  let o2, outcome;
+  let o2, outcome, it;
 
   tro._returnedVerification();
 
@@ -2212,6 +2206,21 @@ function notEquivalent( got, expected, options )
     else _.assert( options === undefined );
     accuracy = o2.accuracy;
     outcome = !_.entityEquivalent( got, expected, o2 );
+
+    // it = o2;
+    it = o2.it; /* yyy */
+    if( !it || it.lastPath === undefined )
+    {
+      debugger;
+      outcome = false;
+      tro.exceptionReport
+      ({
+        err : 'Something wrong with entityEquivalent, iterator misses lastPath',
+        level : 2,
+      });
+      return outcome;
+    }
+
   }
   catch( err )
   {
@@ -2239,27 +2248,12 @@ function notEquivalent( got, expected, options )
 
   /* */
 
-  if( !o2.it || o2.it.lastPath === undefined )
-  {
-    outcome = false;
-
-    tro.exceptionReport
-    ({
-      err : 'Something wrong with entityIdentical, iterator misses lastPath',
-      level : 2,
-    });
-
-    return outcome;
-  }
-
-  /* */
-
   tro._outcomeReportCompare
   ({
     outcome,
     got,
     expected,
-    path : o2.it.lastPath,
+    path : it.lastPath,
     usingExtraDetails : 1,
     accuracy,
     interruptible : 1,
@@ -2286,7 +2280,7 @@ function contains_functor( fo )
   return function contains( got, expected )
   {
     let tro = this;
-    let o2, outcome;
+    let o2, outcome, it;
 
     tro._returnedVerification();
 
@@ -2295,10 +2289,24 @@ function contains_functor( fo )
     try
     {
       o2 = Object.create( null );
-      // outcome = _.entityContains( got, expected, o2 );
       outcome = compare( got, expected, o2 );
       if( !positive )
       outcome = !outcome;
+
+      // it = o2;
+      it = o2.it; /* yyy */
+      if( !it || it.lastPath === undefined )
+      {
+        debugger;
+        outcome = false;
+        tro.exceptionReport
+        ({
+          err : 'Something wrong with entityIdentical, iterator misses lastPath',
+          level : 2,
+        });
+        return outcome;
+      }
+
     }
     catch( err )
     {
@@ -2326,25 +2334,12 @@ function contains_functor( fo )
 
     /* */
 
-    if( !o2.it || o2.it.lastPath === undefined )
-    {
-      outcome = false;
-      tro.exceptionReport
-      ({
-        err : 'Something wrong with equaler, iterator does not have lastPath',
-        level : 2,
-      });
-      return outcome;
-    }
-
-    /* */
-
     tro._outcomeReportCompare
     ({
       outcome,
       got,
       expected,
-      path : o2.it.lastPath,
+      path : it.lastPath,
       usingExtraDetails : 1,
       interruptible : 1,
       strictString : 0,
@@ -2396,369 +2391,6 @@ contains_functor.defaults =
  * @class wTestRoutineObject
  * @module Tools/atop/Tester
  */
-
-// function contains( got, expected )
-// {
-//   let tro = this;
-//   let o2, outcome;
-//
-//   tro._returnedVerification();
-//
-//   /* */
-//
-//   try
-//   {
-//     o2 = Object.create( null );
-//     outcome = _.entityContains( got, expected, o2 );
-//   }
-//   catch( err )
-//   {
-//     tro.exceptionReport
-//     ({
-//       err,
-//     });
-//     return false;
-//   }
-//
-//   /* */
-//
-//   if( arguments.length !== 2 )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : '"contains" expects two arguments',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   if( !o2.it || o2.it.lastPath === undefined )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   tro._outcomeReportCompare
-//   ({
-//     outcome,
-//     got,
-//     expected,
-//     path : o2.it.lastPath,
-//     usingExtraDetails : 1,
-//     interruptible : 1,
-//     strictString : 0,
-//   });
-//
-//   /* */
-//
-//   return outcome;
-// }
-
-//
-
-// function containsAll( got, expected )
-// {
-//   let tro = this;
-//   let o2, outcome;
-//
-//   tro._returnedVerification();
-//
-//   /* */
-//
-//   try
-//   {
-//     o2 = Object.create( null );
-//     outcome = _.entityContainsAll( got, expected, o2 );
-//   }
-//   catch( err )
-//   {
-//     tro.exceptionReport
-//     ({
-//       err,
-//     });
-//     return false;
-//   }
-//
-//   /* */
-//
-//   if( arguments.length !== 2 )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : '"contains" expects two arguments',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   if( !o2.it || o2.it.lastPath === undefined )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   tro._outcomeReportCompare
-//   ({
-//     outcome,
-//     got,
-//     expected,
-//     path : o2.it.lastPath,
-//     usingExtraDetails : 1,
-//     interruptible : 1,
-//     strictString : 0,
-//   });
-//
-//   /* */
-//
-//   return outcome;
-// }
-
-//
-
-// function containsAny( got, expected )
-// {
-//   let tro = this;
-//   let o2, outcome;
-//
-//   tro._returnedVerification();
-//
-//   /* */
-//
-//   try
-//   {
-//     o2 = Object.create( null );
-//     outcome = _.entityContainsAny( got, expected, o2 );
-//   }
-//   catch( err )
-//   {
-//     tro.exceptionReport
-//     ({
-//       err,
-//     });
-//     return false;
-//   }
-//
-//   /* */
-//
-//   if( arguments.length !== 2 )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : '"contains" expects two arguments',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   if( !o2.it || o2.it.lastPath === undefined )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   tro._outcomeReportCompare
-//   ({
-//     outcome,
-//     got,
-//     expected,
-//     path : o2.it.lastPath,
-//     usingExtraDetails : 1,
-//     interruptible : 1,
-//     strictString : 0,
-//   });
-//
-//   /* */
-//
-//   return outcome;
-// }
-
-//
-
-// function containsOnly( got, expected )
-// {
-//   let tro = this;
-//   let o2, outcome;
-//
-//   tro._returnedVerification();
-//
-//   /* */
-//
-//   try
-//   {
-//     o2 = Object.create( null );
-//     outcome = _.containsOnly( got, expected, o2 );
-//   }
-//   catch( err )
-//   {
-//     tro.exceptionReport
-//     ({
-//       err,
-//     });
-//     return false;
-//   }
-//
-//   /* */
-//
-//   if( arguments.length !== 2 )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : '"contains" expects two arguments',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   if( !o2.it || o2.it.lastPath === undefined )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   tro._outcomeReportCompare
-//   ({
-//     outcome,
-//     got,
-//     expected,
-//     path : o2.it.lastPath,
-//     usingExtraDetails : 1,
-//     interruptible : 1,
-//     strictString : 0,
-//   });
-//
-//   /* */
-//
-//   return outcome;
-// }
-
-//
-
-// function containsNone( got, expected )
-// {
-//   let tro = this;
-//   let o2, outcome;
-//
-//   tro._returnedVerification();
-//
-//   /* */
-//
-//   try
-//   {
-//     o2 = Object.create( null );
-//     outcome = _.entityContainsNone( got, expected, o2 );
-//   }
-//   catch( err )
-//   {
-//     tro.exceptionReport
-//     ({
-//       err,
-//     });
-//     return false;
-//   }
-//
-//   /* */
-//
-//   if( arguments.length !== 2 )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : '"contains" expects two arguments',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   if( !o2.it || o2.it.lastPath === undefined )
-//   {
-//     outcome = false;
-//
-//     tro.exceptionReport
-//     ({
-//       err : 'Something wrong with entityIdentical, iterator misses lastPath',
-//       level : 2,
-//     });
-//
-//     return outcome;
-//   }
-//
-//   /* */
-//
-//   tro._outcomeReportCompare
-//   ({
-//     outcome,
-//     got,
-//     expected,
-//     path : o2.it.lastPath,
-//     usingExtraDetails : 1,
-//     interruptible : 1,
-//     strictString : 0,
-//   });
-//
-//   /* */
-//
-//   return outcome;
-// }
 
 let contains = contains_functor( 'contains', 'contains', true );
 let containsAll = contains_functor( 'containsAll', 'containsAll', true );
@@ -3076,514 +2708,6 @@ function le( got, than )
 // --
 // shoulding
 // --
-
-// function _shouldDo( o )
-// {
-//   let tro = this;
-//   let second = 0;
-//   let reported = 0;
-//   let good = 1;
-//   let async = 0;
-//   let stack = _.introspector.stack([ 2, -1 ]);
-//   let logger = tro.logger;
-//   let err, arg;
-//   let con = new _.Consequence();
-//
-//   tro._returnedVerification();
-//
-//   if( !tro.shoulding )
-//   return con.take( null );
-//
-//   try
-//   {
-//     _.routineOptions( _shouldDo, o );
-//     _.assert( arguments.length === 1, 'Expects single argument' );
-//     _.sure( o.args.length === 1 || o.args.length === 2, 'Expects one or two arguments' );
-//     _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
-//     _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
-//     if( o.args[ 1 ] )
-//     {
-//       _.sure( 1 <= o.args[ 1 ].length, 'Callback should have at least one argument.' );
-//       _.sure( o.args[ 1 ].length <= 3, 'Callback should have less then three arguments.' );
-//     }
-//   }
-//   catch( err )
-//   {
-//     let error = _.errRestack( err, 3 );
-//     error = _._err({ args : [ error, '\nIllegal usage of should in', tro.absoluteName ] });
-//     error = tro.exceptionReport({ err : error });
-//
-//     con.error( error );
-//     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
-//     return false;
-//     else
-//     return con;
-//   }
-//
-//   o.routine = o.args[ 0 ];
-//   let acheck = tro.checkCurrent();
-//   tro._inroutineCon.give( 1 );
-//
-//   /* */
-//
-//   let result;
-//   if( _.consequenceIs( o.routine ) )
-//   {
-//     result = o.routine;
-//   }
-//   else
-//   {
-//     try
-//     {
-//       result = o.routine.call( this );
-//     }
-//     catch( _err )
-//     {
-//       return handleError( _err );
-//     }
-//   }
-//
-//   /* no sync error, but expected */
-//
-//   if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError && !err )
-//   return handleLackOfSyncError();
-//
-//   /* */
-//
-//   if( _.consequenceIs( result ) )
-//   handleAsyncResult()
-//   else
-//   handleSyncResult();
-//
-//   /* */
-//
-//   return con;
-//
-//   /* */
-//
-//   function handleError( _err )
-//   {
-//
-//     err = _.err( _err );
-//
-//     if( o.args[ 1 ] )
-//     callbackRunOnResult( err, result, !!o.expectingSyncError || !!( o.expectingSyncError && o.expectingAsyncError ) );
-//
-//     _.errAttend( err );
-//
-//     /* */
-//
-//     if( o.ignoringError )
-//     {
-//       begin( 1 );
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : 1,
-//         msg : 'error throwen synchronously, ignored',
-//         stack,
-//         selectMode : 'center'
-//       });
-//       end( 1, err );
-//       return con;
-//     }
-//
-//     /* */
-//
-//     tro.exceptionReport
-//     ({
-//       err,
-//       sync : 1,
-//       considering : 0,
-//       outcome : o.expectingSyncError,
-//     });
-//
-//     begin( o.expectingSyncError );
-//
-//     if( o.expectingSyncError )
-//     {
-//
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : o.expectingSyncError,
-//         msg : 'error thrown synchronously as expected',
-//         stack,
-//         selectMode : 'center',
-//       });
-//
-//     }
-//     else
-//     {
-//
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : o.expectingSyncError,
-//         msg : 'error thrown synchronously, what was not expected',
-//         stack,
-//         selectMode : 'center',
-//       });
-//
-//     }
-//
-//     end( o.expectingSyncError, err );
-//
-//     if( !o.ignoringError && !o.expectingAsyncError && o.expectingSyncError )
-//     return err;
-//     else
-//     return con;
-//
-//   }
-//
-//   /* */
-//
-//   function handleLackOfSyncError()
-//   {
-//     begin( 0 );
-//
-//     if( o.args[ 1 ] )
-//     callbackRunOnResult( undefined, result, false );
-//
-//     let msg = 'Error not thrown synchronously, but expected';
-//
-//     tro._outcomeReportBoolean
-//     ({
-//       outcome : 0,
-//       msg,
-//       stack,
-//       selectMode : 'center',
-//     });
-//
-//     end( 0, _.err( msg ) );
-//
-//     return false;
-//   }
-//
-//   /* */
-//
-//   function handleAsyncResult()
-//   {
-//
-//     tro.checkNext();
-//     async = 1;
-//
-//     result.give( function( _err, _arg )
-//     {
-//
-//       err = _err;
-//       arg = _arg;
-//
-//       if( !o.ignoringError && !reported )
-//       {
-//         if( o.args[ 1 ] && !err )
-//         callbackRunOnResult( err, result, !o.expectingAsyncError );
-//         if( err && !o.expectingAsyncError )
-//         reportAsync();
-//       }
-//       else if( !err && o.expectingAsyncError )
-//       {
-//         if( o.args[ 1 ] )
-//         callbackRunOnResult( err, result, !o.expectingAsyncError );
-//         reportAsync();
-//       }
-//
-//       if( _.errIs( err ) )
-//       {
-//         if( o.args[ 1 ] )
-//         callbackRunOnResult( err, result, !!o.expectingAsyncError );
-//         _.errAttend( err );
-//       }
-//
-//       /* */
-//
-//       if( !reported )
-//       if( !o.allowingMultipleResources )
-//       _.time.out( 25, function() /* zzz : refactor that, use time out or test routine */
-//       {
-//
-//         if( result.resourcesGet().length )
-//         if( reported )
-//         {
-//           _.assert( !good );
-//         }
-//         else
-//         {
-//
-//           begin( 0 );
-//           debugger;
-//
-//           _.assert( !reported );
-//
-//           tro._outcomeReportBoolean
-//           ({
-//             outcome : 0,
-//             msg : 'Got more than one message',
-//             stack,
-//           });
-//
-//           end( 0, _.err( msg ) );
-//         }
-//
-//         if( !reported )
-//         reportAsync();
-//
-//         return null;
-//       });
-//
-//     });
-//
-//     /* */
-//
-//     if( !o.allowingMultipleResources )
-//     handleSecondResource();
-//
-//   }
-//
-//   /* */
-//
-//   function handleSecondResource()
-//   {
-//     if( reported && !good )
-//     return;
-//
-//     result.finally( gotSecondResource );
-//
-//     // let r = result.orKeepingSplit([ tro._timeLimitCon, wTester._cancelCon ]);
-//     let r = _.Consequence.Or( result, tro._timeLimitCon, wTester._cancelCon );
-//     r.finally( ( err, arg ) =>
-//     {
-//       if( result.competitorHas( gotSecondResource ) )
-//       result.competitorsCancel( gotSecondResource );
-//       if( err )
-//       throw err;
-//       return arg;
-//     });
-//
-//   }
-//
-//   /* */
-//
-//   function gotSecondResource( err, arg )
-//   {
-//     if( reported && !good )
-//     return null;
-//
-//     begin( 0 );
-//
-//     second = 1;
-//     let msg = 'Got more than one message';
-//
-//     tro._outcomeReportBoolean
-//     ({
-//       outcome : 0,
-//       msg,
-//       stack,
-//     });
-//
-//     end( 0, _.err( msg ) );
-//
-//     if( err )
-//     throw err;
-//     return arg;
-//   }
-//
-//   /* */
-//
-//   function handleSyncResult()
-//   {
-//     if( o.args[ 1 ] )
-//     callbackRunOnResult( err, result, !!( !o.expectingSyncError && !o.expectingAsyncError ) );
-//
-//     if( ( o.expectingAsyncError || o.expectingSyncError ) && !err )
-//     {
-//       begin( 0 );
-//
-//       let msg = 'Error not thrown asynchronously, but expected';
-//       if( o.expectingAsyncError )
-//       msg = 'Error not thrown, but expected either synchronosuly or asynchronously';
-//
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : 0,
-//         msg,
-//         stack,
-//         selectMode : 'center',
-//       });
-//
-//       end( 0, _.err( msg ) );
-//     }
-//     else if( !o.expectingSyncError && !err )
-//     {
-//       begin( 1 );
-//
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : 1,
-//         msg : 'no error thrown, as expected',
-//         stack,
-//         selectMode : 'center',
-//       });
-//
-//       end( 1, result );
-//     }
-//     else
-//     {
-//       debugger;
-//       _.assert( 0, 'unexpected' );
-//       tro.checkNext();
-//     }
-//
-//   }
-//
-//   /* */
-//
-//   function begin( positive )
-//   {
-//     if( positive )
-//     _.assert( !reported );
-//     good = positive;
-//
-//     if( reported || async )
-//     tro.checkRestore( acheck );
-//
-//     logger.begin({ verbosity : positive ? -5 : -5+tro.negativity });
-//     logger.begin({ connotation : positive ? 'positive' : 'negative' });
-//   }
-//
-//   /* */
-//
-//   function end( positive, arg )
-//   {
-//     _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-//
-//     logger.end({ verbosity : positive ? -5 : -5+tro.negativity });
-//     logger.end({ connotation : positive ? 'positive' : 'negative' });
-//
-//     if( reported )
-//     debugger;
-//     if( reported || async )
-//     tro.checkRestore();
-//
-//     if( arg === undefined && !async )
-//     arg = null;
-//
-//     if( positive )
-//     con.take( undefined, arg );
-//     else
-//     con.take( _.errAttend( arg ), undefined );
-//
-//     if( !reported )
-//     tro._inroutineCon.take( null );
-//
-//     reported = 1;
-//   }
-//
-//   /* */
-//
-//   function reportAsync()
-//   {
-//
-//     /* yyy */
-//     if( tro._returned )
-//     return;
-//     if( reported )
-//     return;
-//
-//     if( o.ignoringError )
-//     {
-//       begin( 1 );
-//
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : 1,
-//         msg : 'got single message',
-//         stack,
-//         selectMode : 'center'
-//       });
-//
-//       end( 1, err ? err : arg );
-//     }
-//     else if( err !== undefined )
-//     {
-//       begin( o.expectingAsyncError );
-//
-//       tro.exceptionReport
-//       ({
-//         err,
-//         sync : 0,
-//         considering : 0,
-//         outcome : o.expectingAsyncError,
-//       });
-//
-//       if( o.expectingAsyncError )
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : o.expectingAsyncError,
-//         msg : 'error thrown asynchronously as expected',
-//         stack,
-//         selectMode : 'center'
-//       });
-//       else
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : o.expectingAsyncError,
-//         msg : 'error thrown asynchronously, not expected',
-//         stack,
-//         selectMode : 'center'
-//       });
-//
-//       end( o.expectingAsyncError, err );
-//     }
-//     else
-//     {
-//       begin( !o.expectingAsyncError );
-//
-//       let msg = 'error was not thrown asynchronously, but expected';
-//       if( !o.expectingAsyncError && !o.expectingSyncError && good )
-//       msg = 'error was not thrown as expected';
-//
-//       tro._outcomeReportBoolean
-//       ({
-//         outcome : !o.expectingAsyncError,
-//         msg,
-//         stack,
-//         selectMode : 'center'
-//       });
-//
-//       if( o.expectingAsyncError )
-//       end( !o.expectingAsyncError, _._err({ args : [ msg ], catchCallsStack : stack }) );
-//       else
-//       end( !o.expectingAsyncError, arg );
-//
-//     }
-//
-//   }
-//
-//   /* */
-//
-//   function callbackRunOnResult( err, arg, ok )
-//   {
-//     let onResult = o.args[ 1 ];
-//     try
-//     {
-//       onResult( err, arg, ok );
-//     }
-//     catch( err2 )
-//     {
-//       console.error( err2 );
-//     }
-//   }
-//
-// }
-//
-// _shouldDo.defaults =
-// {
-//   args : null, /* aaa : cover 2-arguments calls for each should* check */ /* Dmytro : covered */
-//   expectingSyncError : 1,
-//   expectingAsyncError : 1,
-//   ignoringError : 0,
-//   allowingMultipleResources : 0,
-// }
-
-//
 
 function _shouldDo_( o )
 {

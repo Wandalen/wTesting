@@ -1068,7 +1068,7 @@ function _caseChange( o )
   _.routineOptions( _caseChange, o );
   _.assert( _.mapIs( o ) );
   _.assert( arguments.length === 1 );
-  _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.strType( o.src )}` );
+  _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.entity.strType( o.src )}` );
 
   if( tro.case )
   {
@@ -1520,8 +1520,8 @@ function _outcomeReportCompare( o )
   function msgExpectedGot()
   {
     return
-    'got :\n' + _.toStr( o.got, { stringWrapper : '\'' } ) + '\n'
-    + nameOfExpected + ' :\n' + _.toStr( o.expected, { stringWrapper : '\'' } );
+    'got :\n' + _.entity.exportString( o.got, { stringWrapper : '\'' } ) + '\n'
+    + nameOfExpected + ' :\n' + _.entity.exportString( o.expected, { stringWrapper : '\'' } );
   }
 
 }
@@ -1772,7 +1772,7 @@ function _true( outcome )
 
     tro.exceptionReport
     ({
-      err : 'Test check "true()" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
+      err : 'Test check "true()" expects single bool argument, but got ' + arguments.length + ' ' + _.entity.strType( outcome ),
       level : 2,
     });
 
@@ -1806,7 +1806,7 @@ function _false( outcome )
 
     tro.exceptionReport
     ({
-      err : 'Test check "false()" expects single bool argument, but got ' + arguments.length + ' ' + _.strType( outcome ),
+      err : 'Test check "false()" expects single bool argument, but got ' + arguments.length + ' ' + _.entity.strType( outcome ),
       level : 2,
     });
 

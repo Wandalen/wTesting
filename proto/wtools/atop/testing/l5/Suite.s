@@ -81,7 +81,7 @@ function init( o )
 
   suite._initialOptions = o;
 
-  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.strType( o ) );
+  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.entity.strType( o ) );
 
   /* source path */
 
@@ -187,7 +187,7 @@ function inherit()
   {
     let src = arguments[ a ];
 
-    _.assert( src instanceof Self, () => `Expects test suite to inherit it, but got ${_.strType( src )}` );
+    _.assert( src instanceof Self, () => `Expects test suite to inherit it, but got ${_.entity.strType( src )}` );
 
     if( src.tests )
     _.mapSupplement( suite.tests, src.tests );
@@ -624,7 +624,7 @@ function _runBegin()
   logger.end({ verbosity : -2 });
 
   logger.begin({ verbosity : -6 });
-  logger.log( _.toStr( suite ) );
+  logger.log( _.entity.exportString( suite ) );
   logger.end({ verbosity : -6 });
 
   logger.begin({ verbosity : -6 + suite.importanceOfDetails });

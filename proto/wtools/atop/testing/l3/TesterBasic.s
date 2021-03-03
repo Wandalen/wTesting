@@ -30,7 +30,7 @@ if( wTester._isReal_ )
   return;
 }
 
-_.assert( _.routineIs( _.toStr ), 'wTesting needs Stringer' );
+_.assert( _.routineIs( _.entity.exportString ), 'wTesting needs Stringer' );
 _.assert( _.routineIs( _.process.start ), 'wTesting needs ProcessBasic' );
 _.assert( _.routineIs( _.stagesRun ), 'wTesting needs IntrospectorBasic' );
 _.assert( _.routineIs( _.Consequence ), 'wTesting needs Consequence' );
@@ -346,7 +346,7 @@ function scenarioOptionsList()
   };
 
   logger.log( 'Tester options' );
-  logger.log( _.toStr( tester.ApplicationArgumentsMap, strOptions ), '\n' );
+  logger.log( _.entity.exportString( tester.ApplicationArgumentsMap, strOptions ), '\n' );
 }
 
 //

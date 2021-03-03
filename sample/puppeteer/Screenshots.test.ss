@@ -21,7 +21,7 @@ function onSuiteBegin()
 {
   let self = this;
 
-  self.tempDir = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
+  self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetDirPath = _.path.join( __dirname, 'asset' );
 }
 
@@ -30,8 +30,8 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.assert( _.strHas( self.tempDir, 'Tester' ) )
-  _.path.tempClose( self.tempDir );
+  _.assert( _.strHas( self.suiteTempPath, 'Tester' ) )
+  _.path.tempClose( self.suiteTempPath );
 }
 
 // --
@@ -40,6 +40,11 @@ function onSuiteEnd()
 
 async function screenshot( test )
 {
+  let context = this;
+  let a = test.assetFor( false );
+
+  a.fileProvider.dirMake( a.abs( '.' ) );
+
   let browser = await Puppeteer.launch({ headless : true });
   let page = await browser.newPage();
 
@@ -52,7 +57,7 @@ async function screenshot( test )
   test.true( _.bufferNodeIs( screenshot ) )
 
   test.case = 'screenshot whole window and save to disk'
-  var path = _.path.nativize( _.path.join( __dirname, 'screenshot.png' ) );
+  var path = _.path.nativize( a.abs( 'screenshot.png' ) );
   await page.screenshot({ path });
   test.true( _.fileProvider.fileExists( path ) )
 
@@ -83,7 +88,7 @@ var Self =
 
   context :
   {
-    tempDir : null,
+    suiteTempPath : null,
     assetDirPath : null,
   },
 

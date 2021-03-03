@@ -51,12 +51,12 @@ submodule :
     criterion :
       development : 1
   electron :
-    path : npm:///electron#10.1.5
+    path : npm:///electron#11.3.0
     enabled : 0 # submodule
     criterion :
       development : 1
   spectron :
-    path : npm:///spectron#12.0.0
+    path : npm:///spectron#13.0.0
     enabled : 0 # submodule
     criterion :
       development : 1

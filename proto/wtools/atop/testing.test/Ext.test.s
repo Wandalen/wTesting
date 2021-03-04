@@ -5001,7 +5001,7 @@ function checkDiffWithProto( test )
     test.identical( _.strCount( op.output, exp2 ), 0 );
     test.identical( _.strCount( op.output, exp3 ), 2 );
     test.identical( _.strCount( op.output, exp4 ), 0 );
-    test.identical( _.strCount( op.output, exp5 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 4 );
 
     return null;
   })

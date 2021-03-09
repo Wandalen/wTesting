@@ -8263,7 +8263,6 @@ function notContainsAllReturn( test )
 
     /* */
 
-    /* ?? */
     var got = t.notContainsAll( [ 1, 2, 3, 4 ], 4 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
@@ -8407,7 +8406,6 @@ function notContainsAnyReturn( test )
 
     /* */
 
-    /* ?? */
     var got = t.notContainsAny( [ 1, 2, 3, 4 ], 4 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );
@@ -8453,6 +8451,292 @@ function notContainsAnyReturn( test )
     test.case = 'extra arguments';
 
     var got = t.notContainsAny( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsOnlyReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 11 );
+    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContainsOnly( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContainsOnly();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContainsOnly( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsNoneReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 11 );
+    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContainsNone( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContainsNone();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContainsNone( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -12527,6 +12811,8 @@ let Self =
     notContainsReturn,
     notContainsAllReturn,
     notContainsAnyReturn,
+    notContainsOnlyReturn,
+    notContainsNoneReturn,
 
     ilReturn,
     niReturn,

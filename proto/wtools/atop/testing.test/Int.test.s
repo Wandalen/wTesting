@@ -8119,7 +8119,7 @@ function notContainsReturn( test )
     test.identical( _.boolIs( got ), true );
 
     /* */
-    /* ??? */
+
     var got = t.notContains( [ 1, 2, 3, 4 ], 4 );
     test.identical( got, true );
     test.identical( _.boolIs( got ), true );

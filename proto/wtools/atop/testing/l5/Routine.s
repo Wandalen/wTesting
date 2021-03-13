@@ -3513,7 +3513,7 @@ function assetFor( a )
     locals : null,
     dirPath : '.'
   }
-  let program = _.routineUnite( program_head, program_body );
+  let program = _.routine.uniteCloning_( program_head, program_body );
 
   if( a.program === null )
   a.program = program;

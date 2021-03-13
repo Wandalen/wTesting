@@ -16,21 +16,21 @@
   "scripts" :
   {
     "wtest" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-wtest" : "node proto/wtools/atop/testing/entry/Exec",
-    "debug-wtest" : "node proto/wtools/atop/testing/entry/ExecDebug",
+    "wtest.singleproc" : "node proto/wtools/atop/testing/entry/Exec",
+    "wtest.debug" : "node proto/wtools/atop/testing/entry/ExecDebug",
     "tst" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-tst" : "node proto/wtools/atop/testing/entry/Exec",
-    "debug-tst" : "node proto/wtools/atop/testing/entry/ExecDebug",
+    "tst.singleproc" : "node proto/wtools/atop/testing/entry/Exec",
+    "tst.debug" : "node proto/wtools/atop/testing/entry/ExecDebug",
     "test" : "wtest .run 'proto/**' rapidity:-1"
   },
   "bin" :
   {
     "wtest" : "proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-wtest" : "proto/wtools/atop/testing/entry/Exec",
-    "debug-wtest" : "proto/wtools/atop/testing/entry/ExecDebug",
+    "wtest.singleproc" : "proto/wtools/atop/testing/entry/Exec",
+    "wtest.debug" : "proto/wtools/atop/testing/entry/ExecDebug",
     "tst" : "proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-tst" : "proto/wtools/atop/testing/entry/Exec",
-    "debug-tst" : "proto/wtools/atop/testing/entry/ExecDebug"
+    "tst.singleproc" : "proto/wtools/atop/testing/entry/Exec",
+    "tst.debug" : "proto/wtools/atop/testing/entry/ExecDebug"
   },
   "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wTesting.git" },
   "bugs" :

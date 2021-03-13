@@ -32,7 +32,7 @@ function assetFor( test, name )
 
   let oprogram = a.program;
   program_body.defaults = a.program.defaults;
-  a.program = _.routineUnite( a.program.head, program_body );
+  a.program = _.routine.uniteCloning_( a.program.head, program_body );
   return a;
 
   /* */

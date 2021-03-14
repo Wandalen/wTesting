@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "1.0.473",
+  "version": "1.0.474",
   "engine": "node >= 10.0.0",
   "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",

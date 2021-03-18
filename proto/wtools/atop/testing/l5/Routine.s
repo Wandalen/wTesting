@@ -3513,7 +3513,7 @@ function assetFor( a )
     locals : null,
     dirPath : '.'
   }
-  let program = _.routine.uniteCloning_( program_head, program_body );
+  let program = _.routine.unite( program_head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3745,8 +3745,19 @@ function assetFor( a )
     if( !o.tempPath )
     o.tempPath = a.abs( '.' );
 
+    var hasLocals = !!o.locals;
+
+    _.program.preformLocals.body.call( _.program, o );
+
+    /*
+    replace toolsPath, by toolsPath to the current wTools if such exists in userland
+    */
+    if( !hasLocals && o.locals.toolsPath && o.locals.toolsPath === _.module.toolsPathGet() )
+    if( _globals_.real && _globals_.real.wTools && _globals_.real.wTools.module && _globals_.real.wTools.module.toolsPathGet )
+    o.locals.toolsPath = _globals_.real.wTools.module.toolsPathGet();
     _.program.write( o );
 
+    /* xxx : introduce verbosity */
     logger.log( _.strLinesNumber( o.sourceCode ) );
 
     return o.programPath;

@@ -179,6 +179,9 @@ module:
           - ../proto/wtools
           - ../proto/wtools/Tools.s
           - ../proto/wtools/abase
+          - ../proto/wtools/abase/l0
+          - ../proto/wtools/abase/l0/l0
+          - ../proto/wtools/abase/l0/l0/Global.s
           - ../proto/wtools/amid
           - ../proto/wtools/atop
           - ../proto/wtools/atop/testing

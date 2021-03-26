@@ -3,9 +3,9 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Self = _.test = _.test || Object.create( null );
+const _global = _global_;
+const _ = _global_.wTools;
+const Self = _.test = _.test || Object.create( null );
 
 // --
 // UI Testing
@@ -145,7 +145,7 @@ function waitForVisibleInViewport( o )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
   _.assert( _.objectIs( o.page ) )
 
-  let o2 = _.mapBut( o, { library : null } );
+  let o2 = _.mapBut_( null, o, { library : null } );
 
   if( o.library === 'spectron' )
   return test.waitForVisibleInViewportSpectron( o2 );

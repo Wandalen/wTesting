@@ -3,9 +3,9 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
-let debugged = _.process.isDebugged();
+const _global = _global_;
+const _ = _global_.wTools;
+const debugged = _.process.isDebugged();
 
 //
 
@@ -18,8 +18,8 @@ let debugged = _.process.isDebugged();
  */
 
 let logger = null;
-let Parent = null;
-let Self = wTestSuite;
+const Parent = null;
+const Self = wTestSuite;
 function wTestSuite( o )
 {
 
@@ -119,7 +119,7 @@ function init( o )
         if( Self.InstancesMap[ inherit.name ] )
         {
           let inheritInited = Self.InstancesMap[ inherit.name ];
-          _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit } ) ) );
+          _.assert( _.entityContains( inheritInited, _.mapBut_( null, inherit, { inherit } ) ) );
           inherits[ i ] = inheritInited;
         }
         else
@@ -195,7 +195,7 @@ function inherit()
     if( src.context )
     _.mapSupplement( suite.context, src.context );
 
-    let extend = _.mapBut( src._initialOptions, suite._initialOptions );
+    let extend = _.mapBut_( null, src._initialOptions, suite._initialOptions );
     delete extend.abstract; /* qqq : add test to check test suite inheritance without explicitly defined in descendant `abstact : 0` works */
     _.mapExtend( suite, extend );
     _.mapExtend( suite._initialOptions, extend );

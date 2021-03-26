@@ -98,7 +98,7 @@ function identical3( test )
 
 //
 
-let Self =
+const Proto =
 {
   name : 'Fail',
   tests :
@@ -111,6 +111,6 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

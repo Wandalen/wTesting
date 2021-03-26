@@ -6,15 +6,15 @@
 if( Config.interpreter === 'browser' )
 debugger;
 
-let _global = _global_;
-let _ = _global.wTools;
+const _global = _global_;
+const _ = _global.wTools;
 
 _.assert( _.mapIs( _realGlobal_.wTester ) );
 
 //
 
-let Parent = _realGlobal_.wTesterBasic;
-let Self = wTesterCli;
+const Parent = _realGlobal_.wTesterBasic;
+const Self = wTesterCli;
 function wTesterCli( o )
 {
   return _.workpiece.construct( Self, this, arguments );

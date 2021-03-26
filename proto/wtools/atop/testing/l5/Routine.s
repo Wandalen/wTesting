@@ -12,12 +12,16 @@
  * @module Tools/atop/Tester
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
+const __ = _globals_.testing.wTools;
+
+_.assert( _ === __ );
+
 let debugged = _.process.isDebugged();
 
-let Parent = null;
-let Self = wTestRoutineObject;
+const Parent = null;
+const Self = wTestRoutineObject;
 function wTestRoutineObject( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -120,7 +124,7 @@ function _fieldsForm()
     tro[ tro.RoutineFields[ f ] ] = routine[ f ];
   }
 
-  _.sureMapHasOnly
+  _.map.sureHasOnly
   (
     routine,
     wTester.TestRoutine.RoutineFields,
@@ -1408,7 +1412,7 @@ function _outcomeReport( o )
   tro._testCheckConsider( o.outcome );
 
   if( o.logging )
-  tro._outcomeLog( _.mapOnly( o, tro._outcomeLog.defaults ) );
+  tro._outcomeLog( _.mapOnly_( null, o, tro._outcomeLog.defaults ) );
 
   if( o.interruptible )
   tro._runInterruptMaybe( 1 );
@@ -3509,11 +3513,15 @@ function assetFor( a )
 
   program_body.defaults =
   {
-    routine : null,
-    locals : null,
-    dirPath : '.'
+    ... _.program.write.defaults,
+    rewriting : 1,
+    verbosity : 2,
+    // routine : null,
+    // locals : null,
+    // dirPath : '.'
   }
-  let program = _.routine.unite( program_head, program_body );
+  // let program = _.routine.unite( program_head, program_body );
+  let program = _.routine.unite( _.program.write.head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3719,19 +3727,20 @@ function assetFor( a )
 
   /**/
 
-  function program_head( routine, args )
-  {
-    let o = args[ 0 ]
-
-    if( !_.mapIs( o ) )
-    o = { routine : o }
-    _.routineOptions( program, o );
-    _.assert( _.strIs( o.dirPath ) );
-    _.assert( arguments.length === 2 );
-    _.assert( args.length === 1 );
-
-    return o;
-  }
+  // /* xxx : replace the head? */
+  // function program_head( routine, args )
+  // {
+  //   let o = args[ 0 ]
+  //
+  //   if( !_.mapIs( o ) )
+  //   o = { routine : o }
+  //   _.routineOptions( program, o );
+  //   _.assert( _.strIs( o.dirPath ) );
+  //   _.assert( arguments.length === 2 );
+  //   _.assert( args.length === 1 );
+  //
+  //   return o;
+  // }
 
   /**/
 
@@ -3745,20 +3754,26 @@ function assetFor( a )
     if( !o.tempPath )
     o.tempPath = a.abs( '.' );
 
-    var hasLocals = !!o.locals;
+    // var hasLocals = !!o.locals;
 
     _.program.preformLocals.body.call( _.program, o );
 
     /*
     replace toolsPath, by toolsPath to the current wTools if such exists in userland
     */
-    if( !hasLocals && o.locals.toolsPath && o.locals.toolsPath === _.module.toolsPathGet() )
+    if( o.locals && o.locals.toolsPath === undefined )
+    o.locals.toolsPath = _globals_.real.wTools.module.toolsPathGet();
+    // if( !hasLocals && o.locals.toolsPath && o.locals.toolsPath === _.module.toolsPathGet() )
+    if( o.locals && o.locals.toolsPath && o.locals.toolsPath === _.module.toolsPathGet() )
     if( _globals_.real && _globals_.real.wTools && _globals_.real.wTools.module && _globals_.real.wTools.module.toolsPathGet )
     o.locals.toolsPath = _globals_.real.wTools.module.toolsPathGet();
     _.program.write( o );
 
-    /* xxx : introduce verbosity */
-    logger.log( _.strLinesNumber( o.sourceCode ) );
+    if( !o.logger )
+    o.logger = tro.logger;
+
+    // /* xxx : introduce verbosity */
+    // logger.log( _.strLinesNumber( o.sourceCode ) );
 
     return o.programPath;
   }

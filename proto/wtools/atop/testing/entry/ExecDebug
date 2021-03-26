@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
 }
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let shell = _.process.startPassingThrough
 ({
   execPath : 'debugnode',

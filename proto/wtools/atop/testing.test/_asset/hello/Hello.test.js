@@ -24,7 +24,7 @@ function routine2( test )
 
 //
 
-let Self =
+const Proto =
 {
   name : 'Hello',
   tests :
@@ -36,6 +36,6 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

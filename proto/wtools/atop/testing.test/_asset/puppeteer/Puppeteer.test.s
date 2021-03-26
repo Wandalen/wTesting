@@ -122,7 +122,7 @@ async function waitForVisibleInViewportThrowing( test )
 // suite
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Visual.Puppeteer.Zombie',
@@ -148,7 +148,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

@@ -10,8 +10,8 @@
 
 //
 
-let _global = _global_;
-let _ = _global.wTools;
+const _global = _global_;
+const _ = _global.wTools;
 let sourceFileLocation = _.introspector.location().full;
 let sourceFileStack = _.introspector.stack();
 
@@ -44,8 +44,8 @@ _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
  * @module Tools/atop/Tester
  */
 
-let Parent = null;
-let Self = wTesterBasic;
+const Parent = null;
+const Self = wTesterBasic;
 function wTesterBasic( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -890,34 +890,52 @@ function _suitesIncludeAt( path )
     files = [ record ];
   }
 
-  for( let f = 0 ; f < files.length ; f++ )
+  try
   {
-    if( !files[ f ].stat.isTerminal() )
-    continue;
-    let absolutePath = files[ f ].absolute;
+    // debugger;
+    // _realGlobal_.wTools.global.close( 'testing' );
+    _realGlobal_.wTools.global.openForChildren( 'real', module );
 
-    try
+    for( let f = 0 ; f < files.length ; f++ )
     {
-      require( tester.fileProvider.path.nativize( absolutePath ) );
-    }
-    catch( err )
-    {
-      debugger;
-      let error = _.err( err, '\nCant include', absolutePath );
-      _.errAttend( error );
-      tester._includeFailConsider( error );
+      if( !files[ f ].stat.isTerminal() )
+      continue;
+      let absolutePath = files[ f ].absolute;
 
-      if( tester.settings.coloring )
-      logger.error( _.ct.fg( 'Cant include ' + absolutePath, 'red' ) );
-      else
-      logger.error( 'Cant include ' + absolutePath );
+      try
+      {
+        /* xxx : restore modules */
+        require( tester.fileProvider.path.nativize( absolutePath ) );
+      }
+      catch( err )
+      {
+        debugger;
+        let error = _.err( err, '\nCant include', absolutePath );
+        _.errAttend( error );
+        tester._includeFailConsider( error );
 
-      if( logger.verbosity + tester.negativity >= 4 )
-      logger.error( _.err( error ) );
+        if( tester.settings.coloring )
+        logger.error( _.ct.fg( 'Cant include ' + absolutePath, 'red' ) );
+        else
+        logger.error( 'Cant include ' + absolutePath );
+
+        if( logger.verbosity + tester.negativity >= 4 )
+        logger.error( _.err( error ) );
+      }
+
     }
 
   }
-
+  catch( err )
+  {
+    debugger;
+    throw _.err( err );
+  }
+  finally
+  {
+    _realGlobal_.wTools.global.closeForChildren( 'real', module );
+    // _realGlobal_.wTools.global.open( 'testing' );
+  }
 }
 
 //
@@ -938,7 +956,7 @@ function suitesIncludeAt( path )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
-  
+
   if( Config.interpreter === 'browser' )
   return;
 

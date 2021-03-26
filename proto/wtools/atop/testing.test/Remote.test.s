@@ -5,12 +5,12 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../Tools.s' );
+  const _ = require( '../../Tools.s' );
   require( '../testing/entry/Main.s' );
   _.include( 'wFiles' );
 }
 
-let _global = _global_;
+const _global = _global_;
 let _ = _globals_.testing.wTools;
 
 // --
@@ -412,7 +412,7 @@ function workflowSshAgentRun( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.Tester.Remote',
@@ -446,7 +446,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

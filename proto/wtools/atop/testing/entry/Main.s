@@ -113,11 +113,26 @@ _realGlobal_.wTester.exec();
   should have name, path.. etc
 
 - integrate with github ( special path format ) workflow to let github print annotation
+-- make github marking each faile in source files similar it marks eslint errors
 
 - node Some.test.js . -- should give help
 - node Some.test.js .routines.list -- should list routines
 
 - implement trap. opened trap make test to fail. help to cover async callbacks which potentially could be not called
+
+- xxx : make optional name of test suite. deduce if not defined
+
+- introduce criterions-like groups for test routines and test suites
+- implement logical formulas for selecting test routines and test suites
+
+- make most options available from both test suite and test routine
+
+- implement logger-driven broadcasing of the report
+
+- implement protocol for communication for multi-process run
+
+- make possible listing test routine with options of each
+-- in table formatting
 
 */
 

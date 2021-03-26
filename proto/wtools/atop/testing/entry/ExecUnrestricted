@@ -6,7 +6,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wProcess' );
 }
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let o =
 {
   execPath : _.strQuote( _.path.join( __dirname, 'Exec' ) ),

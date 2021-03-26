@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
+  const _ = require( '../../Tools.s' );
 
   require( '../testing/entry/Main.s' );
 
@@ -15,8 +15,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // context
@@ -303,7 +303,7 @@ var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 
 // declare
 // --
 
-let Self =
+const Proto =
 {
   name : 'Tools.Tester.Procedure',
   silencing : 1,
@@ -330,7 +330,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

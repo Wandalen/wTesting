@@ -7,7 +7,7 @@ let Puppeteer;
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../Tools.s' );
+  const _ = require( '../../Tools.s' );
 
   require( '../testing/entry/Main.s' );
   _.include( 'wFiles' );
@@ -15,8 +15,8 @@ if( typeof module !== 'undefined' )
   Puppeteer = require( 'puppeteer' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // context
@@ -422,7 +422,7 @@ function processWatchingOnPuppeteerZombie( test )
 // suite
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.Tester.Puppeteer',
@@ -458,7 +458,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

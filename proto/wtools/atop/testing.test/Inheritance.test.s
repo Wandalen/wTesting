@@ -17,8 +17,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 //
 
@@ -139,7 +139,7 @@ function inherit( test )
 
   }
 
-  var suit = new wTestSuite( childSuit )
+  var suit = wTestSuite( childSuit )
   .inherit( wTests[ firstParentName ] )
   .inherit( wTests[ secondParentName ] );
 
@@ -156,7 +156,7 @@ function inherit( test )
 
 //
 
-var Proto =
+const Proto =
 {
 
   name : 'Tools.tester.Inheritance',
@@ -172,7 +172,7 @@ var Proto =
 
 //
 
-let Self = new wTestSuite( Proto );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self );
 

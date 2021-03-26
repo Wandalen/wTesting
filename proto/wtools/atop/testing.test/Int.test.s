@@ -19,8 +19,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 /* qqq for Dmytro : parametrize all delays */
 /* qqq for Dmytro : ( err, got ) -> ( err, arg ) */
@@ -10144,7 +10144,7 @@ function testCase( test )
       'testCasePasses' : 2,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10159,7 +10159,7 @@ function testCase( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10234,7 +10234,7 @@ function testsGroupSameNameError( test )
       'testCasePasses' : 0,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -10250,7 +10250,7 @@ function testsGroupSameNameError( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -10321,7 +10321,7 @@ function testsGroupDiscrepancyError( test )
       'testCasePasses' : 0,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -10340,7 +10340,7 @@ function testsGroupDiscrepancyError( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -10583,7 +10583,7 @@ function testsGroupSingleLevel( test )
       'testCasePasses' : 2,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10598,7 +10598,7 @@ function testsGroupSingleLevel( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10723,7 +10723,7 @@ function testsGroupMultipleLevels( test )
       'testCasePasses' : 0,
       'testCaseFails' : 2,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10738,7 +10738,7 @@ function testsGroupMultipleLevels( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10830,7 +10830,7 @@ function testsGroupTestCaseSingleLevel( test )
       'testCasePasses' : 2,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10845,7 +10845,7 @@ function testsGroupTestCaseSingleLevel( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10937,7 +10937,7 @@ function testsGroupTestCaseSameName( test )
       'testCasePasses' : 2,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10952,7 +10952,7 @@ function testsGroupTestCaseSameName( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -11043,7 +11043,7 @@ function testsGroupAfterTestCase( test )
       'testCasePasses' : 2,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -11058,7 +11058,7 @@ function testsGroupAfterTestCase( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -11170,7 +11170,7 @@ function testsGroupTestCaseMultipleLevels( test )
       'testCasePasses' : 3,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -11185,7 +11185,7 @@ function testsGroupTestCaseMultipleLevels( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -12736,7 +12736,7 @@ processWatchingOnSuiteEnd.description =
 // var notTakingIntoAccount = { concurrent : 1, takingIntoAccount : 0 };
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.Tester.Int',
@@ -12882,7 +12882,7 @@ let Self =
 
 }
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

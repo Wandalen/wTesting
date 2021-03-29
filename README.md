@@ -7,7 +7,6 @@ Framework for convenient unit testing. Utility Testing provides the intuitive in
   <img src="./doc/images/tester.gif" alt="tester.gif">
 </div>
 
-
 ### Cheat sheet
 
 All information about utility in short form given in [cheat sheet](./doc/version.eng/tutorial/TestingCheatSheet.pdf).

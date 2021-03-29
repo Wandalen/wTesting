@@ -124,6 +124,7 @@ Please see documentation in the `doc` directory.
 
 For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). For getting exhaustive information on one or another aspect use [list of concepts](./doc/version.eng/README.md#Concepts) to find a concept of interest and get familiar with it.
 
+
 #### Quick references
 
 - [Get help on commands of CLI](./doc/version.eng/tutorial/Help.md)
@@ -132,3 +133,4 @@ For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). 
 - [Writing tests](./doc/version.eng/tutorial/HelloWorld.md)
 - [Grouping of tests cases](./doc/version.eng/tutorial/Report.md)
 - [Test checks](./doc/version.eng/concept/TestCheck.md)
+

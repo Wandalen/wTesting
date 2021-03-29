@@ -1004,7 +1004,7 @@ function _exit()
   if( !err )
   {
     err = _.errBrief( 'Unexpected termination' );
-    _.errReason( err, 'unexpected termination' );
+    _.error.reason( err, 'unexpected termination' );
     if( !_.process.exitCode() )
     _.process.exitCode( 1 );
   }

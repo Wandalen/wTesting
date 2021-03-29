@@ -1592,7 +1592,7 @@ function exceptionReport( o )
 
     err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
 
-    if( _.errIsAttended( err ) )
+    if( _.error.isAttended( err ) )
     err = _.errBrief( err );
     _.errAttend( err );
 

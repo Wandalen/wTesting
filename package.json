@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "1.0.481",
+  "version": "1.0.482",
   "engine": "node >= 10.0.0",
   "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
@@ -24,7 +24,8 @@
     "proto/wtools/atop/testing",
     "proto/wtools/abase/l0/l0",
     "proto/wtools/Tools.s",
-    "out"
+    "out",
+    "proto/node_modules"
   ],
   "scripts": {
     "wtest": "node proto/wtools/atop/testing/entry/ExecUnrestricted",
@@ -72,8 +73,7 @@
     "electron": "11.3.0",
     "eslint": "7.1.0",
     "puppeteer": "5.5.0",
-    "spectron": "13.0.0",
-    "wTesting": "file:."
+    "spectron": "13.0.0"
   },
   "keywords": [
     "testing",

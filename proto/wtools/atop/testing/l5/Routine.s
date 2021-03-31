@@ -3520,8 +3520,8 @@ function assetFor( a )
     // locals : null,
     // dirPath : '.'
   }
-  // let program = _.routine.unite( program_head, program_body );
-  let program = _.routine.unite( _.program.write.head, program_body );
+  let program = _.routine.unite( program_head, program_body );
+  // let program = _.routine.unite( _.program.write.head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3741,6 +3741,25 @@ function assetFor( a )
   //
   //   return o;
   // }
+
+  function program_head( routine, args )
+  {
+    let o = args[ 0 ];
+    if( !_.mapIs( o ) )
+    o = { routine : o }
+
+    if( o.moduleFile === null || o.moduleFile === undefined )
+    {
+      o.moduleFile = _.module.fileNativeWith( 2, _globals_.real.wTools.module.nativeFilesMap );
+    }
+
+    _.assert( args.length === 1 );
+    _.assert( arguments.length === 2 );
+
+    o = _.program.write.head.call( _.program, routine, [ o ] );
+
+    return o;
+  }
 
   /**/
 

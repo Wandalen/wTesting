@@ -155,6 +155,17 @@ function setup( global, name )
   if( typeof module !== 'undefined' )
   global.wTools.module.nativeFilesMap = global.wTools.module.nativeFilesMap || require( 'module' )._cache;
 
+  if( !global.wTools.module.rootFile )
+  {
+    global.wTools.module.rootFile = module;
+    while( global.wTools.module.rootFile.parent )
+    global.wTools.module.rootFile = global.wTools.module.rootFile.parent; /* xxx : use universal file? */
+  }
+
+  const ModuleFileNative = require( 'module' );
+  if( !global.wTools.module.nativeFilesMap )
+  global.wTools.module.nativeFilesMap = ModuleFileNative._cache;
+
 }
 
 //
@@ -176,9 +187,17 @@ function fileUniversalIs( src )
 {
   if( !src )
   return false;
-  if( !src.constructor )
+  if( Reflect.hasOwnProperty( src, 'constructor' ) )
   return false;
-  return src.constructor.name === 'ModuleFile';
+  // if( !Reflect.has( src, 'constructor' ) )
+  // return false;
+  // if( !src.constructor )
+  // return false;
+  // return src.constructor.name === 'ModuleFile';
+  // if( !this.File )
+  // return false;
+  // return src instanceof this.File;
+  return src[ ModuleFileSymbol ] === true;
 }
 
 //
@@ -194,6 +213,7 @@ function fileNativeFrom( src )
 
 //
 
+const ModuleFileSymbol = Symbol.for( 'ModuleFile' );
 const ModuleFileNative = typeof module !== 'undefined' ? require( 'module' ) : null;
 const __ = _realGlobal_.wTools = _realGlobal_.wTools || Object.create( null );
 __.global = __.global || Object.create( null );

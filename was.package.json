@@ -12,7 +12,7 @@
   ],
   "license" : "MIT",
   "main" : "proto/wtools/atop/testing/entry/Main.s",
-  "files" : [ "proto/wtools/atop/testing", "proto/wtools/abase/l0/l0", "proto/wtools/Tools.s", "out" ],
+  "files" : [ "proto/wtools/atop/testing", "proto/wtools/abase/l0/l0", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "scripts" :
   {
     "wtest" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",
@@ -56,7 +56,6 @@
   "optionalDependencies" : { "wEventHandler" : "" },
   "devDependencies" :
   {
-    "wTesting" : "file:.",
     "electron" : "11.3.0",
     "spectron" : "13.0.0",
     "puppeteer" : "5.5.0",

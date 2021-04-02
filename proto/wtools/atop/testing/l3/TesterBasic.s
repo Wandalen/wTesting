@@ -892,9 +892,7 @@ function _suitesIncludeAt( path )
 
   try
   {
-    // debugger;
-    // _realGlobal_.wTools.global.close( 'testing' );
-    _realGlobal_.wTools.global.openForChildren( 'real', module );
+    _realGlobal_.wTools.module.fileSetEnvironment( module, 'real' );
 
     for( let f = 0 ; f < files.length ; f++ )
     {
@@ -933,8 +931,7 @@ function _suitesIncludeAt( path )
   }
   finally
   {
-    _realGlobal_.wTools.global.closeForChildren( 'real', module );
-    // _realGlobal_.wTools.global.open( 'testing' );
+    _realGlobal_.wTools.module.fileResetEnvironment( module, 'real' );
   }
 }
 

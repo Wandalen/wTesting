@@ -1,8 +1,10 @@
-
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || !Object.hasOwnProperty.call( _global_, 'wBase' ) )
+  if
+  (
+    typeof _global_ === 'undefined' || !Object.hasOwnProperty.call( _global_, 'wTools' ) || !_global_.wTools.maybe
+  )
   {
     let toolsPath = './abase/Layer1.s';
     let toolsExternal = 0;
@@ -19,6 +21,11 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  module[ 'exports' ] = _global_.wTools;
+  _global_.wTools.module.predeclare
+  ({
+    alias : [ 'wTools', 'wtools' ],
+    entryPath : __filename,
+  });
 
+  module[ 'exports' ] = _global_.wTools;
 }

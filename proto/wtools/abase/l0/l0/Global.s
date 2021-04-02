@@ -95,7 +95,7 @@ function close( name )
 
 //
 
-function openForChildren( name, moduleFile )
+function fileSetEnvironment( moduleFile, name )
 {
   let moduleNativeFile = __.module.fileNativeFrom( moduleFile );
 
@@ -117,7 +117,7 @@ function openForChildren( name, moduleFile )
 
 //
 
-function closeForChildren( name, moduleFile )
+function fileResetEnvironment( moduleFile, name )
 {
   let moduleNativeFile = __.module.fileNativeFrom( moduleFile );
 
@@ -223,10 +223,12 @@ __.global._stack = __.global._stack || [];
 __.global.new = __.global.new || _new;
 __.global.open = __.global.open || open;
 __.global.close = __.global.close || close;
-__.global.openForChildren = __.global.openForChildren || openForChildren;
-__.global.closeForChildren = __.global.closeForChildren || closeForChildren;
+// __.global.openForChildren = __.global.openForChildren || openForChildren;
+// __.global.closeForChildren = __.global.closeForChildren || closeForChildren;
 __.global.setup = __.global.setup || setup;
 
+__.module.fileSetEnvironment = __.module.fileSetEnvironment || fileSetEnvironment;
+__.module.fileResetEnvironment = __.module.fileResetEnvironment || fileResetEnvironment;
 __.module.fileNativeIs = __.module.fileNativeIs || fileNativeIs;
 __.module.fileUniversalIs = __.module.fileUniversalIs || fileUniversalIs;
 __.module.fileNativeFrom = __.module.fileNativeFrom || fileNativeFrom;

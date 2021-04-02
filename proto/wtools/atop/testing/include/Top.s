@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
   const __ = _realGlobal_.wTools;
   const _global = __.global.new( 'testing', _global_ );
   __.global.open( 'testing' );
-  __.global.openForChildren( 'testing', module );
+  __.module.fileSetEnvironment( module, 'testing' );
 
   //
 

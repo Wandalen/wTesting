@@ -665,9 +665,8 @@ function _runnableGet()
 
   if( suite.routine )
   {
-
     if( _.arrayIs( suite.routine ) )
-    return _.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
+    return !!_.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
     return _.path.globShortFit( tro.name, suite.routine );
   }
 

@@ -11,7 +11,7 @@
     { "name" : "Dmytro Kryvoruchko", "email" : "dm.vict.kr@gmail.com" }
   ],
   "license" : "MIT",
-  "main" : "proto/wtools/atop/testing/entry/Main.s",
+  "main" : "proto/node_modules/wTesting",
   "files" : [ "proto/wtools/atop/testing", "proto/wtools/abase/l0/l0", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "scripts" :
   {

@@ -129,8 +129,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wTesting/proto/wtools/atop/testing/entry/Main.s
-    - /pro/module/wTesting/proto/node_modules/wTesting
+    - proto/wtools/atop/testing/entry/Main.s
+    - proto/node_modules/wTesting
 reflector:
   reflect.proto:
     inherit: predefined.*

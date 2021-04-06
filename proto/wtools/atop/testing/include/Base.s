@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   if( !_global_.wBase || _global_.__GLOBAL_NAME__ !== 'real' )
   {
-    let toolsPath = '../../../../wtools/Tools.s';
+    let toolsPath = '../../../../node_modules/Tools';
     let _externalTools = 0;
     try
     {

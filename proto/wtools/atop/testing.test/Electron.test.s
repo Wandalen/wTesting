@@ -7,7 +7,7 @@ let ElectronPath, Spectron;
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   require( '../testing/entry/Main.s' );
 
@@ -31,7 +31,7 @@ function onSuiteBegin()
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.appStartNonThrowing = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Main.s' ) );
-  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), 'Tools' ) );
   self.spectronPath = require.resolve( 'spectron' );
   self.electronPath = require.resolve( 'electron' );
 }

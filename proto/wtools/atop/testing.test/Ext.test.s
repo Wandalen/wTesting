@@ -5,7 +5,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../wtools/Tools.s' );
+  let _ = require( '../../../node_modules/Tools' );
   require( '../testing/entry/Main.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
@@ -4695,7 +4695,7 @@ function toolsPathGetBasic( test )
 
   test.case = 'basic';
   var got = _.module.toolsPathGet();
-  var exp = __.path.join( _.module.resolve( 'wTools' ), '../../Tools.s' );
+  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
   test.identical( got, exp );
   console.log( `toolsPath : ${got}` );
 
@@ -4711,7 +4711,7 @@ function toolsPathGetTester( test )
   let a = test.assetFor( false );
   let programPath = a.program( program );
 
-  var exp = __.path.join( _.module.resolve( 'wTools' ), '../../Tools.s' );
+  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
   var toolsPath1 = _.module.toolsPathGet();
   return a.forkNonThrowing({ execPath : programPath })
   .then( ( op ) =>

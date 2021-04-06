@@ -7,7 +7,7 @@ let Puppeteer;
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   require( '../testing/entry/Main.s' );
   _.include( 'wFiles' );
@@ -29,7 +29,7 @@ function onSuiteBegin()
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Exec' ) );
-  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), 'Tools' ) );
   self.puppeteerPath = require.resolve( 'puppeteer' );
 }
 

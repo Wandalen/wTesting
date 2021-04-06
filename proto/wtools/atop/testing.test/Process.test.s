@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  const _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../testing/entry/Main.s' );
@@ -194,7 +194,7 @@ function disconnectedChildProcess( test )
   {
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
-    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
     self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
@@ -300,7 +300,7 @@ function disconnectedChildProcessWithIPC( test )
   {
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
-    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
     self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
@@ -407,7 +407,7 @@ function detachedDisconnectedChildProcess( test )
   {
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
-    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
     self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 

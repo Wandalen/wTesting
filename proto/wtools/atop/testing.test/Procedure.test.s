@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  const _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   require( '../testing/entry/Main.s' );
 

@@ -43,7 +43,7 @@ function exec()
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
   let logger = cui.logger;
-  const fileProvider = cui.fileProvider;
+  let fileProvider = cui.fileProvider;
   let appArgs = _.process.input({ keyValDelimeter : 0 });
   let ca = cui._commandsMake();
 
@@ -79,7 +79,7 @@ function exec()
 //   _.assert( arguments.length === 0, 'Expects no arguments' );
 //
 //   let logger = cui.logger;
-//   const fileProvider = cui.fileProvider;
+//   let fileProvider = cui.fileProvider;
 //   let appArgs = _.process.input({ keyValDelimeter : 0 });
 //   let ca = cui._commandsMake();
 //
@@ -111,7 +111,7 @@ function _commandsMake()
 {
   let cui = this;
   let logger = cui.logger;
-  const fileProvider = cui.fileProvider;
+  let fileProvider = cui.fileProvider;
   let appArgs = _.process.input();
 
   _.assert( _.instanceIs( cui ) );
@@ -143,7 +143,8 @@ function _commandsMake()
   })
 
   _.assert( ca.logger === cui.logger );
-  _.assert( ca.verbosity === cui.verbosity );
+  // _.assert( ca.verbosity === cui.verbosity );
+  _.assert( ca.logger.verbosity === cui.verbosity );
 
   ca.form();
 

@@ -184,9 +184,9 @@ module:
           - ../proto
           - ../proto/Integration.test.ss
           - ../proto/node_modules
+          - ../proto/node_modules/Tools
           - ../proto/node_modules/wTesting
           - ../proto/wtools
-          - ../proto/wtools/Tools.s
           - ../proto/wtools/abase
           - ../proto/wtools/abase/l0
           - ../proto/wtools/abase/l0/l0
@@ -1806,6 +1806,4 @@ module:
       ../.im.will.yml:
         hash: c589c7812a7638645ed50d5e4d2caab6
         size: 6076
-      wTesting.out.will.yml:
-        hash: cf63cbcf2455f1b66b0efba5a4075600
-        size: 50774
+      wTesting.out.will.yml: *ref_0

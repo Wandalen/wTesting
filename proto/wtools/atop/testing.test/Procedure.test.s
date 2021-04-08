@@ -163,7 +163,7 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
 
     let keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
@@ -226,7 +226,7 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program2()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
 
     let keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );

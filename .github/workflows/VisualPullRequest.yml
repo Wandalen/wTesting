@@ -30,7 +30,7 @@ jobs :
         node-version : [ 14.x ]
     runs-on : ${{ matrix.os }}
     steps :
-    - name : git config
+    - name : Setup git
       run : |
         git config --global core.autocrlf input
         git config --global user.email "testing@testing.com"

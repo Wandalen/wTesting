@@ -5,7 +5,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../node_modules/Tools' );
+  const _ = require( '../../../node_modules/Tools' );
   require( '../testing/entry/Main.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
@@ -1890,7 +1890,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programFail()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -1932,7 +1932,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programPass()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -1975,7 +1975,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programExit1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -2019,7 +2019,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programExitCustomCode()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -3886,7 +3886,7 @@ function timeOutSeveralRoutines( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
     const __ = _globals_.testing.wTools;
 
@@ -3989,7 +3989,7 @@ function timeOutSeveralRoutinesDesync( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
     const __ = _globals_.testing.wTools;
 
@@ -4410,7 +4410,7 @@ function termination( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
     const __ = _globals_.testing.wTools;
     let input = { map : __.fileProvider.fileRead({ filePath : __.path.join( __dirname, 'File1' ), encoding : 'json' }) };
@@ -4592,7 +4592,7 @@ function uncaughtErrorNotSilenced( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -5068,7 +5068,7 @@ function checkDiffWithProto( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     /* */
@@ -5428,7 +5428,7 @@ function checkDiffWithProtoEq( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     /* */
@@ -5786,7 +5786,7 @@ function checkDiffWithProtoContains( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     /* */
@@ -6143,7 +6143,7 @@ function checkDiffWithProtoContainsAll( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     /* */
@@ -6501,7 +6501,7 @@ function checkDiffWithProtoContainsAny( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     /* */
@@ -6859,7 +6859,7 @@ function checkDiffWithProtoContainsOnly( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     /* */

@@ -7,7 +7,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( 'wTools' );
+  const _ = require( 'wTools' );
   _.include( 'wTesting' );
 }
 
@@ -17,7 +17,6 @@ const _ = _global_.wTools;
 const __ = _globals_.testing.wTools;
 const fileProvider = __.fileProvider;
 const path = fileProvider.path;
-
 
 // --
 // context

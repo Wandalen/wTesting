@@ -195,7 +195,7 @@ function disconnectedChildProcess( test )
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
     self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
-    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+    self.toolsPathInclude = `const _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
   //
@@ -301,7 +301,7 @@ function disconnectedChildProcessWithIPC( test )
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
     self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
-    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+    self.toolsPathInclude = `const _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
   //
@@ -408,7 +408,7 @@ function detachedDisconnectedChildProcess( test )
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
     self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
-    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+    self.toolsPathInclude = `const _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
   //

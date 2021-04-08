@@ -1,5 +1,5 @@
 
-let _ = require( 'wTesting' );
+const _ = require( 'wTesting' );
 let Hello = require( './Hello.js' );
 
 //

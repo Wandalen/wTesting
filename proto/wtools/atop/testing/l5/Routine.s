@@ -3415,6 +3415,7 @@ function returnsSingleResource_( routine )
 
 //
 
+/* xxx : make possible to axtend assetFor in test usite instead of introducing assetFor in context */
 function assetFor( a )
 {
   let tro = this;
@@ -3447,10 +3448,34 @@ function assetFor( a )
   if( !a.assetName )
   a.assetName = a.routine.name;
 
+  if( a.fileProvider === null )
+  {
+    a.fileProvider = _.FileProvider.System({ providers : [] });
+    _.FileProvider.Git().providerRegisterTo( a.fileProvider );
+    _.FileProvider.Npm().providerRegisterTo( a.fileProvider );
+    _.FileProvider.Http().providerRegisterTo( a.fileProvider );
+    let defaultProvider = _.FileProvider.Default();
+    defaultProvider.providerRegisterTo( a.fileProvider );
+    a.fileProvider.defaultProvider = defaultProvider;
+  }
+  if( a.path === null )
+  a.path = a.fileProvider.path || _globals_.testing.wTools.uri;
+  if( a.uri === null )
+  a.uri = _globals_.testing.wTools.uri || a.fileProvider.path;
+
+  if( a.suiteTempPath === null )
+  a.suiteTempPath = a.fileProvider.path.tempOpen( _.strFilenameFor( a.suite.name ) );
+  /* xxx : add tempClose on routine end */
+
   _.sure( arguments.length === 0 || arguments.length === 1 );
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
+  _.sure
+  (
+    !_.property.has( context, 'suiteTempPath' ) || _.strDefined( context.suiteTempPath ),
+    `{- suiteTempPath -} should be defined string if specified in the context`
+  );
   _.sure
   (
     _.strDefined( a.suiteTempPath ) || _.strDefined( a.routinePath ),
@@ -3474,20 +3499,6 @@ function assetFor( a )
 
   if( a.process === null )
   a.process = _globals_.testing.wTools.process;
-  if( a.fileProvider === null )
-  {
-    a.fileProvider = _.FileProvider.System({ providers : [] });
-    _.FileProvider.Git().providerRegisterTo( a.fileProvider );
-    _.FileProvider.Npm().providerRegisterTo( a.fileProvider );
-    _.FileProvider.Http().providerRegisterTo( a.fileProvider );
-    let defaultProvider = _.FileProvider.Default();
-    defaultProvider.providerRegisterTo( a.fileProvider );
-    a.fileProvider.defaultProvider = defaultProvider;
-  }
-  if( a.path === null )
-  a.path = a.fileProvider.path || _globals_.testing.wTools.uri;
-  if( a.uri === null )
-  a.uri = _globals_.testing.wTools.uri || a.fileProvider.path;
   if( a.ready === null )
   a.ready = _.Consequence().take( null );
 

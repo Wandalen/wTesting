@@ -87,21 +87,16 @@ function production( test )
   if( __.git.insideRepository( a.abs( __dirname, '..' ) ) )
   remotePath = __.git.remotePathFromLocal( a.abs( __dirname, '..' ) );
 
+  let isFork = false;
   let mdlRepoParsed, remotePathParsed;
   if( remotePath )
   {
     mdlRepoParsed = __.git.path.parse( mdl.repository.url );
     remotePathParsed = __.git.path.parse( remotePath );
+    isFork = mdlRepoParsed.user !== remotePathParsed.user || mdlRepoParsed.repo !== remotePathParsed.repo;
   }
 
-  let isFork = mdlRepoParsed.user !== remotePathParsed.user || mdlRepoParsed.repo !== remotePathParsed.repo;
-
-  let version;
-  if( isFork )
-  version = __.git.path.nativize( remotePath );
-  else
-  version = mdl.version;
-
+  let version = versionGet( isFork, remotePath );
   if( !version )
   throw _.err( 'Cannot obtain version to install' );
 
@@ -109,6 +104,8 @@ function production( test )
   a.fileProvider.fileWrite({ filePath : a.abs( 'package.json' ), data : structure, encoding : 'json' });
   let data = a.fileProvider.fileRead({ filePath : a.abs( 'package.json' ) });
   console.log( data );
+
+  let moduleDir = __.path.join( a.routinePath, 'node_modules', mdl.name );
 
   /* */
 
@@ -120,11 +117,13 @@ function production( test )
     test.identical( op.exitCode, 0 );
 
     test.case = 'no test files';
-    let moduleDir = __.path.join( a.routinePath, 'node_modules', mdl.name );
     let testFiles = a.fileProvider.filesFind({ filePath : __.path.join( moduleDir, '**.test*' ), outputFormat : 'relative' });
     test.identical( testFiles, [] );
     return null;
   });
+
+  if( isFork )
+  a.shell({ execPath : `will .npm.install`, currentPath : moduleDir })
 
   run( 'Sample.s' );
   run( 'Sample.ss' );
@@ -182,6 +181,20 @@ function production( test )
         return null;
       })
     });
+  }
+
+  /* */
+
+  function versionGet( isFork )
+  {
+    if( isFork )
+    return __.git.path.nativize( remotePath );
+
+    let devDependencies = __.npm.fileReadField({ localPath : __.npm.pathLocalFromInside( __dirname ), key : 'devDependencies' });
+    if( devDependencies && devDependencies.wTesting && isNaN( devDependencies.wTesting[ 0 ] ) )
+    return devDependencies.wTesting;
+
+    return mdl.version;
   }
 
   /* */

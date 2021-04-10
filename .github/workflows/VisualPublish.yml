@@ -1,10 +1,10 @@
 
-name : push
+name : publish
 on : [ push ]
 
 jobs :
 
-  Fast :
+  Full :
     env :
       PRIVATE_WTOOLS_BOT_TOKEN : ${{ secrets.PRIVATE_WTOOLS_BOT_TOKEN }}
       PRIVATE_WTOOLS_BOT_SSH_KEY : ${{ secrets.PRIVATE_WTOOLS_BOT_SSH_KEY }}
@@ -15,8 +15,8 @@ jobs :
       fail-fast : false
       matrix :
         os : [ ubuntu-latest, windows-latest, macos-latest ]
-        node-version : [ 14.x ]
-    if : "!startsWith( github.event.head_commit.message, 'version' ) && !startsWith( github.event.head_commit.message, '.' )"
+        node-version : [ 10.x, 12.9.1, 13.x, 14.x, 15.x ]
+    if : "startsWith( github.event.head_commit.message, 'version' )"
     runs-on : ${{ matrix.os }}
     steps :
     - name : Setup git

@@ -45,11 +45,11 @@ function exec()
   let logger = cui.logger;
   let fileProvider = cui.fileProvider;
   let appArgs = _.process.input({ keyValDelimeter : 0 });
-  let ca = cui._commandsMake();
+  let aggregator = cui._commandsMake();
 
   return _.Consequence.Try( () =>
   {
-    return ca.programPerform
+    return aggregator.programPerform
     ({
       program : _.strUnquote( appArgs.original ),
       withParsed : 0,
@@ -81,9 +81,9 @@ function exec()
 //   let logger = cui.logger;
 //   let fileProvider = cui.fileProvider;
 //   let appArgs = _.process.input({ keyValDelimeter : 0 });
-//   let ca = cui._commandsMake();
+//   let aggregator = cui._commandsMake();
 //
-//   return ca.appArgsPerform({ appArgs });
+//   return aggregator.appArgsPerform({ appArgs });
 // }
 
 
@@ -100,9 +100,9 @@ function init( o )
 function _commandHandleSyntaxError( o )
 {
   let cui = this;
-  let ca = cui.ca;
+  let aggregator = cui.aggregator;
   let request = _.strCommandParse({ src : o.command, commandFormat : 'subject options?' });
-  return ca.commandPerform({ command : '.run ' + request.subject, propertiesMap : request.map });
+  return aggregator.instructionPerform({ command : '.run ' + request.subject, propertiesMap : request.map });
 }
 
 //
@@ -124,15 +124,15 @@ function _commandsMake()
   let commands =
   {
 
-    'help' :                    { e : _.routineJoin( cui, cui.commandHelp ),                        h : 'Get help.' },
-    'version' :                 { e : _.routineJoin( cui, cui.commandVersion ),                     h : 'Get current version.' },
-    'imply' :                   { e : _.routineJoin( cui, cui.commandImply ),                       h : 'Change state or imply value of a variable.' },
-    'run' :                     { e : _.routineJoin( cui, cui.commandRun ),                         h : 'Run test suites found at a specified path.' },
-    'suites list' :             { e : _.routineJoin( cui, cui.commandSuitesList ),                  h : 'Find test suites at a specified path.' },
+    'help' :                    { ro : _.routineJoin( cui, cui.commandHelp ),                        h : 'Get help.' },
+    'version' :                 { ro : _.routineJoin( cui, cui.commandVersion ),                     h : 'Get information about version.' },
+    'imply' :                   { ro : _.routineJoin( cui, cui.commandImply ),                       h : 'Change state or imply value of a variable.' },
+    'run' :                     { ro : _.routineJoin( cui, cui.commandRun ),                         h : 'Run test suites found at a specified path.' },
+    'suites list' :             { ro : _.routineJoin( cui, cui.commandSuitesList ),                  h : 'Find test suites at a specified path.' },
 
   }
 
-  let ca = cui.ca = _.CommandsAggregator
+  let aggregator = cui.aggregator = _.CommandsAggregator
   ({
     basePath : fileProvider.path.current(),
     commands,
@@ -142,13 +142,13 @@ function _commandsMake()
     commandsImplicitDelimiting : 1,
   })
 
-  _.assert( ca.logger === cui.logger );
-  // _.assert( ca.verbosity === cui.verbosity );
-  _.assert( ca.logger.verbosity === cui.verbosity );
+  _.assert( aggregator.logger === cui.logger );
+  // _.assert( aggregator.verbosity === cui.verbosity );
+  _.assert( aggregator.logger.verbosity === cui.verbosity );
 
-  ca.form();
+  aggregator.form();
 
-  return ca;
+  return aggregator;
 }
 
 //
@@ -156,11 +156,11 @@ function _commandsMake()
 function commandHelp( e )
 {
   let cui = this;
-  let ca = e.ca;
+  let aggregator = e.aggregator;
   let logger = cui.logger;
 
   logger.log( 'Known commands' );
-  ca._commandHelp( e );
+  aggregator._commandHelp( e );
   cui.scenarioOptionsList();
 }
 
@@ -169,7 +169,6 @@ function commandHelp( e )
 function commandVersion( e )
 {
   let cui = this.form();
-
   return _.npm.versionLog
   ({
     localPath : _.path.join( __dirname, '../../../../..' ),
@@ -178,7 +177,8 @@ function commandVersion( e )
   });
 }
 
-commandVersion.hint = 'Get information about version.';
+var command = commandVersion.command = Object.create( null );
+command.hint = 'Get information about version.';
 
 //
 
@@ -236,7 +236,7 @@ let Associates =
 
 let Restricts =
 {
-  ca : null,
+  aggregator : null,
 }
 
 let Statics =

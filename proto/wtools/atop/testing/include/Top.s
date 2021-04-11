@@ -8,7 +8,7 @@
 if( typeof module !== 'undefined' )
 {
   /* xxx : write test for moduling checking the module file is ok */
-  require( '../../../abase/l0/l0/Global.s' );
+  require( '../../../abase/l0/l0/l0/Global.s' );
 
   if( _realGlobal_.wTester && _realGlobal_.wTester._isReal_ )
   return;

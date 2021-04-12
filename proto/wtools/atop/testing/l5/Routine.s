@@ -3791,9 +3791,8 @@ function assetFor( a )
     replace toolsPath, by toolsPath to the current wTools if such exists in userland
     */
     if( o.locals && o.locals.toolsPath === undefined )
-    o.locals.toolsPath = _globals_.real.wTools.module.toolsPathGet();
-    // if( !hasLocals && o.locals.toolsPath && o.locals.toolsPath === _.module.toolsPathGet() )
-    if( o.locals && o.locals.toolsPath && o.locals.toolsPath === _.module.toolsPathGet() )
+    o.locals.toolsPath = _.path.nativize( _globals_.real.wTools.module.toolsPathGet() );
+    if( o.locals && o.locals.toolsPath && _.path.nativize( o.locals.toolsPath ) === _.path.nativize( _.module.toolsPathGet() ) )
     if( _globals_.real && _globals_.real.wTools && _globals_.real.wTools.module && _globals_.real.wTools.module.toolsPathGet )
     o.locals.toolsPath = _globals_.real.wTools.module.toolsPathGet();
     _.program.write( o );

@@ -3735,7 +3735,7 @@ function assetFor( a )
     return null; /* qqq : cover a.reflect. make sure returned value is covered */
   }
 
-  /**/
+  /* */
 
   // /* xxx : replace the head? */
   // function program_head( routine, args )

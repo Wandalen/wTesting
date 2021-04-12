@@ -3794,7 +3794,7 @@ function assetFor( a )
     o.locals.toolsPath = _.path.nativize( _globals_.real.wTools.module.toolsPathGet() );
     if( o.locals && o.locals.toolsPath && _.path.nativize( o.locals.toolsPath ) === _.path.nativize( _.module.toolsPathGet() ) )
     if( _globals_.real && _globals_.real.wTools && _globals_.real.wTools.module && _globals_.real.wTools.module.toolsPathGet )
-    o.locals.toolsPath = _globals_.real.wTools.module.toolsPathGet();
+    o.locals.toolsPath = _.path.nativize( _globals_.real.wTools.module.toolsPathGet() );
     _.program.write( o );
 
     if( !o.logger )

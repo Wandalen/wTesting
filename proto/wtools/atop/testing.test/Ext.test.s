@@ -7029,6 +7029,73 @@ checkDiffWithProtoContainsOnly.description =
 Check diff from test.containsOnly, when comparing maps that set new __proto__.
 `
 
+//
+
+function containsStrings( test )
+{
+  let context = this;
+  let a = context.assetFor( test );
+  let programPath = a.program( program );
+
+  a.reflect();
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'string contains another string';
+    return null;
+  })
+
+  a.appStartNonThrowing({ execPath : `${programPath} r:contains1` })
+  .then( ( op ) =>
+  {
+    test.il( op.exitCode, 0 );
+
+    var exp = 'Passed test checks 2 / 2';
+    var exp2 = 'Passed TestSuite::Contains';
+
+    test.true( _.strHas( op.output, exp ) );
+    test.true( _.strHas( op.output, exp2 ) );
+
+    return null;
+  })
+
+  return a.ready;
+
+  /* - */
+
+  function program()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wTesting' );
+
+    /* */
+
+    function contains1( test )
+    {
+      test.contains( 'abc', 'ab' );
+      test.contains( 'abcd', 'bc' );
+    }
+
+    /* */
+
+    const Proto =
+    {
+      name : 'Contains',
+      tests :
+      {
+        contains1,
+      }
+    }
+
+    /* */
+
+    const Self = wTestSuite( Proto );
+    wTester.test();
+  }
+}
+
 // --
 // suite
 // --
@@ -7133,7 +7200,11 @@ const Proto =
     checkDiffWithProtoContains,
     checkDiffWithProtoContainsAll,
     checkDiffWithProtoContainsAny,
-    checkDiffWithProtoContainsOnly
+    checkDiffWithProtoContainsOnly,
+
+    //
+
+    containsStrings
 
   }
 

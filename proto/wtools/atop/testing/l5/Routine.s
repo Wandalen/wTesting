@@ -2292,9 +2292,7 @@ function contains_functor( fo )
     try
     {
       o2 = Object.create( null );
-      debugger
       outcome = compare( got, expected, o2 );
-      debugger
       if( !positive )
       outcome = !outcome;
 

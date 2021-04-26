@@ -185,9 +185,9 @@ function appArgsRead()
   if( tester._appArgs )
   return tester._appArgs;
 
-  let o = _.routineOptions( appArgsRead, arguments );
+  let o = _.routine.options_( appArgsRead, arguments );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.mapExtend( settings, tester.Settings );
+  _.props.extend( settings, tester.Settings );
 
   let appArgs = _.process.input();
   if( o.propertiesMap !== null )
@@ -255,7 +255,7 @@ function appArgsRead()
   {
     _.each( src, ( value, key ) =>
     {
-      if( _.arrayLike( value ) )
+      if( _.argumentsArray.like( value ) )
       if( !SettingsAsArrayMap[ key ] )
       src[ key ] = value[ value.length - 1 ];
     });
@@ -306,8 +306,11 @@ function scenarioTest()
     _.assert( arguments.length === 0, 'Expects no arguments' );
     _.assert( tester.settings.scenario === undefined );
 
+    debugger;
     tester.suitesIncludeAt( tester.filePath );
+    debugger;
     result = tester.testAll();
+    debugger;
 
   }
   catch( err )
@@ -529,10 +532,12 @@ function _testingEndNow()
   /* */
 
   let msg = tester._reportToStr();
+  debugger;
   logger.begin({ verbosity : -2 });
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( '\n' + msg );
   logger.end({ verbosity : -2 });
+  debugger;
 
   /* */
 
@@ -612,7 +617,7 @@ function cancel()
 {
   let tester = this;
 
-  let o = _.routineOptions( cancel, arguments );
+  let o = _.routine.options_( cancel, arguments );
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( o.global === undefined );
@@ -700,7 +705,7 @@ function _suitesRun( suites )
 
   /* */
 
-  let allSuites = _.mapExtend( null, suites );
+  let allSuites = _.props.extend( null, suites );
   for( let s in suites )
   {
     let suite = wTesterBasic.TestSuite.instanceByName( suites[ s ] );
@@ -726,7 +731,7 @@ function _suitesRun( suites )
 
   }
 
-  if( !_.mapKeys( suites ).length )
+  if( !_.props.keys( suites ).length )
   {
     tester.suitesListPrint( allSuites );
     logger.log( 'No enabled test suite to run at', wTester.textColor( tester.filePath, 'path' ) );
@@ -1455,7 +1460,7 @@ let SettingsOfSuite =
 
 }
 
-let Settings = _.mapExtend( null, SettingsOfSuite, SettingsOfTester );
+let Settings = _.props.extend( null, SettingsOfSuite, SettingsOfTester );
 
 let Composes =
 {

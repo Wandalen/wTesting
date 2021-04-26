@@ -170,7 +170,7 @@ Test case is the lowest level of test group and `test.case` expects no closing, 
   var src1Copy = { a : 1, b : 2 };
   var src2 = { c : 3, d : 4 };
   var src2Copy = { c : 3, d : 4 };
-  var got = _.mapExtend( null, src1, src2 );
+  var got = _.props.extend( null, src1, src2 );
   var expected = { a : 1, b : 2, c : 3, d : 4 };
   test.will = 'return';
   test.identical( got, expected );

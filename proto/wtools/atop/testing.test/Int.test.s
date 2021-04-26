@@ -12310,7 +12310,7 @@ function processWatchingOnDefault( test )
     test.true( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -12335,9 +12335,9 @@ function processWatchingOnDefault( test )
       throwingExitCode : 0,
       mode : 'spawn'
     }
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
   }
 
 }
@@ -12364,9 +12364,9 @@ function processWatchingOnExplicit( test )
       throwingExitCode : 0,
       mode : 'spawn'
     }
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
   }
 
   var suite = wTestSuite
@@ -12389,7 +12389,7 @@ function processWatchingOnExplicit( test )
     test.true( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -12514,7 +12514,7 @@ function processWatchingRoutineTimeOut( test )
     test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) );
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -12575,7 +12575,7 @@ function processWatchingErrorInTestRoutine( test )
     test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -12639,7 +12639,7 @@ function processWatchingOnSuiteBegin( test )
     test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -12703,7 +12703,7 @@ function processWatchingOnSuiteEnd( test )
     test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );

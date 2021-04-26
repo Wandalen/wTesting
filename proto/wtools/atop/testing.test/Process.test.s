@@ -32,7 +32,7 @@ function assetFor( test, name )
 
   let oprogram = a.program;
   program_body.defaults = a.program.defaults;
-  a.program = _.routine.uniteCloning_( a.program.head, program_body );
+  a.program = _.routine.uniteCloning_replaceByUnite( a.program.head, program_body );
   return a;
 
   /* */
@@ -45,8 +45,8 @@ function assetFor( test, name )
       toolsPath : _.module.resolve( 'wTools' ),
     };
     o.locals = o.locals || locals;
-    _.mapSupplement( o.locals, locals );
-    _.mapSupplement( o.locals.context, locals.context );
+    _.props.supplement( o.locals, locals );
+    _.props.supplement( o.locals.context, locals.context );
     let programPath = a.path.nativize( oprogram.body.call( a, o ) );
     return programPath;
   }
@@ -90,7 +90,7 @@ function main( test )
     test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
     test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Trivial" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -183,7 +183,7 @@ function disconnectedChildProcess( test )
     console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DisconnectedProcess" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -289,7 +289,7 @@ function disconnectedChildProcessWithIPC( test )
     console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DisconnectedProcessIPC" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -396,7 +396,7 @@ function detachedDisconnectedChildProcess( test )
     console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DetachedProcess" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })

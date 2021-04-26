@@ -143,7 +143,6 @@ function _commandsMake()
   })
 
   _.assert( aggregator.logger === cui.logger );
-  // _.assert( aggregator.verbosity === cui.verbosity );
   _.assert( aggregator.logger.verbosity === cui.verbosity );
 
   aggregator.form();

@@ -108,7 +108,7 @@ function init( o )
 
   if( inherits )
   {
-    _.assert( _.arrayLike( inherits ) );
+    _.assert( _.argumentsArray.like( inherits ) );
     if( inherits.length !== 1 )
     debugger;
     for( let i = 0 ; i < inherits.length ; i++ )
@@ -190,15 +190,15 @@ function inherit()
     _.assert( src instanceof Self, () => `Expects test suite to inherit it, but got ${_.entity.strType( src )}` );
 
     if( src.tests )
-    _.mapSupplement( suite.tests, src.tests );
+    _.props.supplement( suite.tests, src.tests );
 
     if( src.context )
-    _.mapSupplement( suite.context, src.context );
+    _.props.supplement( suite.context, src.context );
 
     let extend = _.mapBut_( null, src._initialOptions, suite._initialOptions );
     delete extend.abstract; /* qqq : add test to check test suite inheritance without explicitly defined in descendant `abstact : 0` works */
-    _.mapExtend( suite, extend );
-    _.mapExtend( suite._initialOptions, extend );
+    _.props.extend( suite, extend );
+    _.props.extend( suite._initialOptions, extend );
 
   }
 
@@ -244,7 +244,7 @@ function _accuracySet( accuracy )
   }
   else
   {
-    accuracy = _.make( accuracy );
+    accuracy = _.entity.cloneShallow( accuracy );
     suite.accuracyExplicitly = accuracy;
   }
 
@@ -319,10 +319,11 @@ function _consoleBar( o )
           wTester._barOptions.on = 1;
           if( !wTester._barOptions.outputPrinter )
           wTester._barOptions.outputPrinter = logger;
+          wTester._barOptions.outputingToConsole = 1;
         }
         else
         {
-          wTester._barOptions = { outputPrinter : logger, on : 1 };
+          wTester._barOptions = { outputPrinter : logger, on : 1, outputingToConsole : 1 };
         }
         wTester._barOptions = _.Logger.ConsoleBar( wTester._barOptions );
       }
@@ -430,7 +431,7 @@ function _form()
   let extend = Object.create( null );
 
   if( suite.override )
-  _.mapExtend( extend, suite.override );
+  _.props.extend( extend, suite.override );
 
   if( !suite.logger )
   suite.logger = wTester.logger || _global_.logger;
@@ -449,7 +450,7 @@ function _form()
 
   }
 
-  _.mapExtend( suite, extend );
+  _.props.extend( suite, extend );
 
   /* form test routines */
 
@@ -1331,7 +1332,7 @@ function exceptionReport( o )
   let logger = suite.logger || wTester.logger || _global_.logger || _global_.console;
   let err;
 
-  _.routineOptions( exceptionReport, o );
+  _.routine.options_( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   try

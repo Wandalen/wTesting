@@ -469,7 +469,7 @@ function _testingBegin( allSuites, runSuites )
 
   /* */
 
-  let total = _.entityLengthOf( runSuites );
+  let total = _.entity.lengthOf( runSuites );
   logger.log( 'Launching several ( ' + total + ' ) test suite(s) ..' );
   logger.up();
   logger.begin({ verbosity : -5 });
@@ -845,7 +845,7 @@ function suitesListPrint( suites )
     logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  let l = _.entityLengthOf( suites );
+  let l = _.entity.lengthOf( suites );
 
   logger.log( l, l > 1 ? 'test suites' : 'test suite' );
 

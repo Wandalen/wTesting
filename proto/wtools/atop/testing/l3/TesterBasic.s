@@ -789,7 +789,7 @@ function suitesFilterOut( suites )
   }
 
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
-  _.assert( _.objectIs( suites ) );
+  _.assert( _.object.isBasic( suites ) );
 
   suites = _.filter_( null, suites, function( suite )
   {

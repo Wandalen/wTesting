@@ -81,7 +81,7 @@ function init( o )
 
   suite._initialOptions = o;
 
-  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.entity.strType( o ) );
+  _.assert( o === undefined || _.object.isBasic( o ), 'Expects object {-options-}, but got', _.entity.strType( o ) );
 
   /* source path */
 
@@ -136,7 +136,7 @@ function init( o )
 
   if( suite.context === null )
   suite.context = Object.create( null );
-  _.assert( _.objectIs( suite.context ) );
+  _.assert( _.object.isBasic( suite.context ) );
   // Object.preventExtensions( suite.context );
 
   return suite;
@@ -419,11 +419,11 @@ function _form()
 
   /* verify */
 
-  _.assert( _.objectIs( suite.tests ) );
+  _.assert( _.object.isBasic( suite.tests ) );
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strDefined( suite.name ), 'Test suite should has {-name-}"' );
-  _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
+  _.assert( _.object.isBasic( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
   _.assert( !suite._formed );
 
   /* extend */
@@ -591,7 +591,7 @@ function _runBegin()
   /* tracking */
 
   _.arrayAppendOnceStrictly( wTester.activeSuites, suite );
-  _.assert( _.objectIs( suite.context ) );
+  _.assert( _.object.isBasic( suite.context ) );
   Object.preventExtensions( suite.context );
 
   /* logger */

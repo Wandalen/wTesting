@@ -249,7 +249,7 @@ async function htmlAwait( test )
 //           var con = _.Consequence.From( result );
 //           con.deasync();
 //           result = con.sync();
-//           if( _.objectIs( result ) )
+//           if( _.object.isBasic( result ) )
 //           return new Proxy( result, handler )
 //           return result;
 //         }

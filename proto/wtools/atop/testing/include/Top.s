@@ -39,8 +39,8 @@ if( typeof module !== 'undefined' )
   _.assert( _global_.wTools !== _realGlobal_.wTools );
   _.assert( _.routineIs( _realGlobal_.wTestSuite ) );
   _.assert( !_realGlobal_.wTestRoutineObject );
-  _.assert( _.objectIs( _realGlobal_.wTests ) );
-  _.assert( _.objectIs( _realGlobal_.wTester ) );
+  _.assert( _.object.isBasic( _realGlobal_.wTests ) );
+  _.assert( _.object.isBasic( _realGlobal_.wTester ) );
   _.assert
   (
     !_realGlobal_.wTools.time || _realGlobal_.wTools.time.sleep !== _globals_.testing.wTools.time.sleep,

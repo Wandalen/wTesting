@@ -19,7 +19,7 @@ function fileDrop( o )
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.strIs( o.fileInputId ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let ready = new _.Consequence().take( null );
   let filePath = _.path.s.nativize( _.arrayAs( o.filePath ) );
@@ -87,9 +87,9 @@ function eventDispatch( o )
   _.routine.options_( eventDispatch, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.strIs( o.eventType ) )
-  _.assert( _.objectIs( o.eventData ) || o.eventData === null )
+  _.assert( _.object.isBasic( o.eventData ) || o.eventData === null )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   if( o.eventData === null )
   o.eventData = {};
@@ -143,7 +143,7 @@ function waitForVisibleInViewport( o )
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let o2 = _.mapBut_( null, o, { library : null } );
 
@@ -171,7 +171,7 @@ function waitForVisibleInViewportPuppeteer( o )
   _.routine.options_( waitForVisibleInViewportPuppeteer, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let ready = _.Consequence().take( null )
 
@@ -228,7 +228,7 @@ function waitForVisibleInViewportSpectron( o )
   _.routine.options_( waitForVisibleInViewportSpectron, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let timeOutError = _.time.outError( o.timeOut );
   let result = _.Consequence();
@@ -298,7 +298,7 @@ function isVisibleWithinViewport( o )
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   /* Common way to query selector */
 

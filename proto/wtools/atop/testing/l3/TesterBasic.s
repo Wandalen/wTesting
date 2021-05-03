@@ -532,12 +532,10 @@ function _testingEndNow()
   /* */
 
   let msg = tester._reportToStr();
-  debugger;
   logger.begin({ verbosity : -2 });
   logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
   logger.log( '\n' + msg );
   logger.end({ verbosity : -2 });
-  debugger;
 
   /* */
 

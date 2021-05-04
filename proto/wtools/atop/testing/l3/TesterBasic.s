@@ -306,11 +306,8 @@ function scenarioTest()
     _.assert( arguments.length === 0, 'Expects no arguments' );
     _.assert( tester.settings.scenario === undefined );
 
-    debugger;
     tester.suitesIncludeAt( tester.filePath );
-    debugger;
     result = tester.testAll();
-    debugger;
 
   }
   catch( err )

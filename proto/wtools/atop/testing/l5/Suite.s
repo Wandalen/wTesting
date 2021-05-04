@@ -570,6 +570,23 @@ function _runBegin()
   if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.time.now();
 
+  /* module */
+
+  /* yyy */
+  if
+  (
+       _globals_.real
+    && _globals_.real.wTools
+    && _globals_.real.wTools.module
+    && _globals_.real.wTools.module.predeclare
+  )
+  _globals_.real.wTools.module.predeclare
+  ({
+    alias : [ 'wTesting', 'wtesting' ],
+    entryPath : __dirname + '/../../../../node_modules/wTesting',
+    // entryPath : __dirname + '/../entry/Main.s',
+  });
+
   /* test routine */
 
   /* qqq : cover the case, please */

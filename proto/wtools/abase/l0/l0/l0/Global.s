@@ -106,8 +106,13 @@ function close( name )
 function fileSetEnvironment( moduleFile, name )
 {
   let moduleNativeFile = __.module.fileNativeFrom( moduleFile );
-
   let global2 = _globals_[ name ];
+
+  if( name === null )
+  {
+    moduleNativeFile._virtualEnvironment = null;
+    return;
+  }
 
   if( !!moduleNativeFile._virtualEnvironment )
   throw Error( `Module already have virtual environment ${moduleNativeFile._virtualEnvironment.name}` );
@@ -158,8 +163,8 @@ function setup( global, name )
 
   global.wTools.module = global.wTools.module || Object.create( null );
   if( typeof module !== 'undefined' )
-  if( global.wTools.module.nativeFilesMap && global.wTools.module.nativeFilesMap !== require( 'module' )._cache )
-  throw Error( `The global have native module files map of different global. Something wrong!` );
+  // if( global.wTools.module.nativeFilesMap && global.wTools.module.nativeFilesMap !== require( 'module' )._cache )
+  // throw Error( `The global have native module files map of different global. Something wrong!` );
   if( typeof module !== 'undefined' )
   global.wTools.module.nativeFilesMap = global.wTools.module.nativeFilesMap || require( 'module' )._cache;
 

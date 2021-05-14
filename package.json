@@ -1,6 +1,6 @@
 {
   "name" : "wTesting",
-  "version" : "1.0.509",
+  "version" : "1.0.510",
   "engine" : "node >= 10.0.0",
   "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -39,21 +39,21 @@
   },
   "dependencies" :
   {
-    "wConsequence" : "stable",
-    "wCopyable" : "stable",
-    "wFiles" : "stable",
-    "wLogger" : "stable",
-    "wProto" : "stable",
-    "wTools" : "stable",
-    "wequaler" : "stable",
-    "wprocess" : "stable",
-    "wcommandsaggregator" : "stable",
-    "winstancing" : "stable",
-    "wlooker" : "stable",
-    "wselector" : "stable",
-    "wprocesswatcher" : "stable"
+    "wConsequence" : "delta",
+    "wCopyable" : "delta",
+    "wFiles" : "delta",
+    "wLogger" : "delta",
+    "wProto" : "delta",
+    "wTools" : "delta",
+    "wequaler" : "delta",
+    "wprocess" : "delta",
+    "wcommandsaggregator" : "delta",
+    "winstancing" : "delta",
+    "wlooker" : "delta",
+    "wselector" : "delta",
+    "wprocesswatcher" : "delta"
   },
-  "optionalDependencies" : { "wEventHandler" : "stable" },
+  "optionalDependencies" : { "wEventHandler" : "delta" },
   "devDependencies" :
   {
     "electron" : "11.3.0",

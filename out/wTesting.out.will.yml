@@ -2,12 +2,9 @@ format: outwillfile-2.0
 root:
   - wTesting.out
 consistency:
-  ../.ex.will.yml: &ref_0
-    hash: 984cb3aad208231181d4e056698101ba
-    size: 2796
-  ../.im.will.yml: &ref_1
-    hash: c589c7812a7638645ed50d5e4d2caab6
-    size: 6076
+  ../will.yml: &ref_0
+    hash: c36f33333691cc95790b10ca6efab3a9
+    size: 8245
 module:
   wTesting.out:
     about:
@@ -20,37 +17,31 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters: &ref_2
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords: &ref_3
+      license: MIT
+      npm.name: wTesting
+      npm.bin: &ref_1
+        single-process-wtest: proto/wtools/atop/testing/entry/Exec
+        debug-wtest: proto/wtools/atop/testing/entry/ExecDebug
+        tst: proto/wtools/atop/testing/entry/ExecUnrestricted
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_2
         - testing
         - unit test
         - functional test
         - wTools
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors: &ref_3
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
-      npm.name: wTesting
+      interpreters: &ref_4
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
       npm.scripts: &ref_5
         test: wtest .run proto/**
-        wtest: node proto/wtools/atop/testing/entry/ExecUnrestricted
         single-process-wtest: node proto/wtools/atop/testing/entry/Exec
         debug-wtest: node proto/wtools/atop/testing/entry/ExecDebug
         tst: node proto/wtools/atop/testing/entry/ExecUnrestricted
-        single-process-tst: node proto/wtools/atop/testing/entry/Exec
-        debug-tst: node proto/wtools/atop/testing/entry/ExecDebug
-      npm.bin: &ref_6
-        wtest: proto/wtools/atop/testing/entry/ExecUnrestricted
-        single-process-wtest: proto/wtools/atop/testing/entry/Exec
-        debug-wtest: proto/wtools/atop/testing/entry/ExecDebug
-        tst: proto/wtools/atop/testing/entry/ExecUnrestricted
-        single-process-tst: proto/wtools/atop/testing/entry/Exec
-        debug-tst: proto/wtools/atop/testing/entry/ExecDebug
     path:
       module.willfiles:
         criterion:
@@ -63,15 +54,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -341,27 +328,27 @@ module:
         path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
-      wComparator:
+      wcomparator:
         path: 'npm:///wcomparator'
         autoExporting: 0
         enabled: 0
-      wExternalFundamentals:
+      wexternalfundamentals:
         path: 'npm:///wexternalfundamentals'
         autoExporting: 0
         enabled: 0
-      wCommandsAggregator:
+      wcommandsaggregator:
         path: 'npm:///wcommandsaggregator'
         autoExporting: 0
         enabled: 0
-      wInstancing:
+      winstancing:
         path: 'npm:///winstancing'
         autoExporting: 0
         enabled: 0
-      wLooker:
+      wlooker:
         path: 'npm:///wlooker'
         autoExporting: 0
         enabled: 0
-      wSelector:
+      wselector:
         path: 'npm:///wselector'
         autoExporting: 0
         enabled: 0
@@ -1000,8 +987,7 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      ../will.yml: *ref_0
   ../:
     about:
       name: wTesting
@@ -1013,27 +999,23 @@ module:
         of routines which can be automated.
       enabled: 1
       version: 1.1.0
-      interpreters: *ref_2
-      keywords: *ref_3
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
       npm.name: wTesting
+      npm.bin: *ref_1
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_2
+      contributors: *ref_3
+      interpreters: *ref_4
       npm.scripts: *ref_5
-      npm.bin: *ref_6
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -1161,27 +1143,27 @@ module:
         path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
-      wComparator:
+      wcomparator:
         path: 'npm:///wcomparator'
         autoExporting: 0
         enabled: 0
-      wExternalFundamentals:
+      wexternalfundamentals:
         path: 'npm:///wexternalfundamentals'
         autoExporting: 0
         enabled: 0
-      wCommandsAggregator:
+      wcommandsaggregator:
         path: 'npm:///wcommandsaggregator'
         autoExporting: 0
         enabled: 0
-      wInstancing:
+      winstancing:
         path: 'npm:///winstancing'
         autoExporting: 0
         enabled: 0
-      wLooker:
+      wlooker:
         path: 'npm:///wlooker'
         autoExporting: 0
         enabled: 0
-      wSelector:
+      wselector:
         path: 'npm:///wselector'
         autoExporting: 0
         enabled: 0
@@ -1756,9 +1738,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: 984cb3aad208231181d4e056698101ba
-        size: 2796
-      ../.im.will.yml:
-        hash: c589c7812a7638645ed50d5e4d2caab6
-        size: 6076
+      ../will.yml:
+        hash: c36f33333691cc95790b10ca6efab3a9
+        size: 8245

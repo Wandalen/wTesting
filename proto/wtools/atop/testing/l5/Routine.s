@@ -3731,7 +3731,7 @@ function assetFor( a )
   {
     _.assert( arguments.length === 0 );
     a.fileProvider.filesDelete( a.routinePath );
-    if( a.originalAssetPath === false )
+    if( a.originalAssetPath === false || a.originalAssetPath === null )
     a.fileProvider.dirMake( a.routinePath );
     else
     a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });

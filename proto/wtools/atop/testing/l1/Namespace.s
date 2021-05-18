@@ -22,7 +22,7 @@ function fileDrop( o )
   _.assert( _.object.isBasic( o.page ) )
 
   let ready = new _.Consequence().take( null );
-  let filePath = _.path.s.nativize( _.arrayAs( o.filePath ) );
+  let filePath = _.path.s.nativize( _.array.as( o.filePath ) );
 
   if( o.library === 'puppeteer' )
   fileDropPuppeteer();
@@ -509,7 +509,7 @@ function netInterfacesUp( o )
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
-  o.interfaces = _.arrayAs( o.interfaces );
+  o.interfaces = _.array.as( o.interfaces );
   _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
   _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to enable' );
 
@@ -586,7 +586,7 @@ function netInterfacesDown( o )
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
-  o.interfaces = _.arrayAs( o.interfaces );
+  o.interfaces = _.array.as( o.interfaces );
   _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
   _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to disable' );
 

@@ -1109,34 +1109,33 @@ function runWithSeveralMixedOptions( test )
 
 //
 
-function runWithQuotedArrayWithSpaces( test )
+function runWithWrongSyntaxAndQuotedArrayWithSpaces( test )
 {
   let context = this;
-  let a = context.assetFor( test, 'optionRapidity' );
+  let a = context.assetFor( test, 'runWithArrayOfRoutines' );
   a.reflect();
-  test.true( a.fileProvider.fileExists( a.abs( 'OptionRapidity.test.js' ) ) );
+  test.true( a.fileProvider.fileExists( a.abs( 'RunWithArrayOfRoutines.test.js' ) ) );
 
   /* - */
 
   a.ready.then( () =>
   {
-    test.case = 'run with vectorized option `r` and vectorized `verbosity`';
+    test.case = 'run with vectorized option `r`';
     return null;
   });
 
-  a.appStart({ execPath : `.run ./ r:"[ routinePositiveRapidity1, routinePositiveRapidity2 ]"` })
+  a.shell({ execPath : `node ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]'` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
 
-    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
-    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
-    test.identical( _.strCount( got.output, exp ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
-    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
-    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
-    test.identical( _.strCount( got.output, exp ), 1 );
-    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
 
     return null;
   });
@@ -7110,7 +7109,7 @@ const Proto =
     runWithQuotedPath,
     runWithSeveralSimilarOptions,
     runWithSeveralMixedOptions,
-    runWithQuotedArrayWithSpaces,
+    runWithWrongSyntaxAndQuotedArrayWithSpaces,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     checkFails,

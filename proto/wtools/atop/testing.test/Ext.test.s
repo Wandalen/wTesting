@@ -4755,7 +4755,8 @@ function toolsPathGetTester( test )
   let a = test.assetFor( false );
   let programPath = a.program( program );
 
-  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  var exp = _.module.resolve( 'wTools' );
   var toolsPath1 = _.module.toolsPathGet();
   return a.forkNonThrowing({ execPath : programPath })
   .then( ( op ) =>

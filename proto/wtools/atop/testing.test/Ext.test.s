@@ -54,7 +54,7 @@ function assetFor( test, asset )
   let oprogram = a.program;
   program_body.defaults = a.program.defaults;
   a.program = _.routine.uniteCloning_replaceByUnite( a.program.head, program_body );
-  a.reflect = reflect
+  a.reflect = reflect;
 
   return a;
 
@@ -76,8 +76,12 @@ function assetFor( test, asset )
 
   function reflect()
   {
-
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
+    let reflected = a.fileProvider.filesReflect
+    ({
+      reflectMap : { [ a.originalAssetPath ] : a.routinePath },
+      onUp,
+      outputFormat : 'record'
+    });
 
     reflected.forEach( ( r ) =>
     {
@@ -88,7 +92,6 @@ function assetFor( test, asset )
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( _.module.resolve( 'wTools' ) )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
-
   }
 
   function onUp( r )
@@ -1083,6 +1086,45 @@ function runWithSeveralMixedOptions( test )
   });
 
   a.appStart({ execPath : `.run ./ r:[routinePositiveRapidity1,routinePositiveRapidity2] v:1 verbosity:5` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity1 in' ), 1 );
+    test.identical( _.strCount( got.output, 'Running TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 ..' ), 1 );
+    var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
+    test.identical( _.strCount( got.output, exp ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runWithQuotedArrayWithSpaces( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'optionRapidity' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'OptionRapidity.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r` and vectorized `verbosity`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./ r:"[ routinePositiveRapidity1, routinePositiveRapidity2 ]"` })
   .then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
@@ -7068,6 +7110,7 @@ const Proto =
     runWithQuotedPath,
     runWithSeveralSimilarOptions,
     runWithSeveralMixedOptions,
+    runWithQuotedArrayWithSpaces,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     checkFails,

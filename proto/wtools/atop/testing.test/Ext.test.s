@@ -3519,7 +3519,7 @@ function imply( test )
 function asyncTimeOutSingle( test )
 {
   let context = this;
-  let a = context.assetFor( test, 'asyncTimeOutSingle' );
+  let a = context.assetFor( test );
   a.reflect();
 
   /* - */

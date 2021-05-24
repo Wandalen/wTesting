@@ -1,7 +1,7 @@
 
 require( 'wTesting' );
 // const _ = require( 'wTools' );
-let _ = _globals_.testing.wTools;
+const _ = _globals_.testing.wTools;
 _.include( 'wConsequence' );
 
 //

@@ -3519,17 +3519,16 @@ function imply( test )
 function asyncTimeOutSingle( test )
 {
   let context = this;
-  let a = context.assetFor( test );
+  let a = context.assetFor( test, 'asyncTimeOutSingle' );
   a.reflect();
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
-    test.case = 'Suite.test.js'
+    test.case = 'Suite.test.js';
     return null;
-  })
+  });
 
   a.appStartNonThrowing({ execPath : `.run Suite.test.js` })
   .then( ( got ) =>
@@ -3694,7 +3693,7 @@ function asyncTimeOutCheck( test )
 //   _.time.out( 2000 );
 //   _.time.out( 1000, () =>
 //   {
-//     console.log( 'v1' ); debugger;
+//     console.log( 'v1' );
 //     test.identical( 1, 1 );
 //     test.equivalent( 1, 1 );
 //     test.true( true );

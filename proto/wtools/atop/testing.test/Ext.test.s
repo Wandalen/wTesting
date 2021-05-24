@@ -4738,7 +4738,8 @@ function toolsPathGetBasic( test )
 
   test.case = 'basic';
   var got = _.module.toolsPathGet();
-  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  var exp = _.module.resolve( 'wTools' );
   test.identical( got, exp );
   console.log( `toolsPath : ${got}` );
 

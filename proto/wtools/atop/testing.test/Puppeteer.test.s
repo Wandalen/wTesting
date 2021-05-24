@@ -7,7 +7,7 @@ let Puppeteer;
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   require( '../testing/entry/Main.s' );
   _.include( 'wFiles' );
@@ -15,8 +15,8 @@ if( typeof module !== 'undefined' )
   Puppeteer = require( 'puppeteer' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // context
@@ -29,7 +29,7 @@ function onSuiteBegin()
   self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Tester' );
   self.assetsOriginalPath = _.path.join( __dirname, '_asset' );
   self.appJsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../testing/entry/Exec' ) );
-  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), '../../Tools.s' ) );
+  self.toolsPath = _.path.nativize( _.path.join( _.path.normalize( __dirname ), 'Tools' ) );
   self.puppeteerPath = require.resolve( 'puppeteer' );
 }
 
@@ -249,7 +249,7 @@ async function htmlAwait( test )
 //           var con = _.Consequence.From( result );
 //           con.deasync();
 //           result = con.sync();
-//           if( _.objectIs( result ) )
+//           if( _.object.isBasic( result ) )
 //           return new Proxy( result, handler )
 //           return result;
 //         }
@@ -422,7 +422,7 @@ function processWatchingOnPuppeteerZombie( test )
 // suite
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.Tester.Puppeteer',
@@ -458,7 +458,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

@@ -3,9 +3,9 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Self = _.test = _.test || Object.create( null );
+const _global = _global_;
+const _ = _global_.wTools;
+const Self = _.test = _.test || Object.create( null );
 
 // --
 // UI Testing
@@ -14,15 +14,15 @@ let Self = _.test = _.test || Object.create( null );
 function fileDrop( o )
 {
   _.assert( arguments.length === 1 );
-  _.routineOptions( fileDrop, o );
+  _.routine.options_( fileDrop, o );
   _.assert( _.strIs( o.filePath ) || _.arrayIs( o.filePath ) );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.strIs( o.fileInputId ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let ready = new _.Consequence().take( null );
-  let filePath = _.path.s.nativize( _.arrayAs( o.filePath ) );
+  let filePath = _.path.s.nativize( _.array.as( o.filePath ) );
 
   if( o.library === 'puppeteer' )
   fileDropPuppeteer();
@@ -37,7 +37,7 @@ function fileDrop( o )
   {
     ready
     .then( () => o.page.evaluate( fileInputCreate, o.fileInputId, o.targetSelector, filePath ) )
-    .then( () => o.page.$(`#${ o.fileInputId }`) )
+    .then( () => o.page.$( `#${ o.fileInputId }` ) )
     .then( ( fileInput ) => fileInput.uploadFile.apply( fileInput, filePath ) )
   }
 
@@ -46,7 +46,7 @@ function fileDrop( o )
     ready
     .then( () => o.page.execute( fileInputCreate, o.fileInputId, o.targetSelector ) )
     // .then( () => _.Consequence.And( filePath.map( path => _.Consequence.From( o.page.uploadFile( path ) ) ) ) )
-    .then( () => o.page.$(`#${o.fileInputId}`).then( ( e ) => e.addValue( filePath.join( '\n' ) ) ) )
+    .then( () => o.page.$( `#${o.fileInputId}` ).then( ( e ) => e.addValue( filePath.join( '\n' ) ) ) )
   }
 
   function fileInputCreate( fileInputId, targetSelector, filePaths )
@@ -84,12 +84,12 @@ fileDrop.defaults =
 function eventDispatch( o )
 {
   _.assert( arguments.length === 1 );
-  _.routineOptions( eventDispatch, o );
+  _.routine.options_( eventDispatch, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.strIs( o.eventType ) )
-  _.assert( _.objectIs( o.eventData ) || o.eventData === null )
+  _.assert( _.object.isBasic( o.eventData ) || o.eventData === null )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   if( o.eventData === null )
   o.eventData = {};
@@ -139,13 +139,13 @@ function waitForVisibleInViewport( o )
   let test = this;
 
   _.assert( arguments.length === 1 );
-  _.routineOptions( waitForVisibleInViewport, o );
+  _.routine.options_( waitForVisibleInViewport, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
-  let o2 = _.mapBut( o, { library : null } );
+  let o2 = _.mapBut_( null, o, { library : null } );
 
   if( o.library === 'spectron' )
   return test.waitForVisibleInViewportSpectron( o2 );
@@ -168,10 +168,10 @@ function waitForVisibleInViewportPuppeteer( o )
   let test = this;
 
   _.assert( arguments.length === 1 );
-  _.routineOptions( waitForVisibleInViewportPuppeteer, o );
+  _.routine.options_( waitForVisibleInViewportPuppeteer, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let ready = _.Consequence().take( null )
 
@@ -225,10 +225,10 @@ function waitForVisibleInViewportSpectron( o )
   let test = this;
 
   _.assert( arguments.length === 1 );
-  _.routineOptions( waitForVisibleInViewportSpectron, o );
+  _.routine.options_( waitForVisibleInViewportSpectron, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   let timeOutError = _.time.outError( o.timeOut );
   let result = _.Consequence();
@@ -294,11 +294,11 @@ waitForVisibleInViewportSpectron.defaults =
 function isVisibleWithinViewport( o )
 {
   _.assert( arguments.length === 1 );
-  _.routineOptions( isVisibleWithinViewport, o );
+  _.routine.options_( isVisibleWithinViewport, o );
   _.assert( _.strIs( o.targetSelector ) )
   _.assert( _.numberIs( o.timeOut ) )
   _.assert( o.library === 'puppeteer' || o.library === 'spectron' );
-  _.assert( _.objectIs( o.page ) )
+  _.assert( _.object.isBasic( o.page ) )
 
   /* Common way to query selector */
 
@@ -419,7 +419,7 @@ function netInterfacesGet( o )
   o = Object.create( null );
 
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single options map {-o-}' );
-  _.routineOptions( netInterfacesGet, o );
+  _.routine.options_( netInterfacesGet, o );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
@@ -504,12 +504,12 @@ netInterfacesGet.defaults =
 function netInterfacesUp( o )
 {
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
-  _.routineOptions( netInterfacesUp, o );
+  _.routine.options_( netInterfacesUp, o );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
-  o.interfaces = _.arrayAs( o.interfaces );
+  o.interfaces = _.array.as( o.interfaces );
   _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
   _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to enable' );
 
@@ -581,12 +581,12 @@ netInterfacesUp.defaults =
 function netInterfacesDown( o )
 {
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
-  _.routineOptions( netInterfacesDown, o );
+  _.routine.options_( netInterfacesDown, o );
 
   if( process.platform !== 'linux' )
   _.assert( 0, 'not implemented' );
 
-  o.interfaces = _.arrayAs( o.interfaces );
+  o.interfaces = _.array.as( o.interfaces );
   _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
   _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to disable' );
 
@@ -715,7 +715,7 @@ function workflowSshAgentRun( o )
   _.assert( arguments.length === 1, 'Expects single options map {-o-}' );
 
   _.assert( _.process.insideTestContainer(), 'Should be used only in CI' );
-  _.routineOptions( workflowSshAgentRun, o );
+  _.routine.options_( workflowSshAgentRun, o );
   _.assert( _.strDefined( o.keyData ), 'Expects data for ssh private key' );
 
   if( process.platform !== 'linux' )
@@ -798,7 +798,7 @@ let Extension =
 
 }
 
-_.mapExtend( Self, Extension );
+_.props.extend( Self, Extension );
 
 // --
 // export

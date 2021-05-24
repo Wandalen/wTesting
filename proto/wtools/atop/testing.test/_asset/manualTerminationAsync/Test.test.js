@@ -1,6 +1,6 @@
 
 require( 'wTesting' );
-let _ = require( 'wTools' );
+const _ = require( 'wTools' );
 _.include( 'wProcess' );
 let c = 0;
 

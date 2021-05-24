@@ -1,6 +1,6 @@
 
 require( 'wTesting' );
-let _ = require( 'wTools' );
+const _ = require( 'wTools' );
 _.include( 'wConsequence' );
 
 //
@@ -50,7 +50,7 @@ function asyncErrorHandling( test )
 
 //
 
-let Self =
+const Proto =
 {
   name : 'AsyncErrorHandling',
   tests :
@@ -61,6 +61,6 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

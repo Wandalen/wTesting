@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   if( !_global_.wBase || _global_.__GLOBAL_NAME__ !== 'real' )
   {
-    let toolsPath = '../../../../wtools/Tools.s';
+    let toolsPath = '../../../../node_modules/Tools';
     let _externalTools = 0;
     try
     {
@@ -25,8 +25,8 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  let _global = _global_;
-  let _ = _global_.wTools;
+  const _global = _global_;
+  const _ = _global_.wTools;
 
   _.include( 'wLooker' );
   _.include( 'wSelector' );

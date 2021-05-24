@@ -12,12 +12,16 @@
  * @module Tools/atop/Tester
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
+const __ = _globals_.testing.wTools;
+
+_.assert( _ === __ );
+
 let debugged = _.process.isDebugged();
 
-let Parent = null;
-let Self = wTestRoutineObject;
+const Parent = null;
+const Self = wTestRoutineObject;
 function wTestRoutineObject( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -120,7 +124,7 @@ function _fieldsForm()
     tro[ tro.RoutineFields[ f ] ] = routine[ f ];
   }
 
-  _.sureMapHasOnly
+  _.map.sureHasOnly
   (
     routine,
     wTester.TestRoutine.RoutineFields,
@@ -322,6 +326,7 @@ function _run()
   }
   catch( err )
   {
+    debugger;
     result = new _.Consequence().error( _.err( err ) );
   }
 
@@ -661,9 +666,8 @@ function _runnableGet()
 
   if( suite.routine )
   {
-
     if( _.arrayIs( suite.routine ) )
-    return _.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
+    return !!_.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
     return _.path.globShortFit( tro.name, suite.routine );
   }
 
@@ -713,7 +717,7 @@ function cancel( o )
 {
   let tro = this;
   let logger = tro.logger;
-  o = _.routineOptions( cancel, arguments );
+  o = _.routine.options_( cancel, arguments );
 
   if( !o.err )
   o.err = _.errBrief( `Test routine ${tro.absoluteName} was canceled!` );
@@ -766,7 +770,7 @@ function _descriptionChange( o )
   let tro = this;
 
   _.assert( _.mapIs( o ) );
-  _.routineOptions( _descriptionChange, o );
+  _.routine.options_( _descriptionChange, o );
 
   if( o.touching )
   if( wTester.report )
@@ -908,7 +912,7 @@ function _groupChange( o )
 {
   let tro = this;
 
-  _.routineOptions( _groupChange, o );
+  _.routine.options_( _groupChange, o );
   _.assert( arguments.length === 1, 'Expects no arguments' );
   _.assert( _.strIs( o.group ) || o.group === null );
 
@@ -1065,7 +1069,7 @@ function _caseChange( o )
 {
   let tro = this;
 
-  _.routineOptions( _caseChange, o );
+  _.routine.options_( _caseChange, o );
   _.assert( _.mapIs( o ) );
   _.assert( arguments.length === 1 );
   _.assert( o.src === null || _.strIs( o.src ), () => `Expects string or null {-o.src-}, but got ${_.entity.strType( o.src )}` );
@@ -1305,7 +1309,7 @@ function _outcomeLog( o )
   let logger = tro.logger;
   let sourceCode = '';
 
-  _.routineOptions( _outcomeLog, o );
+  _.routine.options_( _outcomeLog, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   /* */
@@ -1401,14 +1405,14 @@ function _outcomeReport( o )
   let logger = tro.logger;
   let sourceCode = '';
 
-  _.routineOptions( _outcomeReport, o );
+  _.routine.options_( _outcomeReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( o.considering )
   tro._testCheckConsider( o.outcome );
 
   if( o.logging )
-  tro._outcomeLog( _.mapOnly( o, tro._outcomeLog.defaults ) );
+  tro._outcomeLog( _.mapOnly_( null, o, tro._outcomeLog.defaults ) );
 
   if( o.interruptible )
   tro._runInterruptMaybe( 1 );
@@ -1436,7 +1440,7 @@ function _outcomeReportBoolean( o )
   let tro = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( _outcomeReportBoolean, o );
+  _.routine.options_( _outcomeReportBoolean, o );
 
   o.msg = tro._reportTextForTestCheck
   ({
@@ -1480,7 +1484,7 @@ function _outcomeReportCompare( o )
 
   _.assert( tro instanceof Self );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptionsPreservingUndefines( _outcomeReportCompare, o );
+  _.routine.options( _outcomeReportCompare, o );
 
   let nameOfExpected = ( o.outcome ? o.nameOfPositiveExpected : o.nameOfNegativeExpected );
   let details = '';
@@ -1549,7 +1553,7 @@ function exceptionReport( o )
   let msg = '';
   let err;
 
-  _.routineOptions( exceptionReport, o );
+  _.routine.options_( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   try
@@ -1588,7 +1592,7 @@ function exceptionReport( o )
 
     err = _._err({ args : [ o.err ], level : _.numberIs( o.level ) ? o.level+1 : o.level });
 
-    if( _.errIsAttended( err ) )
+    if( _.error.isAttended( err ) )
     err = _.errBrief( err );
     _.errAttend( err );
 
@@ -1709,7 +1713,7 @@ function _reportTextForTestCheck( o )
 {
   let tro = this;
 
-  o = _.routineOptions( _reportTextForTestCheck, o );
+  o = _.routine.options_( _reportTextForTestCheck, o );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.outcome === null || _.boolLike( o.outcome ) );
@@ -1748,7 +1752,7 @@ _reportTextForTestCheck.defaults =
 }
 
 // --
-// checker
+// dichotomy
 // --
 
 /**
@@ -2085,7 +2089,7 @@ function equivalent( got, expected, options )
     o2 = Object.create( null );
     o2.accuracy = accuracy;
     if( _.mapIs( options ) )
-    _.mapExtend( o2, options )
+    _.props.extend( o2, options )
     else if( _.numberIs( options ) )
     o2.accuracy = options;
     else _.assert( options === undefined );
@@ -2200,7 +2204,7 @@ function notEquivalent( got, expected, options )
     o2 = Object.create( null );
     o2.accuracy = accuracy;
     if( _.mapIs( options ) )
-    _.mapExtend( o2, options )
+    _.props.extend( o2, options )
     else if( _.numberIs( options ) )
     o2.accuracy = options;
     else _.assert( options === undefined );
@@ -2271,7 +2275,7 @@ function contains_functor( fo )
 
   if( arguments.length > 1 )
   fo = { methodName : arguments[ 0 ], compareName : arguments[ 1 ], positive : arguments[ 2 ] }
-  _.routineOptions( contains_functor, fo );
+  _.routine.options_( contains_functor, fo );
   _.assert( _.routineIs( _.equaler[ fo.compareName ] ) );
   const methodName = fo.methodName;
   const compare = _.routineJoin( _, _[ fo.compareName ] );
@@ -2734,7 +2738,7 @@ function _shouldDo_( o )
     _.sure( _.routineIs( o.args[ 0 ] ), 'Expects callback to call' );
     _.sure( o.args[ 1 ] === undefined || _.routineIs( o.args[ 1 ] ), 'Callback to handle error should be routine' );
 
-    _.routineOptions( _shouldDo_, o );
+    _.routine.options_( _shouldDo_, o );
 
     if( o.args[ 1 ] )
     {
@@ -3412,6 +3416,7 @@ function returnsSingleResource_( routine )
 
 //
 
+/* xxx : make possible to axtend assetFor in test usite instead of introducing assetFor in context */
 function assetFor( a )
 {
   let tro = this;
@@ -3429,7 +3434,7 @@ function assetFor( a )
   _.assert( a.tro === undefined );
   _.assert( a.suite === undefined );
   _.assert( a.routine === undefined );
-  _.routineOptions( assetFor, a );
+  _.routine.options_( assetFor, a );
 
   if( a.suiteTempPath === null && context.suiteTempPath !== undefined )
   a.suiteTempPath = context.suiteTempPath;
@@ -3444,10 +3449,36 @@ function assetFor( a )
   if( !a.assetName )
   a.assetName = a.routine.name;
 
+  if( a.fileProvider === null )
+  {
+    a.fileProvider = _.FileProvider.System({ providers : [] });
+    _.FileProvider.Git().providerRegisterTo( a.fileProvider );
+    _.FileProvider.Npm().providerRegisterTo( a.fileProvider );
+    _.FileProvider.Http().providerRegisterTo( a.fileProvider );
+    let defaultProvider = _.FileProvider.Default();
+    defaultProvider.providerRegisterTo( a.fileProvider );
+    a.fileProvider.defaultProvider = defaultProvider;
+  }
+  if( a.path === null )
+  a.path = a.fileProvider.path || _globals_.testing.wTools.uri;
+  if( a.uri === null )
+  a.uri = _globals_.testing.wTools.uri || a.fileProvider.path;
+
+  // debugger;
+  if( a.suiteTempPath === null )
+  a.suiteTempPath = a.fileProvider.path.tempOpen( _.strFilenameFor( a.suite.name ) );
+  // debugger;
+  /* xxx : add tempClose on routine end */
+
   _.sure( arguments.length === 0 || arguments.length === 1 );
   _.sure( _.mapIs( a ) );
   _.sure( _.routineIs( a.routine ) );
   _.sure( _.strDefined( a.assetName ) );
+  _.sure
+  (
+    !_.props.has( context, 'suiteTempPath' ) || _.strDefined( context.suiteTempPath ),
+    `{- suiteTempPath -} should be defined string if specified in the context`
+  );
   _.sure
   (
     _.strDefined( a.suiteTempPath ) || _.strDefined( a.routinePath ),
@@ -3471,20 +3502,6 @@ function assetFor( a )
 
   if( a.process === null )
   a.process = _globals_.testing.wTools.process;
-  if( a.fileProvider === null )
-  {
-    a.fileProvider = _.FileProvider.System({ providers : [] });
-    _.FileProvider.Git().providerRegisterTo( a.fileProvider );
-    _.FileProvider.Npm().providerRegisterTo( a.fileProvider );
-    _.FileProvider.Http().providerRegisterTo( a.fileProvider );
-    let defaultProvider = _.FileProvider.Default();
-    defaultProvider.providerRegisterTo( a.fileProvider );
-    a.fileProvider.defaultProvider = defaultProvider;
-  }
-  if( a.path === null )
-  a.path = a.fileProvider.path || _globals_.testing.wTools.uri;
-  if( a.uri === null )
-  a.uri = _globals_.testing.wTools.uri || a.fileProvider.path;
   if( a.ready === null )
   a.ready = _.Consequence().take( null );
 
@@ -3509,11 +3526,15 @@ function assetFor( a )
 
   program_body.defaults =
   {
-    routine : null,
-    locals : null,
-    dirPath : '.'
+    ... _.program.write.defaults,
+    rewriting : 1,
+    verbosity : 2,
+    // routine : null,
+    // locals : null,
+    // dirPath : '.'
   }
-  let program = _.routineUnite( program_head, program_body );
+  let program = _.routine.unite( program_head, program_body );
+  // let program = _.routine.unite( _.program.write.head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3710,25 +3731,45 @@ function assetFor( a )
   {
     _.assert( arguments.length === 0 );
     a.fileProvider.filesDelete( a.routinePath );
-    if( a.originalAssetPath === false )
+    if( a.originalAssetPath === false || a.originalAssetPath === null )
     a.fileProvider.dirMake( a.routinePath );
     else
     a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath } });
     return null; /* qqq : cover a.reflect. make sure returned value is covered */
   }
 
-  /**/
+  /* */
+
+  // /* xxx : replace the head? */
+  // function program_head( routine, args )
+  // {
+  //   let o = args[ 0 ]
+  //
+  //   if( !_.mapIs( o ) )
+  //   o = { routine : o }
+  //   _.routine.options_( program, o );
+  //   _.assert( _.strIs( o.dirPath ) );
+  //   _.assert( arguments.length === 2 );
+  //   _.assert( args.length === 1 );
+  //
+  //   return o;
+  // }
 
   function program_head( routine, args )
   {
-    let o = args[ 0 ]
-
+    let o = args[ 0 ];
     if( !_.mapIs( o ) )
     o = { routine : o }
-    _.routineOptions( program, o );
-    _.assert( _.strIs( o.dirPath ) );
-    _.assert( arguments.length === 2 );
+
+    if( o.moduleFile === null || o.moduleFile === undefined )
+    {
+      o.moduleFile = _.module.fileNativeWith( 2, _globals_.real.wTools.module.nativeFilesMap );
+    }
+
     _.assert( args.length === 1 );
+    _.assert( arguments.length === 2 );
+
+    o = _.program.write.head.call( _.program, routine, [ o ] );
 
     return o;
   }
@@ -3745,9 +3786,25 @@ function assetFor( a )
     if( !o.tempPath )
     o.tempPath = a.abs( '.' );
 
+    // var hasLocals = !!o.locals;
+
+    _.program.preformLocals.body.call( _.program, o );
+
+    /*
+    replace toolsPath, by toolsPath to the current wTools if such exists in userland
+    */
+    if( o.locals && o.locals.toolsPath === undefined )
+    o.locals.toolsPath = _.path.nativize( _globals_.real.wTools.module.toolsPathGet() );
+    if( o.locals && o.locals.toolsPath && _.path.nativize( o.locals.toolsPath ) === _.path.nativize( _.module.toolsPathGet() ) )
+    if( _globals_.real && _globals_.real.wTools && _globals_.real.wTools.module && _globals_.real.wTools.module.toolsPathGet )
+    o.locals.toolsPath = _.path.nativize( _globals_.real.wTools.module.toolsPathGet() );
     _.program.write( o );
 
-    logger.log( _.strLinesNumber( o.sourceCode ) );
+    if( !o.logger )
+    o.logger = tro.logger;
+
+    // /* xxx : introduce verbosity */
+    // logger.log( _.strLinesNumber( o.sourceCode ) );
 
     return o.programPath;
   }
@@ -4032,7 +4089,7 @@ let Extension =
   _reportIsPositive,
   _reportTextForTestCheck,
 
-  // checker
+  // dichotomy
 
   true : _true,
   false : _false,

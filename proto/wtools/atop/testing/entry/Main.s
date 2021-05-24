@@ -3,6 +3,11 @@
 
 'use strict';
 
+/**
+ *Framework for convenient unit testing. Aggregates module Testing. Utility Test provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
+ * @module Tools/top/test
+ */
+
 if( typeof module !== 'undefined' )
 {
 
@@ -113,11 +118,26 @@ _realGlobal_.wTester.exec();
   should have name, path.. etc
 
 - integrate with github ( special path format ) workflow to let github print annotation
+-- make github marking each faile in source files similar it marks eslint errors
 
 - node Some.test.js . -- should give help
 - node Some.test.js .routines.list -- should list routines
 
 - implement trap. opened trap make test to fail. help to cover async callbacks which potentially could be not called
+
+- xxx : make optional name of test suite. deduce if not defined
+
+- introduce criterions-like groups for test routines and test suites
+- implement logical formulas for selecting test routines and test suites
+
+- make most options available from both test suite and test routine
+
+- implement logger-driven broadcasing of the report
+
+- implement protocol for communication for multi-process run
+
+- make possible listing test routine with options of each
+-- in table formatting
 
 */
 
@@ -155,7 +175,7 @@ Test case is the lowest level of test group and `test.case` expects no closing, 
   var src1Copy = { a : 1, b : 2 };
   var src2 = { c : 3, d : 4 };
   var src2Copy = { c : 3, d : 4 };
-  var got = _.mapExtend( null, src1, src2 );
+  var got = _.props.extend( null, src1, src2 );
   var expected = { a : 1, b : 2, c : 3, d : 4 };
   test.will = 'return';
   test.identical( got, expected );

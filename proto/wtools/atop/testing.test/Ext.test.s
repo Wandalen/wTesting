@@ -5,15 +5,16 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../wtools/Tools.s' );
+  const _ = require( '../../../node_modules/Tools' );
   require( '../testing/entry/Main.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
   _.include( 'wConsequence' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
+const __ = _globals_.testing.wTools;
 
 /* qqq : parametrize delays */
 
@@ -52,7 +53,7 @@ function assetFor( test, asset )
 
   let oprogram = a.program;
   program_body.defaults = a.program.defaults;
-  a.program = _.routineUnite( a.program.head, program_body );
+  a.program = _.routine.uniteCloning_replaceByUnite( a.program.head, program_body );
   a.reflect = reflect
 
   return a;
@@ -67,8 +68,8 @@ function assetFor( test, asset )
       toolsPath : _.module.resolve( 'wTools' ),
     };
     o.locals = o.locals || locals;
-    _.mapSupplement( o.locals, locals );
-    _.mapSupplement( o.locals.context, locals.context );
+    _.props.supplement( o.locals, locals );
+    _.props.supplement( o.locals.context, locals.context );
     let programPath = a.path.nativize( oprogram.body.call( a, o ) );
     return programPath;
   }
@@ -1889,7 +1890,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programFail()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -1931,7 +1932,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programPass()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -1974,7 +1975,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programExit1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -2018,7 +2019,7 @@ function exitCodeSeveralTestSuites( test )
 
   function programExitCustomCode()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -3885,8 +3886,9 @@ function timeOutSeveralRoutines( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
+    const __ = _globals_.testing.wTools;
 
     function routine1( test )
     {
@@ -3897,28 +3899,28 @@ function timeOutSeveralRoutines( test )
         test.true( true );
         console.log( 'routine1:time2' );
       });
-      return _globals_.testing.wTools.time.out( context.t2*3 );
+      return __.time.out( context.t2*3 );
     }
 
     function routine2( test )
     {
       test.true( true );
-      return _globals_.testing.wTools.time.out( context.t2 );
+      return __.time.out( context.t2 );
     }
 
     function routine3( test )
     {
       test.true( true );
-      return _globals_.testing.wTools.time.out( context.t2 );
+      return __.time.out( context.t2 );
     }
 
     function routine4( test )
     {
       test.true( true );
-      return _globals_.testing.wTools.time.out( context.t2 );
+      return __.time.out( context.t2 );
     }
 
-    let Self =
+    const Proto =
     {
       routineTimeOut : context.t2*2,
       name : 'ForTesting',
@@ -3931,7 +3933,7 @@ function timeOutSeveralRoutines( test )
       }
     }
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test( Self.name );
   }
 
@@ -3987,8 +3989,9 @@ function timeOutSeveralRoutinesDesync( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
+    const __ = _globals_.testing.wTools;
 
     function routine1( test )
     {
@@ -3999,29 +4002,29 @@ function timeOutSeveralRoutinesDesync( test )
         test.true( true );
         console.log( 'routine1:time2' );
       });
-      _globals_.testing.wTools.time.out( context.t2*3 ).deasync();
+      __.time.out( context.t2*3 ).deasync();
       test.true( true );
     }
 
     function routine2( test )
     {
       test.true( true );
-      return _globals_.testing.wTools.time.out( context.t2 );
+      return __.time.out( context.t2 );
     }
 
     function routine3( test )
     {
       test.true( true );
-      return _globals_.testing.wTools.time.out( context.t2 );
+      return __.time.out( context.t2 );
     }
 
     function routine4( test )
     {
       test.true( true );
-      return _globals_.testing.wTools.time.out( context.t2 );
+      return __.time.out( context.t2 );
     }
 
-    let Self =
+    const Proto =
     {
       routineTimeOut : context.t2*2,
       name : 'ForTesting',
@@ -4034,7 +4037,7 @@ function timeOutSeveralRoutinesDesync( test )
       }
     }
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test( Self.name );
   }
 
@@ -4407,21 +4410,21 @@ function termination( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
-    _ = _realGlobal_._globals_.testing.wTools;
-    let input = { map : _.fileProvider.fileRead({ filePath : _.path.join( __dirname, 'File1' ), encoding : 'json' }) };
+    const __ = _globals_.testing.wTools;
+    let input = { map : __.fileProvider.fileRead({ filePath : __.path.join( __dirname, 'File1' ), encoding : 'json' }) };
 
     function routine1( test )
     {
       test.true( true );
-      let con = new _.Consequence();
-      _.time.out( context.t1, () =>
+      let con = new __.Consequence();
+      __.time.out( context.t1, () =>
       {
         if( input.map.throwing )
         {
           if( input.map.errAttend )
-          con.error( _.errAttend( 'Error1' ) );
+          con.error( __.errAttend( 'Error1' ) );
           else
           con.error( 'Error1' );
         }
@@ -4433,12 +4436,12 @@ function termination( test )
       con.tap( ( _err, arg ) =>
       {
         if( input.map.terminationBegin )
-        _.procedure.terminationBegin();
+        __.procedure.terminationBegin();
       });
       return con;
     }
 
-    let Self =
+    const Proto =
     {
       routineTimeOut : context.t1*100,
       tests :
@@ -4447,7 +4450,7 @@ function termination( test )
       }
     }
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test( Self.name );
     // wTestSuite( Self ).run(); // xxx : make it working
   }
@@ -4589,7 +4592,7 @@ function uncaughtErrorNotSilenced( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
     function routine1( test )
@@ -4597,7 +4600,7 @@ function uncaughtErrorNotSilenced( test )
       _.time.begin( 1, () => _.error._handleUncaught2({ err : 'Error1' }) );
     }
 
-    let Self =
+    const Proto =
     {
       tests :
       {
@@ -4605,7 +4608,7 @@ function uncaughtErrorNotSilenced( test )
       }
     }
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test( Self.name );
   }
 
@@ -4679,6 +4682,51 @@ function programOptionsRoutineDirPath( test )
   /* - */
 
   function testApp1(){}
+
+}
+
+//
+
+function toolsPathGetBasic( test )
+{
+  let context = this;
+
+  /* */
+
+  test.case = 'basic';
+  var got = _.module.toolsPathGet();
+  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  test.identical( got, exp );
+  console.log( `toolsPath : ${got}` );
+
+  /* */
+
+}
+
+//
+
+function toolsPathGetTester( test )
+{
+  let context = this;
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  var toolsPath1 = _.module.toolsPathGet();
+  return a.forkNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var toolsPath2 = op.output.trim();
+    test.identical( toolsPath1, exp );
+    test.identical( toolsPath2, exp );
+    return op;
+  });
+
+  function program()
+  {
+    console.log( toolsPath );
+  }
 
 }
 
@@ -5001,7 +5049,7 @@ function checkDiffWithProto( test )
     test.identical( _.strCount( op.output, exp2 ), 0 );
     test.identical( _.strCount( op.output, exp3 ), 2 );
     test.identical( _.strCount( op.output, exp4 ), 0 );
-    test.identical( _.strCount( op.output, exp5 ), 0 );
+    test.identical( _.strCount( op.output, exp5 ), 4 );
 
     return null;
   })
@@ -5020,10 +5068,10 @@ function checkDiffWithProto( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
-    //
+    /* */
 
     function identical1( test )
     {
@@ -5045,7 +5093,7 @@ function checkDiffWithProto( test )
       test.identical( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function identical2( test )
     {
@@ -5068,7 +5116,7 @@ function checkDiffWithProto( test )
       test.identical( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function identical3( test )
     {
@@ -5090,7 +5138,7 @@ function checkDiffWithProto( test )
       test.identical( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function identical4( test )
     {
@@ -5113,7 +5161,7 @@ function checkDiffWithProto( test )
       test.identical( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function identical5( test )
     {
@@ -5138,7 +5186,7 @@ function checkDiffWithProto( test )
       test.identical( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function identical6( test )
     {
@@ -5164,9 +5212,9 @@ function checkDiffWithProto( test )
       test.identical( obj2, obj1 );
     }
 
-    //
+    /* */
 
-    let Self =
+    const Proto =
     {
       name : 'Fail',
       tests :
@@ -5180,9 +5228,9 @@ function checkDiffWithProto( test )
       }
     }
 
-    //
+    /* */
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test();
   }
 }
@@ -5380,10 +5428,10 @@ function checkDiffWithProtoEq( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
-    //
+    /* */
 
     function equivalent1( test )
     {
@@ -5405,7 +5453,7 @@ function checkDiffWithProtoEq( test )
       test.eq( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function equivalent2( test )
     {
@@ -5428,7 +5476,7 @@ function checkDiffWithProtoEq( test )
       test.eq( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function equivalent3( test )
     {
@@ -5450,7 +5498,7 @@ function checkDiffWithProtoEq( test )
       test.eq( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function equivalent4( test )
     {
@@ -5473,7 +5521,7 @@ function checkDiffWithProtoEq( test )
       test.eq( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function equivalent5( test )
     {
@@ -5498,7 +5546,7 @@ function checkDiffWithProtoEq( test )
       test.eq( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function equivalent6( test )
     {
@@ -5524,7 +5572,7 @@ function checkDiffWithProtoEq( test )
       test.eq( obj2, obj1 );
     }
 
-    let Self =
+    const Proto =
     {
       name : 'Eq',
       tests :
@@ -5538,9 +5586,9 @@ function checkDiffWithProtoEq( test )
       }
     }
 
-    //
+    /* */
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test();
   }
 }
@@ -5738,10 +5786,10 @@ function checkDiffWithProtoContains( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
-    //
+    /* */
 
     function contains1( test )
     {
@@ -5763,7 +5811,7 @@ function checkDiffWithProtoContains( test )
       test.contains( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function contains2( test )
     {
@@ -5786,7 +5834,7 @@ function checkDiffWithProtoContains( test )
       test.contains( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function contains3( test )
     {
@@ -5808,7 +5856,7 @@ function checkDiffWithProtoContains( test )
       test.contains( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function contains4( test )
     {
@@ -5831,7 +5879,7 @@ function checkDiffWithProtoContains( test )
       test.contains( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function contains5( test )
     {
@@ -5856,7 +5904,7 @@ function checkDiffWithProtoContains( test )
       test.contains( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function contains6( test )
     {
@@ -5882,7 +5930,7 @@ function checkDiffWithProtoContains( test )
       test.contains( obj2, obj1 );
     }
 
-    let Self =
+    const Proto =
     {
       name : 'Contains',
       tests :
@@ -5896,9 +5944,9 @@ function checkDiffWithProtoContains( test )
       }
     }
 
-    //
+    /* */
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test();
   }
 }
@@ -6095,10 +6143,10 @@ function checkDiffWithProtoContainsAll( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
-    //
+    /* */
 
     function containsAll1( test )
     {
@@ -6120,7 +6168,7 @@ function checkDiffWithProtoContainsAll( test )
       test.containsAll( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAll2( test )
     {
@@ -6143,7 +6191,7 @@ function checkDiffWithProtoContainsAll( test )
       test.containsAll( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAll3( test )
     {
@@ -6165,7 +6213,7 @@ function checkDiffWithProtoContainsAll( test )
       test.containsAll( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAll4( test )
     {
@@ -6188,7 +6236,7 @@ function checkDiffWithProtoContainsAll( test )
       test.containsAll( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAll5( test )
     {
@@ -6213,7 +6261,7 @@ function checkDiffWithProtoContainsAll( test )
       test.containsAll( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAll6( test )
     {
@@ -6239,7 +6287,7 @@ function checkDiffWithProtoContainsAll( test )
       test.containsAll( obj2, obj1 );
     }
 
-    let Self =
+    const Proto =
     {
       name : 'ContainsAll',
       tests :
@@ -6253,9 +6301,9 @@ function checkDiffWithProtoContainsAll( test )
       }
     }
 
-    //
+    /* */
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test();
   }
 }
@@ -6453,10 +6501,10 @@ function checkDiffWithProtoContainsAny( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
-    //
+    /* */
 
     function containsAny1( test )
     {
@@ -6478,7 +6526,7 @@ function checkDiffWithProtoContainsAny( test )
       test.containsAny( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAny2( test )
     {
@@ -6501,7 +6549,7 @@ function checkDiffWithProtoContainsAny( test )
       test.containsAny( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAny3( test )
     {
@@ -6523,7 +6571,7 @@ function checkDiffWithProtoContainsAny( test )
       test.containsAny( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAny4( test )
     {
@@ -6546,7 +6594,7 @@ function checkDiffWithProtoContainsAny( test )
       test.containsAny( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAny5( test )
     {
@@ -6571,7 +6619,7 @@ function checkDiffWithProtoContainsAny( test )
       test.containsAny( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsAny6( test )
     {
@@ -6597,7 +6645,7 @@ function checkDiffWithProtoContainsAny( test )
       test.containsAny( obj2, obj1 );
     }
 
-    let Self =
+    const Proto =
     {
       name : 'ContainsAny',
       tests :
@@ -6611,9 +6659,9 @@ function checkDiffWithProtoContainsAny( test )
       }
     }
 
-    //
+    /* */
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test();
   }
 }
@@ -6811,10 +6859,10 @@ function checkDiffWithProtoContainsOnly( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wTesting' );
 
-    //
+    /* */
 
     function containsOnly1( test )
     {
@@ -6836,7 +6884,7 @@ function checkDiffWithProtoContainsOnly( test )
       test.containsOnly( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsOnly2( test )
     {
@@ -6859,7 +6907,7 @@ function checkDiffWithProtoContainsOnly( test )
       test.containsOnly( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsOnly3( test )
     {
@@ -6881,7 +6929,7 @@ function checkDiffWithProtoContainsOnly( test )
       test.containsOnly( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsOnly4( test )
     {
@@ -6904,7 +6952,7 @@ function checkDiffWithProtoContainsOnly( test )
       test.containsOnly( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsOnly5( test )
     {
@@ -6929,7 +6977,7 @@ function checkDiffWithProtoContainsOnly( test )
       test.containsOnly( obj2, obj1 );
     }
 
-    //
+    /* */
 
     function containsOnly6( test )
     {
@@ -6955,7 +7003,7 @@ function checkDiffWithProtoContainsOnly( test )
       test.containsOnly( obj2, obj1 );
     }
 
-    let Self =
+    const Proto =
     {
       name : 'ContainsOnly',
       tests :
@@ -6971,7 +7019,7 @@ function checkDiffWithProtoContainsOnly( test )
 
     //
 
-    Self = wTestSuite( Self );
+    const Self = wTestSuite( Proto );
     wTester.test();
   }
 }
@@ -6985,7 +7033,7 @@ Check diff from test.containsOnly, when comparing maps that set new __proto__.
 // suite
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.Tester.Ext',
@@ -7073,6 +7121,8 @@ let Self =
     // test asset
 
     programOptionsRoutineDirPath,
+    toolsPathGetBasic,
+    toolsPathGetTester,
 
     // related
 
@@ -7091,7 +7141,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

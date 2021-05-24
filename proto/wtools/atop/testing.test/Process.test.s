@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../testing/entry/Main.s' );
@@ -19,8 +19,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 function assetFor( test, name )
 {
@@ -32,7 +32,7 @@ function assetFor( test, name )
 
   let oprogram = a.program;
   program_body.defaults = a.program.defaults;
-  a.program = _.routineUnite( a.program.head, program_body );
+  a.program = _.routine.uniteCloning_replaceByUnite( a.program.head, program_body );
   return a;
 
   /* */
@@ -45,8 +45,8 @@ function assetFor( test, name )
       toolsPath : _.module.resolve( 'wTools' ),
     };
     o.locals = o.locals || locals;
-    _.mapSupplement( o.locals, locals );
-    _.mapSupplement( o.locals.context, locals.context );
+    _.props.supplement( o.locals, locals );
+    _.props.supplement( o.locals.context, locals.context );
     let programPath = a.path.nativize( oprogram.body.call( a, o ) );
     return programPath;
   }
@@ -90,7 +90,7 @@ function main( test )
     test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'Error from onSuiteEnd' ) );
     test.identical( _.strCount( suite.report.errorsArray[ 2 ].message, 'Test suite "Trivial" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -183,7 +183,7 @@ function disconnectedChildProcess( test )
     console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DisconnectedProcess" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -194,8 +194,8 @@ function disconnectedChildProcess( test )
   {
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
-    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
-    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
+    self.toolsPathInclude = `const _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
   //
@@ -289,7 +289,7 @@ function disconnectedChildProcessWithIPC( test )
     console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DisconnectedProcessIPC" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -300,8 +300,8 @@ function disconnectedChildProcessWithIPC( test )
   {
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
-    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
-    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
+    self.toolsPathInclude = `const _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
   //
@@ -396,7 +396,7 @@ function detachedDisconnectedChildProcess( test )
     console.log( suite.report.errorsArray[ 0 ] );
     test.identical( _.strCount( suite.report.errorsArray[ 0 ].message, 'Test suite "DetachedProcess" had zombie process with pid' ), 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     return null;
   })
@@ -407,8 +407,8 @@ function detachedDisconnectedChildProcess( test )
   {
     var self = this;
     self.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'DetachedProcess' );
-    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../wtools/Tools.s' ) );
-    self.toolsPathInclude = `let _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
+    self.toolsPath = _.path.nativize( _.path.resolve( __dirname, '../../../node_modules/Tools' ) );
+    self.toolsPathInclude = `const _ = require( '${ _.strEscape( self.toolsPath ) }' )\n`;
   }
 
   //
@@ -463,7 +463,7 @@ function detachedDisconnectedChildProcess( test )
 
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-let Self =
+const Proto =
 {
   name : 'Tools.Tester.Process',
   silencing : 1,
@@ -483,7 +483,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

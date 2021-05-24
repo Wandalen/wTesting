@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../wtools/Tools.s' );
+  const _ = require( '../../../node_modules/Tools' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../testing/entry/Main.s' );
@@ -19,8 +19,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 /* qqq for Dmytro : parametrize all delays */
 /* qqq for Dmytro : ( err, got ) -> ( err, arg ) */
@@ -7888,7 +7888,7 @@ function notEquivalentReturn( test )
 
 //
 
-function containReturn( test )
+function containsReturn( test )
 {
 
   var suite = wTestSuite
@@ -8022,6 +8022,721 @@ function containReturn( test )
     test.case = 'extra arguments';
 
     var got = t.contains( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( suite.report.testCheckFails, 8 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContains( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContains( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContains();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContains( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsAllReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( suite.report.testCheckFails, 8 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContainsAll( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAll( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContainsAll();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContainsAll( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsAnyReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 10 );
+    test.identical( suite.report.testCheckFails, 8 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContainsAny( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsAny( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContainsAny();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContainsAny( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsOnlyReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 11 );
+    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContainsOnly( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( { a : 1 }, { a : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsOnly( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContainsOnly();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContainsOnly( { a : 1 }, { a : 1 }, { a : 1 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+  }
+
+}
+
+//
+
+function notContainsNoneReturn( test )
+{
+
+  var suite = wTestSuite
+  ({
+    tests : { returnTest },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+    name : test.name,
+    onSuiteEnd,
+  });
+
+  return suite.run();
+
+  /* */
+
+  function onSuiteEnd( t )
+  {
+    test.identical( suite.report.testCheckPasses, 11 );
+    test.identical( suite.report.testCheckFails, 7 );
+    test.identical( suite.report.errorsArray.length, 2 );
+    if( suite.report.errorsArray.length )
+    logger.log( suite.report.errorsArray[ 0 ] );
+  }
+
+  /* */
+
+  function returnTest( t )
+  {
+    var got = t.notContainsNone( 1, 1 );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( 1, 2 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( 1, '1' );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( '1', 1 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( '1', '1' );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( true, true );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( false, true );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1 ], [ 1 ] );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1 ], [ 2 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], 5 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], 4 );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], [ 4, 5 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( [ 1, 2, 3, 4 ], [ 3, 4 ] );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( { a : 1 }, { a : 1 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( { a : 1 }, { a : 2 } );
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    var got = t.notContainsNone( { a : 1, b : 2 }, { b : 2 } );
+    test.identical( got, true );
+    test.identical( _.boolIs( got ), true );
+
+    /* */
+
+    test.case = 'no arguments';
+
+    var got = t.notContainsNone();
+    test.identical( got, false );
+    test.identical( _.boolIs( got ), true );
+
+    test.case = 'extra arguments';
+
+    var got = t.notContainsNone( { a : 1 }, { a : 1 }, { a : 1 } );
     test.identical( got, false );
     test.identical( _.boolIs( got ), true );
 
@@ -9429,7 +10144,7 @@ function testCase( test )
       'testCasePasses' : 2,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -9444,7 +10159,7 @@ function testCase( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -9519,7 +10234,7 @@ function testsGroupSameNameError( test )
       'testCasePasses' : 0,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -9535,7 +10250,7 @@ function testsGroupSameNameError( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -9606,7 +10321,7 @@ function testsGroupDiscrepancyError( test )
       'testCasePasses' : 0,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -9625,7 +10340,7 @@ function testsGroupDiscrepancyError( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     got.errorsArray[ 0 ] = String( got.errorsArray[ 0 ] );
     test.identical( got, exp );
 
@@ -9868,7 +10583,7 @@ function testsGroupSingleLevel( test )
       'testCasePasses' : 2,
       'testCaseFails' : 1,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -9883,7 +10598,7 @@ function testsGroupSingleLevel( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10008,7 +10723,7 @@ function testsGroupMultipleLevels( test )
       'testCasePasses' : 0,
       'testCaseFails' : 2,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10023,7 +10738,7 @@ function testsGroupMultipleLevels( test )
       'testRoutinePasses' : 0,
       'testRoutineFails' : 1,
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10115,7 +10830,7 @@ function testsGroupTestCaseSingleLevel( test )
       'testCasePasses' : 2,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10130,7 +10845,7 @@ function testsGroupTestCaseSingleLevel( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10222,7 +10937,7 @@ function testsGroupTestCaseSameName( test )
       'testCasePasses' : 2,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10237,7 +10952,7 @@ function testsGroupTestCaseSameName( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10328,7 +11043,7 @@ function testsGroupAfterTestCase( test )
       'testCasePasses' : 2,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10343,7 +11058,7 @@ function testsGroupAfterTestCase( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -10455,7 +11170,7 @@ function testsGroupTestCaseMultipleLevels( test )
       'testCasePasses' : 3,
       'testCaseFails' : 0,
     }
-    var got = _.mapBut( testRoutine.report, { timeSpent : null } );
+    var got = _.mapBut_( null, testRoutine.report, { timeSpent : null } );
     test.identical( got, exp );
 
     var exp =
@@ -10470,7 +11185,7 @@ function testsGroupTestCaseMultipleLevels( test )
       'testRoutinePasses' : 1,
       'testRoutineFails' : 0
     }
-    var got = _.mapBut( suite1.report, { timeSpent : null } );
+    var got = _.mapBut_( null, suite1.report, { timeSpent : null } );
     test.identical( got, exp );
 
   });
@@ -11595,7 +12310,7 @@ function processWatchingOnDefault( test )
     test.true( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11620,9 +12335,9 @@ function processWatchingOnDefault( test )
       throwingExitCode : 0,
       mode : 'spawn'
     }
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
   }
 
 }
@@ -11649,9 +12364,9 @@ function processWatchingOnExplicit( test )
       throwingExitCode : 0,
       mode : 'spawn'
     }
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
-    _.process.start( _.mapExtend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
+    _.process.start( _.props.extend( null, o ) );
   }
 
   var suite = wTestSuite
@@ -11674,7 +12389,7 @@ function processWatchingOnExplicit( test )
     test.true( _.strHas( suite.report.errorsArray[ 2 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11799,7 +12514,7 @@ function processWatchingRoutineTimeOut( test )
     test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) );
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11860,7 +12575,7 @@ function processWatchingErrorInTestRoutine( test )
     test.true( _.strHas( suite.report.errorsArray[ 1 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 1 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11924,7 +12639,7 @@ function processWatchingOnSuiteBegin( test )
     test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -11988,7 +12703,7 @@ function processWatchingOnSuiteEnd( test )
     test.true( _.strHas( suite.report.errorsArray[ 0 ].message, 'had zombie process' ) )
     test.identical( suite.report.testCheckFails, 0 );
 
-    test.identical( _.mapKeys( suite._processWatcherMap ).length, 0 );
+    test.identical( _.props.keys( suite._processWatcherMap ).length, 0 );
 
     test.true( err === undefined );
     test.true( arg === suite );
@@ -12021,7 +12736,7 @@ processWatchingOnSuiteEnd.description =
 // var notTakingIntoAccount = { concurrent : 1, takingIntoAccount : 0 };
 var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 1, takingIntoAccount : 0 };
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.Tester.Int',
@@ -12092,7 +12807,12 @@ let Self =
     notIdenticalReturn,
     equivalentReturn,
     notEquivalentReturn,
-    containReturn,
+    containsReturn,
+    notContainsReturn,
+    notContainsAllReturn,
+    notContainsAnyReturn,
+    notContainsOnlyReturn,
+    notContainsNoneReturn,
 
     ilReturn,
     niReturn,
@@ -12162,7 +12882,7 @@ let Self =
 
 }
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

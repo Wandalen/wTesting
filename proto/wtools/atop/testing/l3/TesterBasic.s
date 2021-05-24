@@ -10,8 +10,8 @@
 
 //
 
-let _global = _global_;
-let _ = _global.wTools;
+const _global = _global_;
+const _ = _global.wTools;
 let sourceFileLocation = _.introspector.location().full;
 let sourceFileStack = _.introspector.stack();
 
@@ -44,8 +44,8 @@ _.assert( _.printerIs( _global.logger ), 'wTesting needs Logger' );
  * @module Tools/atop/Tester
  */
 
-let Parent = null;
-let Self = wTesterBasic;
+const Parent = null;
+const Self = wTesterBasic;
 function wTesterBasic( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -185,9 +185,9 @@ function appArgsRead()
   if( tester._appArgs )
   return tester._appArgs;
 
-  let o = _.routineOptions( appArgsRead, arguments );
+  let o = _.routine.options_( appArgsRead, arguments );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.mapExtend( settings, tester.Settings );
+  _.props.extend( settings, tester.Settings );
 
   let appArgs = _.process.input();
   if( o.propertiesMap !== null )
@@ -255,7 +255,7 @@ function appArgsRead()
   {
     _.each( src, ( value, key ) =>
     {
-      if( _.arrayLike( value ) )
+      if( _.argumentsArray.like( value ) )
       if( !SettingsAsArrayMap[ key ] )
       src[ key ] = value[ value.length - 1 ];
     });
@@ -466,7 +466,7 @@ function _testingBegin( allSuites, runSuites )
 
   /* */
 
-  let total = _.entityLengthOf( runSuites );
+  let total = _.entity.lengthOf( runSuites );
   logger.log( 'Launching several ( ' + total + ' ) test suite(s) ..' );
   logger.up();
   logger.begin({ verbosity : -5 });
@@ -612,7 +612,7 @@ function cancel()
 {
   let tester = this;
 
-  let o = _.routineOptions( cancel, arguments );
+  let o = _.routine.options_( cancel, arguments );
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( o.global === undefined );
@@ -700,7 +700,7 @@ function _suitesRun( suites )
 
   /* */
 
-  let allSuites = _.mapExtend( null, suites );
+  let allSuites = _.props.extend( null, suites );
   for( let s in suites )
   {
     let suite = wTesterBasic.TestSuite.instanceByName( suites[ s ] );
@@ -726,7 +726,7 @@ function _suitesRun( suites )
 
   }
 
-  if( !_.mapKeys( suites ).length )
+  if( !_.props.keys( suites ).length )
   {
     tester.suitesListPrint( allSuites );
     logger.log( 'No enabled test suite to run at', wTester.textColor( tester.filePath, 'path' ) );
@@ -784,7 +784,7 @@ function suitesFilterOut( suites )
   }
 
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects none or single argument, but got', arguments.length );
-  _.assert( _.objectIs( suites ) );
+  _.assert( _.object.isBasic( suites ) );
 
   suites = _.filter_( null, suites, function( suite )
   {
@@ -840,7 +840,7 @@ function suitesListPrint( suites )
     logger.log( suite.suiteFileLocation, '-', ( suite.enabled ? 'enabled' : 'disabled' ) );
   });
 
-  let l = _.entityLengthOf( suites );
+  let l = _.entity.lengthOf( suites );
 
   logger.log( l, l > 1 ? 'test suites' : 'test suite' );
 
@@ -890,34 +890,49 @@ function _suitesIncludeAt( path )
     files = [ record ];
   }
 
-  for( let f = 0 ; f < files.length ; f++ )
+  try
   {
-    if( !files[ f ].stat.isTerminal() )
-    continue;
-    let absolutePath = files[ f ].absolute;
+    _realGlobal_.wTools.module.fileSetEnvironment( module, 'real' );
 
-    try
+    for( let f = 0 ; f < files.length ; f++ )
     {
-      require( tester.fileProvider.path.nativize( absolutePath ) );
-    }
-    catch( err )
-    {
-      debugger;
-      let error = _.err( err, '\nCant include', absolutePath );
-      _.errAttend( error );
-      tester._includeFailConsider( error );
+      if( !files[ f ].stat.isTerminal() )
+      continue;
+      let absolutePath = files[ f ].absolute;
 
-      if( tester.settings.coloring )
-      logger.error( _.ct.fg( 'Cant include ' + absolutePath, 'red' ) );
-      else
-      logger.error( 'Cant include ' + absolutePath );
+      try
+      {
+        /* xxx : restore modules */
+        require( tester.fileProvider.path.nativize( absolutePath ) );
+      }
+      catch( err )
+      {
+        debugger;
+        let error = _.err( err, '\nCant include', absolutePath );
+        _.errAttend( error );
+        tester._includeFailConsider( error );
 
-      if( logger.verbosity + tester.negativity >= 4 )
-      logger.error( _.err( error ) );
+        if( tester.settings.coloring )
+        logger.error( _.ct.fg( 'Cant include ' + absolutePath, 'red' ) );
+        else
+        logger.error( 'Cant include ' + absolutePath );
+
+        if( logger.verbosity + tester.negativity >= 4 )
+        logger.error( _.err( error ) );
+      }
+
     }
 
   }
-
+  catch( err )
+  {
+    debugger;
+    throw _.err( err );
+  }
+  finally
+  {
+    _realGlobal_.wTools.module.fileResetEnvironment( module, 'real' );
+  }
 }
 
 //
@@ -938,7 +953,7 @@ function suitesIncludeAt( path )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( path ), 'Expects string' );
-  
+
   if( Config.interpreter === 'browser' )
   return;
 
@@ -1440,7 +1455,7 @@ let SettingsOfSuite =
 
 }
 
-let Settings = _.mapExtend( null, SettingsOfSuite, SettingsOfTester );
+let Settings = _.props.extend( null, SettingsOfSuite, SettingsOfTester );
 
 let Composes =
 {

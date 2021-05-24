@@ -1,16 +1,11 @@
 
-# utility::Testing  [![status](https://github.com/Wandalen/wTesting/workflows/publish/badge.svg)](https://github.com/Wandalen/wTesting/actions?query=workflow%3Apublish) [![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)](https://github.com/emersion/stability-badges#stable)
+# utility::Testing  [![status](https://github.com/Wandalen/wTesting/actions/workflows/StandardPublish.yml/badge.svg)](https://github.com/Wandalen/wTesting/actions/workflows/StandardPublish.yml) [![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)](https://github.com/emersion/stability-badges#stable)
 
 Framework for convenient unit testing. Utility Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.
 
 <div align="center">
   <img src="./doc/images/tester.gif" alt="tester.gif">
 </div>
-
-
-### Cheat sheet
-
-All information about utility in short form given in [cheat sheet](./doc/version.eng/tutorial/TestingCheatSheet.pdf).
 
 ### Why wTesting?
 
@@ -31,10 +26,8 @@ All information about utility in short form given in [cheat sheet](./doc/version
 To install :
 
 ```
-npm install -g wTesting
+npm install -g wTesting@stable
 ```
-
-Once installed, the utility requires no configuration and is ready for use.
 
 ### Test files
 
@@ -125,7 +118,11 @@ Please see documentation in the `doc` directory.
 
 For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). For getting exhaustive information on one or another aspect use [list of concepts](./doc/version.eng/README.md#Concepts) to find a concept of interest and get familiar with it.
 
-#### Quick references
+### Cheat sheet
+
+All information about utility in short form given in [cheat sheet](./doc/version.eng/tutorial/TestingCheatSheet.pdf).
+
+### Quick references
 
 - [Get help on commands of CLI](./doc/version.eng/tutorial/Help.md)
 - [Running tests](./doc/version.eng/tutorial/Running.md)
@@ -133,3 +130,4 @@ For gentle introduction use [tutorials](./doc/version.eng/README.md#Tutorials). 
 - [Writing tests](./doc/version.eng/tutorial/HelloWorld.md)
 - [Grouping of tests cases](./doc/version.eng/tutorial/Report.md)
 - [Test checks](./doc/version.eng/concept/TestCheck.md)
+

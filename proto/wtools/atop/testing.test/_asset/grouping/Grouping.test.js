@@ -1,5 +1,5 @@
 
-let _ = require( 'wTesting' );
+const _ = require( 'wTesting' );
 let Hello = require( './Hello.js' );
 
 //
@@ -33,7 +33,7 @@ function routine1( test )
 
 //
 
-let Self =
+const Proto =
 {
   name : 'Hello',
   tests :
@@ -44,6 +44,6 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

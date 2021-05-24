@@ -1,6 +1,6 @@
 {
   "name" : "wTesting",
-  "version" : "1.0.468",
+  "version" : "1.0.513",
   "engine" : "node >= 10.0.0",
   "description" : "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -11,26 +11,26 @@
     { "name" : "Dmytro Kryvoruchko", "email" : "dm.vict.kr@gmail.com" }
   ],
   "license" : "MIT",
-  "main" : "proto/wtools/atop/testing/entry/Main.s",
-  "files" : [ "proto/wtools/atop/testing", "proto/wtools/Tools.s", "out" ],
+  "main" : "proto/node_modules/wTesting",
+  "files" : [ "proto/wtools/atop/testing", "proto/wtools/abase/l0/l0", "out", "proto/node_modules" ],
   "scripts" :
   {
     "wtest" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-wtest" : "node proto/wtools/atop/testing/entry/Exec",
-    "debug-wtest" : "node proto/wtools/atop/testing/entry/ExecDebug",
+    "wtest.singleproc" : "node proto/wtools/atop/testing/entry/Exec",
+    "wtest.debug" : "node proto/wtools/atop/testing/entry/ExecDebug",
     "tst" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-tst" : "node proto/wtools/atop/testing/entry/Exec",
-    "debug-tst" : "node proto/wtools/atop/testing/entry/ExecDebug",
+    "tst.singleproc" : "node proto/wtools/atop/testing/entry/Exec",
+    "tst.debug" : "node proto/wtools/atop/testing/entry/ExecDebug",
     "test" : "wtest .run 'proto/**' rapidity:-1"
   },
   "bin" :
   {
     "wtest" : "proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-wtest" : "proto/wtools/atop/testing/entry/Exec",
-    "debug-wtest" : "proto/wtools/atop/testing/entry/ExecDebug",
+    "wtest.singleproc" : "proto/wtools/atop/testing/entry/Exec",
+    "wtest.debug" : "proto/wtools/atop/testing/entry/ExecDebug",
     "tst" : "proto/wtools/atop/testing/entry/ExecUnrestricted",
-    "single-process-tst" : "proto/wtools/atop/testing/entry/Exec",
-    "debug-tst" : "proto/wtools/atop/testing/entry/ExecDebug"
+    "tst.singleproc" : "proto/wtools/atop/testing/entry/Exec",
+    "tst.debug" : "proto/wtools/atop/testing/entry/ExecDebug"
   },
   "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wTesting.git" },
   "bugs" :
@@ -56,7 +56,6 @@
   "optionalDependencies" : { "wEventHandler" : "" },
   "devDependencies" :
   {
-    "wTesting" : "file:.",
     "electron" : "11.3.0",
     "spectron" : "13.0.0",
     "puppeteer" : "5.5.0",

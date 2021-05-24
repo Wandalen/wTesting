@@ -1,6 +1,6 @@
 
 debugger;
-let _ = require( 'wTesting' );
+const _ = require( 'wTesting' );
 debugger;
 
 //

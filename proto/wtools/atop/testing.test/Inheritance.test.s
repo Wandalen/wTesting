@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
 
 
-  let _ = require( '../../../wtools/Tools.s' );
+  const _ = require( '../../../node_modules/Tools' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
   require( '../testing/entry/Main.s' );
@@ -17,8 +17,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 //
 
@@ -78,7 +78,7 @@ function inherit( test )
     routines.push( test.name );
 
     test.case = 'check if child suit inherits tests, options, context from parent';
-    var tests = _.mapOnlyOwnKeys( wTests[ childSuitName ].tests );
+    var tests = _.props.onlyOwnKeys( wTests[ childSuitName ].tests );
     test.identical( tests, [ 'test1', 'test2' ] );
     test.identical( wTests[ childSuitName ].abstract, 0 );
 
@@ -139,7 +139,7 @@ function inherit( test )
 
   }
 
-  var suit = new wTestSuite( childSuit )
+  var suit = wTestSuite( childSuit )
   .inherit( wTests[ firstParentName ] )
   .inherit( wTests[ secondParentName ] );
 
@@ -149,14 +149,14 @@ function inherit( test )
     test.true( test.report.testCheckPasses > 8  );
     test.identical( test.report.testCheckFails, 0 );
     test.identical( routines.length, 3 );
-    test.identical( _.mapOnlyOwnKeys( suit.tests ).length, 2 );
+    test.identical( _.props.onlyOwnKeys( suit.tests ).length, 2 );
     return null;
   })
 }
 
 //
 
-var Proto =
+const Proto =
 {
 
   name : 'Tools.tester.Inheritance',
@@ -172,7 +172,7 @@ var Proto =
 
 //
 
-let Self = new wTestSuite( Proto );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self );
 

@@ -1,4 +1,4 @@
-let _ = require( 'wTesting' );
+const _ = require( 'wTesting' );
 
 function routine( test )
 {

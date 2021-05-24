@@ -32,7 +32,7 @@ function onSuiteEnd()
 
 //
 
-let Self =
+const Proto =
 {
   name : 'IsExecutedOnceOnSigint',
   onSuiteEnd,
@@ -46,6 +46,6 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

@@ -3,9 +3,9 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
-let debugged = _.process.isDebugged();
+const _global = _global_;
+const _ = _global_.wTools;
+const debugged = _.process.isDebugged();
 
 //
 
@@ -18,8 +18,8 @@ let debugged = _.process.isDebugged();
  */
 
 let logger = null;
-let Parent = null;
-let Self = wTestSuite;
+const Parent = null;
+const Self = wTestSuite;
 function wTestSuite( o )
 {
 
@@ -81,7 +81,7 @@ function init( o )
 
   suite._initialOptions = o;
 
-  _.assert( o === undefined || _.objectIs( o ), 'Expects object {-options-}, but got', _.entity.strType( o ) );
+  _.assert( o === undefined || _.object.isBasic( o ), 'Expects object {-options-}, but got', _.entity.strType( o ) );
 
   /* source path */
 
@@ -108,7 +108,7 @@ function init( o )
 
   if( inherits )
   {
-    _.assert( _.arrayLike( inherits ) );
+    _.assert( _.argumentsArray.like( inherits ) );
     if( inherits.length !== 1 )
     debugger;
     for( let i = 0 ; i < inherits.length ; i++ )
@@ -119,7 +119,7 @@ function init( o )
         if( Self.InstancesMap[ inherit.name ] )
         {
           let inheritInited = Self.InstancesMap[ inherit.name ];
-          _.assert( _.entityContains( inheritInited, _.mapBut( inherit, { inherit } ) ) );
+          _.assert( _.entityContains( inheritInited, _.mapBut_( null, inherit, { inherit } ) ) );
           inherits[ i ] = inheritInited;
         }
         else
@@ -136,7 +136,7 @@ function init( o )
 
   if( suite.context === null )
   suite.context = Object.create( null );
-  _.assert( _.objectIs( suite.context ) );
+  _.assert( _.object.isBasic( suite.context ) );
   // Object.preventExtensions( suite.context );
 
   return suite;
@@ -190,15 +190,15 @@ function inherit()
     _.assert( src instanceof Self, () => `Expects test suite to inherit it, but got ${_.entity.strType( src )}` );
 
     if( src.tests )
-    _.mapSupplement( suite.tests, src.tests );
+    _.props.supplement( suite.tests, src.tests );
 
     if( src.context )
-    _.mapSupplement( suite.context, src.context );
+    _.props.supplement( suite.context, src.context );
 
-    let extend = _.mapBut( src._initialOptions, suite._initialOptions );
+    let extend = _.mapBut_( null, src._initialOptions, suite._initialOptions );
     delete extend.abstract; /* qqq : add test to check test suite inheritance without explicitly defined in descendant `abstact : 0` works */
-    _.mapExtend( suite, extend );
-    _.mapExtend( suite._initialOptions, extend );
+    _.props.extend( suite, extend );
+    _.props.extend( suite._initialOptions, extend );
 
   }
 
@@ -244,7 +244,7 @@ function _accuracySet( accuracy )
   }
   else
   {
-    accuracy = _.make( accuracy );
+    accuracy = _.entity.cloneShallow( accuracy );
     suite.accuracyExplicitly = accuracy;
   }
 
@@ -319,10 +319,11 @@ function _consoleBar( o )
           wTester._barOptions.on = 1;
           if( !wTester._barOptions.outputPrinter )
           wTester._barOptions.outputPrinter = logger;
+          wTester._barOptions.outputingToConsole = 1;
         }
         else
         {
-          wTester._barOptions = { outputPrinter : logger, on : 1 };
+          wTester._barOptions = { outputPrinter : logger, on : 1, outputingToConsole : 1 };
         }
         wTester._barOptions = _.Logger.ConsoleBar( wTester._barOptions );
       }
@@ -418,11 +419,11 @@ function _form()
 
   /* verify */
 
-  _.assert( _.objectIs( suite.tests ) );
+  _.assert( _.object.isBasic( suite.tests ) );
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strDefined( suite.name ), 'Test suite should has {-name-}"' );
-  _.assert( _.objectIs( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
+  _.assert( _.object.isBasic( suite.tests ), 'Test suite should has map with test routines {-tests-}, but "' + suite.name + '" does not have such map' );
   _.assert( !suite._formed );
 
   /* extend */
@@ -430,7 +431,7 @@ function _form()
   let extend = Object.create( null );
 
   if( suite.override )
-  _.mapExtend( extend, suite.override );
+  _.props.extend( extend, suite.override );
 
   if( !suite.logger )
   suite.logger = wTester.logger || _global_.logger;
@@ -449,7 +450,7 @@ function _form()
 
   }
 
-  _.mapExtend( suite, extend );
+  _.props.extend( suite, extend );
 
   /* form test routines */
 
@@ -569,6 +570,23 @@ function _runBegin()
   if( wTester.settings.timing )
   suite._testSuiteBeginTime = _.time.now();
 
+  /* module */
+
+  /* yyy */
+  if
+  (
+       _globals_.real
+    && _globals_.real.wTools
+    && _globals_.real.wTools.module
+    && _globals_.real.wTools.module.predeclare
+  )
+  _globals_.real.wTools.module.predeclare
+  ({
+    alias : [ 'wTesting', 'wtesting' ],
+    entryPath : __dirname + '/../../../../node_modules/wTesting',
+    // entryPath : __dirname + '/../entry/Main.s',
+  });
+
   /* test routine */
 
   /* qqq : cover the case, please */
@@ -590,7 +608,7 @@ function _runBegin()
   /* tracking */
 
   _.arrayAppendOnceStrictly( wTester.activeSuites, suite );
-  _.assert( _.objectIs( suite.context ) );
+  _.assert( _.object.isBasic( suite.context ) );
   Object.preventExtensions( suite.context );
 
   /* logger */
@@ -1004,7 +1022,7 @@ function _exit()
   if( !err )
   {
     err = _.errBrief( 'Unexpected termination' );
-    _.errReason( err, 'unexpected termination' );
+    _.error.reason( err, 'unexpected termination' );
     if( !_.process.exitCode() )
     _.process.exitCode( 1 );
   }
@@ -1331,7 +1349,7 @@ function exceptionReport( o )
   let logger = suite.logger || wTester.logger || _global_.logger || _global_.console;
   let err;
 
-  _.routineOptions( exceptionReport, o );
+  _.routine.options_( exceptionReport, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   try

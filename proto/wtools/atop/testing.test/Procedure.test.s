@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
+  const _ = require( 'Tools' );
 
   require( '../testing/entry/Main.s' );
 
@@ -15,8 +15,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // context
@@ -163,21 +163,21 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
 
-    let keys = _.mapKeys( _realGlobal_._globals_ );
+    let keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
 
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `GLOBAL WHICH : ${ keys[ 0 ] }` );
 
     _.include( 'wTesting' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `GLOBAL WHICH : ${ keys[ 1 ] }` );
 
@@ -226,21 +226,21 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program2()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
 
-    let keys = _.mapKeys( _realGlobal_._globals_ );
+    let keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
 
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `GLOBAL WHICH : ${ keys[ 0 ] }` );
 
     _.include( 'wTesting' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `GLOBAL WHICH : ${ keys[ 1 ] }` );
 
@@ -303,7 +303,7 @@ var notTakingIntoAccount = { logger : _.Logger({ output : null }), concurrent : 
 // declare
 // --
 
-let Self =
+const Proto =
 {
   name : 'Tools.Tester.Procedure',
   silencing : 1,
@@ -330,7 +330,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

@@ -28,7 +28,7 @@ about:
     - chrome >= 60.0.0
     - firefox >= 60.0.0
   npm.scripts:
-    test: wtest .run proto/**
+    test: node proto/wtools/atop/testing/entry/ExecUnrestricted .run proto/**
     single-process-wtest: node proto/wtools/atop/testing/entry/Exec
     debug-wtest: node proto/wtools/atop/testing/entry/ExecDebug
     tst: node proto/wtools/atop/testing/entry/ExecUnrestricted

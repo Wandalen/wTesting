@@ -21,7 +21,7 @@
     "tst" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",
     "tst.singleproc" : "node proto/wtools/atop/testing/entry/Exec",
     "tst.debug" : "node proto/wtools/atop/testing/entry/ExecDebug",
-    "test" : "wtest .run 'proto/**' rapidity:-1"
+    "test" : "node proto/wtools/atop/testing/entry/ExecUnrestricted .run 'proto/**' rapidity:-1"
   },
   "bin" :
   {

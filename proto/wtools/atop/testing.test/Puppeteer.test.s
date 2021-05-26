@@ -52,7 +52,7 @@ function assetFor( test, asset )
   a.reflect = function reflect()
   {
 
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp, outputFormat : 'record' });
 
     reflected.forEach( ( r ) =>
     {

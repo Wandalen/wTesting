@@ -53,7 +53,7 @@ function assetFor( test, asset )
   a.reflect = function reflect()
   {
 
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
+    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp, outputFormat : 'record' });
 
     reflected.forEach( ( r ) =>
     {
@@ -318,13 +318,17 @@ function processWatchingOnSpectronZombie( test )
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
-    test.case = ''
+    test.case = '';
     return null;
-  })
+  });
 
+  a.ready.then( () =>
+  {
+    debugger;
+    return null;
+  });
   a.appStartNonThrowing({ execPath : `Spectron.test.s r:routineTimeOut ` })
   .then( ( got ) =>
   {
@@ -333,7 +337,7 @@ function processWatchingOnSpectronZombie( test )
     test.identical( _.strCount( got.output, 'Thrown 2 error' ), 2 );
     test.identical( _.strCount( got.output, `had zombie process` ), 1 );
     return null;
-  })
+  });
 
   a.appStartNonThrowing({ execPath : `Spectron.test.s r:spectronTimeOut ` })
   .then( ( got ) =>

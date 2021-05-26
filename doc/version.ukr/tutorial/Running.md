@@ -6,22 +6,6 @@
 
 В модулі [`wTools`](<https://github.com/Wandalen/wTools>) є готові тест сюіти. Використайте їх щоб побачити як працює фреймворк для тестування. Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
 
-<details>
-  <summary><u>Структура файлів модуля <code>wTools</code></u></summary>
-
-```
-wTools
-   ├── .git
-   ├── doc
-   ├── out
-   ├── proto
-   ├── sample
-   ├── ...
-   └── package.json
-```
-
-</details>
-
 Код цього модуля включно із тестами знаходиться в директорії `proto`.
 
 Після клонування перейдіть в директорію із модулем та виконайте команду
@@ -44,7 +28,7 @@ tst .suites.list
   <summary><u>Вивід команди <code>tst .suites.list</code></u></summary>
 
 ```
-[user@user ~]$ tst .suites.list
+$ tst .suites.list
 
 /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
 /.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808 - enabled
@@ -61,11 +45,11 @@ tst .suites.list
 
 </details>
 
-Згідно виводу модуль `Tools` має 10 тест сюітів. Іншими словами, 10 тест файлів так як під кожен тест сюіт відведено окремий файл. Вісім із них знаходяться в `proto/wtools/abase/l1.test`, один в `proto/wtools/abase/l2.test` i один в `sample`.
+Згідно виводу модуль `Tools` має 10 тест сюітів. Іншими словами, 10 тест файлів, так як під кожен тест сюіт відведено окремий файл. Вісім із них знаходяться в `proto/wtools/abase/l1.test`, один в `proto/wtools/abase/l2.test` i один в `sample`.
 
 ### Тестування окремого тест сюіта
 
-Виконати тестування можливо запустивши `JavaScript` файл із тест сюітом.
+Виконати тестування можливо запустивши файл із тест сюітом інтерпретатором `NodeJS`.
 
 Введіть команду:
 
@@ -79,7 +63,7 @@ node proto/wtools/abase/l1.test/Long.test.s
   <summary><u>Вивід команди <code>node proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ node proto/wtools/abase/l1.test/Long.test.s
+$ node proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -123,12 +107,12 @@ tst .run proto/wtools/abase/l1.test/Long.test.s
   <summary><u>Вивід команди <code>tst .run proto/wtools/abase/l1.test/Long.test.s</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto/wtools/abase/l1.test/Long.test.s
+$ tst .run proto/wtools/abase/l1.test/Long.test.s
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
 
-     Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.358s
+      Passed test routine ( Tools/base/l1/Long / bufferFrom ) in 0.358s
       Passed test routine ( Tools/base/l1/Long / bufferRelen ) in 0.091s
       Passed test routine ( Tools/base/l1/Long / bufferRetype ) in 0.080s
       Passed test routine ( Tools/base/l1/Long / bufferRawFrom ) in 0.118s
@@ -153,15 +137,17 @@ Testing ... in 41.124s ... ok
 
 </details>
 
-Читайти команду як: Знайти і запустити всі тести в директорій `proto/wtools/abase/l1.test/Long.test.s`. Порівняйте отриманий вивід з попереднім. Звіт тестування при виконанні тесту схожий. Відмінність в часі, який може варіюватися від запуску до запуску.
+Читайти команду як: Знайти і запустити всі тести в директорій `proto/wtools/abase/l1.test/Long.test.s`. Порівняйте отриманий вивід з попереднім. Звіт тестування при виконанні теста схожий. Відмінність в часі, який може варіюватися від запуску до запуску.
 
 ### Порівняння викликів
 
 Отже, прогнати тест сюіт можливо запустивши `JavaScript` файл на виконання інтерпретатором. Для цього інтерпретатору передається шлях до файла в якості аргумента
+
 ```
 node File.test.js
 ```
 або передавши цей шлях в якості аргумента утиліті
+
 ```
 tst File.test.js
 ```
@@ -175,7 +161,6 @@ tst File.test.js
 ```
 node path/to/TestSuite.js routine:someRoutine
 ```
-
 або
 
 ```
@@ -196,7 +181,7 @@ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
   <summary><u>Вивід команди <code>tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom</code></u></summary>
 
 ```
-[user@user ~]$ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
+$ tst proto/wtools/abase/l1.test/Long.test.s routine:bufferFrom
 
 Running test suite ( Tools/base/l1/Long ) ..
     at  /.../wTools/proto/wtools/abase/l1.test/Long.test.s:19500
@@ -230,7 +215,7 @@ tst .run proto
   <summary><u>Вивід команди <code>tst .run proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .run proto
+$ tst .run proto
 
     Running test suite ( Tools/base/l1/Diagnostics ) ..
     at  /.../sources/wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309

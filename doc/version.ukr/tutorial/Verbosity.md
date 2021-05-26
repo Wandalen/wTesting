@@ -28,7 +28,7 @@ tst .imply verbosity:1 .run Join.test.js
   <summary><u>Вивід команди <code>tst .imply verbosity:1 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply verbosity:1 .run Join.test.js
+$ tst .imply verbosity:1 .run Join.test.js
 
   Testing ... in 0.278s ... failed
 ```
@@ -43,7 +43,7 @@ tst .imply verbosity:1 .run Join.test.js
   <summary><u>Вивід команди <code>tst .imply v:4 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply v:4 .run Join.test.js
+$ tst .imply v:4 .run Join.test.js
 
   Includes tests from : /.../testCreation/Join.test.js
 
@@ -79,7 +79,7 @@ tst .imply verbosity:1 .run Join.test.js
   <summary><u>Вивід команди <code>tst .imply verbosity:6 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply verbosity:6 .run Join.test.js
+$ tst .imply verbosity:6 .run Join.test.js
 Includes tests from : /.../testCreation/Join.test.js
 
 Tester Settings :
@@ -116,7 +116,7 @@ Tester Settings :
             6 :
             7 : function routine1( test )
             8 : {
-            9 :   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );  
+            9 :   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
         Test check ( Join / routine1 /  # 1 ) ... ok
 
       Passed test routine ( Join / routine1 ) in 0.091s
@@ -128,7 +128,7 @@ Tester Settings :
             15 : {
             16 :
             17 :   test.case = 'pass';
-            18 :   test.identical( Join.join( 1, 3 ), '13' );  
+            18 :   test.identical( Join.join( 1, 3 ), '13' );
         Test check ( Join / routine2 / pass # 1 ) ... ok
 
 
@@ -144,7 +144,7 @@ Tester Settings :
             18 :   test.identical( Join.join( 1, 3 ), '13' );
             19 :
             20 :   test.case = 'fail';
-            21 :   test.identical( Join.join( 1, 3 ), 13 );  
+            21 :   test.identical( Join.join( 1, 3 ), 13 );
         Test check ( Join / routine2 / fail # 2 ) ... failed
 
       Failed test routine ( Join / routine2 ) in 0.098s
@@ -195,7 +195,7 @@ Tester Settings :
   <summary><u>Вивід команди <code>tst .imply routine:routine2 v:9 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply routine:routine2 v:9 .run Join.test.js
+$ tst .imply routine:routine2 v:9 .run Join.test.js
 Includes tests from : /.../testCreation/Join.test.js
 
 Tester Settings :
@@ -263,7 +263,7 @@ Tester Settings :
             6 :
             7 : function routine1( test )
             8 : {
-            9 :   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );  
+            9 :   test.identical( Join.join( 'Hello ', 'world!' ), 'Hello world!' );
         Test check ( Join / routine1 /  # 1 ) ... ok
 
       Passed test routine ( Join / routine1 ) in 0.066s
@@ -275,7 +275,7 @@ Tester Settings :
             15 : {
             16 :
             17 :   test.case = 'pass';
-            18 :   test.identical( Join.join( 1, 3 ), '13' );  
+            18 :   test.identical( Join.join( 1, 3 ), '13' );
         Test check ( Join / routine2 / pass # 1 ) ... ok
 
 
@@ -291,7 +291,7 @@ Tester Settings :
             18 :   test.identical( Join.join( 1, 3 ), '13' );
             19 :
             20 :   test.case = 'fail';
-            21 :   test.identical( Join.join( 1, 3 ), 13 );  
+            21 :   test.identical( Join.join( 1, 3 ), 13 );
         Test check ( Join / routine2 / fail # 2 ) ... failed
 
       Failed test routine ( Join / routine2 ) in 0.147s

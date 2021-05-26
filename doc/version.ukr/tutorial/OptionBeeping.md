@@ -14,7 +14,7 @@
 ```
 beeping
     ├── Join.js
-    ├── Join.test.js    
+    ├── Join.test.js
     └── package.json
 ```
 
@@ -27,7 +27,7 @@ beeping
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -108,7 +108,7 @@ tst .run Join.test.js
   <summary><u>Вивід команди <code>tst .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .run Join.test.js
+$ tst .run Join.test.js
 Running test suite ( Join ) ..
     at  /.../Join.test.js:38
 
@@ -133,7 +133,7 @@ Running test suite ( Join ) ..
 Виконайте тестування командою
 
 ```
-tst .imply beeping:0 Join.test.js 
+tst .imply beeping:0 Join.test.js
 ```
 
 Прослідкуйте за виконанням тестування. Після його завершення звукового сигналу не повинно бути, а звіт повторює попередній.

@@ -6,25 +6,7 @@
 
 ### Завантаження
 
-В модулі [`wTools`](<https://github.com/Wandalen/wTools>) є готові тест сюіти. Використайте їх для дослідження сценарію пошуку. Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git`.
-
-<details>
-  <summary><u>Структура файлів модуля <code>wTools</code></u></summary>
-
-```
-wTools
-   ├── .git
-   ├── doc
-   ├── out
-   ├── proto
-   ├── sample
-   ├── ...
-   └── package.json
-```
-
-</details>
-
-Код модуля, а також файли з тестами знаходяться в директоріїя `proto`. Директорія `sample` також може містити приклади з тестами.
+В модулі [`wTools`](<https://github.com/Wandalen/wTools>) є готові тест сюіти. Використайте їх для дослідження сценарію пошуку. Склонуйте репозиторій модуля виконавши команду `git clone https://github.com/Wandalen/wTools.git` тф перейдіть в створену директорію `wTools`.
 
 ### Запуск сценарію
 
@@ -40,7 +22,7 @@ tst .suites.list ./proto
   <summary><u>Вивід команди <code>tst .suites.list ./proto</code></u></summary>
 
 ```
-[user@user ~]$ tst .suites.list ./proto
+$ tst .suites.list ./proto
 
 /.../wTools/proto/wtools/abase/l1.test/Diagnostics.test.s:309 - enabled
 /.../wTools/proto/wtools/abase/l1.test/Entity.test.s:808 - enabled

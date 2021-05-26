@@ -14,7 +14,7 @@
 ```
 negativity
         ├── Join.js
-        ├── Join.test.js    
+        ├── Join.test.js
         └── package.json
 ```
 
@@ -27,7 +27,7 @@ negativity
 <details>
     <summary><u>Код файла <code>Join.js</code></u></summary>
 
-```js    
+```js
 module.exports.join = function( a, b )
 {
   return String( a ) + String( b );
@@ -103,7 +103,7 @@ wTester.test( Self.name );
 <details>
     <summary><u>Код файла <code>package.json</code></u></summary>
 
-```json    
+```json
 {
   "dependencies": {
     "wTesting": ""
@@ -123,7 +123,7 @@ wTester.test( Self.name );
   <summary><u>Вивід команди <code>tst .imply verbosity:5 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$
+$
 Includes tests from : /.../negativity
 
 Tester Settings :
@@ -170,7 +170,7 @@ Tester Settings :
             17 :   test.identical( Join.join( 1, 3 ), '13' );
             18 :
             19 :   test.case = 'fail';
-            20 :   test.identical( Join.join( 1, 3 ), 13 );  
+            20 :   test.identical( Join.join( 1, 3 ), 13 );
         Test check ( Join / routine2 / fail # 2 ) ... failed
 
       Failed test routine ( Join / routine2 ) in 0.106s
@@ -200,7 +200,7 @@ Tester Settings :
   <summary><u>Вивід команди <code>tst .imply v:5 n:0 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply v:5 n:0 .run Join.test.js
+$ tst .imply v:5 n:0 .run Join.test.js
 Includes tests from : /.../negativity
 
 Tester Settings :
@@ -264,7 +264,7 @@ Tester Settings :
   <summary><u>Вивід команди <code>tst .imply v:0 n:3 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply v:0 n:3 .run Join.test.js
+$ tst .imply v:0 n:3 .run Join.test.js
 
 Failed test routine ( Join / routine2 ) in 0.051s
 ```
@@ -279,7 +279,7 @@ Failed test routine ( Join / routine2 ) in 0.051s
   <summary><u>Вивід команди <code>tst .imply v:0 n:5 .run Join.test.js</code></u></summary>
 
 ```
-[user@user ~]$ tst .imply v:0 n:5 .run Join.test.js
+$ tst .imply v:0 n:5 .run Join.test.js
 
         - got :
           '13'
@@ -293,7 +293,7 @@ Failed test routine ( Join / routine2 ) in 0.051s
             17 :   test.identical( Join.join( 1, 3 ), '13' );
             18 :
             19 :   test.case = 'fail';
-            20 :   test.identical( Join.join( 1, 3 ), 13 );  
+            20 :   test.identical( Join.join( 1, 3 ), 13 );
         Test check ( Join / routine2 / fail # 2 ) ... failed
 
       Failed test routine ( Join / routine2 ) in 0.100s

@@ -8,7 +8,7 @@
   <summary><u>Вивід команди <code>tst .</code></u></summary>
 
 ```
-[user@user ~]$ tst .
+$ tst .
 Command "."
 Ambiguity. Did you mean?
   .help - Get help.
@@ -30,7 +30,7 @@ tst .help
   <summary><u>Вивід команди <code>tst</code></u></summary>
 
 ```
-[user@user ~]$ tst .help
+$ tst .help
 Command ".help"
 Known commands
   .help - Get help.

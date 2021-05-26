@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: c36f33333691cc95790b10ca6efab3a9
-    size: 8245
+    hash: dba6bc45e1997ba382fd3d9ec60ca81a
+    size: 8293
 module:
   wTesting.out:
     about:
@@ -38,7 +38,7 @@ module:
         - chrome >= 60.0.0
         - firefox >= 60.0.0
       npm.scripts: &ref_5
-        test: wtest .run proto/**
+        test: node proto/wtools/atop/testing/entry/ExecUnrestricted .run proto/**
         single-process-wtest: node proto/wtools/atop/testing/entry/Exec
         debug-wtest: node proto/wtools/atop/testing/entry/ExecDebug
         tst: node proto/wtools/atop/testing/entry/ExecUnrestricted
@@ -296,6 +296,9 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/requireTesting
           - >-
             ../proto/wtools/atop/testing.test/_asset/requireTesting/Suite.test.js
+          - ../proto/wtools/atop/testing.test/_asset/runWithArrayOfRoutines
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/runWithArrayOfRoutines/RunWithArrayOfRoutines.test.js
           - ../proto/wtools/atop/testing.test/_asset/spectron
           - ../proto/wtools/atop/testing.test/_asset/spectron/index.html
           - ../proto/wtools/atop/testing.test/_asset/spectron/main.ss
@@ -1739,5 +1742,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: c36f33333691cc95790b10ca6efab3a9
-        size: 8245
+        hash: dba6bc45e1997ba382fd3d9ec60ca81a
+        size: 8293

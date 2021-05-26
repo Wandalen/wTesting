@@ -101,7 +101,9 @@ function _commandHandleSyntaxError( o )
 {
   let cui = this;
   let aggregator = cui.aggregator;
-  let request = _.strCommandParse({ src : o.command, commandFormat : 'subject options?' });
+  let request = _.strCommandParse({ src : o.command, commandFormat : 'subject? options?' });
+  // let request = _.strCommandParse({ src : o.command, commandFormat : 'subject options?' }); /* Dmytro : first 2 arguments of input arguments are missed in routine input, so o.command can be an options map with this syntax r:"[ one, two ]" */
+  // let request = _.strRequestParse({ src : o.command }); /* Dmytro : alternative variant */
   return aggregator.instructionPerform({ command : '.run ' + request.subject, propertiesMap : request.map });
 }
 

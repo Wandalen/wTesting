@@ -54,7 +54,7 @@ function assetFor( test, asset )
   let oprogram = a.program;
   program_body.defaults = a.program.defaults;
   a.program = _.routine.uniteCloning_replaceByUnite( a.program.head, program_body );
-  a.reflect = reflect
+  a.reflect = reflect;
 
   return a;
 
@@ -76,8 +76,12 @@ function assetFor( test, asset )
 
   function reflect()
   {
-
-    let reflected = a.fileProvider.filesReflect({ reflectMap : { [ a.originalAssetPath ] : a.routinePath }, onUp });
+    let reflected = a.fileProvider.filesReflect
+    ({
+      reflectMap : { [ a.originalAssetPath ] : a.routinePath },
+      onUp,
+      outputFormat : 'record'
+    });
 
     reflected.forEach( ( r ) =>
     {
@@ -88,7 +92,6 @@ function assetFor( test, asset )
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( _.module.resolve( 'wTools' ) )}'` );
       a.fileProvider.fileWrite( r.dst.absolute, read );
     });
-
   }
 
   function onUp( r )
@@ -1095,6 +1098,82 @@ function runWithSeveralMixedOptions( test )
     var exp = 'Test check ( TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 /  # 1 ) ... ok';
     test.identical( _.strCount( got.output, exp ), 1 );
     test.identical( _.strCount( got.output, 'Passed TestSuite::OptionRapidity / TestRoutine::routinePositiveRapidity2 in' ), 1 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runWithQuotedArrayWithSpaces( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runWithArrayOfRoutines' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'RunWithArrayOfRoutines.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`';
+    return null;
+  });
+
+  a.appStart({ execPath : `.run ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]'` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
+function runWithWrongSyntaxAndQuotedArrayWithSpaces( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runWithArrayOfRoutines' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'RunWithArrayOfRoutines.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`';
+    return null;
+  });
+
+  a.shell({ execPath : `node ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]'` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
 
     return null;
   });
@@ -3483,12 +3562,11 @@ function asyncTimeOutSingle( test )
 
   /* - */
 
-  a.ready
-  .then( () =>
+  a.ready.then( () =>
   {
-    test.case = 'Suite.test.js'
+    test.case = 'Suite.test.js';
     return null;
-  })
+  });
 
   a.appStartNonThrowing({ execPath : `.run Suite.test.js` })
   .then( ( got ) =>
@@ -3653,7 +3731,7 @@ function asyncTimeOutCheck( test )
 //   _.time.out( 2000 );
 //   _.time.out( 1000, () =>
 //   {
-//     console.log( 'v1' ); debugger;
+//     console.log( 'v1' );
 //     test.identical( 1, 1 );
 //     test.equivalent( 1, 1 );
 //     test.true( true );
@@ -4474,27 +4552,19 @@ function manualTermination( test )
 
   /* - */
 
-  let o =
-  {
-    execPath : `${a.abs( 'Test.test.js' )} v:7`,
-  };
-  a.appStartNonThrowing( o )
-
-  /* */
-
-  a.ready
-  .then( ( op ) =>
+  a.appStartNonThrowing( `${a.abs( 'Test.test.js' )} v:7` );
+  a.ready.then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
-    test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onSuiteEnd : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onExit : 1' ), 1 );
     test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
     test.identical( _.strCount( op.output, 'by user' ), 0 );
     test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
     test.identical( _.strCount( op.output, 'Error' ), 0 );
     test.identical( _.strCount( op.output, 'error' ), 1 );
     return op;
-  })
+  });
 
   /* - */
 
@@ -4504,7 +4574,7 @@ function manualTermination( test )
 manualTermination.description =
 `
   User terminates execution when second test routine is runnning.
-  onSuiteEnd handler should be executed before exit event
+  onSuiteEnd handler should be executed after exit event
   exit code should be not zero
 `
 
@@ -4518,20 +4588,12 @@ function manualTerminationAsync( test )
 
   /* - */
 
-  let o =
-  {
-    execPath : `${a.abs( 'Test.test.js' )} v:7`,
-  };
-  a.appStartNonThrowing( o )
-
-  /* */
-
-  a.ready
-  .then( ( op ) =>
+  a.appStartNonThrowing( `${a.abs( 'Test.test.js' )} v:7` );
+  a.ready .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
-    test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onSuiteEnd : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onExit : 1' ), 1 );
     test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
     test.identical( _.strCount( op.output, 'by user' ), 0 );
     test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
@@ -4549,7 +4611,7 @@ function manualTerminationAsync( test )
 manualTerminationAsync.description =
 `
   User terminates execution when second test routine is runnning.
-  onSuiteEnd handler should be executed before exit event
+  onSuiteEnd handler should be executed after exit event
   exit code should be not zero
   on suite end returns consequence
 `
@@ -4561,28 +4623,25 @@ function uncaughtErrorNotSilenced( test )
   let context = this;
   let a = context.assetFor( test, false );
   let programPath = a.program({ routine : program1 });
-  let ready = _.take( null );
 
   /* */
 
-  ready.then( function( arg )
+  a.forkNonThrowing
+  ({
+    execPath : programPath,
+    args : [ 'silencing:1' ],
+    mode : 'fork',
+  })
+  .tap( ( _err, op ) =>
   {
     test.case = 'basic';
-    a.forkNonThrowing
-    ({
-      execPath : programPath,
-      args : [ 'silencing:1' ],
-      mode : 'fork',
-    })
-    .tap( ( _err, op ) =>
-    {
-      test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
-      test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
-      test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
-      test.notIdentical( op.exitCode, 0 );
-    });
-    return a.ready;
+    test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
+    test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+    test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
+    test.notIdentical( op.exitCode, 0 );
   });
+
+  return a.ready;
 
   /* */
 
@@ -4594,6 +4653,14 @@ function uncaughtErrorNotSilenced( test )
   {
     const _ = require( toolsPath );
     _.include( 'wTesting' );
+
+    const errCallback = ( o ) =>
+    {
+      throw _.err( o.err );
+    }
+
+    /* throw uncaughtError because event handler should be _.process._ehandler */
+    _.event.on( _.process, { callbackMap : { 'uncaughtError' : errCallback } } );
 
     function routine1( test )
     {
@@ -4666,17 +4733,20 @@ function programOptionsRoutineDirPath( test )
 
   test.case = 'default'
   var got = a.program( testApp1 );
-  var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name + '.js' ) )
+  var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name ) );
+  // var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name + '.js' ) )
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath'
   var got = a.program({ routine : testApp1, dirPath : 'temp' })
-  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name + '.js' ) )
+  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name ) );
+  // var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name + '.js' ) )
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath with spaces'
   var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
-  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name + '.js' ) )
+  var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name ) );
+  // var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name + '.js' ) )
   test.il( got, exp )
 
   /* - */
@@ -4695,7 +4765,8 @@ function toolsPathGetBasic( test )
 
   test.case = 'basic';
   var got = _.module.toolsPathGet();
-  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  var exp = _.module.resolve( 'wTools' );
   test.identical( got, exp );
   console.log( `toolsPath : ${got}` );
 
@@ -4711,7 +4782,8 @@ function toolsPathGetTester( test )
   let a = test.assetFor( false );
   let programPath = a.program( program );
 
-  var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
+  var exp = _.module.resolve( 'wTools' );
   var toolsPath1 = _.module.toolsPathGet();
   return a.forkNonThrowing({ execPath : programPath })
   .then( ( op ) =>
@@ -7068,6 +7140,8 @@ const Proto =
     runWithQuotedPath,
     runWithSeveralSimilarOptions,
     runWithSeveralMixedOptions,
+    runWithQuotedArrayWithSpaces,
+    runWithWrongSyntaxAndQuotedArrayWithSpaces,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     checkFails,

@@ -1,6 +1,7 @@
 
 require( 'wTesting' );
-const _ = require( 'wTools' );
+// const _ = require( 'wTools' );
+const _ = _globals_.testing.wTools;
 _.include( 'wProcess' );
 let c = 0;
 

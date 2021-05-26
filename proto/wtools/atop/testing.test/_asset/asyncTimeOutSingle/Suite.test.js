@@ -1,6 +1,7 @@
 
 require( 'wTesting' );
-const _ = require( 'wTools' );
+// const _ = require( 'wTools' );
+const _ = _globals_.testing.wTools;
 _.include( 'wConsequence' );
 
 //
@@ -39,7 +40,7 @@ var Self1 =
 {
   name : 'AsyncTimeOutAsset',
   silencing : 0,
-  context : 
+  context :
   {
     t2 : 5000,
   },

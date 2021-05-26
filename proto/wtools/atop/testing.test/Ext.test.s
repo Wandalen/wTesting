@@ -4585,33 +4585,25 @@ function uncaughtErrorNotSilenced( test )
   let context = this;
   let a = context.assetFor( test, false );
   let programPath = a.program({ routine : program1 });
-  let ready = _.take( null );
 
   /* */
 
-  ready.then( function( arg )
+  a.forkNonThrowing
+  ({
+    execPath : programPath,
+    args : [ 'silencing:1' ],
+    mode : 'fork',
+  })
+  .tap( ( _err, op ) =>
   {
-    a.ready.then( () =>
-    {
-      debugger;
-      return null;
-    });
     test.case = 'basic';
-    a.forkNonThrowing
-    ({
-      execPath : programPath,
-      args : [ 'silencing:1' ],
-      mode : 'fork',
-    })
-    .tap( ( _err, op ) =>
-    {
-      test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
-      test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
-      test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
-      test.notIdentical( op.exitCode, 0 );
-    });
-    return a.ready;
+    test.identical( _.strCount( op.output, 'uncaught error' ), 2 );
+    test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
+    test.identical( _.strCount( op.output, 'Unexpected termination' ), 0 );
+    test.notIdentical( op.exitCode, 0 );
   });
+
+  return a.ready;
 
   /* */
 
@@ -4623,6 +4615,14 @@ function uncaughtErrorNotSilenced( test )
   {
     const _ = require( toolsPath );
     _.include( 'wTesting' );
+
+    const errCallback = ( o ) =>
+    {
+      throw _.err( o.err );
+    }
+
+    /* throw uncaughtError because event handler should be _.process._ehandler */
+    _.event.on( _.process, { callbackMap : { 'uncaughtError' : errCallback } } );
 
     function routine1( test )
     {

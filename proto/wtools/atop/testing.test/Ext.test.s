@@ -4514,27 +4514,19 @@ function manualTermination( test )
 
   /* - */
 
-  let o =
-  {
-    execPath : `${a.abs( 'Test.test.js' )} v:7`,
-  };
-  a.appStartNonThrowing( o )
-
-  /* */
-
-  a.ready
-  .then( ( op ) =>
+  a.appStartNonThrowing( `${a.abs( 'Test.test.js' )} v:7` );
+  a.ready.then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
-    test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onSuiteEnd : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onExit : 1' ), 1 );
     test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
     test.identical( _.strCount( op.output, 'by user' ), 0 );
     test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
     test.identical( _.strCount( op.output, 'Error' ), 0 );
     test.identical( _.strCount( op.output, 'error' ), 1 );
     return op;
-  })
+  });
 
   /* - */
 
@@ -4544,7 +4536,7 @@ function manualTermination( test )
 manualTermination.description =
 `
   User terminates execution when second test routine is runnning.
-  onSuiteEnd handler should be executed before exit event
+  onSuiteEnd handler should be executed after exit event
   exit code should be not zero
 `
 
@@ -4558,20 +4550,12 @@ function manualTerminationAsync( test )
 
   /* - */
 
-  let o =
-  {
-    execPath : `${a.abs( 'Test.test.js' )} v:7`,
-  };
-  a.appStartNonThrowing( o )
-
-  /* */
-
-  a.ready
-  .then( ( op ) =>
+  a.appStartNonThrowing( `${a.abs( 'Test.test.js' )} v:7` );
+  a.ready .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'onSuiteEnd : 1' ), 1 );
-    test.identical( _.strCount( op.output, 'onExit : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onSuiteEnd : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'onExit : 1' ), 1 );
     test.identical( _.strCount( op.output, 'Terminated by user' ), 0 );
     test.identical( _.strCount( op.output, 'by user' ), 0 );
     test.identical( _.strCount( op.output, 'Unexpected termination' ), 1 );
@@ -4589,7 +4573,7 @@ function manualTerminationAsync( test )
 manualTerminationAsync.description =
 `
   User terminates execution when second test routine is runnning.
-  onSuiteEnd handler should be executed before exit event
+  onSuiteEnd handler should be executed after exit event
   exit code should be not zero
   on suite end returns consequence
 `
@@ -4607,6 +4591,11 @@ function uncaughtErrorNotSilenced( test )
 
   ready.then( function( arg )
   {
+    a.ready.then( () =>
+    {
+      debugger;
+      return null;
+    });
     test.case = 'basic';
     a.forkNonThrowing
     ({

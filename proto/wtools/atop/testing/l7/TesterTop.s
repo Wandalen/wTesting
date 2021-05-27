@@ -44,7 +44,8 @@ function exec()
 
   let logger = cui.logger;
   let fileProvider = cui.fileProvider;
-  let appArgs = _.process.input({ keyValDelimeter : 0 });
+  // let appArgs = _.process.input({ keyValDelimeter : 0 });
+  let appArgs = _.process.input();
   let aggregator = cui._commandsMake();
 
   return _.Consequence.Try( () =>

@@ -1185,6 +1185,44 @@ function runWithWrongSyntaxAndQuotedArrayWithSpaces( test )
 
 //
 
+function runWithWrongSyntaxAndQuotedArrayWithSpacesAndRapidity( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runWithArrayOfRoutines' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'RunWithArrayOfRoutines.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run with vectorized option `r`';
+    return null;
+  });
+
+  a.shell({ execPath : `node ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]' rapidity:-2` })
+  .then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function runCheckNotRewritingDefaultOption( test )
 {
   let context = this;
@@ -7142,6 +7180,7 @@ const Proto =
     runWithSeveralMixedOptions,
     runWithQuotedArrayWithSpaces,
     runWithWrongSyntaxAndQuotedArrayWithSpaces,
+    runWithWrongSyntaxAndQuotedArrayWithSpacesAndRapidity,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     checkFails,

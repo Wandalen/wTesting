@@ -5,7 +5,7 @@
 
 const _global = _global_;
 const _ = _global_.wTools;
-const Self = _.test = _.test || Object.create( null );
+_.test = _.test || Object.create( null );
 
 // --
 // UI Testing
@@ -511,7 +511,7 @@ function netInterfacesUp( o )
 
   o.interfaces = _.array.as( o.interfaces );
   _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
-  _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to enable' );
+  _.assert( o.interfaces.length > 0, 'Expects interfaces {-o.interfaces-} to enable' );
 
   const ready = _.take( null );
   const shell = _.process.starter
@@ -588,7 +588,7 @@ function netInterfacesDown( o )
 
   o.interfaces = _.array.as( o.interfaces );
   _.assert( _.strsDefined( o.interfaces ), 'Expects defined interfaces {-o.interfaces-}' );
-  _.assert( o.interfaces.length, 'Expects interfaces {-o.interfaces-} to disable' );
+  _.assert( o.interfaces.length > 0, 'Expects interfaces {-o.interfaces-} to disable' );
 
   const ready = _.take( null );
   const shell = _.process.starter
@@ -798,7 +798,7 @@ let Extension =
 
 }
 
-_.props.extend( Self, Extension );
+/* _.props.extend */Object.assign( _.test, Extension );
 
 // --
 // export

@@ -4383,8 +4383,8 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
     test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-    test.identical( _.strCount( got.output, 'Error' ), 0 );
-    test.identical( _.strCount( got.output, 'error' ), 2 );
+    test.identical( _.strCount( got.output, 'Error' ), 1 );
+    test.identical( _.strCount( got.output, 'error' ), 1 );
     test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
     test.identical( _.strCount( got.output, 'Thrown' ), 1 );

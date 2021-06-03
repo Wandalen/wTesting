@@ -490,7 +490,7 @@ function _runSoon()
 
   _.assert( suite instanceof Self );
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  _.assert( suite._formed );
+  _.assert( suite._formed > 0 );
 
   if( _.arrayAppendedOnce( wTester.quedSuites, suite ) === -1 )
   return null;
@@ -1134,7 +1134,7 @@ function routineEach( onEach )
 
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( onEach ) );
-  _.assert( suite._formed );
+  _.assert( suite._formed > 0 );
 
   for( let testRoutineName in suite.tests )
   {
@@ -1459,7 +1459,7 @@ function processWatchingBegin()
   {
     if( o.sync )
     return;
-    _.assert( suite._processWatcherMap[ o.pnd.pid ] );
+    _.assert( !!suite._processWatcherMap[ o.pnd.pid ] );
     delete suite._processWatcherMap[ o.pnd.pid ];
   }
 

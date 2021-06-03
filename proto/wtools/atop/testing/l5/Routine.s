@@ -1231,7 +1231,7 @@ function checkRestore( acheck )
   }
   else
   {
-    _.assert( _.arrayIs( tro._checksStack ) && tro._checksStack.length, 'checkRestore : no stored check in stack' );
+    _.assert( _.arrayIs( tro._checksStack ) && tro._checksStack.length > 0, 'checkRestore : no stored check in stack' );
     acheck = tro._checksStack.pop();
   }
 

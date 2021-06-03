@@ -3456,7 +3456,8 @@ function version( test )
   {
     test.identical( op.exitCode, 0 );
     test.true( _.strHas( op.output, /Current version : .*\..*\..*/ ) );
-    test.true( _.strHas( op.output, /Latest version of wTesting!alpha : .*\..*\..*/ ) );
+    test.true( _.strHas( op.output, /Latest version of wTesting : .*\..*\..*/ ) );
+    test.true( _.strHas( op.output, /Stable version of wTesting : .*\..*\..*/ ) );
     return op;
   })
 

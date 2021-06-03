@@ -1185,7 +1185,7 @@ function runWithWrongSyntaxAndQuotedArrayWithSpaces( test )
 
 //
 
-function runWithWrongSyntaxAndQuotedArrayWithSpacesAndRapidity( test )
+function runWithQuotedArrayWithSpacesAndRapidity( test )
 {
   let context = this;
   let a = context.assetFor( test, 'runWithArrayOfRoutines' );
@@ -1196,12 +1196,36 @@ function runWithWrongSyntaxAndQuotedArrayWithSpacesAndRapidity( test )
 
   a.ready.then( () =>
   {
-    test.case = 'run with vectorized option `r`';
+    test.case = 'wrong syntax, run with vectorized option `r`';
     return null;
   });
 
-  a.shell({ execPath : `node ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]' rapidity:-2` })
-  .then( ( got ) =>
+  a.appStart( `.run ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]' rapidity:-2` );
+  a.ready.then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'wrong syntax, run with vectorized option `r`';
+    return null;
+  });
+
+  a.shell( `node ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]' rapidity:-2` );
+  a.ready.then( ( got ) =>
   {
     test.identical( got.exitCode, 0 );
 
@@ -7180,7 +7204,7 @@ const Proto =
     runWithSeveralMixedOptions,
     runWithQuotedArrayWithSpaces,
     runWithWrongSyntaxAndQuotedArrayWithSpaces,
-    runWithWrongSyntaxAndQuotedArrayWithSpacesAndRapidity,
+    runWithQuotedArrayWithSpacesAndRapidity,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     checkFails,

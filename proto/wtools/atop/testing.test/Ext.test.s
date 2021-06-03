@@ -3679,7 +3679,7 @@ function asyncTimeOutTwo( test )
     test.identical( _.strCount( got.output, 'several' ), 1 );
     test.identical( _.strCount( got.output, 'several async returning' ), 0 );
     test.identical( _.strCount( got.output, 'Launching several' ), 1 );
-    test.identical( _.strCount( got.output, '= Message of error' ), 0 );
+    test.identical( _.strCount( got.output, '= Message of Error' ), 0 );
     test.identical( _.strCount( got.output, 'stack' ), 0 );
     test.identical( _.strCount( got.output, 'Stack' ), 0 );
 
@@ -4260,7 +4260,7 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
       test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
       test.identical( _.strCount( got.output, 'Error' ), 0 );
       test.identical( _.strCount( got.output, 'error' ), 2 );
-      test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+      test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
       test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
       test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
       test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
@@ -4302,7 +4302,7 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
       test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
       test.identical( _.strCount( got.output, 'Error' ), 0 );
       test.identical( _.strCount( got.output, 'error' ), 2 );
-      test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+      test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
       test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
       test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
       test.identical( _.strCount( got.output, 'Exit signal : SIGINT ( 128+2 )' ), 1 );
@@ -4361,7 +4361,7 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
     test.identical( _.strCount( got.output, 'Error' ), 0 );
     test.identical( _.strCount( got.output, 'error' ), 2 );
-    test.identical( _.strCount( got.output, 'Message of error' ), 1 );
+    test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
     test.identical( _.strCount( got.output, 'Thrown' ), 1 );
     test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );

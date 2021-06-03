@@ -4500,8 +4500,8 @@ function termination( test )
       test.identical( _.strCount( op.output, 'procedure::' ), 0 );
       test.identical( _.strCount( op.output, 'ncaught' ), 0 );
       test.identical( _.strCount( op.output, 'synchronous' ), 0 );
-      test.identical( _.strCount( op.output, 'Error' ), 3 );
-      test.identical( _.strCount( op.output, 'error' ), 7 );
+      test.identical( _.strCount( op.output, 'Error' ), 4 );
+      test.identical( _.strCount( op.output, 'error' ), 6 );
       test.identical( _.strCount( op.output, 'Error1' ), 3 );
       test.identical( _.strCount( op.output, 'Testing ...' ), 1 );
       test.identical( _.strCount( op.output, '... failed' ), 3 );

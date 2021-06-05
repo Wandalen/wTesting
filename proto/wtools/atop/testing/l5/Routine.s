@@ -3526,15 +3526,16 @@ function assetFor( a )
 
   program_body.defaults =
   {
-    ... _.program.write.defaults,
+    ... _.program.make.defaults,
     rewriting : 1,
-    verbosity : 2,
+    logger : 2,
+    // verbosity : 2,
     // routine : null,
     // locals : null,
     // dirPath : '.'
   }
   let program = _.routine.unite( program_head, program_body );
-  // let program = _.routine.unite( _.program.write.head, program_body );
+  // let program = _.routine.unite( _.program.make.head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3762,14 +3763,24 @@ function assetFor( a )
     o = { routine : o }
 
     if( o.moduleFile === null || o.moduleFile === undefined )
-    {
-      o.moduleFile = _.module.fileNativeWith( 2, _globals_.real.wTools.module.nativeFilesMap );
-    }
+    o.moduleFile = _.module.fileNativeWith( 2, _globals_.real.wTools.module.nativeFilesMap );
 
     _.assert( args.length === 1 );
     _.assert( arguments.length === 2 );
 
-    o = _.program.write.head.call( _.program, routine, [ o ] );
+    _.routine.options( routine, o );
+
+    // debugger;
+    // if( o.logger === undefined || o.logger === null )
+    if( !_.logger.is( o.logger ) )
+    {
+      o.logger = _.Logger({ output : tro.logger, verbosity : o.logger || 0 });
+      // o.logger = _.logger.from( o.logger );
+      // o.logger.outputTo( tro.logger );
+    }
+    // o.logger = tro.logger;
+
+    o = _.program.make.head.call( _.program, routine, [ o ] );
 
     return o;
   }
@@ -3786,8 +3797,6 @@ function assetFor( a )
     if( !o.tempPath )
     o.tempPath = a.abs( '.' );
 
-    // var hasLocals = !!o.locals;
-
     _.program.preformLocals.body.call( _.program, o );
 
     /*
@@ -3798,15 +3807,20 @@ function assetFor( a )
     if( o.locals && o.locals.toolsPath && _.path.nativize( o.locals.toolsPath ) === _.path.nativize( _.module.toolsPathGet() ) )
     if( _globals_.real && _globals_.real.wTools && _globals_.real.wTools.module && _globals_.real.wTools.module.toolsPathGet )
     o.locals.toolsPath = _.path.nativize( _globals_.real.wTools.module.toolsPathGet() );
-    _.program.write( o );
 
-    if( !o.logger )
-    o.logger = tro.logger;
+    _.program.make.body.call( _.program, o );
+
+    o.start = _.process.starter
+    ({
+      ... o.start.predefined,
+      ready : a.ready,
+    });
 
     // /* xxx : introduce verbosity */
     // logger.log( _.strLinesNumber( o.sourceCode ) );
+    // return o.programPath;
 
-    return o.programPath;
+    return o;
   }
 
   /**/

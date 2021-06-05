@@ -1854,7 +1854,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programFail';
-    let programPath = a.program({ routine : programFail });
+    let programPath = a.program({ routine : programFail }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -1882,7 +1882,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programPass';
-    let programPath = a.program({ routine : programPass });
+    let programPath = a.program({ routine : programPass }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -1910,7 +1910,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programExit1';
-    let programPath = a.program({ routine : programExit1 });
+    let programPath = a.program({ routine : programExit1 }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -1938,7 +1938,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programExitCustomCode';
-    let programPath = a.program({ routine : programExitCustomCode });
+    let programPath = a.program({ routine : programExitCustomCode }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -3924,7 +3924,7 @@ function timeOutSeveralRoutines( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ routine : program1 });
+  let programPath = a.program({ routine : program1 }).programPath;
   let ready = _.take( null );
 
   /* */
@@ -4029,7 +4029,7 @@ function timeOutSeveralRoutinesDesync( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ routine : program1 });
+  let programPath = a.program({ routine : program1 }).programPath;
   let ready = _.take( null );
 
   /* */
@@ -4353,7 +4353,7 @@ function termination( test )
   let a = context.assetFor( test, false );
   let file1Path = a.abs( 'File1' );
   let locals = { file1Path }
-  let programPath = a.program({ routine : program1, locals });
+  let programPath = a.program({ routine : program1, locals }).programPath;
   let ready = _.take( null );
 
   /* */
@@ -4622,7 +4622,7 @@ function uncaughtErrorNotSilenced( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ routine : program1 });
+  let programPath = a.program({ routine : program1 }).programPath;
 
   /* */
 
@@ -4659,7 +4659,7 @@ function uncaughtErrorNotSilenced( test )
       throw _.err( o.err );
     }
 
-    /* throw uncaughtError because event handler should be _.process._ehandler */
+    /* throw uncaughtError because event handler should be _.process._edispatcher */
     _.event.on( _.process, { callbackMap : { 'uncaughtError' : errCallback } } );
 
     function routine1( test )
@@ -4732,7 +4732,7 @@ function programOptionsRoutineDirPath( test )
   let a = context.assetFor( test, false );
 
   test.case = 'default'
-  var got = a.program( testApp1 );
+  var got = a.program( testApp1 ).programPath;
   var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name ) );
   // var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name + '.js' ) )
   test.il( got, exp )
@@ -4744,7 +4744,7 @@ function programOptionsRoutineDirPath( test )
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath with spaces'
-  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' });
+  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' }).programPath;
   var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name ) );
   // var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name + '.js' ) )
   test.il( got, exp )
@@ -4780,7 +4780,7 @@ function toolsPathGetTester( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
   var exp = _.module.resolve( 'wTools' );
@@ -4950,7 +4950,7 @@ function checkDiffWithProto( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   a.reflect();
 
@@ -5318,7 +5318,7 @@ function checkDiffWithProtoEq( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   a.reflect();
 
@@ -5676,7 +5676,7 @@ function checkDiffWithProtoContains( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   a.reflect();
 
@@ -6033,7 +6033,7 @@ function checkDiffWithProtoContainsAll( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   a.reflect();
 
@@ -6391,7 +6391,7 @@ function checkDiffWithProtoContainsAny( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   a.reflect();
 
@@ -6749,7 +6749,7 @@ function checkDiffWithProtoContainsOnly( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   a.reflect();
 

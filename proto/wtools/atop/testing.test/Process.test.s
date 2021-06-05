@@ -212,7 +212,7 @@ function disconnectedChildProcess( test )
     let context = this;
     let a = context.assetFor( test, null );
 
-    let testAppPath = a.path.nativize( a.program( testApp ) );
+    let testAppPath = a.path.nativize( a.program( testApp ).programPath );
 
     let o =
     {
@@ -318,7 +318,7 @@ function disconnectedChildProcessWithIPC( test )
     let context = this;
     let a = context.assetFor( test, null );
 
-    let testAppPath = a.path.nativize( a.program( testApp ) );
+    let testAppPath = a.path.nativize( a.program( testApp ).programPath );
 
     let o =
     {
@@ -425,7 +425,7 @@ function detachedDisconnectedChildProcess( test )
     let context = this;
     let a = context.assetFor( test, null );
 
-    let testAppPath = a.path.nativize( a.program( testApp ) );
+    let testAppPath = a.path.nativize( a.program( testApp ).programPath );
 
     let o =
     {

@@ -173,7 +173,8 @@ function commandVersion( e )
   return _.npm.versionLog
   ({
     localPath : _.path.join( __dirname, '../../../../..' ),
-    remotePath : 'wTesting!alpha',
+    remotePath : 'wTesting',
+    tags : [ 'latest', 'stable' ],
     logger : cui.logger
   });
 }

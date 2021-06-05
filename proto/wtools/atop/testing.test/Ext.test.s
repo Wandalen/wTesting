@@ -1185,6 +1185,68 @@ function runWithWrongSyntaxAndQuotedArrayWithSpaces( test )
 
 //
 
+function runWithQuotedArrayWithSpacesAndRapidity( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runWithArrayOfRoutines' );
+  a.reflect();
+  test.true( a.fileProvider.fileExists( a.abs( 'RunWithArrayOfRoutines.test.js' ) ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'wrong syntax, run with vectorized option `r`';
+    return null;
+  });
+
+  a.appStart( `.run ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]' rapidity:-2` );
+  a.ready.then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
+
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'wrong syntax, run with vectorized option `r`';
+    return null;
+  });
+
+  a.shell( `node ./RunWithArrayOfRoutines.test.js r:'[ export*, import*, open* ]' rapidity:-2` );
+  a.ready.then( ( got ) =>
+  {
+    test.identical( got.exitCode, 0 );
+
+    test.identical( _.strCount( got.output, 'Running test suite ( RunWithArrayOfRoutines )' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::open in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::importOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::exportOne in' ), 1 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::build in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::module in' ), 0 );
+    test.identical( _.strCount( got.output, 'Passed TestSuite::RunWithArrayOfRoutines / TestRoutine::submodule in' ), 0 );
+
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function runCheckNotRewritingDefaultOption( test )
 {
   let context = this;
@@ -3456,7 +3518,8 @@ function version( test )
   {
     test.identical( op.exitCode, 0 );
     test.true( _.strHas( op.output, /Current version : .*\..*\..*/ ) );
-    test.true( _.strHas( op.output, /Latest version of wTesting!alpha : .*\..*\..*/ ) );
+    test.true( _.strHas( op.output, /Latest version of wTesting : .*\..*\..*/ ) );
+    test.true( _.strHas( op.output, /Stable version of wTesting : .*\..*\..*/ ) );
     return op;
   })
 
@@ -4220,8 +4283,8 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
       test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
       test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
       test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-      test.identical( _.strCount( got.output, 'Error' ), 0 );
-      test.identical( _.strCount( got.output, 'error' ), 2 );
+      test.identical( _.strCount( got.output, 'Error' ), 1 );
+      test.identical( _.strCount( got.output, 'error' ), 1 );
       test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
       test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
       test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
@@ -4262,8 +4325,8 @@ function onSuiteEndIsExecutedOnceOnSigintEarly( test )
       test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
       test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
       test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-      test.identical( _.strCount( got.output, 'Error' ), 0 );
-      test.identical( _.strCount( got.output, 'error' ), 2 );
+      test.identical( _.strCount( got.output, 'Error' ), 1 );
+      test.identical( _.strCount( got.output, 'error' ), 1 );
       test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
       test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
       test.identical( _.strCount( got.output, 'ExitCode : 130' ), 1 );
@@ -4321,8 +4384,8 @@ function onSuiteEndIsExecutedOnceOnSigintLate( test )
     test.identical( _.strCount( got.output, 'Unexpected termination' ), 0 );
     test.identical( _.strCount( got.output, 'Executing onSuiteEnd' ), 1 );
     test.identical( _.strCount( got.output, 'Error in suite.onSuiteEnd' ), 0 );
-    test.identical( _.strCount( got.output, 'Error' ), 0 );
-    test.identical( _.strCount( got.output, 'error' ), 2 );
+    test.identical( _.strCount( got.output, 'Error' ), 1 );
+    test.identical( _.strCount( got.output, 'error' ), 1 );
     test.identical( _.strCount( got.output, 'Message of Error' ), 1 );
     test.identical( _.strCount( got.output, 'Thrown 1 error' ), 1 );
     test.identical( _.strCount( got.output, 'Thrown' ), 1 );
@@ -4438,8 +4501,8 @@ function termination( test )
       test.identical( _.strCount( op.output, 'procedure::' ), 0 );
       test.identical( _.strCount( op.output, 'ncaught' ), 0 );
       test.identical( _.strCount( op.output, 'synchronous' ), 0 );
-      test.identical( _.strCount( op.output, 'Error' ), 3 );
-      test.identical( _.strCount( op.output, 'error' ), 7 );
+      test.identical( _.strCount( op.output, 'Error' ), 4 );
+      test.identical( _.strCount( op.output, 'error' ), 6 );
       test.identical( _.strCount( op.output, 'Error1' ), 3 );
       test.identical( _.strCount( op.output, 'Testing ...' ), 1 );
       test.identical( _.strCount( op.output, '... failed' ), 3 );
@@ -7142,6 +7205,7 @@ const Proto =
     runWithSeveralMixedOptions,
     runWithQuotedArrayWithSpaces,
     runWithWrongSyntaxAndQuotedArrayWithSpaces,
+    runWithQuotedArrayWithSpacesAndRapidity,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     checkFails,

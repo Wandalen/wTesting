@@ -70,8 +70,9 @@ function assetFor( test, asset )
     o.locals = o.locals || locals;
     _.props.supplement( o.locals, locals );
     _.props.supplement( o.locals.context, locals.context );
-    let programPath = a.path.nativize( oprogram.body.call( a, o ) );
-    return programPath;
+    let r = oprogram.body.call( a, o );
+    r.programPath = a.path.nativize( r.programPath );
+    return r;
   }
 
   function reflect()

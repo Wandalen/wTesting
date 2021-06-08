@@ -51,8 +51,8 @@ function terminationBeginWithTwoNamespaces( test )
   let context = this;
   var testRoutine;
   let a = test.assetFor( 'double' );
-  let programPath1 = a.path.nativize( a.path.normalize( a.program( program1 ) ) );
-  let programPath2 = a.path.nativize( a.path.normalize( a.program( program2 ) ) );
+  let programPath1 = a.path.nativize( a.path.normalize( a.program( program1 ).programPath ) );
+  let programPath2 = a.path.nativize( a.path.normalize( a.program( program2 ).programPath ) );
   let currentPath = a.abs( '.' );
 
   /* */

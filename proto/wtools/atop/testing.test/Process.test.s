@@ -172,7 +172,7 @@ function disconnectedChildProcess( test )
       disconnectedChildProcess,
     },
 
-  })
+  });
 
   var result = suite.run();
 

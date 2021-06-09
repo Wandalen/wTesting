@@ -11,8 +11,9 @@ const _ = _global_.wTools;
 let shell = _.process.startPassingThrough
 ({
   execPath : 'debugnode',
-  args : [ _.path.nativize( _.path.join( __dirname, 'Main.s' ) ) ]
+  args : [ _.path.nativize( _.path.join( __dirname, 'Main.s' ) ) ],
+  stdio : 'pipe',
 });
 
-if( typeof module !== 'undefined' )
-module[ 'exports' ] = _globals_.testing.wTools;
+// if( typeof module !== 'undefined' )
+// module[ 'exports' ] = _globals_.testing.wTools;

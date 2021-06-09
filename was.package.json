@@ -12,7 +12,7 @@
   ],
   "license" : "MIT",
   "main" : "proto/node_modules/wTesting",
-  "files" : [ "proto/wtools/atop/testing", "proto/wtools/abase/l0/l0", "out", "proto/node_modules" ],
+  "files" : [ "proto/wtools/atop/testing", "proto/wtools/abase/l0/l0", "out", "proto/node_modules", "proto/node_modules/Tools", "proto/node_modules/wTesting" ],
   "scripts" :
   {
     "wtest" : "node proto/wtools/atop/testing/entry/ExecUnrestricted",

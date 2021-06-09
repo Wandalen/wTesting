@@ -616,6 +616,62 @@ function run( test )
 
 //
 
+function runDebugTst( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'hello' );
+  let con = _.take( null );
+  a.reflect();
+
+  /* */
+
+  con.then( () =>
+  {
+    test.case = 'tst.debug .help';
+
+    var debugWillPath = a.abs( __dirname, '../testing/entry/ExecDebug' );
+    var o =
+    {
+      execPath : debugWillPath + ' .help',
+      currentPath : a.routinePath,
+      outputCollecting : 1,
+      throwingExitCode : 0,
+      outputGraying : 1,
+      ready : a.ready,
+      mode : 'fork',
+    };
+    _.process.start( o );
+
+    return a.ready.then( ( op ) =>
+    {
+      if( op.exitCode === 0 )
+      {
+        test.description = 'utility debugnode exists';
+        test.identical( _.strCount( op.output, 'Command ".help"' ), 1 );
+        test.identical( _.strCount( op.output, '.help - Get help.' ), 1 );
+        test.identical( _.strCount( op.output, '.imply - Change state or imply value of a variable.' ), 1 );
+      }
+      else
+      {
+        test.description = 'utility debugnode not exists';
+        test.identical( _.strCount( op.output, 'spawn debugnode ENOENT' ), 1 );
+        test.identical( _.strCount( op.output, 'code : \'ENOENT\'' ), 1 );
+        test.identical( _.strCount( op.output, 'syscall : \'spawn debugnode\'' ), 1 );
+        test.identical( _.strCount( op.output, 'path : \'debugnode\'' ), 1 );
+        test.identical( _.strCount( op.output, 'spawnargs' ), 1 );
+        test.identical( _.strCount( op.output, 'Error starting the process' ), 1 );
+      }
+      return null;
+    });
+  });
+
+  return con;
+}
+
+runDebugTst.experimental = 1;
+
+//
+
 function runWithQuotedPath( test )
 {
   let context = this;
@@ -7197,6 +7253,7 @@ const Proto =
     // conditions
 
     run,
+    runDebugTst,
     runWithQuotedPath,
     runWithSeveralSimilarOptions,
     runWithSeveralMixedOptions,

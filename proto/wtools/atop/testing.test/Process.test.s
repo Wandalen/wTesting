@@ -469,7 +469,7 @@ const Proto =
   name : 'Tools.Tester.Process',
   silencing : 1,
   processWatching : 1,
-  routineTimeOut : 30000,
+  routineTimeOut : 60000,
 
   tests :
   {

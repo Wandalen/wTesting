@@ -12342,6 +12342,7 @@ function processWatchingOnDefault( test )
 
 }
 
+processWatchingOnDefault.timeOut = 60000;
 processWatchingOnDefault.description =
 `
   Three processes are terminated.
@@ -12404,6 +12405,7 @@ function processWatchingOnExplicit( test )
   return result;
 }
 
+processWatchingOnExplicit.timeOut = 60000;
 processWatchingOnExplicit.description =
 `
   Three processes are terminated.
@@ -12529,6 +12531,7 @@ function processWatchingRoutineTimeOut( test )
   return result;
 }
 
+processWatchingRoutineTimeOut.timeOut = 60000;
 processWatchingRoutineTimeOut.description =
 `
   Test routine ends with time out error.
@@ -12590,6 +12593,7 @@ function processWatchingErrorInTestRoutine( test )
   return result;
 }
 
+processWatchingErrorInTestRoutine.timeOut = 60000;
 processWatchingErrorInTestRoutine.description =
 `
   Test routine creates zombie process and throws sync error.
@@ -12654,6 +12658,7 @@ function processWatchingOnSuiteBegin( test )
   return result;
 }
 
+processWatchingOnSuiteBegin.timeOut = 60000;
 processWatchingOnSuiteBegin.description =
 `
   onSuiteBegin handler creates zombie process.
@@ -12718,6 +12723,7 @@ function processWatchingOnSuiteEnd( test )
   return result;
 }
 
+processWatchingOnSuiteEnd.timeOut = 60000;
 processWatchingOnSuiteEnd.description =
 `
   onSuiteEnd handler creates zombie process.

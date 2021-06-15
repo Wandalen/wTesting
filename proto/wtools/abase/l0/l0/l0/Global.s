@@ -49,7 +49,6 @@ function _new( name, global )
   global2.wTools.global.current = global2;
   global2.wTools.module = Object.create( null );
   global2.wTools.module.nativeFilesMap = Object.create( null );
-
   return global2;
 }
 
@@ -82,6 +81,16 @@ function open( name )
   ModuleFileNative._cache = global2.wTools.module.nativeFilesMap;
 
   return global2;
+}
+
+//
+
+function makeAndOpen( module, name )
+{
+  const _global = __.global.new( name, _global_ );
+  __.global.open( name );
+  __.module.fileSetEnvironment( module, name );
+  return _global;
 }
 
 //
@@ -163,8 +172,6 @@ function setup( global, name )
 
   global.wTools.module = global.wTools.module || Object.create( null );
   if( typeof module !== 'undefined' )
-  // if( global.wTools.module.nativeFilesMap && global.wTools.module.nativeFilesMap !== require( 'module' )._cache )
-  // throw Error( `The global have native module files map of different global. Something wrong!` );
   if( typeof module !== 'undefined' )
   global.wTools.module.nativeFilesMap = global.wTools.module.nativeFilesMap || require( 'module' )._cache;
 
@@ -203,14 +210,6 @@ function fileUniversalIs( src )
   return false;
   if( Reflect.hasOwnProperty( src, 'constructor' ) )
   return false;
-  // if( !Reflect.has( src, 'constructor' ) )
-  // return false;
-  // if( !src.constructor )
-  // return false;
-  // return src.constructor.name === 'ModuleFile';
-  // if( !this.File )
-  // return false;
-  // return src instanceof this.File;
   return src[ ModuleFileSymbol ] === true;
 }
 
@@ -245,9 +244,8 @@ __.global._stack = __.global._stack || [];
 __.global.get = __.global.get || get;
 __.global.new = __.global.new || _new;
 __.global.open = __.global.open || open;
+__.global.makeAndOpen = __.global.makeAndOpen || makeAndOpen;
 __.global.close = __.global.close || close;
-// __.global.openForChildren = __.global.openForChildren || openForChildren;
-// __.global.closeForChildren = __.global.closeForChildren || closeForChildren;
 __.global.setup = __.global.setup || setup;
 
 __.module.fileSetEnvironment = __.module.fileSetEnvironment || fileSetEnvironment;

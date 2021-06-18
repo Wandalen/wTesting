@@ -296,6 +296,9 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/requireTesting
           - >-
             ../proto/wtools/atop/testing.test/_asset/requireTesting/Suite.test.js
+          - ../proto/wtools/atop/testing.test/_asset/runExperimentalRoutines
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/runExperimentalRoutines/RunExperimentalRoutines.test.js
           - ../proto/wtools/atop/testing.test/_asset/runWithArrayOfRoutines
           - >-
             ../proto/wtools/atop/testing.test/_asset/runWithArrayOfRoutines/RunWithArrayOfRoutines.test.js

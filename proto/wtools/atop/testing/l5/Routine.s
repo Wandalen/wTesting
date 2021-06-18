@@ -666,9 +666,14 @@ function _runnableGet()
 
   if( suite.routine )
   {
-    if( _.arrayIs( suite.routine ) )
-    return !!_.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
-    return _.path.globShortFit( tro.name, suite.routine );
+    // if( _.arrayIs( suite.routine ) )
+    // return !!_.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
+    // return _.path.globShortFit( tro.name, suite.routine );
+
+    const checkRoutine = tro.experimental ? checkExperimental : checkNotExperimental;
+    if( _.array.is( suite.routine ) )
+    return !!_.any( suite.routine, ( e ) => checkRoutine( tro.name, e ) );
+    return checkRoutine( tro.name, suite.routine );
   }
 
   if( tro.experimental )
@@ -678,6 +683,22 @@ function _runnableGet()
   return false;
 
   return true;
+
+  /* */
+
+  function checkExperimental( name, selector )
+  {
+    if( !_.path.isGlob( selector ) )
+    return _.path.globShortFit( name, selector );
+    return false;
+  }
+
+  /* */
+
+  function checkNotExperimental( name, selector )
+  {
+    return _.path.globShortFit( name, selector );
+  }
 }
 
 //

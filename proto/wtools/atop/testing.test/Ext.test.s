@@ -1392,6 +1392,93 @@ function runCheckRewritingSuiteOptions( test )
 
 //
 
+function runExperimentalRoutines( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runExperimentalRoutines' );
+  a.reflect();
+
+  /* */
+
+  a.appStart( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'run without routines selector, should not run experimental test routines';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::open ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::openExperimental ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::build ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::buildExperimental ' ), 0 );
+    return null;
+  });
+
+  a.appStart( '.run ./ r:open*' )
+  .then( ( op ) =>
+  {
+    test.case = 'selector - string with glob, should not run experimental test routine';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::open ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::openExperimental ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::build ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::buildExperimental ' ), 0 );
+    return null;
+  });
+
+  a.appStart( '.run ./ r:openExperimental' )
+  .then( ( op ) =>
+  {
+    test.case = 'selector - string with name of experimental routine, should run test routine';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::open ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::openExperimental ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::build ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::buildExperimental ' ), 0 );
+    return null;
+  });
+
+  a.appStart( '.run ./ r:open* r:build*' )
+  .then( ( op ) =>
+  {
+    test.case = 'selector - array with globs, should not run experimental test routines';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::open ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::openExperimental ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::build ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::buildExperimental ' ), 0 );
+    return null;
+  });
+
+  a.appStart( '.run ./ r:"[ openExperimental, buildExperimental ]"' )
+  .then( ( op ) =>
+  {
+    test.case = 'selector - array with names of experimental test routines, should run test routines';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::open ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::openExperimental ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::build ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::buildExperimental ' ), 1 );
+    return null;
+  });
+
+  a.appStart( '.run ./ r:"[ open*, buildExperimental ]"' )
+  .then( ( op ) =>
+  {
+    test.case = 'selector - array with mixed names, should run defined experimental test routine';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::open ' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::openExperimental ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::build ' ), 0 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::RunExperimentalRoutines / TestRoutine::buildExperimental ' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function checkFails( test )
 {
   let context = this;
@@ -7048,6 +7135,7 @@ const Proto =
     runWithQuotedArrayWithSpacesAndRapidity,
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
+    runExperimentalRoutines,
 
     checkFails,
     double,

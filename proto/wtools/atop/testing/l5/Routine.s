@@ -670,15 +670,10 @@ function _runnableGet()
     // return !!_.any( suite.routine, ( e ) => _.path.globShortFit( tro.name, e ) )
     // return _.path.globShortFit( tro.name, suite.routine );
 
-    let result = false;
     const checkRoutine = tro.experimental ? checkExperimental : checkNotExperimental;
-    if( _.long.is( suite.routine ) )
-    for( let i = 0 ; i < suite.routine.length ; i++ )
-    result = checkRoutine( tro.name, suite.routine[ i ] );
-    else
-    result = checkRoutine( tro.name, suite.routine );
-
-    return result;
+    if( _.array.is( suite.routine ) )
+    return !!_.any( suite.routine, ( e ) => checkRoutine( tro.name, e ) );
+    return checkRoutine( tro.name, suite.routine );
   }
 
   if( tro.experimental )

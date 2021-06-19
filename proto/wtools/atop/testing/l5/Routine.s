@@ -3550,13 +3550,8 @@ function assetFor( a )
     ... _.program.make.defaults,
     rewriting : 1,
     logger : 2,
-    // verbosity : 2,
-    // routine : null,
-    // locals : null,
-    // dirPath : '.'
   }
   let program = _.routine.unite( program_head, program_body );
-  // let program = _.routine.unite( _.program.make.head, program_body );
 
   if( a.program === null )
   a.program = program;
@@ -3762,26 +3757,11 @@ function assetFor( a )
 
   /* */
 
-  // /* xxx : replace the head? */
-  // function program_head( routine, args )
-  // {
-  //   let o = args[ 0 ]
-  //
-  //   if( !_.mapIs( o ) )
-  //   o = { routine : o }
-  //   _.routine.options_( program, o );
-  //   _.assert( _.strIs( o.dirPath ) );
-  //   _.assert( arguments.length === 2 );
-  //   _.assert( args.length === 1 );
-  //
-  //   return o;
-  // }
-
   function program_head( routine, args )
   {
     let o = args[ 0 ];
     if( !_.mapIs( o ) )
-    o = { routine : o }
+    o = { entry : o }
 
     if( o.moduleFile === null || o.moduleFile === undefined )
     o.moduleFile = _.module.fileNativeWith( 2, _globals_.real.wTools.module.nativeFilesMap );
@@ -3791,22 +3771,17 @@ function assetFor( a )
 
     _.routine.options( routine, o );
 
-    // debugger;
-    // if( o.logger === undefined || o.logger === null )
     if( !_.logger.is( o.logger ) )
     {
       o.logger = _.Logger({ output : tro.logger, verbosity : o.logger || 0 });
-      // o.logger = _.logger.from( o.logger );
-      // o.logger.outputTo( tro.logger );
     }
-    // o.logger = tro.logger;
 
     o = _.program.make.head.call( _.program, routine, [ o ] );
 
     return o;
   }
 
-  /**/
+  /* */
 
   function program_body( o )
   {
@@ -3818,7 +3793,7 @@ function assetFor( a )
     if( !o.tempPath )
     o.tempPath = a.abs( '.' );
 
-    _.program.preformLocals.body.call( _.program, o );
+    _.program.groupPreformLocals.body.call( _.program, o ); 
 
     /*
     replace toolsPath, by toolsPath to the current wTools if such exists in userland
@@ -3836,10 +3811,6 @@ function assetFor( a )
       ... o.start.predefined,
       ready : a.ready,
     });
-
-    // /* xxx : introduce verbosity */
-    // logger.log( _.strLinesNumber( o.sourceCode ) );
-    // return o.programPath;
 
     return o;
   }

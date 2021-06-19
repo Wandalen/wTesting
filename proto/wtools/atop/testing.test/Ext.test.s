@@ -1846,7 +1846,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programFail';
-    let programPath = a.program({ routine : programFail }).programPath;
+    let programPath = a.program({ entry : programFail }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -1874,7 +1874,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programPass';
-    let programPath = a.program({ routine : programPass }).programPath;
+    let programPath = a.program({ entry : programPass }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -1902,7 +1902,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programExit1';
-    let programPath = a.program({ routine : programExit1 }).programPath;
+    let programPath = a.program({ entry : programExit1 }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -1930,7 +1930,7 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programExitCustomCode';
-    let programPath = a.program({ routine : programExitCustomCode }).programPath;
+    let programPath = a.program({ entry : programExitCustomCode }).programPath;
     a.fork
     ({
       execPath : programPath,
@@ -3917,7 +3917,7 @@ function timeOutSeveralRoutines( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ routine : program1 }).programPath;
+  let programPath = a.program({ entry : program1 }).programPath;
   let ready = _.take( null );
 
   /* */
@@ -4022,7 +4022,7 @@ function timeOutSeveralRoutinesDesync( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ routine : program1 }).programPath;
+  let programPath = a.program({ entry : program1 }).programPath;
   let ready = _.take( null );
 
   /* */
@@ -4346,7 +4346,7 @@ function termination( test )
   let a = context.assetFor( test, false );
   let file1Path = a.abs( 'File1' );
   let locals = { file1Path }
-  let programPath = a.program({ routine : program1, locals }).programPath;
+  let programPath = a.program({ entry : program1, locals }).programPath;
   let ready = _.take( null );
 
   /* */
@@ -4615,7 +4615,7 @@ function uncaughtErrorNotSilenced( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ routine : program1 }).programPath;
+  let programPath = a.program({ entry : program1 }).programPath;
 
   /* */
 
@@ -4730,12 +4730,12 @@ function programOptionsRoutineDirPath( test )
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath'
-  var got = a.program({ routine : testApp1, dirPath : 'temp' }).programPath;
+  var got = a.program({ entry : testApp1, dirPath : 'temp' }).programPath;
   var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name ) );
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath with spaces'
-  var got = a.program({ routine : testApp1, dirPath : 'temp with spaces' }).programPath;
+  var got = a.program({ entry : testApp1, dirPath : 'temp with spaces' }).programPath;
   var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name ) );
   test.il( got, exp )
 

@@ -2948,11 +2948,11 @@ function _shouldDo_( o )
       expected = !expected;
 
       if( callback )
-      callbackRunOnResult( err, result, expected );
+      callbackRunOnResult( err, arg, expected );
+      // callbackRunOnResult( err, result, expected );
 
       if( !o.ignoringError && !reported )
       {
-
         if( err && !o.expectingAsyncError )
         reportAsync();
       }
@@ -3793,7 +3793,7 @@ function assetFor( a )
     if( !o.tempPath )
     o.tempPath = a.abs( '.' );
 
-    _.program.groupPreformLocals.body.call( _.program, o ); 
+    _.program.groupPreformLocals.body.call( _.program, o );
 
     /*
     replace toolsPath, by toolsPath to the current wTools if such exists in userland

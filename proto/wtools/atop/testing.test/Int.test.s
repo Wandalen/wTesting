@@ -3816,7 +3816,7 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.timerIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
@@ -3915,7 +3915,7 @@ function shouldThrowErrorAsyncWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.identical( errStack[ 0 ], null );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c6.resourcesGet().length, 1 );
@@ -4254,7 +4254,7 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.timerIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
@@ -4353,7 +4353,7 @@ function shouldThrowErrorAsync_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.identical( errStack[ 0 ], null );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c6.resourcesGet().length, 1 );

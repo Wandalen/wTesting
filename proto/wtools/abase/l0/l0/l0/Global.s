@@ -135,6 +135,22 @@ function fileSetEnvironment( moduleFile, name )
   env.global = global2;
   env.moduleNativeFilesMap = global2.wTools.module.nativeFilesMap;
 
+  // /* yyy */
+  // debugger;
+
+  // let moduleFileName = moduleNativeFile.filename || moduleNativeFile.id;
+  // if( global2.wTools.module.nativeFilesMap[ moduleFileName ] && global2.wTools.module.nativeFilesMap[ moduleFileName ] !== moduleNativeFile )
+  // throw Error( `Namespace::${name} already has native module file :: ${moduleFileName} in nativeFilesMap` );
+  // global2.wTools.module.nativeFilesMap[ moduleFileName ] = moduleNativeFile;
+
+  // if( global2.wTools.module.filesMap && moduleNativeFile.universal && global2.wTools.path && global2.wTools.path.canonize )
+  // {
+  //   let moduleFileName2 = global2.wTools.path.canonize( moduleFileName );
+  //   if( global2.wTools.module.filesMap[ moduleFileName2 ] && global2.wTools.module.filesMap[ moduleFileName2 ] !== moduleNativeFile.universal )
+  //   throw Error( `Namespace::${name} already has universal module file :: ${moduleFileName2} in filesMap` );
+  //   global2.wTools.module.filesMap[ moduleFileName2 ] = moduleNativeFile;
+  // }
+
 }
 
 //

@@ -176,6 +176,8 @@ module:
           - ../proto/wtools/abase/l0/l0
           - ../proto/wtools/abase/l0/l0/l0
           - ../proto/wtools/abase/l0/l0/l0/Global.s
+          - ../proto/wtools/abase/l9.test
+          - ../proto/wtools/abase/l9.test/ModuleTesting.test.s
           - ../proto/wtools/amid
           - ../proto/wtools/atop
           - ../proto/wtools/atop/testing

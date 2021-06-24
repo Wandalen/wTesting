@@ -780,6 +780,7 @@ workflowSshAgentRun.defaults =
 
 let Extension =
 {
+
   fileDrop,
   eventDispatch,
   waitForVisibleInViewport,
@@ -798,7 +799,7 @@ let Extension =
 
 }
 
-/* _.props.extend */Object.assign( _.test, Extension );
+Object.assign( _.test, Extension );
 
 // --
 // export

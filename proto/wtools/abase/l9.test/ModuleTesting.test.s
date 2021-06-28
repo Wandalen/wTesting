@@ -160,12 +160,12 @@ function modulingLogistic( test )
     {
       test.case = `external program, ${__.entity.exportStringSolo( env )}`;
 
-      var programPath = a.program( programRoutine1 ).programPath;
+      var filePath/*programPath*/ = a.program( programRoutine1 ).filePath/*programPath*/;
 
       return a.forkNonThrowing
       ({
-        execPath : programPath,
-        currentPath : _.path.dir( programPath ),
+        execPath : filePath/*programPath*/,
+        currentPath : _.path.dir( filePath/*programPath*/ ),
       })
     })
     .then( ( op ) =>

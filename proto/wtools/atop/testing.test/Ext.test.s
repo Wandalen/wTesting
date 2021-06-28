@@ -71,7 +71,7 @@ function assetFor( test, asset )
     _.props.supplement( o.locals, locals );
     _.props.supplement( o.locals.context, locals.context );
     let r = oprogram.body.call( a, o );
-    r.programPath = a.path.nativize( r.programPath );
+    r.filePath/*programPath*/ = a.path.nativize( r.filePath/*programPath*/ );
     return r;
   }
 
@@ -1846,10 +1846,10 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programFail';
-    let programPath = a.program({ entry : programFail }).programPath;
+    let filePath/*programPath*/ = a.program({ entry : programFail }).filePath/*programPath*/;
     a.fork
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       throwingExitCode : 0,
     })
     .tap( ( err, op ) =>
@@ -1874,10 +1874,10 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programPass';
-    let programPath = a.program({ entry : programPass }).programPath;
+    let filePath/*programPath*/ = a.program({ entry : programPass }).filePath/*programPath*/;
     a.fork
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       throwingExitCode : 0,
     })
     .tap( ( err, op ) =>
@@ -1902,10 +1902,10 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programExit1';
-    let programPath = a.program({ entry : programExit1 }).programPath;
+    let filePath/*programPath*/ = a.program({ entry : programExit1 }).filePath/*programPath*/;
     a.fork
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       throwingExitCode : 0,
     })
     .tap( ( err, op ) =>
@@ -1930,10 +1930,10 @@ function exitCodeSeveralTestSuites( test )
   ready.then( function( arg )
   {
     test.case = 'programExitCustomCode';
-    let programPath = a.program({ entry : programExitCustomCode }).programPath;
+    let filePath/*programPath*/ = a.program({ entry : programExitCustomCode }).filePath/*programPath*/;
     a.fork
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       throwingExitCode : 0,
     })
     .tap( ( err, op ) =>
@@ -3917,7 +3917,7 @@ function timeOutSeveralRoutines( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ entry : program1 }).programPath;
+  let filePath/*programPath*/ = a.program({ entry : program1 }).filePath/*programPath*/;
   let ready = _.take( null );
 
   /* */
@@ -3927,7 +3927,7 @@ function timeOutSeveralRoutines( test )
     test.case = 'basic';
     a.forkNonThrowing
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
     })
     .tap( ( _err, op ) =>
     {
@@ -4022,7 +4022,7 @@ function timeOutSeveralRoutinesDesync( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ entry : program1 }).programPath;
+  let filePath/*programPath*/ = a.program({ entry : program1 }).filePath/*programPath*/;
   let ready = _.take( null );
 
   /* */
@@ -4032,7 +4032,7 @@ function timeOutSeveralRoutinesDesync( test )
     test.case = 'basic';
     a.forkNonThrowing
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
     })
     .tap( ( _err, op ) =>
     {
@@ -4346,7 +4346,7 @@ function termination( test )
   let a = context.assetFor( test, false );
   let file1Path = a.abs( 'File1' );
   let locals = { file1Path }
-  let programPath = a.program({ entry : program1, locals }).programPath;
+  let filePath/*programPath*/ = a.program({ entry : program1, locals }).filePath/*programPath*/;
   let ready = _.take( null );
 
   /* */
@@ -4358,7 +4358,7 @@ function termination( test )
     a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
     a.forkNonThrowing
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       mode : 'fork',
     })
     .tap( ( _err, op ) =>
@@ -4390,7 +4390,7 @@ function termination( test )
     a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
     a.forkNonThrowing
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       mode : 'fork',
     })
     .tap( ( _err, op ) =>
@@ -4422,7 +4422,7 @@ function termination( test )
     a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
     a.forkNonThrowing
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       mode : 'fork',
     })
     .tap( ( _err, op ) =>
@@ -4452,7 +4452,7 @@ function termination( test )
     a.fileProvider.fileWrite({ filePath : file1Path, data : opts, encoding : 'json' });
     a.forkNonThrowing
     ({
-      execPath : programPath,
+      execPath : filePath/*programPath*/,
       mode : 'fork',
     })
     .tap( ( _err, op ) =>
@@ -4615,13 +4615,13 @@ function uncaughtErrorNotSilenced( test )
 {
   let context = this;
   let a = context.assetFor( test, false );
-  let programPath = a.program({ entry : program1 }).programPath;
+  let filePath/*programPath*/ = a.program({ entry : program1 }).filePath/*programPath*/;
 
   /* */
 
   a.forkNonThrowing
   ({
-    execPath : programPath,
+    execPath : filePath/*programPath*/,
     args : [ 'silencing:1' ],
     mode : 'fork',
   })
@@ -4725,17 +4725,17 @@ function programOptionsRoutineDirPath( test )
   let a = context.assetFor( test, false );
 
   test.case = 'default'
-  var got = a.program( testApp1 ).programPath;
+  var got = a.program( testApp1 ).filePath/*programPath*/;
   var exp = a.path.nativize( a.path.join( a.routinePath, testApp1.name ) );
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath'
-  var got = a.program({ entry : testApp1, dirPath : 'temp' }).programPath;
+  var got = a.program({ entry : testApp1, dirPath : 'temp' }).filePath/*programPath*/;
   var exp = a.path.nativize( a.path.join( a.routinePath, 'temp', testApp1.name ) );
   test.il( got, exp )
 
   test.case = 'options : routine, dirPath with spaces'
-  var got = a.program({ entry : testApp1, dirPath : 'temp with spaces' }).programPath;
+  var got = a.program({ entry : testApp1, dirPath : 'temp with spaces' }).filePath/*programPath*/;
   var exp = a.path.nativize( a.path.join( a.routinePath, 'temp with spaces', testApp1.name ) );
   test.il( got, exp )
 
@@ -4769,12 +4769,12 @@ function toolsPathGetTester( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
   var exp = _.module.resolve( 'wTools' );
   var toolsPath1 = _.module.toolsPathGet();
-  return a.forkNonThrowing({ execPath : programPath })
+  return a.forkNonThrowing({ execPath : filePath/*programPath*/ })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -4939,7 +4939,7 @@ function checkDiffWithProto( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   a.reflect();
 
@@ -4951,7 +4951,7 @@ function checkDiffWithProto( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:identical1` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:identical1` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -4979,7 +4979,7 @@ function checkDiffWithProto( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:identical2` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:identical2` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5007,7 +5007,7 @@ function checkDiffWithProto( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:identical3` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:identical3` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -5037,7 +5037,7 @@ function checkDiffWithProto( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:identical4` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:identical4` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -5067,7 +5067,7 @@ function checkDiffWithProto( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:identical5` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:identical5` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5095,7 +5095,7 @@ function checkDiffWithProto( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:identical6` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:identical6` })
   .then( ( op ) =>
   {
     test.notIdentical( op.exitCode, 0 );
@@ -5307,7 +5307,7 @@ function checkDiffWithProtoEq( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   a.reflect();
 
@@ -5319,7 +5319,7 @@ function checkDiffWithProtoEq( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:equivalent1` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:equivalent1` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5347,7 +5347,7 @@ function checkDiffWithProtoEq( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:equivalent2` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:equivalent2` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5375,7 +5375,7 @@ function checkDiffWithProtoEq( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:equivalent3` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:equivalent3` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -5405,7 +5405,7 @@ function checkDiffWithProtoEq( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:equivalent4` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:equivalent4` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -5435,7 +5435,7 @@ function checkDiffWithProtoEq( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:equivalent5` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:equivalent5` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5463,7 +5463,7 @@ function checkDiffWithProtoEq( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:equivalent6` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:equivalent6` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5665,7 +5665,7 @@ function checkDiffWithProtoContains( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   a.reflect();
 
@@ -5677,7 +5677,7 @@ function checkDiffWithProtoContains( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:contains1` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:contains1` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5705,7 +5705,7 @@ function checkDiffWithProtoContains( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:contains2` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:contains2` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5733,7 +5733,7 @@ function checkDiffWithProtoContains( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:contains3` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:contains3` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -5763,7 +5763,7 @@ function checkDiffWithProtoContains( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:contains4` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:contains4` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -5793,7 +5793,7 @@ function checkDiffWithProtoContains( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:contains5` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:contains5` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -5821,7 +5821,7 @@ function checkDiffWithProtoContains( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:contains6` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:contains6` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6022,7 +6022,7 @@ function checkDiffWithProtoContainsAll( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   a.reflect();
 
@@ -6034,7 +6034,7 @@ function checkDiffWithProtoContainsAll( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAll1` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAll1` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6062,7 +6062,7 @@ function checkDiffWithProtoContainsAll( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAll2` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAll2` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6090,7 +6090,7 @@ function checkDiffWithProtoContainsAll( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAll3` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAll3` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -6120,7 +6120,7 @@ function checkDiffWithProtoContainsAll( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAll4` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAll4` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -6150,7 +6150,7 @@ function checkDiffWithProtoContainsAll( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAll5` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAll5` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6178,7 +6178,7 @@ function checkDiffWithProtoContainsAll( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAll6` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAll6` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6380,7 +6380,7 @@ function checkDiffWithProtoContainsAny( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   a.reflect();
 
@@ -6392,7 +6392,7 @@ function checkDiffWithProtoContainsAny( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAny1` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAny1` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6420,7 +6420,7 @@ function checkDiffWithProtoContainsAny( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAny2` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAny2` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6448,7 +6448,7 @@ function checkDiffWithProtoContainsAny( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAny3` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAny3` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6478,7 +6478,7 @@ function checkDiffWithProtoContainsAny( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAny4` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAny4` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6508,7 +6508,7 @@ function checkDiffWithProtoContainsAny( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAny5` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAny5` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6536,7 +6536,7 @@ function checkDiffWithProtoContainsAny( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsAny6` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsAny6` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6738,7 +6738,7 @@ function checkDiffWithProtoContainsOnly( test )
 {
   let context = this;
   let a = context.assetFor( test, 'failout' );
-  let programPath = a.program( program ).programPath;
+  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
 
   a.reflect();
 
@@ -6750,7 +6750,7 @@ function checkDiffWithProtoContainsOnly( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsOnly1` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsOnly1` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6778,7 +6778,7 @@ function checkDiffWithProtoContainsOnly( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsOnly2` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsOnly2` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6806,7 +6806,7 @@ function checkDiffWithProtoContainsOnly( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsOnly3` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsOnly3` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -6836,7 +6836,7 @@ function checkDiffWithProtoContainsOnly( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsOnly4` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsOnly4` })
   .then( ( op ) =>
   {
     test.nil( op.exitCode, 0 );
@@ -6866,7 +6866,7 @@ function checkDiffWithProtoContainsOnly( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsOnly5` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsOnly5` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );
@@ -6894,7 +6894,7 @@ function checkDiffWithProtoContainsOnly( test )
     return null;
   })
 
-  a.appStartNonThrowing({ execPath : `${programPath} r:containsOnly6` })
+  a.appStartNonThrowing({ execPath : `${filePath/*programPath*/} r:containsOnly6` })
   .then( ( op ) =>
   {
     test.il( op.exitCode, 0 );

@@ -49,6 +49,13 @@ function _new( name, global )
   global2.wTools.global.current = global2;
   global2.wTools.module = Object.create( null );
   global2.wTools.module.nativeFilesMap = Object.create( null );
+
+  for( let name in ModuleFileNative._cache )
+  {
+    if( filePathIsBin( name ) )
+    global2.wTools.module.nativeFilesMap[ name ] = ModuleFileNative._cache[ name ];
+  }
+
   return global2;
 }
 
@@ -250,6 +257,14 @@ function fileNativeParent( file )
 
 //
 
+function filePathIsBin( filePath )
+{
+  const regexp = /\.node$/;
+  return regexp.test( filePath );
+}
+
+//
+
 const ModuleFileSymbol = Symbol.for( 'ModuleFile' );
 const ModuleFileNative = typeof module !== 'undefined' ? require( 'module' ) : null;
 const __ = _realGlobal_.wTools = _realGlobal_.wTools || Object.create( null );
@@ -270,6 +285,7 @@ __.module.fileNativeIs = __.module.fileNativeIs || fileNativeIs;
 __.module.fileUniversalIs = __.module.fileUniversalIs || fileUniversalIs;
 __.module.fileNativeFrom = __.module.fileNativeFrom || fileNativeFrom;
 __.module.fileNativeParent = __.module.fileNativeParent || fileNativeParent;
+__.module.filePathIsBin = __.module.filePathIsBin || filePathIsBin;
 
 if( _global_ === _realGlobal_ )
 __.global.setup( _realGlobal_, 'real' );

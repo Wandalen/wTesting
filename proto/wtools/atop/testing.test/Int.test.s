@@ -5038,7 +5038,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.timerIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
@@ -5087,7 +5087,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.identical( errStack[ 0 ], 'arg1' );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c5.resourcesGet().length, 1 );
@@ -5175,7 +5175,7 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.identical( errStack[ 0 ], 'arg' );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c8.resourcesGet().length, 1 );
@@ -5425,7 +5425,7 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.true( _.timerIs( errStack[ 0 ] ) );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c4.resourcesGet().length, 1 );
@@ -5474,7 +5474,7 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.identical( errStack[ 0 ], 'arg1' );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c5.resourcesGet().length, 1 );
@@ -5562,7 +5562,7 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
         counter.next();
 
         test.identical( errStack.length, 2 );
-        test.true( _.consequenceIs( errStack[ 0 ] ) );
+        test.identical( errStack[ 0 ], 'arg' );
         test.identical( errStack[ 1 ], false );
 
         test.identical( c8.resourcesGet().length, 1 );

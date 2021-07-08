@@ -91,6 +91,7 @@ function modulingLogistic( test )
   let a = test.assetFor( false );
   let ready = __.take( null );
 
+  debugger;
   var toolsPath = _.module.resolve( 'wTools' );
   var toolsDirPath = _.module.toolsDirGet();
   var testingPath = _.module.resolve( 'wTesting' );
@@ -126,8 +127,10 @@ function modulingLogistic( test )
   var module = _.module.withName( 'wTools' );
   test.gt( _.entity.lengthOf( module.files ), 100 );
   test.identical( _.entity.lengthOf( module.alias ), 2 );
-  test.true( _.module.filesMap.has( toolsPath ) );
-  test.true( module.files.has( toolsPath ) );
+  test.false( _.module.filesMap.has( toolsPath ) );
+  test.false( module.files.has( toolsPath ) );
+  // test.true( _.module.filesMap.has( toolsPath ) );
+  // test.true( module.files.has( toolsPath ) );
   test.true( _.module.filesMap.has( __.path.join( toolsDirPath, 'abase/l0/l0/l0/Global.s' ) ) );
   test.true( module.files.has( __.path.join( toolsDirPath, 'abase/l0/l0/l0/Global.s' ) ) );
   var module2 = _.module.withName( 'wTools' );
@@ -179,7 +182,7 @@ lengthOf( _modulesToPredeclare ) 0
 lengthOf( predeclaredWithNameMap ) 2
 lengthOf( predeclaredWithEntryPathMap ) 2
 lengthOf( modulesMap ) ${_.entity.lengthOf( _.module.withName( 'wTools' ).alias )}
-lengthOf( filesMap ) ${_.entity.lengthOf( _.module.withName( 'wTools' ).files ) + 1}
+lengthOf( filesMap ) ${_.entity.lengthOf( _.module.withName( 'wTools' ).files ) + 2}
 module.fileIs( moduleFile ) true
 module.fileUniversalIs( moduleFile ) true
 module.fileNativeIs( moduleFile ) false

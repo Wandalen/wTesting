@@ -51,6 +51,6 @@ jobs :
     - run : npm list
       continue-on-error : true
     - if : startsWith( matrix.os, 'ubuntu' )
-      run : xvfb-run --auto-servernum npm test v:9
+      run : xvfb-run --auto-servernum npm test
     - if : "!startsWith( matrix.os, 'ubuntu' )"
-      run : npm test v:9
+      run : npm test

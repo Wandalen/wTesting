@@ -86,8 +86,10 @@ function assetFor( test, asset )
 
     reflected.forEach( ( r ) =>
     {
-      if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
+      if( !_.longHasAny( [ 'js', 's', 'ts' ], r.dst.ext ) )
       return;
+      // if( r.dst.ext !== 'js' && r.dst.ext !== 's' )
+      // return;
       var read = a.fileProvider.fileRead( r.dst.absolute );
       read = _.strReplace( read, `'wTesting'`, `'${_.strEscape( context.appJsPath )}'` );
       read = _.strReplace( read, `'wTools'`, `'${_.strEscape( _.module.resolve( 'wTools' ) )}'` );
@@ -7136,7 +7138,7 @@ function typescriptSupport( test )
     test.identical( op.exitCode, 0 );
 
     test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.ts' ), 1 );
-    test.identical( _.strCount( op.output, 'Passed test routines 1 / 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test routines 1 / 1' ), 2 );
     test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
 
     return null;
@@ -7147,7 +7149,7 @@ function typescriptSupport( test )
   return a.ready;
 }
 
-typescriptSupport.description = 
+typescriptSupport.description =
 `
   - Tester should detect typescript test files and include them into the run.
 `

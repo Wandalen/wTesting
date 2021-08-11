@@ -867,6 +867,7 @@ function _suitesIncludeAt( path )
   let ends = [ '.test.s' ];
   ends.push( '.test.js' );
   ends.push( '.test.ss' );
+  ends.push( '.test.ts' );
 
   let maskAll = _.files.regexpMakeSafe
   ({
@@ -892,6 +893,7 @@ function _suitesIncludeAt( path )
 
   try
   {
+    require( 'ts-node' ).register();
     _realGlobal_.wTools.module.fileSetEnvironment( module, 'real' );
 
     for( let f = 0 ; f < files.length ; f++ )

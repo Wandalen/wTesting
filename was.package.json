@@ -65,7 +65,10 @@
     "wequaler": "",
     "wCopyable": "",
     "wConsequence": "",
-    "wcommandsaggregator": ""
+    "wcommandsaggregator": "",
+    "typescript": "",
+    "ts-node": "",
+    "@types/node": ""
   },
   "optionalDependencies": {
     "wEventHandler": ""

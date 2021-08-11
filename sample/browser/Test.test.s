@@ -5,8 +5,9 @@
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( 'Tools' );
-  require( '../testing/entry/Main.s' );
+  const _ = require( 'wTools' );
+  _.include( 'wTesting' );
+  // require( '../testing/entry/Main.s' );
   _.include( 'wFiles' );
 }
 

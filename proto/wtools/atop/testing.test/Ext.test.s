@@ -7090,6 +7090,68 @@ checkDiffWithProtoContainsOnly.description =
 Check diff from test.containsOnly, when comparing maps that set new __proto__.
 `
 
+//
+
+function typescriptSupport( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'typescriptSupport' );
+
+  a.reflect();
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'detects and runs typescript tests';
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.abs( 'tests/**' ) ] })
+
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.ts' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite2.test.ts' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test routines 2 / 2' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 2 / 2' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'runs single ts test suite';
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.abs( 'tests/TestSuite1.test.ts' ) ] })
+
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.ts' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test routines 1 / 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  return a.ready;
+}
+
+typescriptSupport.description = 
+`
+  - Tester should detect typescript test files and include them into the run.
+`
+
 // --
 // suite
 // --
@@ -7200,7 +7262,11 @@ const Proto =
     checkDiffWithProtoContains,
     checkDiffWithProtoContainsAll,
     checkDiffWithProtoContainsAny,
-    checkDiffWithProtoContainsOnly
+    checkDiffWithProtoContainsOnly,
+
+    // typescript
+
+    typescriptSupport,
 
   }
 

@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: f6245465c27e112c4b2f53a4e7637716
-    size: 12890
+    hash: 25084bf7ce0deaa27a1d8991abfceda3
+    size: 13049
 module:
   wTesting.out:
     about:
@@ -378,6 +378,18 @@ module:
         enabled: 0
       wprocesswatcher:
         path: 'npm:///wprocesswatcher'
+        autoExporting: 0
+        enabled: 0
+      typescript:
+        path: 'npm:///typescript'
+        autoExporting: 0
+        enabled: 0
+      ts-node:
+        path: 'npm:///ts-node'
+        autoExporting: 0
+        enabled: 0
+      types/node:
+        path: 'npm:///@types/node'
         autoExporting: 0
         enabled: 0
       wEventHandler:
@@ -1425,6 +1437,18 @@ module:
         path: 'npm:///wprocesswatcher'
         autoExporting: 0
         enabled: 0
+      typescript:
+        path: 'npm:///typescript'
+        autoExporting: 0
+        enabled: 0
+      ts-node:
+        path: 'npm:///ts-node'
+        autoExporting: 0
+        enabled: 0
+      types/node:
+        path: 'npm:///@types/node'
+        autoExporting: 0
+        enabled: 0
       wEventHandler:
         path: 'npm:///wEventHandler'
         autoExporting: 0
@@ -2192,5 +2216,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: f6245465c27e112c4b2f53a4e7637716
-        size: 12890
+        hash: 25084bf7ce0deaa27a1d8991abfceda3
+        size: 13049

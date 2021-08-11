@@ -36,16 +36,16 @@ build:
 
   #
 
-  browser.debug : 
-    criterion : 
+  browser.debug :
+    criterion :
       debug: debug
     steps:
       - step::clean.out.browser.debug
       - step::sources.join
       - step::reflect.module.files.debug
       - step::npm.release.browser.debug
-  browser.debug.min : 
-    criterion : 
+  browser.debug.min :
+    criterion :
       debug: debug
     steps:
       - step::clean.out.browser.debug.min
@@ -53,8 +53,8 @@ build:
       - step::transpile.debug.min
       - step::reflect.module.files.debug.min
       - step::npm.release.browser.debug.min
-  browser.release : 
-    criterion : 
+  browser.release :
+    criterion :
       debug: release
     steps:
       - step::clean.out.browser.release
@@ -62,8 +62,8 @@ build:
       - step::transpile.release
       - step::reflect.module.files.release
       - step::npm.release.browser.release
-  browser.release.min : 
-    criterion : 
+  browser.release.min :
+    criterion :
       debug: release
     steps:
       - step::clean.out.browser.release.min
@@ -360,7 +360,7 @@ step:
     inherit: npm.generate
     entryPath: '{path::out.browser.release.min}/Main.s'
     packagePath: '{path::out.browser.release.min}/package.json'
-    
+
   #
 
   proto.export:
@@ -424,7 +424,7 @@ step:
     filePath: '{path::out.browser.release}'
   clean.out.browser.release.min:
     inherit: files.delete
-    filePath: '{path::out.browser.release.min}' 
+    filePath: '{path::out.browser.release.min}'
 
   #
   clean.out.npm:
@@ -488,6 +488,15 @@ submodule:
     enabled: 0
   wprocesswatcher:
     path: 'npm:///wprocesswatcher'
+    enabled: 0
+  typescript:
+    path: 'npm:///typescript'
+    enabled: 0
+  ts-node:
+    path: 'npm:///ts-node'
+    enabled: 0
+  types/node:
+    path: 'npm:///@types/node'
     enabled: 0
   wEventHandler:
     path: 'npm:///wEventHandler'

@@ -7112,11 +7112,32 @@ function typescriptSupport( test )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    
+
     test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.ts' ), 1 );
     test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite2.test.ts' ), 1 );
     test.identical( _.strCount( op.output, 'Passed test routines 2 / 2' ), 1 );
     test.identical( _.strCount( op.output, 'Passed test suites 2 / 2' ), 1 );
+
+    return null;
+  })
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'runs single ts test suite';
+    return null;
+  })
+
+  a.appStartNonThrowing({ args : [ '.run', a.abs( 'tests/TestSuite1.test.ts' ) ] })
+
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.ts' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test routines 1 / 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
 
     return null;
   })

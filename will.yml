@@ -490,13 +490,13 @@ submodule:
     path: 'npm:///wprocesswatcher'
     enabled: 0
   typescript:
-    path: 'npm:///typescript'
+    path: 'npm:///typescript!4.3.5'
     enabled: 0
   ts-node:
-    path: 'npm:///ts-node'
+    path: 'npm:///ts-node!10.2.0'
     enabled: 0
   types/node:
-    path: 'npm:///@types/node'
+    path: 'npm:///@types/node!16.6.0'
     enabled: 0
   wEventHandler:
     path: 'npm:///wEventHandler'
@@ -509,22 +509,22 @@ submodule:
     criterion:
       development: 1
   electron:
-    path: 'npm:///electron#11.3.0'
+    path: 'npm:///electron!11.3.0'
     enabled: 0
     criterion:
       development: 1
   spectron:
-    path: 'npm:///spectron#13.0.0'
+    path: 'npm:///spectron!13.0.0'
     enabled: 0
     criterion:
       development: 1
   puppeteer:
-    path: 'npm:///puppeteer#5.5.0'
+    path: 'npm:///puppeteer!5.5.0'
     enabled: 0
     criterion:
       development: 1
   eslint:
-    path: 'npm:///eslint#7.1.0'
+    path: 'npm:///eslint!7.1.0'
     enabled: 0
     criterion:
       development: 1

@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "1.0.551",
+  "version": "1.0.552",
   "engine": "node >= 10.0.0",
   "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
@@ -68,7 +68,7 @@
     "wcommandsaggregator": "delta",
     "typescript": "4.3.5",
     "ts-node": "10.2.0",
-    "@types/node": "16.4.14"
+    "@types/node": "16.6.0"
   },
   "optionalDependencies": {
     "wEventHandler": "delta"

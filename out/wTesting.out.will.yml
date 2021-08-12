@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: 25084bf7ce0deaa27a1d8991abfceda3
-    size: 13049
+    hash: ca8ff7638c9397cb4ab9b46c14a8ca0d
+    size: 13069
 module:
   wTesting.out:
     about:
@@ -381,15 +381,15 @@ module:
         autoExporting: 0
         enabled: 0
       typescript:
-        path: 'npm:///typescript'
+        path: 'npm:///typescript!4.3.5'
         autoExporting: 0
         enabled: 0
       ts-node:
-        path: 'npm:///ts-node'
+        path: 'npm:///ts-node!10.2.0'
         autoExporting: 0
         enabled: 0
       types/node:
-        path: 'npm:///@types/node'
+        path: 'npm:///@types/node!16.6.0'
         autoExporting: 0
         enabled: 0
       wEventHandler:
@@ -405,25 +405,25 @@ module:
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#11.3.0'
+        path: 'npm:///electron!11.3.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#13.0.0'
+        path: 'npm:///spectron!13.0.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       puppeteer:
-        path: 'npm:///puppeteer#5.5.0'
+        path: 'npm:///puppeteer!5.5.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint#7.1.0'
+        path: 'npm:///eslint!7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1438,15 +1438,15 @@ module:
         autoExporting: 0
         enabled: 0
       typescript:
-        path: 'npm:///typescript'
+        path: 'npm:///typescript!4.3.5'
         autoExporting: 0
         enabled: 0
       ts-node:
-        path: 'npm:///ts-node'
+        path: 'npm:///ts-node!10.2.0'
         autoExporting: 0
         enabled: 0
       types/node:
-        path: 'npm:///@types/node'
+        path: 'npm:///@types/node!16.6.0'
         autoExporting: 0
         enabled: 0
       wEventHandler:
@@ -1462,25 +1462,25 @@ module:
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron#11.3.0'
+        path: 'npm:///electron!11.3.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       spectron:
-        path: 'npm:///spectron#13.0.0'
+        path: 'npm:///spectron!13.0.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       puppeteer:
-        path: 'npm:///puppeteer#5.5.0'
+        path: 'npm:///puppeteer!5.5.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint#7.1.0'
+        path: 'npm:///eslint!7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -2216,5 +2216,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 25084bf7ce0deaa27a1d8991abfceda3
-        size: 13049
+        hash: ca8ff7638c9397cb4ab9b46c14a8ca0d
+        size: 13069

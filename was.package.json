@@ -66,9 +66,9 @@
     "wCopyable": "",
     "wConsequence": "",
     "wcommandsaggregator": "",
-    "typescript": "",
-    "ts-node": "",
-    "@types/node": ""
+    "typescript": "4.3.5",
+    "ts-node": "10.2.0",
+    "@types/node": "16.6.0"
   },
   "optionalDependencies": {
     "wEventHandler": ""

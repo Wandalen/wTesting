@@ -2139,7 +2139,71 @@ function exitCodeSeveralTestSuites( test )
 exitCodeSeveralTestSuites.description = /* qqq : extend the test */
 `
   - previous test soute does not influence on exit code of the current
-`
+`;
+
+//
+
+function globalTestingTestToolsProblemFullModuleProblem( test )
+{
+  const a = test.assetFor( false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run all test suites by global tester, except Integration.test.s';
+    return null;
+  });
+
+  a.shell( 'git clone https://github.com/Wandalen/wTools.git .' );
+  a.shell( 'npm i' );
+  a.appStartNonThrowing( '.run proto/wtools' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+globalTestingTestToolsProblemFullModuleProblem.experimental = 1;
+globalTestingTestToolsProblemFullModuleProblem.timeOut = 8e5;
+
+//
+
+function globalTestingTestToolsSingleSuiteProblem( test )
+{
+  const a = test.assetFor( false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run single test suite Module.test.s by global tester';
+    return null;
+  });
+
+  a.shell( 'git clone https://github.com/Wandalen/wTools.git .' );
+  a.shell( 'npm i' );
+  a.appStartNonThrowing( '.run proto/wtools/abase/l0/l9.test/Module.test.s' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+globalTestingTestToolsSingleSuiteProblem.experimental = 1;
+globalTestingTestToolsSingleSuiteProblem.timeOut = 6e5;
 
 // --
 // options
@@ -7207,6 +7271,8 @@ const Proto =
     noTestCheck,
     noTestSuite,
     exitCodeSeveralTestSuites,
+    globalTestingTestToolsProblemFullModuleProblem,
+    globalTestingTestToolsSingleSuiteProblem,
 
     // options
 

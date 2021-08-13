@@ -929,11 +929,20 @@ function _suitesIncludeAt( path )
   catch( err )
   {
     debugger;
-    throw _.err( err );
+    err = _.err( err );
+    throw err;
   }
   finally
   {
-    _realGlobal_.wTools.module.fileResetEnvironment( module, 'real' );
+    debugger;
+    try
+    {
+      _realGlobal_.wTools.module.fileResetEnvironment( module, 'real' );
+    }
+    catch( err )
+    {
+      console.error( _.err( err ) );
+    }
   }
 }
 

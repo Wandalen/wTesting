@@ -17,4 +17,3 @@ const Suite =
 //
 
 export const Self = wTestSuite( Suite );
-wTester.test( Self.name );

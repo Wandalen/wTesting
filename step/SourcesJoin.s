@@ -22,7 +22,7 @@ let step = function sourcesJoin( o )
   o.basePath = _.path.resolve( o.basePath );
 
   if( o.modulesList === null )
-  o.modulesList = 
+  o.modulesList =
   [
     'wTools',
     'wLooker',
@@ -31,6 +31,7 @@ let step = function sourcesJoin( o )
     'wProcessWatcher',
     'wProcess',
     'wIntrospectorBasic',
+    'wIntrospectorExtra',
     'wCopyable',
     'wInstancing',
     'wEventHandler',
@@ -78,7 +79,7 @@ let step = function sourcesJoin( o )
 
   _.assert( _.arrayIs( o.modulesList ), 'Expects modules list as array' );
 
-  o.modulesList.forEach( ( module ) => 
+  o.modulesList.forEach( ( module ) =>
   {
     let omodule = module;
     let modulePath = _.path.resolve( `node_modules/${module}` );
@@ -92,7 +93,7 @@ let step = function sourcesJoin( o )
 
     let moduleJsScriptsGlob = _.path.resolve( `node_modules/${module}/proto/**/*.(js|s)` );
     let moduleIncludeScriptsGlob = _.path.resolve( `node_modules/${module}/proto/node_modules/*` )
-    
+
     o.inPath.filePath.push( moduleJsScriptsGlob, moduleIncludeScriptsGlob );
   })
 

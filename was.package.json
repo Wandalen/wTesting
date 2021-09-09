@@ -54,18 +54,19 @@
   },
   "dependencies": {
     "wTools": "",
-    "wselector": "",
     "wProto": "",
+    "wcommandsaggregator": "",
+    "wselector": "",
     "wprocesswatcher": "",
     "wprocess": "",
+    "wintrospectorextra": "",
     "wlooker": "",
-    "wLogger": "",
     "winstancing": "",
-    "wFiles": "",
     "wequaler": "",
     "wCopyable": "",
+    "wLogger": "",
     "wConsequence": "",
-    "wcommandsaggregator": "",
+    "wFiles": "",
     "typescript": "4.3.5",
     "ts-node": "10.2.0",
     "@types/node": "16.6.0"
@@ -77,8 +78,8 @@
     "wstarter": "",
     "spectron": "13.0.0",
     "puppeteer": "5.5.0",
-    "eslint": "7.1.0",
-    "electron": "11.3.0"
+    "electron": "11.3.0",
+    "eslint": "7.1.0"
   },
   "keywords": [
     "testing",

@@ -33,7 +33,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wEqualer' );
   _.include( 'wProcessWatcher' );
   _.include( 'wProcess' );
-  _.include( 'wIntrospectorBasic' );
+  _.include( 'wIntrospectorExtra' );
   _.include( 'wCopyable' );
   _.include( 'wInstancing' );
   _.includeFirst( 'wEventHandler', _.optional );

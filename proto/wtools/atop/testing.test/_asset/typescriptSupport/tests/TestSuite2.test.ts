@@ -6,14 +6,16 @@ declare let _globals_:any;
 
 require( 'wTesting' );
 
+import { Self as Abstract } from './Abstract.test';
+
 const __ = _globals_.testing.wTools;
 
 //
 
-function trivial ( test:any ) 
+function trivial ( test:any )
 {
   let ready = __.take( true );
-  ready.then( ( got:boolean ) => 
+  ready.then( ( got:boolean ) =>
   {
     test.true( got );
     return null;
@@ -23,11 +25,11 @@ function trivial ( test:any )
 
 //
 
-const Suite = 
+const Suite =
 {
   silencing: 1,
 
-  tests : 
+  tests :
   {
     trivial
   }
@@ -35,6 +37,6 @@ const Suite =
 
 //
 
-export const Self = wTestSuite( Suite );
+export const Self = wTestSuite( Suite ).inherit( Abstract );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );

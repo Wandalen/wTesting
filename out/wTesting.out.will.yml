@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: ca8ff7638c9397cb4ab9b46c14a8ca0d
-    size: 13069
+    hash: c8302c601679615ca2369d03ce3454b0
+    size: 13994
 module:
   wTesting.out:
     about:
@@ -323,6 +323,8 @@ module:
             ../proto/wtools/atop/testing.test/_asset/timeOutExternalMessage/Suite.test.js
           - ../proto/wtools/atop/testing.test/_asset/typescriptSupport
           - ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests/Abstract.test.ts
           - >-
             ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests/TestSuite1.test.ts
           - >-
@@ -652,7 +654,53 @@ module:
           content: proto
           export: 1
     step:
-      sources.join:
+      join:
+        opts:
+          entryPath: proto/node_modules/wTesting
+          modulesList:
+            - wTools
+            - wLooker
+            - wSelector
+            - wEqualer
+            - wProcessWatcher
+            - wProcess
+            - wIntrospectorBasic
+            - wCopyable
+            - wInstancing
+            - wEventHandler
+            - wLogger
+            - wConsequence
+            - wFilesBasic
+            - wFiles
+            - wfileshttp
+            - wColor
+            - wStringsExtra
+            - wCommandsAggregator
+            - wReplicator
+            - wPathTools
+            - wPathBasic
+            - wArraySorted
+            - wArraySparse
+            - wBlueprint
+            - wProto
+            - wConsequence
+            - wProcedure
+            - wCloner
+            - wTraverser
+            - wStringer
+            - wGdf
+            - wColor256
+            - wUriBasic
+            - wRegexpObject
+            - wFieldsStack
+            - wVerbal
+            - wweburibasic
+            - wVocabulary
+          interpreter: browser
+          outPath: '{path::out.browser.debug}/Main.s'
+        inherit:
+          - sources.join
+      sources.join.hook:
         opts:
           currentPath: 'path::in'
           shell: >-
@@ -1124,7 +1172,7 @@ module:
       browser.debug:
         steps:
           - 'step::clean.out.browser.debug'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::reflect.module.files.debug'
           - 'step::npm.release.browser.debug'
         criterion:
@@ -1132,7 +1180,7 @@ module:
       browser.debug.min:
         steps:
           - 'step::clean.out.browser.debug.min'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::transpile.debug.min'
           - 'step::reflect.module.files.debug.min'
           - 'step::npm.release.browser.debug.min'
@@ -1141,7 +1189,7 @@ module:
       browser.release:
         steps:
           - 'step::clean.out.browser.release'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::transpile.release'
           - 'step::reflect.module.files.release'
           - 'step::npm.release.browser.release'
@@ -1150,7 +1198,7 @@ module:
       browser.release.min:
         steps:
           - 'step::clean.out.browser.release.min'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::transpile.release.min'
           - 'step::reflect.module.files.release.min'
           - 'step::npm.release.browser.release.min'
@@ -1637,7 +1685,53 @@ module:
         inherit:
           - predefined.*
     step:
-      sources.join:
+      join:
+        opts:
+          entryPath: proto/node_modules/wTesting
+          modulesList:
+            - wTools
+            - wLooker
+            - wSelector
+            - wEqualer
+            - wProcessWatcher
+            - wProcess
+            - wIntrospectorBasic
+            - wCopyable
+            - wInstancing
+            - wEventHandler
+            - wLogger
+            - wConsequence
+            - wFilesBasic
+            - wFiles
+            - wfileshttp
+            - wColor
+            - wStringsExtra
+            - wCommandsAggregator
+            - wReplicator
+            - wPathTools
+            - wPathBasic
+            - wArraySorted
+            - wArraySparse
+            - wBlueprint
+            - wProto
+            - wConsequence
+            - wProcedure
+            - wCloner
+            - wTraverser
+            - wStringer
+            - wGdf
+            - wColor256
+            - wUriBasic
+            - wRegexpObject
+            - wFieldsStack
+            - wVerbal
+            - wweburibasic
+            - wVocabulary
+          interpreter: browser
+          outPath: '{path::out.browser.debug}/Main.s'
+        inherit:
+          - sources.join
+      sources.join.hook:
         opts:
           currentPath: 'path::in'
           shell: >-
@@ -2109,7 +2203,7 @@ module:
       browser.debug:
         steps:
           - 'step::clean.out.browser.debug'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::reflect.module.files.debug'
           - 'step::npm.release.browser.debug'
         criterion:
@@ -2117,7 +2211,7 @@ module:
       browser.debug.min:
         steps:
           - 'step::clean.out.browser.debug.min'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::transpile.debug.min'
           - 'step::reflect.module.files.debug.min'
           - 'step::npm.release.browser.debug.min'
@@ -2126,7 +2220,7 @@ module:
       browser.release:
         steps:
           - 'step::clean.out.browser.release'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::transpile.release'
           - 'step::reflect.module.files.release'
           - 'step::npm.release.browser.release'
@@ -2135,7 +2229,7 @@ module:
       browser.release.min:
         steps:
           - 'step::clean.out.browser.release.min'
-          - 'step::sources.join'
+          - 'step::sources.join.hook'
           - 'step::transpile.release.min'
           - 'step::reflect.module.files.release.min'
           - 'step::npm.release.browser.release.min'
@@ -2216,5 +2310,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: ca8ff7638c9397cb4ab9b46c14a8ca0d
-        size: 13069
+        hash: c8302c601679615ca2369d03ce3454b0
+        size: 13994

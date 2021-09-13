@@ -317,9 +317,54 @@ step:
 
   #
 
+  join :
+    inherit : sources.join
+    entryPath : proto/node_modules/wTesting
+    modulesList :
+      - wTools
+      - wLooker
+      - wSelector
+      - wEqualer
+      - wProcessWatcher
+      - wProcess
+      - wIntrospectorBasic
+      - wCopyable
+      - wInstancing
+      - wEventHandler
+      - wLogger
+      - wConsequence
+      - wFilesBasic
+      - wFiles
+      - wfileshttp
+      - wColor
+      - wStringsExtra
+      - wCommandsAggregator
+      - wReplicator
+      - wPathTools
+      - wPathBasic
+      - wArraySorted
+      - wArraySparse
+      - wBlueprint
+      - wProto
+      - wConsequence
+      - wProcedure
+      - wCloner
+      - wTraverser
+      - wStringer
+      - wGdf
+      - wColor256
+      - wUriBasic
+      - wRegexpObject
+      - wFieldsStack
+      - wVerbal
+      - wweburibasic
+      - wVocabulary
+    interpreter : browser
+    outPath : '{path::out.browser.debug}/Main.s'
   sources.join.ext :
     currentPath : 'path::in'
     shell : 'node {path::step}/SourcesJoin.s outPath:{path::out.browser.debug}/Main.s'
+
   transpile.debug.min :
     inherit : files.transpile
     filePath : reflector::transpile.main.reflector.debug.min

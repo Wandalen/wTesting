@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "1.0.558",
+  "version": "1.0.561",
   "engine": "node >= 10.0.0",
   "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
@@ -53,28 +53,29 @@
     "url": "https://github.com/Wandalen/wTesting/issues"
   },
   "dependencies": {
-    "wTools": "",
-    "wselector": "",
-    "wProto": "",
-    "wprocesswatcher": "",
-    "wprocess": "",
-    "wlooker": "",
-    "wLogger": "",
-    "winstancing": "",
-    "wFiles": "",
-    "wequaler": "",
-    "wCopyable": "",
-    "wConsequence": "",
-    "wcommandsaggregator": "",
+    "wTools": "delta",
+    "wselector": "delta",
+    "wProto": "delta",
+    "wprocesswatcher": "delta",
+    "wprocess": "delta",
+    "wlooker": "delta",
+    "wLogger": "delta",
+    "wintrospectorextra": "delta",
+    "winstancing": "delta",
+    "wFiles": "delta",
+    "wequaler": "delta",
+    "wCopyable": "delta",
+    "wConsequence": "delta",
+    "wcommandsaggregator": "delta",
     "typescript": "4.3.5",
     "ts-node": "10.2.0",
     "@types/node": "16.6.0"
   },
   "optionalDependencies": {
-    "wEventHandler": ""
+    "wEventHandler": "delta"
   },
   "devDependencies": {
-    "wstarter": "",
+    "wstarter": "delta",
     "spectron": "13.0.0",
     "puppeteer": "5.5.0",
     "eslint": "7.1.0",

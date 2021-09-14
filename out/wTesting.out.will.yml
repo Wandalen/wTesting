@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: ca8ff7638c9397cb4ab9b46c14a8ca0d
-    size: 13069
+    hash: 03e860a3160f44c9c8b34614754ee044
+    size: 13934
 module:
   wTesting.out:
     about:
@@ -324,52 +324,22 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/typescriptSupport
           - ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests
           - >-
+            ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests/Abstract.test.ts
+          - >-
             ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests/TestSuite1.test.ts
           - >-
             ../proto/wtools/atop/testing.test/_asset/typescriptSupport/tests/TestSuite2.test.ts
     submodule:
-      wConsequence:
-        path: 'npm:///wConsequence'
-        autoExporting: 0
-        enabled: 0
-      wCopyable:
-        path: 'npm:///wCopyable'
-        autoExporting: 0
-        enabled: 0
-      wFiles:
-        path: 'npm:///wFiles'
-        autoExporting: 0
-        enabled: 0
-      wLogger:
-        path: 'npm:///wLogger'
+      wTools:
+        path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
       wProto:
         path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
-      wTools:
-        path: 'npm:///wTools'
-        autoExporting: 0
-        enabled: 0
-      wcomparator:
-        path: 'npm:///wcomparator'
-        autoExporting: 0
-        enabled: 0
-      wexternalfundamentals:
-        path: 'npm:///wexternalfundamentals'
-        autoExporting: 0
-        enabled: 0
       wcommandsaggregator:
         path: 'npm:///wcommandsaggregator'
-        autoExporting: 0
-        enabled: 0
-      winstancing:
-        path: 'npm:///winstancing'
-        autoExporting: 0
-        enabled: 0
-      wlooker:
-        path: 'npm:///wlooker'
         autoExporting: 0
         enabled: 0
       wselector:
@@ -378,6 +348,42 @@ module:
         enabled: 0
       wprocesswatcher:
         path: 'npm:///wprocesswatcher'
+        autoExporting: 0
+        enabled: 0
+      wprocess:
+        path: 'npm:///wprocess'
+        autoExporting: 0
+        enabled: 0
+      wintrospectorextra:
+        path: 'npm:///wintrospectorextra'
+        autoExporting: 0
+        enabled: 0
+      wlooker:
+        path: 'npm:///wlooker'
+        autoExporting: 0
+        enabled: 0
+      winstancing:
+        path: 'npm:///winstancing'
+        autoExporting: 0
+        enabled: 0
+      wequaler:
+        path: 'npm:///wequaler'
+        autoExporting: 0
+        enabled: 0
+      wCopyable:
+        path: 'npm:///wCopyable'
+        autoExporting: 0
+        enabled: 0
+      wLogger:
+        path: 'npm:///wLogger'
+        autoExporting: 0
+        enabled: 0
+      wConsequence:
+        path: 'npm:///wConsequence'
+        autoExporting: 0
+        enabled: 0
+      wFiles:
+        path: 'npm:///wFiles'
         autoExporting: 0
         enabled: 0
       typescript:
@@ -398,14 +404,8 @@ module:
         enabled: 0
         criterion:
           optional: 1
-      wTesting:
-        path: 'hd://..'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      electron:
-        path: 'npm:///electron!11.3.0'
+      wstarter:
+        path: 'npm:///wstarter'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -418,6 +418,12 @@ module:
           development: 1
       puppeteer:
         path: 'npm:///puppeteer!5.5.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      electron:
+        path: 'npm:///electron!11.3.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -652,12 +658,53 @@ module:
           content: proto
           export: 1
     step:
-      sources.join:
+      join.sources:
         opts:
-          currentPath: 'path::in'
-          shell: >-
-            node {path::step}/SourcesJoin.s
-            outPath:{path::out.browser.debug}/Main.s
+          entryPath: proto/wtools/atop/testing/entry/Main.s
+          modulesList:
+            - wTools
+            - wLooker
+            - wSelector
+            - wEqualer
+            - wProcessWatcher
+            - wProcess
+            - wIntrospectorBasic
+            - wIntrospectorExtra
+            - wCopyable
+            - wInstancing
+            - wEventHandler
+            - wLogger
+            - wConsequence
+            - wFilesBasic
+            - wFiles
+            - wfileshttp
+            - wColor
+            - wStringsExtra
+            - wCommandsAggregator
+            - wReplicator
+            - wPathTools
+            - wPathBasic
+            - wArraySorted
+            - wArraySparse
+            - wBlueprint
+            - wProto
+            - wConsequence
+            - wProcedure
+            - wCloner
+            - wTraverser
+            - wStringer
+            - wGdf
+            - wColor256
+            - wUriBasic
+            - wRegexpObject
+            - wFieldsStack
+            - wVerbal
+            - wweburibasic
+            - wVocabulary
+          interpreter: browser
+          outPath: '{path::out.browser.debug}/Main.s'
+        inherit:
+          - sources.join
       transpile.debug.min:
         opts:
           filePath: 'reflector::transpile.main.reflector.debug.min'
@@ -1124,7 +1171,7 @@ module:
       browser.debug:
         steps:
           - 'step::clean.out.browser.debug'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::reflect.module.files.debug'
           - 'step::npm.release.browser.debug'
         criterion:
@@ -1132,7 +1179,7 @@ module:
       browser.debug.min:
         steps:
           - 'step::clean.out.browser.debug.min'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::transpile.debug.min'
           - 'step::reflect.module.files.debug.min'
           - 'step::npm.release.browser.debug.min'
@@ -1141,7 +1188,7 @@ module:
       browser.release:
         steps:
           - 'step::clean.out.browser.release'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::transpile.release'
           - 'step::reflect.module.files.release'
           - 'step::npm.release.browser.release'
@@ -1150,7 +1197,7 @@ module:
       browser.release.min:
         steps:
           - 'step::clean.out.browser.release.min'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::transpile.release.min'
           - 'step::reflect.module.files.release.min'
           - 'step::npm.release.browser.release.min'
@@ -1385,48 +1432,16 @@ module:
       step:
         path: step
     submodule:
-      wConsequence:
-        path: 'npm:///wConsequence'
-        autoExporting: 0
-        enabled: 0
-      wCopyable:
-        path: 'npm:///wCopyable'
-        autoExporting: 0
-        enabled: 0
-      wFiles:
-        path: 'npm:///wFiles'
-        autoExporting: 0
-        enabled: 0
-      wLogger:
-        path: 'npm:///wLogger'
+      wTools:
+        path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
       wProto:
         path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
-      wTools:
-        path: 'npm:///wTools'
-        autoExporting: 0
-        enabled: 0
-      wcomparator:
-        path: 'npm:///wcomparator'
-        autoExporting: 0
-        enabled: 0
-      wexternalfundamentals:
-        path: 'npm:///wexternalfundamentals'
-        autoExporting: 0
-        enabled: 0
       wcommandsaggregator:
         path: 'npm:///wcommandsaggregator'
-        autoExporting: 0
-        enabled: 0
-      winstancing:
-        path: 'npm:///winstancing'
-        autoExporting: 0
-        enabled: 0
-      wlooker:
-        path: 'npm:///wlooker'
         autoExporting: 0
         enabled: 0
       wselector:
@@ -1435,6 +1450,42 @@ module:
         enabled: 0
       wprocesswatcher:
         path: 'npm:///wprocesswatcher'
+        autoExporting: 0
+        enabled: 0
+      wprocess:
+        path: 'npm:///wprocess'
+        autoExporting: 0
+        enabled: 0
+      wintrospectorextra:
+        path: 'npm:///wintrospectorextra'
+        autoExporting: 0
+        enabled: 0
+      wlooker:
+        path: 'npm:///wlooker'
+        autoExporting: 0
+        enabled: 0
+      winstancing:
+        path: 'npm:///winstancing'
+        autoExporting: 0
+        enabled: 0
+      wequaler:
+        path: 'npm:///wequaler'
+        autoExporting: 0
+        enabled: 0
+      wCopyable:
+        path: 'npm:///wCopyable'
+        autoExporting: 0
+        enabled: 0
+      wLogger:
+        path: 'npm:///wLogger'
+        autoExporting: 0
+        enabled: 0
+      wConsequence:
+        path: 'npm:///wConsequence'
+        autoExporting: 0
+        enabled: 0
+      wFiles:
+        path: 'npm:///wFiles'
         autoExporting: 0
         enabled: 0
       typescript:
@@ -1455,14 +1506,8 @@ module:
         enabled: 0
         criterion:
           optional: 1
-      wTesting:
-        path: 'hd://.'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      electron:
-        path: 'npm:///electron!11.3.0'
+      wstarter:
+        path: 'npm:///wstarter'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1475,6 +1520,12 @@ module:
           development: 1
       puppeteer:
         path: 'npm:///puppeteer!5.5.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      electron:
+        path: 'npm:///electron!11.3.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1637,12 +1688,53 @@ module:
         inherit:
           - predefined.*
     step:
-      sources.join:
+      join.sources:
         opts:
-          currentPath: 'path::in'
-          shell: >-
-            node {path::step}/SourcesJoin.s
-            outPath:{path::out.browser.debug}/Main.s
+          entryPath: proto/wtools/atop/testing/entry/Main.s
+          modulesList:
+            - wTools
+            - wLooker
+            - wSelector
+            - wEqualer
+            - wProcessWatcher
+            - wProcess
+            - wIntrospectorBasic
+            - wIntrospectorExtra
+            - wCopyable
+            - wInstancing
+            - wEventHandler
+            - wLogger
+            - wConsequence
+            - wFilesBasic
+            - wFiles
+            - wfileshttp
+            - wColor
+            - wStringsExtra
+            - wCommandsAggregator
+            - wReplicator
+            - wPathTools
+            - wPathBasic
+            - wArraySorted
+            - wArraySparse
+            - wBlueprint
+            - wProto
+            - wConsequence
+            - wProcedure
+            - wCloner
+            - wTraverser
+            - wStringer
+            - wGdf
+            - wColor256
+            - wUriBasic
+            - wRegexpObject
+            - wFieldsStack
+            - wVerbal
+            - wweburibasic
+            - wVocabulary
+          interpreter: browser
+          outPath: '{path::out.browser.debug}/Main.s'
+        inherit:
+          - sources.join
       transpile.debug.min:
         opts:
           filePath: 'reflector::transpile.main.reflector.debug.min'
@@ -2109,7 +2201,7 @@ module:
       browser.debug:
         steps:
           - 'step::clean.out.browser.debug'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::reflect.module.files.debug'
           - 'step::npm.release.browser.debug'
         criterion:
@@ -2117,7 +2209,7 @@ module:
       browser.debug.min:
         steps:
           - 'step::clean.out.browser.debug.min'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::transpile.debug.min'
           - 'step::reflect.module.files.debug.min'
           - 'step::npm.release.browser.debug.min'
@@ -2126,7 +2218,7 @@ module:
       browser.release:
         steps:
           - 'step::clean.out.browser.release'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::transpile.release'
           - 'step::reflect.module.files.release'
           - 'step::npm.release.browser.release'
@@ -2135,7 +2227,7 @@ module:
       browser.release.min:
         steps:
           - 'step::clean.out.browser.release.min'
-          - 'step::sources.join'
+          - 'step::join.sources'
           - 'step::transpile.release.min'
           - 'step::reflect.module.files.release.min'
           - 'step::npm.release.browser.release.min'
@@ -2216,5 +2308,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: ca8ff7638c9397cb4ab9b46c14a8ca0d
-        size: 13069
+        hash: 03e860a3160f44c9c8b34614754ee044
+        size: 13934

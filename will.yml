@@ -41,7 +41,7 @@ build:
       debug: debug
     steps:
       - step::clean.out.browser.debug
-      - step::sources.join
+      - step::join.sources
       - step::reflect.module.files.debug
       - step::npm.release.browser.debug
   browser.debug.min :
@@ -49,7 +49,7 @@ build:
       debug: debug
     steps:
       - step::clean.out.browser.debug.min
-      - step::sources.join
+      - step::join.sources
       - step::transpile.debug.min
       - step::reflect.module.files.debug.min
       - step::npm.release.browser.debug.min
@@ -58,7 +58,7 @@ build:
       debug: release
     steps:
       - step::clean.out.browser.release
-      - step::sources.join
+      - step::join.sources
       - step::transpile.release
       - step::reflect.module.files.release
       - step::npm.release.browser.release
@@ -67,7 +67,7 @@ build:
       debug: release
     steps:
       - step::clean.out.browser.release.min
-      - step::sources.join
+      - step::join.sources
       - step::transpile.release.min
       - step::reflect.module.files.release.min
       - step::npm.release.browser.release.min
@@ -317,9 +317,52 @@ step:
 
   #
 
-  sources.join :
-    currentPath : 'path::in'
-    shell : 'node {path::step}/SourcesJoin.s outPath:{path::out.browser.debug}/Main.s'
+  join.sources :
+    inherit : sources.join
+    entryPath : proto/wtools/atop/testing/entry/Main.s
+    modulesList :
+      - wTools
+      - wLooker
+      - wSelector
+      - wEqualer
+      - wProcessWatcher
+      - wProcess
+      - wIntrospectorBasic
+      - wIntrospectorExtra
+      - wCopyable
+      - wInstancing
+      - wEventHandler
+      - wLogger
+      - wConsequence
+      - wFilesBasic
+      - wFiles
+      - wfileshttp
+      - wColor
+      - wStringsExtra
+      - wCommandsAggregator
+      - wReplicator
+      - wPathTools
+      - wPathBasic
+      - wArraySorted
+      - wArraySparse
+      - wBlueprint
+      - wProto
+      - wConsequence
+      - wProcedure
+      - wCloner
+      - wTraverser
+      - wStringer
+      - wGdf
+      - wColor256
+      - wUriBasic
+      - wRegexpObject
+      - wFieldsStack
+      - wVerbal
+      - wweburibasic
+      - wVocabulary
+    interpreter : browser
+    outPath : '{path::out.browser.debug}/Main.s'
+
   transpile.debug.min :
     inherit : files.transpile
     filePath : reflector::transpile.main.reflector.debug.min
@@ -450,44 +493,47 @@ step:
       content: prime
       debug: release
 submodule:
-  wConsequence:
-    path: 'npm:///wConsequence'
-    enabled: 0
-  wCopyable:
-    path: 'npm:///wCopyable'
-    enabled: 0
-  wFiles:
-    path: 'npm:///wFiles'
-    enabled: 0
-  wLogger:
-    path: 'npm:///wLogger'
+  wTools:
+    path: 'npm:///wTools'
     enabled: 0
   wProto:
     path: 'npm:///wProto'
     enabled: 0
-  wTools:
-    path: 'npm:///wTools'
-    enabled: 0
-  wcomparator:
-    path: 'npm:///wcomparator'
-    enabled: 0
-  wexternalfundamentals:
-    path: 'npm:///wexternalfundamentals'
-    enabled: 0
   wcommandsaggregator:
     path: 'npm:///wcommandsaggregator'
-    enabled: 0
-  winstancing:
-    path: 'npm:///winstancing'
-    enabled: 0
-  wlooker:
-    path: 'npm:///wlooker'
     enabled: 0
   wselector:
     path: 'npm:///wselector'
     enabled: 0
   wprocesswatcher:
     path: 'npm:///wprocesswatcher'
+    enabled: 0
+  wprocess:
+    path: 'npm:///wprocess'
+    enabled: 0
+  wintrospectorextra:
+    path: 'npm:///wintrospectorextra'
+    enabled: 0
+  wlooker:
+    path: 'npm:///wlooker'
+    enabled: 0
+  winstancing:
+    path: 'npm:///winstancing'
+    enabled: 0
+  wequaler:
+    path: 'npm:///wequaler'
+    enabled: 0
+  wCopyable:
+    path: 'npm:///wCopyable'
+    enabled: 0
+  wLogger:
+    path: 'npm:///wLogger'
+    enabled: 0
+  wConsequence:
+    path: 'npm:///wConsequence'
+    enabled: 0
+  wFiles:
+    path: 'npm:///wFiles'
     enabled: 0
   typescript:
     path: 'npm:///typescript!4.3.5'
@@ -503,13 +549,8 @@ submodule:
     enabled: 0
     criterion:
       optional: 1
-  wTesting:
-    path: 'hd://.'
-    enabled: 0
-    criterion:
-      development: 1
-  electron:
-    path: 'npm:///electron!11.3.0'
+  wstarter:
+    path: 'npm:///wstarter'
     enabled: 0
     criterion:
       development: 1
@@ -520,6 +561,11 @@ submodule:
       development: 1
   puppeteer:
     path: 'npm:///puppeteer!5.5.0'
+    enabled: 0
+    criterion:
+      development: 1
+  electron:
+    path: 'npm:///electron!11.3.0'
     enabled: 0
     criterion:
       development: 1

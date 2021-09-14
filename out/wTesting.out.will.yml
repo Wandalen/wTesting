@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: dae7d25015ebc240d6d576c6717cab4c
-    size: 14041
+    hash: 03e860a3160f44c9c8b34614754ee044
+    size: 13934
 module:
   wTesting.out:
     about:
@@ -658,9 +658,9 @@ module:
           content: proto
           export: 1
     step:
-      join:
+      join.sources:
         opts:
-          entryPath: proto/node_modules/wTesting
+          entryPath: proto/wtools/atop/testing/entry/Main.s
           modulesList:
             - wTools
             - wLooker
@@ -669,6 +669,7 @@ module:
             - wProcessWatcher
             - wProcess
             - wIntrospectorBasic
+            - wIntrospectorExtra
             - wCopyable
             - wInstancing
             - wEventHandler
@@ -704,12 +705,6 @@ module:
           outPath: '{path::out.browser.debug}/Main.s'
         inherit:
           - sources.join
-      sources.join.ext:
-        opts:
-          currentPath: 'path::in'
-          shell: >-
-            node {path::step}/SourcesJoin.s
-            outPath:{path::out.browser.debug}/Main.s
       transpile.debug.min:
         opts:
           filePath: 'reflector::transpile.main.reflector.debug.min'
@@ -1176,7 +1171,7 @@ module:
       browser.debug:
         steps:
           - 'step::clean.out.browser.debug'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::reflect.module.files.debug'
           - 'step::npm.release.browser.debug'
         criterion:
@@ -1184,7 +1179,7 @@ module:
       browser.debug.min:
         steps:
           - 'step::clean.out.browser.debug.min'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::transpile.debug.min'
           - 'step::reflect.module.files.debug.min'
           - 'step::npm.release.browser.debug.min'
@@ -1193,7 +1188,7 @@ module:
       browser.release:
         steps:
           - 'step::clean.out.browser.release'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::transpile.release'
           - 'step::reflect.module.files.release'
           - 'step::npm.release.browser.release'
@@ -1202,7 +1197,7 @@ module:
       browser.release.min:
         steps:
           - 'step::clean.out.browser.release.min'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::transpile.release.min'
           - 'step::reflect.module.files.release.min'
           - 'step::npm.release.browser.release.min'
@@ -1693,9 +1688,9 @@ module:
         inherit:
           - predefined.*
     step:
-      join:
+      join.sources:
         opts:
-          entryPath: proto/node_modules/wTesting
+          entryPath: proto/wtools/atop/testing/entry/Main.s
           modulesList:
             - wTools
             - wLooker
@@ -1704,6 +1699,7 @@ module:
             - wProcessWatcher
             - wProcess
             - wIntrospectorBasic
+            - wIntrospectorExtra
             - wCopyable
             - wInstancing
             - wEventHandler
@@ -1739,12 +1735,6 @@ module:
           outPath: '{path::out.browser.debug}/Main.s'
         inherit:
           - sources.join
-      sources.join.ext:
-        opts:
-          currentPath: 'path::in'
-          shell: >-
-            node {path::step}/SourcesJoin.s
-            outPath:{path::out.browser.debug}/Main.s
       transpile.debug.min:
         opts:
           filePath: 'reflector::transpile.main.reflector.debug.min'
@@ -2211,7 +2201,7 @@ module:
       browser.debug:
         steps:
           - 'step::clean.out.browser.debug'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::reflect.module.files.debug'
           - 'step::npm.release.browser.debug'
         criterion:
@@ -2219,7 +2209,7 @@ module:
       browser.debug.min:
         steps:
           - 'step::clean.out.browser.debug.min'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::transpile.debug.min'
           - 'step::reflect.module.files.debug.min'
           - 'step::npm.release.browser.debug.min'
@@ -2228,7 +2218,7 @@ module:
       browser.release:
         steps:
           - 'step::clean.out.browser.release'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::transpile.release'
           - 'step::reflect.module.files.release'
           - 'step::npm.release.browser.release'
@@ -2237,7 +2227,7 @@ module:
       browser.release.min:
         steps:
           - 'step::clean.out.browser.release.min'
-          - 'step::sources.join.ext'
+          - 'step::join.sources'
           - 'step::transpile.release.min'
           - 'step::reflect.module.files.release.min'
           - 'step::npm.release.browser.release.min'
@@ -2318,5 +2308,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: dae7d25015ebc240d6d576c6717cab4c
-        size: 14041
+        hash: 03e860a3160f44c9c8b34614754ee044
+        size: 13934

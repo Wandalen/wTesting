@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: 03e860a3160f44c9c8b34614754ee044
-    size: 13934
+    hash: 70f3b3788236af83490fe00f52e5e2d5
+    size: 13935
 module:
   wTesting.out:
     about:
@@ -2308,5 +2308,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 03e860a3160f44c9c8b34614754ee044
-        size: 13934
+        hash: 70f3b3788236af83490fe00f52e5e2d5
+        size: 13935

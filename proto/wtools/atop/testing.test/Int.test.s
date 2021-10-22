@@ -3273,7 +3273,7 @@ function shouldThrowErrorAsync( test )
 
   function r1( t )
   {
-    let ready = new _.Consequence().take( null );
+    let ready = new _.take( null );
     let c1, c2, c3, c4, c5, c6, c7, c8, c9;
 
     counter.testRoutine = t;
@@ -4511,7 +4511,8 @@ function shouldThrowErrorOfAnyKind( test )
 
   function r1( t )
   {
-    let ready = new _.Consequence().take( null );
+    let ready = new _.take( null );
+    let c1, c2, c3, c4, c5, c6, c7, c8, c9, errStack;
 
     counter.testRoutine = t;
     t.description = 'a';
@@ -4521,7 +4522,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'does not throw error, but expected';
 
       t.identical( 0, 0 );
-      var c1 = t.shouldThrowErrorOfAnyKind( () => {} );
+      c1 = t.shouldThrowErrorOfAnyKind( () => {} );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -4529,22 +4530,19 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
+      return c1;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( c1.resourcesGet().length, 1 );
 
-        test.identical( c1.resourcesGet().length, 1 );
-
-        c1.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -4554,7 +4552,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'throw expected synchronous error';
 
       t.identical( 0, 0 );
-      var c2 = t.shouldThrowErrorOfAnyKind( () =>
+      c2 = t.shouldThrowErrorOfAnyKind( () =>
       {
         throw _.err( 'err1' );
       });
@@ -4565,24 +4563,21 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
-
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
-
-        test.identical( c2.resourcesGet().length, 1 );
-
-        c2.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.errIs( arg ) );
-          test.true( _.strHas( arg.message, 'err1' ) );
-        });
-        return null;
-      });
+      return c2;
     });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
+
+      test.identical( c2.resourcesGet().length, 1 );
+
+      test.true( err === undefined );
+      test.true( _.errIs( arg ) );
+      test.true( _.strHas( arg.message, 'err1' ) );
+      return null;
+    })
 
     /* */
 
@@ -4591,7 +4586,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'throw expected asynchronous error';
 
       t.identical( 0, 0 );
-      var c3 = t.shouldThrowErrorOfAnyKind( () =>
+      c3 = t.shouldThrowErrorOfAnyKind( () =>
       {
         return _.time.out( context.t1, () =>
         {
@@ -4605,23 +4600,20 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c3;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( c3.resourcesGet().length, 1 );
 
-        test.identical( c3.resourcesGet().length, 1 );
-
-        c3.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.errIs( arg ) );
-          test.true( _.strHas( arg.message, 'err1' ) );
-        });
-        return null;
-      });
+      test.true( err === undefined );
+      test.true( _.errIs( arg ) );
+      test.true( _.strHas( arg.message, 'err1' ) );
+      return null;
     });
 
     /* */
@@ -4631,7 +4623,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'single message, but error expected';
 
       t.identical( 0, 0 );
-      var c4 = t.shouldThrowErrorOfAnyKind( () => _.time.out( context.t1 ) );
+      c4 = t.shouldThrowErrorOfAnyKind( () => _.time.out( context.t1 ) );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -4639,22 +4631,19 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c4;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( c4.resourcesGet().length, 1 );
 
-        test.identical( c4.resourcesGet().length, 1 );
-
-        c4.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -4664,7 +4653,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'not expected second message';
 
       t.identical( 0, 0 );
-      var c5 = t.shouldThrowErrorOfAnyKind( () =>
+      c5 = t.shouldThrowErrorOfAnyKind( () =>
       {
         var con = _.Consequence();
 
@@ -4684,21 +4673,18 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c5;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
-
-        test.identical( c5.resourcesGet().length, 1 );
-        c5.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c5.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -4708,7 +4694,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'not expected second error';
 
       t.identical( 0, 0 );
-      var c6 = t.shouldThrowErrorOfAnyKind( () =>
+      c6 = t.shouldThrowErrorOfAnyKind( () =>
       {
         var con = _.Consequence();
 
@@ -4728,23 +4714,20 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c6;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( c6.resourcesGet().length, 1 );
 
-        test.identical( c6.resourcesGet().length, 1 );
-
-        c6.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( _.strHas( err.message, 'Got more than one message' ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.true( _.errIs( err ) );
+      test.true( _.strHas( err.message, 'Got more than one message' ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -4754,7 +4737,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'consequence with argument';
 
       t.identical( 0, 0 );
-      var c8 = t.shouldThrowErrorOfAnyKind( _.Consequence().take( 'arg' ) );
+      c8 = t.shouldThrowErrorOfAnyKind( _.Consequence().take( 'arg' ) );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -4762,22 +4745,19 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c8;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( c8.resourcesGet().length, 1 );
 
-        test.identical( c8.resourcesGet().length, 1 );
-
-        c8.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -4787,7 +4767,7 @@ function shouldThrowErrorOfAnyKind( test )
       test.case = 'consequence with error';
 
       t.identical( 0, 0 );
-      var c9 = t.shouldThrowErrorOfAnyKind( _.Consequence().error( 'error1' ) );
+      c9 = t.shouldThrowErrorOfAnyKind( _.Consequence().error( 'error1' ) );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -4795,27 +4775,26 @@ function shouldThrowErrorOfAnyKind( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c9;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
-
-        test.identical( c9.resourcesGet().length, 1 );
-        c9.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
-        });
-        return null;
-      });
+      test.identical( c9.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.strHas( _.err( arg ).message, 'error1' ) );
+      return null;
     });
 
     /* */
 
     return ready;
   }
+
+  /* */
 
   var suite = wTestSuite
   ({
@@ -4844,8 +4823,6 @@ function shouldThrowErrorOfAnyKind( test )
   return result;
 }
 
-shouldThrowErrorOfAnyKind.timeOut = 30000;
-
 //
 
 function shouldThrowErrorOfAnyKindWithCallback( test )
@@ -4855,8 +4832,9 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
 
   function r1( t )
   {
+    let ready = new _.take( null );
+    let c1, c2, c3, c4, c5, c6, c7, c8, c9, errStack;
 
-    let ready = new _.Consequence().take( null );
     counter.testRoutine = t;
     t.description = 'a';
 
@@ -4864,10 +4842,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'does not throw error, but expected';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c1 = t.shouldThrowErrorOfAnyKind( () => {}, onResult );
+      c1 = t.shouldThrowErrorOfAnyKind( () => {}, onResult );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -4875,36 +4853,34 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
+      return c1;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack, [ undefined, false ] );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack, [ undefined, false ] );
-
-        test.identical( c1.resourcesGet().length, 1 );
-        c1.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c1.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
 
     ready.then( () =>
     {
+      console.log( 'here' );
       test.case = 'throw expected synchronous error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c2 = t.shouldThrowErrorOfAnyKind( () =>
+      c2 = t.shouldThrowErrorOfAnyKind( () =>
       {
         throw _.errBrief( 'err1' );
       },
@@ -4916,25 +4892,22 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c2;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack, [ 'err1', true ] );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack, [ 'err1', true ] );
-
-        test.identical( c2.resourcesGet().length, 1 );
-        c2.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.errIs( arg ) );
-          test.true( _.strHas( arg.message, 'err1' ) );
-        });
-        return null;
-      });
+      test.identical( c2.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.errIs( arg ) );
+      test.true( _.strHas( arg.message, 'err1' ) );
+      return null;
     });
 
     /* */
@@ -4943,10 +4916,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'throw expected asynchronous error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c3 = t.shouldThrowErrorOfAnyKind( () =>
+      c3 = t.shouldThrowErrorOfAnyKind( () =>
       {
         return _.time.out( context.t1, () =>
         {
@@ -4961,25 +4934,22 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c3;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack, [ 'err1', true ] );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack, [ 'err1', true ] );
-
-        test.identical( c3.resourcesGet().length, 1 );
-        c3.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.errIs( arg ) );
-          test.true( _.strHas( arg.message, 'err1' ) );
-        });
-        return null;
-      });
+      test.identical( c3.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.errIs( arg ) );
+      test.true( _.strHas( arg.message, 'err1' ) );
+      return null;
     });
 
     /* */
@@ -4988,10 +4958,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'single message, but error expected';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c4 = t.shouldThrowErrorOfAnyKind( () =>
+      c4 = t.shouldThrowErrorOfAnyKind( () =>
       {
         return _.time.out( context.t1 );
       },
@@ -5003,25 +4973,22 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c4;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.true( _.timerIs( errStack[ 0 ] ) );
+      test.identical( errStack[ 1 ], false );
 
-        test.identical( errStack.length, 2 );
-        test.true( _.timerIs( errStack[ 0 ] ) );
-        test.identical( errStack[ 1 ], false );
-
-        test.identical( c4.resourcesGet().length, 1 );
-        c4.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c4.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5030,10 +4997,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'not expected second message';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c5 = t.shouldThrowErrorOfAnyKind( () =>
+      c5 = t.shouldThrowErrorOfAnyKind( () =>
       {
         var con = _.Consequence();
         _.time.out( context.t1, () =>
@@ -5052,25 +5019,22 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c5;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack[ 0 ], 'arg1' );
+      test.identical( errStack[ 1 ], false );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack[ 0 ], 'arg1' );
-        test.identical( errStack[ 1 ], false );
-
-        test.identical( c5.resourcesGet().length, 1 );
-        c5.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c5.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5079,10 +5043,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'not expected second error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c6 = t.shouldThrowErrorOfAnyKind( () =>
+      c6 = t.shouldThrowErrorOfAnyKind( () =>
       {
         var con = _.Consequence();
         _.time.out( context.t1, () =>
@@ -5101,26 +5065,23 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c6;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.true( _.strHas( errStack[ 0 ], 'error1' ) );
+      test.identical( errStack[ 1 ], true );
 
-        test.identical( errStack.length, 2 );
-        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
-        test.identical( errStack[ 1 ], true );
-
-        test.identical( c6.resourcesGet().length, 1 );
-        c6.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( _.strHas( err.message, 'Got more than one message' ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c6.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( _.strHas( err.message, 'Got more than one message' ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5129,10 +5090,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'consequence with argument';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c8 = t.shouldThrowErrorOfAnyKind( _.Consequence().take( 'arg' ), onResult );
+      c8 = t.shouldThrowErrorOfAnyKind( _.Consequence().take( 'arg' ), onResult );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -5140,25 +5101,22 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c8;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack[ 0 ], 'arg' );
+      test.identical( errStack[ 1 ], false );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack[ 0 ], 'arg' );
-        test.identical( errStack[ 1 ], false );
-
-        test.identical( c8.resourcesGet().length, 1 );
-        c8.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c8.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5167,10 +5125,10 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
     {
       test.case = 'consequence with error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c9 = t.shouldThrowErrorOfAnyKind( _.Consequence().error( 'error1' ), onResult );
+      c9 = t.shouldThrowErrorOfAnyKind( _.Consequence().error( 'error1' ), onResult );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -5178,31 +5136,30 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c9;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.true( _.strHas( errStack[ 0 ], 'error1' ) );
+      test.identical( errStack[ 1 ], true );
 
-        test.identical( errStack.length, 2 );
-        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
-        test.identical( errStack[ 1 ], true );
-
-        test.identical( c9.resourcesGet().length, 1 );
-        c9.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
-        });
-        return null;
-      });
+      test.identical( c9.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.strHas( _.err( arg ).message, 'error1' ) );
+      return null;
     });
 
     /* */
 
     return ready;
   }
+
+  /* */
 
   var suite = wTestSuite
   ({
@@ -5231,8 +5188,6 @@ function shouldThrowErrorOfAnyKindWithCallback( test )
   return result;
 }
 
-shouldThrowErrorOfAnyKindWithCallback.timeOut = 10000;
-
 //
 
 function shouldThrowErrorOfAnyKind_WithCallback( test )
@@ -5242,8 +5197,9 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
 
   function r1( t )
   {
+    let ready = new _.take( null );
+    let c1, c2, c3, c4, c5, c6, c7, c8, c9, errStack;
 
-    let ready = new _.Consequence().take( null );
     counter.testRoutine = t;
     t.description = 'a';
 
@@ -5251,10 +5207,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'does not throw error, but expected';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c1 = t.shouldThrowErrorOfAnyKind_( () => {}, onResult );
+      c1 = t.shouldThrowErrorOfAnyKind_( () => {}, onResult );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -5262,24 +5218,21 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
       counter.next();
+      return c1;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack, [ undefined, false ] );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack, [ undefined, false ] );
-
-        test.identical( c1.resourcesGet().length, 1 );
-        c1.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c1.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5288,10 +5241,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'throw expected synchronous error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c2 = t.shouldThrowErrorOfAnyKind_( () =>
+      c2 = t.shouldThrowErrorOfAnyKind_( () =>
       {
         throw _.errBrief( 'err1' );
       },
@@ -5303,25 +5256,22 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 2 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c2;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack, [ 'err1', true ] );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack, [ 'err1', true ] );
-
-        test.identical( c2.resourcesGet().length, 1 );
-        c2.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.errIs( arg ) );
-          test.true( _.strHas( arg.message, 'err1' ) );
-        });
-        return null;
-      });
+      test.identical( c2.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.errIs( arg ) );
+      test.true( _.strHas( arg.message, 'err1' ) );
+      return null;
     });
 
     /* */
@@ -5330,10 +5280,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'throw expected asynchronous error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c3 = t.shouldThrowErrorOfAnyKind_( () =>
+      c3 = t.shouldThrowErrorOfAnyKind_( () =>
       {
         return _.time.out( context.t1, () =>
         {
@@ -5348,25 +5298,22 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c3;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack, [ 'err1', true ] );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack, [ 'err1', true ] );
-
-        test.identical( c3.resourcesGet().length, 1 );
-        c3.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.errIs( arg ) );
-          test.true( _.strHas( arg.message, 'err1' ) );
-        });
-        return null;
-      });
+      test.identical( c3.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.errIs( arg ) );
+      test.true( _.strHas( arg.message, 'err1' ) );
+      return null;
     });
 
     /* */
@@ -5375,10 +5322,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'single message, but error expected';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c4 = t.shouldThrowErrorOfAnyKind_( () =>
+      c4 = t.shouldThrowErrorOfAnyKind_( () =>
       {
         return _.time.out( context.t1 );
       },
@@ -5390,25 +5337,22 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c4;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.true( _.timerIs( errStack[ 0 ] ) );
+      test.identical( errStack[ 1 ], false );
 
-        test.identical( errStack.length, 2 );
-        test.true( _.timerIs( errStack[ 0 ] ) );
-        test.identical( errStack[ 1 ], false );
-
-        test.identical( c4.resourcesGet().length, 1 );
-        c4.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c4.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5417,10 +5361,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'not expected second message';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c5 = t.shouldThrowErrorOfAnyKind_( () =>
+      c5 = t.shouldThrowErrorOfAnyKind_( () =>
       {
         var con = _.Consequence();
         _.time.out( context.t1, () =>
@@ -5439,25 +5383,22 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c5;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack[ 0 ], 'arg1' );
+      test.identical( errStack[ 1 ], false );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack[ 0 ], 'arg1' );
-        test.identical( errStack[ 1 ], false );
-
-        test.identical( c5.resourcesGet().length, 1 );
-        c5.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c5.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5466,10 +5407,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'not expected second error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c6 = t.shouldThrowErrorOfAnyKind_( () =>
+      c6 = t.shouldThrowErrorOfAnyKind_( () =>
       {
         var con = _.Consequence();
         _.time.out( context.t1, () =>
@@ -5488,26 +5429,23 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c6;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.true( _.strHas( errStack[ 0 ], 'error1' ) );
+      test.identical( errStack[ 1 ], true );
 
-        test.identical( errStack.length, 2 );
-        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
-        test.identical( errStack[ 1 ], true );
-
-        test.identical( c6.resourcesGet().length, 1 );
-        c6.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( _.strHas( err.message, 'Got more than one message' ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c6.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( _.strHas( err.message, 'Got more than one message' ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5516,10 +5454,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'consequence with argument';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c8 = t.shouldThrowErrorOfAnyKind_( _.Consequence().take( 'arg' ), onResult );
+      c8 = t.shouldThrowErrorOfAnyKind_( _.Consequence().take( 'arg' ), onResult );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -5527,25 +5465,22 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c8;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 0 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 1 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.identical( errStack[ 0 ], 'arg' );
+      test.identical( errStack[ 1 ], false );
 
-        test.identical( errStack.length, 2 );
-        test.identical( errStack[ 0 ], 'arg' );
-        test.identical( errStack[ 1 ], false );
-
-        test.identical( c8.resourcesGet().length, 1 );
-        c8.give( ( err, arg ) =>
-        {
-          test.true( _.errIs( err ) );
-          test.true( !arg );
-        });
-        return null;
-      });
+      test.identical( c8.resourcesGet().length, 1 );
+      test.true( _.errIs( err ) );
+      test.true( !arg );
+      return null;
     });
 
     /* */
@@ -5554,10 +5489,10 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
     {
       test.case = 'consequence with error';
       var onResult = ( err, arg, ok ) => err ? errStack.push( err.message, ok ) : errStack.push( arg, ok );
-      var errStack = [];
+      errStack = [];
 
       t.identical( 0, 0 );
-      var c9 = t.shouldThrowErrorOfAnyKind_( _.Consequence().error( 'error1' ), onResult );
+      c9 = t.shouldThrowErrorOfAnyKind_( _.Consequence().error( 'error1' ), onResult );
 
       counter.acheck = t.checkCurrent();
       test.identical( counter.acheck.description, 'a' );
@@ -5565,25 +5500,22 @@ function shouldThrowErrorOfAnyKind_WithCallback( test )
       test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
       test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
       counter.next();
+      return c9;
+    });
+    ready.finally( ( err, arg ) =>
+    {
+      test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
+      test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
+      counter.next();
 
-      return _.time.out( context.t2 / 2, () =>
-      {
-        test.identical( t.suite.report.testCheckPasses-counter.prevCheckPasses, 1 );
-        test.identical( t.suite.report.testCheckFails-counter.prevCheckFails, 0 );
-        counter.next();
+      test.identical( errStack.length, 2 );
+      test.true( _.strHas( errStack[ 0 ], 'error1' ) );
+      test.identical( errStack[ 1 ], true );
 
-        test.identical( errStack.length, 2 );
-        test.true( _.strHas( errStack[ 0 ], 'error1' ) );
-        test.identical( errStack[ 1 ], true );
-
-        test.identical( c9.resourcesGet().length, 1 );
-        c9.give( ( err, arg ) =>
-        {
-          test.true( err === undefined );
-          test.true( _.strHas( _.err( arg ).message, 'error1' ) );
-        });
-        return null;
-      });
+      test.identical( c9.resourcesGet().length, 1 );
+      test.true( err === undefined );
+      test.true( _.strHas( _.err( arg ).message, 'error1' ) );
+      return null;
     });
 
     /* */

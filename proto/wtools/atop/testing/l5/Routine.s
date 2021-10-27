@@ -288,89 +288,96 @@ function _run()
   let tro = this;
   let suite = tro.suite;
   let result;
+  let ready = new _.Consequence().take( null );
 
-  tro._runBegin();
+  ready.then( () => tro._runBegin() );
 
-  tro._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
-  tro._timeLimitErrorCon = _.time.outError( debugged ? Infinity : tro.timeOut + wTester.settings.sanitareTime )
-  .finally( ( err, arg ) =>
+  ready.then( () => 
   {
-    if( err === _.dont )
+    tro._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
+    tro._timeLimitErrorCon = _.time.outError( debugged ? Infinity : tro.timeOut + wTester.settings.sanitareTime )
+    .finally( ( err, arg ) =>
     {
-      tro._timeLimitCon.take( err );
-    }
-    else
-    {
-      _.errAttend( err );
-      err = tro._timeOutError( 'From run.' );
-      if( err && !tro.report.reason )
-      tro.report.reason = err.reason;
-      _.errAttend( err );
-      _.assert( !err.logged );
-      if( !tro._returnedHow )
-      tro._returnedHow = 'test routine time out';
-    }
-    if( err )
-    throw err;
-    return arg;
-  });
-  tro._timeLimitErrorCon.tag = '_timeLimitErrorCon';
-
-  /* */
-
-  try
-  {
-    result = tro.routine.call( suite.context, tro );
-    if( result === undefined )
-    result = null;
-  }
-  catch( err )
-  {
-    debugger;
-    result = new _.Consequence().error( _.err( err ) );
-  }
-
-  /* */
-
-  tro._returnedCon = new _.Consequence();
-  if( Config.debug && !tro._returnedCon.tag )
-  tro._returnedCon.tag = tro.name + '-1';
-
-  tro._returnedData = result;
-  tro._originalReturnedCon = _.Consequence.From( result );
-  tro._originalReturnedCon.give( ( err, arg ) =>
-  {
-    if( tro._returnedHow )
-    {
-      let err; debugger;
-      if( tro.report && tro.report.reason )
+      if( err === _.dont )
       {
-        if( tro.report.reason === 'test routine time limit' )
-        return;
-        err = _.err( `${tro.qualifiedNameGet()} is ended because of ${tro.report.reason}, but it got several async returning` );
+        tro._timeLimitCon.take( err );
       }
       else
       {
-        err = _.err( `${tro.qualifiedNameGet()} is ended, but it got several async returning` );
+        _.errAttend( err );
+        err = tro._timeOutError( 'From run.' );
+        if( err && !tro.report.reason )
+        tro.report.reason = err.reason;
+        _.errAttend( err );
+        _.assert( !err.logged );
+        if( !tro._returnedHow )
+        tro._returnedHow = 'test routine time out';
       }
-      suite.exceptionReport
-      ({
-        err,
-      });
-    }
-    else
+      if( err )
+      throw err;
+      return arg;
+    });
+    tro._timeLimitErrorCon.tag = '_timeLimitErrorCon';
+
+    /* */
+
+    try
     {
-      tro._returnedHow = 'normal';
-      tro._returnedCon.take( err, arg );
-      tro._originalReturnedCon.take( err, arg );
+      result = tro.routine.call( suite.context, tro );
+      if( result === undefined )
+      result = null;
     }
+    catch( err )
+    {
+      debugger;
+      result = new _.Consequence().error( _.err( err ) );
+    }
+
+    /* */
+
+    tro._returnedCon = new _.Consequence();
+    if( Config.debug && !tro._returnedCon.tag )
+    tro._returnedCon.tag = tro.name + '-1';
+
+    tro._returnedData = result;
+    tro._originalReturnedCon = _.Consequence.From( result );
+    tro._originalReturnedCon.give( ( err, arg ) =>
+    {
+      if( tro._returnedHow )
+      {
+        let err; debugger;
+        if( tro.report && tro.report.reason )
+        {
+          if( tro.report.reason === 'test routine time limit' )
+          return;
+          err = _.err( `${tro.qualifiedNameGet()} is ended because of ${tro.report.reason}, but it got several async returning` );
+        }
+        else
+        {
+          err = _.err( `${tro.qualifiedNameGet()} is ended, but it got several async returning` );
+        }
+        suite.exceptionReport
+        ({
+          err,
+        });
+      }
+      else
+      {
+        tro._returnedHow = 'normal';
+        tro._returnedCon.take( err, arg );
+        tro._originalReturnedCon.take( err, arg );
+      }
+    });
+
+    tro._returnedCon.andKeep( suite._inroutineCon );
+    tro._returnedCon.orKeeping([ tro._timeLimitErrorCon, wTester._cancelCon ]);
+    tro._returnedCon.finally( ( err, msg ) => tro._runFinally( err, msg ) );
+
+    return tro._returnedCon;
+
   });
 
-  tro._returnedCon.andKeep( suite._inroutineCon );
-  tro._returnedCon.orKeeping([ tro._timeLimitErrorCon, wTester._cancelCon ]);
-  tro._returnedCon.finally( ( err, msg ) => tro._runFinally( err, msg ) );
-
-  return tro._returnedCon;
+  return ready;
 }
 
 //
@@ -379,6 +386,7 @@ function _runBegin()
 {
   let tro = this;
   let suite = tro.suite;
+  let ready = new _.Consequence().take( null );
 
   _.assert( !!wTester );
   tro._testRoutineBeginTime = _.time.now();
@@ -414,23 +422,30 @@ function _runBegin()
     Config.debug = wTester.settings.debug;
   }
 
-  try
+  ready.then( () => suite.onRoutineBegin.call( tro.context, tro ) || null );
+  ready.then( () => 
   {
-    suite.onRoutineBegin.call( tro.context, tro );
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
     if( tro.eventGive )
     tro.eventGive({ kind : 'routineBegin', testRoutine : tro, context : tro.context });
-  }
-  catch( err )
+    return null;
+  });
+  ready.catch( ( err ) => 
   {
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
     tro.exceptionReport({ err });
-  }
+    return null;
+  });
+  ready.then( () => 
+  {
+    if( Config.debug !== debugWas )
+    Config.debug = debugWas;
+    return null;
+  });
 
-  if( Config.debug !== debugWas )
-  Config.debug = debugWas;
+  return ready;
 }
 
 //
@@ -439,6 +454,7 @@ function _runEnd()
 {
   let tro = this;
   let suite = tro.suite;
+  let ready = new _.Consequence().take( null );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strDefined( tro.routine.name ), 'test routine should have name' );
@@ -503,66 +519,72 @@ function _runEnd()
 
   tro._reportEnd();
   let ok = tro._reportIsPositive();
-  try
-  {
-    suite.onRoutineEnd.call( tro.context, tro, ok ); /* xxx qqq for Dmytro : may return consequence! should pass error if thrown */
-    /* qqq : should be
-    it = { err, arg, test : tro }
-    suite.onRoutineEnd.call( tro.context, it );
-    */
-    if( tro.eventGive )
-    tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context });
-  }
-  catch( err )
+
+  /* qqq : should be
+  it = { err, arg, test : tro }
+  suite.onRoutineEnd.call( tro.context, it );
+  */
+  ready.then( () => suite.onRoutineEnd.call( tro.context, tro, ok ) || null );
+  
+  if( tro.eventGive )
+  ready.then( () => tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context }) || null )
+  
+  ready.catch( ( err ) => 
   {
     tro.exceptionReport({ err });
     ok = false;
-  }
+    return ok;
+  });
 
-  /* restoring exit code */
-
-  if( tro._exitCode && !_.process.exitCode() )
-  tro._exitCode = _.process.exitCode( tro._exitCode );
-
-  /* */
-
-  suite._testRoutineConsider( tro.report );
-
-  suite.currentRoutine = null;
-
-  /* */
-
-  suite.logger.begin( 'routine', 'end' );
-  suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
-  suite.logger.begin({ verbosity : -3 });
-
-  let timingStr = '';
-  if( wTester )
+  ready.then( () =>
   {
-    tro.report.timeSpent = _.time.now() - tro._testRoutineBeginTime;
-    timingStr = 'in ' + _.time.spentFormat( tro.report.timeSpent );
-  }
+    /* restoring exit code */
 
-  let str = ( ok ? 'Passed' : 'Failed' ) + ( tro.report.reason ? ` ( ${tro.report.reason} )` : '' ) + ` ${tro.absoluteName} ${timingStr}`;
+    if( tro._exitCode && !_.process.exitCode() )
+    tro._exitCode = _.process.exitCode( tro._exitCode );
 
-  str = wTester.textColor( str, ok );
+    /* */
 
-  if( !ok )
-  suite.logger.begin({ verbosity : -3+suite.negativity });
+    suite._testRoutineConsider( tro.report );
 
-  suite.logger.logDown( str );
+    suite.currentRoutine = null;
 
-  if( !ok )
-  suite.logger.end({ verbosity : -3+suite.negativity });
+    /* */
 
-  suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
-  suite.logger.end( 'routine', 'end' );
+    suite.logger.begin( 'routine', 'end' );
+    suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+    suite.logger.begin({ verbosity : -3 });
 
-  suite.logger.end({ verbosity : -3 });
+    let timingStr = '';
+    if( wTester )
+    {
+      tro.report.timeSpent = _.time.now() - tro._testRoutineBeginTime;
+      timingStr = 'in ' + _.time.spentFormat( tro.report.timeSpent );
+    }
 
-  _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, tro );
+    let str = ( ok ? 'Passed' : 'Failed' ) + ( tro.report.reason ? ` ( ${tro.report.reason} )` : '' ) + ` ${tro.absoluteName} ${timingStr}`;
 
-  return ok
+    str = wTester.textColor( str, ok );
+
+    if( !ok )
+    suite.logger.begin({ verbosity : -3+suite.negativity });
+
+    suite.logger.logDown( str );
+
+    if( !ok )
+    suite.logger.end({ verbosity : -3+suite.negativity });
+
+    suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+    suite.logger.end( 'routine', 'end' );
+
+    suite.logger.end({ verbosity : -3 });
+
+    _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, tro );
+
+    return ok;
+  });
+
+  return ready;
 }
 
 //
@@ -587,12 +609,18 @@ function _runFinally( err, arg )
       err,
       logging : tro._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
     });
-    tro._runEnd();
-    return err;
+    return tro._runEnd()
+    .then( () => 
+    {
+      return err;
+    })
   }
 
-  tro._runEnd();
-  return arg;
+  return tro._runEnd()
+  .then( () => 
+  {
+    return arg;
+  })
 }
 
 //

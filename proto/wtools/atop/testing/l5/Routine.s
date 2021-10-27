@@ -439,6 +439,7 @@ function _runEnd()
 {
   let tro = this;
   let suite = tro.suite;
+  let ready = new _.Consequence().take( null );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strDefined( tro.routine.name ), 'test routine should have name' );
@@ -503,66 +504,71 @@ function _runEnd()
 
   tro._reportEnd();
   let ok = tro._reportIsPositive();
-  try
-  {
-    suite.onRoutineEnd.call( tro.context, tro, ok ); /* xxx qqq for Dmytro : may return consequence! should pass error if thrown */
-    /* qqq : should be
-    it = { err, arg, test : tro }
-    suite.onRoutineEnd.call( tro.context, it );
-    */
-    if( tro.eventGive )
-    tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context });
-  }
-  catch( err )
+
+  /* qqq : should be
+  it = { err, arg, test : tro }
+  suite.onRoutineEnd.call( tro.context, it );
+  */
+  ready.then( () => suite.onRoutineEnd.call( tro.context, tro, ok ) || null );
+  
+  if( tro.eventGive )
+  ready.then( () => tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context }) || null )
+  
+  ready.catch( ( err ) => 
   {
     tro.exceptionReport({ err });
     ok = false;
-  }
+  });
 
-  /* restoring exit code */
-
-  if( tro._exitCode && !_.process.exitCode() )
-  tro._exitCode = _.process.exitCode( tro._exitCode );
-
-  /* */
-
-  suite._testRoutineConsider( tro.report );
-
-  suite.currentRoutine = null;
-
-  /* */
-
-  suite.logger.begin( 'routine', 'end' );
-  suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
-  suite.logger.begin({ verbosity : -3 });
-
-  let timingStr = '';
-  if( wTester )
+  ready.then( () =>
   {
-    tro.report.timeSpent = _.time.now() - tro._testRoutineBeginTime;
-    timingStr = 'in ' + _.time.spentFormat( tro.report.timeSpent );
-  }
+    /* restoring exit code */
 
-  let str = ( ok ? 'Passed' : 'Failed' ) + ( tro.report.reason ? ` ( ${tro.report.reason} )` : '' ) + ` ${tro.absoluteName} ${timingStr}`;
+    if( tro._exitCode && !_.process.exitCode() )
+    tro._exitCode = _.process.exitCode( tro._exitCode );
 
-  str = wTester.textColor( str, ok );
+    /* */
 
-  if( !ok )
-  suite.logger.begin({ verbosity : -3+suite.negativity });
+    suite._testRoutineConsider( tro.report );
 
-  suite.logger.logDown( str );
+    suite.currentRoutine = null;
 
-  if( !ok )
-  suite.logger.end({ verbosity : -3+suite.negativity });
+    /* */
 
-  suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
-  suite.logger.end( 'routine', 'end' );
+    suite.logger.begin( 'routine', 'end' );
+    suite.logger.begin({ 'connotation' : ok ? 'positive' : 'negative' });
+    suite.logger.begin({ verbosity : -3 });
 
-  suite.logger.end({ verbosity : -3 });
+    let timingStr = '';
+    if( wTester )
+    {
+      tro.report.timeSpent = _.time.now() - tro._testRoutineBeginTime;
+      timingStr = 'in ' + _.time.spentFormat( tro.report.timeSpent );
+    }
 
-  _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, tro );
+    let str = ( ok ? 'Passed' : 'Failed' ) + ( tro.report.reason ? ` ( ${tro.report.reason} )` : '' ) + ` ${tro.absoluteName} ${timingStr}`;
 
-  return ok
+    str = wTester.textColor( str, ok );
+
+    if( !ok )
+    suite.logger.begin({ verbosity : -3+suite.negativity });
+
+    suite.logger.logDown( str );
+
+    if( !ok )
+    suite.logger.end({ verbosity : -3+suite.negativity });
+
+    suite.logger.end({ 'connotation' : ok ? 'positive' : 'negative' });
+    suite.logger.end( 'routine', 'end' );
+
+    suite.logger.end({ verbosity : -3 });
+
+    _.arrayRemoveElementOnceStrictly( wTester.activeRoutines, tro );
+
+    return ok;
+  });
+
+  return ready;
 }
 
 //
@@ -587,12 +593,18 @@ function _runFinally( err, arg )
       err,
       logging : tro._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
     });
-    tro._runEnd();
-    return err;
+    return tro._runEnd()
+    .then( () => 
+    {
+      return err;
+    })
   }
 
-  tro._runEnd();
-  return arg;
+  return tro._runEnd()
+  .then( () => 
+  {
+    return arg;
+  })
 }
 
 //

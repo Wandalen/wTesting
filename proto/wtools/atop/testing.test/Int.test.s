@@ -11636,6 +11636,272 @@ function onSuiteEndDelayedConsequence( test )
 
 //
 
+function onRoutineBeginThrowError( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  let onRoutineBeginErr = _.err( 'onRoutineBegin: some error' );
+
+  function onRoutineBegin()
+  {
+    throw onRoutineBeginErr;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineBegin,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ onRoutineBeginErr ] );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 1 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    // test.identical( got.testCaseNumber, 0 );
+    test.identical( got.testRoutinePasses, 0 );
+    test.identical( got.testRoutineFails, 1 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function onRoutineBeginReturnsNothing( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  function onRoutineBegin()
+  {
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineBegin,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, true );
+    test.identical( got.errorsArray.length, 0 );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function onRoutineBeginErrorInConsequence( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  let ConError = _.err( 'Error from onRoutineBegin' )
+
+  function onRoutineBegin()
+  {
+    let con = new _.Consequence().error( ConError );
+    return con;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineBegin,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ ConError ] );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 1 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 0 );
+    test.identical( got.testRoutineFails, 1 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function onRoutineBeginNormalConsequence( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  function onRoutineBegin()
+  {
+    let con = new _.Consequence().take( 1 );
+    return con;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineBegin,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, true );
+    test.identical( got.errorsArray.length, 0 );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
+function onRoutineBeginDelayedConsequence( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  function onRoutineBegin()
+  {
+    let con = _.time.out( 2000, () => 1 )
+    return con;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineBegin,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var t1 = _.time.now();
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var t2 = _.time.now();
+
+    test.ge( t2 - t1, 2000 );
+
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, true );
+    test.identical( got.errorsArray.length, 0 );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+
 function onRoutineEndThrowError( test )
 {
   function trivial( t )
@@ -13029,6 +13295,12 @@ const Proto =
     onSuiteEndNormalConsequence,
     onSuiteEndDelayedConsequence,
     /* qqq : please cover onRoutineBegin, onRoutineEnd */
+
+    onRoutineBeginThrowError,
+    onRoutineBeginReturnsNothing,
+    onRoutineBeginErrorInConsequence,
+    onRoutineBeginNormalConsequence,
+    onRoutineBeginDelayedConsequence,
 
     onRoutineEndThrowError,
     onRoutineEndReturnsNothing,

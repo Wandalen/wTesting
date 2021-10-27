@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: 03e860a3160f44c9c8b34614754ee044
-    size: 13934
+    hash: e97848bfaa36cf32537aabd1fd147574
+    size: 13935
 module:
   wTesting.out:
     about:
@@ -423,13 +423,13 @@ module:
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron!11.3.0'
+        path: 'npm:///electron!11.5.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint!7.1.0'
+        path: 'npm:///eslint!7.32.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1525,13 +1525,13 @@ module:
         criterion:
           development: 1
       electron:
-        path: 'npm:///electron!11.3.0'
+        path: 'npm:///electron!11.5.0'
         autoExporting: 0
         enabled: 0
         criterion:
           development: 1
       eslint:
-        path: 'npm:///eslint!7.1.0'
+        path: 'npm:///eslint!7.32.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -2308,5 +2308,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 03e860a3160f44c9c8b34614754ee044
-        size: 13934
+        hash: e97848bfaa36cf32537aabd1fd147574
+        size: 13935

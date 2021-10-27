@@ -11634,6 +11634,63 @@ function onSuiteEndDelayedConsequence( test )
   return result;
 }
 
+//
+
+function onRoutineEndDelayedConsequence( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  function onRoutineEnd()
+  {
+    let con = _.time.out( 2000, () => 1 )
+    return con;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineEnd,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var t1 = _.time.now();
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var t2 = _.time.now();
+
+    test.ge( t2 - t1, 2000 );
+
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, true );
+    test.identical( got.errorsArray.length, 0 );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 0 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
 // --
 // options
 // --
@@ -12762,6 +12819,7 @@ const Proto =
     onSuiteEndNormalConsequence,
     onSuiteEndDelayedConsequence,
     /* qqq : please cover onRoutineBegin, onRoutineEnd */
+    onRoutineEndDelayedConsequence,
 
     // options
 

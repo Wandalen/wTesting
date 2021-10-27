@@ -518,6 +518,7 @@ function _runEnd()
   {
     tro.exceptionReport({ err });
     ok = false;
+    return ok;
   });
 
   ready.then( () =>

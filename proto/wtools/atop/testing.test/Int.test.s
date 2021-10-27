@@ -11636,6 +11636,60 @@ function onSuiteEndDelayedConsequence( test )
 
 //
 
+function onRoutineEndThrowError( test )
+{
+  function trivial( t )
+  {
+    t.case = 'trivial'
+    t.identical( 1, 1 );
+  }
+
+  let onRoutineEndErr = _.err( 'onRoutineEnd: some error' );
+
+  function onRoutineEnd()
+  {
+    throw onRoutineEndErr;
+  }
+
+  let suite1 = wTestSuite
+  ({
+    onRoutineEnd,
+    tests : { trivial },
+    override : this.notTakingIntoAccount,
+    ignoringTesterOptions : 1,
+  });
+
+  /* */
+
+  var result = wTester.test([ suite1 ])
+  .finally( function( err, suites )
+  {
+    var got = _.select( suites, '*/report' )[ 0 ];
+
+    test.identical( got.outcome, false );
+    test.identical( got.errorsArray, [ onRoutineEndErr ] );
+    test.identical( got.exitCode, 0 );
+    test.identical( got.testCheckPasses, 1 );
+    test.identical( got.testCheckFails, 1 );
+    test.identical( got.testCasePasses, 1 );
+    test.identical( got.testCaseFails, 0 );
+    // test.identical( got.testCaseNumber, 0 );
+    test.identical( got.testRoutinePasses, 1 );
+    test.identical( got.testRoutineFails, 0 );
+
+    _.errAttend( err );
+    test.false( _.errIs( err ) );
+    test.true( _.arrayIs( suites ) );
+
+    _.process.exitCode( 0 );
+    return null;
+  });
+
+  return result;
+}
+
+//
+
 function onRoutineEndDelayedConsequence( test )
 {
   function trivial( t )
@@ -12819,6 +12873,8 @@ const Proto =
     onSuiteEndNormalConsequence,
     onSuiteEndDelayedConsequence,
     /* qqq : please cover onRoutineBegin, onRoutineEnd */
+
+    onRoutineEndThrowError,
     onRoutineEndDelayedConsequence,
 
     // options

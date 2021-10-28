@@ -163,6 +163,21 @@ function formAssociates()
   _.assert( logger2.verbosity <= logger.verbosity );
 }
 
+//
+
+function formContext( context )
+{
+  const tester = this;
+
+  _.assert( arguments.length === 1, 'Expects single argument {-context-}.' );
+  _.assert( _.aux.is( context ), 'Expects aux like context.' );
+
+  if( this.context === null )
+  this.context = context;
+  else
+  _.map.extend( this.context, context );
+}
+
 // --
 // exec
 // --
@@ -307,6 +322,8 @@ function scenarioTest()
     _.assert( tester.settings.scenario === undefined );
 
     tester.suitesIncludeAt( tester.filePath );
+    if( tester.context )
+    tester.suitestContextImply( tester.context );
     result = tester.testAll();
 
   }
@@ -982,6 +999,26 @@ function suitesIncludeAt( path )
   logger.verbosityPop();
 }
 
+//
+
+function suitestContextImply( context )
+{
+  const tester = this;
+  const suites = wTests;
+
+  _.assert( arguments.length === 1, 'Expects context to apply to test suites.' );
+  _.assert( _.aux.is( context ), 'Expects aux like context.' );
+
+  if( _.props.keys( context ).length === 0 )
+  return null;
+
+  _.each( suites, ( suite ) =>
+  {
+    let extension = _.mapOnly_( null, context, suite.context );
+    _.map.extend( suite.context, extension );
+  });
+}
+
 // --
 // etc
 // --
@@ -1473,6 +1510,7 @@ let Composes =
   // verbosity : 3,
 
   settings : _.define.own( {} ),
+  context : null,
   state : null,
 
   _cancelCon : _.define.own( new _.Consequence({ tag : 'TesterCancel', capacity : 0 }) ),
@@ -1581,6 +1619,7 @@ let Extension =
   form,
   FormSuites,
   formAssociates,
+  formContext,
 
   // scenarios
 
@@ -1613,6 +1652,7 @@ let Extension =
 
   _suitesIncludeAt,
   suitesIncludeAt,
+  suitestContextImply,
 
   // report
 

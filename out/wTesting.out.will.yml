@@ -241,6 +241,8 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/checksAfterTimeOutSilenced
           - >-
             ../proto/wtools/atop/testing.test/_asset/checksAfterTimeOutSilenced/Suite.test.js
+          - ../proto/wtools/atop/testing.test/_asset/context
+          - ../proto/wtools/atop/testing.test/_asset/context/Context.test.js
           - ../proto/wtools/atop/testing.test/_asset/double
           - ../proto/wtools/atop/testing.test/_asset/double/Hello.js
           - ../proto/wtools/atop/testing.test/_asset/double/Hello.test.js

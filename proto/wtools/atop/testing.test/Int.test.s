@@ -12667,7 +12667,7 @@ function asyncTimeout1( test )
       t.identical( 0, 1 );
       t.identical( 1, 1 );
       visit( 'v2' );
-    })
+    });
   }
 
   testRoutine.timeOut = 100;
@@ -12679,12 +12679,11 @@ function asyncTimeout1( test )
     ignoringTesterOptions : 1,
   });
 
+  /* */
+
   var result = suite.run();
-
-  result
-  .finally( function( err, arg )
+  result.finally( ( err, arg ) =>
   {
-
     var acheck = tro.checkCurrent();
     test.identical( acheck.checkIndex, 2 );
     test.identical( suite.report.testCheckPasses, 0 );
@@ -12703,26 +12702,23 @@ function asyncTimeout1( test )
     return null;
   });
 
-  return _.time.out( 2000, () =>
+  /* */
+
+  return _.time.out( 4000, () =>
   {
     test.identical( visits, [ 'v0', 'v3', 'v1' ] );
   });
 
+  /* */
+
   function visit( what )
   {
     visits.push( what );
-    logger.log( what );
   }
-
 }
 
 asyncTimeout1.timeOut = 15000;
-asyncTimeout1.description =
-`
-- test failed because of time out
-
-//
-`
+asyncTimeout1.description = `test failed because of time out`;
 
 //
 

@@ -129,6 +129,7 @@ function _commandsMake()
     'help' :                    { ro : _.routineJoin( cui, cui.commandHelp ),                        h : 'Get help.' },
     'version' :                 { ro : _.routineJoin( cui, cui.commandVersion ),                     h : 'Get information about version.' },
     'imply' :                   { ro : _.routineJoin( cui, cui.commandImply ),                       h : 'Change state or imply value of a variable.' },
+    'context' :                 { ro : _.routineJoin( cui, cui.commandContext ),                     h : 'Change existed context variables to defined value.' },
     'run' :                     { ro : _.routineJoin( cui, cui.commandRun ),                         h : 'Run test suites found at a specified path.' },
     'suites list' :             { ro : _.routineJoin( cui, cui.commandSuitesList ),                  h : 'Find test suites at a specified path.' },
 
@@ -193,6 +194,15 @@ function commandImply( e )
   let cui = this.form();
 
   cui.appArgsRead({ subject : e.subject, propertiesMap : e.propertiesMap });
+}
+
+//
+
+function commandContext( e )
+{
+  let cui = this.form();
+
+  cui.formContext( e.propertiesMap );
 }
 
 //
@@ -273,6 +283,7 @@ let Extension =
   commandHelp,
   commandVersion,
   commandImply,
+  commandContext,
   commandRun,
   commandSuitesList,
 

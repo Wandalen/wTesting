@@ -33,47 +33,41 @@ about:
     debug-wtest: node proto/wtools/atop/testing/entry/ExecDebug
     tst: node proto/wtools/atop/testing/entry/ExecUnrestricted
 build:
-
-  #
-
-  browser.debug :
-    criterion :
+  browser.debug:
+    criterion:
       debug: debug
     steps:
-      - step::clean.out.browser.debug
-      - step::join.sources
-      - step::reflect.module.files.debug
-      - step::npm.release.browser.debug
-  browser.debug.min :
-    criterion :
+      - 'step::clean.out.browser.debug'
+      - 'step::join.sources'
+      - 'step::reflect.module.files.debug'
+      - 'step::npm.release.browser.debug'
+  browser.debug.min:
+    criterion:
       debug: debug
     steps:
-      - step::clean.out.browser.debug.min
-      - step::join.sources
-      - step::transpile.debug.min
-      - step::reflect.module.files.debug.min
-      - step::npm.release.browser.debug.min
-  browser.release :
-    criterion :
+      - 'step::clean.out.browser.debug.min'
+      - 'step::join.sources'
+      - 'step::transpile.debug.min'
+      - 'step::reflect.module.files.debug.min'
+      - 'step::npm.release.browser.debug.min'
+  browser.release:
+    criterion:
       debug: release
     steps:
-      - step::clean.out.browser.release
-      - step::join.sources
-      - step::transpile.release
-      - step::reflect.module.files.release
-      - step::npm.release.browser.release
-  browser.release.min :
-    criterion :
+      - 'step::clean.out.browser.release'
+      - 'step::join.sources'
+      - 'step::transpile.release'
+      - 'step::reflect.module.files.release'
+      - 'step::npm.release.browser.release'
+  browser.release.min:
+    criterion:
       debug: release
     steps:
-      - step::clean.out.browser.release.min
-      - step::join.sources
-      - step::transpile.release.min
-      - step::reflect.module.files.release.min
-      - step::npm.release.browser.release.min
-
-  #
-
+      - 'step::clean.out.browser.release.min'
+      - 'step::join.sources'
+      - 'step::transpile.release.min'
+      - 'step::reflect.module.files.release.min'
+      - 'step::npm.release.browser.release.min'
   proto.export:
     criterion:
       content: proto
@@ -86,12 +80,6 @@ build:
       export: 1
     steps:
       - 'step::doc.export'
-  npm.export:
-    criterion:
-      content: npm
-      export: 1
-    steps:
-      - 'step::npm.publish'
   export:
     criterion:
       default: 1
@@ -148,7 +136,6 @@ build:
       - 'build::release'
       - 'build::npm'
 path:
-
   repository: 'git+https:///github.com/Wandalen/wTesting.git'
   origins:
     - 'git+https:///github.com/Wandalen/wTesting.git'
@@ -216,11 +203,11 @@ path:
   npm.proto.entry:
     - proto/wtools/atop/testing/entry/Main.s
     - proto/node_modules/wTesting
-  out.browser.debug : '{path::out}/wtesting.browser.debug'
-  out.browser.debug.min : '{path::out}/wtesting.browser.debug.min'
-  out.browser.release : '{path::out}/wtesting.browser.release'
-  out.browser.release.min : '{path::out}/wtesting.browser.release.min'
-  step : step
+  out.browser.debug: '{path::out}/wtesting.browser.debug'
+  out.browser.debug.min: '{path::out}/wtesting.browser.debug.min'
+  out.browser.release: '{path::out}/wtesting.browser.release'
+  out.browser.release.min: '{path::out}/wtesting.browser.release.min'
+  step: step
 reflector:
   reflect.proto:
     inherit: predefined.*
@@ -278,49 +265,43 @@ reflector:
     filePath:
       '**.test*': 1
       'path::proto': '{path::out.*=1}/Tests.test.s'
-  #
-  transpile.main.reflector.debug.min :
-    inherit : predefined.*
-    filePath :
-      '{path::out.browser.debug}/Main.s' : '{path::out.browser.debug.min}/Main.s'
-  transpile.main.reflector.release :
-    inherit : predefined.*
-    filePath :
-      '{path::out.browser.debug}/Main.s' : '{path::out.browser.release}/Main.s'
-  transpile.main.reflector.release.min :
-    inherit : predefined.*
-    filePath :
-      '{path::out.browser.debug}/Main.s' : '{path::out.browser.release.min}/Main.s'
-  reflect.module.files.debug :
-    inherit : predefined.*
-    filePath :
+  transpile.main.reflector.debug.min:
+    inherit: predefined.*
+    filePath:
+      '{path::out.browser.debug}/Main.s': '{path::out.browser.debug.min}/Main.s'
+  transpile.main.reflector.release:
+    inherit: predefined.*
+    filePath:
+      '{path::out.browser.debug}/Main.s': '{path::out.browser.release}/Main.s'
+  transpile.main.reflector.release.min:
+    inherit: predefined.*
+    filePath:
+      '{path::out.browser.debug}/Main.s': '{path::out.browser.release.min}/Main.s'
+  reflect.module.files.debug:
+    inherit: predefined.*
+    filePath:
       '{path::in}/License': '{path::out.browser.debug}/License'
       '{path::in}/Readme.md': '{path::out.browser.debug}/Readme.md'
-  reflect.module.files.debug.min :
-    inherit : predefined.*
-    filePath :
+  reflect.module.files.debug.min:
+    inherit: predefined.*
+    filePath:
       '{path::in}/License': '{path::out.browser.debug.min}/License'
       '{path::in}/Readme.md': '{path::out.browser.debug.min}/Readme.md'
-  reflect.module.files.release :
-    inherit : predefined.*
-    filePath :
+  reflect.module.files.release:
+    inherit: predefined.*
+    filePath:
       '{path::in}/License': '{path::out.browser.release}/License'
       '{path::in}/Readme.md': '{path::out.browser.release}/Readme.md'
-  reflect.module.files.release.min :
-    inherit : predefined.*
-    filePath :
+  reflect.module.files.release.min:
+    inherit: predefined.*
+    filePath:
       '{path::in}/License': '{path::out.browser.release.min}/License'
       '{path::in}/Readme.md': '{path::out.browser.release.min}/Readme.md'
-  #
-
 step:
-
-  #
-
-  join.sources :
-    inherit : sources.join
-    entryPath : proto/wtools/atop/testing/entry/Main.s
-    modulesList :
+  join.sources:
+    inherit: sources.join
+    entryPath: proto/wtools/atop/testing/entry/Main.s
+    modulesList:
       - wTools
       - wLooker
       - wSelector
@@ -360,33 +341,35 @@ step:
       - wVerbal
       - wweburibasic
       - wVocabulary
-    interpreter : browser
-    outPath : '{path::out.browser.debug}/Main.s'
-
-  transpile.debug.min :
-    inherit : files.transpile
-    filePath : reflector::transpile.main.reflector.debug.min
-    transpilingStrategy : [ 'Uglify' ]
-    optimization : 0
-    minification : 9
-    diagnosing : 1
-    beautifing : 1
-  transpile.release :
-    inherit : files.transpile
-    filePath : reflector::transpile.main.reflector.release
-    transpilingStrategy : [ 'Uglify' ]
-    optimization : 9
-    minification : 0
-    diagnosing : 0
-    beautifing : 0
-  transpile.release.min :
-    inherit : files.transpile
-    filePath : reflector::transpile.main.reflector.release.min
-    transpilingStrategy : [ 'Uglify' ]
-    optimization : 9
-    minification : 9
-    diagnosing : 0
-    beautifing : 0
+    interpreter: browser
+    outPath: '{path::out.browser.debug}/Main.s'
+  transpile.debug.min:
+    inherit: files.transpile
+    filePath: 'reflector::transpile.main.reflector.debug.min'
+    transpilingStrategy:
+      - Uglify
+    optimization: 0
+    minification: 9
+    diagnosing: 1
+    beautifing: 1
+  transpile.release:
+    inherit: files.transpile
+    filePath: 'reflector::transpile.main.reflector.release'
+    transpilingStrategy:
+      - Uglify
+    optimization: 9
+    minification: 0
+    diagnosing: 0
+    beautifing: 0
+  transpile.release.min:
+    inherit: files.transpile
+    filePath: 'reflector::transpile.main.reflector.release.min'
+    transpilingStrategy:
+      - Uglify
+    optimization: 9
+    minification: 9
+    diagnosing: 0
+    beautifing: 0
   npm.release.browser.debug:
     inherit: npm.generate
     entryPath: '{path::out.browser.debug}/Main.s'
@@ -403,9 +386,6 @@ step:
     inherit: npm.generate
     entryPath: '{path::out.browser.release.min}/Main.s'
     packagePath: '{path::out.browser.release.min}/package.json'
-
-  #
-
   proto.export:
     inherit: module.export
     export: 'path::export'
@@ -424,8 +404,6 @@ step:
     tar: 0
     criterion:
       content: npm
-  npm.publish:
-    shell: npm publish
   npm.generate:
     inherit: npm.generate
     entryPath: 'path::entry.out.*=1'
@@ -454,8 +432,6 @@ step:
       content:
         - prime
         - npm
-  #
-
   clean.out.browser.debug:
     inherit: files.delete
     filePath: '{path::out.browser.debug}'
@@ -468,8 +444,6 @@ step:
   clean.out.browser.release.min:
     inherit: files.delete
     filePath: '{path::out.browser.release.min}'
-
-  #
   clean.out.npm:
     inherit: files.delete
     filePath: 'path::out.*=1'

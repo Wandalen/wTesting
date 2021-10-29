@@ -3609,6 +3609,54 @@ function imply( test )
   return a.ready;
 }
 
+//
+
+function context( test )
+{
+  const ctx = this;
+  const a = ctx.assetFor( test, 'context' );
+  a.reflect();
+
+  /* - */
+
+  const routinesContextMap =
+  {
+    runWithoutChangedContext : '',
+    runWithChangingSuiteVariable : 'suiteContextVariable:5',
+    runWithChangingVariableWithDefaultValue : 'variableWithDefaultValue:3',
+    runWithChangingVariableWithoutDefaultValue : 'variableWithoutDefaultValue:3',
+    runWithChangingSeveralVariables : 'variableWithDefaultValue:3 variableWithoutDefaultValue:1',
+    runWithExtendingContext : 'a:0 b:foo',
+    runWithVectorisingContextVariables :
+    'variableWithDefaultValue:1 variableWithDefaultValue:2 variableWithoutDefaultValue:"[a,b]"',
+    severalRunsWithRewritingByLast : 'variableWithDefaultValue:100 .context variableWithDefaultValue:2',
+    severalRunsWithExtendingByLast : 'variableWithDefaultValue:3 .context variableWithoutDefaultValue:1',
+  };
+
+  /* */
+
+  for( let routine in routinesContextMap )
+  run({ routine, context : routinesContextMap[ routine ] });
+
+  /* - */
+
+  return a.ready;
+
+  function run( env )
+  {
+    return a.appStart({ execPath : `.context ${ env.context } .run ./ r:${ env.routine }` })
+    .then( ( op ) =>
+    {
+      test.case = `${ _.entity.exportStringSolo( env ) }`;
+      test.identical( op.exitCode, 0 );
+      test.identical( _.strCount( op.output, `Passed TestSuite::Context / TestRoutine::${ env.routine }` ), 1 );
+      test.identical( _.strCount( op.output, 'Passed test routines 1 / 1' ), 2 );
+      test.identical( _.strCount( op.output, 'Passed test suites 1 / 1' ), 1 );
+      return null;
+    });
+  }
+}
+
 // --
 // time out
 // --
@@ -7289,6 +7337,7 @@ const Proto =
     help,
     version,
     imply,
+    context,
 
     // time out
 

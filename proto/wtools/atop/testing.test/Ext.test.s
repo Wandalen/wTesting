@@ -7266,6 +7266,72 @@ typescriptSupport.description =
   - Tester should detect typescript test files and include them into the run.
 `
 
+//
+
+//
+
+function testLoggerExperiment( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'testLogger' );
+  a.reflect();
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with program logger';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:programLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+node .*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with test routine logger';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:troLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+node .*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with console logger';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:consoleLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+node .*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+testLoggerExperiment.experimental = 1;
+
+
 // --
 // suite
 // --
@@ -7385,8 +7451,10 @@ const Proto =
 
     typescriptSupport,
 
-  }
+    // experiment
 
+    testLoggerExperiment,
+  },
 }
 
 //

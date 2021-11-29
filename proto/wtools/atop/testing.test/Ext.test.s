@@ -4883,13 +4883,12 @@ function toolsPathGetTester( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
+  let programPath = a.program( program ).filePath;
 
-  // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
   var exp = _.module.resolve( 'wTools' );
   var toolsPath1 = _.module.toolsPathGet();
-  return a.forkNonThrowing({ execPath : filePath/*programPath*/ })
-  .then( ( op ) =>
+  a.forkNonThrowing({ execPath : programPath });
+  return a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
     var toolsPath2 = op.output.trim();
@@ -4898,11 +4897,105 @@ function toolsPathGetTester( test )
     return op;
   });
 
+  /* */
+
   function program()
   {
     console.log( toolsPath );
   }
+}
 
+//
+
+function programOutput( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'testLogger' );
+  a.reflect();
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with program logger';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:programLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+.*node .*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with program starter';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:programStart' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+.*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with test routine logger';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:troLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+.*node .*\n\s*inside testApp/ ), 0 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with higher verbosity';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:7 r:troLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+.*node .*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    test.case = 'run test routine with console logger';
+    return null;
+  });
+
+  a.appStartNonThrowing( '.run s:0 v:5 r:consoleLogger' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, />\s+.*node .*\n\s*inside testApp/ ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
 }
 
 // --
@@ -7264,73 +7357,7 @@ function typescriptSupport( test )
 typescriptSupport.description =
 `
   - Tester should detect typescript test files and include them into the run.
-`
-
-//
-
-//
-
-function testLoggerExperiment( test )
-{
-  let context = this;
-  let a = context.assetFor( test, 'testLogger' );
-  a.reflect();
-
-  /* - */
-
-  a.ready.then( () =>
-  {
-    test.case = 'run test routine with program logger';
-    return null;
-  });
-
-  a.appStartNonThrowing( '.run s:0 v:5 r:programLogger' );
-  a.ready.then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, />\s+node .*\n\s*inside testApp/ ), 1 );
-    return null;
-  });
-
-  /* */
-
-  a.ready.then( () =>
-  {
-    test.case = 'run test routine with test routine logger';
-    return null;
-  });
-
-  a.appStartNonThrowing( '.run s:0 v:5 r:troLogger' );
-  a.ready.then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, />\s+node .*\n\s*inside testApp/ ), 1 );
-    return null;
-  });
-
-  /* */
-
-  a.ready.then( () =>
-  {
-    test.case = 'run test routine with console logger';
-    return null;
-  });
-
-  a.appStartNonThrowing( '.run s:0 v:5 r:consoleLogger' );
-  a.ready.then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, />\s+node .*\n\s*inside testApp/ ), 1 );
-    return null;
-  });
-
-  /* - */
-
-  return a.ready;
-}
-
-testLoggerExperiment.experimental = 1;
-
+`;
 
 // --
 // suite
@@ -7435,6 +7462,7 @@ const Proto =
     programOptionsRoutineDirPath,
     toolsPathGetBasic,
     toolsPathGetTester,
+    programOutput,
 
     // related
 
@@ -7450,10 +7478,6 @@ const Proto =
     // typescript
 
     typescriptSupport,
-
-    // experiment
-
-    testLoggerExperiment,
   },
 }
 

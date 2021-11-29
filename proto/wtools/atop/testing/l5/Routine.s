@@ -292,7 +292,7 @@ function _run()
 
   ready.then( () => tro._runBegin() );
 
-  ready.then( () => 
+  ready.then( () =>
   {
     tro._timeLimitCon = new _.Consequence({ tag : '_timeLimitCon' });
     tro._timeLimitErrorCon = _.time.outError( debugged ? Infinity : tro.timeOut + wTester.settings.sanitareTime )
@@ -423,7 +423,7 @@ function _runBegin()
   }
 
   ready.then( () => suite.onRoutineBegin.call( tro.context, tro ) || null );
-  ready.then( () => 
+  ready.then( () =>
   {
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
@@ -431,14 +431,14 @@ function _runBegin()
     tro.eventGive({ kind : 'routineBegin', testRoutine : tro, context : tro.context });
     return null;
   });
-  ready.catch( ( err ) => 
+  ready.catch( ( err ) =>
   {
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
     tro.exceptionReport({ err });
     return null;
   });
-  ready.then( () => 
+  ready.then( () =>
   {
     if( Config.debug !== debugWas )
     Config.debug = debugWas;
@@ -525,11 +525,11 @@ function _runEnd()
   suite.onRoutineEnd.call( tro.context, it );
   */
   ready.then( () => suite.onRoutineEnd.call( tro.context, tro, ok ) || null );
-  
+
   if( tro.eventGive )
   ready.then( () => tro.eventGive({ kind : 'routineEnd', testRoutine : tro, context : tro.context }) || null )
-  
-  ready.catch( ( err ) => 
+
+  ready.catch( ( err ) =>
   {
     tro.exceptionReport({ err });
     ok = false;
@@ -610,14 +610,14 @@ function _runFinally( err, arg )
       logging : tro._returnedHow !== 'test routine time out' || err.reason !== 'test routine time limit',
     });
     return tro._runEnd()
-    .then( () => 
+    .then( () =>
     {
       return err;
     })
   }
 
   return tro._runEnd()
-  .then( () => 
+  .then( () =>
   {
     return arg;
   })
@@ -3800,9 +3800,7 @@ function assetFor( a )
     _.routine.options( routine, o );
 
     if( !_.logger.is( o.logger ) )
-    {
-      o.logger = _.Logger({ output : tro.logger, verbosity : o.logger || 0 });
-    }
+    o.logger = _.Logger({ output : _global_.logger || console, verbosity : o.logger || 0 });
 
     o = _.program.make.head.call( _.program, routine, [ o ] );
 

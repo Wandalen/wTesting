@@ -38,6 +38,35 @@ function programLogger( test )
 
 //
 
+function programStart( test )
+{
+  const a = test.assetFor( false );
+  const program = a.program( testApp );
+
+  /* - */
+
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( op.output.trim(), 'inside testApp' );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function testApp()
+  {
+    console.log( 'inside testApp' );
+  }
+}
+
+//
+
 function troLogger( test )
 {
   const a = test.assetFor( false );
@@ -126,6 +155,7 @@ var Self =
   tests :
   {
     programLogger,
+    programStart,
     troLogger,
     consoleLogger,
   },

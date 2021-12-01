@@ -23,14 +23,14 @@ module:
         single-process-wtest: proto/wtools/atop/testing/entry/Exec
         debug-wtest: proto/wtools/atop/testing/entry/ExecDebug
         tst: proto/wtools/atop/testing/entry/ExecUnrestricted
-      author: Kostiantyn Wandalen <wanalen@01.school>
+      author: Kostiantyn Wandalen <wandalen@obox.systems>
       keywords: &ref_2
         - testing
         - unit test
         - functional test
         - wTools
       contributors: &ref_3
-        - Kostiantyn Wandalen <wanalen@01.school>
+        - Kostiantyn Wandalen <wandalen@obox.systems>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
         - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
       interpreters: &ref_4
@@ -1298,7 +1298,7 @@ module:
       license: MIT
       npm.name: wTesting
       npm.bin: *ref_1
-      author: Kostiantyn Wandalen <wanalen@01.school>
+      author: Kostiantyn Wandalen <wandalen@obox.systems>
       keywords: *ref_2
       contributors: *ref_3
       interpreters: *ref_4

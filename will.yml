@@ -13,14 +13,14 @@ about:
     single-process-wtest: proto/wtools/atop/testing/entry/Exec
     debug-wtest: proto/wtools/atop/testing/entry/ExecDebug
     tst: proto/wtools/atop/testing/entry/ExecUnrestricted
-  author: Kostiantyn Wandalen <wanalen@01.school>
+  author: Kostiantyn Wandalen <wandalen@obox.systems>
   keywords:
     - testing
     - unit test
     - functional test
     - wTools
   contributors:
-    - Kostiantyn Wandalen <wanalen@01.school>
+    - Kostiantyn Wandalen <wandalen@obox.systems>
     - Volodymyr M. <volodymyr.migdal@gmail.com>
     - Dmytro Kryvoruchko <dm.vict.kr@gmail.com>
   interpreters:

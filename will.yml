@@ -523,11 +523,6 @@ submodule:
     enabled: 0
     criterion:
       optional: 1
-  wstarter:
-    path: 'npm:///wstarter'
-    enabled: 0
-    criterion:
-      development: 1
   eslint:
     path: 'npm:///eslint!7.32.0'
     enabled: 0

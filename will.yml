@@ -151,7 +151,7 @@ path:
   proto: ./proto
   export: '{path::proto}/**'
   doc: ./doc
-  proto.entry: proto/wtools/atop/testing/entry/Main.s
+  proto.entry: proto/wtools/atop/testing/entry/Basic.s
   out.raw.debug:
     path: '{path::out}/debug'
     criterion:
@@ -177,7 +177,7 @@ path:
       raw: compiled
       content: prime
   entry.proto.no.tests:
-    path: proto/wtools/atop/testing/entry/Main.s
+    path: proto/wtools/atop/testing/entry/Basic.s
     criterion:
       tests: no.tests
   entry.proto.only.tests:
@@ -185,7 +185,7 @@ path:
     criterion:
       tests: only.tests
   entry.out.raw.debug:
-    path: '{path::out.*=1}/source/wtools/atop/testing/entry/Main.s'
+    path: '{path::out.*=1}/source/wtools/atop/testing/entry/Basic.s'
     criterion:
       debug:
         - debug
@@ -201,7 +201,7 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - proto/wtools/atop/testing/entry/Main.s
+    - proto/wtools/atop/testing/entry/Basic.s
     - proto/node_modules/wTesting
   out.browser.debug: '{path::out}/wtesting.browser.debug'
   out.browser.debug.min: '{path::out}/wtesting.browser.debug.min'
@@ -300,7 +300,7 @@ reflector:
 step:
   join.sources:
     inherit: sources.join
-    entryPath: proto/wtools/atop/testing/entry/Main.s
+    entryPath: proto/wtools/atop/testing/entry/Basic.s
     modulesList:
       - wTools
       - wLooker

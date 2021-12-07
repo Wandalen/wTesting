@@ -584,7 +584,7 @@ function _runBegin()
   ({
     alias : [ 'wTesting', 'wtesting' ],
     entryPath : __dirname + '/../../../../node_modules/wTesting',
-    // entryPath : __dirname + '/../entry/Main.s',
+    // entryPath : __dirname + '/../entry/Basic.s',
   });
 
   /* test routine */

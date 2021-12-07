@@ -3,7 +3,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( './Main.s' );
+  require( './Basic.s' );
 
   if( typeof module !== 'undefined' )
   module[ 'exports' ] = _globals_.testing.wTools;

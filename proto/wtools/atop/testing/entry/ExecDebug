@@ -11,7 +11,7 @@ const _ = _global_.wTools;
 let shell = _.process.startPassingThrough
 ({
   execPath : 'debugnode',
-  args : [ _.path.nativize( _.path.join( __dirname, 'Main.s' ) ) ],
+  args : [ _.path.nativize( _.path.join( __dirname, 'Basic.s' ) ) ],
   stdio : 'pipe',
 });
 

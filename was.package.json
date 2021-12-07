@@ -75,11 +75,7 @@
     "wEventHandler": ""
   },
   "devDependencies": {
-    "wstarter": "",
-    "spectron": "13.0.0",
-    "puppeteer": "5.5.0",
-    "eslint": "7.32.0",
-    "electron": "11.5.0"
+    "eslint": "7.32.0"
   },
   "keywords": [
     "testing",

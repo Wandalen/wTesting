@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
   const _ = require( '../../../node_modules/Tools' );
-  require( '../testing/entry/Main.s' );
+  require( '../testing/entry/Basic.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
   _.include( 'wConsequence' );

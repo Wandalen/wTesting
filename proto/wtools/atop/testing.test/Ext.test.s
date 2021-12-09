@@ -1481,6 +1481,43 @@ function runExperimentalRoutines( test )
 
 //
 
+function runShouldIgnoreNodeModulesDir( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runShouldIgnoreNodeModulesDir' );
+  a.reflect();
+
+  /* */
+
+  a.ready.then( () => 
+  {
+    a.fileProvider.fileCopy
+    ({ 
+      srcPath : a.abs( 'TestSuite1.test.js' ), 
+      dstPath : a.abs( 'node_modules/TestSuiteInNodeModules.test.js' ),
+      makingDirectory : 1 
+    });
+    return null;
+  })
+
+  a.appStart( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'should not include test suites in the node_modules directory';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Launching several ( 1 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.js' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuiteInNodeModules.test.js' ), 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+//
+
 function checkFails( test )
 {
   let context = this;
@@ -7312,6 +7349,7 @@ const Proto =
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     runExperimentalRoutines,
+    runShouldIgnoreNodeModulesDir,
 
     checkFails,
     double,

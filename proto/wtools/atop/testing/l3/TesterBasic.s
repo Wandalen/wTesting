@@ -888,7 +888,11 @@ function _suitesIncludeAt( path )
 
   let maskAll = _.files.regexpMakeSafe
   ({
-    excludeAny : [ /(?:^|\/)_/ ],
+    excludeAny :
+    [
+      /(?:^|\/)_/,
+      /(\W|^)node_modules(\W|$)/
+    ],
   });
   let files = tester.fileProvider.filesFind
   ({

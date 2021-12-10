@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
   const _ = require( '../../../node_modules/Tools' );
-  require( '../testing/entry/Main.s' );
+  require( '../testing/entry/Basic.s' );
   _.include( 'wProcess' );
   _.include( 'wFiles' );
   _.include( 'wConsequence' );
@@ -1478,6 +1478,96 @@ function runExperimentalRoutines( test )
 
   return a.ready;
 }
+
+//
+
+function runExcludeNodeModules( test )
+{
+  let context = this;
+  let a = context.assetFor( test, 'runExcludeNodeModules' );
+  a.reflect();
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    a.fileProvider.fileCopy
+    ({
+      srcPath : a.abs( 'TestSuite1.test.js' ),
+      dstPath : a.abs( 'node_modules/TestSuiteInNodeModules.test.js' ),
+      makingDirectory : 1
+    });
+    return null;
+  })
+
+  a.appStart( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'should not include test suites from the node_modules directory';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Launching several ( 1 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.js' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuiteInNodeModules.test.js' ), 0 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    a.fileProvider.fileCopy
+    ({
+      srcPath : a.abs( 'TestSuite1.test.js' ),
+      dstPath : a.abs( 'dir1/node_modules/TestSuiteInNodeModules.test.js' ),
+      makingDirectory : 1
+    });
+    return null;
+  })
+
+  a.appStart( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'should not include test suites from the nested node_modules directory';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Launching several ( 1 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.js' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuiteInNodeModules.test.js' ), 0 );
+    return null;
+  });
+
+  /* */
+
+  a.ready.then( () =>
+  {
+    a.fileProvider.fileCopy
+    ({
+      srcPath : a.abs( 'TestSuite1.test.js' ),
+      dstPath : a.abs( 'dir1/dir2/node_modules/TestSuiteInNodeModules.test.js' ),
+      makingDirectory : 1
+    });
+    return null;
+  })
+
+  a.appStart( '.run ./' )
+  .then( ( op ) =>
+  {
+    test.case = 'should not include test suites from the deep nested node_modules directory';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Launching several ( 1 ) test suite(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuite1.test.js' ), 1 );
+    test.identical( _.strCount( op.output, 'Passed TestSuite::TestSuiteInNodeModules.test.js' ), 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+}
+
+runExcludeNodeModules.description =
+`
+ - Checks that node_modules dir is exluded on any level. Tests in that directory should not be included.
+`
 
 //
 
@@ -7312,6 +7402,7 @@ const Proto =
     runCheckNotRewritingDefaultOption,
     runCheckRewritingSuiteOptions,
     runExperimentalRoutines,
+    runExcludeNodeModules,
 
     checkFails,
     double,

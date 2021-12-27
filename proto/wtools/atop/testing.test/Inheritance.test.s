@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
   const _ = require( '../../../node_modules/Tools' );
 
   if( typeof _realGlobal_ === 'undefined' || !_realGlobal_.wTester || !_realGlobal_.wTester._isReal_ )
-  require( '../testing/entry/Main.s' );
+  require( '../testing/entry/Basic.s' );
 
   _.include( 'wLogger' );
   _.include( 'wConsequence' );

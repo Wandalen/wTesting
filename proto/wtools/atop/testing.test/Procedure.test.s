@@ -8,7 +8,7 @@ if( typeof module !== 'undefined' )
 
   const _ = require( 'Tools' );
 
-  require( '../testing/entry/Main.s' );
+  require( '../testing/entry/Basic.s' );
 
   _.include( 'wProcess' );
   _.include( 'wProcedure' );

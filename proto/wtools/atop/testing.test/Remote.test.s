@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
   const _ = require( 'Tools' );
-  require( '../testing/entry/Main.s' );
+  require( '../testing/entry/Basic.s' );
   _.include( 'wFiles' );
 }
 
@@ -23,7 +23,7 @@ function onSuiteBegin()
   let self = this;
   self.suiteTempPath = __.path.tempOpen( __.path.join( __dirname, '../..' ), 'Tester' );
   self.assetsOriginalPath = __.path.join( __dirname, '_asset' );
-  self.appStartNonThrowing = __.path.nativize( __.path.join( __.path.normalize( __dirname ), '../testing/entry/Main.s' ) );
+  self.appStartNonThrowing = __.path.nativize( __.path.join( __.path.normalize( __dirname ), '../testing/entry/Basic.s' ) );
   self.toolsPath = __.path.nativize( __.path.join( __.path.normalize( __dirname ), 'Tools' ) );
 }
 

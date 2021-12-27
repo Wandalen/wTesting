@@ -151,7 +151,7 @@ path:
   proto: ./proto
   export: '{path::proto}/**'
   doc: ./doc
-  proto.entry: proto/wtools/atop/testing/entry/Main.s
+  proto.entry: proto/wtools/atop/testing/entry/Basic.s
   out.raw.debug:
     path: '{path::out}/debug'
     criterion:
@@ -177,7 +177,7 @@ path:
       raw: compiled
       content: prime
   entry.proto.no.tests:
-    path: proto/wtools/atop/testing/entry/Main.s
+    path: proto/wtools/atop/testing/entry/Basic.s
     criterion:
       tests: no.tests
   entry.proto.only.tests:
@@ -185,7 +185,7 @@ path:
     criterion:
       tests: only.tests
   entry.out.raw.debug:
-    path: '{path::out.*=1}/source/wtools/atop/testing/entry/Main.s'
+    path: '{path::out.*=1}/source/wtools/atop/testing/entry/Basic.s'
     criterion:
       debug:
         - debug
@@ -201,7 +201,7 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - proto/wtools/atop/testing/entry/Main.s
+    - proto/wtools/atop/testing/entry/Basic.s
     - proto/node_modules/wTesting
   out.browser.debug: '{path::out}/wtesting.browser.debug'
   out.browser.debug.min: '{path::out}/wtesting.browser.debug.min'
@@ -300,7 +300,7 @@ reflector:
 step:
   join.sources:
     inherit: sources.join
-    entryPath: proto/wtools/atop/testing/entry/Main.s
+    entryPath: proto/wtools/atop/testing/entry/Basic.s
     modulesList:
       - wTools
       - wLooker
@@ -523,26 +523,6 @@ submodule:
     enabled: 0
     criterion:
       optional: 1
-  wstarter:
-    path: 'npm:///wstarter'
-    enabled: 0
-    criterion:
-      development: 1
-  spectron:
-    path: 'npm:///spectron!13.0.0'
-    enabled: 0
-    criterion:
-      development: 1
-  puppeteer:
-    path: 'npm:///puppeteer!5.5.0'
-    enabled: 0
-    criterion:
-      development: 1
-  electron:
-    path: 'npm:///electron!11.5.0'
-    enabled: 0
-    criterion:
-      development: 1
   eslint:
     path: 'npm:///eslint!7.32.0'
     enabled: 0

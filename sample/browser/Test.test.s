@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
   const _ = require( 'wTools' );
   _.include( 'wTesting' );
-  // require( '../testing/entry/Main.s' );
+  // require( '../testing/entry/Basic.s' );
   _.include( 'wFiles' );
 }
 

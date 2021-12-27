@@ -3,8 +3,8 @@ root:
   - wTesting.out
 consistency:
   ../will.yml: &ref_0
-    hash: ab3907fa6b189be202bbf68b057c28cd
-    size: 13740
+    hash: 3abb48ef588e9186c839dd5c81d16140
+    size: 13359
 module:
   wTesting.out:
     about:
@@ -92,7 +92,7 @@ module:
       doc:
         path: ../doc
       proto.entry:
-        path: ../proto/wtools/atop/testing/entry/Main.s
+        path: ../proto/wtools/atop/testing/entry/Basic.s
       out.raw.debug:
         criterion:
           debug: debug
@@ -120,7 +120,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/wtools/atop/testing/entry/Main.s
+        path: ../proto/wtools/atop/testing/entry/Basic.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -130,13 +130,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Basic.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Basic.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -151,7 +151,7 @@ module:
         path: '{path::out.*=}/source/Index.s'
       npm.proto.entry:
         path:
-          - ../proto/wtools/atop/testing/entry/Main.s
+          - ../proto/wtools/atop/testing/entry/Basic.s
           - ../proto/node_modules/wTesting
       out.browser.debug:
         path: '{path::out}/wtesting.browser.debug'
@@ -192,10 +192,10 @@ module:
           - ../proto/wtools/atop
           - ../proto/wtools/atop/testing
           - ../proto/wtools/atop/testing/entry
+          - ../proto/wtools/atop/testing/entry/Basic.s
           - ../proto/wtools/atop/testing/entry/Exec
           - ../proto/wtools/atop/testing/entry/ExecDebug
           - ../proto/wtools/atop/testing/entry/ExecUnrestricted
-          - ../proto/wtools/atop/testing/entry/Main.s
           - ../proto/wtools/atop/testing/include
           - ../proto/wtools/atop/testing/include/Base.s
           - ../proto/wtools/atop/testing/include/Top.s
@@ -209,13 +209,11 @@ module:
           - ../proto/wtools/atop/testing/l7
           - ../proto/wtools/atop/testing/l7/TesterTop.s
           - ../proto/wtools/atop/testing.test
-          - ../proto/wtools/atop/testing.test/Electron.test.s
           - ../proto/wtools/atop/testing.test/Ext.test.s
           - ../proto/wtools/atop/testing.test/Inheritance.test.s
           - ../proto/wtools/atop/testing.test/Int.test.s
           - ../proto/wtools/atop/testing.test/Procedure.test.s
           - ../proto/wtools/atop/testing.test/Process.test.s
-          - ../proto/wtools/atop/testing.test/Puppeteer.test.s
           - ../proto/wtools/atop/testing.test/Remote.test.s
           - ../proto/wtools/atop/testing.test/_asset
           - ../proto/wtools/atop/testing.test/_asset/asyncErrorHandling
@@ -246,9 +244,6 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/double
           - ../proto/wtools/atop/testing.test/_asset/double/Hello.js
           - ../proto/wtools/atop/testing.test/_asset/double/Hello.test.js
-          - ../proto/wtools/atop/testing.test/_asset/electron
-          - ../proto/wtools/atop/testing.test/_asset/electron/index.html
-          - ../proto/wtools/atop/testing.test/_asset/electron/main.js
           - ../proto/wtools/atop/testing.test/_asset/failout
           - ../proto/wtools/atop/testing.test/_asset/failout/Fail.test.js
           - ../proto/wtools/atop/testing.test/_asset/grouping
@@ -304,22 +299,18 @@ module:
           - ../proto/wtools/atop/testing.test/_asset/optionSuite/A1.test.js
           - ../proto/wtools/atop/testing.test/_asset/optionSuite/A2.test.js
           - ../proto/wtools/atop/testing.test/_asset/optionSuite/B1.test.js
-          - ../proto/wtools/atop/testing.test/_asset/puppeteer
-          - ../proto/wtools/atop/testing.test/_asset/puppeteer/index.html
-          - ../proto/wtools/atop/testing.test/_asset/puppeteer/Puppeteer.test.s
           - ../proto/wtools/atop/testing.test/_asset/requireTesting
           - >-
             ../proto/wtools/atop/testing.test/_asset/requireTesting/Suite.test.js
+          - ../proto/wtools/atop/testing.test/_asset/runExcludeNodeModules
+          - >-
+            ../proto/wtools/atop/testing.test/_asset/runExcludeNodeModules/TestSuite1.test.js
           - ../proto/wtools/atop/testing.test/_asset/runExperimentalRoutines
           - >-
             ../proto/wtools/atop/testing.test/_asset/runExperimentalRoutines/RunExperimentalRoutines.test.js
           - ../proto/wtools/atop/testing.test/_asset/runWithArrayOfRoutines
           - >-
             ../proto/wtools/atop/testing.test/_asset/runWithArrayOfRoutines/RunWithArrayOfRoutines.test.js
-          - ../proto/wtools/atop/testing.test/_asset/spectron
-          - ../proto/wtools/atop/testing.test/_asset/spectron/index.html
-          - ../proto/wtools/atop/testing.test/_asset/spectron/main.ss
-          - ../proto/wtools/atop/testing.test/_asset/spectron/Spectron.test.s
           - ../proto/wtools/atop/testing.test/_asset/timeOutExternalMessage
           - >-
             ../proto/wtools/atop/testing.test/_asset/timeOutExternalMessage/Suite.test.js
@@ -406,30 +397,6 @@ module:
         enabled: 0
         criterion:
           optional: 1
-      wstarter:
-        path: 'npm:///wstarter'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      spectron:
-        path: 'npm:///spectron!13.0.0'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      puppeteer:
-        path: 'npm:///puppeteer!5.5.0'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      electron:
-        path: 'npm:///electron!11.5.0'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
       eslint:
         path: 'npm:///eslint!7.32.0'
         autoExporting: 0
@@ -662,7 +629,7 @@ module:
     step:
       join.sources:
         opts:
-          entryPath: proto/wtools/atop/testing/entry/Main.s
+          entryPath: proto/wtools/atop/testing/entry/Basic.s
           modulesList:
             - wTools
             - wLooker
@@ -1353,7 +1320,7 @@ module:
       doc:
         path: doc
       proto.entry:
-        path: proto/wtools/atop/testing/entry/Main.s
+        path: proto/wtools/atop/testing/entry/Basic.s
       out.raw.debug:
         criterion:
           debug: debug
@@ -1381,7 +1348,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/wtools/atop/testing/entry/Main.s
+        path: proto/wtools/atop/testing/entry/Basic.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1391,13 +1358,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Basic.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Main.s'
+        path: '{path::out.*=1}/source/wtools/atop/testing/entry/Basic.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1412,7 +1379,7 @@ module:
         path: '{path::out.*=}/source/Index.s'
       npm.proto.entry:
         path:
-          - proto/wtools/atop/testing/entry/Main.s
+          - proto/wtools/atop/testing/entry/Basic.s
           - proto/node_modules/wTesting
       out.browser.debug:
         path: '{path::out}/wtesting.browser.debug'
@@ -1499,30 +1466,6 @@ module:
         enabled: 0
         criterion:
           optional: 1
-      wstarter:
-        path: 'npm:///wstarter'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      spectron:
-        path: 'npm:///spectron!13.0.0'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      puppeteer:
-        path: 'npm:///puppeteer!5.5.0'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      electron:
-        path: 'npm:///electron!11.5.0'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
       eslint:
         path: 'npm:///eslint!7.32.0'
         autoExporting: 0
@@ -1683,7 +1626,7 @@ module:
     step:
       join.sources:
         opts:
-          entryPath: proto/wtools/atop/testing/entry/Main.s
+          entryPath: proto/wtools/atop/testing/entry/Basic.s
           modulesList:
             - wTools
             - wLooker
@@ -2292,5 +2235,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: ab3907fa6b189be202bbf68b057c28cd
-        size: 13740
+        hash: 3abb48ef588e9186c839dd5c81d16140
+        size: 13359

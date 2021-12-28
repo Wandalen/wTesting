@@ -4973,20 +4973,22 @@ function toolsPathGetTester( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let filePath/*programPath*/ = a.program( program ).filePath/*programPath*/;
+  let programPath = a.program( program ).filePath;
 
-  // var exp = __.path.join( _.module.resolve( 'wTools' ), 'Tools' );
   var exp = _.module.resolve( 'wTools' );
   var toolsPath1 = _.module.toolsPathGet();
-  return a.forkNonThrowing({ execPath : filePath/*programPath*/ })
+  return a.forkNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
     var toolsPath2 = op.output.trim();
+    console.log( toolsPath2 );
     test.identical( toolsPath1, exp );
-    test.identical( toolsPath2, exp );
+    test.identical( toolsPath2, a.path.nativize( exp ) );
     return op;
   });
+
+  /* */
 
   function program()
   {

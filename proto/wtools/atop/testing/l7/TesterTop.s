@@ -92,7 +92,7 @@ function exec()
 
 function init( o )
 {
-  let cui = this;
+  const cui = this;
   return Parent.prototype.init.apply( cui, arguments );
 }
 
@@ -100,10 +100,10 @@ function init( o )
 
 function _commandHandleSyntaxError( o )
 {
-  let cui = this;
-  let aggregator = cui.aggregator;
-  // let request = _.strCommandParse({ src : o.command, commandFormat : 'subject? options?' });
-  let request = _.strRequestParse({ src : o.command });
+  const cui = this;
+  const aggregator = cui.aggregator;
+  const subjectWinPathsMaybe = Config.interpreter === 'njs' ? process.platform === 'win32' : false;
+  const request = _.strRequestParse({ src : o.command, subjectWinPathsMaybe });
   return aggregator.instructionPerform({ command : '.run ' + request.subject, propertiesMap : request.map });
 }
 

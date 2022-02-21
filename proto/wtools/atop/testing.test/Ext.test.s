@@ -4982,8 +4982,9 @@ function toolsPathGetTester( test )
   {
     test.identical( op.exitCode, 0 );
     var toolsPath2 = op.output.trim();
+    console.log( toolsPath2 );
     test.identical( toolsPath1, exp );
-    test.identical( toolsPath2, exp );
+    test.identical( toolsPath2, a.path.nativize( exp ) );
     return op;
   });
 

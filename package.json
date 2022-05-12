@@ -1,6 +1,6 @@
 {
   "name": "wTesting",
-  "version": "1.0.584",
+  "version": "1.0.585",
   "engine": "node >= 10.0.0",
   "description": "Framework for convenient unit testing. Testing provides the intuitive interface, simple tests structure, asynchronous code handling mechanism, colorful report, verbosity control and more. Use the module to get free of routines which can be automated.",
   "author": "Kostiantyn Wandalen <wandalen@obox.systems>",
@@ -53,26 +53,26 @@
     "url": "https://github.com/Wandalen/wTesting/issues"
   },
   "dependencies": {
-    "wTools": "alpha",
-    "wselector": "alpha",
-    "wProto": "alpha",
-    "wprocesswatcher": "alpha",
-    "wprocess": "alpha",
-    "wlooker": "alpha",
-    "wLogger": "alpha",
-    "wintrospectorextra": "alpha",
-    "winstancing": "alpha",
-    "wFiles": "alpha",
-    "wequaler": "alpha",
-    "wCopyable": "alpha",
-    "wConsequence": "alpha",
-    "wcommandsaggregator": "alpha",
+    "wTools": "latest",
+    "wselector": "latest",
+    "wProto": "latest",
+    "wprocesswatcher": "latest",
+    "wprocess": "latest",
+    "wlooker": "latest",
+    "wLogger": "latest",
+    "wintrospectorextra": "latest",
+    "winstancing": "latest",
+    "wFiles": "latest",
+    "wequaler": "latest",
+    "wCopyable": "latest",
+    "wConsequence": "latest",
+    "wcommandsaggregator": "latest",
     "typescript": "4.3.5",
     "ts-node": "10.2.0",
     "@types/node": "16.6.0"
   },
   "optionalDependencies": {
-    "wEventHandler": "alpha"
+    "wEventHandler": "latest"
   },
   "devDependencies": {
     "eslint": "7.32.0"

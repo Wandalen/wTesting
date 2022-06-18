@@ -41,7 +41,7 @@ jobs :
       run : |
         npm install --global node-gyp@9.0.0
         npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
-    - run : npm -g i willbe@delta
+    - run : npm -g i willbe@latest
     - run : will .npm.install
     - name : Environment
       run : env

@@ -910,7 +910,9 @@ function _suitesIncludeAt( path )
 
   try
   {
+    if( _.any( files, ( file ) => file.ext === 'ts' ) )
     require( 'ts-node' ).register();
+
     _realGlobal_.wTools.module.fileSetEnvironment( module, 'real' );
 
     for( let f = 0 ; f < files.length ; f++ )
@@ -926,7 +928,6 @@ function _suitesIncludeAt( path )
       }
       catch( err )
       {
-        debugger;
         let error = _.err( err, '\nCant include', absolutePath );
         _.errAttend( error );
         tester._includeFailConsider( error );
@@ -945,13 +946,11 @@ function _suitesIncludeAt( path )
   }
   catch( err )
   {
-    debugger;
     err = _.err( err );
     throw err;
   }
   finally
   {
-    debugger;
     try
     {
       _realGlobal_.wTools.module.fileResetEnvironment( module, 'real' );

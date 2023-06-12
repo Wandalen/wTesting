@@ -41,8 +41,18 @@ jobs :
       run : |
         npm install --global node-gyp@9.0.0
         npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
-    - run : npm -g i willbe@latest
-    - run : will .npm.install
+    - name : Install willbe
+      uses : Wandalen/wretry.action@v1.0.15
+      with :
+        command : npm i -g willbe@latest
+        attempt_limit : 3
+        attempt_delay: 1000
+    - name : Install submodules
+      uses : Wandalen/wretry.action@v1.0.15
+      with :
+        command : will .npm.install
+        attempt_limit : 3
+        attempt_delay: 1000
     - name : Environment
       run : env
     - run : npm list

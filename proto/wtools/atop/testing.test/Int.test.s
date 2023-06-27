@@ -13163,7 +13163,7 @@ processWatchingOnSuiteEnd.description =
   onSuiteEnd handler creates zombie process.
   Test suite ends with single error.
   Zombie proces is killed on suite end stage.
-`
+`;
 
 // --
 // experiment
@@ -13326,10 +13326,7 @@ const Proto =
     processWatchingRoutineTimeOut,
     processWatchingErrorInTestRoutine,
     processWatchingOnSuiteBegin,
-    processWatchingOnSuiteEnd
-
-    // experiment
-
+    processWatchingOnSuiteEnd,
   },
 
 }
